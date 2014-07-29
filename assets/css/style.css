@@ -953,34 +953,34 @@ section#recherche-fiche {
 /* Déclarations de styles liées à l'affichage des résultats d'une recherche */
 main[class^='recherche'] section.liste,
 main[class^='creation'] section.liste {
+  height: 100%; }
+
+section.liste {
   display: block;
-  height: 100%;
   margin-top: 1.1em;
   text-align: center;
   width: 100%; }
-  main[class^='recherche'] section.liste a,
-  main[class^='creation'] section.liste a {
+  section.liste a {
     border-bottom: inherit;
     color: inherit;
     text-decoration: inherit; }
-  main[class^='recherche'] section.liste article.fiche,
-  main[class^='creation'] section.liste article.fiche {
+  section.liste article.fiche {
     position: relative;
     display: inline-block;
     background: rgba(253, 231, 180, 0.66);
     border-radius: .5em;
-    box-shadow: 1px 1px 3px #cdcbca;
     margin: 1.5em 2em;
     min-height: 100px;
     padding: 10px;
     vertical-align: top;
-    width: 200px; }
-    main[class^='recherche'] section.liste article.fiche header,
-    main[class^='creation'] section.liste article.fiche header {
+    width: 200px;
+    -webkit-box-shadow: 1px 1px 3px #cdcbca;
+    -moz-box-shadow: 1px 1px 3px #cdcbca;
+    box-shadow: 1px 1px 3px #cdcbca; }
+    section.liste article.fiche > header {
       display: block;
       padding-top: 140px; }
-      main[class^='recherche'] section.liste article.fiche header:before,
-      main[class^='creation'] section.liste article.fiche header:before {
+      section.liste article.fiche > header:before {
         position: absolute;
         top: 0;
         left: 0px;
@@ -996,8 +996,7 @@ main[class^='creation'] section.liste {
         margin: 25px 50px;
         text-align: center;
         width: 100px; }
-      main[class^='recherche'] section.liste article.fiche header h3,
-      main[class^='creation'] section.liste article.fiche header h3 {
+      section.liste article.fiche > header h3 {
         border-bottom: none;
         color: #2c3e50;
         font-size: 1.33em;
@@ -1005,22 +1004,24 @@ main[class^='creation'] section.liste {
         margin: 0;
         margin-bottom: .33em;
         padding: 0; }
-        main[class^='recherche'] section.liste article.fiche header h3 span:last-of-type,
-        main[class^='creation'] section.liste article.fiche header h3 span:last-of-type {
+        section.liste article.fiche > header h3 span:last-of-type {
           display: block;
           font-weight: 500; }
-    main[class^='recherche'] section.liste article.fiche ul,
-    main[class^='creation'] section.liste article.fiche ul {
+    section.liste article.fiche.ajout {
+      cursor: pointer; }
+      section.liste article.fiche.ajout > header:before {
+        background: #597ea2;
+        content: '\e816';
+        font-size: 75px; }
+    section.liste article.fiche ul {
       list-style: none;
       margin: 0;
       padding: 0; }
-      main[class^='recherche'] section.liste article.fiche ul li,
-      main[class^='creation'] section.liste article.fiche ul li {
+      section.liste article.fiche ul li {
         color: #3c3c3c;
         font-size: 1em;
         font-weight: 300; }
-    main[class^='recherche'] section.liste article.fiche.vide header:before,
-    main[class^='creation'] section.liste article.fiche.vide header:before {
+    section.liste article.fiche.vide header:before {
       background: none;
       color: #ed8262;
       content: '\e803';
@@ -1152,17 +1153,15 @@ section#creation {
             border-color: #c0392b;
             color: #c0392b; }
 
-section#dossier {
+main.dossier section#fiche-dossier {
   position: relative;
   width: 55%; }
-  section#dossier header {
+  main.dossier section#fiche-dossier > header {
     position: relative;
     display: table;
     height: 200px;
     padding-left: 250px; }
-    section#dossier header.dossier:before {
-      content: '\e850'; }
-    section#dossier header:before {
+    main.dossier section#fiche-dossier > header:before {
       position: absolute;
       top: 0;
       left: 0;
@@ -1170,6 +1169,7 @@ section#dossier {
       background: #2c3e50;
       border-radius: .5em;
       color: white;
+      content: '\e850';
       font-family: "fontello";
       font-size: 75px;
       height: 125px;
@@ -1178,16 +1178,97 @@ section#dossier {
       margin-left: 87.5px;
       text-align: center;
       width: 125px; }
-    section#dossier header h2 {
+    main.dossier section#fiche-dossier > header h2 {
       display: table-cell;
       color: #2c3e50;
       font: 900 2.66em/1.25em "Roboto", Helvetica, Arial, sans-serif;
       vertical-align: middle; }
-      section#dossier header h2 span {
+      main.dossier section#fiche-dossier > header h2 span {
         display: block; }
-        section#dossier header h2 span:first-of-type {
-          text-transform: uppercase; }
-        section#dossier header h2 span:last-of-type {
-          font: 500 0.9em/1.25em "Roboto", Helvetica, Arial, sans-serif;
+        main.dossier section#fiche-dossier > header h2 span:first-of-type {
           font-variant: small-caps;
+          font-weight: 500; }
+        main.dossier section#fiche-dossier > header h2 span:last-of-type {
           text-transform: uppercase; }
+  main.dossier section#fiche-dossier ul.infos {
+    list-style: none;
+    padding: 0;
+    padding-left: 250px; }
+    main.dossier section#fiche-dossier ul.infos li {
+      position: relative;
+      font: 400 1.2em/1.5em "Roboto", Helvetica, Arial, sans-serif;
+      margin-bottom: 1.5em;
+      min-height: 1.5em; }
+      main.dossier section#fiche-dossier ul.infos li a {
+        border-bottom-color: #c0392b; }
+        main.dossier section#fiche-dossier ul.infos li a:hover {
+          border-bottom-color: #2c3e50; }
+      main.dossier section#fiche-dossier ul.infos li label {
+        position: absolute;
+        top: 0;
+        left: -200px;
+        color: #425d77;
+        font-variant: small-caps;
+        margin-top: .1em;
+        padding-right: 1em;
+        text-align: right;
+        width: 200px; }
+        main.dossier section#fiche-dossier ul.infos li label.textarea {
+          margin-top: .9em; }
+      main.dossier section#fiche-dossier ul.infos li input.fiche {
+        border: 0;
+        border-bottom: 1px solid #aabdd1;
+        font-family: "Roboto", Helvetica, Arial, sans-serif;
+        font-size: 1.1em;
+        font-weight: 300;
+        width: 85%;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+        main.dossier section#fiche-dossier ul.infos li input.fiche:focus {
+          border-bottom: 1px solid #2c3e50; }
+      main.dossier section#fiche-dossier ul.infos li textarea {
+        border: 0;
+        border-bottom: 1px solid #aabdd1;
+        border-left: 1px solid #aabdd1;
+        font-family: "Roboto", Helvetica, Arial, sans-serif;
+        font-size: 1.1em;
+        font-weight: 300;
+        height: auto;
+        line-height: 1.5em;
+        min-height: 7.6em;
+        padding: .33em;
+        padding-top: 0;
+        resize: none;
+        width: 85%;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+        main.dossier section#fiche-dossier ul.infos li textarea:focus {
+          border-bottom: 1px solid #2c3e50;
+          border-left: 1px solid #2c3e50; }
+      main.dossier section#fiche-dossier ul.infos li.button {
+        text-align: center;
+        width: 85%; }
+        main.dossier section#fiche-dossier ul.infos li.button input[type='submit'] {
+          background: white;
+          border: 3px solid #2c3e50;
+          color: #2c3e50;
+          font-family: "Roboto", Helvetica, Arial, sans-serif;
+          font-weight: 500;
+          letter-spacing: .03em;
+          padding: .33em 1em;
+          -webkit-border-radius: 1em;
+          -moz-border-radius: 1em;
+          border-radius: 1em;
+          -webkit-transition: all 0.2s ease-in-out;
+          -moz-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out; }
+          main.dossier section#fiche-dossier ul.infos li.button input[type='submit']:hover {
+            border-color: #c0392b;
+            color: #c0392b; }
+main.dossier aside {
+  padding-bottom: 3em;
+  -webkit-box-shadow: 0 0 1em #646464;
+  -moz-box-shadow: 0 0 1em #646464;
+  box-shadow: 0 0 1em #646464; }

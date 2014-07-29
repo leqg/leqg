@@ -401,6 +401,29 @@ class fiche extends core {
 	}
 	
 	
+	// Méthode permettant d'extraire l'ensemble des informations sur le dossier
+	public	function dossier($id) {
+		// On retravaille l'ID fourni
+		$id = $this->securisation_string($id);
+		
+		// On recherche dans la base de données les informations
+		$query = 'SELECT * FROM dossiers WHERE dossier_id = ' . $id . ' LIMIT 0,1';
+		$sql = $this->db->query($query);
+		
+		if ($sql->num_rows == 1) {
+			$infos = $sql->fetch_assoc();
+			
+			// On transforme le nom des clés du tableau $infos pour retirer le préfixe BDD
+			$infos = $this->formatage_donnees($infos);
+			
+			// On retourne les informations sous forme d'un tableau
+			return $infos;
+		} else {
+			$this->tpl_redirection();
+		}
+	}
+	
+	
 	// Méthode permettant la recherche des dossiers présents dans la base de données du site à partir de leur nom
 	public	function dossier_recherche($recherche) {
 		// On traite la recherche pour qu'elle soit sécurisée
