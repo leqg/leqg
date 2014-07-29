@@ -95,6 +95,22 @@ body {
 	line-height: 1.5;
 }
 
+h3 {
+	border-bottom: 1px solid $rouge;
+	color: $bleu;
+	font: 600 1.3em/1.3em $fonts;
+	margin: 1.3em 3em 1em 3em;
+	padding: 1.3em 10px .33em 10px;
+	
+	@media  (-webkit-min-device-pixel-ratio: 1.5),
+			(min--moz-device-pixel-ratio: 1.5),
+			(-o-min-device-pixel-ratio: 3/2),
+			(min-device-pixel-ratio: 1.5),
+			(min-resolution: 1.5dppx) {
+				border-bottom-width: .5px;
+	}
+}
+
 h6 {
 	border-bottom: 1px solid $rouge;
 	color: $bleu;
@@ -917,7 +933,7 @@ main.fiche {
 						line-height: 40px;
 					}
 					
-					&.dossier-ferme {
+					&.dossierFerme {
 						background-color: lighten($gris, 10%);
 						
 						&:before {
@@ -928,13 +944,30 @@ main.fiche {
 						
 						strong {
 							color: $grisFonce;
+							font-weight: 500;
+						}
+					}
+					
+					&.dossierAbsent {
+						background-color: lighten($gris, 10%);
+						
+						&:before {
+							left: 22px;
+							color: $grisMoyen;
+							content: '\e868';
+						}
+						
+						strong {
+							color: $grisFonce;
+							font-weight: 400;
+							line-height: 58px;
 						}
 					}
 					
 					strong {
 						color: $orange;
 						font-size: 1.2em;
-						font-weight: 300;
+						font-weight: 500;
 					}
 					
 					p {
@@ -1167,7 +1200,8 @@ section#recherche-fiche {
 
 /* Déclarations de styles liées à l'affichage des résultats d'une recherche */
 
-main[class^='recherche'] {
+main[class^='recherche'],
+main[class^='creation'] {
 	section.liste {
 		display: block;
 		height: 100%;
@@ -1214,6 +1248,7 @@ main[class^='recherche'] {
 				}
 				
 				h3 {
+					border-bottom: none;
 					color: $bleu;
 					font-size: 1.33em;
 					font-weight: 900;
@@ -1275,11 +1310,19 @@ section#creation {
 	position: relative;
 	width: 55%;
 	
-	header {
+	> header {
 		position: relative;
 		display: table;
 		height: 200px;
 		padding-left: 250px;
+		
+		&.dossier:before {
+			content: '\e850';
+		}
+		
+		&.tache:before {
+			content: '';
+		}
 		
 		&:before {
 			position: absolute; top: 0; left: 0;
@@ -1287,7 +1330,6 @@ section#creation {
 			background: $bleu;
 			border-radius: .5em;
 			color: white;
-			content: '\e80a';
 			font-family: $icons;
 			font-size: 75px;
 			height: 125px;
@@ -1348,11 +1390,18 @@ section#creation {
 				padding-right: 1em;
 				text-align: right;
 				width: 200px;
+				
+				&.textarea {
+					margin-top: .9em;
+				}
 			}
 			
 			input.fiche {
 				border: 0;
 				border-bottom: 1px solid lighten($bleu, 50%);
+				font-family: $fonts;
+				font-size: 1.1em;
+				font-weight: 300;
 				width: 85%;
 				@include transition(all);
 				
@@ -1361,22 +1410,53 @@ section#creation {
 				}
 			}
 			
-			span {
-				&#reussite-form-email, 
-				&#reussite-form-mobile, 
-				&#reussite-form-telephone {
-					position: absolute; bottom: 0; right: 15%;
-					display: none;
-					background: green;
-					border-radius: 50% 50% 0 0;
-					color: white;
-					font-family: $icons;
-					font-size: 12px;
-					height: 18px;
-					line-height: 18px;
-					text-align: center;
-					width: 18px;
+			textarea {
+				border: 0;
+				border-bottom: 1px solid lighten($bleu, 50%);
+				border-left: 1px solid lighten($bleu, 50%);
+				font-family: $fonts;
+				font-size: 1.1em;
+				font-weight: 300;
+				height: 6.5em;
+				line-height: 1.5em;
+				padding: .33em;
+				padding-top: 0;
+				width: 85%;
+				@include transition(all);
+				
+				&:focus {
+					border-bottom: 1px solid $bleu;
 				}
+			}
+			
+			&.button {
+				margin-left: -250px;
+				text-align: center;
+			
+				input[type='button'] {
+					background: $blanc;
+					border: 3px solid $bleu;
+					color: $bleu;
+					font-family: $fonts;
+					font-weight: 500;
+					letter-spacing: .03em;
+					padding: .33em 1em;
+					@include border-radius(1em);
+					@include transition(all);
+					
+					&:hover {
+						border-color: $rouge;
+						color: $rouge;
+					}
+				}
+			}
+		}
+	}
+	
+	#ajoutProfils {
+		section.liste {
+			article.fiche {
+				cursor: pointer;
 			}
 		}
 	}

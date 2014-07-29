@@ -366,7 +366,7 @@ class fiche extends core {
 	
 	
 	// Méthode permettant l'ajout d'un dossier à la base de données du site
-	public	function dossier_ajout($fiches, $nom, $description) {
+	public	function dossier_ajout($nom, $description, $fiches = null, $return = true) {
 		// On retraite le tableau des fiches pour l'ajout à la base de données
 		if (is_array($fiches)) {
 			// Si les données sont envoyées sous le format d'un tableau, on implode les fiches en une variable sous le format CSV
@@ -378,11 +378,12 @@ class fiche extends core {
 		$description = $this->securisation_string($description); if (!is_string($description)) return false;
 		$fiches = $this->securisation_string($fiches); if (!is_string($fiches)) return false;
 		
+		
 		if (is_string($nom) && is_string($description) && is_string($fiches)) {
 			// On prépare l'ajout à la base de données du dit fichier
-			$query =   "INSERT INTO dossiers (	'dossier_nom',
-												'dossier_description',
-												'dossiers_contacts' )
+			$query =   "INSERT INTO dossiers (	dossier_nom,
+												dossier_description,
+												dossier_contacts )
 						VALUES				  (	'" . $nom . "',
 												'" . $description . "',
 												'" . $fiches . "' ) ";
@@ -391,7 +392,11 @@ class fiche extends core {
 			$this->db->query($query);
 			
 			// On retourne l'ID du dossier ajouté pour information
-			return $this->db->insert_id;
+			if ($return == true) {
+				return $this->db->insert_id;
+			} else {
+				echo $this->db->insert_id;
+			}
 		}
 	}
 	
@@ -435,7 +440,7 @@ class fiche extends core {
 	// Méthode permettant la recherche de fiche (on remplace les espaces et caractères spéciaux par des jokers
 	public	function recherche_fiche($var) {
 		// On fait la liste des caractères à remplacer
-		$char = array(' ', '-', '_', '.');
+		$char = array(' ', '-', '_', '.', ',');
 		
 		// On remplace les caractères dans la chaine
 		$var = str_replace($char, '%', $var);
@@ -443,8 +448,32 @@ class fiche extends core {
 		// On retourne le résultat
 		return $var;
 	}
-
-
+	
+	
+	// Récupération d'informations sans ouverture de fiches, grâce à l'ID
+	
+	public	function nomByID($id, $separateur = null, $return = false) {
+		// On récupère les informations dans la base de données concernant la fiche de demandée
+		$query = 'SELECT contact_nom, contact_nom_usage, contact_prenoms FROM contacts WHERE contact_id = "' . $id . '"';
+		$sql = $this->db->query($query);
+		$infos = $sql->fetch_assoc();
+	
+		$nom = $infos['contact_nom']; 
+		$nom_usage = $infos['contact_nom_usage'];
+		$prenoms = $infos['contact_prenoms'];
+	
+		if ($separateur) { $begin = '<' . $separateur . '>'; $end = '</' . $separateur . '>'; }
+		else { $begin = null; $end = null; }
+	
+		if (!empty($nom)) { $affichage = $begin . mb_convert_case($nom, MB_CASE_UPPER, 'utf-8') . $end; }
+		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case($nom_usage, MB_CASE_UPPER, 'utf-8') . $end; }
+		if (!empty($prenoms)) { $affichage .= ' ' . $begin . mb_convert_case($prenoms, MB_CASE_TITLE, 'utf-8') . $end; }
+		
+		//if ($return == false) { echo $affichage; } else { return $affichage; }
+		if ($return == false) { echo $affichage; } else { return $affichage; }
+		
+		unset($affichage);
+	}
 }
 
 ?>

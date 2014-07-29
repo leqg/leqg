@@ -57,7 +57,7 @@
 
 	<ul id="navigation-aside"><!--
 	 --><li class="nav-aside-go" id="nav-aside-start" data-tab="start">Infos. générales</li><!--
-	 --><li class="nav-aside-go" id="nav-aside-taches" data-tab="taches">Tâches et dossiers</li><!--
+	 --><li class="nav-aside-go" id="nav-aside-contenus-associes" data-tab="taches">Tâches et dossiers</li><!--
 	 --><li class="nav-aside-go" id="nav-aside-historique" data-tab="historique">Historique</li><!--
  --></ul>
 
@@ -69,7 +69,7 @@
 	
  --></div>
  	
- 	<div id="aside-taches">
+ 	<div id="aside-contenus-associes">
 	 	<?php
 			// On recherche s'il existe des tâches par rapport au contact
 			$taches_liees = $fiche->taches_liees();
@@ -105,7 +105,7 @@
 		 				foreach ($dossiers_lies as $dossier) {
 			 				?>
 			 				<a href="<?php $core->tpl_get_url('dossier', $dossier['dossier_id']); ?>">
-				 				<li id="dossier-<?php echo $dossier['dossier_id']; ?>" <?php if (!$dossier['dossier_statut']) { ?>class="dossier-ferme"<?php } ?>>
+				 				<li id="dossier-<?php echo $dossier['dossier_id']; ?>" <?php if (!$dossier['dossier_statut']) { ?>class="dossierFerme"<?php } ?>>
 					 				<strong><?php echo $dossier['dossier_nom']; ?></strong>
 					 				<?php if (strlen($dossier['dossier_description']) > 100) { ?>
 					 				<p><?php echo substr($dossier['dossier_description'], 0, 100); ?>&hellip;</p>
@@ -117,6 +117,8 @@
 			 				<?php
 		 				}
 	 				}
+	 			} else {
+		 			echo '<li class="dossierAbsent"><strong>Aucun dossier associé au contact actuellement.</strong></li>';
 	 			}
 	 			?>
 	 		</ul>
@@ -198,7 +200,7 @@
 		$("#aside-start").hide();
 		$("#aside-historique").hide();
 		// On aout aussi la classe actif à l'élément en cours dans le menu
-		$("#nav-aside-taches").addClass('actif');
+		$("#nav-aside-contenus-associes").addClass('actif');
 		
 		// Au chargement, on cache les marqueurs "valider" sur chaque formulaire
 		$("#valider-form-telephone").hide();
@@ -211,24 +213,24 @@
 			
 			if (selection == 'start') {
 				$("#aside-start").show();
-				$("#aside-taches").hide();
+				$("#aside-contenus-associes").hide();
 				$("#aside-historique").hide();
-				$("#nav-aside-taches").removeClass('actif');
+				$("#nav-aside-contenus-associes").removeClass('actif');
 				$("#nav-aside-historique").removeClass('actif');
 				$("#nav-aside-start").removeClass('actif').addClass('actif');
 				
 			} else if (selection == 'taches') {
 				$("#aside-start").hide();
-				$("#aside-taches").show();
+				$("#aside-contenus-associes").show();
 				$("#aside-historique").hide();
 				$("#nav-aside-start").removeClass('actif');
 				$("#nav-aside-historique").removeClass('actif');
-				$("#nav-aside-taches").removeClass('actif').addClass('actif');
+				$("#nav-aside-contenus-associes").removeClass('actif').addClass('actif');
 			} else if (selection == 'historique') {
 				$("#aside-start").hide();
-				$("#aside-taches").hide();
+				$("#aside-contenus-associes").hide();
 				$("#aside-historique").show();
-				$("#nav-aside-taches").removeClass('actif');
+				$("#nav-aside-contenus-associes").removeClass('actif');
 				$("#nav-aside-start").removeClass('actif');
 				$("#nav-aside-historique").removeClass('actif').addClass('actif');
 			}

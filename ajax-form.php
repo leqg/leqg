@@ -152,6 +152,7 @@ else if ($_GET['action'] == 'retrait-tache') {
 	}
 }
 
+
 else if ($_GET['action'] == 'dossiers-existants') {
 	// On recherche les dossiers existants
 	$dossiers = $fiche->dossier_recherche($_POST['nom']);
@@ -177,5 +178,74 @@ else if ($_GET['action'] == 'dossiers-existants') {
 		// On ne trouve rien, donc on n'affiche rien
 		return false;
 	}
+}
+
+
+// Système d'ajout d'un nouveau dossier
+else if ($_GET['action'] == 'creation-dossier-etape1') {
+	// On récupère et on retraite les données
+	$titre = $core->securisation_string($_POST['titre']);
+	$description = $core->securisation_string($_POST['description']);
+	$fiches = $core->securisation_string($_POST['id']);
+	
+	// On ajoute ce nouveau dossier dans la base de données
+	$fiche->dossier_ajout($titre, $description, $fiches, false);
+}
+
+
+// Système de recherche de fiches dans le cadre de la création d'un nouveau dossier ou d'une nouvelle tâche
+else if ($_GET['action'] == 'recherche-fiche-creation') {
+	// On récupère la liste des champs déjà entrés, pour les exclure de la recherche
+	$fiches_exclues = $_POST['fichesDansDossier']; echo $fiches_exclues;
+	$fiches_exclues = explode(',', $fiches_exclues);
+	
+	$recherche_exclusion = " AND ";
+	$nb_exclusions = count($fiches_exclues);
+	$i = 1;
+	foreach ($fiches_exclues as $f) {
+		$recherche_exclusion .= "contact_id != " . $f;
+		if ($i != $nb_exclusions) { $recherche_exclusion .= " AND "; }
+		$i++;
+	}
+			
+	// On récupère la recherche et on la reformate
+	$recherche = $core->securisation_string($_POST['recherche']);
+	$recherche = $fiche->recherche_fiche($recherche);
+	
+	$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_prenoms) LIKE "%' . $recherche . '%"' . $recherche_exclusion . ' LIMIT 0, 25';
+	$sql = $db->query($query);
+	
+	while ($row = $sql->fetch_assoc()) {
+		echo '<article class="fiche fiche-recherchee" id="fiche-recherchee-' . $row['contact_id'] . '" data-fiche="' . $row['contact_id'] . '">';
+			echo '<header><h3>' . $fiche->nomByID($row['contact_id'], 'span', true) . '</h3></header>';
+		echo '</article>';
+	}
+	
+	/*<script>
+		// On paramètre la fonction d'ajout d'une fiche recherchée à la liste des personnes souhaitées
+		$(".fiche-recherchee").click(function(){
+			var fiche = $(this).data('fiche');
+			
+			// On ajoute l'identifiant au champ caché
+			var champ = $("#fichesDansDossier").val();
+			var champ_add = champ + ',' + fiche;
+			$("#fichesDansDossier").val(champ_add);
+			
+			// On déplace la fiche en question dans le cadre supérieur et on l'enlève de la recherche
+			var contenuAfficheDansArticle = $("#fiche-recherchee-" + fiche).html();
+			var contenuAffiche = '<article class="fiche" id="fiche-' + fiche + '">' + contenuAfficheDansArticle + '</article>';
+			$("#fiche-recherchee-" + fiche).hide();
+			$("#listeFiches").append(contenuAffiche);
+			
+			// On relance la recherche
+			rechercheFiche();
+		});
+		
+		$(".fiche").click(function(){
+			var fiche = $(this).data('fiche');
+			
+			
+		});
+	</script>*/
 }
 ?>
