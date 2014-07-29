@@ -1,14 +1,18 @@
+@charset "UTF-8";
 /*
  *
  * Feuille de style du QG – logiciel développé par Damien Senger
  *
  */
 
+// imports CSS hors SASS (.css)
 @import "fontello.css";
 @import "fonts.css";
 @import "keyframes.css";
-@import "mixins.scss";
 @import "kna.css";
+
+// imports SASS (.scss)
+@import "mixins.scss";
 
 $rouge:		rgba(192,  57,  43, 1);
 $bleu:		rgba( 44,  62,  80, 1);
