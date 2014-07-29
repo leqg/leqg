@@ -1,0 +1,37 @@
+<?php
+/*
+	Fichier d'appel des différents modules, fonctions et classes du core du site
+*/
+
+// On met en place l'affichage des erreurs en mode développement
+error_reporting(-1); // -1 reporte toutes les erreurs PHP (=E_ALL) / 0 en mode production
+ini_set('error_reporting', E_ALL);
+
+// On détermine les problématiques de langage des données PHP
+setlocale(LC_ALL, 'fr_FR', 'fr');
+
+// On détermine le charset du fichier retourné par le serveur
+header('Content-Type: text/html; charset=utf-8');
+
+
+
+// Appel de la classe MySQL
+
+$db = new mysqli('localhost', 'leqg', 'evecsanobi-67', 'leqg');
+
+
+// Constructeur de classes
+
+function __autoload($class_name) {
+	include 'class/'.$class_name.'.class.php';
+}
+
+// On appelle l'ensemble des classes générales au site
+$core =		new core($db);
+$user =		new user($db);
+$fiche =		new fiche($db);
+
+// On transforme ces classes générales en variables globales
+global $db, $core, $user, $fiche;
+
+?>

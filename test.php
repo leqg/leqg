@@ -1,0 +1,353 @@
+<?php
+error_reporting(E_ALL);
+
+$mysqli = new mysqli('localhost', 'leqg', 'evecsanobi-67', 'leqg');
+
+
+//include 'class/core.class.php';
+//include 'class/user.class.php';
+//$user = new user($mysqli);
+
+
+// Traitement de la date de naissance
+/*
+	$query = "SELECT * FROM contacts";
+	$sql = $mysqli->query($query);
+	
+	while ($result = $sql->fetch_assoc()) :
+			
+		$mysqli->query('UPDATE	contacts
+						SET		contact_naissance_date = "' . date('Y-m-d', strtotime($result['contact_naissance_jour'])) . '"
+						WHERE	contact_id = ' . $result['contact_id']
+					  );
+	
+	endwhile;
+*/
+
+
+// Traitement des villes de naissance pour les inscrire dans la base de données
+/*
+	$query = "SELECT * FROM contacts";
+	$sql = $mysqli->query($query);
+	
+	while ($result = $sql->fetch_assoc()) :
+	
+		$ville_origine = $result['contact_naissance_commune_texte'];
+		$dept_origine = $result['contact_naissance_departement'];
+		
+		if ($dept_origine == 99) {
+			// la personne est née à l'étranger
+			$etranger = 1;
+			$mysqli->query('UPDATE contacts SET contact_naissance_commune_id = "0" WHERE contact_id = '.$result['contact_id']);
+		} else {
+			$etranger = 0;
+			
+			// Pour éviter les problèmes d'apostrophes (dans la BDD souvent des espaces) des villes comme L'isle, on remplace par un joker
+			$remplacement = array("'", " ", "OE");
+			$ville_origine = str_replace($remplacement, '%', $ville_origine);
+			
+			// On évite certains caractères spéciaux
+			$ville_origine = str_replace('œ', 'oe', $ville_origine);
+			
+			// Cas particulier de Paris / Marseille / Lyon, si ça commence par ces noms, on affiche juste la ville sans l'arrondissement
+			if (preg_match('/^PARIS/', $ville_origine)) { $ville_origine = 'PARIS'; }
+			if (preg_match('/^LYON/', $ville_origine)) { $ville_origine = 'LYON'; }
+			if (preg_match('/^MARSEILLE/', $ville_origine)) { $ville_origine = 'MARSEILLE'; }
+			
+			// Cas particulier des DOM-TOM où la recherche doit porter sur 971 au lieu de 97
+			if ($dept_origine == 97) { $dept_origine = '97%'; }
+			
+			// Cas particulier des villes mal orthographiées dans les bases de données
+			if ($ville_origine == 'SAINT-DIE' && $dept_origine == 88) { $ville_origine = 'SAINT-DIE-DES-VOSGES'; }
+			if ($ville_origine == 'CHERBOURG' && $dept_origine == 50) { $ville_origine = 'CHERBOURG-OCTEVILLE'; }
+			if ($ville_origine == 'OCTEVILLE' && $dept_origine == 50) { $ville_origine = 'CHERBOURG-OCTEVILLE'; }
+			if ($ville_origine == 'MEULAN' && $dept_origine == 78) { $ville_origine = 'MEULAN-EN-YVELINES'; }
+			
+			// Cas particulier de Chalons sur Marne qui a changé de nom pour Chalons en Champagne
+			if ($ville_origine == 'CHALONS-SUR-MARNE' && $dept_origine == 51) { $ville_origine = 'CHALONS-EN-CHAMPAGNE'; }
+			
+			$q = '	SELECT	*
+					FROM	communes
+					WHERE	departement_id LIKE "' . $dept_origine . '"
+					AND		commune_nom LIKE "' . $ville_origine . '"
+				 ';
+				 
+			$sql2 = $mysqli->query($q);
+			
+			// Si on ne trouve pas de fiche, alors on dit qu'on ne sait pas
+			if ($sql2->num_rows == 1) {
+				$r = $sql2->fetch_assoc();
+				$mysqli->query('UPDATE contacts SET contact_naissance_commune_id = "' . $r['commune_id'] . '" WHERE contact_id = '.$result['contact_id']);
+			} else {
+				// On essaye juste de voir s'il n'y a pas un petit article devant
+				$q3 = '	SELECT	*
+						FROM	communes
+						WHERE	departement_id LIKE "' . $dept_origine . '"
+						AND		commune_nom LIKE "%' . $ville_origine . '"
+					 ';
+					 
+				$sql3 = $mysqli->query($q3);
+				if ($sql3->num_rows == 1) {
+					$r3 = $sql3->fetch_assoc();
+					$mysqli->query('UPDATE contacts SET contact_naissance_commune_id = "' . $r3['commune_id'] . '" WHERE contact_id = '.$result['contact_id']);
+				} else {
+					// On regarde enfin si ça a un rapport avec la corse
+					if ($dept_origine == 2) {
+						$q4 = '	SELECT	*
+								FROM	communes
+								WHERE	departement_id LIKE "20%"
+								AND		commune_nom LIKE "' . $ville_origine . '"
+							 ';
+							 
+						$sql4 = $mysqli->query($q4);
+						if ($sql4->num_rows == 1) {
+							$r4 = $sql4->fetch_assoc();
+							$mysqli->query('UPDATE contacts SET contact_naissance_commune_id = "' . $r4['commune_id'] . '" WHERE contact_id = '.$result['contact_id']);
+						} else {
+							$mysqli->query('UPDATE contacts SET contact_naissance_commune_id = "0" WHERE contact_id = '.$result['contact_id']);
+						}
+					} else {
+						$mysqli->query('UPDATE contacts SET contact_naissance_commune_id = "0" WHERE contact_id = '.$result['contact_id']);
+					}
+				}
+			}
+			
+		}
+
+	endwhile;
+*/
+
+
+// Traitement des codes postaux
+/*
+	$query = "SELECT * FROM contacts";
+	$sql = $mysqli->query($query);
+	
+	while ($result = $sql->fetch_assoc()) :
+
+		// Identifiant du contact
+		$id = $result['contact_id'];
+
+		// On explose le contenu à chaque espace
+		$adresse = explode(' ', $result['contact_adresse_ville'], 2);
+		
+		print_r($adresse); echo '<br>';
+		
+		if ($adresse[1] == 'STRASBOURG') {
+			$q = 'UPDATE contacts SET contact_adresse_cp = "' . $adresse[0] . '", contact_adresse_ville = "' . $adresse[1] . '" WHERE contact_id = ' . $id;
+			$mysqli->query($q);
+		}
+
+	endwhile;
+*/
+
+
+// Liaison des villes déclarées dans les adresses avec leur communes.commune_id
+/*
+	$query = "SELECT * FROM contacts";
+	$sql = $mysqli->query($query);
+	
+	while ($result = $sql->fetch_assoc()) :
+	
+		$ville_origine = $result['contact_adresse_ville'];
+		$dept_origine = str_split($result['contact_adresse_cp'], 2);
+		$dept_origine = $dept_origine[0];
+		
+		if ($dept_origine == '') {
+			// la personne est née à l'étranger
+			$etranger = 1;
+			echo 'etranger';
+			$mysqli->query('UPDATE contacts SET commune_id = "0" WHERE contact_id = '.$result['contact_id']);
+		} else {
+			$etranger = 0;
+			
+			// Pour éviter les problèmes d'apostrophes (dans la BDD souvent des espaces) des villes comme L'isle, on remplace par un joker
+			$remplacement = array("'", " ", "OE");
+			$ville_origine = str_replace($remplacement, '%', $ville_origine);
+			
+			// On évite certains caractères spéciaux
+			$ville_origine = str_replace('œ', 'oe', $ville_origine);
+			
+			// Cas particulier de Paris / Marseille / Lyon, si ça commence par ces noms, on affiche juste la ville sans l'arrondissement
+			if (preg_match('/^PARIS/', $ville_origine)) { $ville_origine = 'PARIS'; }
+			if (preg_match('/^LYON/', $ville_origine)) { $ville_origine = 'LYON'; }
+			if (preg_match('/^MARSEILLE/', $ville_origine)) { $ville_origine = 'MARSEILLE'; }
+			
+			// Cas particulier des DOM-TOM où la recherche doit porter sur 971 au lieu de 97
+			if ($dept_origine == 97) { $dept_origine = '97%'; }
+			
+			// Cas particulier des villes mal orthographiées dans les bases de données
+			if ($ville_origine == 'SAINT-DIE' && $dept_origine == 88) { $ville_origine = 'SAINT-DIE-DES-VOSGES'; }
+			if ($ville_origine == 'CHERBOURG' && $dept_origine == 50) { $ville_origine = 'CHERBOURG-OCTEVILLE'; }
+			if ($ville_origine == 'OCTEVILLE' && $dept_origine == 50) { $ville_origine = 'CHERBOURG-OCTEVILLE'; }
+			if ($ville_origine == 'MEULAN' && $dept_origine == 78) { $ville_origine = 'MEULAN-EN-YVELINES'; }
+			
+			// Cas particulier de Chalons sur Marne qui a changé de nom pour Chalons en Champagne
+			if ($ville_origine == 'CHALONS-SUR-MARNE' && $dept_origine == 51) { $ville_origine = 'CHALONS-EN-CHAMPAGNE'; }
+			
+			$q = '	SELECT	*
+					FROM	communes
+					WHERE	departement_id LIKE "' . $dept_origine . '"
+					AND		commune_nom LIKE "' . $ville_origine . '"
+				 ';
+				 
+			$sql2 = $mysqli->query($q);
+			
+			// Si on ne trouve pas de fiche, alors on dit qu'on ne sait pas
+			if ($sql2->num_rows == 1) {
+				$r = $sql2->fetch_assoc();
+				$mysqli->query('UPDATE contacts SET commune_id = "' . $r['commune_id'] . '" WHERE contact_id = '.$result['contact_id']);
+			} else {
+				// On essaye juste de voir s'il n'y a pas un petit article devant
+				$q3 = '	SELECT	*
+						FROM	communes
+						WHERE	departement_id LIKE "' . $dept_origine . '"
+						AND		commune_nom LIKE "%' . $ville_origine . '"
+					 ';
+					 
+				$sql3 = $mysqli->query($q3);
+				if ($sql3->num_rows == 1) {
+					$r3 = $sql3->fetch_assoc();
+					$mysqli->query('UPDATE contacts SET commune_id = "' . $r3['commune_id'] . '" WHERE contact_id = '.$result['contact_id']);
+				} else {
+					// On regarde enfin si ça a un rapport avec la corse
+					if ($dept_origine == 2) {
+						$q4 = '	SELECT	*
+								FROM	communes
+								WHERE	departement_id LIKE "20%"
+								AND		commune_nom LIKE "' . $ville_origine . '"
+							 ';
+							 
+						$sql4 = $mysqli->query($q4);
+						if ($sql4->num_rows == 1) {
+							$r4 = $sql4->fetch_assoc();
+							$mysqli->query('UPDATE contacts SET commune_id = "' . $r4['commune_id'] . '" WHERE contact_id = '.$result['contact_id']);
+						} else {
+							$mysqli->query('UPDATE contacts SET commune_id = "0" WHERE contact_id = '.$result['contact_id']);
+						}
+					} else {
+						$mysqli->query('UPDATE contacts SET commune_id = "0" WHERE contact_id = '.$result['contact_id']);
+					}
+				}
+			}
+			
+		}
+
+	endwhile;
+*/
+
+
+// Traitement des numéros de rue
+/*
+	$query = "SELECT * FROM contacts";
+	$sql = $mysqli->query($query);
+	
+	while ($result = $sql->fetch_assoc()) :
+
+		// Identifiant du contact
+		$id = $result['contact_id'];
+
+		// On explose le contenu à chaque espace
+		$adresse = explode(' ', $result['contact_adresse_rue'], 2);
+		
+		// On regarde si le premier morceau est un chiffre
+		$adresse[0]{0};
+		if (is_numeric($adresse[0]{0})) {
+			$numero = $adresse[0];
+			$adresse = addslashes($adresse[1]);
+		}
+		else {
+			$numero = NULL;
+			$adresse = addslashes($adresse[0].' '.$adresse[1]);
+		}
+		
+		$q = "UPDATE contacts SET contact_adresse_numero='".$numero."', contact_adresse_rue='".$adresse."' WHERE contact_id='".$id."'";	
+
+		$mysqli->query($q);
+
+	endwhile;
+*/
+
+
+// On transforme les gens en électeurs et on leur affecte leur canton
+
+//	$mysqli->query("UPDATE contacts SET contact_electeur = 1");
+//	$mysqli->query("UPDATE contacts SET canton_id = 2775");
+
+
+// On va tâcher de lister les rues de la base de données
+/*
+	$query = "SELECT * FROM contacts";
+	$sql = $mysqli->query($query);
+	
+	while ($row = $sql->fetch_assoc()) :
+
+		echo $row['contact_adresse_numero']." - ".$row['contact_adresse_rue']."<br>";
+		
+	// À partir de là, on essayer de récupérer des données vis à vis de cette adresse
+		$bureau = $row['bureau_id'];
+		$canton = $row['canton_id'];
+		$commune = $row['commune_id'];
+		echo $bureau . ' - ' . $canton . ' - ' . $commune . ' - ';
+		
+	// À partir de là, on récupère l'adresse
+		$adresse = addslashes($row['contact_adresse_rue']);
+	
+		// On regarde si l'adresse existe déjà dans la BDD
+		$query2 = "SELECT * FROM rues WHERE bureau_id='".$bureau."' AND rue_nom='".$adresse."'";
+		$sql2 = $mysqli->query($query2);
+		$row2 = $sql2->fetch_assoc();
+		$nb_row2 = $sql2->num_rows;
+		
+		if ($nb_row2 == 0) {
+			echo "La rue n'existe pas<br>";
+			$query3 = "INSERT INTO rues VALUES ('', '', '".$canton."', '".$commune."', '".$bureau."', '".$adresse."')";
+			echo $query3."<br>";
+			$mysqli->query($query3);
+			$adresse_id = $mysqli->insert_id;
+		} else {
+			echo "La rue existe<br>";
+			$adresse_id = $row2['rue_id'];
+		}
+		
+		$sql2->close();
+
+
+	// À partir de là, on essaye de savoir dans quel immeuble ils vivent
+		$numero = $row['contact_adresse_numero'];
+		
+		// On regarde si dans le bureau de vote, à l'adresse demandé, ce numéro a déjà été déclaré
+		$query4 = "SELECT * FROM immeubles WHERE rue_id='".$adresse_id."' AND immeuble_numero='".$numero."'";
+		$sql4 = $mysqli->query($query4);
+		$row4 = $sql4->fetch_assoc();
+		$nb_row2 = $sql4->num_rows;
+		
+		if ($nb_row2 == 0) {
+			echo "L'immeuble n'existe pas<br>";
+			$query5 = "INSERT INTO immeubles VALUES ('', '', '".$canton."', '".$commune."', '".$bureau."', '".$adresse_id."', '".$numero."')";
+			echo $query5.'<br>';
+			$mysqli->query($query5);
+			$immeuble_id = $mysqli->insert_id;
+		} else {
+			echo "L'immeuble existe déjà<br>";
+			$immeuble_id = $row4['immeuble_id'];
+		}
+		
+		$sql4->close();
+
+		
+		$query6 = "UPDATE contacts SET rue_id='".$adresse_id."', immeuble_id='".$immeuble_id."' WHERE contact_id='".$row['contact_id']."'";
+		echo $query6;
+		$mysqli->query($query6);
+
+		
+		echo '<br><br>';
+
+	endwhile;
+*/
+
+
+// On calcule un mot de passe pour l'ajouter à la base
+//echo $user->encrypt_pass('evecsanobi-67');	
+
+?>

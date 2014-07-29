@@ -1,0 +1,185 @@
+<?php
+
+// On appelle le fichier d'inclusion du cœur du système
+require_once('includes.php');
+
+
+// On vérifie qu'une personne est connectée au système, on affiche le script de login
+
+if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'login')) {
+	// On regarde si on a reçu des informations POST
+	if (isset($_POST['login'], $_POST['pass'])) {
+		// On effectue la démarche de connexion
+		$user->connexion($_POST['login'], $_POST['pass']);
+	} else {
+		// On affiche le script de connexion
+		$core->tpl_load('login');
+	}
+} else {
+
+	// On commence par appeler l'index.tpl si aucune page n'est appelée
+	
+	if (empty($_GET['page'])) {
+	
+		//$core->tpl_load('index');
+	
+		// On redirige temporairement vers contact
+		$core->tpl_redirection('contacts');
+	
+	}
+	
+	// Si une page a été appelée, on calcule et on affiche son contenu
+	else {
+	
+		// Si la page appelée est la déconnexion
+		if ($_GET['page'] == 'logout') {
+			// On appelle le script de déconnexion et on renvoit vers la page de login
+			if ($user->deconnexion()) {
+				$core->tpl_redirection();
+			}
+		}
+		
+		// Sinon, si la page demandée est une fiche
+		
+		else if ($_GET['page'] == 'fiche' && isset($_GET['id'])) {
+			// On ouvre dans ce cas une fiche
+			$fiche->acces(addslashes($_GET['id']), true);
+			
+			// On charge le template de fiche
+			$core->tpl_load('fiche');
+			
+			// On ferme la fiche ouverte
+			$fiche->fermeture();
+		}
+		
+		else if ($_GET['page'] == 'creation') {
+			// S'il s'agit de la création d'un dossier ou d'une tâche, on charge les templates relatifs à la page demandée
+			$core->tpl_header();
+			$core->tpl_load('creation', addslashes($_GET['type']));
+			$core->tpl_footer();
+		} 
+		
+		else if ($_GET['page'] == 'contacts') {
+			
+			// On lance la page d'accueil du module contact
+			$core->tpl_load('contacts');
+			
+		}	
+		
+		else if ($_GET['page'] == 'recherche') {
+
+			// On prépare les différents champs à la recherche (suppression des espaces et des caractères, remplacement par des jokers
+			$nom = $fiche->recherche_fiche(utf8_decode($_POST['nom']));
+			$prenom = $fiche->recherche_fiche(utf8_decode($_POST['prenom']));
+
+			// On fait la recherche
+			if (!empty($nom) && !empty($prenom)) $query = 'SELECT contact_id FROM contacts WHERE (contact_nom LIKE "%' . $nom . '%" OR contact_nom_usage LIKE "%' . $nom . '%") AND contact_prenoms LIKE "%' . $prenom . '%"';
+			if (empty($nom) && !empty($prenom)) $query = 'SELECT contact_id FROM contacts WHERE contact_prenoms LIKE "%' . $prenom . '%"';
+			if (!empty($nom) && empty($prenom)) $query = 'SELECT contact_id FROM contacts WHERE (contact_nom LIKE "%' . $nom . '%" OR contact_nom_usage LIKE "%' . $nom . '%")';
+			if (!empty($query)) $sql = $db->query($query);
+			
+			// On regarde le nombre de résultats
+			$nb = $sql->num_rows;
+			
+			if ($nb == 1) {
+				// S'il n'y a qu'un seul résultat, on ouvre la fiche correspondante
+				$row = $sql->fetch_array();
+				
+				$core->tpl_redirection('fiche', $row[0]);
+			} else if ($nb > 1) {
+				// On load le header de la page
+				$core->tpl_header();
+				
+				// On load les différentes fiches
+				echo '<section class="liste">';
+				
+				while ($row = $sql->fetch_array()) {
+					$fiche->acces($row[0], true);
+					
+					// On charge le template de la fiche
+					$core->tpl_load('fiche', 'liste');
+					
+					// On ferme la fiche ouverte
+					$fiche->fermeture();
+				}
+				
+				echo '</section>';
+				
+				// On charge le footer
+				$core->tpl_footer();
+			} else {
+
+				$core->tpl_load('fiche', 'vide');
+			}
+		}
+		
+		else if ($_GET['page'] == 'recherche-tag') {
+			
+			// On regarde si le tag existe
+			$query = 'SELECT * FROM tags WHERE tag_nom LIKE "' . utf8_decode($_POST['tag']) . '"';
+			$sql = $db->query($query);
+			
+			if ($sql->num_rows >= 1) {
+				$tag = $sql->fetch_array();
+				$tag = $tag[0];
+				
+				// On initialise la liste des fiches ayant ce tag
+				$fiches = array();
+				
+				// On fait la recherche des fiches ayant ce tag de manière grossière
+				$query = 'SELECT contact_tags, contact_id FROM contacts WHERE contact_tags LIKE "%' . $tag . '%"';
+				$sql = $db->query($query);
+				while ($row = $sql->fetch_array()) {
+					$tags = explode(',', $row[0]);
+					
+					if (in_array($tag, $tags)) {
+						$fiches[] = $row[1];
+					}
+				}
+				
+				if (count($fiches) == 1) {
+					// Si nous n'avons qu'un seul résultat, on l'ouvre
+					$core->tpl_redirection('fiche', $fiches[0]);
+				} else if (count($fiches) > 1) {
+					// On load le header de la page
+					$core->tpl_header();
+					
+					// On load les différentes fiches
+					echo '<section class="liste">';
+					
+					foreach ($fiches as $row) {
+						$fiche->acces($row, true);
+						
+						// On charge le template de la fiche
+						$core->tpl_load('fiche', 'liste');
+						
+						// On ferme la fiche ouverte
+						$fiche->fermeture();
+					}
+					
+					echo '</section>';
+					
+					// On charge le footer
+					$core->tpl_footer();
+				} else {
+					$core->tpl_load('fiche', 'vide');
+				}
+			} else {
+				$core->tpl_load('fiche', 'vide');
+			}
+		}
+		
+		else {
+			// On redirige temporairement vers la page contacts
+			$core->tpl_redirection('contacts');
+		}
+	}
+}
+
+
+
+
+// On appelle les fichiers de purge
+require_once('purge.php');
+
+?>

@@ -1,0 +1,1021 @@
+/*
+ *
+ * Feuille de style du QG – logiciel développé par Damien Senger
+ *
+ */
+
+/* On appelle les fichiers CSS associés au présent fichier */
+@import url('kna.css');
+@import url('fontello.css');
+@import url('keyframes.css');
+
+
+/* Style CSS du QG */
+
+html, body {
+	font-family: "Roboto", Helvetica, Arial, sans-serif;
+	height: 100%;
+	width: 100%;
+}
+
+/* Style dédié aux balises */
+	
+	a {
+		border-bottom: 1px solid rgba(192, 57, 43, 1);
+		color: rgba(192, 57, 43, 1);
+		text-decoration: none;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	a:hover {
+		border-bottom-color: rgba(44, 62, 80, 1);
+		color: rgba(44, 62, 80, 1);
+	}
+	
+	a.nostyle {
+		border: none;
+		color: inherit;
+		text-decoration: none;
+	}
+	
+	aside {
+		position: absolute; top: 0; right: 0;
+		box-sizing: border-box;
+		height: 100%;
+		padding-top: 50px;
+		width: 40%;
+	}
+	
+	abbr { outline: none; border-bottom: none; }
+	
+	h6 {
+		border-bottom: 1px solid rgba(192, 57, 43, .5);
+		color: rgb(44, 62, 80);
+		font: 600 1.3em/1.3em "Roboto", Helvetica, Arial, sans-serif;
+		margin: 1.3em 0 1em 0;
+		padding: 1.3em 10px .33em 10px;
+	}
+	
+	main {
+		position: absolute; top: 0; left: 0;
+		height: 100%;
+		margin: 0;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		padding: 0;
+		padding-top: 50px;
+		width: 100%;
+	}
+	
+
+/* Style dédié au header */
+	
+	header#top {
+		position: relative;
+		background: rgb(44, 62, 80);
+		color: white;
+		font-size: 1em;
+		height: 50px;
+		padding: .33em 1em;
+		width: 100%;
+		z-index: 10000;
+	}
+	
+	header#top h1 {
+		font-size: 2.5em;
+		line-height: 50px; /* line-height : 2.5 * 1.5 = 3,75 em */
+	}
+	
+	header#top ul#parametres:before {
+		position: absolute; top: -50px; right: 0px;
+		display: block;
+		background: rgba(255, 255, 255, 0);
+		color: rgba(255, 255, 255, 1);
+		content: '\e855';
+		font-family: 'fontello';
+		font-size: 1.66em;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		width: 50px;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	header#top ul#parametres:hover:before {
+		background: rgba(255, 255, 255, 1);
+		color: rgba(44, 62, 80, 1);
+	}
+	
+	header#top ul#parametres {
+		position: absolute; top: 50px; right: 65px;
+		background: rgba(255, 255, 255, .9);
+		display: block;
+		margin: 0;
+		padding: .33em 0 .5em 0;
+		color: black;
+	}
+	
+	header#top ul#parametres a {
+		color: rgb(44, 62, 80);
+		text-decoration: none;
+	}
+	
+	header#top ul#parametres li {
+		display: none;
+		line-height: 1.5em;
+		margin: .15em 0;
+		padding: .6em 1.33em .5em 4em;
+		text-align: right;
+		z-index: 500;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	header#top ul#parametres li:hover {
+		background-color: rgba(192, 57, 43, .15);
+		color: rgba(192, 57, 43, 1);
+	}
+	
+	header#top ul#parametres:hover {
+		border: 1px solid rgba(44, 62, 80, 1);
+		border-top: none;
+	}
+	
+	header#top ul#parametres:hover li {
+		display: block;
+	}	
+	
+	header#top ul#gestion-compte:before {
+		position: absolute; top: -50px; right: 0px;
+		display: block;
+		background: rgba(255, 255, 255, 0);
+		color: rgba(255, 255, 255, 1);
+		content: '\e80a';
+		font-family: 'fontello';
+		font-size: 1.66em;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		width: 50px;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	header#top ul#gestion-compte:hover:before {
+		background: rgba(255, 255, 255, 1);
+		color: rgba(44, 62, 80, 1);
+	}
+	
+	header#top ul#gestion-compte {
+		position: absolute; top: 50px; right: 15px;
+		background: rgba(255, 255, 255, .9);
+		display: block;
+		margin: 0;
+		padding: .33em 0 .5em 0;
+		color: black;
+	}
+	
+	header#top ul#gestion-compte a {
+		color: rgb(44, 62, 80);
+		text-decoration: none;
+	}
+	
+	header#top ul#gestion-compte li {
+		display: none;
+		line-height: 1.5em;
+		margin: .15em 0;
+		padding: .6em 1.33em .5em 4em;
+		text-align: right;
+		z-index: 500;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	header#top ul#gestion-compte li:hover {
+		background-color: rgba(192, 57, 43, .15);
+		color: rgba(192, 57, 43, 1);
+	}
+	
+	header#top ul#gestion-compte:hover {
+		border: 1px solid rgba(44, 62, 80, 1);
+		border-top: none;
+	}
+	
+	header#top ul#gestion-compte:hover li {
+		display: block;
+	}
+	
+	header#top nav#applications {
+		position: absolute; top: 50px; right: 115px;
+		display: block;
+		margin: 0;
+		padding: 0;
+	}
+	
+	header#top nav#applications:before {
+		position: absolute; top: -50px; right: 1px;
+		display: block;
+		background: rgba(255, 255, 255, 0);
+		color: rgba(255, 255, 255, 1);
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		width: 50px;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+		content: '\e810';
+		font-family: 'fontello';
+		font-size: 2em;
+	}
+	
+	header#top nav#applications:hover:before {
+		background: rgba(255, 255, 255, 1);
+		color: rgba(44, 62, 80, 1);
+	}
+	
+	header#top nav#applications ul {
+		display: none;
+		background: rgba(255, 255, 255, .9);
+	}
+	
+	header#top nav#applications:hover ul {
+		display: table;
+		border: 1px solid rgba(44, 62, 80, 1);
+		border-collapse: collapse;
+		border-top: none;
+		margin: 0;
+		width: 302px;
+	}
+		
+	header#top nav#applications:hover ul a {
+		display: inline-block;
+		color: rgb(44, 62, 80);
+		text-decoration: none;
+	}
+	
+	header#top nav#applications:hover ul li {
+		display: table-cell;
+		height: 100px;
+		overflow: hidden;
+		padding: .5em;
+		text-align: center;
+		vertical-align: middle;
+		width: 100px;
+		z-index: 500;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	header#top nav#applications:hover ul li span {
+		display: block;
+		font-family: 'fontello';
+		font-size: 2.5em;
+	}
+	
+	header#top nav#applications:hover ul li:hover {
+		color: rgba(192, 57, 43, 1);
+	}
+	
+	
+	
+	
+	
+/* Style dédié au formulaire de connexion */
+	
+	main.login form {
+		color: rgb(255, 255, 255);
+		background: rgba(0, 0, 0, .66);
+		border-radius: 2em;
+		height: 330px;
+		left: 50%;
+		margin: -165px 0 0 -200px;
+		position: absolute;
+		top: 50%;
+		width: 400px;
+	}
+	
+	form ul, form ul li {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+		width: 100%;
+	}
+	
+	form ul li label {
+		display: block;
+		font: 900 1em/1.8em "Roboto", Helvetica, Arial, sans-serif;
+		text-align: center;
+	}
+	form ul li label:first-of-type {
+		margin-top: 1.8em;
+	}
+	
+	form ul li input {
+		background: rgb(236, 240, 241);
+		border: 3px solid rgb(127, 140, 141);
+		border-radius: .66em;
+		display: block;
+		font: 300 1.2em/1.5em "Roboto", Helvetica, Arial, sans-serif;
+		height: 1.8em;
+		margin: .33em auto 1.8em auto;
+		padding: .1em .5em;
+		text-align: center;
+		width: 300px;
+		-webkit-transition: all .3s ease-in-out;
+		-moz-transition: all .3s ease-in-out;
+		-ms-transition: all .3s ease-in-out;
+		transition: all .3s ease-in-out;
+		outline: none;
+	}
+	
+	form ul li input:focus {
+		border-color: rgb(22, 160, 133);
+		outline: none;
+		padding: .1em 1em;
+	}
+	
+	form ul li.submit{
+		padding-left: 100px;
+	}
+	
+	form ul li input[type="submit"] {
+		background: rgb(236, 240, 241);
+		border: 3px solid rgb(127, 140, 141);
+		border-radius: .66em;
+		display: block;
+		font: 300 1em/1.8em "Roboto", Helvetica, Arial, sans-serif;
+		height: 2.3em;
+		text-align: center;
+		width: 200px;
+	}
+	
+	form ul li input[type="submit"]:hover, form ul li input[type="submit"]:focus {
+		border-color: rgb(22, 160, 133);
+		color: rgb(22, 160, 133);
+		outline: none;
+	} 
+	
+	form ul li input[type="submit"]::-moz-focus-inner {
+		border: 0;
+	}
+	
+	#erreur {
+		background-color: rgba(175, 0, 0, .66);
+		border: 3px solid white;
+		border-radius: 1em;
+		color: white;
+		margin: 1em auto;
+		padding: .5em 0;
+		text-align: center;
+		width: 250px;
+	}
+
+
+
+
+
+/* Style dédié aux fiches contact */
+
+	main.fiche {
+		position: absolute; top: 0; left: 0;
+		box-sizing: border-box;
+		height: 100%;
+		padding-top: 50px;
+		width: 100%;
+	}
+
+	main.fiche section#fiche-electeur {
+		position: relative;
+		width: 55%;
+	}
+	
+	main.fiche section#fiche-electeur #electeur-icons {
+		position: absolute; top: 0; left: 0;
+	}
+	
+	main.fiche section#fiche-electeur header {
+		position: relative;
+		display: table;
+		height: 200px;
+		padding-left: 250px;
+	}
+	
+	main.fiche section#fiche-electeur header:before {
+		position: absolute; top: 0; left: 0;
+		display: block;
+		background: rgb(44, 62, 80);
+		border-radius: 50%;
+		color: white;
+		content: '\e80a';
+		font-family: 'fontello';
+		font-size: 75px;
+		height: 125px;
+		line-height: 125px;
+		margin: 37.5px;
+		margin-left: 87.5px;
+		text-align: center;
+		width: 125px;
+	}
+	
+	main.fiche section#fiche-electeur header h2 {
+		display: table-cell;
+		color: rgb(44, 62, 80);
+		font: 900 2.66em/1.25em 'Roboto', Helvetica, Arial, sans-serif;
+		vertical-align: middle;
+	}
+	
+	main.fiche section#fiche-electeur header h2 span { display: block; }
+	
+	main.fiche section#fiche-electeur header h2 span:last-of-type {
+		font: 500 .9em/1.25em 'Roboto', Helvetica, Arial, sans-serif;
+		font-variant: small-caps;
+	}
+	
+	main.fiche ul.icons {
+		position: absolute; top: .5em; right: 0;
+		list-style: none;
+		text-align: right;
+	}
+	
+	main.fiche ul.icons li {
+		display: inline-block;
+		background: rgb(44, 62, 80);
+		border-radius: 50%;
+		color: white;
+		cursor: pointer;
+		font-family: 'fontello';
+		font-size: 15px;
+		height: 30px;
+		line-height: 30px;
+		margin: 0 .5em;
+		text-align: center;
+		width: 30px;
+	}
+	
+	main.fiche ul.icons li.actif { background: rgb(122,191,102); }
+	
+	main.fiche ul.icons li.inactif { background: rgb(219,48,38); }
+	
+	main.fiche ul.icons li:hover { background: rgb(249,225,75); }
+	
+	main.fiche ul.infos {
+		list-style: none;
+		padding: 0;
+		padding-left: 250px;
+	}
+	
+	main.fiche ul.infos li {
+		position: relative;
+		font: 400 1.2em/1.5em 'Roboto', Helvetica, Arial, sans-serif;
+		margin-bottom: 1.5em;
+		min-height: 1.5em;
+	}
+	
+	main.fiche ul.infos li label {
+		position: absolute; top: 0; left: -200px;
+		color: rgba(44, 62, 80, .85);
+		font-variant: small-caps;
+		margin-top: 0;
+		padding-right: 1em;
+		text-align: right;
+		width: 200px;
+	}
+	
+	main.fiche ul.infos li input.fiche {
+		border: 0;
+		border-bottom: 1px solid rgba(44, 62, 80, .25);
+		width: 85%;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	main.fiche ul.infos li input.fiche:focus {
+		border-bottom: 1px solid rgba(44, 62, 80, 1);
+	}
+	
+	main.fiche ul.infos li span#reussite-form-email, main.fiche ul.infos li span#reussite-form-mobile, main.fiche ul.infos li span#reussite-form-telephone {
+		position: absolute; bottom: 0; right: 15%;
+		display: none;
+		background: green;
+		border-radius: 50% 50% 0 0;
+		color: white;
+		font-family: 'fontello';
+		font-size: 12px;
+		height: 18px;
+		line-height: 18px;
+		text-align: center;
+		width: 18px;
+	}
+	
+	main.fiche aside #carte {
+		background-color: gray;
+		height: 200px;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
+	
+	main.fiche aside #tags {
+		list-style: none;
+		margin: 1em 0 0 0;
+		padding: .25em;
+		width: 100%;
+	}
+	
+	main.fiche aside #tags span.tag {
+		display: inline-block;
+		background: rgb(253, 231, 180);
+		border-radius: .5em;
+		box-shadow: 1px 1px 1px rgb(205,203,202);
+		cursor: pointer;
+		margin: .33em .25em;
+		padding: .15em 1em;
+	}
+	
+	main.fiche aside #tags span.tag:before {
+		display: inline-block;
+		color: rgb(237,130,98);
+		content: '\e827';
+		font-family: 'fontello';
+		padding: 0 .66em 0 0;
+		text-align: center;
+		width: 1em;
+	}
+	
+	main.fiche aside #tags span.tag:hover {
+		background: rgb(238,130,98);
+		color: rgb(255,255,255);
+		cursor: pointer;
+	}
+	
+	main.fiche aside #tags span.tag:hover:before {
+		color: rgb(253,231,180);
+		content: '\e813';
+	}
+	
+	main.fiche aside #tags #add-tag {
+		position: relative;
+		display: inline-block;
+		border: 2px solid rgb(237,130,98);
+		border-radius: 50%;
+		color: rgb(237,130,98);
+		cursor: pointer;
+		font-family: 'fontello';
+		font-size: 14px;
+		height: 18px;
+		line-height: 14px;
+		margin: 0 .5em;
+		text-align: center;
+		width: 18px;
+	}
+	
+	main.fiche aside #tags #add-tag:before {
+		position: absolute; top: -5px; right: 20px;
+		display: none;
+		background: rgb(44, 62, 80);
+		border-radius: .5em;
+		color: rgb(255, 255, 255);
+		content: 'Ajouter un tag';
+		font-family: 'Roboto', Helvetica, Arial, sans-serif;
+		padding: .4em .66em;
+		text-align: right;
+		z-index: 500;
+	}
+		
+	main.fiche aside #tags #add-tag:hover:before {
+		display: block;
+	}
+	
+	main.fiche aside #tags #ajout-tag {
+		display: none;
+		border: 1px solid rgb(253, 231, 180);
+		border-radius: .5em;
+		margin: .5em .33em;
+		padding: .15em 1em;
+		width: 15em;
+	}
+	
+	
+	
+	
+	main.fiche aside #historique, main.fiche aside #taches {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0 10px;
+		width: 100%;
+	}
+	
+	main.fiche aside #taches ul {
+		list-style: none;
+	}
+	
+	main.fiche aside #taches ul li {
+		position: relative;
+		margin-left: 0;
+		padding-left: 30px;
+	}
+	
+	main.fiche aside #taches ul li:before {
+		position: absolute; top: 0; left: 10px;
+		content: '\e836';
+		font-family: 'fontello';
+	}
+	
+	main.fiche aside #taches ul li span {
+		position: absolute; top: 2px; left: 6px;
+		display: none;
+		background: rgba(200, 200, 200, 1);
+		border-radius: 50%;
+		color: white;
+		font-family: 'fontello';
+		font-size: 10px;
+		height: 17px;
+		line-height: 17px;
+		text-align: center;
+		width: 17px;
+		
+		-webkit-transition: all .3s ease-in-out;
+		-moz-transition: all .3s ease-in-out;
+		-ms-transition: all .3s ease-in-out;
+		transition: all .3s ease-in-out;
+	}
+	
+	main.fiche aside #taches ul li:hover span {
+		display: block;
+		background: rgba(100, 100, 100, 1);
+	}
+	
+	main.fiche aside #taches ul li span:hover {
+		background: rgba(255, 100, 50, 1);
+		cursor: pointer;
+	}
+	
+	table#historique-contact {
+		border: 1px solid rgb(237,130,98);
+		margin: 0;
+		margin-top: -.33em;
+		margin-bottom: 1em;
+		table-layout: auto;
+		width: 100%;
+	}
+	
+	table#historique-contact thead tr th {
+		border: 1px solid rgb(237,130,98);
+	}
+	
+	table#historique-contact td, table#historique-contact th {
+		border: 1px dotted rgb(237,130,98);
+	}
+	
+	table#historique-contact thead tr {
+		background: rgba(253, 231, 180, 1);
+		border: 1px solid rgb(237,130,98);
+	}
+	
+	table#historique-contact tbody tr td:nth-of-type(-n+2) {
+		width: 125px;
+	}
+	
+	table#historique-contact tbody tr td:nth-of-type(2) {
+		text-align: center;
+	}
+	
+	table#historique-contact tbody tr.ajout-historique {
+		display: none;
+	}
+	
+	table#historique-contact tbody tr.ajout-historique td {
+		text-align: center;
+	} 
+	
+	table#historique-contact tbody tr.ajout-historique td input {
+		font-size: .95em;
+	}
+	
+	table#historique-contact tbody tr.ajout-historique td input#form-date {
+		text-align: center;
+		width: 95px;
+	}
+	
+	table#historique-contact tbody tr.ajout-historique td:last-of-type {
+		position: relative;
+		text-align: left;
+	}
+	
+	table#historique-contact tbody tr.ajout-historique td:last-of-type span.add-element {
+		position: absolute; top: 3px; right: 7px;
+		display: block;
+		background: rgb(237,130,98);
+		border-radius: 50%;
+		color: white;
+		cursor: pointer;
+		font-family: "fontello";
+		font-size: 15px;
+		height: 25px;
+		line-height: 25px;
+		text-align: center;
+		width: 25px;
+	}
+	
+	table#historique-contact tbody tr.ajout-historique td input#form-objet {
+		width: 90%;
+	}
+	
+	table#historique-contact thead tr th:last-of-type {
+		position: relative;
+	}
+	
+	table#historique-contact thead tr th:last-of-type span.add-historique {
+		position: absolute; top: 4px; right: 10px;
+		display: block;
+		background: rgb(237,130,98);
+		border-radius: 50%;
+		color: white;
+		cursor: pointer;
+		font-family: "fontello";
+		font-size: 12px;
+		height: 20px;
+		line-height: 20px;
+		opacity: .66;
+		text-align: center;
+		width: 20px;
+		
+		-webkit-transition: all .3s ease-in-out;
+		-moz-transition: all .3s ease-in-out;
+		-ms-transition: all .3s ease-in-out;
+		transition: all .3s ease-in-out;
+	}
+	
+	table#historique-contact thead tr th:last-of-type span.add-historique:hover {
+		opacity: 1;
+	}
+	
+	table#historique-contact thead tr th:last-of-type span.add-historique:before {
+		position: absolute; top: -5px; right: 30px;
+		display: block;
+		background: rgb(44, 62, 80);
+		border-radius: .5em;
+		color: rgb(255, 255, 255);
+		content: 'Ajouter une entrée';
+		font-family: 'Roboto', Helvetica, Arial, sans-serif;
+		opacity: 0;
+		padding: .4em .66em;
+		text-align: right;
+		z-index: 500;
+		
+		-webkit-transition: all .3s ease-in-out;
+		-moz-transition: all .3s ease-in-out;
+		-ms-transition: all .3s ease-in-out;
+		transition: all .3s ease-in-out;
+	}
+		
+	table#historique-contact thead tr th:last-of-type span.add-historique:hover:before {
+		opacity: 1;
+	}
+	
+	table#historique-contact tbody tr.attente { 
+		display: none;
+		width: 100%;
+	}
+	
+	table#historique-contact tbody tr.attente td {
+		font-family: 'fontello';
+		text-align: center;
+		width: 100%;
+	}
+	
+	table#historique-contact tbody tr.attente span {
+		display: block;
+		transform-origin: 50% 50%;
+		-moz-animation: rotfocus 3s linear infinite;
+		animation: rotfocus 3s linear infinite;
+	}
+	
+	table#historique-contact thead tr th {
+		text-align: center;
+	}
+	
+	
+/* Style lié au formulaire de recherche de fiche */
+
+	section#recherche-fiche {
+		margin: 0;
+		padding: 0 2em;
+	}
+	
+	section#recherche-fiche ul {
+		position: relative;
+		list-style: none;
+		margin: 0;
+		padding: 0 10px;
+		padding-right: 30px;
+		width: 100%;
+	}
+	
+	section#recherche-fiche ul li {
+		display: inline-block;
+		width: 50%;
+	}
+	
+	section#recherche-fiche ul li:last-of-type {
+		position: absolute; top: 5px; right: 10px;
+		display: block;
+		text-align: right;
+		width: 30px;
+	}
+	
+	section#recherche-fiche ul li:last-of-type input[type="submit"] {
+		background-color: rgba(44, 62, 80, 0);
+		border: 1px solid rgba(44, 62, 80, .5);
+		border-radius: 50%;
+		color: rgba(44, 62, 80, 1);
+		font-family: 'fontello';
+		height: 30px;
+		line-height: 20px;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+		width: 30px;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	section#recherche-fiche ul li:last-of-type input[type='submit']:hover {
+		border: 1px solid rgba(44, 62, 80, 1);
+	}
+	
+	section#recherche-fiche ul li label {
+		display: block;
+		color: rgba(44, 62, 80, .85);
+		font-size: .85em;
+		font-variant: small-caps;
+		line-height: .75em;
+		padding-left: 5px;
+		margin-top: .5em;
+	}
+	
+	section#recherche-fiche ul li input {
+		border: 0;
+		border-bottom: 1px solid rgba(44, 62, 80, .25);
+		font-size: 1.1em;
+		line-height: 1.5em;
+		padding: .15em 5px;
+		margin-bottom: .66em;
+		width: 85%;
+		
+		-webkit-transition: all .2s ease-in-out;
+		-moz-transition: all .2s ease-in-out;
+		-ms-transition: all .2s ease-in-out;
+		transition: all .2s ease-in-out;
+	}
+	
+	section#recherche-fiche ul li input:focus {
+		border-bottom: 1px solid rgba(44, 62, 80, 1);
+	}
+	
+	
+	
+	
+	
+	main[class^='recherche'] section.liste {
+		display: block;
+		height: 100%;
+		margin-top: 1.1em;
+		text-align: center;
+		width: 100%;
+	}
+	
+	main[class^='recherche'] section.liste a {
+		border-bottom: inherit;
+		color: inherit;
+		text-decoration: inherit;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche {
+		position: relative;
+		display: inline-block;
+		background: rgba(253, 231, 180, .66);
+		border-radius: .5em;
+		box-shadow: 1px 1px 3px rgb(205,203,202);
+		margin: 1.5em 2em;
+		min-height: 100px;
+		padding: 10px;
+		vertical-align: top;
+		width: 200px;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche header {
+		display: block;
+		padding-top: 140px;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche header:before {
+		position: absolute; top: 0; left: 0px;
+		display: block;
+		background: /*rgb(44, 62, 80)*/rgb(237,130,98);
+		border-radius: 50%;
+		color: white;
+		content: '\e80a';
+		font-family: 'fontello';
+		font-size: 50px;
+		height: 100px;
+		line-height: 100px;
+		margin: 25px 50px;
+		text-align: center;
+		width: 100px;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche.vide header:before {
+		background: none;
+		color: rgb(237, 130, 98);
+		content: '\e803';
+		font-size: 45px;
+		height: 75px;
+		line-height: 75px;
+		margin: 37.5px 62.5px;
+		width: 75px;
+		
+		transform-origin: 50% 50%;
+		-webkit-animation: typofocus 4s ease-in-out infinite;
+		-moz-animation: typofocus 4s ease-in-out infinite;
+		-ms-animation: typofocus 4s ease-in-out infinite;
+		animation: typofocus 4s ease-in-out infinite;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche header h3 {
+		color: rgb(44, 62, 80);
+		font-size: 1.33em;
+		font-weight: 900;
+		margin: 0;
+		margin-bottom: .33em;
+		padding: 0;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche header h3 span:last-of-type {
+		display: block;
+		font-weight: 500;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	
+	main[class^='recherche'] section.liste article.fiche ul li {
+		color: rgb(60, 60, 60);
+		font-size: 1em;
+		font-weight: 300;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
