@@ -15,9 +15,6 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSkeqzB0suNWsj8fU3If9tA0spIl_xN2A&sensor=false"></script>
 </head>
 <body>	
-	<!-- Interstitiel pouvant être déclencher et à remplir -->
-	<section id="interstitiel"><div id="boutonFermer">&#xe814;</div><div id="contenuInterstitiel"></div></section>
-
 	<!-- Contenu concret de la page -->
 	<header id="top">
 		<h1><a class="nostyle" href="<?php $core->tpl_get_url(); ?>">LeQG</a></h1>
