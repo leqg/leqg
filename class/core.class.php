@@ -43,6 +43,24 @@ class core {
 		// On retourne la chaîne de caractères sécurisée
 		return $string;
 	}
+	
+	
+	// formatage_donnees( array , string ) permet de retourner le tableau entré sans les préfixes BDD
+	public	function formatage_donnees($array) {
+		// On initialise le nouveau tableau
+		$keys = array_keys($array);
+		
+		foreach ($keys as $key) {
+			// On détecte le premier segment BDD à retirer du nom de la clé
+			$new_key = substr(strpbrk($key, '_'), 1);
+
+			// On transforme la clé
+			$array[$new_key] = $array[$key];
+			unset($array[$key]);
+		}
+		
+		return $array;
+	}
 		
 	
 // Méthodes liées au templating
