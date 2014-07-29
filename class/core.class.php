@@ -25,6 +25,8 @@ class core {
 		// On affiche le tableau préformaté s'il s'agit d'un tableau
 		if (is_array($array)) { print_r($array); }
 		
+		else if (is_object($array)) { print_r($array); }
+		
 		// On affiche une phrase d'erreur s'il ne s'agit pas d'un tableau avec le contenu de la variable en question
 		else {
 			echo ucwords(gettype($array)).'<br>(<span>';
