@@ -18,6 +18,21 @@ class core {
 	}
 	
 	
+	// debug( array ) permet d'afficher un array mis en forme par la fonction print_r et d'arrêter le script à des fins de debug
+	public	function debug($array) {
+		// On affiche le tableau préformaté s'il s'agit d'un tableau
+		if (is_array($array)) { echo '<pre>'; print_r($array); echo '</pre>'; }
+		
+		// On affiche une phrase d'erreur s'il ne s'agit pas d'un tableau avec le contenu de la variable en question
+		else {
+			echo '<div>L\'entrée fournie n\'est pas un tableau :<br>' . $array . '</div>';
+		}
+		
+		// Dans tous les cas, on arrête le script à l'appel de la fonction
+		exit;
+	}
+	
+	
 	// securisation_string( string ) permet de sécuriser les données qui doivent transiter par la base de données pour éviter les injections
 	public	function securisation_string($string) {
 		// On ajout des antislashes pour les caractères spéciaux
