@@ -151,6 +151,31 @@ main {
 	width: 100%;
 }
 
+pre {
+	background-color: lighten($rouge, 33%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	-webkit-background-size: 3em 3em;
+	-moz-background-size: 3em 3em;
+	background-size: 3em 3em;
+	border: 5px solid lighten($rouge, 10%);
+	color: $noir;
+	font-family: 'Courrier New', monospace;
+	font-size: 1.1em;
+	line-height: 1.5em;
+	margin: 3em;
+	padding: 1.5em;
+	padding-top: 1.55em;
+	text-align: left;
+	
+	span {
+		display: block;
+		padding-left: 2em;
+	}
+}
+
 svg:not(:root) {
 	overflow: hidden;
 }
