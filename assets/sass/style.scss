@@ -1310,7 +1310,7 @@ section#creation {
 	position: relative;
 	width: 55%;
 	
-	> header {
+	header {
 		position: relative;
 		display: table;
 		height: 200px;
@@ -1386,7 +1386,7 @@ section#creation {
 				position: absolute; top: 0; left: -200px;
 				color: lighten($bleu, 12%);
 				font-variant: small-caps;
-				margin-top: 0;
+				margin-top: .1em;
 				padding-right: 1em;
 				text-align: right;
 				width: 200px;
@@ -1421,19 +1421,21 @@ section#creation {
 				line-height: 1.5em;
 				padding: .33em;
 				padding-top: 0;
+				resize: none;
 				width: 85%;
 				@include transition(all);
 				
 				&:focus {
 					border-bottom: 1px solid $bleu;
+					border-left: 1px solid $bleu;
 				}
 			}
 			
 			&.button {
-				margin-left: -250px;
 				text-align: center;
+				width: 85%;
 			
-				input[type='button'] {
+				input[type='submit'] {
 					background: $blanc;
 					border: 3px solid $bleu;
 					color: $bleu;
@@ -1452,11 +1454,61 @@ section#creation {
 			}
 		}
 	}
+}
+
+
+
+// Style relatif aux pages des dossiers
+section#dossier {
+	position: relative;
+	width: 55%;
 	
-	#ajoutProfils {
-		section.liste {
-			article.fiche {
-				cursor: pointer;
+	header {
+		position: relative;
+		display: table;
+		height: 200px;
+		padding-left: 250px;
+		
+		&.dossier:before {
+			content: '\e850';
+		}
+		
+		&:before {
+			position: absolute; top: 0; left: 0;
+			display: block;
+			background: $bleu;
+			border-radius: .5em;
+			color: white;
+			font-family: $icons;
+			font-size: 75px;
+			height: 125px;
+			line-height: 125px;
+			margin: 37.5px;
+			margin-left: 87.5px;
+			text-align: center;
+			width: 125px;
+		}
+		
+		h2 {
+			display: table-cell;
+			color: $bleu;
+			font: 900 2.66em/1.25em $fonts;
+			vertical-align: middle;
+			
+			span {
+				display: block;
+				
+				&:first-of-type {
+					text-transform: uppercase;
+				}
+				
+				&:last-of-type {
+					font: 500 .9em/1.25em $fonts;
+					font-variant: small-caps;
+					text-transform: uppercase;
+				}
+				
+				
 			}
 		}
 	}

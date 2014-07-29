@@ -106,11 +106,11 @@
 			 				?>
 			 				<a href="<?php $core->tpl_get_url('dossier', $dossier['dossier_id']); ?>">
 				 				<li id="dossier-<?php echo $dossier['dossier_id']; ?>" <?php if (!$dossier['dossier_statut']) { ?>class="dossierFerme"<?php } ?>>
-					 				<strong><?php echo $dossier['dossier_nom']; ?></strong>
-					 				<?php if (strlen($dossier['dossier_description']) > 100) { ?>
-					 				<p><?php echo substr($dossier['dossier_description'], 0, 100); ?>&hellip;</p>
+					 				<strong><?php echo stripslashes($dossier['dossier_nom']); ?></strong>
+					 				<?php if (strlen($dossier['dossier_description']) > 150) { ?>
+					 				<p><?php echo substr(stripslashes($dossier['dossier_description']), 0, 150); ?>&hellip;</p>
 					 				<?php } else { ?>
-					 				<p><?php echo $dossier['dossier_description']; ?></p>
+					 				<p><?php echo stripslashes($dossier['dossier_description']); ?></p>
 					 				<?php } ?>
 				 				</li>
 			 				</a>

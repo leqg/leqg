@@ -52,12 +52,30 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$fiche->fermeture();
 		}
 		
-		else if ($_GET['page'] == 'creation') {
+		else if ($_GET['page'] == 'creation' && isset($_GET['id'])) {
 			// S'il s'agit de la création d'un dossier ou d'une tâche, on charge les templates relatifs à la page demandée
 			$core->tpl_header();
 			$core->tpl_load('creation', addslashes($_GET['type']));
 			$core->tpl_footer();
 		} 
+		
+		else if ($_GET['page'] == 'creation' && $_GET['type'] == 'dossier' && isset($_GET['submit'])) {
+			// S'il s'agit de la création d'un dossier, on l'enregistre dans la base de données, en récupérant d'abord les variables
+			$titre = $_POST['titre'];
+			$description = $_POST['description'];
+			$id = $_POST['id'];
+			
+			// On enregistre ces informations dans la base de données
+			$dossier = $fiche->dossier_ajout($titre, $description, $id);
+			
+			$core->tpl_redirection('dossier', $dossier);
+		}
+		
+		else if ($_GET['page'] == 'dossier' && is_numeric($_GET['id'])) {
+			$core->tpl_header();
+			$core->tpl_load('dossier');
+			$core->tpl_footer();
+		}
 		
 		else if ($_GET['page'] == 'contacts') {
 			
