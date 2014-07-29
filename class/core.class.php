@@ -19,7 +19,7 @@ class core {
 	
 	
 	// securisation_string( string ) permet de sécuriser les données qui doivent transiter par la base de données pour éviter les injections
-	private	function securisation_string($string) {
+	public	function securisation_string($string) {
 		// On ajout des antislashes pour les caractères spéciaux
 		$string = addslashes($string);
 		// On transforme les caractères spéciaux en entités HTML
