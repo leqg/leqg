@@ -759,10 +759,15 @@ main.fiche {
 	
 		#carte {
 			background-color: gray;
-			height: 50%;
+			height: 75%;
 			margin: 0;
+			max-width: none;
 			padding: 0;
 			width: 100%;
+			
+			img {
+			    max-width: none; 
+			}
 		}
 		
 		#tags {

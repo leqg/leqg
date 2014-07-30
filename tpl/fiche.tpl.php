@@ -500,7 +500,8 @@ function initialize() {
 		draggable: true,
 		rotateControl: false,
 		scrollwheel: false,
-		zoom: 16
+		zoomControl: true,
+		zoom: 17
 	};
 	var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
 
