@@ -311,7 +311,7 @@ class fiche extends core {
 	public	function taches_liees($id = null) {
 		if (is_null($id)) $id = $this->get_infos('id');
 		
-		$query = "SELECT * FROM taches WHERE tache_contacts LIKE '%" . $id . "%'";
+		$query = "SELECT * FROM taches WHERE tache_contacts LIKE '%" . $id . "%' AND tache_terminee = 0";
 		$sql = $this->db->query($query);
 		
 		$nb = $sql->num_rows;

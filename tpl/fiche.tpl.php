@@ -82,7 +82,7 @@
 			 	if ($taches_liees) {
 					if (count($taches_liees) >= 1) {
 			 			foreach ($taches_liees as $tache) {
-				 			echo '<li id="tache-' . $tache['tache_id'] . '">' . $tache['tache_description'] . ' <span class="fin-tache" data-tache="' . $tache['tache_id'] . '">&#xe812;</span></li>';
+				 			echo '<li id="tache-' . $tache['tache_id'] . '">' . $tache['tache_description'] . ' <a href="' . $core->tpl_return_url('tache', 'suppression', 'action', $_GET['id'] . '-' . $tache['tache_id'], 'id') . '">&#xe812;</a></li>';
 			 			}
 			 		} else {
 				 		echo '<li class="nobefore">Aucune tâche associée au contact actuellement.</li>';

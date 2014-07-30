@@ -125,6 +125,30 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$core->tpl_redirection('dossier', $id['dossier']);
 		}
 		
+		else if ($_GET['page'] == 'creation' && $_GET['type'] == 'tache' && isset($_GET['submit'])) {
+			// S'il s'agit de la création d'un dossier, on l'enregistre dans la base de données, en récupérant d'abord les variables
+			$contenu_tache = $_POST['tache'];
+			$id = $_POST['id'];
+			$destinataire = implode(',', $_POST['destinataire']);
+			$deadline = $_POST['deadline']; 
+			
+			// On enregistre ces informations dans la base de données
+			$tache_id = $tache->creation( $contenu_tache , $deadline , $id , $destinataire );
+						
+			$core->tpl_redirection('fiche', $id);
+		}
+		
+		else if ($_GET['page'] == 'tache' && $_GET['action'] == 'suppression' && isset($_GET['id'])) {
+			// On récupère les identifiants
+			$id = explode('-', $_GET['id']);
+			
+			// On défini la tâche comme terminée dans la base de données
+			$db->query("UPDATE taches SET tache_terminee = 1 WHERE tache_id = " . $id[1]);
+			
+			// On renvoit vers la fiche
+			$core->tpl_redirection('fiche', $id[0]);
+		}
+
 		else if ($_GET['page'] == 'contacts') {
 			
 			// On lance la page d'accueil du module contact

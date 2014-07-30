@@ -341,11 +341,11 @@ main.login form {
     padding: 0;
     text-align: center;
     width: 100%; }
-  main.login form ul li label {
+  main.login form ul li > label {
     display: block;
     font: 900 1em/1.8em "Roboto", Helvetica, Arial, sans-serif;
     text-align: center; }
-    main.login form ul li label:first-of-type {
+    main.login form ul li > label:first-of-type {
       margin-top: 1.8em; }
   main.login form ul li.submit {
     padding-left: 100px; }
@@ -500,7 +500,7 @@ main.fiche {
         border-bottom-color: #c0392b; }
         main.fiche ul.infos li a:hover {
           border-bottom-color: #2c3e50; }
-      main.fiche ul.infos li label {
+      main.fiche ul.infos li > label {
         position: absolute;
         top: 0;
         left: -200px;
@@ -722,10 +722,10 @@ main.fiche {
           font-family: "fontello"; }
         main.fiche aside #taches ul li.nobefore:before {
           content: '\e81f'; }
-        main.fiche aside #taches ul li:hover span {
+        main.fiche aside #taches ul li:hover > a {
           display: block;
           background: #646464; }
-        main.fiche aside #taches ul li span {
+        main.fiche aside #taches ul li > a {
           position: absolute;
           top: 2px;
           left: 6px;
@@ -738,11 +738,12 @@ main.fiche {
           height: 17px;
           line-height: 17px;
           text-align: center;
+          text-decoration: none;
           width: 17px;
           -webkit-transition: all 0.2s ease-in-out;
           -moz-transition: all 0.2s ease-in-out;
           transition: all 0.2s ease-in-out; }
-          main.fiche aside #taches ul li span:hover {
+          main.fiche aside #taches ul li > a:hover {
             background: #c0392b;
             cursor: pointer; }
     main.fiche aside #dossiers ul {
@@ -941,7 +942,7 @@ section#recherche-fiche {
           transition: all 0.2s ease-in-out; }
           section#recherche-fiche ul li:last-of-type input[type="submit"]:hover {
             border: 1px solid #2c3e50; }
-      section#recherche-fiche ul li label {
+      section#recherche-fiche ul li > label {
         display: block;
         color: #476481;
         font-size: .85em;
@@ -1072,7 +1073,7 @@ section#creation {
     section#creation header.dossier:before {
       content: '\e850'; }
     section#creation header.tache:before {
-      content: ''; }
+      content: '\e823'; }
     section#creation header:before {
       position: absolute;
       top: 0;
@@ -1114,7 +1115,7 @@ section#creation {
         border-bottom-color: #c0392b; }
         section#creation ul.infos li a:hover {
           border-bottom-color: #2c3e50; }
-      section#creation ul.infos li label {
+      section#creation ul.infos li > label:first-of-type {
         position: absolute;
         top: 0;
         left: -200px;
@@ -1124,7 +1125,7 @@ section#creation {
         padding-right: 1em;
         text-align: right;
         width: 200px; }
-        section#creation ul.infos li label.textarea {
+        section#creation ul.infos li > label:first-of-type.textarea {
           margin-top: .9em; }
       section#creation ul.infos li input.fiche {
         border: 0;
@@ -1138,6 +1139,16 @@ section#creation {
         transition: all 0.2s ease-in-out; }
         section#creation ul.infos li input.fiche:focus {
           border-bottom: 1px solid #2c3e50; }
+      section#creation ul.infos li > label.checkbox {
+        position: relative;
+        display: block;
+        padding-left: 2em; }
+        section#creation ul.infos li > label.checkbox input {
+          position: absolute;
+          top: .2em;
+          left: 0;
+          display: block;
+          width: auto; }
       section#creation ul.infos li textarea {
         border: 0;
         border-bottom: 1px solid #aabdd1;
@@ -1229,7 +1240,7 @@ main.dossier section#fiche-dossier {
         border-bottom-color: #c0392b; }
         main.dossier section#fiche-dossier ul.infos li a:hover {
           border-bottom-color: #2c3e50; }
-      main.dossier section#fiche-dossier ul.infos li label {
+      main.dossier section#fiche-dossier ul.infos li > label {
         position: absolute;
         top: 0;
         left: -200px;
@@ -1239,7 +1250,7 @@ main.dossier section#fiche-dossier {
         padding-right: 1em;
         text-align: right;
         width: 200px; }
-        main.dossier section#fiche-dossier ul.infos li label.textarea {
+        main.dossier section#fiche-dossier ul.infos li > label.textarea {
           margin-top: .9em; }
       main.dossier section#fiche-dossier ul.infos li input.fiche {
         border: 0;

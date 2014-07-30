@@ -435,7 +435,7 @@ main.login {
 		
 		ul {
 			li {
-				label {
+				& > label {
 					display: block;
 					font: 900 1em/1.8em $fonts;
 					text-align: center;
@@ -643,7 +643,7 @@ main.fiche {
 				}
 			}
 			
-			label {
+			& > label {
 				position: absolute; top: 0; left: -200px;
 				color: lighten($bleu, 12%);
 				font-variant: small-caps;
@@ -909,12 +909,12 @@ main.fiche {
 						content: '\e81f';
 					}
 					
-					&:hover span {
+					&:hover > a {
 						display: block;
 						background: rgba(100, 100, 100, 1);
 					}
 					
-					span {
+					& > a {
 						position: absolute; top: 2px; left: 6px;
 						display: none;
 						background: rgba(200, 200, 200, 1);
@@ -925,6 +925,7 @@ main.fiche {
 						height: 17px;
 						line-height: 17px;
 						text-align: center;
+						text-decoration: none;
 						width: 17px;
 						@include transition(all);
 						
@@ -1204,7 +1205,7 @@ section#recherche-fiche {
 				}
 			}
 			
-			label {
+			& > label {
 				display: block;
 				color: lighten($bleu, 15%);
 				font-size: .85em;
@@ -1386,7 +1387,7 @@ section#creation {
 		}
 		
 		&.tache:before {
-			content: '';
+			content: '\e823';
 		}
 		
 		&:before {
@@ -1447,7 +1448,7 @@ section#creation {
 				}
 			}
 			
-			label {
+			& > label:first-of-type {
 				position: absolute; top: 0; left: -200px;
 				color: lighten($bleu, 12%);
 				font-variant: small-caps;
@@ -1472,6 +1473,18 @@ section#creation {
 				
 				&:focus {
 					border-bottom: 1px solid $bleu;
+				}
+			}
+			
+			& > label.checkbox {
+				position: relative;
+				display: block;
+				padding-left: 2em;
+				
+				input {
+					position: absolute; top: .2em; left: 0; 
+					display: block;
+					width: auto;
 				}
 			}
 			
@@ -1593,7 +1606,7 @@ main.dossier {
 					}
 				}
 				
-				label {
+				& > label {
 					position: absolute; top: 0; left: -200px;
 					color: lighten($bleu, 12%);
 					font-variant: small-caps;
