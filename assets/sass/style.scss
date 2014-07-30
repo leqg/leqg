@@ -140,6 +140,17 @@ img {
 	border: 0;
 }
 
+input {
+	border: 0;
+	border-bottom: 1px solid lighten($bleu, 50%);
+	padding: .33em 1em;
+	width: 100%;
+	@include transition(all);
+	
+	&:hover { border-bottom: 1px solid lighten($bleu, 40%); }
+	&:focus { border-bottom: 1px solid $bleu; }
+}
+
 main {
 	position: absolute; top: 0; left: 0;
 	height: 100%;
@@ -1642,8 +1653,107 @@ main.dossier {
 		}
 	}
 	
-	aside {
-		padding-bottom: 3em;
-		@include shadow(0, 0, 1em, rgb(100, 100, 100));
+	aside.barreGauche {
+		ul#liste-contacts {
+			list-style: none;
+			margin: 0;
+			padding: 1em 0;
+			
+			li {
+				position: relative;
+				display: block;
+				background: $jaune;
+				font-size: 1.15em;
+				height: 35px;
+				line-height: 35px;
+				margin: .5em 2em 1em 2em;
+				padding: 0 1em;
+				padding-left: 40px;
+				width: auto;
+				@include border-radius(1em);
+				@include shadow(2px, 2px, 0, $gris);
+				
+				span {
+					font-weight: 400;
+				
+					&.bouton-ajout {
+						position: absolute; top: 0; left: 5px;
+						display: block;
+						color: $orange;
+						font-family: $icons;
+						font-size: 20px;
+						height: 35px;
+						line-height: 35px;
+						text-align: center;
+						width: 35px;
+						@include transition(all);
+					}
+				}
+				
+				&:hover {
+					color: $rouge;
+					
+					.bouton-ajout {
+						color: $rouge;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Style de base pour les barres latérales standards à gauche avec ou sans navigation
+aside.barreGauche {
+	position: fixed; top: 0; right: 0;
+	padding-bottom: 3em;
+	@include shadow(0, 0, 1em, rgb(100, 100, 100));
+	
+	ul#navigation-aside {
+		position: absolute; bottom: 0;
+		background: rgba(255, 255, 255, .66);
+		height: 3.5em;
+		margin: 0;
+		padding: 0;
+		padding-top: .5em;
+		width: 100%;
+		z-index: 9999;
+		
+		li {
+			display: inline-block;
+			background: $blanc;
+			border-top: 1px solid $bleu;
+			font-size: 1em;
+			height: 3em;
+			line-height: 3em;
+			margin: 0;
+			padding: 0;
+			text-align: center;
+			width: 33.33%;
+			
+			&:hover {
+				cursor: pointer;
+				font-weight: 500;
+			}
+			
+			&:nth-of-type(2) {
+				border: 1px solid $bleu;
+				border-bottom: none;
+			}
+			
+			&.actif {
+				border-top: none !important;
+				
+				&:hover {
+					cursor: default;
+					font-weight: inherit;
+				}
+			}
+		}
+	}
+	
+	div[id^='aside-'] {
+		padding-left: 1em;
+		padding-right: 1em;
 	}
 }

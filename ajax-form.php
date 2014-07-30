@@ -196,7 +196,7 @@ else if ($_GET['action'] == 'creation-dossier-etape1') {
 // Système de recherche de fiches dans le cadre de la création d'un nouveau dossier ou d'une nouvelle tâche
 else if ($_GET['action'] == 'recherche-fiche-creation') {
 	// On récupère la liste des champs déjà entrés, pour les exclure de la recherche
-	$fiches_exclues = $_POST['fichesDansDossier']; echo $fiches_exclues;
+	$fiches_exclues = $_POST['exclusion'];
 	$fiches_exclues = explode(',', $fiches_exclues);
 	
 	$recherche_exclusion = " AND ";
@@ -207,7 +207,7 @@ else if ($_GET['action'] == 'recherche-fiche-creation') {
 		if ($i != $nb_exclusions) { $recherche_exclusion .= " AND "; }
 		$i++;
 	}
-			
+	
 	// On récupère la recherche et on la reformate
 	$recherche = $core->securisation_string($_POST['recherche']);
 	$recherche = $fiche->recherche_fiche($recherche);
@@ -216,36 +216,12 @@ else if ($_GET['action'] == 'recherche-fiche-creation') {
 	$sql = $db->query($query);
 	
 	while ($row = $sql->fetch_assoc()) {
-		echo '<article class="fiche fiche-recherchee" id="fiche-recherchee-' . $row['contact_id'] . '" data-fiche="' . $row['contact_id'] . '">';
-			echo '<header><h3>' . $fiche->nomByID($row['contact_id'], 'span', true) . '</h3></header>';
-		echo '</article>';
+		echo '<a href="' . $core->tpl_return_url('dossier', 'ajout', 'action', $_POST['id'] . '-' . $row['contact_id'], 'id') . '">';
+			echo '<li class="ajout-fiche" data-fiche="' . $row['contact_id'] . '">';
+				echo $fiche->nomByID($row['contact_id'], 'span class="nom"', true);
+				echo '<span class="bouton-ajout">&#xe817;</span>';
+			echo '</li>';
+		echo '</a>';
 	}
-	
-	/*<script>
-		// On paramètre la fonction d'ajout d'une fiche recherchée à la liste des personnes souhaitées
-		$(".fiche-recherchee").click(function(){
-			var fiche = $(this).data('fiche');
-			
-			// On ajoute l'identifiant au champ caché
-			var champ = $("#fichesDansDossier").val();
-			var champ_add = champ + ',' + fiche;
-			$("#fichesDansDossier").val(champ_add);
-			
-			// On déplace la fiche en question dans le cadre supérieur et on l'enlève de la recherche
-			var contenuAfficheDansArticle = $("#fiche-recherchee-" + fiche).html();
-			var contenuAffiche = '<article class="fiche" id="fiche-' + fiche + '">' + contenuAfficheDansArticle + '</article>';
-			$("#fiche-recherchee-" + fiche).hide();
-			$("#listeFiches").append(contenuAffiche);
-			
-			// On relance la recherche
-			rechercheFiche();
-		});
-		
-		$(".fiche").click(function(){
-			var fiche = $(this).data('fiche');
-			
-			
-		});
-	</script>*/
 }
 ?>

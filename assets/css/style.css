@@ -94,6 +94,19 @@ img {
   vertical-align: middle;
   border: 0; }
 
+input {
+  border: 0;
+  border-bottom: 1px solid #aabdd1;
+  padding: .33em 1em;
+  width: 100%;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
+  input:hover {
+    border-bottom: 1px solid #8aa4be; }
+  input:focus {
+    border-bottom: 1px solid #2c3e50; }
+
 main {
   position: absolute;
   top: 0;
@@ -1267,8 +1280,89 @@ main.dossier section#fiche-dossier {
           main.dossier section#fiche-dossier ul.infos li.button input[type='submit']:hover {
             border-color: #c0392b;
             color: #c0392b; }
-main.dossier aside {
+main.dossier aside.barreGauche ul#liste-contacts {
+  list-style: none;
+  margin: 0;
+  padding: 1em 0; }
+  main.dossier aside.barreGauche ul#liste-contacts li {
+    position: relative;
+    display: block;
+    background: #fde7b4;
+    font-size: 1.15em;
+    height: 35px;
+    line-height: 35px;
+    margin: .5em 2em 1em 2em;
+    padding: 0 1em;
+    padding-left: 40px;
+    width: auto;
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    border-radius: 1em;
+    -webkit-box-shadow: 2px 2px 0 #cdcbca;
+    -moz-box-shadow: 2px 2px 0 #cdcbca;
+    box-shadow: 2px 2px 0 #cdcbca; }
+    main.dossier aside.barreGauche ul#liste-contacts li span {
+      font-weight: 400; }
+      main.dossier aside.barreGauche ul#liste-contacts li span.bouton-ajout {
+        position: absolute;
+        top: 0;
+        left: 5px;
+        display: block;
+        color: #ed8262;
+        font-family: "fontello";
+        font-size: 20px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        width: 35px;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+    main.dossier aside.barreGauche ul#liste-contacts li:hover {
+      color: #c0392b; }
+      main.dossier aside.barreGauche ul#liste-contacts li:hover .bouton-ajout {
+        color: #c0392b; }
+
+aside.barreGauche {
+  position: fixed;
+  top: 0;
+  right: 0;
   padding-bottom: 3em;
   -webkit-box-shadow: 0 0 1em #646464;
   -moz-box-shadow: 0 0 1em #646464;
   box-shadow: 0 0 1em #646464; }
+  aside.barreGauche ul#navigation-aside {
+    position: absolute;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.66);
+    height: 3.5em;
+    margin: 0;
+    padding: 0;
+    padding-top: .5em;
+    width: 100%;
+    z-index: 9999; }
+    aside.barreGauche ul#navigation-aside li {
+      display: inline-block;
+      background: white;
+      border-top: 1px solid #2c3e50;
+      font-size: 1em;
+      height: 3em;
+      line-height: 3em;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      width: 33.33%; }
+      aside.barreGauche ul#navigation-aside li:hover {
+        cursor: pointer;
+        font-weight: 500; }
+      aside.barreGauche ul#navigation-aside li:nth-of-type(2) {
+        border: 1px solid #2c3e50;
+        border-bottom: none; }
+      aside.barreGauche ul#navigation-aside li.actif {
+        border-top: none !important; }
+        aside.barreGauche ul#navigation-aside li.actif:hover {
+          cursor: default;
+          font-weight: inherit; }
+  aside.barreGauche div[id^='aside-'] {
+    padding-left: 1em;
+    padding-right: 1em; }

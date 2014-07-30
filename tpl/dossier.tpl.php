@@ -26,3 +26,59 @@
 		<article id="ajout-contact" class="fiche ajout"><header><h3><span>Ajouter</span> <span>un contact</span></h3></header></article>
 	</section>
 </section>
+
+<aside class="barreGauche">
+	<!-- Barre de navigation -->
+	<ul id="navigation-aside"><!--
+	 --><li class="nav-aside-go" id="nav-aside-taches" data-tab="start">Tâches associées</li><!--
+	 --><li class="nav-aside-go" id="nav-aside-fichiers" data-tab="taches">Fichiers associés</li><!--
+	 --><li class="nav-aside-go" id="nav-aside-historique" data-tab="historique">Historique</li><!--
+ --></ul>
+ 
+ 	<div id="aside-taches" class="volet"></div>
+ 	<div id="aside-fichiers" class="volet"></div>
+ 	<div id="aside-historique" class="volet"></div>
+ 	<div id="aside-contacts" class="volet">
+	 	<h6>Ajout d'un contact</h6>
+	 	<input type="text" id="recherche" placeholder="Entrez le nom et le prénom de la personne à chercher (3 signes min.)">
+	 	
+	 	<ul id="liste-contacts"></ul>
+ 	</div>
+
+</aside>
+
+<script>
+$(document).ready(function(){
+	// Au démarrage, on cache les volets du aside sauf aside-taches
+	$(".volet").hide();
+	$("#aside-taches").show();
+	
+	// On ferme tous les volets sauf contacts au clic sur l'ajout d'une fiche
+	$("#ajout-contact").click(function(){
+		$(".volet").hide();
+		$("#aside-contacts").show();
+		$("#recherche").focus();
+	});
+
+	// Fonction permettant de recherche à partir du moment où l'on tape quelque chose dans le formulaire des fiches correspondantes
+	function rechercheFiches() {
+		var recherche = $("#recherche").val();
+		var exclusion = '<?php echo $dossier['contacts']; ?>';
+		
+		// On continue si c'est assez long
+		if (recherche.length > 3) {
+			$.ajax({
+				type: 'POST',
+				url: 'ajax-form.php?action=recherche-fiche-creation',
+				data: { 'id': <?php echo $_GET['id']; ?> , 'recherche': recherche , 'exclusion': exclusion },
+				dataType: 'html'
+			}).done(function(data){
+				$("#liste-contacts").html(data);
+			});
+		}
+	}
+	
+	rechercheFiches();
+	$("#recherche").keyup(rechercheFiches);
+});
+</script>
