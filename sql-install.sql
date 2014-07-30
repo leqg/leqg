@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:8889
--- Généré le :  Mar 29 Juillet 2014 à 15:26
+-- Généré le :  Jeu 31 Juillet 2014 à 00:31
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
@@ -51909,15 +51909,14 @@ CREATE TABLE `dossiers` (
   `dossier_date_fermeture` datetime DEFAULT NULL,
   PRIMARY KEY (`dossier_id`),
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Contenu de la table `dossiers`
 --
 
 INSERT INTO `dossiers` (`dossier_id`, `dossier_nom`, `dossier_description`, `dossier_contacts`, `dossier_statut`, `dossier_date_ouverture`, `dossier_date_fermeture`) VALUES
-(1, 'Test du système de dossier', 'Ce test permettra de savoir comment se comporte le système de dossier et voir ainsi comment intégrer son fonctionnement au système de fiches. On verra bien comment ça va fonctionner !', '1100,10164', 1, '2014-06-27 16:14:21', NULL),
-(2, 'Dossier fermé', 'Test de style d''un dossier fermé', '1100', 0, '2014-06-27 16:49:42', '0000-00-00 00:00:00');
+(9, 'Insalubrit&eacute; Socolopo', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '4052,10164', 1, '2014-07-29 20:03:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -53840,16 +53839,27 @@ CREATE TABLE `taches` (
   `tache_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tache_contacts` text NOT NULL,
   `tache_destinataire` text NOT NULL,
+  `tache_terminee` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tache_id`),
   KEY `compte_id` (`compte_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Contenu de la table `taches`
 --
 
-INSERT INTO `taches` (`tache_id`, `compte_id`, `tache_description`, `tache_deadline`, `tache_creation`, `tache_contacts`, `tache_destinataire`) VALUES
-(1, 1, 'Vider l''historique des contacts', '2014-06-07', '2014-06-07 15:56:41', '4077,', '');
+INSERT INTO `taches` (`tache_id`, `compte_id`, `tache_description`, `tache_deadline`, `tache_creation`, `tache_contacts`, `tache_destinataire`, `tache_terminee`) VALUES
+(1, 1, 'Vider l''historique des contacts', '2014-06-07', '2014-06-07 15:56:41', '4077,', '', 0),
+(2, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:40:09', '1100', '1,2', 1),
+(3, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:40:12', '1100', '1,2', 1),
+(4, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:40:28', '1100', '1,2', 1),
+(5, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:40:30', '1100', '1,2', 1),
+(6, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:40:47', '1100', '1,2', 1),
+(7, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:40:48', '1100', '1,2', 1),
+(8, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:41:33', '1100', '1,2', 1),
+(9, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:41:43', '1100', '1,2', 1),
+(10, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:41:48', '1100', '1,2', 1),
+(11, 1, 'Envoi de la plaquette commerciale LeQG', '0000-00-00', '2014-07-30 22:02:32', '1100', '1', 0);
 
 -- --------------------------------------------------------
 
@@ -53869,9 +53879,6 @@ CREATE TABLE `tags` (
 INSERT INTO `tags` (`tag_nom`) VALUES
 ('adjoint de quartier'),
 ('association de résidents'),
-('calme Gutenberg'),
-('connasse'),
-('débile profonde'),
 ('économie circulaire'),
 ('élu'),
 ('jardins partagés'),
@@ -53879,5 +53886,3 @@ INSERT INTO `tags` (`tag_nom`) VALUES
 ('militante'),
 ('mobilités'),
 ('nouvelles économies'),
-('poufiasse'),
-('salope');
