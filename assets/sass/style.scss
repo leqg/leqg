@@ -1267,6 +1267,8 @@ section.liste {
 		width: 200px;
 		@include shadow(1px, 1px, 3px, $gris);
 		
+		&:hover > header a.suppression { display: block; }
+		
 		& > header {
 			display: block;
 			padding-top: 140px;
@@ -1285,6 +1287,18 @@ section.liste {
 				margin: 25px 50px;
 				text-align: center;
 				width: 100px;
+			}
+			
+			a.suppression {
+				position: absolute; top: .2em; right: .5em;
+				display: none;
+				color: $grisMoyen;
+				font-family: $icons;
+				font-size: 1.5em;
+				
+				&:hover {
+					color: $orange;
+				}
 			}
 					
 			h3 {
@@ -1494,6 +1508,7 @@ section#creation {
 					font-weight: 500;
 					letter-spacing: .03em;
 					padding: .33em 1em;
+					width: auto;
 					@include border-radius(1em);
 					@include transition(all);
 					

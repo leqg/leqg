@@ -18,6 +18,7 @@
 		<a href="<?php $core->tpl_get_url('fiche', $contact); ?>">
 			<article class="fiche" data-fiche="<?php echo $contact; ?>">
 				<header>
+					<a href="<?php $core->tpl_get_url('dossier', 'suppression', 'action', $_GET['id'] . '-' . $contact, 'id'); ?>" class="suppression">&#xe814;</a>
 					<h3><?php $fiche->nomByID($contact, 'span', false); ?></h3>
 				</header>
 			</article>

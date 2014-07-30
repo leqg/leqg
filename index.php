@@ -101,6 +101,30 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$core->tpl_redirection('dossier', $id['dossier']);
 		}
 		
+		else if ($_GET['page'] == 'dossier' && $_GET['action'] == 'suppression' && isset($_GET['id'])) {
+			// On récupère les ID concernés
+			$id = explode('-', $_GET['id']);
+			$id = array('dossier' => $id[0],
+						'fiche' => $id[1]);
+			
+			// On cherche les fiches déjà associées au dossier sélectionné
+			$query = 'SELECT dossier_contacts FROM dossiers WHERE dossier_id = ' . $id['dossier'];
+			$sql = $db->query($query);
+			$dossier = $core->formatage_donnees($sql->fetch_assoc());
+			$fiches = explode(',', $dossier['contacts']);
+			
+			// On recherche la clé correspondant à la valeur pour la supprimer
+			$key = array_search($id['fiche'], $fiches);
+			unset($fiches[$key]);
+			
+			// On enregistre la nouvelle liste dans la base de données
+			$fiches = implode(',', $fiches);
+			$query = 'UPDATE dossiers SET dossier_contacts = "' . $fiches . '" WHERE dossier_id = ' . $id['dossier'];
+			$db->query($query);
+			
+			$core->tpl_redirection('dossier', $id['dossier']);
+		}
+		
 		else if ($_GET['page'] == 'contacts') {
 			
 			// On lance la page d'accueil du module contact

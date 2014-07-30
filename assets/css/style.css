@@ -990,6 +990,8 @@ section.liste {
     -webkit-box-shadow: 1px 1px 3px #cdcbca;
     -moz-box-shadow: 1px 1px 3px #cdcbca;
     box-shadow: 1px 1px 3px #cdcbca; }
+    section.liste article.fiche:hover > header a.suppression {
+      display: block; }
     section.liste article.fiche > header {
       display: block;
       padding-top: 140px; }
@@ -1009,6 +1011,16 @@ section.liste {
         margin: 25px 50px;
         text-align: center;
         width: 100px; }
+      section.liste article.fiche > header a.suppression {
+        position: absolute;
+        top: .2em;
+        right: .5em;
+        display: none;
+        color: #a8a4a3;
+        font-family: "fontello";
+        font-size: 1.5em; }
+        section.liste article.fiche > header a.suppression:hover {
+          color: #ed8262; }
       section.liste article.fiche > header h3 {
         border-bottom: none;
         color: #2c3e50;
@@ -1156,6 +1168,7 @@ section#creation {
           font-weight: 500;
           letter-spacing: .03em;
           padding: .33em 1em;
+          width: auto;
           -webkit-border-radius: 1em;
           -moz-border-radius: 1em;
           border-radius: 1em;
