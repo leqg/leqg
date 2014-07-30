@@ -197,10 +197,10 @@
 		$("#form-date").inputmask("9{1,2}/9{1,2}/9{2,4}");
 		
 		// Au chargement, on cache l'historique et les tâches pour n'afficher que la carte et les tags, mise en place des onglets
-		$("#aside-start").hide();
+		$("#aside-contenus-associes").hide();
 		$("#aside-historique").hide();
 		// On aout aussi la classe actif à l'élément en cours dans le menu
-		$("#nav-aside-contenus-associes").addClass('actif');
+		$("#nav-aside-start").addClass('actif');
 		
 		// Au chargement, on cache les marqueurs "valider" sur chaque formulaire
 		$("#valider-form-telephone").hide();
