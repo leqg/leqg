@@ -187,6 +187,12 @@ pre {
 	}
 }
 
+section {
+	&.central {
+		width: 55%;
+	}
+}
+
 svg:not(:root) {
 	overflow: hidden;
 }
