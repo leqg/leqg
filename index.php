@@ -168,13 +168,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		else if ($_GET['page'] == 'recherche') {
 
 			// On prépare les différents champs à la recherche (suppression des espaces et des caractères, remplacement par des jokers
-			$nom = $fiche->recherche_fiche(utf8_decode($_POST['nom']));
-			$prenom = $fiche->recherche_fiche(utf8_decode($_POST['prenom']));
+			$recherche = $fiche->recherche_fiche(utf8_decode($_POST['recherche']));
 
 			// On fait la recherche
-			if (!empty($nom) && !empty($prenom)) $query = 'SELECT contact_id FROM contacts WHERE (contact_nom LIKE "%' . $nom . '%" OR contact_nom_usage LIKE "%' . $nom . '%") AND contact_prenoms LIKE "%' . $prenom . '%"';
-			if (empty($nom) && !empty($prenom)) $query = 'SELECT contact_id FROM contacts WHERE contact_prenoms LIKE "%' . $prenom . '%"';
-			if (!empty($nom) && empty($prenom)) $query = 'SELECT contact_id FROM contacts WHERE (contact_nom LIKE "%' . $nom . '%" OR contact_nom_usage LIKE "%' . $nom . '%")';
+			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_prenoms) LIKE "%' . $recherche . '%"';
+
 			if (!empty($query)) $sql = $db->query($query);
 			
 			// On regarde le nombre de résultats

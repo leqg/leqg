@@ -182,7 +182,7 @@ main.fiche aside #historique table#historique-contact tbody tr.attente td { font
 /* Déclarations de style liées à la recherche de fiches */
 section#recherche-fiche { margin: 0; padding: 0 2em; }
 section#recherche-fiche ul { position: relative; list-style: none; margin: 0; padding: 0 10px; padding-right: 30px; width: 100%; }
-section#recherche-fiche ul li { display: inline-block; width: 50%; }
+section#recherche-fiche ul li { display: inline-block; width: 100%; }
 section#recherche-fiche ul li:last-of-type { position: absolute; top: 5px; right: 10px; display: block; text-align: right; width: 30px; }
 section#recherche-fiche ul li:last-of-type input[type="submit"] { background-color: rgba(44, 62, 80, 0); border: 1px solid rgba(44, 62, 80, 0.5); border-radius: 50%; color: #2c3e50; font-family: "fontello"; height: 30px; line-height: 20px; margin: 0; padding: 0; text-align: center; width: 30px; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
 section#recherche-fiche ul li:last-of-type input[type="submit"]:hover { border: 1px solid #2c3e50; }
