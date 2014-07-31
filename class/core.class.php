@@ -60,13 +60,27 @@ class core {
 		// On initialise le nouveau tableau
 		$keys = array_keys($array);
 		
+		// On détecte quel est le premier segment BDD à retirer du nom de la clé
+		$segment = explode('_', $keys[0]);
+		$segment = $segment[0];
+		
 		foreach ($keys as $key) {
-			// On détecte le premier segment BDD à retirer du nom de la clé
-			$new_key = substr(strpbrk($key, '_'), 1);
-
+			// On détecte les segments de la clé entrée
+			$seg = explode('_', $key);
+			
+			// Si le premier segment correspond au segment à retirer, on le vire du tableau
+			if ( $seg[0] == $segment ) :
+				unset($seg[0]);
+				$new_key = implode('_', $seg);
+			else :
+				$new_key = implode('_', $seg);
+			endif;
+			
 			// On transforme la clé
-			$array[$new_key] = $array[$key];
-			unset($array[$key]);
+			if ($new_key != $key) :
+				$array[$new_key] = $array[$key];
+				unset($array[$key]);
+			endif;
 		}
 		
 		return $array;
