@@ -53885,4 +53885,4 @@ INSERT INTO `tags` (`tag_nom`) VALUES
 ('militant'),
 ('militante'),
 ('mobilités'),
-('nouvelles économies'),
+('nouvelles économies');
