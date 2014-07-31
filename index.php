@@ -84,7 +84,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 						'fiche' => $id[1]);
 			
 			// On cherche les fiches déjà associées au dossier sélectionné
-			$query = 'SELECT dossier_contacts FROM dossiers WHERE dossier_id = ' . $id['dossier'];
+			$query = 'SELECT dossier_nom, dossier_contacts FROM dossiers WHERE dossier_id = ' . $id['dossier'];
 			$sql = $db->query($query);
 			$dossier = $core->formatage_donnees($sql->fetch_assoc());
 			$fiches = explode(',', $dossier['contacts']);
@@ -111,7 +111,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 						'fiche' => $id[1]);
 			
 			// On cherche les fiches déjà associées au dossier sélectionné
-			$query = 'SELECT dossier_contacts FROM dossiers WHERE dossier_id = ' . $id['dossier'];
+			$query = 'SELECT dossier_nom, dossier_contacts FROM dossiers WHERE dossier_id = ' . $id['dossier'];
 			$sql = $db->query($query);
 			$dossier = $core->formatage_donnees($sql->fetch_assoc());
 			$fiches = explode(',', $dossier['contacts']);
@@ -125,6 +125,9 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$query = 'UPDATE dossiers SET dossier_contacts = "' . $fiches . '" WHERE dossier_id = ' . $id['dossier'];
 			$db->query($query);
 			
+			// On ajoute maintenant cette action à l'historique du contact
+			$fiche->historique_ajout($id['fiche'], 'autre', 'Retrait du dossier ' . $dossier['nom']);
+
 			$core->tpl_redirection('dossier', $id['dossier']);
 		}
 		
@@ -138,6 +141,9 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			// On enregistre ces informations dans la base de données
 			$tache_id = $tache->creation( $contenu_tache , $deadline , $id , $destinataire );
 						
+			// On ajoute maintenant cette action à l'historique du contact
+			$fiche->historique_ajout($id, 'autre', 'Nouvelle tâche associée : ' . $contenu_tache);
+
 			$core->tpl_redirection('fiche', $id);
 		}
 		

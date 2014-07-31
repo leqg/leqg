@@ -507,7 +507,7 @@ class fiche extends core {
 								'objet'			=> $objet,
 								'remarques'		=> $remarques );
 			
-			$db->query('INSERT INTO historique (contact_id,
+			$this->db->query('INSERT INTO historique (contact_id,
 												historique_type,	
 												historique_date,
 												historique_objet,
