@@ -497,6 +497,27 @@ class fiche extends core {
 		
 		unset($affichage);
 	}
+	
+	
+	// Méthode d'ajout d'une entrée à l'historique d'un utilisateur
+	public	function historique_ajout($fiche, $type, $objet, $remarques = 'Entrée automatique du système') {
+			$historique = array(	'fiche'			=> $fiche,
+								'type'			=> $type,
+								'date'			=> date('Y-m-d'),
+								'objet'			=> $objet,
+								'remarques'		=> $remarques );
+			
+			$db->query('INSERT INTO historique (contact_id,
+												historique_type,	
+												historique_date,
+												historique_objet,
+												historique_remarques)
+									VALUES (		"' . $historique['fiche'] . '",
+												"' . $historique['type'] . '",
+												"' . $historique['date'] . '",
+												"' . $historique['objet'] . '",
+												"' . $historique['remarques'] . '" )');
+	}
 }
 
 ?>

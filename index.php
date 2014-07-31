@@ -98,6 +98,9 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$query = 'UPDATE dossiers SET dossier_contacts = "' . $fiches . '" WHERE dossier_id = ' . $id['dossier'];
 			$db->query($query);
 			
+			// On ajoute maintenant cette action à l'historique du contact
+			$fiche->historique_ajout($id['fiche'], 'autre', 'Ajout au dossier ' . $dossier['nom']);
+			
 			$core->tpl_redirection('dossier', $id['dossier']);
 		}
 		
