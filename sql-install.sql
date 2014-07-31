@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.9
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
--- Client :  localhost:8889
--- Généré le :  Jeu 31 Juillet 2014 à 00:31
+-- Client :  localhost:3306
+-- Généré le :  Jeu 31 Juillet 2014 à 13:06
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
@@ -51909,14 +51909,15 @@ CREATE TABLE `dossiers` (
   `dossier_date_fermeture` datetime DEFAULT NULL,
   PRIMARY KEY (`dossier_id`),
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Contenu de la table `dossiers`
 --
 
 INSERT INTO `dossiers` (`dossier_id`, `dossier_nom`, `dossier_description`, `dossier_contacts`, `dossier_statut`, `dossier_date_ouverture`, `dossier_date_fermeture`) VALUES
-(9, 'Insalubrit&eacute; Socolopo', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '4052,10164', 1, '2014-07-29 20:03:46', NULL);
+(9, 'Insalubrit&eacute; Socolopo', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '10164,1240,8469', 1, '2014-07-29 20:03:46', NULL),
+(10, 'Insalubrit&eacute; Socolopo 2', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '4052,10164,1182', 1, '2014-07-29 20:03:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -51927,14 +51928,14 @@ INSERT INTO `dossiers` (`dossier_id`, `dossier_nom`, `dossier_description`, `dos
 CREATE TABLE `historique` (
   `historique_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` bigint(20) NOT NULL,
-  `historique_type` set('contact','téléphone','email','courrier') NOT NULL,
+  `historique_type` set('contact','téléphone','email','courrier','autre') NOT NULL,
   `historique_date` date NOT NULL,
   `historique_objet` varchar(255) NOT NULL,
   `historique_remarques` text NOT NULL,
   `historique_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`historique_id`),
   KEY `contact_id` (`contact_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Contenu de la table `historique`
@@ -51956,7 +51957,14 @@ INSERT INTO `historique` (`historique_id`, `contact_id`, `historique_type`, `his
 (13, 10164, 'contact', '2014-06-13', 'Dernier test sur un long champ qui va s''Ã©tirer sur plusieurs lignes', '', '2014-06-07 15:08:12'),
 (14, 10164, 'contact', '2014-06-14', 'On teste l''entrÃ©e automatique par le bouton du mÃªme nom', '', '2014-06-07 15:13:08'),
 (15, 10164, 'téléphone', '2014-06-26', 'Test du systÃ¨me d''historique pour voir comment se comporte le scroll dans le cas d''une entrÃ©e multiple de champs dans l''historique et son comportement responsive !', '', '2014-06-26 18:08:49'),
-(16, 10164, 'email', '2014-06-26', 'Bonâ€¦Â DeuxiÃ¨me Test du systÃ¨me d''historique pour voir comment se comporte le scroll dans le cas d''une entrÃ©e multiple de champs dans l''historique et son comportement responsive !', '', '2014-06-26 18:09:04');
+(16, 10164, 'email', '2014-06-26', 'Bonâ€¦Â DeuxiÃ¨me Test du systÃ¨me d''historique pour voir comment se comporte le scroll dans le cas d''une entrÃ©e multiple de champs dans l''historique et son comportement responsive !', '', '2014-06-26 18:09:04'),
+(17, 1240, 'autre', '2014-07-31', 'Ajout au dossier ', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:54:35'),
+(18, 8469, 'autre', '2014-07-31', 'Ajout au dossier ', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:54:54'),
+(19, 1182, 'autre', '2014-07-31', 'Ajout au dossier Insalubrit&eacute; Socolopo 2', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:56:14'),
+(20, 4052, 'autre', '2014-07-31', 'Retrait du dossier Insalubrit&eacute; Socolopo', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:57:02'),
+(21, 4, 'autre', '2014-07-31', 'Nouvelle tÃ¢che associÃ©e : Test du systÃ¨me de tÃ¢che', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:58:38'),
+(22, 0, 'autre', '2014-07-31', 'Nouvelle tÃ¢che associÃ©e : Dernier test des tÃ¢ches pour l''ajout Ã  l''historique', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:59:35'),
+(23, 4052, 'autre', '2014-07-31', 'Nouvelle tÃ¢che associÃ©e : Test aprÃ¨s correction', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 11:00:18');
 
 -- --------------------------------------------------------
 
@@ -53842,7 +53850,7 @@ CREATE TABLE `taches` (
   `tache_terminee` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tache_id`),
   KEY `compte_id` (`compte_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- Contenu de la table `taches`
@@ -53859,7 +53867,10 @@ INSERT INTO `taches` (`tache_id`, `compte_id`, `tache_description`, `tache_deadl
 (8, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:41:33', '1100', '1,2', 1),
 (9, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:41:43', '1100', '1,2', 1),
 (10, 1, 'Appel Socolopo', '0000-00-00', '2014-07-30 21:41:48', '1100', '1,2', 1),
-(11, 1, 'Envoi de la plaquette commerciale LeQG', '0000-00-00', '2014-07-30 22:02:32', '1100', '1', 0);
+(11, 1, 'Envoi de la plaquette commerciale LeQG', '0000-00-00', '2014-07-30 22:02:32', '1100', '1', 0),
+(12, 1, 'Test du syst&egrave;me de t&acirc;che', '2014-08-31', '2014-07-31 10:58:38', '4052', '1', 0),
+(13, 1, 'Dernier test des t&acirc;ches pour l''ajout &agrave; l''historique', '1970-01-01', '2014-07-31 10:59:35', '4052', '1', 1),
+(14, 1, 'Test apr&egrave;s correction', '1970-01-01', '2014-07-31 11:00:18', '4052', '1', 1);
 
 -- --------------------------------------------------------
 
