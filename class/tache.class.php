@@ -1,10 +1,5 @@
 <?php
 
-/*
-	Classe du noyau central du système LeQG
-*/
-
-
 class tache extends core {
 	
 	// Définition des propriétés
