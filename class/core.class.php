@@ -27,6 +27,8 @@ class core {
 		
 		else if (is_object($array)) { print_r($array); }
 		
+		else if (is_bool($array)) { if ($array == true) { echo ucwords(gettype($array)).'<br>(<span>true</span>)'; } else { echo ucwords(gettype($array)).'<br>(<span>false</span>)'; } }
+		
 		// On affiche une phrase d'erreur s'il ne s'agit pas d'un tableau avec le contenu de la variable en question
 		else {
 			echo ucwords(gettype($array)).'<br>(<span>';
