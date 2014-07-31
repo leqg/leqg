@@ -29,10 +29,11 @@ function __autoload($class_name) {
 // On appelle l'ensemble des classes générales au site
 $core =		new core($db);
 $user =		new user($db);
-$fiche =	new fiche($db);;
-$tache =	new tache($db, $_COOKIE['leqg-user']);
+$fiche =		new fiche($db);;
+$tache =		new tache($db, $_COOKIE['leqg-user']);
+$dossier =	new dossier($db, $_COOKIE['leqg-user']);
 
 // On transforme ces classes générales en variables globales
-global $db, $core, $user, $fiche, $tache;
+global $db, $core, $user, $fiche, $tache, $dossier;
 
 ?>
