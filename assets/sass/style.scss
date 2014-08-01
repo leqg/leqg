@@ -1881,8 +1881,9 @@ aside.ficheContact {
 	padding-top: 55px;
 	padding-top: calc(50px + .33em);
 	
+	
 	#premierContact {
-		display: table-cell;
+		display: none;
 		height: 100%;
 		text-align: center;
 		vertical-align: middle;
@@ -1907,6 +1908,59 @@ aside.ficheContact {
 				margin: 25px auto;
 				width: 150px;
 			}
+		}
+	}
+	
+	
+	#nouvelleInteraction {
+		display: block;
+	}
+}
+
+
+ul.ficheInteraction {
+	list-style: none;
+	margin: 0 1em;
+	padding: 0;
+	
+	li {
+		display: block;
+		margin-bottom: 1.33em;
+		padding-bottom: .33em;
+		
+		label {
+			display: inline-block;
+			font-variant: small-caps;
+			margin-top: .1em;
+			padding-right: 1em;
+			text-align: right;
+			text-transform: capitalize;
+			width: 20%;
+			
+			&.textarea {
+				margin-top: 1.33em;
+			}
+		}
+		
+		input[type="text"] {
+			display: inline-block;
+			border-bottom: 1px solid $bleu !important;
+			font-size: 1.15em;
+			line-height: 1.33em;
+			width: 80%;
+		}
+		
+		textarea {
+			display: inline-block;
+			border: 0;
+			border-bottom: 1px solid $bleu;
+			border-left: 1px solid $bleu;
+			font-size: 1.15em;
+			height: 10em;
+			height: calc((1.33em * 9) + 1em);
+			padding: .33em 1em;
+			line-height: 1.33em;
+			width: 80%;
 		}
 	}
 }

@@ -77,7 +77,7 @@
 		
 			$("#form-mobile").inputmask("99 99 99 99 99");
 			$("#form-telephone").inputmask("99 99 99 99 99");
-			$("#form-date").inputmask("9{1,2}/9{1,2}/9{2,4}");
+			//$("#form-date").inputmask("9{1,2}/9{1,2}/9{2,4}");
 					
 			// Au chargement, on cache les marqueurs "valider" sur chaque formulaire
 			$("#valider-form-telephone").hide();
