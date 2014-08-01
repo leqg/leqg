@@ -68,66 +68,34 @@
 
 <script>
 	$(document).ready(function() {
-		$("#form-mobile").inputmask("99 99 99 99 99");
-		$("#form-telephone").inputmask("99 99 99 99 99");
-		$("#form-date").inputmask("9{1,2}/9{1,2}/9{2,4}");
+	
+		// javascript relatif à la partie Fichier
 		
-		// Au chargement, on cache l'historique et les tâches pour n'afficher que la carte et les tags, mise en place des onglets
-		$("#aside-contenus-associes").hide();
-		$("#aside-historique").hide();
-		// On aout aussi la classe actif à l'élément en cours dans le menu
-		$("#nav-aside-start").addClass('actif');
-		
-		// Au chargement, on cache les marqueurs "valider" sur chaque formulaire
-		$("#valider-form-telephone").hide();
-		$("#valider-form-mobile").hide();
-		$("#valider-form-email").hide();
-		
-		// On met en place le système des onglets
-		$(".nav-aside-go").click(function(){
-			var selection = $(this).data('tab');
-			
-			if (selection == 'start') {
-				$("#aside-start").show();
-				$("#aside-contenus-associes").hide();
-				$("#aside-historique").hide();
-				$("#nav-aside-contenus-associes").removeClass('actif');
-				$("#nav-aside-historique").removeClass('actif');
-				$("#nav-aside-start").removeClass('actif').addClass('actif');
+			$("#form-mobile").inputmask("99 99 99 99 99");
+			$("#form-telephone").inputmask("99 99 99 99 99");
+			$("#form-date").inputmask("9{1,2}/9{1,2}/9{2,4}");
+					
+			// Au chargement, on cache les marqueurs "valider" sur chaque formulaire
+			$("#valider-form-telephone").hide();
+			$("#valider-form-mobile").hide();
+			$("#valider-form-email").hide();
 				
-			} else if (selection == 'taches') {
-				$("#aside-start").hide();
-				$("#aside-contenus-associes").show();
-				$("#aside-historique").hide();
-				$("#nav-aside-start").removeClass('actif');
-				$("#nav-aside-historique").removeClass('actif');
-				$("#nav-aside-contenus-associes").removeClass('actif').addClass('actif');
-			} else if (selection == 'historique') {
-				$("#aside-start").hide();
-				$("#aside-contenus-associes").hide();
-				$("#aside-historique").show();
-				$("#nav-aside-contenus-associes").removeClass('actif');
-				$("#nav-aside-start").removeClass('actif');
-				$("#nav-aside-historique").removeClass('actif').addClass('actif');
-			}
-		});
-		
-		// Script AJAX de sauvegarde lancé à départ d'un formulaire
-		$("#form-email").change(function() {
-			// On récupère les informations
-			var value = $(this).val();
-		
-			// On appelle l'AJAX
-			$.ajax({
-				type: 'POST',
-				url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
-				data: { champ: 'email', valeur: value },
-				dataType: 'html'
-			}).done(function(){
-				$("#valider-form-email").fadeOut('slow');
-				$("#reussite-form-email").fadeIn('slow');
+			// Script AJAX de sauvegarde lancé à départ d'un formulaire
+			$("#form-email").change(function() {
+				// On récupère les informations
+				var value = $(this).val();
+			
+				// On appelle l'AJAX
+				$.ajax({
+					type: 'POST',
+					url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
+					data: { champ: 'email', valeur: value },
+					dataType: 'html'
+				}).done(function(){
+					$("#valider-form-email").fadeOut('slow');
+					$("#reussite-form-email").fadeIn('slow');
+				});
 			});
-		});
 		
 		$("#form-telephone").change(function() {
 			// On récupère les informations
