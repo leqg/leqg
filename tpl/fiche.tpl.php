@@ -8,10 +8,6 @@
 			<?php if ($fiche->get_infos('electeur')) : ?><span id="est-electeur" title="Électeur">&#xe840;</span><?php endif; ?>
 		</div>
 	</header>
-	
-	<ul class="icons">
-		<abbr title="Créer une nouvelle tâche"><li id="bouton-add-tache">&#xe836;</li></abbr>
-	</ul>
 
 	<ul class="infos">
 		<li>
@@ -53,143 +49,22 @@
 	</ul>
 </section>
 
-<aside>
-
-	<ul id="navigation-aside"><!--
-	 --><li class="nav-aside-go" id="nav-aside-start" data-tab="start">Infos. générales</li><!--
-	 --><li class="nav-aside-go" id="nav-aside-contenus-associes" data-tab="taches">Tâches et dossiers</li><!--
-	 --><li class="nav-aside-go" id="nav-aside-historique" data-tab="historique">Historique</li><!--
- --></ul>
-
-	<div id="aside-start">
-
-		<section id="carte"></section><!--
-		
-	 --><section id="tags"><span id="tags-fiche"><?php $fiche->tags('span') ?></span><input list="list-tag" id="ajout-tag" class="ajout-tag" type="text" placeholder="Tag à ajouter (puis entrée)"><span id="add-tag">&#xe816;</span></section><!--
-	
- --></div>
- 	
- 	<div id="aside-contenus-associes">
-	 	<?php
-			// On recherche s'il existe des tâches par rapport au contact
-			$taches_liees = $fiche->taches_liees();
-		?><!--
-	 --><section id="taches">
-		 	<h6>Tâches liées au contact</h6>
-	 		<a href="<?php $core->tpl_get_url('creation', 'tache', 'type', $fiche->get_infos('id'), 'id'); ?>" id="ajout-tache">Ajouter une tâche</a>
-		 	<ul id="taches-liees">
-		 		<?php
-			 	if ($taches_liees) {
-					if (count($taches_liees) >= 1) {
-			 			foreach ($taches_liees as $tache) {
-				 			echo '<li id="tache-' . $tache['tache_id'] . '">' . $tache['tache_description'] . ' <a href="' . $core->tpl_return_url('tache', 'suppression', 'action', $_GET['id'] . '-' . $tache['tache_id'], 'id') . '">&#xe812;</a></li>';
-			 			}
-			 		} else {
-				 		echo '<li class="nobefore">Aucune tâche associée au contact actuellement.</li>';
-			 		}
-			 	} else {
-				 	echo '<li class="nobefore">Aucune tâche associée au contact actuellement.</li>';
-			 	}
-		 		?>
-		 	</ul>
-	 	</section><!--
-	
-	 --><section id="dossiers">
-	 		<h6>Dossiers liés au contact</h6>
-	 		<a href="<?php $core->tpl_get_url('creation', 'dossier', 'type', $fiche->get_infos('id'), 'id'); ?>" id="ajout-dossier">Ajouter un dossier</a>
-	 		<?php $dossiers_lies = $fiche->dossiers_lies(); ?>
-	 		<ul id="dossiers-lies">
-	 			<?php
-	 			if ($dossiers_lies) {
-	 				if (count($dossiers_lies) >= 1) {
-		 				foreach ($dossiers_lies as $dossier) {
-			 				?>
-			 				<a href="<?php $core->tpl_get_url('dossier', $dossier['dossier_id']); ?>">
-				 				<li id="dossier-<?php echo $dossier['dossier_id']; ?>" <?php if (!$dossier['dossier_statut']) { ?>class="dossierFerme"<?php } ?>>
-					 				<strong><?php echo stripslashes($dossier['dossier_nom']); ?></strong>
-					 				<?php if (strlen($dossier['dossier_description']) > 150) { ?>
-					 				<p><?php echo substr(stripslashes($dossier['dossier_description']), 0, 150); ?>&hellip;</p>
-					 				<?php } else { ?>
-					 				<p><?php echo stripslashes($dossier['dossier_description']); ?></p>
-					 				<?php } ?>
-				 				</li>
-			 				</a>
-			 				<?php
-		 				}
-	 				}
-	 			} else {
-		 			echo '<li class="dossierAbsent"><strong>Aucun dossier associé au contact actuellement.</strong></li>';
-	 			}
-	 			?>
-	 		</ul>
-	 	</section><!--
-	 
- --></div>
- 
- 	<div id="aside-historique"><!--
-		
-	 --><section id="historique">
-			<h6>Historique du contact</h6>
-			<!-- Liste de l'historique des contacts avec cette fiche -->
-			<table id="historique-contact">
-				<thead>
-					<tr>
-						<th>Type</th>
-						<th>Date</th>
-						<th>Objet <span class="add-historique">&#xe816;</span></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="ajout-historique">
-						<td>
-							<select name="type" id="form-type">
-								<option value="contact">Rencontre</option>
-								<option value="téléphone">Appel</option>
-								<option value="email">Email</option>
-								<option value="courrier">Courrier</option>
-								<option value="autre">Autre</option>
-							</select>
-						</td>
-						<td><input type="date" name="date" id="form-date" placeholder="dd/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></td>
-						<td>
-							<input type="text" name="objet" id="form-objet" placeholder="Objet">
-							<span class="add-element">&#xe812;</span>
-						</td>
-					</tr>
-					<?php
-						$query = 'SELECT * FROM historique WHERE contact_id = ' . $fiche->get_infos('id') . ' ORDER BY historique_date DESC';
-						$sql = $db->query($query);
-						
-						if ($sql->num_rows > 0) {
-							while ($row = $sql->fetch_assoc()) {
-					?>
-						<tr>
-							<td><?php echo ucwords(utf8_encode($row['historique_type'])); ?></td>
-							<td><?php echo date('d/m/Y', strtotime($row['historique_date'])); ?></td>
-							<td><?php echo $row['historique_objet']; ?></td>
-						</tr>
-					<?php } } else { ?>
-						<tr>
-							<td colspan="3">Aucun historique avec ce contact.</td>
-						</tr>	
-					<?php } ?>
-				</tbody>
-			</table>
-	 	</section><!--
-	 	
- --></div>
-
-</aside>
-
-<datalist id="list-tag">
+<aside class="ficheContact">
 	<?php
-		$query = 'SELECT tag_nom FROM tags ORDER BY tag_nom ASC';
-		$sql = $db->query($query);
-		while ($row = $sql->fetch_array()) {
+		// On regarde s'il existe un historique avec ce contact, ou des fichiers, et si ce n'est pas le cas, on charge un bouton pour lancer la première interaction
+		$nombre['dossier'] = $dossier->nombre( $fiche->get_infos('id') );
+		$nombre['historique'] = $historique->nombre( $fiche->get_infos('id') );
+		
+		// S'il n'existe aucun historique, on charge le volet correspondant
+		if ( $nombre['dossier'] == 0 && $nombre['historique'] == 0 ) :
+			$core->tpl_load( 'aside' , 'premiercontact' );
+		
+		// S'il existe des éléments d'histoire ou de dossiers avec le contact choisi, on lance les volets habituels
+		else :
+
+		endif;
 	?>
-	<option value="<?php echo utf8_encode($row[0]); ?>">
-	<?php } ?>
-</datalist>
+</aside>
 
 <script>
 	$(document).ready(function() {

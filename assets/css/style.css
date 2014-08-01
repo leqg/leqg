@@ -284,3 +284,5 @@ ul#listeDossiers li.dossierAbsent:before { left: 22px; color: #a8a4a3; content: 
 ul#listeDossiers li.dossierAbsent strong { color: #4e4b4a; font-weight: 400; line-height: 58px; }
 ul#listeDossiers li strong { color: #ed8262; font-size: 1.2em; font-weight: 500; }
 ul#listeDossiers li p { font-size: .85em; }
+
+aside.ficheContact { padding: .33em 1em; padding-top: 55px; padding-top: calc(50px + .33em); }
