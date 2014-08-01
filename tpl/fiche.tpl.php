@@ -81,255 +81,88 @@
 			$("#valider-form-email").hide();
 				
 			// Script AJAX de sauvegarde lancé à départ d'un formulaire
-			$("#form-email").change(function() {
-				// On récupère les informations
-				var value = $(this).val();
-			
-				// On appelle l'AJAX
-				$.ajax({
-					type: 'POST',
-					url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
-					data: { champ: 'email', valeur: value },
-					dataType: 'html'
-				}).done(function(){
-					$("#valider-form-email").fadeOut('slow');
-					$("#reussite-form-email").fadeIn('slow');
-				});
-			});
-		
-		$("#form-telephone").change(function() {
-			// On récupère les informations
-			var value = $(this).val();
-		
-			// On appelle l'AJAX
-			$.ajax({
-				type: 'POST',
-				url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
-				data: { champ: 'telephone', valeur: value },
-				dataType: 'html'
-			}).done(function(){
-				$("#valider-form-telephone").fadeOut('slow');
-				$("#reussite-form-telephone").fadeIn('slow');
-			});
-		});
-		
-		$("#form-mobile").change(function() {
-			// On récupère les informations
-			var value = $(this).val();
-		
-			// On appelle l'AJAX
-			$.ajax({
-				type: 'POST',
-				url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
-				data: { champ: 'mobile', valeur: value },
-			}).done(function(){
-				$("#valider-form-mobile").fadeOut('slow');
-				$("#reussite-form-mobile").fadeIn('slow');
-			});
-		});
-		
-		$("#form-email").focus(function(){
-			$("#reussite-form-email").fadeOut('slow');
-		});
-		$("#form-telephone").focus(function(){
-			$("#reussite-form-telephone").fadeOut('slow');
-		});
-		$("#form-mobile").focus(function(){
-			$("#reussite-form-mobile").fadeOut('slow');
-		});
-		
-		
-		// Quand les champs de formulaire sont sélectionnés, on affiche le bouton valider
-		$("#form-email").focus(function(){
-			$("#valider-form-email").fadeIn('slow');
-		});
-		$("#form-telephone").focus(function(){
-			$("#valider-form-telephone").fadeIn('slow');
-		});
-		$("#form-mobile").focus(function(){
-			$("#valider-form-mobile").fadeIn('slow');
-		});
-		
-		
-		// Simplement quand on sort du formulaire, on supprime le bouton valider
-		$("#form-email").blur(function(){
-			$("#valider-form-email").fadeOut('slow');
-		});
-		$("#form-telephone").blur(function(){
-			$("#valider-form-telephone").fadeOut('slow');
-		});
-		$("#form-mobile").blur(function(){
-			$("#valider-form-mobile").fadeOut('slow');
-		});		
-		
-		
-		// Scripts AJAX d'ajout d'un tag
-		$('#add-tag').click(function() {
-			$('#ajout-tag').show();
-			$('#ajout-tag').focus();
-		});
-		
-		$('.ajout-tag').keypress(function(e){
-			if (e.which == 13) { // touche entrée appuyée ou tab
-				if ($(this).val() != '') {
-					// On récupère le contenu du tag
-					var tag = $(this).val();
-					
-					// On insère le tag dans la base de données et on l'ajoute à la liste
-					$('#tags-fiche').append('<span class="tag">' + tag + '</span>');
+				$("#form-email").change(function() {
+					// On récupère les informations
+					var value = $(this).val();
+				
+					// On appelle l'AJAX
 					$.ajax({
 						type: 'POST',
-						url: 'ajax-form.php?action=ajout-tag&id=<?php $fiche->infos('id'); ?>',
-						data: { valeur: tag }
-					});
-					
-					// On cache le formulaire et on le vide
-					$(this).hide();
-					$(this).val('');
-					
-					return true;
-				}
-			}
-			else {
-				if (e.which == 44) { // touche virgule appuyée, on enregistre et ouvre un nouveau formulaire
-					if ($(this).val() != '') {
-						// On récupère le contenu du tag
-						var tag = $(this).val();
-						
-						// On insère le tag dans la base de données et on l'ajoute à la liste
-						$('#tags-fiche').append('<span class="tag">' + tag + '</span>');
-						$.ajax({
-							type: 'POST',
-							url: 'ajax-form.php?action=ajout-tag&id=<?php $fiche->infos('id'); ?>',
-							data: { valeur: tag }
-						});
-						
-						// On vide le formulaire
-						$(this).val('');
-						
-						return false;
-					}
-				}
-				/*else if (e.which == 0) {
-					$(this).hide();
-					$(this).val('');
-				}*/
-				/*else {
-					// on met à jour l'autocomplétion
-					var entree = $(this).val();
-					
-					$.ajax({
-						type: 'POST',
-						url: 'ajax-form.php?action=autocompletion-tag',
-						data: { valeur: entree },
+						url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
+						data: { champ: 'email', valeur: value },
 						dataType: 'html'
-					}).done(function(data){
-						$('#list-tag').html(data);
+					}).done(function(){
+						$("#valider-form-email").fadeOut('slow');
+						$("#reussite-form-email").fadeIn('slow');
 					});
-				}*/
-			}
-		});
-		
-		// On retire le petit formulaire d'ajout de tag quand il n'est plus focus
-		$("#ajout-tag").blur(function(){
-			$(this).hide();
-			$(this).val('');
-		});
-		
-		$(".tag").click(function(){
-			var tag = $(this).html();
-			$(this).hide();
-			$.ajax({
-				type: 'POST',
-				url: 'ajax-form.php?action=suppression-tag&id=<?php $fiche->infos('id'); ?>',
-				data: { valeur: tag }
-			});
-		});
-		
-		$(".add-historique").click(function(){
-			$(this).hide();
-			$(".ajout-historique").show();
-		});
-		
-		$(".add-element").click(function(){
-			var objet = $("#form-objet").val();
-			var type = $("#form-type").val();
-			var date = $("#form-date").val();
-			
-			if (objet != '') {
-				if (type != '') {
-					if (date != '') {
-						$.ajax({
-							type: 'POST',
-							url: 'ajax-form.php?action=ajout-historique&id=<?php $fiche->infos('id'); ?>',
-							data: { 'objet': objet, 'type': type, 'date': date },
-							dataType: 'html'
-						}).done(function(data){
-							$("#historique-contact tbody tr:first").after(data);
-						});
-					}
-				}
-			}
-			
-			// On vide le formulaire
-			$("#form-objet").val('');
-			$("#form-date").val('');
-			$("#form-type").val('contact');
-			$(".ajout-historique").hide();
-			$(".add-historique").show();
-			
-			return true;
-		});
-		
-		$("#form-objet").keypress(function(e){
-			if (e.which == 13) { // touche entrée appuyée ou tab
-				var objet = $("#form-objet").val();
-				var type = $("#form-type").val();
-				var date = $("#form-date").val();
+				});
 				
-				if (objet != '') {
-					if (type != '') {
-						if (date != '') {
-							$.ajax({
-								type: 'POST',
-								url: 'ajax-form.php?action=ajout-historique&id=<?php $fiche->infos('id'); ?>',
-								data: { 'objet': objet, 'type': type, 'date': date },
-								dataType: 'html'
-							}).done(function(data){
-								$("#historique-contact tbody tr:first").after(data);
-							});
-						}
-					}
-				}
+				$("#form-telephone").change(function() {
+					// On récupère les informations
+					var value = $(this).val();
 				
-				// On vide le formulaire
-				$("#form-objet").val('');
-				$("#form-date").val('');
-				$("#form-type").val('contact');
-				$(".ajout-historique").hide();
-				$(".add-historique").show();
+					// On appelle l'AJAX
+					$.ajax({
+						type: 'POST',
+						url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
+						data: { champ: 'telephone', valeur: value },
+						dataType: 'html'
+					}).done(function(){
+						$("#valider-form-telephone").fadeOut('slow');
+						$("#reussite-form-telephone").fadeIn('slow');
+					});
+				});
 				
-				return true;
-			}
-		});
+				$("#form-mobile").change(function() {
+					// On récupère les informations
+					var value = $(this).val();
+				
+					// On appelle l'AJAX
+					$.ajax({
+						type: 'POST',
+						url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
+						data: { champ: 'mobile', valeur: value },
+					}).done(function(){
+						$("#valider-form-mobile").fadeOut('slow');
+						$("#reussite-form-mobile").fadeIn('slow');
+					});
+				});
+				
+				$("#form-email").focus(function(){
+					$("#reussite-form-email").fadeOut('slow');
+				});
+				$("#form-telephone").focus(function(){
+					$("#reussite-form-telephone").fadeOut('slow');
+				});
+				$("#form-mobile").focus(function(){
+					$("#reussite-form-mobile").fadeOut('slow');
+				});
+				
+			
+			// Quand les champs de formulaire sont sélectionnés, on affiche le bouton valider
+				$("#form-email").focus(function(){
+					$("#valider-form-email").fadeIn('slow');
+				});
+				$("#form-telephone").focus(function(){
+					$("#valider-form-telephone").fadeIn('slow');
+				});
+				$("#form-mobile").focus(function(){
+					$("#valider-form-mobile").fadeIn('slow');
+				});
 		
 		
-		// Script de suppression d'une tache
-		$(".fin-tache").click(function(){
-			// On récupère l'ID de la tâche
-			var tache_id = $(this).data('tache');
-			
-			// On appelle la fonction AJAX pour l'envoi
-			$.ajax({
-				type: 'POST',
-				url: 'ajax-form.php?action=retrait-tache',
-				data: { 'tache' : tache_id, 'fiche' : <?php $fiche->infos('id'); ?> },
-				dataType: 'html'
-			});
-			
-			// On retire de l'affichage la tâche en question
-			$("#tache-" + tache_id).fadeOut('slow');
-		});		
+			// Simplement quand on sort du formulaire, on supprime le bouton valider
+				$("#form-email").blur(function(){
+					$("#valider-form-email").fadeOut('slow');
+				});
+				$("#form-telephone").blur(function(){
+					$("#valider-form-telephone").fadeOut('slow');
+				});
+				$("#form-mobile").blur(function(){
+					$("#valider-form-mobile").fadeOut('slow');
+				});		
+		
+				
 	});
 </script>
 
