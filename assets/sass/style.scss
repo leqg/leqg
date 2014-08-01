@@ -709,7 +709,7 @@ main.fiche {
 	}
 	
 	aside {
-		padding-bottom: 3em;
+		//padding-bottom: 3em;
 		@include shadow(0, 0, 1em, rgb(100, 100, 100));
 		
 		ul#navigation-aside {
@@ -1875,7 +1875,38 @@ ul#listeDossiers {
 
 
 aside.ficheContact {
+	display: table;
+	margin: 0;
 	padding: .33em 1em;
 	padding-top: 55px;
 	padding-top: calc(50px + .33em);
+	
+	#premierContact {
+		display: table-cell;
+		height: 100%;
+		text-align: center;
+		vertical-align: middle;
+		width: 100%;
+		
+		span#ajoutInteraction {
+			color: $bleu;
+			cursor: pointer;
+			font-size: 2em;
+			font-weight: 300;
+			
+			&:before {
+				display: block;
+				background: $bleu;
+				@include border-radius(50%);
+				color: $blanc;
+				content: '\e83c';
+				font-family: $icons;
+				font-size: 75px;
+				height: 150px;
+				line-height: 150px;
+				margin: 25px auto;
+				width: 150px;
+			}
+		}
+	}
 }
