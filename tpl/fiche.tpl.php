@@ -63,6 +63,10 @@
 		else :
 
 		endif;
+		
+		
+		// On charge ici les volets qui ne seront appelés que lors des appels javascript
+		$core->tpl_load( 'aside' , 'nouvelleinteraction' ); // Appelé pour créer une nouvelle fiche dans l'historique
 	?>
 </aside>
 
