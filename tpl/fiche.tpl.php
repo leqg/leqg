@@ -73,6 +73,18 @@
 <script>
 	$(document).ready(function() {
 	
+		// javascript relatif au volet latéral
+			// état de base des volets
+			$("#nouvelleInteraction").hide();
+			
+			
+			// interactions permettant le passage entre les volets
+			$("#ajoutInteraction").click(function(){
+				$(".ficheContact div").hide(); // On ferme tous les volets
+				$("#nouvelleInteraction").show(); // On affiche la création de fiche
+			});
+	
+	
 		// javascript relatif à la partie Fichier
 		
 			//$("#form-mobile").inputmask("99 99 99 99 99");
