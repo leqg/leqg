@@ -657,6 +657,10 @@ main.fiche {
 				padding-right: 1em;
 				text-align: right;
 				width: 200px;
+				
+				&.formulaire {
+					margin-top: .25em;
+				}
 			}
 			
 			input.fiche {
@@ -664,6 +668,13 @@ main.fiche {
 				border-bottom: 1px solid lighten($bleu, 50%);
 				width: 85%;
 				@include transition(all);
+				
+				&[value=""] {
+					position: relative;
+					background-color: lighten($rouge, 45%);
+					border-bottom: 1px solid $rouge;
+					color: $rouge;
+				}
 				
 				&:focus {
 					border-bottom: 1px solid $bleu;
@@ -1950,6 +1961,21 @@ ul.ficheInteraction {
 			width: 80%;
 		}
 		
+		input[type="submit"] {
+			display: block;
+			background: lighten($bleu, 66%);
+			border: 1px solid $bleu;
+			color: $bleu;
+			margin: 0 auto;
+			width: auto;
+			@include shadow(2px, 2px, 0, lighten($gris, 10%));
+			
+			&:hover {
+				border-color: $rouge;
+				color: $rouge;
+			}
+		}
+		
 		textarea {
 			display: inline-block;
 			border: 0;
@@ -1960,6 +1986,7 @@ ul.ficheInteraction {
 			height: calc((1.33em * 9) + 1em);
 			padding: .33em 1em;
 			line-height: 1.33em;
+			resize: none;
 			width: 80%;
 		}
 	}

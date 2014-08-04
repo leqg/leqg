@@ -28,5 +28,7 @@
 		 --><label for="form-notes" class="textarea">Notes</label><!--
 		 --><textarea id="form-notes" name="notes"></textarea><!--
 	 --></li>
+	 	<li class="submit"><!--
+	 	 --><input type="submit" value="Sauvegarder l'interaction">
 	</ul>
 </div>

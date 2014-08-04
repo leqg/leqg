@@ -513,6 +513,8 @@ main.fiche {
         padding-right: 1em;
         text-align: right;
         width: 200px; }
+        main.fiche ul.infos li > label.formulaire {
+          margin-top: .25em; }
       main.fiche ul.infos li input.fiche {
         border: 0;
         border-bottom: 1px solid #aabdd1;
@@ -520,6 +522,11 @@ main.fiche {
         -webkit-transition: all 0.2s ease-in-out;
         -moz-transition: all 0.2s ease-in-out;
         transition: all 0.2s ease-in-out; }
+        main.fiche ul.infos li input.fiche[value=""] {
+          position: relative;
+          background-color: #f7ddda;
+          border-bottom: 1px solid #c0392b;
+          color: #c0392b; }
         main.fiche ul.infos li input.fiche:focus {
           border-bottom: 1px solid #2c3e50; }
       main.fiche ul.infos li span#reussite-form-email, main.fiche ul.infos li span#reussite-form-mobile, main.fiche ul.infos li span#reussite-form-telephone {
@@ -1512,6 +1519,19 @@ ul.ficheInteraction {
       font-size: 1.15em;
       line-height: 1.33em;
       width: 80%; }
+    ul.ficheInteraction li input[type="submit"] {
+      display: block;
+      background: #dfe6ed;
+      border: 1px solid #2c3e50;
+      color: #2c3e50;
+      margin: 0 auto;
+      width: auto;
+      -webkit-box-shadow: 2px 2px 0 #e6e5e4;
+      -moz-box-shadow: 2px 2px 0 #e6e5e4;
+      box-shadow: 2px 2px 0 #e6e5e4; }
+      ul.ficheInteraction li input[type="submit"]:hover {
+        border-color: #c0392b;
+        color: #c0392b; }
     ul.ficheInteraction li textarea {
       display: inline-block;
       border: 0;
@@ -1522,4 +1542,5 @@ ul.ficheInteraction {
       height: calc((1.33em * 9) + 1em);
       padding: .33em 1em;
       line-height: 1.33em;
+      resize: none;
       width: 80%; }

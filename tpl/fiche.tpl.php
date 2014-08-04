@@ -29,20 +29,20 @@
 			<?php $fiche->canton(); ?>
 		</li>
 		<li>
-			<label>Adresse email</label>
+			<label class="formulaire">Adresse email</label>
 			<input class="fiche" type="email" name="email" id="form-email" placeholder="abc@domaine.fr" value="<?php $fiche->contact('email'); ?>">
 			<span id="valider-form-email">Valider</span>
 			<span id="reussite-form-email">&#xe812;</span>
 		</li>
 		<li>
-			<label>Téléphone portable</label>
-			<input class='fiche' type='text' name='mobile' id='form-mobile' placeholder='00 00 00 00 00' value='<?php $core->tpl_phone($fiche->contact('mobile', false, true)); ?>'>
+			<label class="formulaire">Téléphone portable</label>
+			<input class='fiche' type='text' name='mobile' id='form-mobile' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('mobile', false, true)); ?>">
 			<span id="valider-form-mobile">Valider</span>
 			<span id="reussite-form-mobile">&#xe812;</span>
 		</li>
 		<li>
-			<label>Téléphone fixe</label>
-			<input class='fiche' type='text' name='telephone' id='form-telephone' placeholder='00 00 00 00 00' value='<?php $core->tpl_phone($fiche->contact('telephone', false, true)); ?>'>
+			<label class="formulaire">Téléphone fixe</label>
+			<input class='fiche' type='text' name='telephone' id='form-telephone' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('telephone', false, true)); ?>">
 			<span id="valider-form-telephone">Valider</span>
 			<span id="reussite-form-telephone">&#xe812;</span>
 		</li>
@@ -75,8 +75,8 @@
 	
 		// javascript relatif à la partie Fichier
 		
-			$("#form-mobile").inputmask("99 99 99 99 99");
-			$("#form-telephone").inputmask("99 99 99 99 99");
+			//$("#form-mobile").inputmask("99 99 99 99 99");
+			//$("#form-telephone").inputmask("99 99 99 99 99");
 			//$("#form-date").inputmask("9{1,2}/9{1,2}/9{2,4}");
 					
 			// Au chargement, on cache les marqueurs "valider" sur chaque formulaire
