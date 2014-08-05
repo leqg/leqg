@@ -67,23 +67,18 @@
 		
 		// On charge ici les volets qui ne seront appelés que lors des appels javascript
 		$core->tpl_load( 'aside' , 'nouvelleinteraction' ); // Appelé pour créer une nouvelle fiche dans l'historique
+		
+		
+		// On prépare ici la liste des div qui seront créé vides pour être remplis par des scripts AJAX
+		$divs = array('interaction');
+		
+		// On affiche les div en question
+		foreach ($divs as $div) { echo '<div id="' . $div . '"></div>'; }
 	?>
 </aside>
 
 <script>
-	$(document).ready(function() {
-	
-		// javascript relatif au volet latéral
-			// état de base des volets
-			$("#nouvelleInteraction").hide();
-			
-			
-			// interactions permettant le passage entre les volets
-			$("#ajoutInteraction").click(function(){
-				$(".ficheContact div").hide(); // On ferme tous les volets
-				$("#nouvelleInteraction").show(); // On affiche la création de fiche
-			});
-	
+	$(document).ready(function() {	
 	
 		// javascript relatif à la partie Fichier
 		
