@@ -29,6 +29,23 @@
 		 --><textarea id="form-notes" name="notes"></textarea><!--
 	 --></li>
 	 	<li class="submit"><!--
-	 	 --><input type="submit" value="Sauvegarder l'interaction">
+	 	 --><input type="submit" id="sauvegarde" value="Sauvegarder l'interaction">
 	</ul>
+	<span id='test' style="display: block;"></span>
 </div>
+<script>
+	$(document).ready(function(){
+		$("#sauvegarde").click(function(){
+			console.log('click ok');
+			$.ajax({
+				type:		'POST',
+				url:			'ajax.php?script=historique-ajout',
+				data:		{ test:'test', test2:'test2' },
+				dataType:	'html'
+			}).done(function(data){
+				console.log(data);
+				$("#test").html(data);
+			});
+		});
+	});
+</script>

@@ -290,7 +290,7 @@ ul#listeDossiers li p { font-size: .85em; }
 aside.ficheContact { display: table; margin: 0; padding: .33em 1em; padding-top: 55px; padding-top: calc(50px + .33em); }
 aside.ficheContact #premierContact { display: table-cell; height: 100%; text-align: center; vertical-align: middle; width: 100%; }
 aside.ficheContact #premierContact span#ajoutInteraction { color: #2c3e50; cursor: pointer; font-size: 2em; font-weight: 300; }
-aside.ficheContact #premierContact span#ajoutInteraction:before { display: block; background: #2c3e50; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; color: white; content: '\e83c'; font-family: "fontello"; font-size: 75px; height: 150px; line-height: 150px; margin: 25px auto; width: 150px; }
+aside.ficheContact #premierContact span#ajoutInteraction:before { display: block; background: #2c3e50; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; color: white; content: '\e851'; font-family: "fontello"; font-size: 75px; height: 150px; line-height: 150px; margin: 25px auto; width: 150px; }
 aside.ficheContact #nouvelleInteraction { display: none; }
 
 ul.ficheInteraction { list-style: none; margin: 0 1em; padding: 0; }
