@@ -111,4 +111,17 @@ class historique extends core {
 		else : return false; endif;
 	}
 	
+	
+	// returnType( string [, bool] ) permet de retourner un affichage correct et compréhensible de tous du type d'événement entré dans l'historique
+	public	function returnType( $type , $return = true ) {
+		$types = array(	'contact'	=> 'Entrevue',
+						'telephone'	=> 'Entretien téléphonique',
+						'email'		=> 'Échange électronique',
+						'courrier'	=> 'Correspondance',
+						'autre'		=> 'Autre' );
+				
+		$retour = $types[$type];
+		
+		if ($return === true) : return $retour; else : echo $retour; endif;
+	}
 }
