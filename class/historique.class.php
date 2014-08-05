@@ -93,4 +93,22 @@ class historique extends core {
 		
 		else : return false; endif;
 	}
+	
+	
+	// recherche( int ) permet de récupérer les informations liées à une interaction recherchée
+	public	function recherche( $id ) {
+		// on vérifie que l'ID demandé est formaté correctement
+		if ( is_numeric( $id ) ) :
+		
+			// on effectue la recherche des informations liées
+			$query = 'SELECT * FROM historique WHERE historique_id = ' . $id;
+			$sql = $this->db->query($query);
+			$infos = $this->formatage_donnees($sql->fetch_assoc());
+			
+			// On retourne le tableau des résultats
+			return $infos;
+		
+		else : return false; endif;
+	}
+	
 }
