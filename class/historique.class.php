@@ -51,4 +51,46 @@ class historique extends core {
 		
 		else : return false; endif;
 	}
+	
+	
+	// ajout( int , int , string , date , string , string->array , string ) permet d'ajouter une nouvelle interaction au sein de la base de données
+	public	function ajout( $contact , $compte , $type , $date , $lieu , $thematiques , $notes ) {
+		// on formate les thématiques et la date en tableau
+		$thematiques = explode(',', $this->securisation_string($thematiques));
+		$date = explode('/', $date);
+		
+		// on sécurise les strings texte
+		$lieu = $this->securisation_string($lieu);
+		$notes = $this->securisation_string($notes);
+	
+		// on vérifie le format des informations entrées
+		if ( is_numeric( $contact ) && is_numeric( $compte ) && is_string($type) && checkdate( $date[1] , $date[0] , $date[2] ) && is_string( $lieu ) && is_array($thematiques) && is_string($notes) ) :
+		
+			// On prépare la requête d'ajout des informations à la base de données
+			$query = 'INSERT INTO historique (	contact_id,
+												compte_id,
+												historique_type,
+												historique_date,
+												historique_lieu,
+												historique_thematiques,
+												historique_notes )
+										VALUES (' . $contact . ',
+												' . $compte . ',
+												"' . $type . '",
+												"' . $date[2] . '-' . $date[1] . '-' . $date[0] . '",
+												"' . $lieu . '",
+												"' . implode(',', $thematiques) . '",
+												"' . $notes . '" )';
+			
+			// On effectue la requête d'ajout à la base de données
+			$sql = $this->db->query($query);
+			
+			// On récupère le numéro ID de l'enregistrement
+			$id = $this->db->insert_id;
+			
+			// On retourne l'ID en question
+			return $id;
+		
+		else : return false; endif;
+	}
 }
