@@ -1,3 +1,3 @@
 <div id="premierContact">
-	<span id="ajoutInteraction">Ajouter une interaction</span>
+	<span id="ajoutInteraction">Ajouter une première interaction</span>
 </div>
