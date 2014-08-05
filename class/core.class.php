@@ -130,11 +130,11 @@ class core {
 	// tpl_get_url ( [ $page = nul , $valeur = null, $attribut = id ] ) permet d'effectuer l'affichage vers l'URL d'une page
 	public	function tpl_return_url( $page = null , $valeur = null , $attribut = null, $valeur2 = null, $attribut2 = null) {
 		if (!empty($page) && !empty($attribut) && !empty($valeur) && !empty($attribut2) && !empty($valeur2)) {
-			$url = 'index.php?page=' . $page . '&amp;' . $attribut . '=' . $valeur . '&amp;' . $attribut2 . '=' . $valeur2;
+			$url = 'index.php?page=' . $page . '&' . $attribut . '=' . $valeur . '&' . $attribut2 . '=' . $valeur2;
 		} else if (!empty($page) && !empty($attribut) && !empty($valeur) && empty($attribut2) && empty($valeur2)) {
-			$url = 'index.php?page=' . $page . '&amp;' . $attribut . '=' . $valeur;
+			$url = 'index.php?page=' . $page . '&' . $attribut . '=' . $valeur;
 		} else if (!empty($page) && is_null($attribut) && !empty($valeur) && empty($attribut2) && empty($valeur2)) {
-			$url = 'index.php?page=' . $page . '&amp;id=' . $valeur;
+			$url = 'index.php?page=' . $page . '&id=' . $valeur;
 		} else if (!empty($page) && is_null($attribut) && is_null($valeur) && empty($attribut2) && empty($valeur2)) {
 			$url = 'index.php?page=' . $page;
 		} else {
