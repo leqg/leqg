@@ -146,6 +146,14 @@ class core {
 	public	function tpl_get_url( $page = null , $valeur = null , $attribut = null, $valeur2 = null, $attribut2 = null) { echo $this->tpl_return_url($page, $valeur, $attribut, $valeur2, $attribut2); }
 	
 	
+	// tpl_domaine() permet de retourner le nom de domaine du site
+	public	function tpl_return_domain() {
+		$domain = 'http://localhost/leqg/';
+		return $domain;
+	}
+	
+	public	function tpl_get_domain() { echo $this->tpl_return_domain(); }
+	
 	// tpl_phone( $numero ) affiche une version mise en forme du numéro de téléphone
 	public	function tpl_phone( $numero ) { if (!empty($numero)) echo $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
 	public	function get_tpl_phone( $numero ) { if (!empty($numero)) return $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
