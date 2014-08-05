@@ -22,7 +22,7 @@
 	 --></li>
 		<li><!--
 		 --><label for="form-thema">Thématiques</label><!--
-		 --><input type="text" id="form-thema" name="objet" placeholder="séparées par des virgules (logement, sport, etc.)"><!--
+		 --><input type="text" id="form-themas" name="themas" placeholder="séparées par des virgules (logement, sport, etc.)"><!--
 	 --></li>
 		<li><!--
 		 --><label for="form-notes" class="textarea">Notes</label><!--
@@ -31,20 +31,30 @@
 	 	<li class="submit"><!--
 	 	 --><input type="submit" id="sauvegarde" value="Sauvegarder l'interaction">
 	</ul>
-	<span id='test' style="display: block;"></span>
 </div>
 <script>
 	$(document).ready(function(){
 		$("#sauvegarde").click(function(){
-			console.log('click ok');
+			var fiche = '<?php echo $fiche->get_infos('id'); ?>';
+			var type = $("#form-type").val();
+			var date = $("#form-date").val();
+			var lieu = $("#form-lieu").val();
+			var themas = $("#form-themas").val();
+			var notes = $("#form-notes").val();
+			
 			$.ajax({
 				type:		'POST',
 				url:			'ajax.php?script=historique-ajout',
-				data:		{ test:'test', test2:'test2' },
+				data:		{	'fiche'  : fiche,
+								'type'   : type,
+								'date'   : date,
+								'lieu'   : lieu,
+								'themas' : themas,
+								'notes'  : notes },
 				dataType:	'html'
 			}).done(function(data){
-				console.log(data);
-				$("#test").html(data);
+				var destination = '<?php $core->tpl_get_domain() . $core->tpl_get_url('fiche', $_GET['id']); ?>&interaction=' + data;
+				$(location).attr('href', destination);
 			});
 		});
 	});

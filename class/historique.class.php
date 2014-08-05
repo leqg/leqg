@@ -58,14 +58,14 @@ class historique extends core {
 		// on formate les thématiques et la date en tableau
 		$thematiques = explode(',', $this->securisation_string($thematiques));
 		$date = explode('/', $date);
-		
+
 		// on sécurise les strings texte
 		$lieu = $this->securisation_string($lieu);
 		$notes = $this->securisation_string($notes);
 	
 		// on vérifie le format des informations entrées
 		if ( is_numeric( $contact ) && is_numeric( $compte ) && is_string($type) && checkdate( $date[1] , $date[0] , $date[2] ) && is_string( $lieu ) && is_array($thematiques) && is_string($notes) ) :
-		
+
 			// On prépare la requête d'ajout des informations à la base de données
 			$query = 'INSERT INTO historique (	contact_id,
 												compte_id,
@@ -81,7 +81,7 @@ class historique extends core {
 												"' . $lieu . '",
 												"' . implode(',', $thematiques) . '",
 												"' . $notes . '" )';
-			
+												
 			// On effectue la requête d'ajout à la base de données
 			$sql = $this->db->query($query);
 			
