@@ -1935,14 +1935,34 @@ ul.ficheInteraction {
 	padding: 0;
 	
 	li {
+		position: relative;
 		display: block;
-		margin-bottom: 1.33em;
-		padding-bottom: .33em;
+		border-bottom: 1px solid $bleu;
+		border-left: 1px solid $bleu;
+		font-size: 1.15em;
+		line-height: 1.5em;
+		margin-bottom: 2em;
+		margin-left: 20%;
+		margin-right: 10%;
+		padding-bottom: .5em;
+		padding-left: 1em;
+		padding-top: .33em;
+		
+		&.notes p {
+			max-height: 15.5em;
+			max-height: calc(1.5em * 10 + .5em);
+			min-height: 11em;
+			min-height: calc(1.5em * 7 + .5em);
+			overflow: scroll;
+		}
 		
 		label {
-			display: inline-block;
+			position: absolute; top: 4px; left: -20%;
+			display: block;
+			cursor: text;
 			font-variant: small-caps;
 			margin-top: .1em;
+			opacity: .5;
 			padding-right: 1em;
 			text-align: right;
 			text-transform: capitalize;

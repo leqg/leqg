@@ -17,23 +17,23 @@
 
 <ul class="ficheInteraction">
 	<li><!--
-	 --><label for="form-type">Type</label><!--
+	 --><label>Type</label><!--
 	 --><?php $historique->returnType($interaction['type'], false); ?><!--
  --></li>
 	<li><!--
-	 --><label for="form-date" class="noform">Date</label><!--
+	 --><label class="noform">Date</label><!--
 	 --><?php echo strtolower(htmlentities(strftime('%A %e %B %Y', $date)));  ?><!--
  --></li>
 	<li><!--
-	 --><label for="form-lieu" class="noform">Lieu</label><!--
+	 --><label class="noform">Lieu</label><!--
 	 --><?php echo ucwords($interaction['lieu']); ?><!--
  --></li>
 	<li><!--
-	 --><label for="form-thema" class="noform">Thématiques</label><!--
+	 --><label class="noform">Thématiques</label><!--
 	 --><?php echo $liste_tags; ?><!--
  --></li>
-	<li><!--
-	 --><label for="form-notes" class="noform">Notes</label><!--
-	 --><?php echo $interaction['notes']; ?><!--
+	<li class="notes"><!--
+	 --><label class="noform">Notes</label><!--
+	 --><p><?php echo $interaction['notes']; ?></p><!--
  --></li>
 </ul>
