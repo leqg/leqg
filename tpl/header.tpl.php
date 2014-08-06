@@ -13,6 +13,7 @@
 	<script src="assets/js/jquery-2.1.1.min.js"></script>
 	<script src="assets/js/jquery.inputmask.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSkeqzB0suNWsj8fU3If9tA0spIl_xN2A&sensor=false"></script>
+	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
 <body>	
