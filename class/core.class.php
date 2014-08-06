@@ -27,7 +27,9 @@ class core {
 		
 		else if (is_object($array)) { print_r($array); }
 		
-		else if (is_bool($array)) { if ($array == true) { echo ucwords(gettype($array)).'<br>(<span>true</span>)'; } else { echo ucwords(gettype($array)).'<br>(<span>false</span>)'; } }
+		else if (is_bool($array)) { echo ucwords(gettype($array)).'<br>(<span>' . var_dump($array) . '</span>)'; }
+		
+		else if (is_numeric($array)) { echo 'Numeric<br>(<span>' . $array . '</span>)'; }
 		
 		// On affiche une phrase d'erreur s'il ne s'agit pas d'un tableau avec le contenu de la variable en question
 		else {
@@ -92,9 +94,9 @@ class core {
 	// tpl_load( slug [, nom = null ] )  appelles le fichier slug-nom.tpl.php
 	public	function tpl_load( $slug , $nom = null, $globale = null) {
 		if (is_null($globale)) {
-			global $db, $core, $user, $fiche, $tache, $dossier;
+			global $db, $core, $user, $fiche, $tache, $dossier, $historique;
 		} else {
-			global $db, $core, $user, $fiche, $tache, $dossier, $globale;
+			global $db, $core, $user, $fiche, $tache, $dossier, $historique, $globale;
 		}
 	
 		if (empty($nom)) {
@@ -128,11 +130,11 @@ class core {
 	// tpl_get_url ( [ $page = nul , $valeur = null, $attribut = id ] ) permet d'effectuer l'affichage vers l'URL d'une page
 	public	function tpl_return_url( $page = null , $valeur = null , $attribut = null, $valeur2 = null, $attribut2 = null) {
 		if (!empty($page) && !empty($attribut) && !empty($valeur) && !empty($attribut2) && !empty($valeur2)) {
-			$url = 'index.php?page=' . $page . '&amp;' . $attribut . '=' . $valeur . '&amp;' . $attribut2 . '=' . $valeur2;
+			$url = 'index.php?page=' . $page . '&' . $attribut . '=' . $valeur . '&' . $attribut2 . '=' . $valeur2;
 		} else if (!empty($page) && !empty($attribut) && !empty($valeur) && empty($attribut2) && empty($valeur2)) {
-			$url = 'index.php?page=' . $page . '&amp;' . $attribut . '=' . $valeur;
+			$url = 'index.php?page=' . $page . '&' . $attribut . '=' . $valeur;
 		} else if (!empty($page) && is_null($attribut) && !empty($valeur) && empty($attribut2) && empty($valeur2)) {
-			$url = 'index.php?page=' . $page . '&amp;id=' . $valeur;
+			$url = 'index.php?page=' . $page . '&id=' . $valeur;
 		} else if (!empty($page) && is_null($attribut) && is_null($valeur) && empty($attribut2) && empty($valeur2)) {
 			$url = 'index.php?page=' . $page;
 		} else {
@@ -146,9 +148,17 @@ class core {
 	public	function tpl_get_url( $page = null , $valeur = null , $attribut = null, $valeur2 = null, $attribut2 = null) { echo $this->tpl_return_url($page, $valeur, $attribut, $valeur2, $attribut2); }
 	
 	
+	// tpl_domaine() permet de retourner le nom de domaine du site
+	public	function tpl_return_domain() {
+		$domain = 'http://localhost/leqg/';
+		return $domain;
+	}
+	
+	public	function tpl_get_domain() { echo $this->tpl_return_domain(); }
+	
 	// tpl_phone( $numero ) affiche une version mise en forme du numéro de téléphone
-	public	function tpl_phone( $numero ) { echo $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
-	public	function get_tpl_phone( $numero ) { return $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
+	public	function tpl_phone( $numero ) { if (!empty($numero)) echo $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
+	public	function get_tpl_phone( $numero ) { if (!empty($numero)) return $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
 
 
 	// tpl_transform_texte() permet de modifier l'affichage d'un texte (adresse)

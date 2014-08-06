@@ -110,11 +110,13 @@ main.fiche ul.infos li { position: relative; font: 400 1.2em/1.5em "Roboto", Hel
 main.fiche ul.infos li a { border-bottom-color: #c0392b; }
 main.fiche ul.infos li a:hover { border-bottom-color: #2c3e50; }
 main.fiche ul.infos li > label { position: absolute; top: 0; left: -200px; color: #425d77; font-variant: small-caps; margin-top: 0; padding-right: 1em; text-align: right; width: 200px; }
+main.fiche ul.infos li > label.formulaire { margin-top: .25em; }
 main.fiche ul.infos li input.fiche { border: 0; border-bottom: 1px solid #aabdd1; width: 85%; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
+main.fiche ul.infos li input.fiche[value=""] { position: relative; background-color: #f7ddda; border-bottom: 1px solid #c0392b; color: #c0392b; }
 main.fiche ul.infos li input.fiche:focus { border-bottom: 1px solid #2c3e50; }
 main.fiche ul.infos li span#reussite-form-email, main.fiche ul.infos li span#reussite-form-mobile, main.fiche ul.infos li span#reussite-form-telephone { position: absolute; bottom: 0; right: 15%; display: none; background: green; border-radius: 50% 50% 0 0; color: white; font-family: "fontello"; font-size: 12px; height: 18px; line-height: 18px; text-align: center; width: 18px; }
 main.fiche ul.infos li span#valider-form-email, main.fiche ul.infos li span#valider-form-mobile, main.fiche ul.infos li span#valider-form-telephone { position: absolute; bottom: 0; right: 15%; display: block; background: #ed8262; border-radius: .5em .5em 0 0; color: white; cursor: pointer; font-family: "Roboto", Helvetica, Arial, sans-serif; font-size: 12px; height: 18px; line-height: 18px; padding: 0 .5em; text-align: center; width: auto; }
-main.fiche aside { padding-bottom: 3em; -webkit-box-shadow: 0 0 1em #646464; -moz-box-shadow: 0 0 1em #646464; box-shadow: 0 0 1em #646464; }
+main.fiche aside { -webkit-box-shadow: 0 0 1em #646464; -moz-box-shadow: 0 0 1em #646464; box-shadow: 0 0 1em #646464; }
 main.fiche aside ul#navigation-aside { position: absolute; bottom: 0; background: rgba(255, 255, 255, 0.66); height: 3.5em; margin: 0; padding: 0; padding-top: .5em; width: 100%; z-index: 9999; }
 main.fiche aside ul#navigation-aside li { display: inline-block; background: white; border-top: 1px solid #2c3e50; font-size: 1em; height: 3em; line-height: 3em; margin: 0; padding: 0; text-align: center; width: 33.33%; }
 main.fiche aside ul#navigation-aside li:hover { cursor: pointer; font-weight: 500; }
@@ -284,3 +286,27 @@ ul#listeDossiers li.dossierAbsent:before { left: 22px; color: #a8a4a3; content: 
 ul#listeDossiers li.dossierAbsent strong { color: #4e4b4a; font-weight: 400; line-height: 58px; }
 ul#listeDossiers li strong { color: #ed8262; font-size: 1.2em; font-weight: 500; }
 ul#listeDossiers li p { font-size: .85em; }
+
+aside.ficheContact { display: table; margin: 0; padding: .33em 1em; padding-top: 55px; padding-top: calc(50px + .33em); }
+aside.ficheContact #premierContact { display: table-cell; height: 100%; text-align: center; vertical-align: middle; width: 100%; }
+aside.ficheContact #premierContact span#ajoutInteraction { color: #2c3e50; cursor: pointer; font-size: 2em; font-weight: 300; }
+aside.ficheContact #premierContact span#ajoutInteraction:before { display: block; background: #2c3e50; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; color: white; content: '\e851'; font-family: "fontello"; font-size: 75px; height: 150px; line-height: 150px; margin: 25px auto; width: 150px; }
+aside.ficheContact #nouvelleInteraction { display: none; }
+
+ul.ficheInteraction { list-style: none; margin: 0 1em; padding: 0; }
+ul.ficheInteraction li { position: relative; display: block; border-bottom: 1px solid #2c3e50; border-left: 1px solid #2c3e50; font-size: 1.15em; line-height: 1.5em; margin-bottom: 2em; margin-left: 20%; margin-right: 10%; padding-bottom: .5em; padding-left: 1em; padding-top: .33em; }
+ul.ficheInteraction li.notes p { max-height: 15.5em; max-height: calc(1.5em * 10 + .5em); min-height: 11em; min-height: calc(1.5em * 7 + .5em); overflow: scroll; }
+ul.ficheInteraction li label { position: absolute; top: 4px; left: -20%; display: block; cursor: text; font-variant: small-caps; margin-top: .1em; opacity: .5; padding-right: 1em; text-align: right; text-transform: capitalize; width: 20%; }
+ul.ficheInteraction li label.textarea { margin-top: 1.33em; }
+ul.ficheInteraction li input[type="text"] { display: inline-block; border-bottom: 1px solid #2c3e50 !important; font-size: 1.15em; line-height: 1.33em; width: 80%; }
+ul.ficheInteraction li input[type="submit"] { display: block; background: #dfe6ed; border: 1px solid #2c3e50; color: #2c3e50; margin: 0 auto; width: auto; -webkit-box-shadow: 2px 2px 0 #e6e5e4; -moz-box-shadow: 2px 2px 0 #e6e5e4; box-shadow: 2px 2px 0 #e6e5e4; }
+ul.ficheInteraction li input[type="submit"]:hover { border-color: #c0392b; color: #c0392b; }
+ul.ficheInteraction li textarea { display: inline-block; border: 0; border-bottom: 1px solid #2c3e50; border-left: 1px solid #2c3e50; font-size: 1.15em; height: 10em; height: calc((1.33em * 9) + 1em); padding: .33em 1em; line-height: 1.33em; resize: none; width: 80%; }
+
+ul#creationsRapides { text-align: center; }
+ul#creationsRapides a { border-bottom: none; color: inherit; text-decoration: none; }
+ul#creationsRapides a:hover { color: #c0392b; }
+ul#creationsRapides li { position: relative; display: inline-block; height: 150px; padding-top: 85px; width: 150px; }
+ul#creationsRapides li::before { position: absolute; top: 25px; left: 50px; display: block; background: #2c3e50; color: white; font-family: "fontello"; font-size: 20px; height: 50px; line-height: 50px; text-align: center; width: 50px; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; }
+ul#creationsRapides li:hover::before { background-color: #c0392b; }
+ul#creationsRapides li.creationFiche::before { content: '\e80c'; }
