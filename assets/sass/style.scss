@@ -2054,3 +2054,28 @@ ul#creationsRapides {
 		&.creationFiche::before { content: '\e80c'; }
 	}
 }
+
+
+
+// Style liés aux tags
+.liste-tags {
+	span.tag {
+		display: inline-block;
+		background: rgb(253, 231, 180);
+		border-radius: .5em;
+		@include shadow(1px, 1px, 1px, $gris);
+		cursor: pointer;
+		margin: .33em .25em;
+		padding: .15em 1em;
+		
+		&:before {
+			display: inline-block;
+			color: $orange;
+			content: '\e827';
+			font-family: $icons;
+			padding: 0 .66em 0 0;
+			text-align: center;
+			width: 1em;
+		}
+	}
+}

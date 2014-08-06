@@ -11,7 +11,7 @@
 	// On prépare la liste des tags
 	$tags = explode(',', $interaction['thematiques']);
 	$liste_tags = '';
-	foreach($tags as $tag) $liste_tags .= '<span>' . $tag . '</span>';
+	foreach($tags as $tag) $liste_tags .= '<span class="tag">' . $tag . '</span>';
 ?>
 <h6>Interaction n° <?php echo $interaction['id']; ?></h6>
 
@@ -28,7 +28,7 @@
 	 --><label class="noform">Lieu</label><!--
 	 --><?php echo ucwords($interaction['lieu']); ?><!--
  --></li>
-	<li><!--
+	<li class="liste-tags"><!--
 	 --><label class="noform">Thématiques</label><!--
 	 --><?php echo $liste_tags; ?><!--
  --></li>
