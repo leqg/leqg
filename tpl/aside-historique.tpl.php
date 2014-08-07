@@ -8,7 +8,7 @@
 				<th>Type</th>
 				<th>Date</th>
 				<th>Objet</th>
-				<th>Thématiques</th>
+				<!--<th>Thématiques</th>-->
 			</tr>
 		</thead>
 		<tbody>
