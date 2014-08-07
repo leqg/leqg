@@ -313,3 +313,5 @@ ul#creationsRapides li.creationFiche::before { content: '\e80c'; }
 
 .liste-tags span.tag { display: inline-block; background: #fde7b4; border-radius: .5em; -webkit-box-shadow: 1px 1px 1px #cdcbca; -moz-box-shadow: 1px 1px 1px #cdcbca; box-shadow: 1px 1px 1px #cdcbca; cursor: pointer; margin: .33em .25em; padding: .15em 1em; }
 .liste-tags span.tag:before { display: inline-block; color: #ed8262; content: '\e827'; font-family: "fontello"; padding: 0 .66em 0 0; text-align: center; width: 1em; }
+.liste-tags span.tag:hover { cursor: pointer; }
+.liste-tags span.tag:hover:before { content: '\e803'; }
