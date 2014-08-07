@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3306
--- Généré le :  Jeu 31 Juillet 2014 à 13:06
+-- Généré le :  Jeu 07 Août 2014 à 14:11
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
@@ -41375,7 +41375,7 @@ CREATE TABLE `compte` (
 --
 
 INSERT INTO `compte` (`id`, `login`, `nickname`, `pass`, `email`, `phone`, `autorisations`, `derniere_connexion`, `demande_reinitialisation`) VALUES
-(1, 'damien', 'Damien Senger', 'cb58ef17b0805d6354348c51f8bb9c9a', 'mail@damiensenger.me', 0678203248, 9, '2014-07-29 09:57:33', '2014-05-30 10:34:07');
+(1, 'damien', 'Damien Senger', 'cb58ef17b0805d6354348c51f8bb9c9a', 'mail@damiensenger.me', 0678203248, 9, '2014-08-04 14:35:41', '2014-05-30 10:34:07');
 
 -- --------------------------------------------------------
 
@@ -51928,43 +51928,27 @@ INSERT INTO `dossiers` (`dossier_id`, `dossier_nom`, `dossier_description`, `dos
 CREATE TABLE `historique` (
   `historique_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` bigint(20) NOT NULL,
-  `historique_type` set('contact','téléphone','email','courrier','autre') NOT NULL,
+  `compte_id` int(11) NOT NULL,
+  `historique_type` set('contact','telephone','email','courrier','autre') NOT NULL,
   `historique_date` date NOT NULL,
+  `historique_lieu` varchar(255) NOT NULL,
   `historique_objet` varchar(255) NOT NULL,
-  `historique_remarques` text NOT NULL,
+  `historique_thematiques` text NOT NULL,
+  `historique_notes` text NOT NULL,
   `historique_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`historique_id`),
-  KEY `contact_id` (`contact_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
+  KEY `contact_id` (`contact_id`),
+  KEY `compte_id` (`compte_id`),
+  KEY `contact_id_2` (`contact_id`),
+  KEY `historique_objet` (`historique_objet`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Contenu de la table `historique`
 --
 
-INSERT INTO `historique` (`historique_id`, `contact_id`, `historique_type`, `historique_date`, `historique_objet`, `historique_remarques`, `historique_timestamp`) VALUES
-(1, 1100, 'téléphone', '2014-03-11', 'Demande d''informations diverses', '', '2014-06-02 10:04:26'),
-(2, 10164, '', '2014-06-07', 'Appel de test du systÃ¨me', '', '2014-06-07 14:39:22'),
-(3, 10164, 'email', '2014-06-07', 'Pour tester le systÃ¨me d''objet', '', '2014-06-07 14:39:54'),
-(4, 10164, 'contact', '2010-01-01', 'Test', '', '2014-06-07 14:40:58'),
-(5, 10164, 'téléphone', '2012-02-02', 'Test du dÃ©code l''objet', '', '2014-06-07 14:41:36'),
-(6, 10164, 'courrier', '1928-04-01', 'Test', '', '2014-06-07 14:42:19'),
-(7, 10164, 'email', '2014-01-23', 'Test', '', '2014-06-07 15:00:49'),
-(8, 10164, 'téléphone', '2014-06-08', 'Test', '', '2014-06-07 15:02:27'),
-(9, 10164, 'courrier', '2014-06-09', 'Dernier test', '', '2014-06-07 15:03:03'),
-(10, 10164, 'email', '2014-06-10', 'Croisons les doigts', '', '2014-06-07 15:04:21'),
-(11, 10164, 'contact', '2014-06-11', 'Rencontre avec la grÃ¢ce', '', '2014-06-07 15:07:11'),
-(12, 10164, 'email', '2014-06-12', 'On regarde la logique du scroll', '', '2014-06-07 15:07:39'),
-(13, 10164, 'contact', '2014-06-13', 'Dernier test sur un long champ qui va s''Ã©tirer sur plusieurs lignes', '', '2014-06-07 15:08:12'),
-(14, 10164, 'contact', '2014-06-14', 'On teste l''entrÃ©e automatique par le bouton du mÃªme nom', '', '2014-06-07 15:13:08'),
-(15, 10164, 'téléphone', '2014-06-26', 'Test du systÃ¨me d''historique pour voir comment se comporte le scroll dans le cas d''une entrÃ©e multiple de champs dans l''historique et son comportement responsive !', '', '2014-06-26 18:08:49'),
-(16, 10164, 'email', '2014-06-26', 'Bonâ€¦Â DeuxiÃ¨me Test du systÃ¨me d''historique pour voir comment se comporte le scroll dans le cas d''une entrÃ©e multiple de champs dans l''historique et son comportement responsive !', '', '2014-06-26 18:09:04'),
-(17, 1240, 'autre', '2014-07-31', 'Ajout au dossier ', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:54:35'),
-(18, 8469, 'autre', '2014-07-31', 'Ajout au dossier ', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:54:54'),
-(19, 1182, 'autre', '2014-07-31', 'Ajout au dossier Insalubrit&eacute; Socolopo 2', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:56:14'),
-(20, 4052, 'autre', '2014-07-31', 'Retrait du dossier Insalubrit&eacute; Socolopo', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:57:02'),
-(21, 4, 'autre', '2014-07-31', 'Nouvelle tÃ¢che associÃ©e : Test du systÃ¨me de tÃ¢che', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:58:38'),
-(22, 0, 'autre', '2014-07-31', 'Nouvelle tÃ¢che associÃ©e : Dernier test des tÃ¢ches pour l''ajout Ã  l''historique', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 10:59:35'),
-(23, 4052, 'autre', '2014-07-31', 'Nouvelle tÃ¢che associÃ©e : Test aprÃ¨s correction', 'EntrÃ©e automatique du systÃ¨me', '2014-07-31 11:00:18');
+INSERT INTO `historique` (`historique_id`, `contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_lieu`, `historique_objet`, `historique_thematiques`, `historique_notes`, `historique_timestamp`) VALUES
+(1, 637, 1, 'contact', '2014-08-05', 'Permanence', 'Demande logement social', 'logement', 'M. RING se pr&eacute;sente dans le cadre de sa demande de logement social pour recevoir un appui &agrave; sa requ&ecirc;te aupr&egrave;s des OPH municipaux.', '2014-08-07 10:41:48');
 
 -- --------------------------------------------------------
 
