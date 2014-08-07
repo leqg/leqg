@@ -8,7 +8,7 @@
 html, body { font-family: "Roboto", Helvetica, Arial, sans-serif; height: 100%; margin: 0; padding: 0; width: 100%; }
 
 /* Style général des balises */
-a { border-bottom: 1px solid #2c3e50; color: #c0392b; text-decoration: none; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
+a { border-bottom: 1px solid #c0392b; color: #c0392b; text-decoration: none; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
 @media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3 / 2), (min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) { a { border-bottom-width: .5px; } }
 a:hover { border-bottom-color: #2c3e50; color: #2c3e50; }
 a.nostyle { border: none; color: inherit; text-decoration: none; }
@@ -168,9 +168,10 @@ main.fiche aside #historique table#historique-contact thead tr th:last-of-type s
 main.fiche aside #historique table#historique-contact thead tr th:last-of-type span.add-historique:before { position: absolute; top: -5px; right: 30px; display: block; background: #2c3e50; border-radius: .5em; color: white; content: 'Ajouter une entrée'; font-family: "Roboto", Helvetica, Arial, sans-serif; opacity: 0; padding: .4em .66em; text-align: right; z-index: 500; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
 main.fiche aside #historique table#historique-contact thead tr th:last-of-type span.add-historique:hover { opacity: 1; }
 main.fiche aside #historique table#historique-contact thead tr th:last-of-type span.add-historique:hover:before { opacity: 1; }
-main.fiche aside #historique table#historique-contact tbody tr td { text-align: center; }
+main.fiche aside #historique table#historique-contact tbody tr td { padding-top: .66em; text-align: center; }
+main.fiche aside #historique table#historique-contact tbody tr td.liste-tags { padding-top: .25em; }
 main.fiche aside #historique table#historique-contact tbody tr td:nth-of-type(-n+2) { width: 125px; }
-main.fiche aside #historique table#historique-contact tbody tr td:nth-of-type(2) { text-align: center; }
+main.fiche aside #historique table#historique-contact tbody tr td:nth-of-type(3) { text-align: left; }
 main.fiche aside #historique table#historique-contact tbody tr td:last-of-type { position: relative; text-align: left; }
 main.fiche aside #historique table#historique-contact tbody tr td:last-of-type span.add-element { position: absolute; top: 3px; right: 7px; display: block; background: #ed8262; border-radius: 50%; color: white; cursor: pointer; font-family: "fontello"; font-size: 15px; height: 25px; line-height: 25px; text-align: center; width: 25px; }
 main.fiche aside #historique table#historique-contact tbody tr td input { font-size: .95em; }

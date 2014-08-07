@@ -43,7 +43,7 @@ body {
 /* Style général des balises */
 
 a {
-	border-bottom: 1px solid $bleu;
+	border-bottom: 1px solid $rouge;
 		@media  (-webkit-min-device-pixel-ratio: 1.5),
 				(min--moz-device-pixel-ratio: 1.5),
 				(-o-min-device-pixel-ratio: 3/2),
@@ -1109,14 +1109,17 @@ main.fiche {
 				tbody {
 					tr {
 						td {
+							padding-top: .66em;
 							text-align: center;
+							
+							&.liste-tags { padding-top: .25em; }
 
 							&:nth-of-type(-n+2) {
 								width: 125px;
 							}
 							
-							&:nth-of-type(2) {
-								text-align: center;
+							&:nth-of-type(3) {
+								text-align: left;
 							}
 							
 							&:last-of-type {
