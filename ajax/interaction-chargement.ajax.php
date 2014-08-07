@@ -37,3 +37,9 @@
 	 --><p><?php echo $interaction['notes']; ?></p><!--
  --></li>
 </ul>
+
+<ul class="listeActions">
+	<li>Ajouter un fichier</li>
+	<li>Ajouter à un dossier</li>
+	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id']); ?>">Retour à l'historique</a></li>
+</ul>
