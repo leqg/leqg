@@ -7,7 +7,7 @@
 			<tr>
 				<th>Type</th>
 				<th>Date</th>
-				<th>Objet</th>
+				<th>Objet <span class="add-historique" id="ajoutInteraction">&#xe816;</span></th>
 				<!--<th>Thématiques</th>-->
 			</tr>
 		</thead>

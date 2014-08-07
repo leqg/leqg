@@ -7,7 +7,7 @@ var fiche = function() {
 	
 	
 	// interactions permettant le passage entre les volets
-		$("#ajoutInteraction").click(function(){
+		$("#ajoutInteraction").click(function(){ // Cliquer pour ajouter une première interaction
 			$(".ficheContact div").hide(); // On ferme tous les volets
 			$("#nouvelleInteraction").show(); // On affiche la création de fiche
 		});
