@@ -61,3 +61,53 @@ var fiche = function() {
 };
 
 $(document).ready(fiche);
+
+
+// Script relatif à l'affichage de la carte par utilisateur
+function initialize() {
+	// On récupère les data liées à la carte
+	var nom_electeur = $("#carte").data('nom');
+	var adresse_electeur = $("#carte").data('adresse');
+
+	geocoder = new google.maps.Geocoder();
+
+	var latlng = new google.maps.LatLng(48.58476, 7.750576);
+	var mapOptions = {
+		//center: latlng,
+		disableDefaultUI: true,
+		draggable: true,
+		rotateControl: false,
+		scrollwheel: false,
+		zoomControl: true,
+		zoom: 16
+	};
+	var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
+
+	
+	// On marque les différents bâtiments
+	// L'adresse à rechercher
+	
+	var GeocoderOptions = { 'address': adresse_electeur, 'region': 'FR' };
+	
+	// La function qui va traiter le résultat
+	function GeocodingResult(results, status) {
+		// Si la recherche a fonctionnée
+		if (status == google.maps.GeocoderStatus.OK) {
+			// On créé un nouveau marker sur la map
+			markerAdresse = new google.maps.Marker({
+				position: results[0].geometry.location,
+				map: map,
+				title: nom_electeur
+			});
+			
+			// On centre sur ce marker
+			map.setCenter(results[0].geometry.location);
+		}
+	}
+	
+	// On lance la recherche de l'adresse
+	geocoder.geocode(GeocoderOptions, GeocodingResult);
+	
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);

@@ -100,6 +100,8 @@ main.fiche section#fiche-electeur header h2 span:last-of-type { font: 500 0.9em/
 main.fiche section#fiche-electeur header #electeur-icons { position: absolute; bottom: 30px; left: 190px; display: block; }
 main.fiche section#fiche-electeur header #electeur-icons span#est-electeur { display: block; background-color: #c0392b; border-radius: 50%; color: white; cursor: default; font-family: "fontello"; font-size: 18px; height: 30px; line-height: 30px; margin: 0; margin-left: 7px; margin-top: 10px; padding: 0; text-align: center; width: 30px; }
 main.fiche section#fiche-electeur header #electeur-icons span#est-electeur:last-of-type { margin-left: 0; }
+main.fiche section#fiche-electeur #carte { position: absolute; top: 0; right: 0; background-color: gray; height: 250px; margin: 0; max-width: none; padding: 0; width: 350px; }
+main.fiche section#fiche-electeur #carte img { max-width: none; }
 main.fiche ul.icons { position: absolute; top: .5em; right: 0; list-style: none; text-align: right; }
 main.fiche ul.icons li { display: inline-block; background: #2c3e50; border-radius: 50%; color: white; cursor: pointer; font-family: "fontello"; font-size: 15px; height: 30px; line-height: 30px; margin: 0 .5em; text-align: center; width: 30px; }
 main.fiche ul.icons li.actif { background: #7abf66; }
@@ -124,8 +126,6 @@ main.fiche aside ul#navigation-aside li:nth-of-type(2) { border: 1px solid #2c3e
 main.fiche aside ul#navigation-aside li.actif { border-top: none !important; }
 main.fiche aside ul#navigation-aside li.actif:hover { cursor: default; font-weight: inherit; }
 main.fiche aside [id^='aside-'] { position: relative; height: 100%; overflow: hidden; overflow-y: scroll; width: 100%; }
-main.fiche aside #carte { background-color: gray; height: 75%; margin: 0; max-width: none; padding: 0; width: 100%; }
-main.fiche aside #carte img { max-width: none; }
 main.fiche aside #tags { list-style: none; margin: 0; padding: 1em 0 0 1em; width: 100%; }
 main.fiche aside #tags span.tag { display: inline-block; background: #fde7b4; border-radius: .5em; -webkit-box-shadow: 1px 1px 1px #cdcbca; -moz-box-shadow: 1px 1px 1px #cdcbca; box-shadow: 1px 1px 1px #cdcbca; cursor: pointer; margin: .33em .25em; padding: .15em 1em; }
 main.fiche aside #tags span.tag:before { display: inline-block; color: #ed8262; content: '\e827'; font-family: "fontello"; padding: 0 .66em 0 0; text-align: center; width: 1em; }

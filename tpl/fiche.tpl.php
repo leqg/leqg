@@ -8,6 +8,8 @@
 			<?php if ($fiche->get_infos('electeur')) : ?><span id="est-electeur" title="Électeur">&#xe840;</span><?php endif; ?>
 		</div>
 	</header>
+	
+	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $fiche->affichage_adresse(' '); ?>"></div>
 
 	<ul class="infos">
 		<li>
@@ -178,51 +180,6 @@
 		
 				
 	});
-</script>
-
-<script>
-function initialize() {
-	geocoder = new google.maps.Geocoder();
-
-	var latlng = new google.maps.LatLng(48.58476, 7.750576);
-	var mapOptions = {
-		//center: latlng,
-		disableDefaultUI: true,
-		draggable: true,
-		rotateControl: false,
-		scrollwheel: false,
-		zoomControl: true,
-		zoom: 17
-	};
-	var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
-
-	
-	// On marque les différents bâtiments
-	// L'adresse à rechercher
-	var GeocoderOptions = { 'address': "<?php $fiche->affichage_adresse(''); ?>", 'region': 'FR' };
-	
-	// La function qui va traiter le résultat
-	function GeocodingResult(results, status) {
-		// Si la recherche a fonctionnée
-		if (status == google.maps.GeocoderStatus.OK) {
-			// On créé un nouveau marker sur la map
-			markerAdresse = new google.maps.Marker({
-				position: results[0].geometry.location,
-				map: map,
-				title: "<?php $fiche->affichage_nom(); ?>"
-			});
-			
-			// On centre sur ce marker
-			map.setCenter(results[0].geometry.location);
-		}
-	}
-	
-	// On lance la recherche de l'adresse
-	geocoder.geocode(GeocoderOptions, GeocodingResult);
-	
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 <?php $core->tpl_footer(); ?>
