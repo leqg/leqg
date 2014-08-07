@@ -1,7 +1,9 @@
 var fiche = function() {
 	// javascript relatif au volet latéral
-	// état de base des volets
-		$("#nouvelleInteraction").hide();
+	// état de base des volets : tous cachés sauf premierContact ou historique
+		$(".ficheContact div").hide();
+		$("#historique").show();
+		$("#premierContact").show();
 	
 	
 	// interactions permettant le passage entre les volets
