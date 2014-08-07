@@ -609,6 +609,10 @@ main.fiche {
 			img {
 			    max-width: none; 
 			}
+			
+			@media all and (max-width: 2000px) {
+				display: none;
+			}
 		}
 	}
 	

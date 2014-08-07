@@ -102,6 +102,7 @@ main.fiche section#fiche-electeur header #electeur-icons span#est-electeur { dis
 main.fiche section#fiche-electeur header #electeur-icons span#est-electeur:last-of-type { margin-left: 0; }
 main.fiche section#fiche-electeur #carte { position: absolute; top: 0; right: 0; background-color: gray; height: 250px; margin: 0; max-width: none; padding: 0; width: 350px; }
 main.fiche section#fiche-electeur #carte img { max-width: none; }
+@media all and (max-width: 2000px) { main.fiche section#fiche-electeur #carte { display: none; } }
 main.fiche ul.icons { position: absolute; top: .5em; right: 0; list-style: none; text-align: right; }
 main.fiche ul.icons li { display: inline-block; background: #2c3e50; border-radius: 50%; color: white; cursor: pointer; font-family: "fontello"; font-size: 15px; height: 30px; line-height: 30px; margin: 0 .5em; text-align: center; width: 30px; }
 main.fiche ul.icons li.actif { background: #7abf66; }
