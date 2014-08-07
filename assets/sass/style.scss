@@ -1109,7 +1109,7 @@ main.fiche {
 				tbody {
 					tr {
 						td {
-							padding-top: .66em;
+							padding: .66em 1em;
 							text-align: center;
 							
 							&.liste-tags { padding-top: .25em; }
@@ -1965,7 +1965,7 @@ ul.ficheInteraction {
 		}
 		
 		label {
-			position: absolute; top: 4px; left: -20%;
+			position: absolute; top: .5em; left: -20%;
 			display: block;
 			cursor: text;
 			font-variant: small-caps;
@@ -1977,16 +1977,18 @@ ul.ficheInteraction {
 			width: 20%;
 			
 			&.textarea {
-				margin-top: 1.33em;
+				margin-top: 0em;
 			}
 		}
 		
 		input[type="text"] {
 			display: inline-block;
-			border-bottom: 1px solid $bleu !important;
+			border: 0;
+			//border-bottom: 1px solid $bleu !important;
+			font-family: $longtext;
 			font-size: 1.15em;
 			line-height: 1.33em;
-			width: 80%;
+			width: 95%;
 		}
 		
 		input[type="submit"] {
@@ -2007,15 +2009,17 @@ ul.ficheInteraction {
 		textarea {
 			display: inline-block;
 			border: 0;
-			border-bottom: 1px solid $bleu;
-			border-left: 1px solid $bleu;
+			//border-bottom: 1px solid $bleu;
+			//border-left: 1px solid $bleu;
 			font-size: 1.15em;
 			height: 10em;
 			height: calc((1.33em * 9) + 1em);
+			margin-top: 0;
 			padding: .33em 1em;
+			padding-top: 0;
 			line-height: 1.33em;
 			resize: none;
-			width: 80%;
+			width: 95%;
 		}
 	}
 }

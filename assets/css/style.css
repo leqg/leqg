@@ -168,7 +168,7 @@ main.fiche aside #historique table#historique-contact thead tr th:last-of-type s
 main.fiche aside #historique table#historique-contact thead tr th:last-of-type span.add-historique:before { position: absolute; top: -5px; right: 30px; display: block; background: #2c3e50; border-radius: .5em; color: white; content: 'Ajouter une entrée'; font-family: "Roboto", Helvetica, Arial, sans-serif; opacity: 0; padding: .4em .66em; text-align: right; z-index: 500; -webkit-transition: all 0.2s ease-in-out; -moz-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
 main.fiche aside #historique table#historique-contact thead tr th:last-of-type span.add-historique:hover { opacity: 1; }
 main.fiche aside #historique table#historique-contact thead tr th:last-of-type span.add-historique:hover:before { opacity: 1; }
-main.fiche aside #historique table#historique-contact tbody tr td { padding-top: .66em; text-align: center; }
+main.fiche aside #historique table#historique-contact tbody tr td { padding: .66em 1em; text-align: center; }
 main.fiche aside #historique table#historique-contact tbody tr td.liste-tags { padding-top: .25em; }
 main.fiche aside #historique table#historique-contact tbody tr td:nth-of-type(-n+2) { width: 125px; }
 main.fiche aside #historique table#historique-contact tbody tr td:nth-of-type(3) { text-align: left; }
@@ -297,12 +297,12 @@ aside.ficheContact #nouvelleInteraction { display: none; }
 ul.ficheInteraction { list-style: none; margin: 0 1em; padding: 0; }
 ul.ficheInteraction li { position: relative; display: block; border-bottom: 1px solid #2c3e50; border-left: 1px solid #2c3e50; font-size: 1.15em; line-height: 1.5em; margin-bottom: 2em; margin-left: 20%; margin-right: 10%; padding-bottom: .5em; padding-left: 1em; padding-top: .33em; }
 ul.ficheInteraction li.notes p { font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1.2em; font-weight: 300; line-height: 1.5em; max-height: 15.5em; max-height: calc(1.5em * 10 + .5em); min-height: 11em; min-height: calc(1.5em * 7 + .5em); overflow: scroll; }
-ul.ficheInteraction li label { position: absolute; top: 4px; left: -20%; display: block; cursor: text; font-variant: small-caps; margin-top: .1em; opacity: .5; padding-right: 1em; text-align: right; text-transform: capitalize; width: 20%; }
-ul.ficheInteraction li label.textarea { margin-top: 1.33em; }
-ul.ficheInteraction li input[type="text"] { display: inline-block; border-bottom: 1px solid #2c3e50 !important; font-size: 1.15em; line-height: 1.33em; width: 80%; }
+ul.ficheInteraction li label { position: absolute; top: .5em; left: -20%; display: block; cursor: text; font-variant: small-caps; margin-top: .1em; opacity: .5; padding-right: 1em; text-align: right; text-transform: capitalize; width: 20%; }
+ul.ficheInteraction li label.textarea { margin-top: 0em; }
+ul.ficheInteraction li input[type="text"] { display: inline-block; border: 0; font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1.15em; line-height: 1.33em; width: 95%; }
 ul.ficheInteraction li input[type="submit"] { display: block; background: #dfe6ed; border: 1px solid #2c3e50; color: #2c3e50; margin: 0 auto; width: auto; -webkit-box-shadow: 2px 2px 0 #e6e5e4; -moz-box-shadow: 2px 2px 0 #e6e5e4; box-shadow: 2px 2px 0 #e6e5e4; }
 ul.ficheInteraction li input[type="submit"]:hover { border-color: #c0392b; color: #c0392b; }
-ul.ficheInteraction li textarea { display: inline-block; border: 0; border-bottom: 1px solid #2c3e50; border-left: 1px solid #2c3e50; font-size: 1.15em; height: 10em; height: calc((1.33em * 9) + 1em); padding: .33em 1em; line-height: 1.33em; resize: none; width: 80%; }
+ul.ficheInteraction li textarea { display: inline-block; border: 0; font-size: 1.15em; height: 10em; height: calc((1.33em * 9) + 1em); margin-top: 0; padding: .33em 1em; padding-top: 0; line-height: 1.33em; resize: none; width: 95%; }
 
 ul#creationsRapides { text-align: center; }
 ul#creationsRapides a { border-bottom: none; color: inherit; text-decoration: none; }
