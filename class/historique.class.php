@@ -27,7 +27,7 @@ class historique extends core {
 			// On fait la liste de toutes les entrées pour les affecter dans un tableau
 			$entrees = array();
 			
-			while ( $row = $sql->fetch_assoc() ) $entrees[] = $row;
+			while ( $row = $sql->fetch_assoc() ) $entrees[] = $this->formatage_donnees($row);
 			
 			return $entrees;
 		
@@ -124,4 +124,41 @@ class historique extends core {
 		
 		if ($return === true) : return $retour; else : echo $retour; endif;
 	}
+	
+	
+	// affichageThematiques( string->array , bool , bool , bool ) permet de retourner avec un système de tags les différentes thématiques liées à un élement de l'historique
+	public	function affichageThematiques( $themas , $return = false , $lienVersTag = false ,  $parentDejaPresent = true ) {
+		// On vérifie que l'entrée est bien un tableau une fois restructurée
+		$tags = explode(',', $themas);
+		
+		if ( is_array( $tags ) ) :
+			
+			// On prépare l'affichage
+			$affichage = '';
+			
+			// On affiche le parent s'il n'est pas déjà présent
+			if ($parentDejaPresent === false) $affichage .= '<div id="liste-tags">';
+			
+			// On fait la liste des différentes thématiques pour les afficher en forme de tags
+			foreach ($tags as $tag) :
+			
+				// On regarde si on a demandé un lien
+				if ($lienVersTag === true) $affichage .= '<a href="' . $this->tpl_get_url('thematiques', $tag) . '">';
+				
+				// On affiche le tag
+				$affichage .= '<span class="tag">' . $tag . '</span>';
+				
+				// On regarde si on doit fermer le lien demandé
+				if ($lienVersTag === true) $affichage .= '</a>';
+			
+			endforeach;
+			
+			// On ferme le parent s'il n'est pas déjà présent
+			if ($parentDejaPresent === false) $affichage .= '</div>';
+			
+			// Si on demande un return, on le lance, sinon un echo
+			if ($return) : return $affichage; else : echo $affichage; endif;
+			
+		else : return false; endif;
+	} 
 }
