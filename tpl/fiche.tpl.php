@@ -62,6 +62,9 @@
 		// S'il existe des éléments d'histoire ou de dossiers avec le contact choisi, on lance les volets habituels
 		else :
 
+			// On charge d'abord le volet de l'historique des événements
+			$core->tpl_load('aside', 'historique');
+
 		endif;
 		
 		
