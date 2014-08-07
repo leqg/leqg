@@ -10,7 +10,7 @@ class fiche extends core {
 	// Définition des propriétés
 	private $db; // Lien vers la base MySQL
 	private $fiches; // tableau des informations disponibles à propos des fiches ouvertes
-	public $fiche_ouverte;
+	public $fiche_ouverte = null;
 	
 	
 	// Définition des méthodes
@@ -75,6 +75,19 @@ class fiche extends core {
 		} else {
 			if ($this->fiche_ouverte['contact_' . $methode . '_optout']) : return true; else : return false; endif;
 		}
+	}
+	
+	
+	// the_ID() et get_the_ID() permettent de retourner l'ID de la fiche consultée indépendamment de la recherche de paramètre GET
+	public	function get_the_ID() {
+		if (is_null($this->fiche_ouverte)) : return false; else :
+			return $this->get_infos('id');
+		endif;
+	}
+	public	function the_ID() {
+		if (is_null($this->fiche_ouverte)) : return false; else :
+			echo $this->get_the_ID();
+		endif;
 	}
 	
 	
