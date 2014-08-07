@@ -24,6 +24,7 @@ $gris:		rgba(205, 203, 202, 1);
 $grisMoyen:	darken($gris, 15%);
 $grisFonce:	darken($gris, 50%);
 $fonts:		'Roboto', Helvetica, Arial, sans-serif;
+$longtext:	'Fira Sans', Helvetica, Arial, sans-serif;
 $icons:		'fontello';
 
 
@@ -1949,6 +1950,10 @@ ul.ficheInteraction {
 		padding-top: .33em;
 		
 		&.notes p {
+			font-family: $longtext;
+			font-size: 1.2em;
+			font-weight: 300;
+			line-height: 1.5em;
 			max-height: 15.5em;
 			max-height: calc(1.5em * 10 + .5em);
 			min-height: 11em;

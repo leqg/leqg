@@ -295,7 +295,7 @@ aside.ficheContact #nouvelleInteraction { display: none; }
 
 ul.ficheInteraction { list-style: none; margin: 0 1em; padding: 0; }
 ul.ficheInteraction li { position: relative; display: block; border-bottom: 1px solid #2c3e50; border-left: 1px solid #2c3e50; font-size: 1.15em; line-height: 1.5em; margin-bottom: 2em; margin-left: 20%; margin-right: 10%; padding-bottom: .5em; padding-left: 1em; padding-top: .33em; }
-ul.ficheInteraction li.notes p { max-height: 15.5em; max-height: calc(1.5em * 10 + .5em); min-height: 11em; min-height: calc(1.5em * 7 + .5em); overflow: scroll; }
+ul.ficheInteraction li.notes p { font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1.2em; font-weight: 300; line-height: 1.5em; max-height: 15.5em; max-height: calc(1.5em * 10 + .5em); min-height: 11em; min-height: calc(1.5em * 7 + .5em); overflow: scroll; }
 ul.ficheInteraction li label { position: absolute; top: 4px; left: -20%; display: block; cursor: text; font-variant: small-caps; margin-top: .1em; opacity: .5; padding-right: 1em; text-align: right; text-transform: capitalize; width: 20%; }
 ul.ficheInteraction li label.textarea { margin-top: 1.33em; }
 ul.ficheInteraction li input[type="text"] { display: inline-block; border-bottom: 1px solid #2c3e50 !important; font-size: 1.15em; line-height: 1.33em; width: 80%; }
