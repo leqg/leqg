@@ -18,7 +18,7 @@
 <ul class="ficheInteraction">
 	<li><!--
 	 --><label>Type</label><!--
-	 --><?php $historique->returnType($interaction['type'], false); ?><!--
+	 --><?php $historique->returnType($interaction['type']); ?><!--
  --></li>
 	<li><!--
 	 --><label class="noform">Date</label><!--
