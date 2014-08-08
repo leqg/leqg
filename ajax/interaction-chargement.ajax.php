@@ -18,15 +18,15 @@
 <ul class="ficheInteraction">
 	<li><!--
 	 --><label>Type</label><!--
-	 --><?php $historique->returnType($interaction['type']); ?><!--
+	 --><p><?php $historique->returnType($interaction['type']); ?></p><!--
  --></li>
 	<li><!--
 	 --><label class="noform">Date</label><!--
-	 --><?php echo strtolower(htmlentities(strftime('%A %e %B %Y', $date)));  ?><!--
+	 --><p><?php echo strtolower(htmlentities(strftime('%A %e %B %Y', $date))); ?></p><!--
  --></li>
 	<li><!--
 	 --><label class="noform">Lieu</label><!--
-	 --><?php echo ucwords($interaction['lieu']); ?><!--
+	 --><p><?php echo ucwords($interaction['lieu']); ?></p><!--
  --></li>
 	<li class="liste-tags"><!--
 	 --><label class="noform">Thématiques</label><!--

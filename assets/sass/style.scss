@@ -685,6 +685,7 @@ main.fiche {
 			input.fiche {
 				border: 0;
 				border-bottom: 1px solid lighten($bleu, 50%);
+				color: $noir;
 				width: 85%;
 				@include transition(all);
 				
@@ -693,6 +694,11 @@ main.fiche {
 					background-color: lighten($rouge, 45%);
 					border-bottom: 1px solid $rouge;
 					color: $rouge;
+					
+					&:focus {
+						background: none;
+						color: $noir;
+					}
 				}
 				
 				&:focus {
@@ -1948,6 +1954,7 @@ ul.ficheInteraction {
 		display: block;
 		border-bottom: 1px solid $bleu;
 		border-left: 1px solid $bleu;
+		font-family: $longtext;
 		font-size: 1.15em;
 		line-height: 1.5em;
 		margin-bottom: 2em;
@@ -1957,11 +1964,14 @@ ul.ficheInteraction {
 		padding-left: 1em;
 		padding-top: .33em;
 		
-		&.notes p {
+		p {
 			font-family: $longtext;
 			font-size: 1.2em;
 			font-weight: 300;
 			line-height: 1.5em;
+		}
+		
+		&.notes p {
 			max-height: 15.5em;
 			max-height: calc(1.5em * 10 + .5em);
 			min-height: 11em;
@@ -1973,6 +1983,7 @@ ul.ficheInteraction {
 			position: absolute; top: .5em; left: -20%;
 			display: block;
 			cursor: text;
+			font-family: $fonts;
 			font-variant: small-caps;
 			margin-top: .1em;
 			opacity: .5;
