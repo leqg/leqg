@@ -2,3 +2,5 @@
 *.scssc
 
 koala-config.json
+
+uploads/*
