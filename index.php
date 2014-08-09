@@ -52,6 +52,13 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$fiche->fermeture();
 		}
 		
+		else if ($_GET['page'] == 'fiche' && !empty($_GET['action']) && $_GET['action'] == 'creation') {
+			// On charge les éléments de template
+				$core->tpl_header();
+				$core->tpl_load('fiche' , 'ajout');
+				$core->tpl_footer();
+		}
+		
 		else if ($_GET['page'] == 'creation' && isset($_GET['id'])) {
 			// S'il s'agit de la création d'un dossier ou d'une tâche, on charge les templates relatifs à la page demandée
 			$core->tpl_header();
