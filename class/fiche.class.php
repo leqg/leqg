@@ -531,6 +531,29 @@ class fiche extends core {
 												"' . $historique['objet'] . '",
 												"' . $historique['remarques'] . '" )');
 	}
+	
+	
+	// modificationAdresse ( int , array , array , array ) permet de modifier l'adresse d'une fiche utilisateur sélectionnée
+	public	function modificationAdresse( $contact , $ville , $rue , $immeuble ) {
+		// On vérifie le format des informations entrées
+			if (!is_numeric($contact) && !is_array($ville) && !is_array($rue) && !is_array($immeuble)) { return false; }
+				
+		// On prépare la requête BDD
+			$query = 'UPDATE		contacts
+					  SET		commune_id = ' . $ville['id'] . ',
+					  			rue_id = ' . $rue['id'] . ',
+					  			bureau_id = ' . $immeuble['bureau_id'] . ',
+					  			immeuble_id = ' . $immeuble['id'] . ',
+					  			canton_id = ' . $immeuble['canton_id'] . ',
+					  			contact_adresse_ville = "' . $ville['nom'] . '",
+					  			contact_adresse_rue = "' . $rue['nom'] . '",
+					  			contact_adresse_numero = "' . $immeuble['numero'] . '"
+					  WHERE		contact_id = ' . $contact;
+			
+		// On effectue la requête dans la BDD et on retourne le résultat
+			$sql = $this->db->query($query);
+			return $sql;
+	}
 }
 
 ?>

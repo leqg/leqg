@@ -63,6 +63,48 @@ var fiche = function() {
 			});
 		});
 
+
+	// script permettant de lancer la procédure de changement d'adresse postale
+		$("#modifierAdressePostale").click(function(){
+			$(".ficheContact div").hide(); // On ferme tous les volets
+			$("#changementAdresse").show(); // Pour ouvrir celui qui permet la modification de l'adresse
+			$("#choixVille").show(); // Pour ouvrir en plus particulièrement la partie de sélection de la ville
+		});
+		
+		
+		// scripts actionnés par les éléments de la recherche d'adresse postale
+		$("#rechercheVille").keyup(function(){
+			var ville = $(this).val();
+			var contact = $("#fiche-electeur").data('fiche');
+			
+			if (ville.length > 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=recherche-ville',
+					data: { 'retour': 'liste' , 'ville' : ville },
+					dataType: 'html'
+				}).done(function(data){
+					$("#selectionVille").html(data);
+				});
+			}
+		});
+		
+		$("#rechercheRue").keyup(function(){
+			var rue = $(this).val();
+			var ville = $("#selectionRue").data('ville');
+			var contact = $("#fiche-electeur").data('fiche');
+			
+			if (rue.length > 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=recherche-rue',
+					data: { 'retour': 'liste' , 'contact' : contact , 'ville' : ville , 'rue' : rue },
+					dataType: 'html'
+				}).done(function(data){
+					$("#selectionRue").html(data);
+				});
+			}
+		});
 };
 
 $(document).ready(fiche);

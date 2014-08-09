@@ -12,6 +12,10 @@
 	$scripts = array(	'historique-ajout',
 						'interaction-chargement',
 						'fichier-envoi',
+						'recherche-ville',
+						'recherche-rue',
+						'recherche-immeuble',
+						'nouvelle-adresse',
 					);
 
 // On vérifie que le script demandé existe

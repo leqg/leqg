@@ -1,6 +1,6 @@
 <?php $core->tpl_header(); ?>
 
-<section id="fiche-electeur">
+<section id="fiche-electeur" data-fiche="<?php $fiche->the_ID(); ?>">
 	<header>
 		<h2><?php $fiche->affichage_nom('span'); ?></h2>
 	
@@ -49,6 +49,10 @@
 			<span id="reussite-form-telephone">&#xe812;</span>
 		</li>
 	</ul>
+	
+	<ul>
+		<li id="modifierAdressePostale">Changer l'adresse postale</li>
+	</ul>
 </section>
 
 <aside class="ficheContact">
@@ -71,6 +75,11 @@
 			$core->tpl_load('aside', 'fichier-nouveau');
 
 		endif;
+		
+		// On charge ici les volets qui peuvent être appelés quelque soit la présence ou non d'un historique
+		
+			// On charge le script de changement d'adresse
+			$core->tpl_load('aside', 'changement-adresse');
 		
 		
 		// On charge ici les volets qui ne seront appelés que lors des appels javascript

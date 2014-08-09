@@ -34,8 +34,9 @@ $tache =			new tache($db, $_COOKIE['leqg-user']);
 $dossier =		new dossier($db, $_COOKIE['leqg-user']);
 $historique =	new historique($db, $_COOKIE['leqg-user']);
 $fichier =		new fichier($db, $_COOKIE['leqg-user']);
+$carto =			new carto($db, $_COOKIE['leqg-user']);
 
 // On transforme ces classes générales en variables globales
-global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier;
+global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
 
 ?>

@@ -46,14 +46,33 @@ class core {
 	
 	
 	// securisation_string( string ) permet de sécuriser les données qui doivent transiter par la base de données pour éviter les injections
-	public	function securisation_string($string) {
+	public	function securisation_string($string, $charset = 'utf-8') {
 		// On ajout des antislashes pour les caractères spéciaux
-		$string = addslashes($string);
+			$string = addslashes($string);
+		
 		// On transforme les caractères spéciaux en entités HTML
-		$string = htmlentities($string);
+			$string = htmlentities($string, ENT_NOQUOTES, $charset);
 		
 		// On retourne la chaîne de caractères sécurisée
-		return $string;
+			return $string;
+	}
+	
+	
+	// formatage_recherche( string ) permet de préparer un champ texte à être recherché via LIKE MySQL
+	public	function formatage_recherche($string, $charset = 'utf-8') {
+		// On vérifie que le texte entré est bien un champ texte
+			if (!is_string($string)) return false;
+		
+		// On sécurise le contenu envoyé
+			$string = $this->securisation_string($string, $charset);
+		
+		// On retire tous les caractères spéciaux
+			$string = preg_replace('#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $string);
+		    $string = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $string); // pour les ligatures e.g. '&oelig;'
+			$string = preg_replace('#&[^;]+;#', '', $string); // supprime les autres caractères
+		
+		// On retourne le contenu final près à une recherche
+			return $string;
 	}
 	
 	
@@ -87,6 +106,19 @@ class core {
 		
 		return $array;
 	}
+	
+	
+	// triParColonne( array , string , string ) permet de trier des tableaux multidimentionnels d'après une clé
+	public	function triParColonne( &$arr , $col , $dir = SORT_ASC ) {
+		// On prépare le tableau de tri
+			$sort_col = array();
+			
+		// On effectue une sélection des colonnes à trier
+			foreach ($arr as $key => $row) $sort_col[$key] = $row[$col];
+		
+		// On effectue le tri multidimensionnel
+			array_multisort($sort_col, $dir, $arr);
+	}
 		
 	
 // Méthodes liées au templating
@@ -94,9 +126,9 @@ class core {
 	// tpl_load( slug [, nom = null ] )  appelles le fichier slug-nom.tpl.php
 	public	function tpl_load( $slug , $nom = null, $globale = null) {
 		if (is_null($globale)) {
-			global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier;
+			global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
 		} else {
-			global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $globale;
+			global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $globale;
 		}
 	
 		if (empty($nom)) {
