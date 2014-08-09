@@ -66,6 +66,9 @@
 
 			// On charge d'abord le volet de l'historique des événements
 			$core->tpl_load('aside', 'historique');
+			
+			// On charge le script de chargement d'un nouveau fichier
+			$core->tpl_load('aside', 'fichier-nouveau');
 
 		endif;
 		
@@ -75,7 +78,7 @@
 		
 		
 		// On prépare ici la liste des div qui seront créé vides pour être remplis par des scripts AJAX
-		$divs = array('interaction');
+		$divs = array('interaction', 'volet');
 		
 		// On affiche les div en question
 		foreach ($divs as $div) { echo '<div id="' . $div . '"></div>'; }

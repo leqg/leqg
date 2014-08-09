@@ -31,7 +31,12 @@ var fiche = function() {
 			
 			$("#interaction").show(); // On affiche la fenêtre d'interaction demandée
 		}
-	
+		
+		if (getURLVar('fichier')) { // Si on demande à rajouter un fichier
+			$(".ficheContact div").hide(); // On ferme tous les volets
+			$("#nouveauFichier").show(); // Pour afficher le formulaire d'envoi
+		}
+		
 	
 	// script de sauvegarde du contenu de l'ajout d'interaction
 		$("#sauvegarde").click(function(){

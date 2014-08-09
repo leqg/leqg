@@ -298,10 +298,12 @@ aside.ficheContact #nouvelleInteraction { display: none; }
 
 ul.ficheInteraction { list-style: none; margin: 0 1em; padding: 0; }
 ul.ficheInteraction li { position: relative; display: block; border-bottom: 1px solid #2c3e50; border-left: 1px solid #2c3e50; font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1.15em; line-height: 1.5em; margin-bottom: 2em; margin-left: 20%; margin-right: 10%; padding-bottom: .5em; padding-left: 1em; padding-top: .33em; }
+ul.ficheInteraction li.submit { border-bottom: 0; border-left: 0; margin-left: 0; margin-right: 0; }
 ul.ficheInteraction li p { font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1.2em; font-weight: 300; line-height: 1.5em; }
 ul.ficheInteraction li.notes p { max-height: 15.5em; max-height: calc(1.5em * 10 + .5em); min-height: 11em; min-height: calc(1.5em * 7 + .5em); overflow: scroll; }
 ul.ficheInteraction li label { position: absolute; top: .5em; left: -20%; display: block; cursor: text; font-family: "Roboto", Helvetica, Arial, sans-serif; font-variant: small-caps; margin-top: .1em; opacity: .5; padding-right: 1em; text-align: right; text-transform: capitalize; width: 20%; }
 ul.ficheInteraction li label.textarea { margin-top: 0em; }
+ul.ficheInteraction li input[type="file"] { display: inline-block; border: 0; font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1em; line-height: 1.33em; width: 95%; }
 ul.ficheInteraction li input[type="text"] { display: inline-block; border: 0; font-family: "Fira Sans", Helvetica, Arial, sans-serif; font-size: 1.15em; line-height: 1.33em; width: 95%; }
 ul.ficheInteraction li input[type="submit"] { display: block; background: #dfe6ed; border: 1px solid #2c3e50; color: #2c3e50; margin: 0 auto; width: auto; -webkit-box-shadow: 2px 2px 0 #e6e5e4; -moz-box-shadow: 2px 2px 0 #e6e5e4; box-shadow: 2px 2px 0 #e6e5e4; }
 ul.ficheInteraction li input[type="submit"]:hover { border-color: #c0392b; color: #c0392b; }

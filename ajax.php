@@ -10,7 +10,9 @@
 
 // On fait la liste des différents scripts pouvant être appelés ci-après
 	$scripts = array(	'historique-ajout',
-						'interaction-chargement');
+						'interaction-chargement',
+						'fichier-envoi',
+					);
 
 // On vérifie que le script demandé existe
 	$script = $core->securisation_string($_GET['script']);

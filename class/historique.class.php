@@ -126,6 +126,17 @@ class historique extends core {
 	}
 	
 	
+	// elementActuel( bool ) recherche l'élément d'historique ouvert actuellement, en récupérant par exemple l'information à travers la variable GET
+	public	function elementActuel( $return = false ) {
+		// On récupère l'information de la variable GET
+		$element = $_GET['objet'];
+		
+		if (is_numeric($element)) :
+			if ($return === true) : return $element; else : echo $element; endif;
+		else : return false; endif;
+	}
+	
+	
 	// affichageThematiques( string->array , bool , bool , bool ) permet de retourner avec un système de tags les différentes thématiques liées à un élement de l'historique
 	public	function affichageThematiques( $themas , $return = false , $lienVersTag = false ,  $parentDejaPresent = true ) {
 		// On vérifie que l'entrée est bien un tableau une fois restructurée

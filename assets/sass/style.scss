@@ -1964,6 +1964,14 @@ ul.ficheInteraction {
 		padding-left: 1em;
 		padding-top: .33em;
 		
+		&.submit {
+			border-bottom: 0;
+			border-left: 0;
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		
 		p {
 			font-family: $longtext;
 			font-size: 1.2em;
@@ -1995,6 +2003,15 @@ ul.ficheInteraction {
 			&.textarea {
 				margin-top: 0em;
 			}
+		}
+		
+		input[type="file"] {
+			display: inline-block;
+			border: 0;
+			font-family: $longtext;
+			font-size: 1em;
+			line-height: 1.33em;
+			width: 95%;
 		}
 		
 		input[type="text"] {
