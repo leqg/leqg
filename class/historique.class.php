@@ -54,17 +54,17 @@ class historique extends core {
 	
 	
 	// ajout( int , int , string , date , string , string->array , string ) permet d'ajouter une nouvelle interaction au sein de la base de données
-	public	function ajout( $contact , $compte , $type , $date , $lieu , $thematiques , $notes ) {
-		// on formate les thématiques et la date en tableau
-		$thematiques = explode(',', $this->securisation_string($thematiques));
+	public	function ajout( $contact , $compte , $type , $date , $lieu , $objet , $notes ) {
+		// on formate la date en tableau
 		$date = explode('/', $date);
 
 		// on sécurise les strings texte
 		$lieu = $this->securisation_string($lieu);
 		$notes = $this->securisation_string($notes);
+		$objet = $this->securisation_string($objet);
 	
 		// on vérifie le format des informations entrées
-		if ( is_numeric( $contact ) && is_numeric( $compte ) && is_string($type) && checkdate( $date[1] , $date[0] , $date[2] ) && is_string( $lieu ) && is_array($thematiques) && is_string($notes) ) :
+		if ( is_numeric( $contact ) && is_numeric( $compte ) && is_string($type) && checkdate( $date[1] , $date[0] , $date[2] ) && is_string( $lieu ) && is_string($objet) && is_string($notes) ) :
 
 			// On prépare la requête d'ajout des informations à la base de données
 			$query = 'INSERT INTO historique (	contact_id,
@@ -72,14 +72,14 @@ class historique extends core {
 												historique_type,
 												historique_date,
 												historique_lieu,
-												historique_thematiques,
+												historique_objet,
 												historique_notes )
 										VALUES (' . $contact . ',
 												' . $compte . ',
 												"' . $type . '",
 												"' . $date[2] . '-' . $date[1] . '-' . $date[0] . '",
 												"' . $lieu . '",
-												"' . implode(',', $thematiques) . '",
+												"' . $objet . '",
 												"' . $notes . '" )';
 												
 			// On effectue la requête d'ajout à la base de données

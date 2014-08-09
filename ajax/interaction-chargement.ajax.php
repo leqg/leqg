@@ -28,9 +28,9 @@
 	 --><label class="noform">Lieu</label><!--
 	 --><p><?php echo ucwords($interaction['lieu']); ?></p><!--
  --></li>
-	<li class="liste-tags"><!--
-	 --><label class="noform">Thématiques</label><!--
-	 --><?php echo $liste_tags; ?><!--
+	<li><!--
+	 --><label class="noform">Objet</label><!--
+	 --><p><?php echo $interaction['objet']; ?></p><!--
  --></li>
 	<li class="notes"><!--
 	 --><label class="noform">Notes</label><!--

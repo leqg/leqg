@@ -21,8 +21,8 @@
 		 --><input type="text" id="form-lieu" name="lieu"><!--
 	 --></li>
 		<li><!--
-		 --><label for="form-thema">Thématiques</label><!--
-		 --><input type="text" id="form-themas" name="themas" placeholder="séparées par des virgules (logement, sport, etc.)"><!--
+		 --><label for="form-objet">Objet</label><!--
+		 --><input type="text" id="form-objet" name="objet"><!--
 	 --></li>
 		<li><!--
 		 --><label for="form-notes" class="textarea">Notes</label><!--
