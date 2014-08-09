@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3306
--- Généré le :  Jeu 07 Août 2014 à 14:11
+-- Généré le :  Sam 09 Août 2014 à 03:47
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
@@ -51901,15 +51901,15 @@ INSERT INTO `departements` (`departement_id`, `region_id`, `departement_nom`) VA
 
 CREATE TABLE `dossiers` (
   `dossier_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `dossier_nom` varchar(255) NOT NULL,
-  `dossier_description` text NOT NULL,
-  `dossier_contacts` text NOT NULL,
+  `dossier_nom` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `dossier_description` text CHARACTER SET latin1 NOT NULL,
+  `dossier_contacts` text CHARACTER SET latin1 NOT NULL,
   `dossier_statut` tinyint(1) NOT NULL DEFAULT '1',
   `dossier_date_ouverture` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dossier_date_fermeture` datetime DEFAULT NULL,
   PRIMARY KEY (`dossier_id`),
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Contenu de la table `dossiers`
@@ -51918,6 +51918,42 @@ CREATE TABLE `dossiers` (
 INSERT INTO `dossiers` (`dossier_id`, `dossier_nom`, `dossier_description`, `dossier_contacts`, `dossier_statut`, `dossier_date_ouverture`, `dossier_date_fermeture`) VALUES
 (9, 'Insalubrit&eacute; Socolopo', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '10164,1240,8469', 1, '2014-07-29 20:03:46', NULL),
 (10, 'Insalubrit&eacute; Socolopo 2', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '4052,10164,1182', 1, '2014-07-29 20:03:46', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fichiers`
+--
+
+CREATE TABLE `fichiers` (
+  `fichier_id` int(11) NOT NULL AUTO_INCREMENT,
+  `contact_id` int(11) NOT NULL,
+  `compte_id` int(11) NOT NULL,
+  `interaction_id` int(11) NOT NULL,
+  `dossier_id` int(11) NOT NULL,
+  `fichier_nom` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `fichier_labels` text CHARACTER SET latin1 NOT NULL,
+  `fichier_description` text CHARACTER SET latin1 NOT NULL,
+  `fichier_url` text CHARACTER SET latin1 NOT NULL,
+  `fichier_reference` varchar(255) NOT NULL,
+  `fichier_timestamp` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`fichier_id`),
+  KEY `fichier_reference` (`fichier_reference`),
+  KEY `contact_id` (`contact_id`),
+  KEY `fichier_nom` (`fichier_nom`),
+  KEY `compte_id` (`compte_id`),
+  KEY `objet_id` (`interaction_id`),
+  KEY `dossier_id` (`dossier_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `fichiers`
+--
+
+INSERT INTO `fichiers` (`fichier_id`, `contact_id`, `compte_id`, `interaction_id`, `dossier_id`, `fichier_nom`, `fichier_labels`, `fichier_description`, `fichier_url`, `fichier_reference`, `fichier_timestamp`) VALUES
+(1, 637, 1, 1, 0, 'Test du syst&egrave;me de fichiers', '', '', '2014-08-1-1407548239.jpg', '2014-08-1', '0000-00-00 00:00:00'),
+(2, 637, 1, 1, 0, 'Dernier test du syst&egrave;me de fichier', '', '', 'derniertestdusystmedefichier-1407548493.pdf', '', '0000-00-00 00:00:00'),
+(3, 637, 1, 1, 0, 'Test des PDF', '', '', '2014082-1407548565.pdf', '2014-08-2', '2014-08-09 01:42:45');
 
 -- --------------------------------------------------------
 
