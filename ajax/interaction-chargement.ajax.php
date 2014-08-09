@@ -36,15 +36,17 @@
 	 --><label class="noform">Notes</label><!--
 	 --><p><?php echo $interaction['notes']; ?></p><!--
  --></li>
+	<?php if ($fichier->nombreFichiers('interaction' , $interaction['id'])) : ?>
+	<li><!--
+	 --><label class="noform">Fichiers</label><!--
+	 --><ul class="listeFichiers">
+			<?php $fichiers = $fichier->listeFichiers('interaction' , $interaction['id']); foreach ($fichiers as $f) : ?>
+			<li><a href="uploads/<?php echo $f['url']; ?>" target="_blank"><?php echo $f['nom']; ?></a></li>
+			<?php endforeach; ?>
+		</ul><!--
+ --></li>
+ 	<?php endif; ?>
 </ul>
-
-<?php if ($fichier->nombreFichiers('interaction' , $interaction['id'])) : ?>
-<ul class="listeFichiers">
-	<?php $fichiers = $fichier->listeFichiers('interaction' , $interaction['id']); foreach ($fichiers as $f) : ?>
-	<li><a href="uploads/<?php echo $f['url']; ?>" target="_blank"><?php echo $f['nom']; ?></a></li>
-	<?php endforeach; ?>
-</ul>
-<?php endif; ?>
 
 <ul class="listeActions">
 	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'objet'); ?>&fichier=true">Ajouter un fichier</a></li>

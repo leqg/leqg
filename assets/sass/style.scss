@@ -1949,7 +1949,7 @@ ul.ficheInteraction {
 	margin: 0 1em;
 	padding: 0;
 	
-	li {
+	& > li {
 		position: relative;
 		display: block;
 		border-bottom: 1px solid $bleu;
@@ -2053,6 +2053,11 @@ ul.ficheInteraction {
 			line-height: 1.33em;
 			resize: none;
 			width: 95%;
+		}
+		
+		ul.listeFichiers {
+			margin-bottom: .5em;
+			margin-left: 0;
 		}
 	}
 }
