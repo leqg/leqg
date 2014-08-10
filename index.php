@@ -178,7 +178,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$recherche = $core->formatage_recherche($_POST['recherche']);
 
 			// On fait la recherche
-			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_prenoms) LIKE "%' . $recherche . '%"';
+			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE "%' . $recherche . '%"';
 
 			if (!empty($query)) $sql = $db->query($query);
 			
