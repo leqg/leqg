@@ -1,6 +1,8 @@
 
 *.scssc
 
+.sass-cache
+
 koala-config.json
 
 uploads/*
