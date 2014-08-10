@@ -67,7 +67,7 @@ class core {
 				$string = $this->securisation_string($string, $charset);
 				
 			// On fait une liste de caractères spéciaux à remplacer basiquement par des jokers
-				$char = array('-', '_', '.', ',');
+				$char = array(' ', '-', '_', '.', ',');
 			
 			// On remplace cette liste de caractères dans la chaîne
 				$string = str_replace($char, '%', $string);
