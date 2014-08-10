@@ -13,12 +13,11 @@ setlocale(LC_ALL, 'fr_FR', 'fr');
 // On détermine le charset du fichier retourné par le serveur
 header('Content-Type: text/html; charset=utf-8');
 
-
+// On récupère le fichier de configuration
+$config = parse_ini_file('config.ini', true);
 
 // Appel de la classe MySQL
-
-$db = new mysqli('localhost', 'leqg', 'evecsanobi-67', 'leqg');
-
+$db = new mysqli($config['bdd']['host'], $config['bdd']['user'], $config['bdd']['pass'], 'test');
 
 // Constructeur de classes
 
