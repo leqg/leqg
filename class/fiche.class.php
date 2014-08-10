@@ -541,6 +541,71 @@ class fiche extends core {
 			$sql = $this->db->query($query);
 			return $sql;
 	}
+	
+	
+	// recherche( string , string , string [, string] ) permet d'effectuer une recherche de fiches selon des critères donnés
+	public	function recherche( $prenom , $nom , $nom_usage , $sexe = '%' ) {
+		// Tout d'abord, on commence par retraiter le sexe entré
+			if ($sexe == 'I') $sexe = '%';
+		
+		// On prépare les données entrées à être mise en place dans une recherche
+			$prenom = $this->formatage_recherche($prenom);
+			$nom_usage = $this->formatage_recherche($nom_usage);
+			$nom = $this->formatage_recherche($nom);
+		
+		// On vérifie que si le champ est vide, on y met un joker
+			if (empty($prenom)) $prenom = '%';
+			if (empty($nom_usage)) $nom_usage = '%';
+			if (empty($nom)) $nom = '%';
+		
+		// On prépare le tableau dans lequel les résultats seront affectés, et un tableau de vérification rapide
+			$contacts = array();
+			$ids = array();
+		
+		// On prépare la requête de recherche stricte sur les données noms et noms d'usage
+			$query = 'SELECT		*
+					  FROM		contacts
+					  WHERE		contact_nom  LIKE "' . $nom . '"
+					  AND		contact_nom_usage LIKE "' . $nom_usage . '"
+					  AND		contact_prenoms LIKE "%' . $prenom . '%"
+					  AND		( contact_sexe LIKE "' . $sexe . '" OR contact_sexe = "I" )
+					  ORDER BY	contact_nom_usage ASC,
+					  			contact_nom ASC,
+					  			contact_prenoms ASC,
+					  			contact_naissance_date DESC';
+		
+		// On effectue la recherche strict et on affecte les résultats au tableau contacts
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) :
+				$contacts[] = $this->formatage_donnees($row);
+				$ids[] = $row['contact_id'];
+			endwhile;
+		
+		// On prépare maintenant la recherche permissive sur les données noms et noms d'usage
+			$query = 'SELECT		*
+					  FROM		contacts
+					  WHERE		contact_nom  LIKE "%' . $nom . '%"
+					  AND		contact_nom_usage LIKE "%' . $nom_usage . '%"
+					  AND		contact_prenoms LIKE "%' . $prenom . '%"
+					  AND		( contact_sexe LIKE "' . $sexe . '" OR contact_sexe = "I" )
+					  ORDER BY	contact_nom_usage ASC,
+					  			contact_nom ASC,
+					  			contact_prenoms ASC,
+					  			contact_naissance_date DESC
+					  LIMIT		0, 25';
+		
+		// On effectue la recherche permissive et on affecte les résultats au tableau contacts
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) :
+			
+			// Avant d'ajouter dans le tableau des correspondances, on vérifie simplement que l'enregistrement n'y figure pas déjà
+				if (!in_array($row['contact_id'], $ids)) $contacts[] = $this->formatage_donnees($row);
+			
+			endwhile;
+		
+		// On retourne le tableau des contacts trouvés
+			return $contacts;
+	}
 }
 
 ?>
