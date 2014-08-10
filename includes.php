@@ -17,7 +17,7 @@ header('Content-Type: text/html; charset=utf-8');
 $config = parse_ini_file('config.ini', true);
 
 // Appel de la classe MySQL
-$db = new mysqli($config['bdd']['host'], $config['bdd']['user'], $config['bdd']['pass'], 'test');
+$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'test');
 
 // Constructeur de classes
 
