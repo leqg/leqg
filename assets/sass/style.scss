@@ -565,7 +565,8 @@ main.fiche {
 						font-variant: small-caps;
 					}
 					
-					
+					&.nom,
+					&.nomUsage { text-transform: uppercase; }
 				}
 			}
 		
@@ -1705,6 +1706,7 @@ main.dossier {
 						font-weight: 500;
 						letter-spacing: .03em;
 						padding: .33em 1em;
+						width: auto;
 						@include border-radius(1em);
 						@include transition(all);
 						
@@ -2014,12 +2016,14 @@ ul.ficheInteraction {
 			width: 95%;
 		}
 		
-		input[type="text"] {
+		input[type="text"],
+		input[type="email"] {
 			display: inline-block;
 			border: 0;
 			//border-bottom: 1px solid $bleu !important;
 			font-family: $longtext;
 			font-size: 1.15em;
+			font-weight: 300;
 			line-height: 1.33em;
 			width: 95%;
 		}
