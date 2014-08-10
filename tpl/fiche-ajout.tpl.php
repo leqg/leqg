@@ -36,6 +36,4 @@
 			<input type="submit" id="creerFiche" value="Créer la fiche">
 		</li>
 	</ul>
-	
-	<div id="test"></div>
 </section>
