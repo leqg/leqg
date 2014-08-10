@@ -473,19 +473,6 @@ class fiche extends core {
 	}
 	
 	
-	// Méthode permettant la recherche de fiche (on remplace les espaces et caractères spéciaux par des jokers
-	public	function recherche_fiche($var) {
-		// On fait la liste des caractères à remplacer
-		$char = array(' ', '-', '_', '.', ',');
-		
-		// On remplace les caractères dans la chaine
-		$var = str_replace($char, '%', $var);
-		
-		// On retourne le résultat
-		return $var;
-	}
-	
-	
 	// Récupération d'informations sans ouverture de fiches, grâce à l'ID
 	
 	public	function nomByID($id, $separateur = null, $return = false) {

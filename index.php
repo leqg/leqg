@@ -175,7 +175,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		else if ($_GET['page'] == 'recherche') {
 
 			// On prépare les différents champs à la recherche (suppression des espaces et des caractères, remplacement par des jokers
-			$recherche = $fiche->recherche_fiche(utf8_decode($_POST['recherche']));
+			$recherche = $core->formatage_recherche($_POST['recherche']);
 
 			// On fait la recherche
 			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_prenoms) LIKE "%' . $recherche . '%"';
