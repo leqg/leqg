@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3306
--- Généré le :  Sam 09 Août 2014 à 03:47
+-- Généré le :  Dim 10 Août 2014 à 22:25
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
@@ -41375,7 +41375,7 @@ CREATE TABLE `compte` (
 --
 
 INSERT INTO `compte` (`id`, `login`, `nickname`, `pass`, `email`, `phone`, `autorisations`, `derniere_connexion`, `demande_reinitialisation`) VALUES
-(1, 'damien', 'Damien Senger', 'cb58ef17b0805d6354348c51f8bb9c9a', 'mail@damiensenger.me', 0678203248, 9, '2014-08-04 14:35:41', '2014-05-30 10:34:07');
+(1, 'damien', 'Damien Senger', 'cb58ef17b0805d6354348c51f8bb9c9a', 'mail@damiensenger.me', 0678203248, 9, '2014-08-09 16:56:12', '2014-05-30 10:34:07');
 
 -- --------------------------------------------------------
 
@@ -41424,7 +41424,7 @@ CREATE TABLE `contacts` (
   KEY `contact_nom` (`contact_nom`,`contact_nom_usage`,`contact_prenoms`),
   KEY `commune_id` (`commune_id`,`rue_id`,`immeuble_id`,`canton_id`),
   KEY `bureau_id` (`bureau_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10292 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10293 ;
 
 --
 -- Contenu de la table `contacts`
@@ -42070,7 +42070,7 @@ INSERT INTO `contacts` (`contact_id`, `commune_id`, `bureau_id`, `rue_id`, `imme
 (634, 27952, 201, 2, 28, 2775, 'RICHTER', '', 'PASCALE HELENE', '1/21/1966', '1966-01-21', 99, 0, 'TUBINGEN', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '56', 'RUE DU JEU DES ENFANTS', '', 67000, 'STRASBOURG', 1, 0, 670, 0, 0, NULL),
 (635, 27952, 201, 2, 41, 2775, 'RIES', '', 'JEAN-LUC JOSEPH', '3/11/1956', '1956-03-11', 67, 27952, 'STRASBOURG', 'M', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '48', 'RUE DU JEU DES ENFANTS', '', 67000, 'STRASBOURG', 1, 0, 671, 0, 0, NULL),
 (636, 27952, 201, 2, 170, 2775, 'RIETSCH', 'ROY', 'DANIELLE CHRISTIANE', '6/21/1965', '1965-06-21', 67, 27952, 'STRASBOURG', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '38', 'RUE DU JEU DES ENFANTS', '', 67000, 'STRASBOURG', 1, 0, 672, 0, 0, NULL),
-(637, 27952, 201, 2, 28, 2775, 'RING', '', 'NICOLAS', '6/13/1981', '1981-06-13', 57, 22437, 'METZ', 'M', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '56', 'RUE DU JEU DES ENFANTS', '', 67000, 'STRASBOURG', 1, 0, 673, 0, 0, NULL),
+(637, 27952, 201, 2, 28, 2775, 'RING', '', 'NICOLAS', '6/13/1981', '1981-06-13', 57, 22437, 'METZ', 'M', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '56', 'RUE DU JEU DES ENFANTS', '', 67000, 'Strasbourg', 1, 0, 673, 0, 0, NULL),
 (638, 27952, 201, 1, 13, 2775, 'RIOU', '', 'SOLENN-CAROLINE', '8/6/1980', '1980-08-06', 99, 0, 'SEOUL', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '31', 'RUE DU VIEUX MARCHE AUX VINS', '', 67000, 'STRASBOURG', 1, 0, 674, 0, 0, NULL),
 (639, 27952, 201, 11, 122, 2775, 'RISMONDO', '', 'PASCALE ANNE', '8/10/1976', '1976-08-10', 93, 36297, 'LES LILAS', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '6', 'RUE DES AVEUGLES', '', 67000, 'STRASBOURG', 1, 0, 675, 0, 0, NULL),
 (640, 27952, 201, 11, 18, 2775, 'ROBARDEY', 'APRAHAMIAN', 'WANDA THERESE SYLVIE', '7/21/1981', '1981-07-21', 90, 35956, 'BELFORT', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '1', 'RUE DES AVEUGLES', '', 67000, 'STRASBOURG', 1, 0, 676, 0, 0, NULL),
@@ -51771,7 +51771,8 @@ INSERT INTO `contacts` (`contact_id`, `commune_id`, `bureau_id`, `rue_id`, `imme
 (10288, 27952, 210, 167, 1428, 2775, 'ZULIANEL', '', 'FRANCOIS THEOPHILE', '7/18/1976', '1976-07-18', 67, 27825, 'OBERNAI', 'M', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '45', 'RUE DU FAUBOURG NATIONAL', '', 67000, 'STRASBOURG', 1, 0, 1157, 0, 0, NULL),
 (10289, 27952, 210, 167, 1428, 2775, 'ZULIANEL', '', 'PASCAL', '6/24/1976', '1976-06-24', 67, 27825, 'OBERNAI', 'M', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '45', 'RUE DU FAUBOURG NATIONAL', '', 67000, 'STRASBOURG', 1, 0, 1158, 0, 0, NULL),
 (10290, 27952, 210, 167, 1587, 2775, 'ZULIANEL', '', 'THOMAS', '4/17/1984', '1984-04-17', 67, 27825, 'OBERNAI', 'M', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '51', 'RUE DU FAUBOURG NATIONAL', '', 67000, 'STRASBOURG', 1, 0, 1159, 0, 0, NULL),
-(10291, 0, 210, 180, 1593, 2775, 'DUBERNET', 'FISCHER', 'NICOLE LOUISE MARTHE', '8/8/1953', '1953-08-08', 33, 12929, 'ARCACHON', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '', 'NIEDEREICHSTRASSE 1B', '77694 KEHL AM RHEIN', 00000, ' ALLEMAGNE', 1, 0, 292, 0, 0, NULL);
+(10291, 0, 210, 180, 1593, 2775, 'DUBERNET', 'FISCHER', 'NICOLE LOUISE MARTHE', '8/8/1953', '1953-08-08', 33, 12929, 'ARCACHON', 'F', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', '', 'NIEDEREICHSTRASSE 1B', '77694 KEHL AM RHEIN', 00000, ' ALLEMAGNE', 1, 0, 292, 0, 0, NULL),
+(10292, 27952, 101, 181, 1594, 2774, 'SENGER', '', 'DAMIEN JEAN PAUL', '23/04/1989', '1989-04-23', 67, 27952, 'STRASBOURG', 'M', 0, 'mail@damiensenger.me', 0678203248, NULL, NULL, 0, 0, 0, 0, '', '25', 'RUE DU VIEIL HOPITAL', '', 67000, 'Strasbourg', 1, 0, 0, 1, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -51917,7 +51918,7 @@ CREATE TABLE `dossiers` (
 
 INSERT INTO `dossiers` (`dossier_id`, `dossier_nom`, `dossier_description`, `dossier_contacts`, `dossier_statut`, `dossier_date_ouverture`, `dossier_date_fermeture`) VALUES
 (9, 'Insalubrit&eacute; Socolopo', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '10164,1240,8469', 1, '2014-07-29 20:03:46', NULL),
-(10, 'Insalubrit&eacute; Socolopo 2', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '4052,10164,1182', 1, '2014-07-29 20:03:46', NULL);
+(10, 'Insalubrit&eacute; Socolopo 2', 'Suivi des probl&eacute;matiques d''insalubrit&eacute; de certains logements du bailleur social Socolopo pour les &eacute;lecteurs du quartier', '10164,1182', 1, '2014-07-29 20:03:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -52002,7 +52003,7 @@ CREATE TABLE `immeubles` (
   `immeuble_numero` varchar(5) NOT NULL,
   PRIMARY KEY (`immeuble_id`),
   KEY `circonscription_id` (`circonscription_id`,`canton_id`,`commune_id`,`bureau_id`,`rue_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1594 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1595 ;
 
 --
 -- Contenu de la table `immeubles`
@@ -53602,7 +53603,8 @@ INSERT INTO `immeubles` (`immeuble_id`, `circonscription_id`, `canton_id`, `comm
 (1590, 0, 2775, 27952, 210, 176, '2'),
 (1591, 0, 2775, 27952, 210, 165, '4'),
 (1592, 0, 2775, 27952, 210, 167, '21'),
-(1593, 0, 2775, 0, 210, 180, '');
+(1593, 0, 2775, 0, 210, 180, ''),
+(1594, 0, 2774, 27952, 101, 181, '25');
 
 -- --------------------------------------------------------
 
@@ -53665,7 +53667,7 @@ CREATE TABLE `rues` (
   `rue_nom` tinytext NOT NULL,
   PRIMARY KEY (`rue_id`),
   KEY `circonscription_id` (`circonscription_id`,`canton_id`,`commune_id`,`bureau_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=181 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=182 ;
 
 --
 -- Contenu de la table `rues`
@@ -53851,7 +53853,8 @@ INSERT INTO `rues` (`rue_id`, `circonscription_id`, `canton_id`, `commune_id`, `
 (177, 0, 2775, 0, 210, ' '),
 (178, 0, 2775, 27952, 210, 'IMP SAINTE- AURELIE'),
 (179, 0, 2775, 27952, 210, ' RUE DU FAUBOURG NATIONAL'),
-(180, 0, 2775, 0, 210, 'NIEDEREICHSTRASSE 1B');
+(180, 0, 2775, 0, 210, 'NIEDEREICHSTRASSE 1B'),
+(181, 0, 2774, 27952, 101, 'RUE DU VIEIL HOPITAL');
 
 -- --------------------------------------------------------
 
