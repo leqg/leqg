@@ -14,8 +14,7 @@ if ($_GET['action'] == 'maj-fiche') {
 			
 			if ($champ == 'mobile' || $champ == 'telephone') {
 				// Si le champ correspond au téléphone ou au mobile, on supprime les espaces qui ne servent à rien
-				$valeur = str_replace(' ', '', $valeur);
-				$valeur = str_replace('_', '', $valeur);
+				$valeur = preg_replace('`[^0-9]`', '', $valeur);
 			}
 			
 			// On met à jour le contenu dans la base de données

@@ -105,6 +105,51 @@ var fiche = function() {
 				});
 			}
 		});
+	
+	
+	// script permettant la recherche de doublons lors de la création d'une fiche et l'affichage des actions associées
+		$("#creerFiche").click(function(){
+			// On récupère les données du formulaire
+				var nom = $("#form-creation-nom").val();
+				var nomUsage = $("#form-creation-nom-usage").val();
+				var prenom = $("#form-creation-prenom").val();
+				var sexe = $("#form-sexe").val();
+				var fixe = $("#form-fixe").val();
+				var mobile = $("#form-mobile").val();
+				var email = $("#form-email").val();
+			
+			// On lance la fonction AJAX
+			$.ajax({
+				type: 'POST',
+				url: 'ajax.php?script=verification-doublons',
+				data: { 'nom': nom, 'nom-usage': nomUsage, 'prenom': prenom, 'sexe': sexe, 'fixe': fixe, 'mobile': mobile, 'email': email },
+				dataType: 'html'
+			}).done(function(data){
+				$("#creationNouvelleFiche").html(data);
+			}).error(function(){
+				$("#creationNouvelleFiche").html('<h3>Erreur lors de la création d\'une nouvelle fiche');
+			});
+		});
+		
+		// script permettant de choisir une fiche à laquelle ajouter les informations entrées dans le script d'ajout de données avant de rediriger vers la fiche en question
+			$(document).on('click', '.existante', function(){
+				var contact = $(this).data('contact');
+				var fixe = $("#selectionDoublons").data('fixe');
+				var email = $("#selectionDoublons").data('email');
+				var mobile = $("#selectionDoublons").data('mobile');
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=fusion-donnees-nouvelle-fiche',
+					data: { 'contact': contact, 'fixe': fixe, 'mobile': mobile, 'email': email },
+					dataType: 'html'
+				}).done(function(){
+					var destination = 'http://localhost/leqg/index.php?page=fiche&id=' + contact;
+					$(location).attr('href', destination);
+				}).error(function(){
+					console.log('ajax: erreur');
+				});
+			});
 };
 
 $(document).ready(fiche);

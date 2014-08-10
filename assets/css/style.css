@@ -201,7 +201,7 @@ main[class^='recherche'] section.liste, main[class^='creation'] section.liste { 
 
 section.liste { display: block; margin-top: 1.1em; text-align: center; width: 100%; }
 section.liste a { border-bottom: inherit; color: inherit; text-decoration: inherit; }
-section.liste article.fiche { position: relative; display: inline-block; background: rgba(253, 231, 180, 0.66); border-radius: .5em; margin: 1.5em 2em; min-height: 100px; padding: 10px; vertical-align: top; width: 200px; -webkit-box-shadow: 1px 1px 3px #cdcbca; -moz-box-shadow: 1px 1px 3px #cdcbca; box-shadow: 1px 1px 3px #cdcbca; }
+section.liste article.fiche { position: relative; display: inline-block; background: rgba(253, 231, 180, 0.66); border-radius: .5em; cursor: pointer; margin: 1.5em 2em; min-height: 100px; padding: 10px; vertical-align: top; width: 200px; -webkit-box-shadow: 1px 1px 3px #cdcbca; -moz-box-shadow: 1px 1px 3px #cdcbca; box-shadow: 1px 1px 3px #cdcbca; }
 section.liste article.fiche:hover > header a.suppression { display: block; }
 section.liste article.fiche > header { display: block; padding-top: 140px; }
 section.liste article.fiche > header:before { position: absolute; top: 0; left: 0px; display: block; background: #ed8262; border-radius: 50%; color: white; content: '\e80a'; font-family: "fontello"; font-size: 50px; height: 100px; line-height: 100px; margin: 25px 50px; text-align: center; width: 100px; }
