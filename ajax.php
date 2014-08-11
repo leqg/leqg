@@ -43,5 +43,10 @@
 // On lance l'appel des différents scripts
 
 	require_once('ajax/' . $script . '.ajax.php');
+	
+	
+// On lance la purge
+	
+	require_once 'purge.php';
 
 ?>
