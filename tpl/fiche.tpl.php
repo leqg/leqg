@@ -9,7 +9,7 @@
 		</div>
 	</header>
 	
-	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $fiche->affichage_adresse(' '); ?>"></div>
+	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?>"></div>
 
 	<ul class="infos">
 		<li>

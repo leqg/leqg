@@ -193,16 +193,15 @@ class carto extends core {
 	}
 	
 	
-	// listeImmeubles( int , int ) permet de retourner la liste des immeubles 
-	public	function listeImmeubles( $ville , $rue ) {
+	// listeImmeubles( int ) permet de retourner la liste des immeubles 
+	public	function listeImmeubles( $rue ) {
 		// On vérifie que les arguments sont bien des éléments numériques
 			if (!is_numeric($ville) && !is_numeric($rue)) return false;
 		
 		// On prépare la requête de récupération des immeubles correspondant
 			$query = 'SELECT		*
 					  FROM		immeubles
-					  WHERE		commune_id = ' . $ville . '
-					  AND		rue_id = ' . $rue . '
+					  WHERE		rue_id = ' . $rue . '
 					  ORDER BY	immeuble_numero ASC';
 		
 		// On prépare le tableau qui permettra de renvoyer les données

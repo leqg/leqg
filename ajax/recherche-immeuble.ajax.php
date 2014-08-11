@@ -10,7 +10,7 @@
 	// On lance la recherche
 	$ville = $carto->ville($ville);
 	$rue = $carto->rue($rue);
-	$immeubles = $carto->listeImmeubles($ville['id'], $rue['id']);
+	$immeubles = $carto->listeImmeubles($rue['id']);
 	$i = 1;
 	
 	foreach ($immeubles as $immeuble) :

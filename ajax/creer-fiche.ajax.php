@@ -8,17 +8,7 @@
 				   'telephone' => $_POST['fixe'],
 				   'mobile' => $_POST['mobile'],
 				   'email' => $_POST['email'],
-				   'ville' => $_POST['ville'],
-				   'rue' => $_POST['rue'],
 				   'immeuble' => $_POST['immeuble']);
-				   
-	// On ajoute les informations additionnelles demandées
-	$infos['bureau'] = $carto->bureauParImmeuble($infos['immeuble']);
-	$infos['canton'] = $carto->cantonParImmeuble($infos['immeuble']);
-	$infos['adresse_ville'] = $carto->afficherVille($infos['ville'], true);
-	$infos['adresse_cp'] = '67000';
-	$infos['adresse_rue'] = $carto->afficherRue($infos['rue'], true);
-	$infos['adresse_numero'] = $carto->afficherImmeuble($infos['immeuble'], true);
 	
 	// On formate correctement certaines données
 	$infos['mobile'] = preg_replace('`[^0-9]`', '', $infos['mobile']);

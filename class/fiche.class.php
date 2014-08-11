@@ -531,21 +531,14 @@ class fiche extends core {
 	}
 	
 	
-	// modificationAdresse ( int , array , array , array ) permet de modifier l'adresse d'une fiche utilisateur sélectionnée
-	public	function modificationAdresse( $contact , $ville , $rue , $immeuble ) {
+	// modificationAdresse ( int , array ) permet de modifier l'adresse d'une fiche utilisateur sélectionnée
+	public	function modificationAdresse( $contact , $immeuble ) {
 		// On vérifie le format des informations entrées
-			if (!is_numeric($contact) && !is_array($ville) && !is_array($rue) && !is_array($immeuble)) { return false; }
+			if (!is_numeric($contact) && !is_array($immeuble)) { return false; }
 				
 		// On prépare la requête BDD
 			$query = 'UPDATE		contacts
-					  SET		commune_id = ' . $ville['id'] . ',
-					  			rue_id = ' . $rue['id'] . ',
-					  			bureau_id = ' . $immeuble['bureau_id'] . ',
-					  			immeuble_id = ' . $immeuble['id'] . ',
-					  			canton_id = ' . $immeuble['canton_id'] . ',
-					  			contact_adresse_ville = "' . $ville['nom'] . '",
-					  			contact_adresse_rue = "' . $rue['nom'] . '",
-					  			contact_adresse_numero = "' . $immeuble['numero'] . '"
+					  SET		immeuble_id = ' . $immeuble['id'] . '
 					  WHERE		contact_id = ' . $contact;
 			
 		// On effectue la requête dans la BDD et on retourne le résultat
@@ -625,38 +618,22 @@ class fiche extends core {
 		if (!is_array($infos) && !isset($infos['nom'], $infos['prenom'])) return false;
 		
 		// On prépare la requête de création de la fiche
-		$query = 'INSERT INTO	contacts (commune_id,
-				  						  bureau_id,
-										  rue_id, 
-										  immeuble_id,
-										  canton_id,
+		$query = 'INSERT INTO	contacts (immeuble_id,
 										  contact_nom,
 										  contact_nom_usage,
 										  contact_prenoms,
 										  contact_sexe,
 										  contact_email,
 										  contact_mobile,
-										  contact_telephone,
-										  contact_adresse_numero,
-										  contact_adresse_rue,
-										  contact_adresse_cp,
-										  contact_adresse_ville)
-				  VALUES (' . $infos['ville'] . ',
-				  		  ' . $infos['bureau'] . ',
-				  		  ' . $infos['rue'] . ',
-				  		  ' . $infos['immeuble'] . ',
-				  		  ' . $infos['canton'] . ',
+										  contact_telephone)
+				  VALUES (' . $infos['immeuble'] . ',
 				  		  "' . $infos['nom'] . '",
 				  		  "' . $infos['nom-usage'] . '",
 				  		  "' . $infos['prenoms'] . '",
 				  		  "' . $infos['sexe'] . '",
 				  		  "' . $infos['email'] . '",
 				  		  "' . $infos['mobile'] . '",
-				  		  "' . $infos['telephone'] . '",
-				  		  "' . $infos['adresse_numero'] . '",
-				  		  "' . $infos['adresse_rue'] . '",
-				  		  "' . $infos['adresse_cp'] . '",
-				  		  "' . $infos['adresse_ville'] . '")';
+				  		  "' . $infos['telephone'] . '")';
 		
 		// On exécute la requête au serveur
 		$this->db->query($query);
