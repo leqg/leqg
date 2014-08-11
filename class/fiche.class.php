@@ -612,6 +612,53 @@ class fiche extends core {
 		// On retourne le tableau des contacts trouvés
 			return $contacts;
 	}
+	
+	
+	// creerContact( array ) permet de rajouter un contact dans la base de données
+	public	function creerContact( $infos ) {
+		// On vérifie que les informations entrées prennent bien la forme d'un tableau et qu'elles contiennent les infos minimales
+		if (!is_array($infos) && !isset($infos['nom'], $infos['prenom'])) return false;
+		
+		// On prépare la requête de création de la fiche
+		$query = 'INSERT INTO	contacts (commune_id,
+				  						  bureau_id,
+										  rue_id, 
+										  immeuble_id,
+										  canton_id,
+										  contact_nom,
+										  contact_nom_usage,
+										  contact_prenoms,
+										  contact_sexe,
+										  contact_email,
+										  contact_mobile,
+										  contact_telephone,
+										  contact_adresse_numero,
+										  contact_adresse_rue,
+										  contact_adresse_cp,
+										  contact_adresse_ville)
+				  VALUES (' . $infos['ville'] . ',
+				  		  ' . $infos['bureau'] . ',
+				  		  ' . $infos['rue'] . ',
+				  		  ' . $infos['immeuble'] . ',
+				  		  ' . $infos['canton'] . ',
+				  		  "' . $infos['nom'] . '",
+				  		  "' . $infos['nom-usage'] . '",
+				  		  "' . $infos['prenoms'] . '",
+				  		  "' . $infos['sexe'] . '",
+				  		  "' . $infos['email'] . '",
+				  		  "' . $infos['mobile'] . '",
+				  		  "' . $infos['telephone'] . '",
+				  		  "' . $infos['adresse_numero'] . '",
+				  		  "' . $infos['adresse_rue'] . '",
+				  		  "' . $infos['adresse_cp'] . '",
+				  		  "' . $infos['adresse_ville'] . '")';
+		
+		// On exécute la requête au serveur
+		$this->db->query($query);
+		
+		// On renvoit l'id de l'entrée
+		return $this->db->insert_id; 
+	}
 }
 
 ?>

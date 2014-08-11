@@ -107,6 +107,26 @@ var fiche = function() {
 		});
 	
 	
+	// script permettant d'afficher à la manière d'une fiche les informations NOM et Prénom sur la création de fiche
+		var miseAJour = function(){
+			var nom = $("#form-creation-nom").val();
+			var nomUsage = $("#form-creation-nom-usage").val();
+			var prenom = $("#form-creation-prenom").val();
+			
+			if (nom != '' || nomUsage != '' || prenom != '') {
+				$("h2.titre").html('<span class="nom">' + nom + '</span><span class="nomUsage">' + nomUsage + '</span><span>' + prenom + '</span>');
+			} else {
+				$("h2.titre").html('Création d\'une fiche');
+			}
+			
+			return true;
+		};
+		
+		$("#form-creation-nom").keyup(miseAJour);
+		$("#form-creation-nom-usage").keyup(miseAJour);
+		$("#form-creation-prenom").keyup(miseAJour);
+		
+	
 	// script permettant la recherche de doublons lors de la création d'une fiche et l'affichage des actions associées
 		$("#creerFiche").click(function(){
 			// On récupère les données du formulaire
@@ -145,6 +165,160 @@ var fiche = function() {
 					dataType: 'html'
 				}).done(function(){
 					var destination = 'http://localhost/leqg/index.php?page=fiche&id=' + contact;
+					$(location).attr('href', destination);
+				}).error(function(){
+					console.log('ajax: erreur');
+				});
+			});
+		
+		// script permettant de créer une nouvelle fiche si aucun doublon n'a été validé
+			$(document).on('click', '#nouvelleFiche', function(){
+				var nom = $("#selectionDoublons").data('nom');
+				var nomUsage = $("#selectionDoublons").data('nomUsage');
+				var prenom = $("#selectionDoublons").data('prenom');
+				var sexe = $("#selectionDoublons").data('sexe');
+				var fixe = $("#selectionDoublons").data('fixe');
+				var email = $("#selectionDoublons").data('email');
+				var mobile = $("#selectionDoublons").data('mobile');
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=nouvelle-fiche-adresse',
+					data: { 'nom': nom, 'nomUsage': nomUsage, 'prenom': prenom, 'sexe': sexe, 'fixe': fixe, 'email': email, 'mobile': mobile },
+					dataType: 'html'
+				}).done(function(data){
+					$("#creationNouvelleFiche").html(data);
+					$("#resultat-ville").hide();
+				}).error(function(){
+					console.log('ajax: erreur');
+				});
+			});
+			
+			$(document).on('keyup', '#form-recherche-ville', function(){
+				var ville = $("#form-recherche-ville").val();
+				
+				if (ville.length > 3) {
+					$.ajax({
+						type: 'POST',
+						url: 'ajax.php?script=recherche-ville',
+						data: { 'retour': 'liste', 'script': 'false', 'ville': ville },
+						dataType: 'html'
+					}).done(function(data){
+						$("#resultat-ville").show();
+						$("#resultat-ville ul").html(data);
+					}).error(function(){
+						$("#resultat-ville").hide();
+					});
+				} else {
+					$("#resultat-ville").hide();
+				}
+			});
+			
+			$(document).on('click', '#resultat-ville ul .propositionVille', function(){
+				var nom = $("#fiche-electeur").data('nom');
+				var nomUsage = $("#fiche-electeur").data('nomUsage');
+				var prenom = $("#fiche-electeur").data('prenom');
+				var sexe = $("#fiche-electeur").data('sexe');
+				var fixe = $("#fiche-electeur").data('fixe');
+				var email = $("#fiche-electeur").data('email');
+				var mobile = $("#fiche-electeur").data('mobile');
+				var ville = $(this).data('id');
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=nouvelle-fiche-rue',
+					data: { 'ville': ville, 'nom': nom, 'nomUsage': nomUsage, 'prenom': prenom, 'sexe': sexe, 'fixe': fixe, 'email': email, 'mobile': mobile },
+					dataType: 'html'
+				}).done(function(data){
+					$("#creationNouvelleFiche").html(data);
+					$("#resultat-rue").hide();
+				}).error(function(){
+					console.log('ajax: erreur');
+				});
+			});
+			
+			$(document).on('keyup', '#form-recherche-rue', function(){
+				var rue = $("#form-recherche-rue").val();
+				var ville = $("#fiche-electeur").data('ville');
+				
+				if (rue.length > 3) {
+					$.ajax({
+						type: 'POST',
+						url: 'ajax.php?script=recherche-rue',
+						data: { 'retour': 'liste', 'script': 'false', 'ville': ville, 'rue': rue },
+						dataType: 'html'
+					}).done(function(data){
+						$("#resultat-rue").show();
+						$("#resultat-rue ul").html(data);
+					}).error(function(){
+						$("#resultat-rue").hide();
+					});
+				} else {
+					$("#resultat-rue").hide();
+				}
+			});
+			
+			$(document).on('click', '#resultat-rue ul .propositionRue', function(){
+				var nom = $("#fiche-electeur").data('nom');
+				var nomUsage = $("#fiche-electeur").data('nomUsage');
+				var prenom = $("#fiche-electeur").data('prenom');
+				var sexe = $("#fiche-electeur").data('sexe');
+				var fixe = $("#fiche-electeur").data('fixe');
+				var email = $("#fiche-electeur").data('email');
+				var mobile = $("#fiche-electeur").data('mobile');
+				var ville = $(this).data('ville');
+				var rue = $(this).data('rue');
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=nouvelle-fiche-immeuble',
+					data: { 'rue': rue, 'ville': ville, 'nom': nom, 'nomUsage': nomUsage, 'prenom': prenom, 'sexe': sexe, 'fixe': fixe, 'email': email, 'mobile': mobile },
+					dataType: 'html'
+				}).done(function(data){
+					$("#creationNouvelleFiche").html(data);
+					$("#resultat-immeuble").hide();
+				}).error(function(){
+					console.log('ajax: erreur');
+				});
+			});
+			
+			$(document).on('keyup', '#form-recherche-immeuble', function(){
+				var immeuble = $("#form-recherche-immeuble").val();
+				var rue = $("#fiche-electeur").data('rue');
+				var ville = $("#fiche-electeur").data('ville');
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=recherche-immeuble',
+					data: { 'retour': 'liste', 'script': 'false', 'ville': ville, 'rue': rue, 'immeuble': immeuble },
+					dataType: 'html'
+				}).done(function(data){
+					$("#resultat-immeuble").show();
+					$("#resultat-immeuble ul").html(data);
+				}).error(function(){
+					$("#resultat-immeuble").hide();
+				});
+			});
+			
+			$(document).on('click', '#resultat-immeuble ul .propositionImmeuble', function(){
+				var nom = $("#fiche-electeur").data('nom');
+				var nomUsage = $("#fiche-electeur").data('nomUsage');
+				var prenom = $("#fiche-electeur").data('prenom');
+				var sexe = $("#fiche-electeur").data('sexe');
+				var fixe = $("#fiche-electeur").data('fixe');
+				var email = $("#fiche-electeur").data('email');
+				var mobile = $("#fiche-electeur").data('mobile');
+				var ville = $(this).data('ville');
+				var rue = $(this).data('rue');
+				var immeuble = $(this).data('immeuble');
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=creer-fiche',
+					data: { 'immeuble': immeuble, 'rue': rue, 'ville': ville, 'nom': nom, 'nomUsage': nomUsage, 'prenom': prenom, 'sexe': sexe, 'fixe': fixe, 'email': email, 'mobile': mobile },
+					dataType: 'html'
+				}).done(function(data){
+					var destination = 'http://localhost/leqg/index.php?page=fiche&id=' + data;
 					$(location).attr('href', destination);
 				}).error(function(){
 					console.log('ajax: erreur');

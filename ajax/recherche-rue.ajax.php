@@ -1,6 +1,8 @@
 <?php
 	// On récupère la ville recherchée avant de renvoyer les options demandées pour le formulaire ou les puces pour la liste
 	$return = $_POST['retour'];
+	$script = $_POST['script'];
+	if (empty($script)) $script = true;
 	$ville = $_POST['ville'];
 	$rue = $core->formatage_recherche($_POST['rue']);
 	
@@ -22,6 +24,8 @@
 		if ($return == 'form') echo '</option>';
 	
 	endforeach;
+	
+	if ($script == true) :
 ?>
 <script>
 	$(".propositionRue").click(function(){
@@ -46,3 +50,4 @@
 		$("#selectionImmeuble").data('rue', rue); // On affecte l'information de rue sélectionnée à l'immeuble
 	});
 </script>
+<?php endif; ?>
