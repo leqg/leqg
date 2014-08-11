@@ -18,8 +18,10 @@
 		</li>
 		<li>
 			<label>Date de naissance</label>
-			<?php $fiche->date_naissance(' / '); ?> <?php $fiche->lieu_de_naissance('à'); ?><br>
-			<?php $fiche->age(); ?>
+			<?php if ($fiche->is_info('naissance_date')) : ?>
+				<?php $fiche->date_naissance(' / '); ?> <?php $fiche->lieu_de_naissance('à'); ?><br>
+				<?php $fiche->age(); ?>
+			<?php endif; ?>
 		</li>
 		<li>
 			<label>Adresse déclarée</label>

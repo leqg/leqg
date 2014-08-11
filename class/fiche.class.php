@@ -68,6 +68,12 @@ class fiche extends core {
 	public	function get_infos($colonne) { return utf8_encode($this->fiche_ouverte['contact_' . $colonne]); }
 	
 	
+	// Méthode permettant de savoir si une information a été remplie
+	public	function is_info($colonne) {
+		return (!empty($this->get_infos($colonne)) && $this->get_infos($colonne) != 0) ? true : false;
+	}
+	
+	
 	// Méthode d'information autour des optout de la fiche ouverte
 	public	function optout($methode = null) {
 		if (empty($methode)) {
