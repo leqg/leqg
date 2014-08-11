@@ -64,9 +64,14 @@ class fiche extends core {
 	
 	
 	// L'ensemble des méthodes liées à l'accès aux informations au sujet de la fiche ouverte
-	public	function infos($colonne) { echo utf8_encode($this->fiche_ouverte['contact_' . $colonne]); }
-	public	function get_infos($colonne) { return utf8_encode($this->fiche_ouverte['contact_' . $colonne]); }
+	public	function infos($colonne, $prefix = true) { if ($prefix) { echo utf8_encode($this->fiche_ouverte['contact_' . $colonne]); } else { echo utf8_encode($this->fiche_ouverte[$colonne]); } }
+	public	function get_infos($colonne, $prefix = true) { if ($prefix) { return utf8_encode($this->fiche_ouverte['contact_' . $colonne]); } else { return utf8_encode($this->fiche_ouverte[$colonne]); } }
 	
+	
+	// Méthode permettant de retourner l'ID de l'immeuble de l'électeur, très important pour l'accès aux fonctions cartographiques
+	public	function get_immeuble() {
+		return $this->fiche_ouverte['immeuble_id'];
+	}
 	
 	// Méthode permettant de savoir si une information a été remplie
 	public	function is_info($colonne) {

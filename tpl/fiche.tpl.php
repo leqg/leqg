@@ -25,12 +25,12 @@
 		</li>
 		<li>
 			<label>Adresse déclarée</label>
-			<?php $fiche->affichage_adresse(); ?>
+			<?php //$fiche->affichage_adresse(); ?>
+			<?php $carto->adressePostale($fiche->get_immeuble()); ?>
 		</li>
 		<li>
 			<label>Bureau de vote</label>
-			<?php $fiche->bureau(true); ?><br>
-			<?php $fiche->canton(); ?>
+			<?php $carto->bureauDeVote($fiche->get_immeuble()); ?><br>
 		</li>
 		<li>
 			<label class="formulaire">Adresse email</label>
