@@ -248,5 +248,85 @@ class carto extends core {
 		// On retourne l'id du canton
 		return $infos['canton_id'];
 	}
+	
+	
+	// detailAdresse( int ) permet de récupérer un tableau contenant l'ensemble des informations disponibles à partir d'un immeuble
+	public	function detailAdresse( $immeuble ) {
+		// On vérifie le format de l'id de l'immeuble pour continuer
+		if (!is_numeric($immeuble)) return false;
+		
+		// On prépare la requête de récupération de toutes les informations disponibles
+		$query = 'SELECT		*
+				  FROM		immeubles
+				  LEFT JOIN rues				ON	rues.rue_id = immeubles.rue_id
+				  LEFT JOIN	communes			ON	communes.commune_id = rues.commune_id
+				  LEFT JOIN	bureaux			ON	bureaux.bureau_numero = immeubles.bureau_id AND communes.commune_id = bureaux.commune_id
+				  LEFT JOIN	cantons			ON	cantons.canton_id = bureaux.canton_id
+				  LEFT JOIN	departements		ON	departements.departement_id = cantons.departement_id
+				  LEFT JOIN	regions			ON	regions.region_id = departements.region_id
+				  WHERE		immeubles.immeuble_id = ' . $immeuble;
+
+		// On lance la requête BDD MySQL et on prépare le tableau de rendu des résultats
+		$sql = $this->db->query($query);
+		$row = $sql->fetch_assoc();
+		
+		// On retourne le tableau complet
+		return $row;
+	}
+	
+	
+	// adressePostale( int , string , bool ) permet d'afficher une adresse postale complète à partir d'id d'un immeuble
+	public	function adressePostale( $immeuble , $separateur = '<br>' , $return = false ) {
+		// On vérifie le format de l'id de l'immeuble pour continuer
+		if (!is_numeric($immeuble)) return false;
+
+		// On récupère les informations liées à l'adresse de l'immeuble demandée
+		$informations = $this->detailAdresse( $immeuble );
+
+		// On formate les composants de l'adresse correctement
+		$adresse['numero'] = $informations['immeuble_numero'];
+		$adresse['rue'] = mb_convert_case($informations['rue_nom'], MB_CASE_LOWER, 'utf-8');
+		$adresse['cp'] = $informations['codepostal_id'];
+		$adresse['ville'] = mb_convert_case($informations['commune_nom'], MB_CASE_UPPER, 'utf-8');
+		
+		// On prépare la variable d'affichage du rendu
+		$affichage = $adresse['numero'] . ' ';
+		
+		// On affiche conditionnement la suite de l'adresse
+		if (!empty($adresse['rue'])) $affichage .= $adresse['rue'] . $separateur;
+		if (!empty($adresse['cp'])) $affichage .= $adresse['cp'] . ' ';
+		if (!empty($adresse['ville'])) $affichage .= $adresse['ville'] . $separateur;
+
+		// On remet en forme l'affichage
+		$affichage = $this->tpl_transform_texte($affichage);
+		
+		// On retourne les informations demandées
+		if (!$return) echo $affichage;
+		return $affichage;
+	}
+	
+	
+	// bureauDeVote( int ) permet d'afficher les informations relatives à un bureau de vote demandé d'après un immeuble
+	public	function bureauDeVote( $immeuble , $return = false ) {
+		// On vérifie le format de l'id de l'immeuble pour continuer
+		if (!is_numeric($immeuble)) return false;
+		
+		// On récupère toutes les informations nécessaires par rapport à cet immeuble et donc son bureau de vote
+		$informations = $this->detailAdresse( $immeuble );
+
+		// On retraite les informations
+		$bureau['numero'] = $informations['bureau_id'];
+		$bureau['nom'] = mb_convert_case($informations['bureau_nom'], MB_CASE_TITLE, 'utf-8');
+		$bureau['ville'] = $this->tpl_transform_texte($informations['commune_nom']);
+		
+		// On prépare le rendu 
+		$affichage = 'Bureau ' . $bureau['numero'] . ' – ' . $bureau['ville'] . '<br>' . $bureau['nom'];
+
+		// On affiche le rendu si demandé
+		if (!$return) echo $affichage;
+		
+		// On retourne dans tous les cas le rendu
+		return $affichage;
+	}
 }
 ?>
