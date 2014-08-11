@@ -260,6 +260,7 @@ class carto extends core {
 				  FROM		immeubles
 				  LEFT JOIN rues				ON	rues.rue_id = immeubles.rue_id
 				  LEFT JOIN	communes			ON	communes.commune_id = rues.commune_id
+				  LEFT JOIN codes_postaux	ON	codes_postaux.commune_id = communes.commune_id
 				  LEFT JOIN	bureaux			ON	bureaux.bureau_numero = immeubles.bureau_id AND communes.commune_id = bureaux.commune_id
 				  LEFT JOIN	cantons			ON	cantons.canton_id = bureaux.canton_id
 				  LEFT JOIN	departements		ON	departements.departement_id = cantons.departement_id
@@ -286,7 +287,7 @@ class carto extends core {
 		// On formate les composants de l'adresse correctement
 		$adresse['numero'] = $informations['immeuble_numero'];
 		$adresse['rue'] = mb_convert_case($informations['rue_nom'], MB_CASE_LOWER, 'utf-8');
-		$adresse['cp'] = $informations['codepostal_id'];
+		$adresse['cp'] = $informations['code_postal'];
 		$adresse['ville'] = mb_convert_case($informations['commune_nom'], MB_CASE_UPPER, 'utf-8');
 		
 		// On prépare la variable d'affichage du rendu
