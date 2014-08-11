@@ -323,3 +323,8 @@ ul#creationsRapides li.creationFiche::before { content: '\e80c'; }
 .liste-tags span.tag:before { display: inline-block; color: #ed8262; content: '\e827'; font-family: "fontello"; padding: 0 .66em 0 0; text-align: center; width: 1em; }
 .liste-tags span.tag:hover { cursor: pointer; }
 .liste-tags span.tag:hover:before { content: '\e803'; }
+
+ul.nostyle { list-style: square; }
+ul.nostyle li { display: block; }
+
+label[for=""] { cursor: text; }

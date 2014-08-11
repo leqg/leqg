@@ -2145,3 +2145,16 @@ ul#creationsRapides {
 		}
 	}
 }
+
+
+ul.nostyle {
+	list-style: square;
+	
+	li {
+		display: block;
+	}
+}
+
+label[for=""] {
+	cursor: text;
+}
