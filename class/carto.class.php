@@ -218,5 +218,35 @@ class carto extends core {
 		// On retourne les données
 			return $immeubles;
 	}
+	
+	
+	// bureauParImmeuble( int ) permet d'afficher l'ID d'un bureau de vote pour un immeuble demandé
+	public	function bureauParImmeuble( $immeuble ) {
+		// On vérifie que l'argument est bien un ID
+		if (!is_numeric($immeuble)) return false;
+		
+		// On cherche l'information dans la base de données
+		$query = 'SELECT * FROM immeubles WHERE immeuble_id = ' . $immeuble;
+		$sql = $this->db->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne l'id du bureau
+		return $infos['bureau_id'];
+	}
+	
+	
+	// cantonParImmeuble( int ) permet d'afficher l'ID d'un canton pour un immeuble demandé
+	public	function cantonParImmeuble( $immeuble ) {
+		// On vérifie que l'argument est bien un ID
+		if (!is_numeric($immeuble)) return false;
+		
+		// On cherche l'information dans la base de données
+		$query = 'SELECT * FROM immeubles WHERE immeuble_id = ' . $immeuble;
+		$sql = $this->db->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne l'id du canton
+		return $infos['canton_id'];
+	}
 }
 ?>
