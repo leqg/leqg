@@ -15,16 +15,16 @@
 	if ($dossier = opendir('./ajax')) :
 	
 	// On vérifie que l'ouverture et la lecture du dossier n'a pas retourné d'erreur
-		while (false !== ($fichier = readdir($dossier))) :
+		while (false !== ($file = readdir($dossier))) :
 					
 		// On analyse le nom du fichier
-			$fichier = explode('.', $fichier);
+			$file = explode('.', $file);
 			
 		// On vérifie que le fichier est bien un script .ajax.php
-			if ($fichier[1] == 'ajax' && $fichier[2] == 'php') :
+			if ($file[1] == 'ajax' && $file[2] == 'php') :
 			
 			// Si oui, on rajoute le script à la liste des scripts
-				$scripts[] = $fichier[0];
+				$scripts[] = $file[0];
 			
 			endif;
 		
