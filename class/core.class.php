@@ -132,9 +132,9 @@ class core {
 	// tpl_load( slug [, nom = null ] )  appelles le fichier slug-nom.tpl.php
 		public	function tpl_load( $slug , $nom = null, $globale = null) {
 			if (is_null($globale)) {
-				global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
+				global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
 			} else {
-				global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $globale;
+				global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $globale;
 			}
 		
 			if (empty($nom)) :

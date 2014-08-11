@@ -27,6 +27,7 @@ function __autoload($class_name) {
 
 // On appelle l'ensemble des classes générales au site
 $core =			new core($db);
+$csv =			new csv($db);
 $user =			new user($db);
 $fiche =			new fiche($db);
 $tache =			new tache($db, $_COOKIE['leqg-user']);
@@ -36,6 +37,6 @@ $fichier =		new fichier($db, $_COOKIE['leqg-user']);
 $carto =			new carto($db, $_COOKIE['leqg-user']);
 
 // On transforme ces classes générales en variables globales
-global $db, $core, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
+global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
 
 ?>
