@@ -15,7 +15,7 @@
 			$file = explode('.', $file);
 			
 			// On vérifie que le fichier est bien un script .ajax.php
-			if ($file[1] == 'ajax' && $file[2] == 'php') :
+			if ($file[1] == 'csv') :
 			
 				// Si oui, on rajoute le script à la liste des scripts
 				$scripts[] = $file[0];
@@ -23,6 +23,8 @@
 			endif;
 		
 		endwhile;
+		
+		natsort($scripts);
 	
 	endif;
 ?>
@@ -31,7 +33,23 @@
 		<li data-file="<?php echo $file; ?>"><?php echo $file; ?></li>
 		<?php endforeach; ?>
 	</ul>
-	<div id="analyse"></div>
+	<div id="analyse" style="margin: 1.5em;"></div>
+	<script>
+		$("#liste-fichiers li").click(function(){
+			var file =  $(this).data('file');
+			
+			$("#analyse").html('Fichier CSV en cours d\'import...<br>');
+			
+			$.ajax({
+				type: 'POST',
+				url: 'ajax.php?script=import-csv',
+				data: { 'fichier': file },
+				dataType: 'html'
+			}).done(function(data){
+				$("#analyse").append('Fichier CSV importé !<br>');
+			});
+		});
+	</script>
 <?php
 	// On importe le footer
 	$core->tpl_footer();

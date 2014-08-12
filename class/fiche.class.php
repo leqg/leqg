@@ -641,6 +641,38 @@ class fiche extends core {
 		// On renvoit l'id de l'entrée
 		return $this->db->insert_id; 
 	}
+	
+	
+	// renommerVille() permet de renommer une ville pour faire une recherche
+	public	function renommerVille($ville_origine, $dept_origine) {
+		// Pour éviter les problèmes d'apostrophes (dans la BDD souvent des espaces) des villes comme L'isle, on remplace par un joker
+		$remplacement = array("'", " ", "OE");
+		$ville_origine = str_replace($remplacement, '%', $ville_origine);
+		
+		// On évite certains caractères spéciaux
+		$ville_origine = str_replace('œ', 'oe', $ville_origine);
+		
+		// Cas particulier de Paris / Marseille / Lyon, si ça commence par ces noms, on affiche juste la ville sans l'arrondissement
+		if (preg_match('/^PARIS/', $ville_origine)) { $ville_origine = 'PARIS'; }
+		if (preg_match('/^LYON/', $ville_origine)) { $ville_origine = 'LYON'; }
+		if (preg_match('/^MARSEILLE/', $ville_origine)) { $ville_origine = 'MARSEILLE'; }
+		
+		// Cas particulier des DOM-TOM où la recherche doit porter sur 971 au lieu de 97
+		if ($dept_origine == 97) { $dept_origine = '97%'; }
+		
+		// Cas particulier des villes mal orthographiées dans les bases de données
+		if ($ville_origine == 'SAINT-DIE' && $dept_origine == 88) { $ville_origine = 'SAINT-DIE-DES-VOSGES'; }
+		if ($ville_origine == 'CHERBOURG' && $dept_origine == 50) { $ville_origine = 'CHERBOURG-OCTEVILLE'; }
+		if ($ville_origine == 'OCTEVILLE' && $dept_origine == 50) { $ville_origine = 'CHERBOURG-OCTEVILLE'; }
+		if ($ville_origine == 'MEULAN' && $dept_origine == 78) { $ville_origine = 'MEULAN-EN-YVELINES'; }
+		
+		// Cas particulier de Chalons sur Marne qui a changé de nom pour Chalons en Champagne
+		if ($ville_origine == 'CHALONS-SUR-MARNE' && $dept_origine == 51) { $ville_origine = 'CHALONS-EN-CHAMPAGNE'; }
+		
+		// On retourne les données corrigées
+		$donnees = array($ville_origine, $dept_origine);
+		return $donnees;
+	}
 }
 
 ?>
