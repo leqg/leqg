@@ -7,4 +7,4 @@ koala-config.json
 
 uploads/*
 
-csv/*
+csv/*.traite.csv
