@@ -156,13 +156,14 @@ class fiche extends core {
 		if ($this->get_infos('naissance_commune_id')) {
 			$ville = $this->get_infos('naissance_commune_id');
 			
-			$sql = $this->db->query('SELECT commune_nom FROM communes WHERE commune_id = ' . $ville);
+			$sql = $this->db->query('SELECT commune_nom, departement_nom FROM communes LEFT JOIN departements ON departements.departement_id = communes.departement_id WHERE commune_id = ' . $ville);
 			$row = $sql->fetch_array();
-			$ville = $row[0];
+			$ville = $row[0]; 
+			$departement = $row[1];
 			
 			if ($before) echo $before . ' ';
 			
-			echo $ville . ' (' . $this->get_infos('naissance_departement') . ')';
+			echo utf8_encode($ville) . ' (' . utf8_encode($departement) . ')';
 		} else {
 			// S'il n'existe pas, on n'affiche rien
 			return false;

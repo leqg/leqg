@@ -183,6 +183,20 @@ class carto extends core {
 	}
 	
 	
+	// afficherDepartement( int , bool ) permet d'afficher le nom du département entré par son ID
+	public	function afficherDepartement( $id , $return = false ) {
+		// On lance la recherche dans la base de données pour retrouver le département
+		$query = 'SELECT * FROM departements WHERE departement_id = ' . $id;
+		$sql = $this->db->query($query);
+		$data = $sql->fetch_assoc();
+		
+		// On retourne l'information
+		if (!$return) echo $data['departement_nom'];
+		
+		return $data['departement_nom'];
+	}
+	
+	
 	// afficherImmeuble( int [ , bool ] ) permet d'afficher le numéro d'un immeuble grâce à son ID
 	public	function afficherImmeuble( $id , $return = false ) {
 		// On lance la recherche d'informations
