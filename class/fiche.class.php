@@ -113,7 +113,7 @@ class fiche extends core {
 	
 		if (!empty($nom)) { $affichage = $begin . mb_convert_case($nom, MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case($nom_usage, MB_CASE_UPPER, 'utf-8') . $end; }
-		if (!empty($prenoms)) { $affichage .= ' ' . $begin . $prenoms . $end; }
+		if (!empty($prenoms)) { $affichage .= ' ' . $begin . utf8_decode(mb_convert_case($prenoms, MB_CASE_TITLE, 'utf-8')) . $end; }
 		
 		if ($return == false) : echo $affichage; else : return $affichage; endif;
 		
