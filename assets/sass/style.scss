@@ -690,7 +690,7 @@ main.fiche {
 				width: 85%;
 				@include transition(all);
 				
-				&[value=""] {
+				&.vide {
 					position: relative;
 					background-color: lighten($rouge, 45%);
 					border-bottom: 1px solid $rouge;

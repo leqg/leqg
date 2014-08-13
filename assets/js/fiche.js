@@ -4,9 +4,29 @@ var fiche = function() {
 		$(".ficheContact div").hide();
 		$("#historique").show();
 		$("#premierContact").show();
+		
+	
+	// scripts permettant d'afficher en style "vide" tous les champs de formulaire non remplis de la page principale de la fiche
+		function couleurVide() {
+			if ($("#form-email").val() == '') { $("#form-email").addClass('vide'); } else { $("#form-email").removeClass('vide'); }
+			if ($("#form-telephone").val() == '') { $("#form-telephone").addClass('vide'); } else { $("#form-telephone").removeClass('vide'); }
+			if ($("#form-mobile").val() == '') { $("#form-mobile").addClass('vide'); } else { $("#form-mobile").removeClass('vide'); }
+		}
+		
+		// fonction lancée au démarrage de la page
+		$("#form-email").ready(couleurVide);
+		$("#form-telephone").ready(couleurVide);
+		$("#form-mobile").ready(couleurVide);
+		
+		// fonction lancée à chaque modification
+		$("#form-email").change(couleurVide);
+		$("#form-telephone").change(couleurVide);
+		$("#form-mobile").change(couleurVide);
+		
 	
 	
 	// interactions permettant le passage entre les volets
+	
 		$("#ajoutInteraction").click(function(){ // Cliquer pour ajouter une première interaction
 			$(".ficheContact div").hide(); // On ferme tous les volets
 			$("#nouvelleInteraction").show(); // On affiche la création de fiche
