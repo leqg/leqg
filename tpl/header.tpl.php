@@ -38,10 +38,12 @@
 		<nav id="applications"><!--
 		 --><ul><!--
 			 --><a class="nostyle" href="<?php $core->tpl_get_url('contacts'); ?>"><li><span>&#xe840;</span>Contacts</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_get_url('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_get_url('email'); ?>"><li><span>&#xe805;</span>Emailing</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_get_url('dossiers'); ?>"><li><span>&#xe851;</span>Dossiers</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_get_url('carto'); ?>"><li><span>&#xe845;</span>Cartographie</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_get_url('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_get_url('boite'); ?>"><li><span>&#xe84d;</span>Diffusion</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_get_url('poste'); ?>"><li><span>&#xe8ef;</span>Publipostage</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_get_url('email'); ?>"><li><span>&#xe805;</span>Emailing</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_get_url('sms'); ?>"><li><span>&#xe8e4;</span>SMS</li></a><!--
 		 --></ul><!--
 	 --></nav><!--#principale-->
