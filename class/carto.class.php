@@ -342,5 +342,19 @@ class carto extends core {
 		// On retourne dans tous les cas le rendu
 		return $affichage;
 	}
+	
+	
+	// ajoutRue( int , string ) permet d'ajouter une nouvelle rue à la base de données
+	public	function ajoutRue( $ville , $rue ) {
+		// On protège les informations pour la BDD
+		$rue = $this->securisation_string($rue);
+
+		// On prépare la requête SQL
+		$query = 'INSERT INTO rues ( commune_id , rue_nom ) VALUES ( ' . $ville . ' , "' . $rue . '" )';
+		
+		// On exécute la requête et on retourne l'ID de l'entrée
+		$this->db->query($query);
+		return $this->db->insert_id;
+	}
 }
 ?>

@@ -278,6 +278,35 @@ var fiche = function() {
 				}
 			});
 			
+			$(document).on('click', '#selectionRue .nouvelleRue', function() {
+				var nom = $("#fiche-electeur").data('nom');
+				var nomUsage = $("#fiche-electeur").data('nomUsage');
+				var prenom = $("#fiche-electeur").data('prenom');
+				var sexe = $("#fiche-electeur").data('sexe');
+				var fixe = $("#fiche-electeur").data('fixe');
+				var email = $("#fiche-electeur").data('email');
+				var mobile = $("#fiche-electeur").data('mobile');
+				var ville = $(this).data('ville');
+				var rue = $(this).data('rue');
+
+				// On commence par l'AJAX d'ajout de la rue
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=ajout-rue',
+					data: { 'ville': ville, 'rue': rue },
+					dataType: 'html'
+				}).done(function(rue){
+					console.log(rue);
+					// on exécute maintenant la requête AJAX permettant d'afficher la création de l'immeuble dans la rue
+					//$.ajax({
+					//	type: 'POST',
+					//	url: 'ajax.php?script=nouvelle-fiche-creer-immeuble',
+					//	data: { 'rue': rue, 'ville': ville, 'nom': nom, 'nomUsage': nomUsage, 'prenom': prenom, 'sexe': sexe, 'fixe': fixe, 'email': email, 'mobile': mobile },
+					//	dataType: 'html'
+					//});
+				}).error(function(){ console.log('ajax: erreur'); });
+			});
+			
 			$(document).on('click', '#resultat-rue ul .propositionRue', function(){
 				var nom = $("#fiche-electeur").data('nom');
 				var nomUsage = $("#fiche-electeur").data('nomUsage');
