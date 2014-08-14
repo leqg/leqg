@@ -8,3 +8,4 @@ koala-config.json
 uploads/*
 
 csv/*.traite.csv
+config.ini
