@@ -167,8 +167,8 @@ class core {
 		}
 	
 	
-	// tpl_go_to ( $page [ , $arguments (array) ] permet d'effectuer une redirection vers une page demandée en suivant le format de nomage des pages du site, tout en ayant une multitude d'arguments
-		public	function tpl_go_to( $page , $arguments = array() ) {
+	// tpl_go_to ( $page [ , $arguments (array) , bool ] permet d'effectuer une redirection vers une page demandée en suivant le format de nomage des pages du site, tout en ayant une multitude d'arguments
+		public	function tpl_go_to( $page , $arguments = array() , $redirect = false ) {
 			// On vérifie que les arguments sont bien sous la forme d'un tableau
 			if (!is_array($arguments)) return false;
 			
@@ -182,9 +182,17 @@ class core {
 			
 			// On lance la redirection
 			if ( !empty( $page ) ) {
-				header('Location: ' . $adresse );
+				if ($redirect) {
+					header('Location: ' . $adresse );
+				} else {
+					echo $adresse;
+				}
 			} else {
-				header('Location index.php');
+				if ($redirect) {
+					header('Location: index.php');
+				} else {
+					echo 'index.php';
+				}
 			}
 		}
 	

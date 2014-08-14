@@ -14,5 +14,5 @@
 	
 	// On retourne vers la page de départ
 	$args_url = array('id' => $infos['fiche'], 'interaction' => $infos['interaction']);
-	$core->tpl_go_to('fiche', $args_url);
+	$core->tpl_go_to('fiche', $args_url, true);
 ?>
