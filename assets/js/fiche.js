@@ -83,7 +83,7 @@ var fiche = function() {
 								'notes'  : notes },
 				dataType:	'html'
 			}).done(function(data){
-				var destination = 'http://localhost/leqg/index.php?page=fiche&id=' + fiche + '&interaction=' + data;
+				var destination = 'index.php?page=fiche&id=' + fiche + '&interaction=' + data;
 				$(location).attr('href', destination);
 			});
 		});
