@@ -88,6 +88,22 @@ var fiche = function() {
 			});
 		});
 
+	
+	// script permettant de lancer la procédure de changement de sexe
+		$("#modifierSexe").click(function(){
+			var fiche = getURLVar('id'); // On récupère l'ID de l'interaction demandée
+			
+			$.ajax({
+				type: 'POST',
+				url: 'ajax.php?script=changement-sexe',
+				data: { 'fiche': fiche },
+				dataType: 'html'
+			}).done(function(data){
+				var destination = 'index.php?page=fiche&id=' + fiche;
+				$(location).attr('href', destination);
+			});	
+		});
+
 
 	// script permettant de lancer la procédure de changement d'adresse postale
 		$("#modifierAdressePostale").click(function(){
