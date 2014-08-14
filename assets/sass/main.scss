@@ -12,7 +12,6 @@
 @import "fontello.css";
 @import "fonts.css";
 @import "keyframes.css";
-@import "kna.css";
 
 // imports SASS (.scss)
 @import "mixins.scss";
@@ -35,6 +34,7 @@ $grisMoyen:	darken($gris, 15%);
 $grisFonce:	darken($gris, 50%);
 $fonts1:		'Roboto', Helvetica, Arial, sans-serif;
 $fonts2:		'Fira Sans', Helvetica, Arial, sans-serif;
+$monospaced:'Fira Mono', monospace;
 $icons:		'fontello';
 
 
@@ -44,34 +44,13 @@ $icons:		'fontello';
  *		 STYLES GÉNÉRAUX			* 
  *								*
  ********************************/
- 
-* {
-	@include box-sizing();
-} 
-
-html,
-body {
-	background-color: $blanc;
-	color: $noir;
-	font: 400 16px/1.5em $fonts1;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-}
 
 a {
 	border-bottom: 1px solid $rouge;
 	color: $rouge;
 	text-decoration: none;
 	@include transition(all);
-	@media (-webkit-min-device-pixel-ratio: 1.5),
-			  (min--moz-device-pixel-ratio: 1.5),
-				(-o-min-device-pixel-ratio: 3/2),
-				   (min-device-pixel-ratio: 1.5),
-				       (min-resolution: 1.5dppx) {
-		border-bottom-width: .5px;
-	}
+	@include bordure-fine();
 	
 	&:hover {
 		border-bottom-color: $bleu;
@@ -95,21 +74,200 @@ abbr {
 	outline: none;
 }
 
+audio,
+canvas,
+video {
+	display: inline-block;
+}
+
 h1 {
 	font-size: 2.5em;
 	line-height: 40px;
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	display: table-cell;
+	color: $bleu;
+	font: 900 2.66em / 1.25em $fonts1;
+	vertical-align: middle;
+	
+	span {
+		display: block;
+		
+		&:first-of-type {
+			font-variant: small-caps;
+			font-weight: 500;
+		}
+		
+		&:last-of-type {
+			text-transform: uppercase;
+		}
+	}
+}
+
+h3 {
+	border-bottom: 1px solid $rouge;
+	color: $bleu;
+	font: 600 1.3em/1.3em $fonts1;
+	margin: 1.3em 3em 1em 3em;
+	padding: 1.3em 10px .33em 10px;
+	@include bordure-fine();
+}
+
+h6 {
+	border-bottom: 1px solid $rouge;
+	color: $bleu;
+	font: 600 1.3em/1.3em $fonts1;
+	margin: 1.3em 3em 1em 3em;
+	padding: 1.3em 10px .33em 10px;
+	@include bordure-fine();
+}
+
+img {
+	border: 0;
+	height: auto;
+	vertical-align: middle;
+}
+
+ol,
+ul {
+	padding-left: 2em;
+	
+	&.unstyled {
+		list-style: none;
+	}
+}
+
+pre {
+	background-color: lighten($rouge, 33%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	@include background-size(3em 3em);
+	border: 5px solid lighten($rouge, 10%);
+	color: $noir;
+	font-family: $monospaced;
+	font-size: 1.1em;
+	line-height: 1.5em;
+	margin: 3em;
+	padding: 1.5em;
+	padding-top: 1.55em;
+	text-align: left;
+	
+	span {
+		display: block;
+		padding-left: 2em;
+	}
+}
+
+svg:not(:root) {
+	overflow: hidden;
 }
 
 
 
+/************************************
+ *									*
+ *		   STYLES DES BLOCS			* 
+ *									*
+ ************************************/
+ 
+* {
+	@include box-sizing();
+} 
+
+html,
+body {
+	background-color: $blanc;
+	color: $noir;
+	font-family: $fonts1;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+html {
+	font-size: 62.5%;
+	font-size: calc(1em * 0.625);
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+body {
+	font-size: 1.4em;
+}
+
+main {
+	position: absolute; top: 0; left: 0;
+	height: 100%;
+	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 0;
+	padding-top: 50px;
+	width: 100%;
+	
+	aside {
+		position: absolute; top: 0; right: 0;
+		height: 100%;
+		padding-top: 50px;
+		width: 40%;
+	}
+}
+
+section {
+	&.central {
+		width: 55%;
+	}
+}
 
 
 
+/************************************
+ *									*
+ *		STYLES DES FORMULAIRES		* 
+ *									*
+ ************************************/
+ 
+form {
+	margin: 0;
+	padding: 0;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='phone'],
+input[type='password'] {
+	border: 0;
+	border-bottom: 1px solid $bleu;
+	padding: .33em 1em;
+	width: 100%;
+	@include transition(all);
+	@include bordure-fine();
+	
+	&:hover {
+		border-bottom: 1px solid $orange;
+	}
+	
+	&:focus {
+		border-bottom: 1px solid $rouge;
+	}
+}
 
 
 
+/************************************
+ *									*
+ *	IMPORT DES STYLES PARTICULIERS	* 
+ *									*
+ ************************************/
 
-
+// Style dédié au header
+@import "header.scss";
 
 
 
