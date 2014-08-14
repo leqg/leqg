@@ -123,5 +123,22 @@ class fichier extends core {
 		// On renvoit ce résultat
 			return $nombre;
 	}
+	
+	
+	// informations( int ) permet de renvoyer un tableau de toutes les informations disponibles sur un fichier
+	public	function informations( $id ) {
+		// On vérifie que l'entrée est bien une donnée numérique
+		if (!is_numeric($id)) return false;
+		
+		// On prépare la requête SQL
+		$query = 'SELECT * FROM fichiers WHERE fichier_id = ' . $id;
+		
+		// On exécute la requête
+		$sql = $this->db->query($query);
+		$informations = $this->formatage_donnees($sql->fetch_assoc());
+		
+		// On retourne le tableau contenant les informations disponibles
+		return $informations;
+	}
 }
 ?>
