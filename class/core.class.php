@@ -152,7 +152,7 @@ class core {
 	
 	
 	// tpl_redirection ( $page [ , $valeur = null, $attribut = id ] ) permet d'effectuer le renvoi de l'utilisateur vers une autre page
-		public	function tpl_redirection( $page = null , $valeur = null , $attribut = null) {
+		public	function tpl_redirection( $page = null , $valeur = null , $attribut = null ) {
 			if (!empty($page) && !empty($attribut) && !empty($valeur)) {
 				header( 'Location: index.php?page=' . $page . '&' . $attribut . '=' . $valeur );
 			} else if (!empty($page) && !empty($valeur)) {
@@ -161,6 +161,28 @@ class core {
 				header( 'Location: index.php?page=' . $page );
 			} else {
 				header( 'Location: index.php' );
+			}
+		}
+	
+	
+	// tpl_go_to ( $page [ , $arguments (array) ] permet d'effectuer une redirection vers une page demandée en suivant le format de nomage des pages du site, tout en ayant une multitude d'arguments
+		public	function tpl_go_to( $page , $arguments = array() ) {
+			// On vérifie que les arguments sont bien sous la forme d'un tableau
+			if (!is_array($arguments)) return false;
+			
+			// On prépare l'adresse de la page d'arrivée
+			$adresse = 'index.php?page=' . $page;
+			 
+			// On fait une boucle selon le nombre d'arguments
+			foreach ($arguments as $key => $value) {
+				$adresse .= '&' . $key . '=' . $value;
+			}
+			
+			// On lance la redirection
+			if ( !empty( $page ) ) {
+				header('Location: ' . $adresse );
+			} else {
+				header('Location index.php');
 			}
 		}
 	
