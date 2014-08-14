@@ -49,7 +49,8 @@
 </ul>
 
 <ul class="listeActions">
-	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'objet'); ?>&fichier=true">Ajouter un fichier</a></li>
+	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&modifier=true">Modifier la fiche</a></li>
+	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&fichier=true">Ajouter un fichier</a></li>
 	<li>Ajouter à un dossier</li>
 	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id']); ?>">Retour à l'historique</a></li>
 </ul>

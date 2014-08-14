@@ -34,7 +34,7 @@ var fiche = function() {
 	
 	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
-		if (getURLVar('interaction')) {
+		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
 			
 			$(".ficheContact div").hide(); // On ferme tous les volets
@@ -52,9 +52,14 @@ var fiche = function() {
 			$("#interaction").show(); // On affiche la fenêtre d'interaction demandée
 		}
 		
-		if (getURLVar('fichier')) { // Si on demande à rajouter un fichier
+		else if (getURLVar('fichier')) { // Si on demande à rajouter un fichier
 			$(".ficheContact div").hide(); // On ferme tous les volets
 			$("#nouveauFichier").show(); // Pour afficher le formulaire d'envoi
+		}
+		
+		else if (getURLVar('modifier')) { // Si on demande à modifier la fiche interaction
+			$(".ficheContact div").hide(); // On ferme tous les volets
+			$("#modifierFiche").show();
 		}
 		
 	

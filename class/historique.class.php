@@ -95,6 +95,41 @@ class historique extends core {
 	}
 	
 	
+	// modification( array ) permet de modifier une interaction selon les paramètres entrés 
+	public	function modification( $infos ) {
+		// On vérifie que le tableau information en est bien un
+		if (!is_array($infos)) return false;
+		
+		// On reformate les données nécessaires
+			// comme la date
+			$infos['date'] = explode('/', $infos['date']);
+			krsort($infos['date']);
+			$infos['date'] = implode('-', $infos['date']);
+			
+			// comme les strings
+			$infos['lieu'] = $this->securisation_string($infos['lieu']);
+			$infos['objet'] = $this->securisation_string($infos['objet']);
+			$infos['notes'] = $this->securisation_string($infos['notes']);
+			
+		// On prépare la requête SQL
+		$query = 'UPDATE		historique
+				  SET		historique_type = "' . $infos['type'] . '",
+				  			historique_date = "' . $infos['date'] . '",
+				  			historique_lieu = "' . $infos['date'] . '",
+				  			historique_objet = "' . $infos['objet'] . '",
+				  			historique_notes = "' . $infos['notes'] . '",
+				  			compte_id = ' . $this->compte . ',
+				  			historique_timestamp = NOW()
+				  WHERE		historique_id = ' . $infos['interaction'] . '
+				  AND		contact_id = ' . $infos['fiche'];
+		
+		// On effectue la requête SQL
+		if ($this->db->query($query)) return true;
+		
+		return false;
+	}
+	
+	
 	// recherche( int ) permet de récupérer les informations liées à une interaction recherchée
 	public	function recherche( $id ) {
 		// on vérifie que l'ID demandé est formaté correctement
@@ -129,7 +164,7 @@ class historique extends core {
 	// elementActuel( bool ) recherche l'élément d'historique ouvert actuellement, en récupérant par exemple l'information à travers la variable GET
 	public	function elementActuel( $return = false ) {
 		// On récupère l'information de la variable GET
-		$element = $_GET['objet'];
+		$element = $_GET['interaction'];
 		
 		if (is_numeric($element)) :
 			if ($return === true) : return $element; else : echo $element; endif;

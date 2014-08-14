@@ -75,6 +75,9 @@
 			
 			// On charge le script de chargement d'un nouveau fichier
 			$core->tpl_load('aside', 'fichier-nouveau');
+			
+			// On charge le script de modifier de l'interaction
+			$core->tpl_load('aside', 'modifier-fiche');
 
 		endif;
 		
