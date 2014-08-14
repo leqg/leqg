@@ -20,11 +20,11 @@
 	if ( $fichier->upload('fichier' , 'uploads/' . $nom_final , 15728640) ) :
 		$enregistrement = $fichier->enregistrement($nom_final , $donnees);
 		
-		$core->tpl_redirection('fiche', $donnees['contact']);
+		// On redirige vers la fiche de l'interaction
+		$args = array( 'id' => $donnees['contact'] , 'interaction' => $donnees['objet'] );
+		$core->tpl_go_to('fiche', $args);
 	else :
 		return false;
 	endif;
-	
-	$core->debug($test);
 
 ?>
