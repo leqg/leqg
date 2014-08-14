@@ -33,8 +33,8 @@ header#top {
 		&::before {
 			position: absolute; top: -50px; right: 1px;
 			display: block;
-			background: rgba(255, 255, 255, 0);
-			color: rgba(255, 255, 255, 1);
+			background: rgba($blanc, 0);
+			color: rgba($blanc, 1);
 			content: '\e810';
 			font-family: $icons;
 			font-size: 2em;
@@ -47,8 +47,8 @@ header#top {
 		
 		&:hover {
 			&::before {
-				background: rgba(255, 255, 255, 1);
-				color: rgba(44, 52, 80, 1);
+				background: rgba($blanc, 1);
+				color: rgba($bleu, 1);
 			}
 			
 			ul {
@@ -63,7 +63,7 @@ header#top {
 		
 		ul {
 			display: none;
-			background: rgba(255, 255, 255, 1);
+			background: rgba($blanc, 1);
 				
 			a {
 				display: inline-block;
@@ -73,7 +73,7 @@ header#top {
 				
 			li {
 				display: table-cell;
-				height: 115px;
+				height: 100px;
 				overflow: hidden;
 				padding: 1em;
 				text-align: center;
@@ -83,7 +83,7 @@ header#top {
 				@include transition(all);
 				
 				&:hover {
-					color: rgba(192, 57, 43, 1);
+					color: rgba($rouge, 1);
 				}
 				
 				span {
@@ -98,7 +98,7 @@ header#top {
 	& > ul {
 		position: absolute; top: 50px;
 		display: block;
-		background: rgba(255, 255, 255, 1);
+		background: rgba($blanc, .1);
 		color: $bleu;
 		margin: 0;
 		padding: .33em 0 .5em 0;
@@ -106,9 +106,9 @@ header#top {
 		&::before {
 			position: absolute; top: -50px; right: 0;
 			display: block;
-			background: rgba(255, 255, 255, 0);
+			background: rgba($blanc, 0);
 			border: 0;
-			color: rgba(255, 255, 255, 1);
+			color: rgba($blanc, 1);
 			font-family: $icons;
 			font-size: 1.66em;
 			height: 50px;
@@ -124,7 +124,7 @@ header#top {
 		}
 		
 		&:hover::before {
-			background: rgba(255, 255, 255, 1);
+			background: rgba($blanc, 1);
 			border: 0;
 			color: $bleu;
 		}
@@ -164,7 +164,7 @@ header#top {
 			@include transition(all);
 			
 			&:hover {
-				background-color: rgba(192, 57, 43, .15);
+				background-color: rgba($rouge, .15);
 				color: $rouge;
 			}
 		}
