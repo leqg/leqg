@@ -8,7 +8,8 @@ error_reporting(-1); // -1 reporte toutes les erreurs PHP (=E_ALL) / 0 en mode p
 ini_set('error_reporting', E_ALL);
 
 // On détermine les problématiques de langage des données PHP
-setlocale(LC_ALL, 'fr_FR', 'fr');
+setlocale(LC_ALL, 'fr_FR.UTF-8', 'fr_FR', 'fr');
+setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr');
 
 // On détermine le charset du fichier retourné par le serveur
 header('Content-Type: text/html; charset=utf-8');
