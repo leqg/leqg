@@ -64,7 +64,7 @@ var fiche = function() {
 			var type = $("#form-type").val();
 			var date = $("#form-date").val();
 			var lieu = $("#form-lieu").val();
-			var themas = $("#form-themas").val();
+			var objet = $("#form-objet").val();
 			var notes = $("#form-notes").val();
 			
 			$.ajax({
@@ -74,7 +74,7 @@ var fiche = function() {
 								'type'   : type,
 								'date'   : date,
 								'lieu'   : lieu,
-								'themas' : themas,
+								'objet'  : objet,
 								'notes'  : notes },
 				dataType:	'html'
 			}).done(function(data){
