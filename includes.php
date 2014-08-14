@@ -30,7 +30,7 @@ function __autoload($class_name) {
 $core =			new core($db, $config['SERVER']['url']);
 $csv =			new csv($db, $config['SERVER']['url']);
 $user =			new user($db, $config['SERVER']['url']);
-$fiche =			new fiche($db, $config['SERVER']['url']);
+$fiche =			new fiche($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
 $tache =			new tache($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
 $dossier =		new dossier($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
 $historique =	new historique($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
