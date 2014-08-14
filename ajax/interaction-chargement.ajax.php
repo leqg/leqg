@@ -34,7 +34,7 @@
  --></li>
 	<li class="notes"><!--
 	 --><label class="noform">Notes</label><!--
-	 --><p><?php echo $interaction['notes']; ?></p><!--
+	 --><p><?php echo nl2br($interaction['notes']); ?></p><!--
  --></li>
 	<?php if ($fichier->nombreFichiers('interaction' , $interaction['id'])) : ?>
 	<li><!--
