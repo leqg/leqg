@@ -35,16 +35,18 @@
 			<a class="nostyle" href="<?php $core->tpl_go_to('logout'); ?>"><li>Déconnexion</li></a>
 		</ul><!--#gestion-compte-->
 	
-		<ul id="applications"><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('contacts'); ?>"><li><span>&#xe840;</span>Contacts</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('dossiers'); ?>"><li><span>&#xe851;</span>Dossiers</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('carto'); ?>"><li><span>&#xe845;</span>Cartographie</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('boite'); ?>"><li><span>&#xe84d;</span>Diffusion</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('poste'); ?>"><li><span>&#xe8ef;</span>Publipostage</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('email'); ?>"><li><span>&#xe805;</span>Emailing</li></a><!--
-		 --><a class="nostyle" href="<?php $core->tpl_go_to('sms'); ?>"><li><span>&#xe8e4;</span>SMS</li></a><!--
-	 --></ul>
+		<nav id="applications">
+			<ul><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('contacts'); ?>"><li><span>&#xe840;</span>Contacts</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('dossiers'); ?>"><li><span>&#xe851;</span>Dossiers</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('carto'); ?>"><li><span>&#xe845;</span>Cartographie</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('boite'); ?>"><li><span>&#xe84d;</span>Diffusion</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('poste'); ?>"><li><span>&#xe8ef;</span>Publipostage</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('email'); ?>"><li><span>&#xe805;</span>Emailing</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('sms'); ?>"><li><span>&#xe8e4;</span>SMS</li></a><!--
+		 --></ul>
+		</nav>
 	</header><!--#top-->
 	
 	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; } ?>">
