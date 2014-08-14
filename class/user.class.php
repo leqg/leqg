@@ -10,14 +10,16 @@ class user extends core {
 	// Définition des propriétés
 	private $db; // Lien à la base de données
 	private	$user; // Informations liées à l'utilisateur
+	private $url;
 	
 	
 	// Définition des méthodes	
 	
 	// Méthode permettant de vérifier si un utilisateur est connecté ou non
 	
-	public	function __construct($db) {
+	public	function __construct($db, $url) {
 		$this->db = $db;
+		$this->url = $url;
 	}
 	
 	public	function statut_connexion() {

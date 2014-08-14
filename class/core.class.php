@@ -9,12 +9,14 @@ class core {
 	
 	// Définition des propriétés
 	private $db; // lien à la base de données
+	private $url; // le nom de domaine du serveur utilisé
 	
 	
 	// Définition des méthodes	
 	
-	public	function __construct($db) {
+	public	function __construct($db, $url) {
 		$this->db = $db;
+		$this->url = $url;
 	}
 	
 	
@@ -210,7 +212,7 @@ class core {
 	
 	// tpl_domaine() permet de retourner le nom de domaine du site
 		public	function tpl_return_domain() {
-			$domain = 'http://localhost/leqg/';
+			$domain = 'http://' . $this->url;
 			return $domain;
 		}
 	

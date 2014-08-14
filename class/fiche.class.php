@@ -7,16 +7,23 @@
 
 class fiche extends core {
 	
-	// Définition des propriétés
-	private $db; // Lien vers la base MySQL
+// Définition des propriétés
 	private $fiches; // tableau des informations disponibles à propos des fiches ouvertes
-	public $fiche_ouverte = null;
+	public	$fiche_ouverte = null;
 	
 	
-	// Définition des méthodes
+// Définition des propriétés
+	private $db; // Lien vers la base MySQL
+	private $compte; // ID du compte utilisant la classe
+	private $url; // Domaine du serveur
 	
-	public function __construct($db) {
+	
+// Définition des méthodes
+	
+	public	function __construct($db, $compte, $url) {
 		$this->db = $db;
+		$this->compte = $compte;
+		$this->url = $url;
 	}
 		
 	

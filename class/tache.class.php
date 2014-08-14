@@ -2,17 +2,20 @@
 
 class tache extends core {
 	
-	// Définition des propriétés
+	
+// Définition des propriétés
 	private $db; // Lien vers la base MySQL
 	private $compte; // ID du compte utilisant la classe
+	private $url; // Domaine du serveur
 	private $tache; // tableau des informations disponibles à propos de la tâche ouverte
 	
 	
-	// Définition des méthodes
+// Définition des méthodes
 	
-	public function __construct($db, $compte) {
+	public	function __construct($db, $compte, $url) {
 		$this->db = $db;
 		$this->compte = $compte;
+		$this->url = $url;
 	}
 	
 	

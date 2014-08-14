@@ -5,13 +5,15 @@ class historique extends core {
 	// Définition des propriétés
 	private $db; // Lien vers la base MySQL
 	private $compte; // ID du compte utilisant la classe
+	private $url; // Domaine du serveur
 	
 	
 	// Définition des méthodes
 	
-	public	function __construct($db, $compte) {
+	public	function __construct($db, $compte, $url) {
 		$this->db = $db;
 		$this->compte = $compte;
+		$this->url = $url;
 	}
 	
 	

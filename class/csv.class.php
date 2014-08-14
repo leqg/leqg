@@ -9,12 +9,14 @@ class csv extends core {
 	
 // Définition des propriétés
 	private $db; // Lien vers la base MySQL
+	private $url; // Domaine du serveur
 	
 	
 // Définition des méthodes
 	
-	public	function __construct($db) {
+	public	function __construct($db, $url) {
 		$this->db = $db;
+		$this->url = $url;
 	}
 		
 	
