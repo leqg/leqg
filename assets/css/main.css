@@ -1,0 +1,65 @@
+@charset "UTF-8";
+/*
+ *
+ *	Feuille de style principale du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+@import url(fontello.css);
+@import url(fonts.css);
+@import url(keyframes.css);
+@import url(kna.css);
+/********************************
+ *								*
+ *		 	VARIABLES			* 
+ *								*
+ ********************************/
+/********************************
+ *								*
+ *		 STYLES GÉNÉRAUX			* 
+ *								*
+ ********************************/
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html,
+body {
+  background-color: white;
+  color: black;
+  font: 400 16px/1.5em "Roboto", Helvetica, Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%; }
+
+a {
+  border-bottom: 1px solid #c0392b;
+  color: #c0392b;
+  text-decoration: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3 / 2), (min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    a {
+      border-bottom-width: .5px; } }
+  a:hover {
+    border-bottom-color: #2c3e50;
+    color: #2c3e50; }
+  a:active {
+    border-bottom-color: #ed8262;
+    color: #ed8262; }
+  a.nostyle {
+    border-bottom: none;
+    color: inherit;
+    text-decoration: none; }
+
+abbr {
+  border-bottom: none;
+  outline: none; }
+
+h1 {
+  font-size: 2.5em;
+  line-height: 40px; }
