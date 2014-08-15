@@ -142,5 +142,49 @@ class fichier extends core {
 		// On retourne le tableau contenant les informations disponibles
 		return $informations;
 	}
+	
+	
+	// extension ( int ) permet de renvoyer le type de fichier selon l'extension à partir d'un ID
+	public	function extension ( $id ) {
+		if (!is_numeric($id)) return false;
+		
+		// On récupère les informations sur le fichier
+		$i = $this->informations($id);
+		$extension = $this->retourExtension($i['url']);
+		
+		// On prépare le tableau des équivalences
+		$extensions = array('pdf' => 'pdf',
+							'doc' => 'texte',
+							'docx' => 'texte',
+							'odt' => 'texte',
+							'txt' => 'texte',
+							'xls' => 'tableur',
+							'xlsx' => 'tableur',
+							'ods' => 'tableur',
+							'csv' => 'tableur',
+							'ppt' => 'presentation',
+							'pptx' => 'presentation',
+							'opd' => 'presentation',
+							'jpg' => 'image',
+							'jpeg' => 'image',
+							'png' => 'image',
+							'gif' => 'image',
+							'tif' => 'image',
+							'tiff' => 'image',
+							'bmp' => 'image',
+							'zip' => 'archive',
+							'gzip' => 'archive',
+							'rar' => 'archive',
+							'tar' => 'archive',
+							'avi' => 'video',
+							'mpeg' => 'video',
+							'mpg' => 'video',
+							'mp4' => 'video',
+							'flv' => 'video',
+							'mp3' => 'audio');
+		
+		return $extensions[$extension];
+							
+	}
 }
 ?>

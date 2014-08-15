@@ -22,10 +22,11 @@ section#fiche-electeur {
 		display: table;
 		height: 200px;
 		margin-left: 25%;
+		padding-left: 25px;
 		width: 100%;
 		
 		&::before {
-			position: absolute; top: 37.5px; left: -175px;
+			position: absolute; top: 37.5px; left: -150px;
 			display: block;
 			background: $bleu;
 			@include border-radius(.5em);
@@ -40,5 +41,59 @@ section#fiche-electeur {
 		}
 		
 		#electeur-icons { display: none; }
+	}
+}
+
+table#historique-contact {
+	thead tr th:last-of-type {
+		position: relative;
+	}
+	
+	tbody tr td {
+		text-align: center;
+		width: 175px;
+	
+		&:last-of-type {
+			text-align: left;
+			width: auto;
+		}
+	}
+	
+	span.add-historique {
+		position: absolute; top: .45em; right: 10px;
+		display: block;
+		background: $rouge;
+		@include border-radius(50%);
+		color: $blanc;
+		cursor: pointer;
+		font-family: $icons;
+		font-size: .85em;
+		height: 20px;
+		line-height: 20px;
+		opacity: .66;
+		text-align: center;
+		width: 20px;
+		@include transition(all);
+		
+		&::before {
+			position: absolute; top: -4px; right: 30px;
+			display: block;
+			background: $bleu;
+			@include border-radius(.5em);
+			color: $blanc;
+			content: 'Ajouter\00A0 une\00A0 entr\E9 e';
+			font-family: $fonts1;
+			opacity: 0;
+			padding: .4em .66em;
+			text-align: right;
+			width: auto;
+			z-index: 500;
+			@include transition(all);
+		}
+		
+		&:hover, 
+		&:hover::before {
+			opacity: 1;
+		}
 	}
 }

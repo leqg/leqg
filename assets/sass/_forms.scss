@@ -47,100 +47,19 @@ input[type='password'] {
 		border-left-color: $rouge;
 		color: $rouge;
 		
+		&:hover {
+			border-bottom-color: $orange;
+			border-left-color: $orange;
+		}
+		
 		&:focus {
 			background: none;
 			color: $noir;
-		}
-	}
-}
-
-
-
-ul.formulaireDeuxColonnes {
-	list-style: none;
-	padding: 0;
-	padding-left: 25%;
-	
-	li {
-		position: relative;
-		font: 400 1.2em/1.5em $fonts1;
-		margin-bottom: 1.5em;
-		min-height: 1.5em;
-		
-		& > span.label-information {
-			position: absolute; top: .33em; left: -20%;
-			color: $bleu;
-			font-variant: small-caps;
-			padding-right: 1em;
-			text-align: right;
-			width: 20%;
-		}
-		
-		p {
-			border-bottom: 1px solid $bleu;
-			border-left: 1px solid $bleu;
-			font: 300 1.1em / 1.5em $fonts2;
-			padding: .33em 1em;
-		}
-		
-		& > span[class^='icone-'] {
-			position: absolute; bottom: .5em; right: .5em;
-			background-color: $blanc;
-			@include border-radius(50%);
-			color: $bleu;
-			cursor: pointer;
-			font-family: $icons;
-			height: 30px;
-			line-height: 30px;
-			text-align: center;
-			width: 30px;
-			@include transition(all);
 			
 			&:hover {
-				background-color: $rouge;
-				color: $blanc;
+				border-bottom-color: $rouge;
+				border-left-color: $rouge;
 			}
-		}
-		
-		& > span[id^='sauvegarde-form-'] {
-			position: absolute; top: .5em; right: .5em;
-			display: none;
-			background-color: $orange;
-			@include border-radius(50%);
-			color: $blanc;
-			font-family: $icons;
-			height: 25px;
-			line-height: 25px;
-			text-align: center;
-			width: 25px;
-		}
-		
-		& > span[id^='reussite-form-'] {
-			position: absolute; top: .5em; right: .5em;
-			display: none;
-			background-color: $vert;
-			@include border-radius(50%);
-			color: $blanc;
-			font-family: $icons;
-			height: 25px;
-			line-height: 25px;
-			text-align: center;
-			width: 25px;
-		}
-		
-		& > span[id^='valider-form-'] {
-			position: absolute; top: .5em; right: .5em;
-			display: none;
-			background-color: $orange;
-			@include border-radius(12.5px);
-			color: $blanc;
-			cursor: pointer;
-			font-family: $fonts1;
-			height: 25px;
-			line-height: 25px;
-			padding: 0 .5em;
-			text-align: center;
-			width: auto;
 		}
 	}
 }

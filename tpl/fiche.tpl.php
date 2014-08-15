@@ -12,7 +12,7 @@
 	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?>"></div>
 
 	<form action="#" method="post">
-		<ul class="formulaireDeuxColonnes">
+		<ul class="deuxColonnes">
 			<li>
 				<span class="label-information">Sexe</span>
 				<p><?php $fiche->sexe(); ?></p>
@@ -24,6 +24,7 @@
 					<?php $fiche->date_naissance(' / '); ?> <?php $fiche->lieu_de_naissance('à'); ?><br>
 					<?php $fiche->age(); ?>
 				<?php endif; ?></p>
+				<span class="icone-modification" id="modifierDateNaissance" title="Modifier la date de naissance">&#xe855;</span>
 			</li>
 			<li>
 				<span class="label-information">Adresse déclarée</span>

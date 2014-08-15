@@ -8,9 +8,9 @@
 	<form action="ajax.php?script=modification-interaction" method="post">
 	<input type="hidden" name="fiche" value="<?php $fiche->infos('id'); ?>">
 	<input type="hidden" name="interaction" value="<?php $historique->elementActuel(); ?>">
-		<ul class="ficheInteraction">
+		<ul class="ficheInteraction deuxColonnes">
 			<li><!--
-			 --><label for="form-type">Type</label><!--
+			 --><span class="label-information"><label for="form-type">Type</label></span><!--
 			 --><select id="form-type" name="type">
 					<option value="contact"<?php if ($interaction['type'] == 'contact') { echo ' selected'; } ?>>Entrevue</option>
 					<option value="telephone"<?php if ($interaction['type'] == 'telephone') { echo ' selected'; } ?>>Entretien téléphonique</option>
@@ -20,19 +20,19 @@
 			 	</select><!--
 		 --></li>
 			<li><!--
-			 --><label for="form-date">Date</label><!--
+			 --><span class="label-information"><label for="form-date">Date</label></span><!--
 			 --><input type="text" id="form-date" name="date" value="<?php echo date('d/m/Y', strtotime($interaction['date'])); ?>" placeholder="jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"><!--
 		 --></li>
 			<li><!--
-			 --><label for="form-lieu">Lieu</label><!--
+			 --><span class="label-information"><label for="form-lieu">Lieu</label></span><!--
 			 --><input type="text" id="form-lieu" name="lieu" value="<?php echo $interaction['lieu']; ?>"><!--
 		 --></li>
 			<li><!--
-			 --><label for="form-objet">Objet</label><!--
+			 --><span class="label-information"><label for="form-objet">Objet</label></span><!--
 			 --><input type="text" id="form-objet" name="objet" value="<?php echo $interaction['objet']; ?>"><!--
 		 --></li>
 			<li><!--
-			 --><label for="form-notes" class="textarea">Notes</label><!--
+			 --><span class="label-information"><label for="form-notes" class="textarea">Notes</label></span><!--
 			 --><textarea id="form-notes" name="notes"><?php echo $interaction['notes']; ?></textarea><!--
 		 --></li>
 		 	<li class="submit"><!--
