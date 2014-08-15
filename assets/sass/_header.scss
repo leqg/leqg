@@ -1,0 +1,172 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée au header du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			  	HEADER				* 
+ *									*
+ ************************************/
+
+header#top {
+	position: relative;
+	background: $bleu;
+	color: $blanc;
+	font-size: 1em;
+	height: 50px;
+	padding: .33em 1em;
+	width: 100%;
+	z-index: 9999;
+	
+	& > nav {
+		position: absolute; top: 50px; right: 115px;
+		display: block;
+		margin: 0;
+		padding: 0;
+		
+		&::before {
+			position: absolute; top: -50px; right: 1px;
+			display: block;
+			background: rgba($blanc, 0);
+			color: rgba($blanc, 1);
+			content: '\e810';
+			font-family: $icons;
+			font-size: 2em;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			width: 50px;
+			@include transition(all);
+		}
+		
+		&:hover {
+			&::before {
+				background: rgba($blanc, 1);
+				color: rgba($bleu, 1);
+			}
+			
+			ul {
+				display: table;
+				border: 1px solid $bleu;
+				border-collapse: collapse;
+				border-top: none;
+				margin: 0;
+				width: 347px;
+			}
+		}
+		
+		ul {
+			display: none;
+			background: rgba($blanc, 1);
+				
+			a {
+				display: inline-block;
+				color: $bleu;
+				text-decoration: none;
+			}
+				
+			li {
+				display: table-cell;
+				height: 100px;
+				overflow: hidden;
+				padding: 1em;
+				text-align: center;
+				vertical-align: middle;
+				width: 115px;
+				z-index: 500;
+				@include transition(all);
+				
+				&:hover {
+					color: rgba($rouge, 1);
+				}
+				
+				span {
+					display: block;
+					font-family: $icons;
+					font-size: 2.5em;
+				}
+			}
+		}
+	}
+	
+	& > ul {
+		position: absolute; top: 50px;
+		display: block;
+		background: rgba($blanc, 1);
+		color: $bleu;
+		margin: 0;
+		padding: .33em 0 .5em 0;
+		
+		&::before {
+			position: absolute; top: -50px; right: 0;
+			display: block;
+			background: rgba($blanc, 0);
+			border: 0;
+			color: rgba($blanc, 1);
+			font-family: $icons;
+			font-size: 1.66em;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			width: 50px;
+			@include transition(all);
+		}
+		
+		&:hover {
+			border: 1px solid $bleu;
+			border-top: 0;
+		}
+		
+		&:hover::before {
+			background: rgba($blanc, 1);
+			border: 0;
+			color: $bleu;
+		}
+		
+		&:hover li {
+			display: block;
+		}
+		
+		&#parametres {
+			right: 65px;
+			
+			&::before {
+				content: '\e855';
+			}
+		}
+		
+		&#gestion-compte {
+			right: 15px;
+			
+			&::before {
+				content: '\e80a';
+			}
+		}
+		
+		a {
+			color: $bleu;
+			text-decoration: none;
+		}
+		
+		li {
+			display: none;
+			line-height: 1.5em;
+			margin: .15em 0;
+			padding: .6em 1.33em .5em 4em;
+			text-align: right;
+			z-index: 500;
+			@include transition(all);
+			
+			&:hover {
+				background-color: rgba($rouge, .15);
+				color: $rouge;
+			}
+		}
+	}
+}

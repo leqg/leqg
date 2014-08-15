@@ -1,0 +1,189 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage des fiches contacts du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			  	FICHES				* 
+ *									*
+ ************************************/
+
+section#fiche-electeur {
+	width: 50%;
+	
+	header {
+		position: relative;
+		display: table;
+		height: 200px;
+		margin-left: 25%;
+		padding-left: 25px;
+		width: 100%;
+		
+		&::before {
+			position: absolute; top: 37.5px; left: -150px;
+			display: block;
+			background: $bleu;
+			@include border-radius(.5em);
+			color: $blanc;
+			content: '\e80a';
+			font-family: $icons;
+			font-size: 75px;
+			height: 125px;
+			line-height: 125px;
+			text-align: center;
+			width: 125px;
+		}
+		
+		#electeur-icons { display: none; }
+	}
+}
+
+
+nav.navigationFiches {
+	position: relative;
+	display: block;
+	height: 2em;
+	width: 100%;
+	margin: 2em 2em -1em 2em;
+	padding: 0;
+	
+	a {
+		position: absolute; top: 0;
+		border: 1px solid $bleu;
+		@include border-radius(.66em);
+		color: $bleu;
+		font: 400 1.1em / 1.5em $fonts1;
+		padding: .33em 1em;
+		text-decoration: none;
+		
+		&::before {
+			display: inline-block;
+			font-family: $icons;
+			width: 20px;
+		}
+		
+		&.retour {
+			left: 0;
+			
+			&::before { content: '\e884'; }
+		
+			&:hover {
+				background-color: rgba($rouge, .05);
+				border-color: $rouge;
+				color: $bleu;
+			}
+		}
+		&.modifier {
+			left: 50%;
+			left: calc(50% - 60px);
+			
+			&::before { content: '\e836'; }
+			
+			&:hover {
+				background-color: rgba($orange, .05);
+				border-color: $orange;
+				color: $bleu;
+			}
+		}
+	}
+}
+
+
+table#historique-contact {
+	thead tr th:last-of-type {
+		position: relative;
+	}
+	
+	tbody tr td {
+		text-align: center;
+		width: 175px;
+	
+		&:last-of-type {
+			text-align: left;
+			width: auto;
+		}
+	}
+	
+	span.add-historique {
+		position: absolute; top: .45em; right: 10px;
+		display: block;
+		background: $rouge;
+		@include border-radius(50%);
+		color: $blanc;
+		cursor: pointer;
+		font-family: $icons;
+		font-size: .85em;
+		height: 20px;
+		line-height: 20px;
+		opacity: .66;
+		text-align: center;
+		width: 20px;
+		@include transition(all);
+		
+		&::before {
+			position: absolute; top: -4px; right: 30px;
+			display: block;
+			background: $bleu;
+			@include border-radius(.5em);
+			color: $blanc;
+			content: 'Ajouter\00A0 une\00A0 entr\E9 e';
+			font-family: $fonts1;
+			opacity: 0;
+			padding: .4em .66em;
+			text-align: right;
+			width: auto;
+			z-index: 500;
+			@include transition(all);
+		}
+		
+		&:hover, 
+		&:hover::before {
+			opacity: 1;
+		}
+	}
+}
+
+/************************************
+ *									*
+ *			PREMIER CONTACT			* 
+ *									*
+ ************************************/
+
+aside.ficheContact {
+	display: table;
+	
+	#premierContact {
+		display: table-cell;
+		height: 100%;
+		text-align: center;
+		vertical-align: middle;
+		width: 100%;
+		
+		#ajoutInteraction {
+			color: $bleu;
+			cursor: pointer;
+			font-size: 2em;
+			font-weight: 300;
+			
+			&:before {
+				display: block;
+				background-color: $bleu;
+				@include border-radius(50%);
+				color: $blanc;
+				content: '\e851';
+				font-family: $icons;
+				font-size: 75px;
+				height: 150px;
+				line-height: 150px;
+				margin: 25px auto;
+				width: 150px;
+			}
+		}
+	}
+}

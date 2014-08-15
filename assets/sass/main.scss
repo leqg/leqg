@@ -1,0 +1,511 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style principale du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+// imports CSS hors SASS (.css)
+@import "fontello.css";
+@import "fonts.css";
+@import "keyframes.css";
+
+// imports SASS (.scss)
+@import "mixins.scss";
+
+
+/********************************
+ *								*
+ *		 	VARIABLES			* 
+ *								*
+ ********************************/
+ 
+$rouge:		rgba(171,  62,  91, 1);
+$bleu:		rgba( 44,  62,  80, 1);
+$blanc:		rgba(255, 255, 255, 1);
+$noir:		rgba(  0,   0,   0, 1);
+$orange:		rgba(255, 190,  64, 1);
+$jaune:		rgba(253, 231, 180, 1);
+$vert:		rgba(179, 204,  87, 1);
+$lime:		rgba(236, 240, 129, 1);
+$gris:		rgba(205, 203, 202, 1);
+$grisMoyen:	darken($gris, 15%);
+$grisFonce:	darken($gris, 50%);
+$fonts1:		'Roboto', Helvetica, Arial, sans-serif;
+$fonts2:		'Fira Sans', Helvetica, Arial, sans-serif;
+$monospaced:'Fira Mono', monospace;
+$icons:		'fontello';
+
+
+
+/********************************
+ *								*
+ *		 STYLES GÉNÉRAUX			* 
+ *								*
+ ********************************/
+
+a {
+	border-bottom: none;
+	color: $rouge;
+	text-decoration: underline;
+	@include transition(all);
+	@include bordure-fine();
+	
+	&:hover {
+		border-bottom-color: $vert;
+		color: $vert;
+	}
+	
+	&:active {
+		border-bottom-color: $jaune;
+		color: $jaune;
+	}
+	
+	&.nostyle {
+		border-bottom: none;
+		color: inherit;
+		text-decoration: none;
+	}
+}
+
+abbr {
+	border-bottom: none;
+	outline: none;
+}
+
+audio,
+canvas,
+video {
+	display: inline-block;
+}
+
+h1 {
+	font-size: 2.5em;
+	line-height: 40px;
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	display: table-cell;
+	color: $bleu;
+	font: 900 2.66em / 1.25em $fonts1;
+	vertical-align: middle;
+	
+	span {
+		display: block;
+		
+		&:first-of-type {
+			text-transform: uppercase;
+		}
+		
+		&:last-of-type {
+			font-variant: small-caps;
+			font-weight: 500;
+		}
+	}
+}
+
+h3 {
+	border-bottom: 1px solid $rouge;
+	color: $bleu;
+	font: 600 1.3em/1.3em $fonts1;
+	margin: 1.3em 3em 1em 3em;
+	padding: 1.3em 10px .33em 10px;
+	@include bordure-fine();
+}
+
+h6 {
+	border-bottom: 1px solid $rouge;
+	color: $bleu;
+	font: 600 1.3em/1.3em $fonts1;
+	margin: 1.3em 0 1em 0;
+	padding: 1.3em 10px .33em 10px;
+	@include bordure-fine();
+}
+
+img {
+	border: 0;
+	height: auto;
+	vertical-align: middle;
+}
+
+ol,
+ul {
+	padding-left: 2em;
+	
+	&.unstyled {
+		list-style: none;
+	}
+}
+
+pre {
+	background-color: lighten($rouge, 33%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	@include background-size(3em 3em);
+	border: 5px solid lighten($rouge, 10%);
+	color: $noir;
+	font-family: $monospaced;
+	font-size: 1.1em;
+	line-height: 1.5em;
+	margin: 3em;
+	padding: 1.5em;
+	padding-top: 1.55em;
+	text-align: left;
+	
+	span {
+		display: block;
+		padding-left: 2em;
+	}
+}
+
+strong {
+	color: $rouge;
+	font-size: 1em;
+	font-weight: 300;
+}
+
+svg:not(:root) {
+	overflow: hidden;
+}
+
+table {
+	border: 1px solid $rouge;
+	border-collapse: collapse;
+	margin: -.33em 0 1em 0;
+	table-layout: auto;
+	width: 100%;
+	
+	td, th {
+	}
+	
+	thead {
+		tr {
+			background: rgba($rouge, .1);
+			border: 1px solid $rouge;
+			
+			th {
+				border: 1px solid $rouge;
+				font-weight: 700;
+				padding: .5em 1em;
+				text-align: center;
+			}
+		}
+	}
+	
+	tbody {
+		tr {
+			td {
+				border: 1px dotted $rouge;
+				padding: .66em 1em;
+			}
+		}
+	}
+}
+
+
+
+/************************************
+ *									*
+ *		   STYLES DES BLOCS			* 
+ *									*
+ ************************************/
+ 
+* {
+	@include box-sizing();
+} 
+
+html,
+body {
+	background-color: $blanc;
+	color: $noir;
+	font-family: $fonts1;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+html {
+	font-size: 62.5%;
+	font-size: calc(1em * 0.625);
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+body {
+	font-size: 1.4em;
+}
+
+main {
+	position: absolute; top: 0; left: 0;
+	height: 100%;
+	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 0;
+	padding-top: 50px;
+	width: 100%;
+	
+	aside {
+		position: absolute; top: 0; right: 0;
+		height: 100%;
+		padding-top: 50px;
+		width: 40%;
+		
+		& > div {
+			margin: 0;
+			margin-bottom: 1em;
+			padding: 0 5%;
+			width: 100%;
+		}
+	}
+}
+
+section {
+	position: relative;
+
+	&.central {
+		width: 55%;
+	}
+}
+
+ul.deuxColonnes {
+	list-style: none;
+	padding: 0;
+	padding-left: 25%;
+	
+	&.petit {
+		padding-left: 15%;
+	}
+	
+	& > li {
+		position: relative;
+		font: 400 1.2em/1.5em $fonts1;
+		margin-bottom: 1.5em;
+		min-height: 1.5em;
+		
+		&.submit {
+			text-align: center;
+		}
+		
+		& > span.label-information {
+			position: absolute; top: .33em; left: -20%;
+			color: $bleu;
+			font-variant: small-caps;
+			padding-right: 1em;
+			text-align: right;
+			width: 20%;
+		}
+		
+		& > p,
+		& > .bordure-form,
+		& > ul.listeEncadree {
+			border-bottom: 1px solid $bleu;
+			border-left: 1px solid $bleu;
+			font: 300 1.1em / 1.5em $fonts2;
+			padding: .33em 1em;
+		}
+		
+		& > .bordure-form {
+			display: block;
+			padding-right: 0;
+			
+			&:hover {
+				border-bottom-color: $orange;
+				border-left-color: $orange;
+			}
+		}
+		
+		& > p {
+			max-height: calc(1.5em * 5 + .66em);
+			overflow: scroll;
+		}
+		
+		& > span[class^='icone-'] {
+			position: absolute; bottom: .5em; right: .5em;
+			background-color: $blanc;
+			@include border-radius(50%);
+			color: $bleu;
+			cursor: pointer;
+			font-family: $icons;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			width: 30px;
+			@include transition(all);
+			
+			&:hover {
+				background-color: $rouge;
+				color: $blanc;
+			}
+		}
+		
+		& > span[id^='sauvegarde-form-'] {
+			position: absolute; top: .5em; right: .5em;
+			display: none;
+			background-color: $orange;
+			@include border-radius(50%);
+			color: $blanc;
+			font-family: $icons;
+			height: 25px;
+			line-height: 25px;
+			text-align: center;
+			width: 25px;
+		}
+		
+		& > span[id^='reussite-form-'] {
+			position: absolute; top: .5em; right: .5em;
+			display: none;
+			background-color: $vert;
+			@include border-radius(50%);
+			color: $blanc;
+			font-family: $icons;
+			height: 25px;
+			line-height: 25px;
+			text-align: center;
+			width: 25px;
+		}
+		
+		& > span[id^='valider-form-'] {
+			position: absolute; top: .5em; right: .5em;
+			display: none;
+			background-color: $orange;
+			@include border-radius(12.5px);
+			color: $blanc;
+			cursor: pointer;
+			font-family: $fonts1;
+			height: 25px;
+			line-height: 25px;
+			padding: 0 .5em;
+			text-align: center;
+			width: auto;
+		}
+		
+		& > ul.listeEncadree {
+			list-style: none;
+			
+			& > a {
+				color: inherit;
+				text-decoration: none;
+			}
+			
+			li {
+				display: block;
+				border: 1px solid $rouge;
+				@include border-radius(.5em);
+				font-size: 1em;
+				font-weight: 300;
+				margin: 0;
+				margin-bottom: .5em;
+				min-height: 50px;
+				padding: .5em 1em;
+				width: 100%;
+				@include transition(all);
+				
+				&.fichier {
+					position: relative;
+					padding-left: 70px;
+					padding-top: .6em;
+					
+					&.ajoutFichier {
+						border-color: $bleu;
+						color: $bleu;
+						
+						&::before {
+							border-color: $bleu;
+							color: $bleu;
+						}
+						
+						&:hover {
+							background-color: rgba($bleu, .05);
+							
+							&::before {
+								background-color: $bleu;
+								color: $blanc;
+							}
+							
+							strong { border-bottom-color: $bleu; }
+						}
+						
+						strong { color: $bleu; }
+					}
+					
+					&::before {
+						position: absolute; left: 20px; top: .66em; top: calc(50% - 15px);
+						border: 1px solid $rouge;
+						@include border-radius(50%);
+						color: $rouge;
+						content: '\e823';
+						font-family: $icons;
+						font-size: 17px;
+						height: 30px;
+						line-height: 30px;
+						text-align: center;
+						width: 30px;
+						@include transition(all);
+					}
+					
+					&.pdf::before { content: '\e823'; }
+					&.texte::before { content: '\e837'; }
+					&.tableur::before { content: '\e8fd'; }
+					&.presentation::before { content: '\e8f4'; }
+					&.image::before { content: '\e80e'; }
+					&.video::before { content: '\e903'; }
+					&.audio::before { content: '\e800'; }
+					&.archive::before { content: '\e908'; }
+					&.ajoutFichier::before { content: '\e822'; }
+					
+					& > strong { line-height: 30px; }
+					& > p { margin: 0; padding-bottom: .5em; }
+				}
+				
+				&:hover {
+					background-color: rgba($rouge, .05);
+					
+					&::before {
+						background-color: $rouge;
+						color: $blanc;
+					}
+				
+					& > strong {
+						border-bottom: 1px solid $rouge;
+						@include bordure-fine();
+					}
+				}
+				
+				p {
+					font-size: .75em;
+					font-weight: 300;
+					line-height: 1.3em;
+				}
+			}
+		}
+	}
+}
+
+
+
+/************************************
+ *									*
+ *	IMPORT DES STYLES PARTICULIERS	* 
+ *									*
+ ************************************/
+
+// Style dédié au header
+@import "header.scss";
+
+// Style dédié aux fiches contacts
+@import "fiches.scss";
+
+// Style dédié aux formulaires
+@import "forms.scss";
+
+// Style dédié aux listes (de fiches, de tags, etc.)
+@import "listes.scss";

@@ -28,6 +28,19 @@
 	   		box-sizing: border-box;
 }
 
+@mixin appearance($val) {
+	-webkit-appearance: $val;
+	   -moz-appearance: $val;
+	   		appearance: $val;
+}
+
+@mixin rotate($deg) {
+	-webkit-transform: rotate($deg);
+	   -moz-transform: rotate($deg);
+	    -ms-transform: rotate($deg);
+	    		transform: rotate($deg);
+}
+
 @mixin linear-gradient($from, $to) {
 	/* Fallback for sad browsers */
 	background-color: $to;
@@ -41,4 +54,20 @@
 	background-image: -ms-linear-gradient($from, $to);
 	/* W3C */
 	background-image: linear-gradient($from, $to);
+}
+
+@mixin bordure-fine {
+	@media (-webkit-min-device-pixel-ratio: 1.5),
+			  (min--moz-device-pixel-ratio: 1.5),
+				(-o-min-device-pixel-ratio: 3/2),
+				   (min-device-pixel-ratio: 1.5),
+				       (min-resolution: 1.5dppx) {
+		border-bottom-width: .5px;
+	}
+}
+
+@mixin background-size($size) {
+	-webkit-background-size: $size;
+	   -moz-background-size: $size;
+	   		background-size: $size;
 }

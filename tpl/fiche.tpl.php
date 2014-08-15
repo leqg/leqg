@@ -11,50 +11,53 @@
 	
 	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?>"></div>
 
-	<ul class="infos">
-		<li>
-			<label>Sexe</label>
-			<?php $fiche->sexe(); ?>
-		</li>
-		<li>
-			<label>Date de naissance</label>
-			<?php if ($fiche->is_info('naissance_date')) : ?>
-				<?php $fiche->date_naissance(' / '); ?> <?php $fiche->lieu_de_naissance('à'); ?><br>
-				<?php $fiche->age(); ?>
-			<?php endif; ?>
-		</li>
-		<li>
-			<label>Adresse déclarée</label>
-			<?php //$fiche->affichage_adresse(); ?>
-			<?php $carto->adressePostale($fiche->get_immeuble()); ?>
-		</li>
-		<li>
-			<label>Bureau de vote</label>
-			<?php $carto->bureauDeVote($fiche->get_immeuble()); ?><br>
-		</li>
-		<li>
-			<label class="formulaire">Adresse email</label>
-			<input class="fiche" type="email" name="email" id="form-email" placeholder="abc@domaine.fr" value="<?php $fiche->contact('email'); ?>">
-			<span id="valider-form-email">Valider</span>
-			<span id="reussite-form-email">&#xe812;</span>
-		</li>
-		<li>
-			<label class="formulaire">Téléphone portable</label>
-			<input class='fiche' type='text' name='mobile' id='form-mobile' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('mobile', false, true)); ?>">
-			<span id="valider-form-mobile">Valider</span>
-			<span id="reussite-form-mobile">&#xe812;</span>
-		</li>
-		<li>
-			<label class="formulaire">Téléphone fixe</label>
-			<input class='fiche' type='text' name='telephone' id='form-telephone' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('telephone', false, true)); ?>">
-			<span id="valider-form-telephone">Valider</span>
-			<span id="reussite-form-telephone">&#xe812;</span>
-		</li>
-	</ul>
-	
-	<ul>
-		<li id="modifierAdressePostale">Changer l'adresse postale</li>
-	</ul>
+	<form action="#" method="post">
+		<ul class="deuxColonnes">
+			<li>
+				<span class="label-information">Sexe</span>
+				<p><?php $fiche->sexe(); ?></p>
+				<span class="icone-modification" id="modifierSexe" title="Modifier le sexe pour le genre opposé">&#xe839;</span>
+			</li>
+			<li>
+				<span class="label-information">Date de naissance</span>
+				<p><?php if ($fiche->is_info('naissance_date')) : ?>
+					<?php $fiche->date_naissance(' / '); ?> <?php $fiche->lieu_de_naissance('à'); ?><br>
+					<?php $fiche->age(); ?>
+				<?php endif; ?></p>
+				<span class="icone-modification" id="modifierDateNaissance" title="Modifier la date de naissance">&#xe855;</span>
+			</li>
+			<li>
+				<span class="label-information">Adresse déclarée</span>
+				<p><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
+				<span class="icone-modification" id="modifierAdressePostale" title="Modifier l'adresse déclarée">&#xe855;</span>
+			</li>
+			<li>
+				<span class="label-information">Bureau de vote</span>
+				<p><?php $carto->bureauDeVote($fiche->get_immeuble()); ?></p>
+			</li>
+			<li>
+				<span class="label-information"><label for="form-email">Adresse email</label></span>
+				<input class="fiche" type="email" name="email" id="form-email" placeholder="abc@domaine.fr" value="<?php $fiche->contact('email'); ?>">
+				<span id="valider-form-email">Valider</span>
+				<span id="reussite-form-email">&#xe812;</span>
+				<span id="sauvegarde-form-email">&#xe917;</span>
+			</li>
+			<li>
+				<span class="label-information"><label for="form-mobile">Téléphone portable</label></span>
+				<input class='fiche' type='text' name='mobile' id='form-mobile' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('mobile', false, true)); ?>">
+				<span id="valider-form-mobile">Valider</span>
+				<span id="reussite-form-mobile">&#xe812;</span>
+				<span id="sauvegarde-form-mobile">&#xe917;</span>
+			</li>
+			<li>
+				<span class="label-information"><label for="form-telephone">Téléphone fixe</label></span>
+				<input class='fiche' type='text' name='telephone' id='form-telephone' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('telephone', false, true)); ?>">
+				<span id="valider-form-telephone">Valider</span>
+				<span id="reussite-form-telephone">&#xe812;</span>
+				<span id="sauvegarde-form-telephone">&#xe917;</span>
+			</li>
+		</ul>
+	</form>
 </section>
 
 <aside class="ficheContact">
@@ -117,6 +120,10 @@
 				$("#form-email").change(function() {
 					// On récupère les informations
 					var value = $(this).val();
+					
+					// On met en place un affichage d'attente
+					$("#valider-form-email").fadeOut('slow');
+					$("#sauvegarde-form-email").fadeIn('slow');
 				
 					// On appelle l'AJAX
 					$.ajax({
@@ -125,14 +132,18 @@
 						data: { champ: 'email', valeur: value },
 						dataType: 'html'
 					}).done(function(){
-						$("#valider-form-email").fadeOut('slow');
-						$("#reussite-form-email").fadeIn('slow');
+						$("#sauvegarde-form-email").fadeOut('slow');
+						$("#reussite-form-email").fadeIn('slow').delay(1500).fadeOut('slow');
 					});
 				});
 				
 				$("#form-telephone").change(function() {
 					// On récupère les informations
 					var value = $(this).val();
+					
+					// On met en place un affichage d'attente
+					$("#valider-form-telephone").fadeOut('slow');
+					$("#sauvegarde-form-telephone").fadeIn('slow');
 				
 					// On appelle l'AJAX
 					$.ajax({
@@ -141,14 +152,18 @@
 						data: { champ: 'telephone', valeur: value },
 						dataType: 'html'
 					}).done(function(){
-						$("#valider-form-telephone").fadeOut('slow');
-						$("#reussite-form-telephone").fadeIn('slow');
+						$("#sauvegarde-form-telephone").fadeOut('slow');
+						$("#reussite-form-telephone").fadeIn('slow').delay(1500).fadeOut('slow');
 					});
 				});
 				
 				$("#form-mobile").change(function() {
 					// On récupère les informations
 					var value = $(this).val();
+					
+					// On met en place un affichage d'attente
+					$("#valider-form-mobile").fadeOut('slow');
+					$("#sauvegarde-form-mobile").fadeIn('slow');
 				
 					// On appelle l'AJAX
 					$.ajax({
@@ -156,8 +171,8 @@
 						url: 'ajax-form.php?action=maj-fiche&id=<?php $fiche->infos('id'); ?>',
 						data: { champ: 'mobile', valeur: value },
 					}).done(function(){
-						$("#valider-form-mobile").fadeOut('slow');
-						$("#reussite-form-mobile").fadeIn('slow');
+						$("#sauvegarde-form-mobile").fadeOut('slow');
+						$("#reussite-form-mobile").fadeIn('slow').delay(1500).fadeOut('slow');
 					});
 				});
 				
@@ -193,9 +208,7 @@
 				});
 				$("#form-mobile").blur(function(){
 					$("#valider-form-mobile").fadeOut('slow');
-				});		
-		
-				
+				});	
 	});
 </script>
 
