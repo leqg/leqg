@@ -5,6 +5,7 @@
 	$reference = (isset($_POST['reference'])) ? $_POST['reference'] : ''; 
 	$labels = (isset($_POST['labels'])) ? $_POST['labels'] : ''; 
 	$description = (isset($_POST['description'])) ? $_POST['description'] : ''; 
+	$upload = (isset($_FILES['fichier'])) ? $_FILES['fichier'] : '';
 
 	// On commence par récolter les données du POST
 	$donnees = array('nom' => $core->securisation_string($nom),
@@ -15,12 +16,12 @@
 					 'description' => $core->securisation_string($description) );
 	
 	// On commence par préparer le nom final du fichier
-	if ($_POST['reference']) :
-		$extension = $fichier->retourExtension($_FILES['fichier']['name']);
-		$nom_final = $fichier->preparationNomFichier($_POST['reference']) . '-' . time() . '.' . $extension;
+	if ($reference) :
+		$extension = $fichier->retourExtension($upload['name']);
+		$nom_final = $fichier->preparationNomFichier($reference) . '-' . time() . '.' . $extension;
 	else :
-		$extension = $fichier->retourExtension($_FILES['fichier']['name']);
-		$nom_final = $fichier->preparationNomFichier($_POST['nom']) . '-' . time() . '.' . $extension;
+		$extension = $fichier->retourExtension($upload['name']);
+		$nom_final = $fichier->preparationNomFichier($nom) . '-' . time() . '.' . $extension;
 	endif;
 	
 	// On tâche de récupérer et de déplacer le fichier envoyé
