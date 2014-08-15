@@ -3,21 +3,28 @@
 	$interaction = $historique->recherche($_GET['interaction']);
 ?>
 <div id="modifierFiche">
+	<nav class="navigationFiches">
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>">Retour à la fiche</a>
+	</nav>
 	<h6>Modification de l'interaction n°<?php $historique->elementActuel(); ?></h6>
 	
 	<form action="ajax.php?script=modification-interaction" method="post">
 	<input type="hidden" name="fiche" value="<?php $fiche->infos('id'); ?>">
 	<input type="hidden" name="interaction" value="<?php $historique->elementActuel(); ?>">
-		<ul class="ficheInteraction deuxColonnes">
+		<ul class="ficheInteraction deuxColonnes  petit">
 			<li><!--
 			 --><span class="label-information"><label for="form-type">Type</label></span><!--
-			 --><select id="form-type" name="type">
-					<option value="contact"<?php if ($interaction['type'] == 'contact') { echo ' selected'; } ?>>Entrevue</option>
-					<option value="telephone"<?php if ($interaction['type'] == 'telephone') { echo ' selected'; } ?>>Entretien téléphonique</option>
-					<option value="courrier"<?php if ($interaction['type'] == 'courrier') { echo ' selected'; } ?>>Courrier postal</option>
-					<option value="email"<?php if ($interaction['type'] == 'email') { echo ' selected'; } ?>>Courrier électronique</option>
-					<option value="autre"<?php if ($interaction['type'] == 'autre') { echo ' selected'; } ?>>Autre</option>
-			 	</select><!--
+			 --><span class="bordure-form">
+			 		<label class="selectbox" for="form-type">
+				 		<select id="form-type" name="type">
+							<option value="contact"<?php if ($interaction['type'] == 'contact') { echo ' selected'; } ?>>Entrevue</option>
+							<option value="telephone"<?php if ($interaction['type'] == 'telephone') { echo ' selected'; } ?>>Entretien téléphonique</option>
+							<option value="courrier"<?php if ($interaction['type'] == 'courrier') { echo ' selected'; } ?>>Courrier postal</option>
+							<option value="email"<?php if ($interaction['type'] == 'email') { echo ' selected'; } ?>>Courrier électronique</option>
+							<option value="autre"<?php if ($interaction['type'] == 'autre') { echo ' selected'; } ?>>Autre</option>
+					 	</select>
+			 		</label>
+			 	</span><!--
 		 --></li>
 			<li><!--
 			 --><span class="label-information"><label for="form-date">Date</label></span><!--

@@ -13,6 +13,11 @@
 	$liste_tags = '';
 	foreach($tags as $tag) $liste_tags .= '<span class="tag">' . $tag . '</span>';
 ?>
+<nav class="navigationFiches">
+	<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>">Retour à l'historique</a>
+	<a class="modifier" href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>&modifier=true">Modifier</a>
+</nav>
+
 <h6>Interaction n° <?php echo $interaction['id']; ?></h6>
 
 <ul class="deuxColonnes petit">
@@ -53,15 +58,9 @@
 					<?php endif; ?>
 				</li>
 			<?php if(!empty($f['url'])) { ?></a><?php } ?>
-			<a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&fichier=true"><li class="fichier ajoutFichier"><strong>Ajouter un nouveau fichier</li></a>
 			<?php endforeach; ?>
+			<a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&fichier=true"><li class="fichier ajoutFichier"><strong>Ajouter un nouveau fichier</li></a>
 		</ul><!--
  --></li>
  	<?php endif; ?>
-</ul>
-
-<ul class="listeActions">
-	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&modifier=true">Modifier la fiche</a></li>
-	<li>Ajouter à un dossier</li>
-	<li><a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id']); ?>">Retour à l'historique</a></li>
 </ul>

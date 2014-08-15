@@ -176,7 +176,7 @@ svg:not(:root) {
 }
 
 table {
-	border: 1px solid $orange;
+	border: 1px solid $rouge;
 	border-collapse: collapse;
 	margin: -.33em 0 1em 0;
 	table-layout: auto;
@@ -187,11 +187,11 @@ table {
 	
 	thead {
 		tr {
-			background: $jaune;
-			border: 1px solid $orange;
+			background: rgba($rouge, .1);
+			border: 1px solid $rouge;
 			
 			th {
-				border: 1px solid $orange;
+				border: 1px solid $rouge;
 				font-weight: 700;
 				padding: .5em 1em;
 				text-align: center;
@@ -202,7 +202,7 @@ table {
 	tbody {
 		tr {
 			td {
-				border: 1px dotted $orange;
+				border: 1px dotted $rouge;
 				padding: .66em 1em;
 			}
 		}
@@ -291,6 +291,10 @@ ul.deuxColonnes {
 		margin-bottom: 1.5em;
 		min-height: 1.5em;
 		
+		&.submit {
+			text-align: center;
+		}
+		
 		& > span.label-information {
 			position: absolute; top: .33em; left: -20%;
 			color: $bleu;
@@ -301,11 +305,22 @@ ul.deuxColonnes {
 		}
 		
 		& > p,
+		& > .bordure-form,
 		& > ul.listeEncadree {
 			border-bottom: 1px solid $bleu;
 			border-left: 1px solid $bleu;
 			font: 300 1.1em / 1.5em $fonts2;
 			padding: .33em 1em;
+		}
+		
+		& > .bordure-form {
+			display: block;
+			padding-right: 0;
+			
+			&:hover {
+				border-bottom-color: $orange;
+				border-left-color: $orange;
+			}
 		}
 		
 		& > p {
@@ -491,3 +506,6 @@ ul.deuxColonnes {
 
 // Style dédié aux formulaires
 @import "forms.scss";
+
+// Style dédié aux listes (de fiches, de tags, etc.)
+@import "listes.scss";

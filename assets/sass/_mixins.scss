@@ -28,6 +28,19 @@
 	   		box-sizing: border-box;
 }
 
+@mixin appearance($val) {
+	-webkit-appearance: $val;
+	   -moz-appearance: $val;
+	   		appearance: $val;
+}
+
+@mixin rotate($deg) {
+	-webkit-transform: rotate($deg);
+	   -moz-transform: rotate($deg);
+	    -ms-transform: rotate($deg);
+	    		transform: rotate($deg);
+}
+
 @mixin linear-gradient($from, $to) {
 	/* Fallback for sad browsers */
 	background-color: $to;

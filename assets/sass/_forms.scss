@@ -22,7 +22,8 @@ form {
 input[type='text'],
 input[type='email'],
 input[type='phone'],
-input[type='password'] {
+input[type='password'],
+textarea {
 	border: 0;
 	border-bottom: 1px solid $bleu;
 	border-left: 1px solid $bleu;
@@ -63,3 +64,140 @@ input[type='password'] {
 		}
 	}
 }
+
+input[type="submit"] {
+	background-color: $blanc;
+	border: 1px solid $bleu;
+	@include border-radius(.25em);
+	color: $bleu;
+	cursor: pointer;
+	font: 400 1.1em / 1.5em $fonts2;
+	margin: 0 auto;
+	padding: .33em 1em .25em 1em;
+	width: auto;
+	@include transition(all);
+	
+	&:hover {
+		background-color: rgba($vert, .5);
+	}
+}
+	
+input[type='file'] {
+	display: none;
+}
+
+textarea {
+	height: calc(1.5em * 7 + .66em);
+	resize: none;
+}
+
+
+
+/************************************
+ *									*
+ *			BOUTON UPLOAD			* 
+ *									*
+ ************************************/
+
+span.bouton-upload {
+	border: 1px solid $bleu;
+	@include border-radius(.66em);
+	color: $bleu;
+	font: 400 .85em / 1.5em $fonts1;
+	margin-right: 1em;
+	padding: .15em .66em;
+	padding-left: .33em;
+	text-decoration: none;
+	
+	&:hover {
+		background-color: rgba($vert, .25);
+		border-color: $vert;
+		color: $bleu;
+	}
+	
+	&::before {
+		display: inline-block;
+		font-family: $icons;
+		content: '\e82d';
+		text-align: center;
+		width: 30px;
+	}
+}
+
+span.upload-file {
+	color: $grisMoyen;
+	font-family: $fonts2;
+	font-size: .85em;
+}
+
+
+
+/************************************
+ *									*
+ *			  SELECTBOX				* 
+ *									*
+ ************************************/
+ 
+label.selectbox {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+
+	select {
+		display: inline-block;
+		@include appearance(none);
+		border: none;
+		@include border-radius(4px);
+		background: $blanc;
+		color: $noir;
+		cursor: pointer;
+		font: 300 1em / 1.5em $fonts2;
+		margin: 0;
+		margin-left: -.33em;
+		margin-top: -.33em;
+		outline: none;
+		padding: 3px;
+		padding-left: 0;
+		width: 100%;
+		
+		@media screen and (-webkit-min-device-pixel-ratio: 0) {
+			padding-right: 18px;
+		}
+	}
+	
+	&::after {
+		position: absolute; top: -4px; right: 10px;
+		background: $blanc;
+		border: 1px solid $bleu;
+		@include border-radius(50%);
+		color: $grisFonce;
+		content: '\e834';
+		font-family: $icons;
+		font-size: .85em;
+		height: 25px;
+		line-height: 23px;
+		padding: 0;
+		pointer-events: none;
+		text-align: center;
+		width: 25px;
+		@include rotate(90deg);
+		@include transition(all);
+	}
+	
+	&:hover::after {
+		background: $bleu;
+		color: $blanc;
+	}
+	
+	&::before {
+		position: absolute; top: -8px; right: 0;
+		display: block;
+		background: $blanc;
+		content: '';
+		height: 35px;
+		line-height: 35px;
+		pointer-events: none;
+		width: 35px;
+	}
+}
+ 
