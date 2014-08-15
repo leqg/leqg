@@ -1,5 +1,6 @@
 <?php
 	// On récupère l'ID de la fiche à modifier
+	if (isset($_GET['interaction'])) :
 	$interaction = $historique->recherche($_GET['interaction']);
 ?>
 <div id="modifierFiche">
@@ -48,3 +49,4 @@
 		</ul>
 	</form>
 </div>
+<?php endif; ?>
