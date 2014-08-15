@@ -41,10 +41,10 @@
 	 --><span class="label-information">Notes</span><!--
 	 --><p><?php echo nl2br($interaction['notes']); ?></p><!--
  --></li>
-	<?php if ($fichier->nombreFichiers('interaction' , $interaction['id'])) : ?>
 	<li><!--
 	 --><span class="label-information">Fichiers</span><!--
 	 --><ul class="listeEncadree">
+			<?php if ($fichier->nombreFichiers('interaction' , $interaction['id'])) : ?>
 			<?php $fichiers = $fichier->listeFichiers('interaction' , $interaction['id']); foreach ($fichiers as $f) : ?>
 			<?php if(!empty($f['url'])) { ?><a href="uploads/<?php echo $f['url']; ?>" target="_blank"><?php } ?>
 				<li class="fichier <?php echo $fichier->extension($f['id']); ?>">
@@ -58,9 +58,8 @@
 					<?php endif; ?>
 				</li>
 			<?php if(!empty($f['url'])) { ?></a><?php } ?>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
 			<a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&fichier=true"><li class="fichier ajoutFichier"><strong>Ajouter un nouveau fichier</li></a>
 		</ul><!--
  --></li>
- 	<?php endif; ?>
 </ul>
