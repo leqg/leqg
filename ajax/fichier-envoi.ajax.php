@@ -1,11 +1,18 @@
 <?php
+	$nom = (isset($_POST['nom'])) ? $_POST['nom'] : ''; 
+	$contact = (isset($_POST['contact'])) ? $_POST['contact'] : ''; 
+	$objet = (isset($_POST['interaction'])) ? $_POST['interaction'] : ''; 
+	$reference = (isset($_POST['reference'])) ? $_POST['reference'] : ''; 
+	$labels = (isset($_POST['labels'])) ? $_POST['labels'] : ''; 
+	$description = (isset($_POST['description'])) ? $_POST['description'] : ''; 
+
 	// On commence par récolter les données du POST
-	$donnees = array('nom' => $core->securisation_string($_POST['nom']),
-					 'contact' => $core->securisation_string($_POST['contact']),
-					 'objet' => $core->securisation_string($_POST['interaction']),
-					 'reference' => $core->securisation_string($_POST['reference']),
-					 'labels' => $core->securisation_string($_POST['labels']),
-					 'description' => $core->securisation_string($_POST['description']) );
+	$donnees = array('nom' => $core->securisation_string($nom),
+					 'contact' => $core->securisation_string($contact),
+					 'objet' => $core->securisation_string($objet),
+					 'reference' => $core->securisation_string($reference),
+					 'labels' => $core->securisation_string($labels),
+					 'description' => $core->securisation_string($description) );
 	
 	// On commence par préparer le nom final du fichier
 	if ($_POST['reference']) :
