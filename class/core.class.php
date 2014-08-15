@@ -168,20 +168,20 @@ class core {
 	
 	
 	// tpl_go_to ( $page [ , $arguments (array) , bool ] permet d'effectuer une redirection vers une page demandée en suivant le format de nomage des pages du site, tout en ayant une multitude d'arguments
-		public	function tpl_go_to( $page , $arguments = array() , $redirect = false ) {
+		public	function tpl_go_to( $page = null , $arguments = array() , $redirect = false ) {
 			// On vérifie que les arguments sont bien sous la forme d'un tableau
 			if (!is_array($arguments)) return false;
 			
-			// On prépare l'adresse de la page d'arrivée
-			$adresse = 'index.php?page=' . $page;
-			 
-			// On fait une boucle selon le nombre d'arguments
-			foreach ($arguments as $key => $value) {
-				$adresse .= '&' . $key . '=' . $value;
-			}
-			
-			// On lance la redirection
 			if ( !empty( $page ) ) {
+				// On prépare l'adresse de la page d'arrivée
+				$adresse = 'index.php?page=' . $page;
+				 
+				// On fait une boucle selon le nombre d'arguments
+				foreach ($arguments as $key => $value) {
+					$adresse .= '&' . $key . '=' . $value;
+				}
+				
+				// On lance la redirection
 				if ($redirect) {
 					header('Location: ' . $adresse );
 				} else {
