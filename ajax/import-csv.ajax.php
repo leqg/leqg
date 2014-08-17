@@ -1,7 +1,7 @@
 <?php
 	
 	// On récupère le nom du fichier
-	$file = $_POST['fichier'];
+	$file = $_GET['fichier'];
 
 	// On lance la lecture du fichier
 	$data = $csv->lectureFichier('csv/' . $file . '.csv');
