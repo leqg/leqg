@@ -41,7 +41,7 @@
 		
 		
 	// On commence d'abord par récupérer l'ID de la ville en question
-		$query = 'SELECT * FROM communes WHERE commune_nom_propre LIKE "' . $core->formatage_recherche($adresse['ville']) . '" LIMIT 0,1';
+		$query = 'SELECT * FROM communes WHERE commune_nom LIKE "' . $core->formatage_recherche($adresse['ville']) . '" LIMIT 0,1';
 		$sql = $db->query($query); $row = $sql->fetch_assoc();
 		$code['ville'] = $row['commune_id'];
 		
@@ -90,7 +90,7 @@
 		
 		// On cherche le titre des villes et du département corrigé
 		$donnees = $fiche->renommerVille($birth['ville'], $birth['departement']);
-		$query = 'SELECT * FROM communes WHERE departement_id LIKE "' . $donnees[1] . '" AND commune_nom_propre LIKE "%' . $donnees[0] . '%" LIMIT 0,1';
+		$query = 'SELECT * FROM communes WHERE departement_id LIKE "' . $donnees[1] . '" AND commune_nom LIKE "%' . $donnees[0] . '%" LIMIT 0,1';
 		$sql = $db->query($query); $nb = $sql->num_rows;
 		
 			// Si le département n'est pas à l'étranger et qu'il y a une commune trouvée, on note son code
