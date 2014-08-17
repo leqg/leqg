@@ -2,7 +2,7 @@
 	
 	// On récupère le nom du fichier
 	$file = (empty($_POST['fichier'])) ? $_GET['fichier'] : $_POST['fichier'];
-
+	$core->debug($file);
 	// On lance la lecture du fichier
 	$data = $csv->lectureFichier('csv/' . $file . '.csv');
 
