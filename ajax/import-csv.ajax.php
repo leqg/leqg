@@ -105,6 +105,9 @@
 		$code['birth'] = $birth;
 		
 		$code = array_merge($adresse, $code);
+	
+	// On formate les noms et prénoms
+	$etatCivil = array('nom' => htmlentities($line[2]), 'nomUsage' => htmlentities($line[3]), 'prenoms' => htmlentities($line[4]));
 		
 		
 	// On va préparer l'ajout du contact à la base de données
@@ -118,9 +121,9 @@
 										  contact_electeur,
 										  contact_electeur_numero)
 				  VALUES (' . $code['immeuble'] . ',
-				  		  "' . htmlentities($line[2]) . '",
-				  		  "' . htmlentities($line[3]) . '",
-				  		  "' . htmlentities($line[4]) . '",
+				  		  "' . $etatCivil['nom'] . '",
+				  		  "' . $etatCivil['nomUsage'] . '",
+				  		  "' . $etatCivil['prenoms'] . '",
 				  		  "' . $code['birth']['day'] . '",
 				  		  "' . $code['birth']['ville'] . '",
 				  		  "' . $line[5] . '",
