@@ -5,7 +5,6 @@
 	
 	// On lance la lecture du fichier
 	$data = $csv->lectureFichier('csv/' . $file . '.csv');
-	$core->debug($data);
 
 	// On lance le calcul du nombre de lignes
 	$row = 0;
