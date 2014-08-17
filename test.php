@@ -1,12 +1,17 @@
 <?php
 error_reporting(E_ALL);
 
-$mysqli = new mysqli('localhost', 'leqg', 'evecsanobi-67', 'leqg');
+require_once('includes.php');
 
 
-//include 'class/core.class.php';
-//include 'class/user.class.php';
-//$user = new user($mysqli);
+// On teste la recherche
+$recherche = 'rue du';
+$rue = $core->formatage_recherche($recherche);
+$rues = $carto->recherche_rue('67482', $rue);
+
+$core->debug($rues);
+
+
 
 
 // Traitement de la date de naissance

@@ -256,6 +256,7 @@ main {
 	aside {
 		position: absolute; top: 0; right: 0;
 		height: 100%;
+		overflow: scroll;
 		padding-top: 50px;
 		width: 40%;
 		
@@ -344,6 +345,14 @@ ul.deuxColonnes {
 			&:hover {
 				background-color: $rouge;
 				color: $blanc;
+				
+				a { color: $blanc; }
+			}
+			
+			a {
+				color: $bleu;
+				text-decoration: none;
+				@include transition(all);
 			}
 		}
 		
@@ -408,8 +417,11 @@ ul.deuxColonnes {
 				padding: .5em 1em;
 				width: 100%;
 				@include transition(all);
-				
-				&.fichier {
+								
+				&.fichier,
+				&.ville,
+				&.rue,
+				&.immeuble {
 					position: relative;
 					padding-left: 70px;
 					padding-top: .6em;
@@ -465,6 +477,10 @@ ul.deuxColonnes {
 					& > strong { line-height: 30px; }
 					& > p { margin: 0; padding-bottom: .5em; }
 				}
+				
+				&.ville::before { content: '\e844'; }
+				&.rue::before { content: '\e841'; }
+				&.immeuble::before { content: '\e842'; }
 				
 				&:hover {
 					background-color: rgba($rouge, .05);

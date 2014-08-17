@@ -546,7 +546,7 @@ class fiche extends core {
 				
 		// On prépare la requête BDD
 			$query = 'UPDATE		contacts
-					  SET		immeuble_id = ' . $immeuble['id'] . '
+					  SET		immeuble_id = ' . $immeuble . '
 					  WHERE		contact_id = ' . $contact;
 			
 		// On effectue la requête dans la BDD et on retourne le résultat

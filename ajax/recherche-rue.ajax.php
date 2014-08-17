@@ -8,7 +8,7 @@
 	
 	// On lance la recherche
 	$ville = $carto->ville($ville);
-	$rues = $carto->recherche_rue($ville['id'], $rue);
+	$rues = $carto->recherche_rue($ville['id'], $rue);	
 	$i = 1;
 	
 	foreach ($rues as $rue) :
@@ -18,7 +18,7 @@
 		if ($return == 'form' && $i == 1) echo ' selected>'; 
 		if ($return == 'form') echo '>';
 
-			echo $core->tpl_transform_texte($rue['nom']) . ' (' . $ville['nom'] . ')';
+			echo $rue['nom'] . ' (' . $ville['nom'] . ')';
 		
 		if ($return == 'liste') echo '</li>';
 		if ($return == 'form') echo '</option>';

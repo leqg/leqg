@@ -27,34 +27,22 @@ class carto extends core {
 	// recherche_ville( string ) permet de renvoyer une liste de toutes les villes répondant à la recherche proposée
 	public	function recherche_ville( $search ) {
 		// On sécurise la recherche
-			$search = $this->securisation_string($search);
+			$search = $this->formatage_recherche($search);
 			
 		// On prépare le tableau de destination finale des résultats
 			$villes = array();
 			
-		// On prépare la requête de recherche exacte
-			$query = 'SELECT		*
-					  FROM		communes
-					  WHERE		commune_nom = "' . $search . '"
-					  ORDER BY	commune_nom ASC';
-		
-		// On lance la requête et on tri les résultats dans un tableau $villes
-			$sql = $this->db->query($query);
-			
-			while ($row = $sql->fetch_assoc()) $villes[] = $this->formatage_donnees($row);
-		
 		// On prépare la requête de recherche approximative (mais en excluant les correspondances exactes trouvées plus haut
 			$query = 'SELECT		*
 					  FROM		communes
-					  WHERE		commune_nom LIKE "%' . $search . '%"
-					  AND		commune_nom != "'.$search.'"
+					  WHERE		commune_nom_propre LIKE "%' . $search . '%"
 					  ORDER BY	commune_nom ASC
 					  LIMIT		0, 25';
 		
 		// On lance la requête et on tri les résultats dans un tableau $villes
 			$sql = $this->db->query($query);
 			
-			while ($row = $sql->fetch_assoc()) $villes[] = $this->formatage_donnees($row);
+			while ($row = $sql->fetch_assoc()) { $villes[] = $this->formatage_donnees($row); }
 
 		// On retourne le tableau
 			return $villes;
@@ -67,36 +55,23 @@ class carto extends core {
 			$search = $this->securisation_string($search);
 		
 		// On vérifie que la ville entrée est bien un champ numérique
-		if (!is_numeric($ville)) return false;
+			if (!is_numeric($ville)) return false;
 		
 		// On prépare le tableau de destination finale des résultats
 			$rues = array();
-		
-		// On prépare la requête de recherche exacte
-			$query = 'SELECT		*
-					  FROM		rues
-					  WHERE		commune_id = ' . $ville . '
-					  AND		rue_nom = "' . $search . '"';
-			
-		// On lance la requête et on tri les résultats dans un tableau $rues
-			$sql = $this->db->query($query);
-			
-			while ($row = $sql->fetch_assoc()) $rues[] = $this->formatage_donnees($row);
 		
 		// On prépare la requête de recherche approximatinve (mais en excluant les correspondances exactes trouvées plus haut
 			$query = 'SELECT		*
 					  FROM		rues
 					  WHERE		commune_id = ' . $ville . '
 					  AND		rue_nom LIKE "%' . $search . '%"
-					  AND		rue_nom != "' . $search . '"
-					  ORDER BY	rue_nom ASC
-					  LIMIT		0, 25';
+					  ORDER BY	rue_nom ASC';
 		
 		// On lance la requête et on tri les résultats dans le tableau $rues
 			$sql = $this->db->query($query);
 			
 			while ($row = $sql->fetch_assoc()) $rues[] = $this->formatage_donnees($row);
-		
+			
 		// On retourne le tableau
 			return $rues;
 	}
