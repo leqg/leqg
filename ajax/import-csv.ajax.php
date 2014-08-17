@@ -132,7 +132,7 @@
 		
 		
 	// On ajoute le contact à la base de données
-		$db->query($query); $core->debug($db);
+		$db->query($query);
 	
 	endforeach;
 	
