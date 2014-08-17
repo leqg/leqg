@@ -107,6 +107,11 @@
 		$code = array_merge($adresse, $code);
 		
 		
+		// On transforme les informations de nom, prénom, etc.
+		$etatCivil = array('nom' => htmlentities($line[2]),
+						   'nomUsage' => htmlentities($line[3]),
+						   'prenoms' => htmlentities($line[4])); $core->debug($etatCivil);
+		
 	// On va préparer l'ajout du contact à la base de données
 		$query = 'INSERT INTO	contacts (immeuble_id,
 										  contact_nom,
@@ -118,9 +123,9 @@
 										  contact_electeur,
 										  contact_electeur_numero)
 				  VALUES (' . $code['immeuble'] . ',
-				  		  "' . htmlentities($line[2]) . '",
-				  		  "' . htmlentities($line[3]) . '",
-				  		  "' . htmlentities($line[4]) . '",
+				  		  "' . $etatCivil['nom'] . '",
+				  		  "' . $etatCivil['nomUsage'] . '",
+				  		  "' . $etatCivil['prenoms'] . '",
 				  		  "' . $code['birth']['day'] . '",
 				  		  "' . $code['birth']['ville'] . '",
 				  		  "' . $line[5] . '",
