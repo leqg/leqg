@@ -38,7 +38,7 @@
 		$("#liste-fichiers li").click(function(){
 			var file =  $(this).data('file');
 			
-			$("#analyse").html('Fichier CSV en cours d\'import...<br>');
+			$("#analyse").html('Fichier CSV ' + file + ' en cours d\'import...<br>');
 			
 			$.ajax({
 				type: 'POST',
