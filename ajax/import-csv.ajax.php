@@ -131,7 +131,7 @@
 				  		  "' . $line[5] . '",
 				  		  "1", "' . $line[1] . '")';
 		
-		
+		$core->debug($query);
 	// On ajoute le contact à la base de données
 		$db->query($query);
 	
