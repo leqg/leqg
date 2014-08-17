@@ -128,6 +128,8 @@
 				  		  "' . $code['birth']['ville'] . '",
 				  		  "' . $line[5] . '",
 				  		  "1", "' . $line[1] . '")';
+				  
+				  echo $query.'<br>';
 				  		  
 	// On ajoute le contact à la base de données
 		$db->query($query);
