@@ -6,6 +6,7 @@
 koala-config.json
 
 uploads/*
+!uploads/index.html
 
 csv/*.traite.csv
 config.ini
