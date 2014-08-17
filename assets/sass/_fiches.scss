@@ -110,7 +110,7 @@ table#historique-contact {
 		}
 	}
 	
-	span.add-historique {
+	.add-historique {
 		position: absolute; top: .45em; right: 10px;
 		display: block;
 		background: $rouge;
@@ -123,6 +123,7 @@ table#historique-contact {
 		line-height: 20px;
 		opacity: .66;
 		text-align: center;
+		text-decoration: none;
 		width: 20px;
 		@include transition(all);
 		
