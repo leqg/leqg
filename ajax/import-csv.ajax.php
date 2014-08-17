@@ -2,9 +2,10 @@
 	
 	// On récupère le nom du fichier
 	$file = (empty($_POST['fichier'])) ? $_GET['fichier'] : $_POST['fichier'];
-	$core->debug($file);
+	
 	// On lance la lecture du fichier
 	$data = $csv->lectureFichier('csv/' . $file . '.csv');
+	$core->debug($data);
 
 	// On lance le calcul du nombre de lignes
 	$row = 0;
