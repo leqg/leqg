@@ -1,39 +1,12 @@
--- phpMyAdmin SQL Dump
--- version 4.1.12
--- http://www.phpmyadmin.net
---
--- Client :  localhost:3306
--- Généré le :  Sam 16 Août 2014 à 20:57
--- Version du serveur :  5.5.34
--- Version de PHP :  5.5.10
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
---
--- Base de données :  `test`
---
-
--- --------------------------------------------------------
-
---
--- Structure de la table `arrondissements`
---
-
 CREATE TABLE `arrondissements` (
-  `arrondissement_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `arrondissement_numero` smallint(2) unsigned NOT NULL,
+  `arrondissement_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `arrondissement_numero` smallint(2) unsigned zerofill NOT NULL,
   `departement_id` smallint(3) unsigned NOT NULL,
   `arrondissement_nom` varchar(50) NOT NULL,
+  `arrondissement_chef_lieu` int(5) NOT NULL,
   PRIMARY KEY (`arrondissement_id`),
   UNIQUE KEY `Arrondissement` (`departement_id`,`arrondissement_numero`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=343 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `bureaux`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `bureaux` (
   `canton_id` smallint(4) unsigned NOT NULL,
@@ -46,26 +19,14 @@ CREATE TABLE `bureaux` (
   PRIMARY KEY (`commune_id`,`bureau_numero`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `cantons`
---
-
 CREATE TABLE `cantons` (
   `canton_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
-  `departement_id` smallint(3) unsigned NOT NULL,
   `arrondissement_id` smallint(2) unsigned NOT NULL,
   `canton_numero` smallint(3) unsigned NOT NULL,
   `canton_nom` varchar(50) NOT NULL,
+  `canton_chef_lieu` int(5) NOT NULL,
   PRIMARY KEY (`canton_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4056 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `codes_postaux`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `codes_postaux` (
   `code_postal` mediumint(5) unsigned zerofill NOT NULL,
@@ -74,26 +35,14 @@ CREATE TABLE `codes_postaux` (
   UNIQUE KEY `commune_id` (`commune_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `communes`
---
-
 CREATE TABLE `communes` (
-  `commune_id` mediumint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `commune_id` mediumint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `departement_id` smallint(3) unsigned NOT NULL,
-  `commune_numero` smallint(3) unsigned zerofill NOT NULL,
-  `commune_nom` varchar(60) NOT NULL,
+  `commune_nom` varchar(100) NOT NULL,
+  `commune_nom_propre` varchar(100) NOT NULL,
   PRIMARY KEY (`commune_id`),
   KEY `departement_id` (`departement_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36682 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `compte`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `compte` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -107,13 +56,7 @@ CREATE TABLE `compte` (
   `demande_reinitialisation` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`,`email`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `contacts`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `contacts` (
   `contact_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -142,27 +85,17 @@ CREATE TABLE `contacts` (
   PRIMARY KEY (`contact_id`),
   KEY `contact_nom` (`contact_nom`,`contact_nom_usage`,`contact_prenoms`),
   KEY `commune_id` (`immeuble_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=144371 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `departements`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `departements` (
   `departement_id` smallint(3) unsigned NOT NULL,
   `region_id` smallint(2) unsigned DEFAULT NULL,
-  `departement_nom` varchar(23) DEFAULT NULL,
+  `departement_nom` varchar(50) DEFAULT NULL,
+  `departement_chef_lieu` int(5) NOT NULL,
   PRIMARY KEY (`departement_id`),
+  UNIQUE KEY `departement_chef_lieu` (`departement_chef_lieu`),
   KEY `region_id` (`region_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `dossiers`
---
 
 CREATE TABLE `dossiers` (
   `dossier_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -174,13 +107,7 @@ CREATE TABLE `dossiers` (
   `dossier_date_fermeture` datetime DEFAULT NULL,
   PRIMARY KEY (`dossier_id`),
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `fichiers`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `fichiers` (
   `fichier_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -201,13 +128,7 @@ CREATE TABLE `fichiers` (
   KEY `compte_id` (`compte_id`),
   KEY `objet_id` (`interaction_id`),
   KEY `dossier_id` (`dossier_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `historique`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `historique` (
   `historique_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -225,13 +146,7 @@ CREATE TABLE `historique` (
   KEY `compte_id` (`compte_id`),
   KEY `contact_id_2` (`contact_id`),
   KEY `historique_objet` (`historique_objet`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `immeubles`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `immeubles` (
   `immeuble_id` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
@@ -241,26 +156,16 @@ CREATE TABLE `immeubles` (
   PRIMARY KEY (`immeuble_id`),
   KEY `bureau_id` (`bureau_id`),
   KEY `rue_id` (`rue_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23522 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `regions`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `regions` (
   `region_id` smallint(2) unsigned NOT NULL,
-  `region_nom` varchar(30) DEFAULT NULL,
+  `region_nom` varchar(50) DEFAULT NULL,
+  `region_chef_lieu` int(5) NOT NULL,
   PRIMARY KEY (`region_id`),
-  KEY `region` (`region_id`,`region_nom`)
+  KEY `region` (`region_id`,`region_nom`),
+  KEY `region_chef_lieu` (`region_chef_lieu`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `rues`
---
 
 CREATE TABLE `rues` (
   `rue_id` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
@@ -268,13 +173,7 @@ CREATE TABLE `rues` (
   `rue_nom` tinytext NOT NULL,
   PRIMARY KEY (`rue_id`),
   KEY `commune_id` (`commune_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1763 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `taches`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `taches` (
   `tache_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -287,13 +186,7 @@ CREATE TABLE `taches` (
   `tache_terminee` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tache_id`),
   KEY `compte_id` (`compte_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `tags`
---
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tags` (
   `tag_nom` varchar(100) NOT NULL,
