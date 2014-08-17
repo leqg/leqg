@@ -45,6 +45,22 @@
 		$sql = $db->query($query); $row = $sql->fetch_assoc();
 		$code['ville'] = $row['commune_id'];
 		
+	
+	// On recherche si le bureau de vote existe déjà
+		$query = 'SELECT * FROM bureaux WHERE bureau_numero = ' . $bureau . ' AND commune_id = ' . $code['ville'];
+		$sql = $db->query($query); $nb = $sql->num_rows;
+		
+			// S'il existe déjà un bureau de vote dans la base de données, on en récupère l'identifiant
+			if ($nb == 1) {
+				$row = $sql->fetch_assoc();
+				$code['bureau'] = $row['bureau_id'];
+			} else {
+				// On rajoute le bureau de vote dans la base de données
+				$query = 'INSERT INTO bureaux (`commune_id`, `bureau_numero`) VALUES (' . $code['ville'] . ', ' . $bureau . ')';
+				$db->query($query);
+				$code['bureau'] = $db->insert_id;
+			}
+		
 		
 	// On continu en vérifiant si la rue existe déjà
 		$query = 'SELECT * FROM rues WHERE commune_id = ' . $code['ville'] . ' AND rue_nom LIKE "' . $adresse['rue'] . '" LIMIT 0,1';
@@ -72,7 +88,7 @@
 				$code['immeuble'] = $row['immeuble_id'];
 			} else {
 				// On rajoute l'immeuble dans la base de données
-				$query = 'INSERT INTO immeubles (bureau_id, rue_id, immeuble_numero) VALUES (' . $bureau . ', ' . $code['rue'] . ', "' . $adresse['immeuble'] . '")';
+				$query = 'INSERT INTO immeubles (bureau_id, rue_id, immeuble_numero) VALUES (' . $code['bureau'] . ', ' . $code['rue'] . ', "' . $adresse['immeuble'] . '")';
 				$db->query($query);
 				$code['immeuble'] = $db->insert_id;
 			}
