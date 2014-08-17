@@ -35,7 +35,7 @@
 		$rue = explode(' ', $line[10], 2);
 		$ville = explode(' ', $line[13], 2);
 		$adresse['immeuble'] = $rue[0];
-		$adresse['rue'] = $rue[1];
+		$adresse['rue'] = $core->tpl_transform_texte($rue[1]);
 		$adresse['code_postal'] = $ville[0];
 		$adresse['ville'] = $ville[1];
 		
