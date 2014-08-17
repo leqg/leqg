@@ -1,6 +1,6 @@
 <?php
 
-$data = $csv->lectureFichier('data/communes_bon.csv');
+$data = $csv->lectureFichier('data/communes.csv');
 
 // On initialise le tableau des clés
 $keys = array();
