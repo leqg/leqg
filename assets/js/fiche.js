@@ -27,14 +27,6 @@ var fiche = function() {
 		
 	
 	
-	// interactions permettant le passage entre les volets
-	
-		$("#ajoutInteraction").click(function(){ // Cliquer pour ajouter une première interaction
-			$(".ficheContact div").hide(); // On ferme tous les volets
-			$("#nouvelleInteraction").show(); // On affiche la création de fiche
-		});
-	
-	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
 		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
@@ -77,6 +69,11 @@ var fiche = function() {
 		else if (getURLVar('modifierImmeuble')) {
 			$(".ficheContact div").hide();
 			$("#changementImmeuble").show();
+		}
+		
+		else if (getURLVar('nouvelleInteraction')) {
+			$(".ficheContact div").hide();
+			$("#nouvelleInteraction").show();
 		}
 		
 	

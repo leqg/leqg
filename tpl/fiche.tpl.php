@@ -82,12 +82,15 @@
 		
 		// On charge ici les volets qui peuvent être appelés quelque soit la présence ou non d'un historique
 		
-			// On charge le script de changement d'adresse
-			$core->tpl_load('aside', 'changement-adresse');
+			// On charge ici les volets qui ne seront appelés que lors des appels javascript
+			$core->tpl_load('aside', 'nouvelleinteraction');
 		
 		
-		// On charge ici les volets qui ne seront appelés que lors des appels javascript
-		$core->tpl_load( 'aside' , 'nouvelleinteraction' ); // Appelé pour créer une nouvelle fiche dans l'historique
+		// On charge les informations de changement d'adresse, si c'est demandé
+			if (isset($_GET['modifierAdresse']) || isset($_GET['modifierRue']) || isset($_GET['modifierImmeuble'])) :
+				// On charge le script de changement d'adresse
+				$core->tpl_load('aside', 'changement-adresse');
+			endif;
 		
 		
 		// On prépare ici la liste des div qui seront créé vides pour être remplis par des scripts AJAX

@@ -1,4 +1,8 @@
 <div id="nouvelleInteraction">
+	<nav class="navigationFiches">
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>">Retour à la fiche</a>
+	</nav>
+	
 	<h6>Ajout d'une nouvelle interaction</h6>
 	
 	<ul class="ficheInteraction deuxColonnes petit">
