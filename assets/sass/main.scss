@@ -329,7 +329,8 @@ ul.deuxColonnes {
 			overflow: scroll;
 		}
 		
-		& span[class^='icone-'] {
+		& > span[class^='icone-'],
+		& a.icone {
 			position: absolute; bottom: .5em; right: .5em;
 			background-color: $blanc;
 			@include border-radius(50%);
@@ -345,14 +346,6 @@ ul.deuxColonnes {
 			&:hover {
 				background-color: $rouge;
 				color: $blanc;
-				
-				a { color: $blanc; }
-			}
-			
-			a {
-				color: $bleu;
-				text-decoration: none;
-				@include transition(all);
 			}
 		}
 		
