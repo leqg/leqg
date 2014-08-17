@@ -53,7 +53,7 @@ class core {
 				$string = addslashes($string);
 			
 			// On transforme les caractères spéciaux en entités HTML
-				$string = htmlentities($string, ENT_NOQUOTES, $charset);
+				$string = htmlentities($string, ENT_HTML5, $charset);
 			
 			// On retourne la chaîne de caractères sécurisée
 				return $string;

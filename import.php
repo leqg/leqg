@@ -46,7 +46,7 @@
 				data: { 'fichier': file },
 				dataType: 'html'
 			}).done(function(data){
-				$("#analyse").append('Fichier CSV importé !<br>');
+				$("#analyse").append('<br>' + data + '<br><br>Fichier CSV importé !<br>');
 			});
 		});
 	</script>

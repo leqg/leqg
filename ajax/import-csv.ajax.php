@@ -107,9 +107,10 @@
 		$code = array_merge($adresse, $code);
 	
 	// On formate les noms et prénoms
-	$etatCivil = array('nom' => htmlentities($line[2]), 'nomUsage' => htmlentities($line[3]), 'prenoms' => htmlentities($line[4]));
-		
-		
+		$etatCivil = array(	'nom' => htmlentities(utf8_encode($line[2]), ENT_HTML5, 'UTF-8'),
+							'nomUsage' => htmlentities(utf8_encode($line[3]), ENT_HTML5, 'UTF-8'),
+							'prenoms' => htmlentities(utf8_encode($line[4]), ENT_HTML5, 'UTF-8'));
+		//$core->debug($etatCivil);
 	// On va préparer l'ajout du contact à la base de données
 		$query = 'INSERT INTO	contacts (immeuble_id,
 										  contact_nom,
@@ -131,11 +132,11 @@
 		
 		
 	// On ajoute le contact à la base de données
-		$db->query($query);
+		$db->query($query); $core->debug($db);
 	
 	endforeach;
 	
 	
 	// On renomme le dossier pour ne pas le relancer
-	rename('csv/' . $file . '.csv', 'csv/' . $file . '.traite.csv');
+	//rename('csv/' . $file . '.csv', 'csv/' . $file . '.traite.csv');
 ?>
