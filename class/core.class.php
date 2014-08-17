@@ -243,6 +243,9 @@ class core {
 			// On mets en place des majuscules automatiques
 			$affichage = ucwords($affichage);
 			
+			// On ajoute un espace au début pour les rues sans numéro
+			$affichage = ' ' . $affichage;
+			
 			// On remplace certaines abbréviations par leur signification
 			$affichage = str_replace(' Pce ', ' place ', $affichage);
 			
