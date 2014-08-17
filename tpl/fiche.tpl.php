@@ -25,7 +25,7 @@
 			<li>
 				<span class="label-information">Adresse déclarée</span>
 				<p><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
-				<span class="icone-modification"><a title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'])); ?>&modifierAdresse=true">&#xe855;</a></span>
+				<a title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'])); ?>&modifierAdresse=true"><span class="icone-modification">&#xe855;</span></a>
 			</li>
 			<li>
 				<span class="label-information">Bureau de vote</span>
