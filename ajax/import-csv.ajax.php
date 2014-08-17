@@ -13,20 +13,20 @@
 	foreach ($data as $line) :
 	
 		/*
-		*	[0] => bureau de vote
+			[0] => bureau de vote
 			[1] => numéro d'électeur
 			[2] => nom de famille
 			[3] => nom d'usage
 			[4] => prénoms
 			[5] => sexe ( M / F )
-		*	[6] => date de naissance
-		*	[7] => département de naissance
-		*	[8] => ville de naissance
+			[6] => date de naissance
+			[7] => département de naissance
+			[8] => ville de naissance
 			[9] => 
-		*	[10] => adresse, ligne 1
-		*	[11] => adresse, ligne 2
-		*	[12] => adresse, ligne 3
-		*	[13] => code postal et ville	
+			[10] => adresse, ligne 1
+			[11] => adresse, ligne 2
+			[12] => adresse, ligne 3
+			[13] => code postal et ville	
 		*/
 		
 		
@@ -128,8 +128,7 @@
 				  		  "' . $code['birth']['ville'] . '",
 				  		  "' . $line[5] . '",
 				  		  "1", "' . $line[1] . '")';
-		
-		$core->debug($query);
+				  		  
 	// On ajoute le contact à la base de données
 		$db->query($query);
 	
