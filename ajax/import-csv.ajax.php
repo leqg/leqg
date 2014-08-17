@@ -109,7 +109,7 @@
 		
 		// On transforme les informations de nom, prénom, etc.
 		$etatCivil = array('nom' => htmlentities($line[2]), 'nomUsage' => htmlentities($line[3]), 'prenoms' => htmlentities($line[4]));
-		
+		print_r($etatCivil); echo '<br>';
 	// On va préparer l'ajout du contact à la base de données
 		$query = 'INSERT INTO	contacts (immeuble_id,
 										  contact_nom,
@@ -129,11 +129,11 @@
 				  		  "' . $line[5] . '",
 				  		  "1", "' . $line[1] . '")';
 				  
-				  echo $query.'<br>';
+		echo $query.'<br>';
 				  		  
 	// On ajoute le contact à la base de données
 		$db->query($query);
-	
+		print_r($db); echo '<br><br>';
 	endforeach;
 	
 	
