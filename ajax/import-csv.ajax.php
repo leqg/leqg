@@ -118,9 +118,9 @@
 										  contact_electeur,
 										  contact_electeur_numero)
 				  VALUES (' . $code['immeuble'] . ',
-				  		  "' . htmlentities($line[2]) . '",
-				  		  "' . htmlentities($line[3]) . '",
-				  		  "' . htmlentities($line[4]) . '",
+				  		  "' . utf8_decode($line[2]) . '",
+				  		  "' . utf8_decode($line[3]) . '",
+				  		  "' . utf8_decode($line[4]) . '",
 				  		  "' . $code['birth']['day'] . '",
 				  		  "' . $code['birth']['ville'] . '",
 				  		  "' . $line[5] . '",
