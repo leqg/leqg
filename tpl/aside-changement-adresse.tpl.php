@@ -17,7 +17,7 @@
 </div>
 <div id="changementRue">
 	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierAdresse=true">Retour à la ville</a>
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierAdresse=true">Retour à la sélection de la ville</a>
 	</nav>
 	<h6>Modification de l'adresse déclarée</h6>
 	
@@ -39,7 +39,7 @@
 
 <div id="changementImmeuble">
 	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierAdresse=true">Retour à la ville</a>
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierRue=true">Retour à la sélection de la rue</a>
 	</nav>
 	<h6>Modification de l'adresse déclarée</h6>
 	
