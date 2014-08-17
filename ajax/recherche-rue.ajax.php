@@ -18,7 +18,7 @@
 		if ($return == 'form' && $i == 1) echo ' selected>'; 
 		if ($return == 'form') echo '>';
 
-			echo ucwords(strtolower($rue['nom'])) . ' (' . $ville['nom'] . ')';
+			echo $core->tpl_transform_texte($rue['nom']) . ' (' . $ville['nom'] . ')';
 		
 		if ($return == 'liste') echo '</li>';
 		if ($return == 'form') echo '</option>';

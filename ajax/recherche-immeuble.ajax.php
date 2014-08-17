@@ -20,7 +20,7 @@
 		if ($return == 'form' && $i == 1) echo ' selected>'; 
 		if ($return == 'form') echo '>';
 
-			echo ucwords(strtolower($immeuble['numero'])) . ' ' . $rue['nom'];
+			echo ucwords(strtolower($immeuble['numero'])) . ' ' . $core->tpl_transform_texte($rue['nom']);
 		
 		if ($return == 'liste') echo '</li>';
 		if ($return == 'form') echo '</option>';
