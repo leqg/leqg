@@ -329,7 +329,7 @@ ul.deuxColonnes {
 			overflow: scroll;
 		}
 		
-		& > span[class^='icone-'] {
+		& span[class^='icone-'] {
 			position: absolute; bottom: .5em; right: .5em;
 			background-color: $blanc;
 			@include border-radius(50%);
