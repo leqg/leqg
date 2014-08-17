@@ -9,6 +9,7 @@ CREATE TABLE `arrondissements` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `bureaux` (
+  `bureau_id` int(11) NOT NULL AUTO_INCREMENT,
   `canton_id` smallint(4) unsigned NOT NULL,
   `commune_id` mediumint(5) unsigned NOT NULL,
   `bureau_numero` int(5) unsigned NOT NULL,
@@ -16,8 +17,8 @@ CREATE TABLE `bureaux` (
   `bureau_adresse` varchar(255) NOT NULL,
   `bureau_cp` int(5) unsigned zerofill NOT NULL,
   `bureau_ville` varchar(65) NOT NULL,
-  PRIMARY KEY (`commune_id`,`bureau_numero`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`bureau_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `cantons` (
   `canton_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
@@ -56,7 +57,7 @@ CREATE TABLE `compte` (
   `demande_reinitialisation` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`,`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `contacts` (
   `contact_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -85,7 +86,7 @@ CREATE TABLE `contacts` (
   PRIMARY KEY (`contact_id`),
   KEY `contact_nom` (`contact_nom`,`contact_nom_usage`,`contact_prenoms`),
   KEY `commune_id` (`immeuble_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `departements` (
   `departement_id` smallint(3) unsigned NOT NULL,
@@ -156,7 +157,7 @@ CREATE TABLE `immeubles` (
   PRIMARY KEY (`immeuble_id`),
   KEY `bureau_id` (`bureau_id`),
   KEY `rue_id` (`rue_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `regions` (
   `region_id` smallint(2) unsigned NOT NULL,
@@ -173,7 +174,7 @@ CREATE TABLE `rues` (
   `rue_nom` tinytext NOT NULL,
   PRIMARY KEY (`rue_id`),
   KEY `commune_id` (`commune_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `taches` (
   `tache_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
