@@ -2,8 +2,6 @@
 	// On importe d'abord les fichiers associés
 	require_once 'includes.php';
 	
-	$core->debug($db);
-	
 	// On importe le header
 	$core->tpl_header();
 ?>
