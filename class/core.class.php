@@ -257,7 +257,6 @@ class core {
 			$affichage = str_replace(' Du ', ' du ', $affichage);
 			$affichage = str_replace(' Des ', ' des ', $affichage);
 			$affichage = str_replace(' Aux ', ' aux ', $affichage);
-			$affichage = str_replace(' A. ', ' aux ', $affichage);
 			$affichage = str_replace(' Le ', ' le ', $affichage);
 			$affichage = str_replace(' La ', ' la ', $affichage);
 			$affichage = str_replace(' Les ', ' les ', $affichage);

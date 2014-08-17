@@ -276,9 +276,10 @@ class carto extends core {
 				  LEFT JOIN rues				ON	rues.rue_id = immeubles.rue_id
 				  LEFT JOIN	communes			ON	communes.commune_id = rues.commune_id
 				  LEFT JOIN codes_postaux	ON	codes_postaux.commune_id = communes.commune_id
-				  LEFT JOIN	bureaux			ON	bureaux.bureau_numero = immeubles.bureau_id AND communes.commune_id = bureaux.commune_id
+				  LEFT JOIN	bureaux			ON	bureaux.bureau_id = immeubles.bureau_id
 				  LEFT JOIN	cantons			ON	cantons.canton_id = bureaux.canton_id
-				  LEFT JOIN	departements		ON	departements.departement_id = cantons.departement_id
+				  LEFT JOIN arrondissements	ON	arrondissements.arrondissement_id = cantons.arrondissement_id
+				  LEFT JOIN	departements		ON	departements.departement_id = arrondissements.departement_id
 				  LEFT JOIN	regions			ON	regions.region_id = departements.region_id
 				  WHERE		immeubles.immeuble_id = ' . $immeuble;
 
@@ -331,7 +332,7 @@ class carto extends core {
 		$informations = $this->detailAdresse( $immeuble );
 
 		// On retraite les informations
-		$bureau['numero'] = $informations['bureau_id'];
+		$bureau['numero'] = $informations['bureau_numero'];
 		$bureau['nom'] = mb_convert_case($informations['bureau_nom'], MB_CASE_TITLE, 'utf-8');
 		$bureau['ville'] = $this->tpl_transform_texte($informations['commune_nom']);
 		
