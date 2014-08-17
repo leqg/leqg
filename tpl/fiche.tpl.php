@@ -3,10 +3,6 @@
 <section id="fiche-electeur" data-fiche="<?php $fiche->the_ID(); ?>">
 	<header>
 		<h2><?php $fiche->affichage_nom('span'); ?></h2>
-	
-		<div id="electeur-icons">
-			<?php if ($fiche->get_infos('electeur')) : ?><span id="est-electeur" title="Électeur">&#xe840;</span><?php endif; ?>
-		</div>
 	</header>
 	
 	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?>"></div>
