@@ -154,5 +154,5 @@
 	
 	
 	// On renomme le dossier pour ne pas le relancer
-	//rename('csv/' . $file . '.csv', 'csv/' . $file . '.traite.csv');
+	rename('csv/' . $file . '.csv', 'csv/' . $file . '.traite.csv');
 ?>
