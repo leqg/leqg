@@ -21,11 +21,14 @@
 			$file = explode('.', $file);
 			
 		// On vérifie que le fichier est bien un script .ajax.php
-			if ($file[1] == 'ajax' && $file[2] == 'php') :
-			
-			// Si oui, on rajoute le script à la liste des scripts
-				$scripts[] = $file[0];
-			
+			if (isset($file[1], $file[2])) :
+				if ($file[1] == 'ajax' && $file[2] == 'php') :
+				
+				// Si oui, on rajoute le script à la liste des scripts
+					$scripts[] = $file[0];
+				
+				endif;
+				
 			endif;
 		
 		endwhile;
