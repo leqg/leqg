@@ -260,6 +260,10 @@ main {
 		padding-top: 50px;
 		width: 40%;
 		
+		@media all and (max-width: 1500px) {
+			width: 45%;
+		}
+		
 		& > div {
 			margin: 0;
 			margin-bottom: 1em;
@@ -282,8 +286,16 @@ ul.deuxColonnes {
 	padding: 0;
 	padding-left: 25%;
 	
+	@media all and (max-width: 1500px) {
+		padding-left: 35%;
+	}
+	
 	&.petit {
 		padding-left: 15%;
+	
+		@media all and (max-width: 1500px) {
+			padding-left: 25%;
+		}
 	}
 	
 	& > li {
@@ -303,6 +315,11 @@ ul.deuxColonnes {
 			padding-right: 1em;
 			text-align: right;
 			width: 20%;
+	
+			@media all and (max-width: 1500px) {
+				left: -35%;
+				width: 35%;
+			}
 		}
 		
 		& > p,

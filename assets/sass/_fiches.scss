@@ -25,6 +25,10 @@ section#fiche-electeur {
 		padding-left: 25px;
 		width: 100%;
 		
+		@media all and (max-width: 1500px) {
+			margin-left: 35%;
+		}
+		
 		&::before {
 			position: absolute; top: 37.5px; left: -150px;
 			display: block;
@@ -103,6 +107,12 @@ table#historique-contact {
 	tbody tr td {
 		text-align: center;
 		width: 175px;
+		
+		@media all and (max-width: 1500px) {
+			&:nth-of-type(2) {
+				width: 115px;
+			}
+		}
 	
 		&:last-of-type {
 			text-align: left;

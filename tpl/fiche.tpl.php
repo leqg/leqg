@@ -39,7 +39,7 @@
 				<span id="sauvegarde-form-email">&#xe917;</span>
 			</li>
 			<li>
-				<span class="label-information"><label for="form-mobile">Téléphone portable</label></span>
+				<span class="label-information"><label for="form-mobile">Téléphone mobile</label></span>
 				<input class='fiche' type='text' name='mobile' id='form-mobile' placeholder='00 00 00 00 00' value="<?php $core->tpl_phone($fiche->contact('mobile', false, true)); ?>">
 				<span id="valider-form-mobile">Valider</span>
 				<span id="reussite-form-mobile">&#xe812;</span>
