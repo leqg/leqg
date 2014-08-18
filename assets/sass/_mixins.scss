@@ -41,6 +41,13 @@
 	    		transform: rotate($deg);
 }
 
+@mixin scale($val) {
+	-webkit-transform: scale($val);
+	   -moz-transform: scale($val);
+	    -ms-transform: scale($val);
+	    		transform: scale($val);
+}
+
 @mixin linear-gradient($from, $to) {
 	/* Fallback for sad browsers */
 	background-color: $to;

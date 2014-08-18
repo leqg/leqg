@@ -21,10 +21,14 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	
 	if (empty($_GET['page'])) {
 	
-		//$core->tpl_load('index');
-	
-		// On redirige temporairement vers contact
-		$core->tpl_redirection('contacts');
+		// On charge le header du site
+		$core->tpl_header();
+		
+		// On charge l'affichage des services de la plateforme
+		$core->tpl_load('services');
+		
+		// On charge le footer du site
+		$core->tpl_footer();
 	
 	}
 	

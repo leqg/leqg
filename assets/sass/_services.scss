@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage des composants du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			   SERVICES				* 
+ *									*
+ ************************************/
+
+table#services {
+	border: none;
+	height: 90%;
+	margin: 0 auto;
+	width: 75%;
+	
+	tr {
+		border: none;
+		
+		td {
+			border: none;
+			text-align: center;
+			vertical-align: middle;
+			width: 25%;
+			
+			a {
+				color: $bleu;
+				text-decoration: none;
+				
+				p {
+					font-family: $fonts2;
+					font-size: 2em;
+					font-weight: 300;
+					@include transition(all);
+				}
+			
+				span {
+					display: block;
+					background-color: $bleu;
+					@include border-radius(.25em);
+					@include shadow(0, 0, .5em, $grisMoyen);
+					color: $blanc;
+					font-family: $icons;
+					font-size: 100px;
+					height: 150px;
+					line-height: 150px;
+					margin: .5em auto;
+					width: 150px;
+					@include transition(all);
+				}
+				
+				&:hover {
+					p {
+						color: $rouge;
+						font-weight: 400;
+					}
+				
+					span {
+						background-color: $rouge;
+						@include scale(1.15);
+					}
+				}
+			}
+		}
+	}
+}
