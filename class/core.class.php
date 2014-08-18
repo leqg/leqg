@@ -9,13 +9,15 @@ class core {
 	
 	// Définition des propriétés
 	private $db; // lien à la base de données
+	private $noyau; // Lien vers la base de données centrale du système
 	private $url; // le nom de domaine du serveur utilisé
 	
 	
 	// Définition des méthodes	
 	
-	public	function __construct($db, $url) {
+	public	function __construct($db, $noyau, $url) {
 		$this->db = $db;
+		$this->noyau = $noyau;
 		$this->url = $url;
 	}
 	
@@ -169,6 +171,9 @@ class core {
 	
 	// tpl_go_to ( $page [ , $arguments (array) , bool ] permet d'effectuer une redirection vers une page demandée en suivant le format de nomage des pages du site, tout en ayant une multitude d'arguments
 		public	function tpl_go_to( $page = null , $arguments = array() , $redirect = false ) {
+			// Si $page == true, on demande une redirection immédiate vers la page d'accueil
+			if (is_bool($page) && $page === true) { header('Location: index.php'); }
+		
 			// On vérifie que les arguments sont bien sous la forme d'un tableau
 			if (!is_array($arguments)) return false;
 			

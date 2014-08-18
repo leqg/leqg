@@ -17,19 +17,30 @@ header('Content-Type: text/html; charset=utf-8');
 // On récupère le fichier de configuration
 $config = parse_ini_file('config.ini', true);
 
-// Appel de la classe MySQL
-$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'test');
+// Appel de la classe MySQL du noyau
+$noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
 
 // Constructeur de classes
-
 function __autoload($class_name) {
 	include 'class/'.$class_name.'.class.php';
 }
 
+// On regarde les cookies
+if (isset($_COOKIE['leqg-user'])) {
+	$query = 'SELECT * FROM users LEFT JOIN clients ON users.client_id = clients.client_id WHERE user_id = ' . $_COOKIE['leqg-user'];
+	$sql = $noyau->query($query);
+	$row = $sql->fetch_assoc();
+	
+	$base = $row['client_bdd'];
+}
+
+// Appel de la classe MySQL du compte
+$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
+
 // On appelle l'ensemble des classes générales au site
-$core =			new core($db, $config['SERVER']['url']);
+$core =			new core($db, $noyau, $config['SERVER']['url']);
 $csv =			new csv($db, $config['SERVER']['url']);
-$user =			new user($db, $config['SERVER']['url']);
+$user =			new user($db, $noyau, $config['SERVER']['url']);
 $fiche =			new fiche($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
 $tache =			new tache($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
 $dossier =		new dossier($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);

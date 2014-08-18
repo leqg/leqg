@@ -9,42 +9,47 @@ class user extends core {
 	
 	// Définition des propriétés
 	private $db; // Lien à la base de données
+	private $noyau; // Lien vers la base de données centrale du système
+	private $url; // le nom de domaine du serveur utilisé
 	private	$user; // Informations liées à l'utilisateur
-	private $url;
 	
 	
 	// Définition des méthodes	
 	
 	// Méthode permettant de vérifier si un utilisateur est connecté ou non
 	
-	public	function __construct($db, $url) {
+	public	function __construct($db, $noyau, $url) {
 		$this->db = $db;
+		$this->noyau = $noyau;
 		$this->url = $url;
 	}
 	
 	public	function statut_connexion() {
 		if (isset($_COOKIE['leqg-user'])) {
 			// La connexion existe, on construit les propriétés
-			$query = "SELECT * FROM compte WHERE id = '" . $_COOKIE['leqg-user'] . "'";
-			$sql = $this->db->query($query);
+			$query = "SELECT * FROM users WHERE user_id = " . $_COOKIE['leqg-user'];
+			$sql = $this->noyau->query($query);
 			$donnees = $sql->fetch_assoc();
 			
 			// On vérifie si une demande de réinitialisation de la connexion n'a pas été demandée
-			if ($_COOKIE['leqg-date'] >= strtotime($donnees['demande_reinitialisation'])) {
+			if (strtotime($donnees['user_lasttime']) >= strtotime($donnees['user_reinit'])) {
 				
-				$user = array(	'id'		=> $donnees['id'] ,
-								'login'		=> $donnees['login'] ,
-								'nickname'	=> $donnees['nickname'] ,
-								'email'		=> $donnees['email'] ,
-								'phone'		=> $donnees['phone'] );
+				// On prépare le tableau des informations
+				$user = $this->formatage_donnees($donnees);
 				
+				// On y supprime le mot de passe crypté et la date de dernière réinitialisation
+				unset($user['password']);
+				unset($user['reinit']);
+				
+				// On retourne le reste des informations dans les paramètres globaux de la classe
 				$this->user = $user;
 				
-			return true;
+				return true;
+				
 			} else {
 				// Dans ce cas, si une réinitialisation a été demandée depuis, on demande la déconnexion et on renvoit sur la page d'accueil
 				$this->deconnexion();
-				$this->tpl_redirection();
+				$this->tpl_go_to(true);
 				return false;
 			}
 		} else {
@@ -55,27 +60,27 @@ class user extends core {
 	
 	// Méthodes permettant d'afficher les données de l'utilisateur
 	
-	public	function the_id() { echo $this->user['id']; }
 	public	function get_the_id() { return $this->user['id']; }
+	public	function the_id() { echo $this->get_the_id(); }
 	
-	public	function the_login() { echo $this->user['login']; }
-	public	function get_the_login() { return $this->user['login']; }
+	public	function get_the_login() { return $this->user['email']; }
+	public	function the_login() { echo $this->get_the_login(); }
 	
-	public	function the_nickname() { echo $this->user['nickname']; }
-	public	function get_the_nickname() { return $this->user['nickname']; }
+	public	function get_the_nickname() { return $this->user['firstname'] . ' ' . $this->user['lastname']; }
+	public	function the_nickname() { echo $this->get_the_nickname(); }
 	
-	public	function the_email() { echo $this->user['email']; }
 	public	function get_the_email() { return $this->user['email']; }
+	public	function the_email() { echo $this->get_the_email(); }
 	
-	public	function the_phone($espaces = false) { if ($espaces) { echo $this->tpl_phone($this->user['phone']); } else { echo $this->user['phone']; } }
 	public	function get_the_phone($espaces = false) { if ($espaces) { return $this->tpl_phone($this->user['phone']); } else { return $this->user['phone']; } }
+	public	function the_phone($espaces = false) { echo $this->get_the_phone($espaces); }
 	
 	
 	// Méthode de vérification de l'exitence d'un login 
 	
 	private	function existence_login($login) {
-		$query = "SELECT login FROM compte WHERE login = '" . $login . "'";
-		$sql = $this->db->query($query);
+		$query = "SELECT user_email FROM users WHERE user_email = '" . $login . "'";
+		$sql = $this->noyau->query($query);
 		$nb_login = $sql->num_rows;
 		
 		if ($nb_login == 1) : return true; else : return false; endif;
@@ -93,24 +98,24 @@ class user extends core {
 	
 	public	function verification_pass($pass, $login) {
 		// On recherche le mot de passe du compte demandé
-		$query = "SELECT pass FROM compte WHERE login = '" . $login . "'";
-		$sql = $this->db->query($query);
+		$query = "SELECT user_password FROM users WHERE user_email = '" . $login . "'";
+		$sql = $this->noyau->query($query);
 		$donnees = $sql->fetch_assoc();
 		
 		$pass_envoye = $this->encrypt_pass($pass);
 		
-		if ($donnees['pass'] == $pass_envoye) : return true; else : return false; endif;
+		if ($donnees['user_password'] == $pass_envoye) : return true; else : return false; endif;
 	}
 	
 	
 	// Méthode permettant de trouver l'ID d'un utilisateur à partir de son login
 	
 	public	function get_id_by_login($login) {
-		$query = "SELECT id FROM compte WHERE login = '" . $login . "'";
-		$sql = $this->db->query($query);
+		$query = "SELECT user_id FROM users WHERE user_email = '" . $login . "'";
+		$sql = $this->noyau->query($query);
 		$donnees = $sql->fetch_assoc();
 		
-		return $donnees['id'];
+		return $donnees['user_id'];
 	}
 	
 	
@@ -126,19 +131,18 @@ class user extends core {
 				
 				// On lance le cookie
 				setcookie('leqg-user', $id_user, $expire);
-				setcookie('leqg-date', time(), $expire);  // cookie de sécurité, pour permettre la réinitialisation à distance
 				
 				// On défini le timestamp dans la base de données
-				$this->db->query('UPDATE compte SET derniere_connexion = NOW() WHERE compte.id = ' . $id_user);
+				$this->noyau->query('UPDATE users SET user_lasttime = NOW() WHERE user_id = ' . $id_user);
 				
-				$this->tpl_redirection();
+				$this->tpl_go_to(true);
 			}
 			else {
-				$this->tpl_redirection('login', 'pass', 'erreur');
+				$this->tpl_go_to('login', array( 'erreur' => 'pass' ), true);
 			}
 		}
 		else {
-			$this->tpl_redirection('login', 'login', 'erreur');
+			$this->tpl_go_to('login', array( 'erreur' => 'login' ), true);
 		}
 	}
 	
@@ -149,7 +153,6 @@ class user extends core {
 		// On détruit tout simplement le cookie
 		
 		if (setcookie('leqg-user', 0, time()-1)) {
-			setcookie('leqg-date', 0, time()-1);
 			return true;
 		} else {
 			return false;
@@ -159,11 +162,13 @@ class user extends core {
 	
 	// méthode de demande de rénitialisation de toutes les connexions au compte
 	
-	public	function reinitialisation() {
-		// On lance une demande de réinitialisation à l'instant T
-		$this->db->query('UPDATE compte SET demande_reinitialisation = NOW() WHERE compte.id = ' . $_COOKIE['leqg-user']);
+	public	function reinitialisation( $compte ) {
+		if (!is_numeric($compte)) return false;
 		
-		$this->redirection();
+		// On lance une demande de réinitialisation à l'instant T
+		$this->noyau->query('UPDATE users SET user_reinit = NOW() WHERE user_id = ' . $compte);
+		
+		$this->tpl_go_to(true);
 	}
 }
 
