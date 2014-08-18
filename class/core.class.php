@@ -131,6 +131,19 @@ class core {
 		}
 		
 	
+	// sortie ( string ) est une méthode permettant de traiter une contenu puis de l'afficher
+		public	function sortie( $texte ) {
+			// On retraite le contenu envoyé pour l'affichage
+			$texte = stripslashes($texte);
+			
+			// On l'affiche
+			echo $texte;
+			
+			// Petit retour pour la forme
+			return true;
+		}
+	
+	
 // Méthodes liées au templating
 	
 	// tpl_load( slug [, nom = null ] )  appelles le fichier slug-nom.tpl.php

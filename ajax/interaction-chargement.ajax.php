@@ -45,7 +45,7 @@
 	 --><span class="label-information">Dossier</span><!--
 	 --><ul class="listeEncadree">
  		<?php $d = $historique->dossier($interaction['id']); if ($d) : ?>
-	 		<a href="<?php $core->tpl_go_to('dossier', array('id' => $d['id'])); ?>"><li class="dossier <?php if ($d['statut'] == 0) { echo 'ferme'; } ?>"><strong>Dossier <?php echo $d['nom']; ?></strong><p><?php echo $d['description']; ?></p></li></a>
+	 		<a href="<?php $core->tpl_go_to('dossier', array('id' => $d['id'])); ?>"><li class="dossier <?php if ($d['statut'] == 0) { echo 'ferme'; } ?>"><strong>Dossier <?php $core->sortie($d['nom']); ?></strong><p><?php $core->sortie($d['description']); ?></p></li></a>
  		<?php else : ?>
 	 		<a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'], 'dossier' => 'true')); ?>"><li class="dossier ajoutDossier"><strong>Ajouter à un dossier</strong></li></a>
  		<?php endif; ?>
