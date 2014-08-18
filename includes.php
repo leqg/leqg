@@ -31,8 +31,9 @@ if (isset($_COOKIE['leqg-user'])) {
 	$sql = $noyau->query($query);
 	$row = $sql->fetch_assoc();
 	
+	$cookie = $_COOKIE['leqg-user'];
 	$base = $row['client_bdd'];
-}
+} else { $base = null; $cookie = null; }
 
 // Appel de la classe MySQL du compte
 $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
@@ -41,12 +42,12 @@ $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD'][
 $core =			new core($db, $noyau, $config['SERVER']['url']);
 $csv =			new csv($db, $config['SERVER']['url']);
 $user =			new user($db, $noyau, $config['SERVER']['url']);
-$fiche =			new fiche($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
-$tache =			new tache($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
-$dossier =		new dossier($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
-$historique =	new historique($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
-$fichier =		new fichier($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
-$carto =			new carto($db, $_COOKIE['leqg-user'], $config['SERVER']['url']);
+$fiche =			new fiche($db, $cookie, $config['SERVER']['url']);
+$tache =			new tache($db, $cookie, $config['SERVER']['url']);
+$dossier =		new dossier($db, $cookie, $config['SERVER']['url']);
+$historique =	new historique($db, $cookie, $config['SERVER']['url']);
+$fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
+$carto =			new carto($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
 global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
