@@ -65,7 +65,9 @@ textarea {
 	}
 }
 
-input[type="submit"] {
+input[type="submit"],
+button,
+a.bouton {
 	background-color: $blanc;
 	border: 1px solid $bleu;
 	@include border-radius(.25em);
@@ -77,8 +79,20 @@ input[type="submit"] {
 	width: auto;
 	@include transition(all);
 	
+	&.boutonRouge {
+		border: 1px solid $rouge;
+	}
+	
 	&:hover {
 		background-color: rgba($vert, .5);
+		
+		&.boutonJaune {
+			background-color: rgba($orange, .33);
+		}
+		
+		&.boutonRouge {
+			background-color: rgba($rouge, .33);
+		}
 	}
 }
 	

@@ -208,5 +208,26 @@ class historique extends core {
 			if ($return) : return $affichage; else : echo $affichage; endif;
 			
 		else : return false; endif;
-	} 
+	}
+	
+	
+	// dossier( int ) permet de retrouver les informations sur le dossier lié à une fiche événement
+	public	function dossier( $id ) {
+		// On vérifie que l'id est au bon format
+		if (!is_numeric($id)) return false;
+		
+		// On récupère les informations sur l'événement demandé
+		$interaction = $this->recherche($id);
+		
+		// On récupère les informations concernant le dossier rattaché s'il en existe un
+		if ($interaction['dossier_id'] != NULL) {
+			$query = 'SELECT * FROM dossiers WHERE dossier_id = ' . $interaction['dossier_id'];
+			$sql = $this->db->query($query);
+			$row = $sql->fetch_assoc();
+			
+			return $this->formatage_donnees($row);
+		} else {
+			return false;
+		}
+	}
 }

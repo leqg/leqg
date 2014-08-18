@@ -28,7 +28,7 @@ var fiche = function() {
 	
 	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
-		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier')) {
+		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
 			
 			$(".ficheContact div").hide(); // On ferme tous les volets
@@ -74,6 +74,16 @@ var fiche = function() {
 		else if (getURLVar('nouvelleInteraction')) {
 			$(".ficheContact div").hide();
 			$("#nouvelleInteraction").show();
+		}
+		
+		else if (getURLVar('dossier')) {
+			$(".ficheContact div").hide();
+			$("#lierUnDossier").show();
+		}
+		
+		else if (getURLVar('creerDossier')) {
+			$(".ficheContact div").hide();
+			$("#creerUnDossier").show();
 		}
 		
 	

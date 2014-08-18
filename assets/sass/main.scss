@@ -127,6 +127,17 @@ h6 {
 	@include bordure-fine();
 }
 
+i {
+	display: inline-block;
+	font-family: $icons;
+	font-size: 1.15em;
+	font-style: normal;
+	
+	&.miroir {
+		@include miroir();
+	}
+}
+
 img {
 	border: 0;
 	height: auto;
@@ -429,6 +440,7 @@ ul.deuxColonnes {
 				@include transition(all);
 								
 				&.fichier,
+				&.dossier,
 				&.ville,
 				&.rue,
 				&.immeuble {
@@ -436,7 +448,8 @@ ul.deuxColonnes {
 					padding-left: 70px;
 					padding-top: .6em;
 					
-					&.ajoutFichier {
+					&.ajoutFichier,
+					&.ajoutDossier {
 						border-color: $bleu;
 						color: $bleu;
 						
@@ -491,6 +504,8 @@ ul.deuxColonnes {
 				&.ville::before { content: '\e844'; }
 				&.rue::before { content: '\e841'; }
 				&.immeuble::before { content: '\e842'; }
+				&.dossier::before { content: '\e850'; }
+				&.ajoutDossier::before { content: '\e851'; }
 				
 				&:hover {
 					background-color: rgba($rouge, .05);

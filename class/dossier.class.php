@@ -90,4 +90,71 @@ class dossier extends core {
 			return false;
 		endif;
 	}
+	
+	
+	// creation_rapide( int , string , string ) est une méthode permettant la création rapide d'un dossier
+	public	function creation_rapide( $contact , $nom , $description ) {
+		// On sécurise les insertions
+		if (!is_numeric($contact) && is_string($nom) && is_string($description)) return false;
+		$nom = $this->securisation_string($nom);
+		$description = $this->securisation_string($description);
+		
+		// On prépare la requête d'insertion dans la base de données
+		$query = 'INSERT INTO dossiers (`dossier_nom`, `dossier_description`, `dossier_contacts`)
+				  VALUES ("' . $nom . '",
+				  		  "' . $description . '",
+				  		  "' . $contact . '")';
+				  		  
+		// On exécute la requête et on retourne l'ID des données insérées
+		$this->db->query($query);
+		return $this->db->insert_id;
+	}
+	
+	
+	// lierInteraction( int , int ) permet de lier ensemble une interaction et un dossier
+	public	function lierInteraction( $interaction , $dossier ) {
+		// On vérifie que tout est bien numérique
+		if (!is_numeric($interaction) || !is_numeric($dossier)) return false;
+		
+		// On prépare la requête SQL
+		$query = 'UPDATE historique SET dossier_id = ' . $dossier . ' WHERE historique_id = ' . $interaction;
+		
+		// On exécute la requête
+		if ($this->db->query($query)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	// lierFiche( int , int ) permet de lier ensemble une fiche et un dossier
+	public	function lierFiche( $fiche , $dossier ) {
+		// On vérifie que tout est bien numérique
+		if (!is_numeric($fiche) || !is_numeric($dossier)) return false;
+		
+		// On récupère les informations sur le dossier
+		$query = 'SELECT * FROM dossiers WHERE dossier_id = ' . $dossier;
+		$sql = $this->db->query($query);
+		$d = $this->formatage_donnees($sql->fetch_assoc());
+		$contacts = explode(',', $d['contacts']);
+		if (!in_array($fiche, $contacts)) {
+			$contacts[] = $fiche;
+			$contacts = implode(',', $contacts);
+			$this->db->query('UPDATE dossiers SET dossier_contacts = "' . $contacts . '" WHERE dossier_id = ' . $dossier);
+		}
+		
+		return true;
+	}
+	
+	
+	// supprimerLiaisonInteraction( int ) permet de supprimer la liaison entre une fiche interaction et un dossier
+	public	function supprimerLiaisonInteraction( $id ) {
+		if (!is_numeric($id)) return false;
+		
+		$query = 'UPDATE historique SET dossier_id = NULL WHERE historique_id = ' . $id;
+		$this->db->query($query);
+		
+		return true;
+	}
 }

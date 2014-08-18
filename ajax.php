@@ -12,10 +12,10 @@
 	$scripts = array();
 
 // On tente d'ouvrir le dossier AJAX pour connaître le contenu des appels AJAX créés
-	if ($dossier = opendir('./ajax')) :
+	if ($doss = opendir('./ajax')) :
 	
 	// On vérifie que l'ouverture et la lecture du dossier n'a pas retourné d'erreur
-		while (false !== ($file = readdir($dossier))) :
+		while (false !== ($file = readdir($doss))) :
 					
 		// On analyse le nom du fichier
 			$file = explode('.', $file);

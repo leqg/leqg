@@ -77,6 +77,12 @@
 			
 			// On charge le script de modifier de l'interaction
 			$core->tpl_load('aside', 'modifier-fiche');
+			
+			// On charge le script de liaison d'un événement à un dossier
+			$core->tpl_load('aside', 'lier-un-dossier');
+			
+			// On charge le script de liaison d'un événement à un dossier
+			$core->tpl_load('aside', 'creer-un-dossier');
 
 		endif;
 		

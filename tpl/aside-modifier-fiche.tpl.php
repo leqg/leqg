@@ -39,12 +39,15 @@
 			 --><span class="label-information"><label for="form-objet">Objet</label></span><!--
 			 --><input type="text" id="form-objet" name="objet" value="<?php echo $interaction['objet']; ?>"><!--
 		 --></li>
-			<li><!--
-			 --><span class="label-information"><label for="form-notes" class="textarea">Notes</label></span><!--
-			 --><textarea id="form-notes" name="notes"><?php echo $interaction['notes']; ?></textarea><!--
-		 --></li>
-		 	<li class="submit"><!--
-		 	 --><input type="submit" value="Sauvegarder les modifications">
+			<li>
+				<span class="label-information"><label for="form-notes" class="textarea">Notes</label></span>
+				<textarea id="form-notes" name="notes"><?php echo $interaction['notes']; ?></textarea>
+			</li>
+		 	<li class="submit">
+		 		<input type="submit" value="Sauvegarder les modifications">
+		 	</li>
+		 	<li class="submit" style="margin-top: 3em;">
+		 		<a href="ajax.php?script=retirer-dossier-rapide&id=<?php echo $_GET['id']; ?>&interaction=<?php echo $_GET['interaction']; ?>" class="nostyle bouton boutonRouge">Retirer le dossier lié</a>
 		 	</li>
 		</ul>
 	</form>

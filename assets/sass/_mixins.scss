@@ -48,6 +48,13 @@
 	    		transform: scale($val);
 }
 
+@mixin miroir() {
+	-webkit-transform: scaleX(-1);
+	   -moz-transform: scaleX(-1);
+	    -ms-transform: scaleX(-1);
+	    		transform: scaleX(-1);
+}
+
 @mixin linear-gradient($from, $to) {
 	/* Fallback for sad browsers */
 	background-color: $to;
