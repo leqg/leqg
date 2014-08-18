@@ -23,7 +23,7 @@ class core {
 	
 	
 	// debug( array ) permet d'afficher un array mis en forme par la fonction print_r et d'arrêter le script à des fins de debug
-		public	function debug($array) {
+		public	function debug($array, $htmlentities = false) {
 			echo '<pre>';
 		
 			// On affiche le tableau préformaté s'il s'agit d'un tableau
@@ -52,10 +52,10 @@ class core {
 	// securisation_string( string ) permet de sécuriser les données qui doivent transiter par la base de données pour éviter les injections
 		public	function securisation_string($string, $charset = 'utf-8') {
 			// On ajout des antislashes pour les caractères spéciaux
-				$string = addslashes($string);
+				//$string = addslashes($string);
 			
 			// On transforme les caractères spéciaux en entités HTML
-				$string = htmlentities($string, ENT_HTML5, $charset);
+				$string = htmlentities($string, ENT_QUOTES, $charset);
 			
 			// On retourne la chaîne de caractères sécurisée
 				return $string;
