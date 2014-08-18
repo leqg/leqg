@@ -225,6 +225,21 @@ class carto extends core {
 	}
 	
 	
+	// villeParImmeuble( int ) permet d'afficher l'ID d'une ville pour un immeuble demandé
+	public	function villeParImmeuble( $immeuble ) {
+		// On vérifie que l'argument est bien un ID
+		if (!is_numeric($immeuble)) return false;
+		
+		// On cherche l'information dans la base de données
+		$query = 'SELECT * FROM immeubles LEFT JOIN rues ON rues.rue_id = immeubles.rue_id WHERE immeuble_id = ' . $immeuble;
+		$sql = $this->db->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne l'id du bureau
+		return $infos['commune_id'];
+	}
+	
+	
 	// cantonParImmeuble( int ) permet d'afficher l'ID d'un canton pour un immeuble demandé
 	public	function cantonParImmeuble( $immeuble ) {
 		// On vérifie que l'argument est bien un ID
