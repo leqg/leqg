@@ -187,7 +187,7 @@ class carto extends core {
 	// listeImmeubles( int ) permet de retourner la liste des immeubles 
 	public	function listeImmeubles( $rue ) {
 		// On vérifie que les arguments sont bien des éléments numériques
-			if (!is_numeric($ville) && !is_numeric($rue)) return false;
+			if (!is_numeric($rue)) return false;
 		
 		// On prépare la requête de récupération des immeubles correspondant
 			$query = 'SELECT		*
