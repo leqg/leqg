@@ -31,9 +31,7 @@ CREATE TABLE `cantons` (
 
 CREATE TABLE `codes_postaux` (
   `code_postal` mediumint(5) unsigned zerofill NOT NULL,
-  `commune_id` mediumint(5) unsigned zerofill NOT NULL,
-  PRIMARY KEY (`code_postal`),
-  UNIQUE KEY `commune_id` (`commune_id`)
+  `commune_id` mediumint(5) unsigned zerofill NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `communes` (
@@ -108,7 +106,7 @@ CREATE TABLE `dossiers` (
   `dossier_date_fermeture` datetime DEFAULT NULL,
   PRIMARY KEY (`dossier_id`),
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `fichiers` (
   `fichier_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -129,12 +127,13 @@ CREATE TABLE `fichiers` (
   KEY `compte_id` (`compte_id`),
   KEY `objet_id` (`interaction_id`),
   KEY `dossier_id` (`dossier_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `historique` (
   `historique_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` bigint(20) NOT NULL,
   `compte_id` int(11) NOT NULL,
+  `dossier_id` int(11) DEFAULT NULL,
   `historique_type` set('contact','telephone','email','courrier','autre') NOT NULL,
   `historique_date` date NOT NULL,
   `historique_lieu` varchar(255) NOT NULL,
@@ -145,13 +144,13 @@ CREATE TABLE `historique` (
   PRIMARY KEY (`historique_id`),
   KEY `contact_id` (`contact_id`),
   KEY `compte_id` (`compte_id`),
-  KEY `contact_id_2` (`contact_id`),
-  KEY `historique_objet` (`historique_objet`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `historique_objet` (`historique_objet`),
+  KEY `dossier_id` (`dossier_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `immeubles` (
   `immeuble_id` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
-  `bureau_id` mediumint(5) unsigned NOT NULL,
+  `bureau_id` mediumint(5) unsigned DEFAULT NULL,
   `rue_id` mediumint(6) unsigned NOT NULL,
   `immeuble_numero` varchar(5) NOT NULL,
   PRIMARY KEY (`immeuble_id`),
