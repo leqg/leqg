@@ -22,7 +22,7 @@
 				<?php else : ?>
 					Date de naissance inconnue
 				<?php endif; ?></p>
-				<span class="icone-modification" id="modifierDateNaissance" title="Modifier la date de naissance">&#xe855;</span>
+				<a class="nostyle icone" title="Modifier les informations de naissance" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'changementNaissance' => 'true')); ?>">&#xe855;</a>
 			</li>
 			<li>
 				<span class="label-information">Adresse déclarée</span>
@@ -31,7 +31,7 @@
 				<?php else : ?>
 				<p>Aucune adresse connue</p>
 				<?php endif; ?>
-				<a class="nostyle icone" title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'])); ?>&modifierAdresse=true">&#xe855;</a>
+				<a class="nostyle icone" title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'modifierAdresse' => 'true')); ?>">&#xe855;</a>
 			</li>
 			<?php if ($fiche->get_immeuble() && $carto->bureauParImmeuble($fiche->get_immeuble()) != 0) : ?>
 			<li>
@@ -98,6 +98,9 @@
 		
 			// On charge ici les volets qui ne seront appelés que lors des appels javascript
 			$core->tpl_load('aside', 'nouvelleinteraction');
+			
+			// On charge le script de changement des informations de naissance
+			$core->tpl_load('aside', 'changement-naissance');
 		
 		
 		// On charge les informations de changement d'adresse, si c'est demandé

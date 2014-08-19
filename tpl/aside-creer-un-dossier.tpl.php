@@ -18,7 +18,6 @@
 		 	<li class="submit">
 		 		<input type="submit" value="Créer le dossier">
 		 	</li>
-			</li>
 		</ul>
 	</form>
 </div>

@@ -6,6 +6,11 @@ var fiche = function() {
 		$("#premierContact").show();
 		$("#resultats").hide();
 		$("#resultatsRue").hide();
+		
+	
+	// On cache tout ce qui doit être caché
+		$(".choix").hide();
+		$("#choixDeVilleDeNaissance").hide();
 
 	
 	// scripts permettant d'afficher en style "vide" tous les champs de formulaire non remplis de la page principale de la fiche
@@ -28,7 +33,7 @@ var fiche = function() {
 	
 	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
-		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier')) {
+		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
 			
 			$(".ficheContact div").hide(); // On ferme tous les volets
@@ -89,6 +94,11 @@ var fiche = function() {
 		else if (getURLVar('creerDossier')) {
 			$(".ficheContact div").hide();
 			$("#creerUnDossier").show();
+		}
+		
+		else if (getURLVar('changementNaissance')) {
+			$(".ficheContact div").hide();
+			$("#changementNaissance").show();
 		}
 		
 	
@@ -221,6 +231,42 @@ var fiche = function() {
 			
 			// On fini par annuler le clique
 			return false;
+		});
+		
+	
+	// choix de la ville de naissance
+		$("#villeNaissance").keyup(function(){
+			var entree = $(this).val();
+			
+			if (entree.length > 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=ville-naissance',
+					data: { 'ville': entree },
+					dataType: 'html'
+				}).done(function(data){
+					$('.choix').show();
+					$('#liste-villeNaissance').html(data);
+				}).error(function(){
+					console.log('Ajax : error');
+				});
+			} else {
+				$('.choix').hide();
+			}
+		});
+		
+		
+	// clique sur la ville de naissance pour la sélectionner
+		$('aside').on('click', '.propositionVilleNaissance', function(){
+			var ville = $(this).data('ville');
+			var affichage = $(this).data('nom');
+			
+			$('.choix').hide();
+			$('#liste-villeNaissance').html('');
+			$('#villeNaissance').val('');
+			$('#villeChoisieAuFinal').val(ville);
+			$('#nomVilleChoisie').html(affichage);
+			$('#choixDeVilleDeNaissance').show();
 		});
 };
 
