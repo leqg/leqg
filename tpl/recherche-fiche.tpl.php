@@ -7,7 +7,7 @@
 				<label for="form-nom">Nom et Prénoms</label>
 			</li><!--
 		 --><li>
-				<input type="submit" value="&#xe803;">
+				<input class="loupe" type="submit" value="&#xe803;">
 			</li>
 		</ul>
 	</form>

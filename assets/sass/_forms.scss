@@ -94,6 +94,25 @@ a.bouton {
 			background-color: rgba($rouge, .33);
 		}
 	}
+	
+	&.loupe {
+		background-color: rgba($bleu, 0);
+		border: 1px solid rgba($bleu, .5);
+		@include border-radius(50%);
+		color: $bleu;
+		font-family: $icons;
+		height: 30px;
+		line-height: 20px;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+		width: 30px;
+		@include transition(all);
+		
+		&:hover {
+			border: 1px solid rgba($bleu, 1);
+		}
+	}
 }
 	
 input[type='file'] {
@@ -230,4 +249,54 @@ label.selectbox {
 		}
 	}
 }
+
+
+
+/************************************
+ *									*
+ *		RECHERCHE DES FICHES			* 
+ *									*
+ ************************************/
  
+section[id^='recherche-'] {
+	ul {
+		position: relative;
+		list-style: none;
+		margin: 0;
+		padding: 0 10px;
+		padding-right: 30px;
+		width: 100%;
+		
+		li {
+			display: inline-block;
+			width: 100%;
+			
+			&:last-of-type {
+				position: absolute; top: 5px; right: 10px;
+				display: block;
+				text-align: right;
+				width: 30px;
+			}
+			
+			& > label {
+				display: block;
+				color: rgba($bleu, .85%);
+				font-size: .85em;
+				font-variant: small-caps;
+				line-height: .75em;
+				padding-left: 5px;
+				margin-top: .5em;
+			}
+			
+			input {
+				font-family: $fonts2;
+				font-size: 1.1em;
+				line-height: 1.5em;
+				margin-bottom: .66em;
+				width: 98%;
+				width: calc(100% - 20px);
+				@include transition(all);
+			}
+		}
+	}
+}
