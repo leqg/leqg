@@ -1,5 +1,9 @@
 <?php
 
+	if (empty($_POST['nom'])) $_POST['nom'] = '';
+	if (empty($_POST['nomUsage'])) $_POST['nomUsage'] = '';
+	if (empty($_POST['prenom'])) $_POST['prenom'] = '';
+
 	// On récupère les informations contenues dans le $_POST
 	$infos = array('nom' => $core->securisation_string($_POST['nom']),
 				   'nom-usage' => $core->securisation_string($_POST['nomUsage']),
