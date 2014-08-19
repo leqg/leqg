@@ -52,7 +52,7 @@ class carto extends core {
 	// recherche_rue( int , string ) permet de renvoyer une liste de toutes les rues répondant à une recherche proposée
 	public	function recherche_rue( $ville , $search = '' ) {
 		// On sécurise la recherche
-			$search = $this->securisation_string($search);
+			$search = $this->formatage_recherche($search);
 		
 		// On vérifie que la ville entrée est bien un champ numérique
 			if (!is_numeric($ville)) return false;
