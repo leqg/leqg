@@ -46,7 +46,25 @@ section#fiche-electeur {
 			width: 125px;
 		}
 		
-		#electeur-icons { display: none; }
+		#config-icon {
+			position: absolute; top: 135px; left: -50px;
+			display: block;
+			background-color: $bleu;
+			border: 4px solid $blanc;
+			@include border-radius(50%);
+			color: $blanc;
+			font-family: $icons;
+			font-size: 20px;
+			height: 38px;
+			line-height: 30px;
+			padding-left: 1px;
+			text-align: center;
+			width: 38px;
+			
+			&:hover {
+				background-color: $rouge;
+			}
+		}
 	}
 	
 	p.adresse {

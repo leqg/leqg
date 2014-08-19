@@ -3,6 +3,7 @@
 <section id="fiche-electeur" data-fiche="<?php $fiche->the_ID(); ?>">
 	<header>
 		<h2><?php $fiche->affichage_nom('span'); ?></h2>
+		<a href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierInformations' => 'true')); ?>" class="nostyle" id="config-icon">&#xe855;</a>
 	</header>
 	
 	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?>"></div>
@@ -101,6 +102,9 @@
 			
 			// On charge le script de changement des informations de naissance
 			$core->tpl_load('aside', 'changement-naissance');
+			
+			// On charge le script de changement des informations de naissance
+			$core->tpl_load('aside', 'changement-information');
 		
 		
 		// On charge les informations de changement d'adresse, si c'est demandé

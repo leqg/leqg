@@ -33,7 +33,7 @@ var fiche = function() {
 	
 	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
-		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance')) {
+		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance') && !getURLVar('modifierInformations')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
 			
 			$(".ficheContact div").hide(); // On ferme tous les volets
@@ -99,6 +99,11 @@ var fiche = function() {
 		else if (getURLVar('changementNaissance')) {
 			$(".ficheContact div").hide();
 			$("#changementNaissance").show();
+		}
+		
+		else if (getURLVar('modifierInformations')) {
+			$(".ficheContact div").hide();
+			$("#changementEtatCivil").show();
 		}
 		
 	
