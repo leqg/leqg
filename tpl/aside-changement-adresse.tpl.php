@@ -1,4 +1,5 @@
 <div id="changementAdresse">
+	<?php if (isset($_GET['modifierAdresse'])) : ?>
 	<nav class="navigationFiches">
 		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>">Retour à la fiche</a>
 	</nav>
@@ -14,8 +15,10 @@
 			<ul id="liste-villes" class="listeEncadree"></ul>
 		</li>
 	</ul>
+	<?php endif; ?>
 </div>
 <div id="changementRue">
+	<?php if (isset($_GET['modifierRue'])) : ?>
 	<nav class="navigationFiches">
 		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierAdresse' => 'true')); ?>">Retour à la sélection de la ville</a>
 	</nav>
@@ -35,9 +38,11 @@
 			<ul id="liste-rues" class="listeEncadree" data-ville="<?php echo $ville; ?>" data-fiche="<?php echo $_POST['fiche']; ?>"></ul>
 		</li>
 	</ul>
+	<?php endif; ?>
 </div>
 
 <div id="changementImmeuble">
+	<?php if (isset($_GET['modifierImmeuble'])) : ?>
 	<nav class="navigationFiches">
 		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierRue' => 'true', 'ville' => $_GET['ville'])); ?>">Retour à la sélection de la rue</a>
 	</nav>
@@ -56,19 +61,25 @@
 			<span class="label-information">Choisir</span>
 			<ul id="liste-rues" class="listeEncadree">
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'creerImmeuble' => 'true', 'rue' => $_GET['rue'], 'ville' => $_GET['ville'])); ?>" class="nostyle" id="ajoutImmeuble">
-					<li class="rue ajoutImmeuble">
+					<li class="immeuble ajoutImmeuble">
 						<strong>Créer une nouvelle adresse dans la rue</strong>
 					</li>
 				</a>
 				<?php $immeubles = $carto->listeImmeubles($_GET['rue']); foreach ($immeubles as $immeuble) : ?>
-				<a href="ajax.php?script=modifier-adresse&immeuble=<?php echo $immeuble['id']; ?>&fiche=<?php echo $_GET['id']; ?>"><li class="immeuble"><strong><?php echo $immeuble['numero']; ?> <?php echo $carto->afficherRue($immeuble['rue_id']); ?></strong></li></a>
+				<a href="ajax.php?script=modifier-adresse&immeuble=<?php echo $immeuble['id']; ?>&fiche=<?php echo $_GET['id']; ?>">
+					<li class="immeuble">
+						<strong><?php echo $immeuble['numero']; ?> <?php echo $carto->afficherRue($immeuble['rue_id']); ?></strong>
+					</li>
+				</a>
 				<?php endforeach; ?>
 			</ul>
 		</li>
 	</ul>
+	<?php endif; ?>
 </div>
 
 <div id="creerImmeuble">
+	<?php if (isset($_GET['creerImmeuble'])) : ?>
 	<nav class="navigationFiches">
 		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierImmeuble' => 'true', 'rue' => $_GET['rue'], 'ville' => $_GET['ville'])); ?>">Retour à la sélection du numéro</a>
 	</nav>
@@ -96,4 +107,5 @@
 			</li>
 		</ul>
 	</form>
+	<?php endif; ?>
 </div>
