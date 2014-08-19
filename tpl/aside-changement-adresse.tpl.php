@@ -17,7 +17,7 @@
 </div>
 <div id="changementRue">
 	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierAdresse=true">Retour à la sélection de la ville</a>
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierAdresse' => 'true')); ?>">Retour à la sélection de la ville</a>
 	</nav>
 	<h6>Modification de l'adresse déclarée</h6>
 	
@@ -39,7 +39,7 @@
 
 <div id="changementImmeuble">
 	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierRue=true">Retour à la sélection de la rue</a>
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierRue' => 'true', 'ville' => $_GET['ville'])); ?>">Retour à la sélection de la rue</a>
 	</nav>
 	<h6>Modification de l'adresse déclarée</h6>
 	
@@ -55,6 +55,11 @@
 		<li id="resultatsImmeuble">
 			<span class="label-information">Choisir</span>
 			<ul id="liste-rues" class="listeEncadree">
+				<a href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'creerImmeuble' => 'true', 'rue' => $_GET['rue'], 'ville' => $_GET['ville'])); ?>" class="nostyle" id="ajoutImmeuble">
+					<li class="rue ajoutImmeuble">
+						<strong>Créer une nouvelle adresse dans la rue</strong>
+					</li>
+				</a>
 				<?php $immeubles = $carto->listeImmeubles($_GET['rue']); foreach ($immeubles as $immeuble) : ?>
 				<a href="ajax.php?script=modifier-adresse&immeuble=<?php echo $immeuble['id']; ?>&fiche=<?php echo $_GET['id']; ?>"><li class="immeuble"><strong><?php echo $immeuble['numero']; ?> <?php echo $carto->afficherRue($immeuble['rue_id']); ?></strong></li></a>
 				<?php endforeach; ?>
@@ -65,7 +70,7 @@
 
 <div id="creerImmeuble">
 	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierRue=true">Retour à la sélection de la rue</a>
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierImmeuble' => 'true', 'rue' => $_GET['rue'], 'ville' => $_GET['ville'])); ?>">Retour à la sélection du numéro</a>
 	</nav>
 	<h6>Modification de l'adresse déclarée</h6>
 	
