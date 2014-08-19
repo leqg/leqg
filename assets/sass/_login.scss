@@ -1,0 +1,92 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée au sysètme de login du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			   	LOGIN				* 
+ *									*
+ ************************************/
+
+main.login {
+	form {
+		position: absolute; top: 50%; left: 50%;
+		background: $bleu;
+		@include border-radius(2em);
+		@include shadow(0, 0, 3em, $grisMoyen);
+		color: $blanc;
+		height: 275px;
+		margin-left: -200px;
+		margin-top: -137px;
+		width: 400px;
+		
+		ul, ul li {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			text-align: center;
+			width: 100%;
+		}
+		
+		ul li {
+			& > label {
+				display: block;
+				font: 900 1em/1.8em $fonts1;
+				text-align: center;
+				
+				&:first-of-type {
+					margin-top: 1.8em;
+				}
+			}
+			
+			input {
+				display: block;
+				background-color: rgba(236, 240, 241, 1);
+				border: 3px solid rgba(127, 140, 141, 1);
+				@include border-radius(.66em);
+				font: 300 1.2em/1.5em $fonts1;
+				height: 1.8em;
+				margin: .33em auto 1.8em auto;
+				outline: none;
+				padding: .1em .5em;
+				text-align: center;
+				width: 300px;
+				@include transition(all);
+				
+				&:focus,
+				&:hover {
+					border-color: rgba(22, 160, 133, 1);
+					outline: none;
+				}
+				
+				&[type=submit] {
+					display: block;
+					background: rgba(236, 240, 241, 1);
+					border: 3px solid rgba(127, 140, 141, 1);
+					@include border-radius(.66em);
+					font: 300 1em/1.8em $fonts1;
+					height: 2.3em;
+					text-align: center;
+					width: 200px;
+					
+					&:hover,
+					&:focus {
+						border-color: rgba(22, 160, 133, 1);
+						color: rgba(22, 160, 133, 1);
+						outline: none;
+					}
+					
+					&::-moz-focus-inner {
+						border: 0;
+					}
+				}
+			}
+		}
+	}
+}
