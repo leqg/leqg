@@ -150,7 +150,7 @@ var fiche = function() {
 		
 	
 	// script permettant la recherche de doublons lors de la création d'une fiche et l'affichage des actions associées
-		$("#creerFiche").click(function(){
+		/*$("#creerFiche").click(function(){
 			// On récupère les données du formulaire
 				var nom = $("#form-creation-nom").val();
 				var nomUsage = $("#form-creation-nom-usage").val();
@@ -171,7 +171,7 @@ var fiche = function() {
 			}).error(function(){
 				$("#creationNouvelleFiche").html('<h3>Erreur lors de la création d\'une nouvelle fiche');
 			});
-		});
+		});*/
 		
 		// script permettant de choisir une fiche à laquelle ajouter les informations entrées dans le script d'ajout de données avant de rediriger vers la fiche en question
 			$(document).on('click', '.existante', function(){

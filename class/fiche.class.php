@@ -625,6 +625,10 @@ class fiche extends core {
 		// On vérifie que les informations entrées prennent bien la forme d'un tableau et qu'elles contiennent les infos minimales
 		if (!is_array($infos) && !isset($infos['nom'], $infos['prenom'])) return false;
 		
+		// On formate les téléphones, au cas où
+		if ($infos['mobile'] == '') { $infos['mobile'] == NULL; }
+		if ($infos['telephone'] == '') { $infos['telephone'] == NULL; }
+		
 		// On prépare la requête de création de la fiche
 		$query = 'INSERT INTO	contacts (immeuble_id,
 										  contact_nom,
@@ -633,21 +637,37 @@ class fiche extends core {
 										  contact_sexe,
 										  contact_email,
 										  contact_mobile,
-										  contact_telephone)
+										  contact_telephone,
+										  contact_naissance_date)
 				  VALUES (' . $infos['immeuble'] . ',
 				  		  "' . $infos['nom'] . '",
 				  		  "' . $infos['nom-usage'] . '",
 				  		  "' . $infos['prenoms'] . '",
 				  		  "' . $infos['sexe'] . '",
-				  		  "' . $infos['email'] . '",
-				  		  "' . $infos['mobile'] . '",
-				  		  "' . $infos['telephone'] . '")';
+				  		  NULL,
+				  		  NULL,
+				  		  NULL,
+				  		  "' . $infos['date-naissance'] . '")';
 		
 		// On exécute la requête au serveur
 		$this->db->query($query);
 		
+		// On récupère l'id de l'entrée
+		$id = $this->db->insert_id;
+		
+		// On fait les modifications dès qu'on a des informations
+		if (!empty($infos['mobile'])) {
+			$this->db->query('UPDATE contacts SET contact_mobile = "' .$infos['mobile']. '" WHERE contact_id = ' . $id);
+		}
+		if (!empty($infos['telephone'])) {
+			$this->db->query('UPDATE contacts SET contact_telephone = "' .$infos['telephone']. '" WHERE contact_id = ' . $id);
+		}
+		if (!empty($infos['email'])) {
+			$this->db->query('UPDATE contacts SET contact_email = "' .$infos['email']. '" WHERE contact_id = ' . $id);
+		}
+		
 		// On renvoit l'id de l'entrée
-		return $this->db->insert_id; 
+		return $id; 
 	}
 	
 	

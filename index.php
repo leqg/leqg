@@ -277,6 +277,21 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			}
 		}
 		
+		else if ($_GET['page'] == 'creerfiche' && isset($_GET['etape'])) {
+			
+			// On charge dans tous les cas le template d'header
+			$core->tpl_header();
+			
+			// Si l'étape de création est l'étape de recherche des doublons, on charge le tpl associé
+			if ($_GET['etape'] == 'recherche') {
+				$core->tpl_load('creerfiche', 'recherche');
+			}
+			
+			// on charge dans tous les cas le template de footer
+			$core->tpl_footer();
+			
+		}
+		
 		else {
 			// On redirige temporairement vers la page contacts
 			$core->tpl_redirection('contacts');

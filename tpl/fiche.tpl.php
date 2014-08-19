@@ -19,18 +19,26 @@
 				<p><?php if ($fiche->is_info('naissance_date')) : ?>
 					<?php $fiche->date_naissance(' / '); ?> <?php $fiche->lieu_de_naissance('à'); ?><br>
 					<?php $fiche->age(); ?>
+				<?php else : ?>
+					Date de naissance inconnue
 				<?php endif; ?></p>
 				<span class="icone-modification" id="modifierDateNaissance" title="Modifier la date de naissance">&#xe855;</span>
 			</li>
 			<li>
 				<span class="label-information">Adresse déclarée</span>
+				<?php if ($fiche->get_immeuble()) : ?>
 				<p><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
+				<?php else : ?>
+				<p>Aucune adresse connue</p>
+				<?php endif; ?>
 				<a class="nostyle icone" title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'])); ?>&modifierAdresse=true">&#xe855;</a>
 			</li>
+			<?php if ($fiche->get_immeuble()) : ?>
 			<li>
 				<span class="label-information">Bureau de vote</span>
 				<p><?php $carto->bureauDeVote($fiche->get_immeuble()); ?></p>
 			</li>
+			<?php endif; ?>
 			<li>
 				<span class="label-information"><label for="form-email">Adresse email</label></span>
 				<input class="fiche" type="email" name="email" id="form-email" placeholder="abc@domaine.fr" value="<?php $fiche->contact('email'); ?>">
