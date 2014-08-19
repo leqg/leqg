@@ -5,7 +5,7 @@
 		</header>
 		<ul>
 			<li><?php $fiche->date_naissance(' / '); ?> – <?php $fiche->age(); ?></li>
-			<li><?php $carto->afficherVille($carto->villeParImmeuble($fiche->get_immeuble())); ?></li>
+			<?php if ($fiche->get_immeuble()) : ?><li><?php $carto->afficherVille($carto->villeParImmeuble($fiche->get_immeuble())); ?></li><?php endif; ?>
 		</ul>
 	</article>
 </a>
