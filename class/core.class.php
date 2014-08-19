@@ -79,8 +79,8 @@ class core {
 			// On retire tous les caractères spéciaux
 				$string = preg_replace('#&([A-za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $string);
 			    $string = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $string); // pour les ligatures e.g. '&oelig;'
-				$string = preg_replace('#&[^;]+;#', '', $string); // supprime les autres caractères
-			
+				$string = preg_replace('#&[^;]+;#', '%', $string); // supprime les autres caractères
+				
 			// On retourne le contenu final près à une recherche
 				return $string;
 		}
