@@ -27,7 +27,7 @@
 			<li>
 				<span class="label-information">Adresse déclarée</span>
 				<?php if ($fiche->get_immeuble()) : ?>
-				<p><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
+				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
 				<?php else : ?>
 				<p>Aucune adresse connue</p>
 				<?php endif; ?>
@@ -101,7 +101,7 @@
 		
 		
 		// On charge les informations de changement d'adresse, si c'est demandé
-			if (isset($_GET['modifierAdresse']) || isset($_GET['modifierRue']) || isset($_GET['modifierImmeuble'])) :
+			if (isset($_GET['modifierAdresse']) || isset($_GET['modifierRue']) || isset($_GET['modifierImmeuble']) || isset($_GET['creerImmeuble'])) :
 				// On charge le script de changement d'adresse
 				$core->tpl_load('aside', 'changement-adresse');
 			endif;

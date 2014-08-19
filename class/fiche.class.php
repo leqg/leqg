@@ -184,7 +184,7 @@ class fiche extends core {
 		$adresse = mb_convert_case($this->get_infos('adresse_rue'), MB_CASE_LOWER, 'utf-8');
 		$complement = mb_convert_case($this->get_infos('adresse_complement'), MB_CASE_LOWER, 'utf-8');
 		$cp = $this->get_infos('adresse_cp');
-		$ville = mb_convert_case($this->get_infos('adresse_ville'), MB_CASE_UPPER, 'utf-8');
+		$ville = mb_convert_case($this->get_infos('adresse_ville'), MB_CASE_TITLE, 'utf-8');
 		
 		if (!empty($numero)) : $affichage = $numero . ' '; endif;
 		if (!empty($adresse)) : $affichage .= $adresse . $separateur; endif;

@@ -32,7 +32,7 @@
 		</li>
 		<li id="resultatsRue">
 			<span class="label-information">Choisir</span>
-			<ul id="liste-rues" class="listeEncadree"></ul>
+			<ul id="liste-rues" class="listeEncadree" data-ville="<?php echo $ville; ?>" data-fiche="<?php echo $_POST['fiche']; ?>"></ul>
 		</li>
 	</ul>
 </div>
@@ -61,4 +61,34 @@
 			</ul>
 		</li>
 	</ul>
+</div>
+
+<div id="creerImmeuble">
+	<nav class="navigationFiches">
+		<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&modifierRue=true">Retour à la sélection de la rue</a>
+	</nav>
+	<h6>Modification de l'adresse déclarée</h6>
+	
+	<form action="ajax.php?script=creer-immeuble" method="post">
+		<input type="hidden" name="ville" value="<?php echo $_GET['ville']; ?>">
+		<input type="hidden" name="rue" value="<?php echo $_GET['rue']; ?>">
+		<input type="hidden" name="fiche" value="<?php echo $_GET['id']; ?>">
+		<ul class="deuxColonnes petit">
+			<li>
+				<span class="label-information">Ville</span>
+				<ul class="listeEncadree"><li class="ville"><?php echo $carto->afficherVille($_GET['ville']); ?></li></ul>
+			</li>
+			<li>
+				<span class="label-information">Rue</span>
+				<ul class="listeEncadree"><li class="rue"><?php echo $carto->afficherRue($_GET['rue']); ?></li></ul>
+			</li>
+			<li>
+				<span class="label-information">Numéro</span>
+				<input type="text" id="form-immeuble" name="immeuble" placeholder="Numéro de l'immeuble">
+			</li>
+			<li class="submit">
+				<input type="submit" value="Enregistrer l'adresse">
+			</li>
+		</ul>
+	</form>
 </div>

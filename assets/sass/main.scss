@@ -449,7 +449,9 @@ ul.deuxColonnes {
 					padding-top: .6em;
 					
 					&.ajoutFichier,
-					&.ajoutDossier {
+					&.ajoutDossier,
+					&.ajoutRue,
+					&.ajoutImmeuble {
 						border-color: $bleu;
 						color: $bleu;
 						

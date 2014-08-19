@@ -349,5 +349,19 @@ class carto extends core {
 		$this->db->query($query);
 		return $this->db->insert_id;
 	}
+	
+	
+	// ajoutImmeuble( array ) permet d'ajouter un nouvel immeuble à partir des informations envoyées
+	public	function ajoutImmeuble( $infos ) {
+		// On vérifie que l'entrée est bien un tableau
+		if (!is_array($infos)) return false;
+		
+		// On prépare la requête
+		$query = 'INSERT INTO immeubles (`rue_id`, `immeuble_numero`) VALUES (' . $infos['rue'] . ', "' . $infos['numero'] . '")';
+		
+		// On enregistre le tout dans la base de données puis on retourne l'ID de l'insertion
+		$this->db->query($query);
+		return $this->db->insert_id;
+	}
 }
 ?>
