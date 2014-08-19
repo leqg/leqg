@@ -32,7 +32,7 @@ section#fiche-electeur {
 		}
 		
 		&::before {
-			position: absolute; top: 37.5px; left: -150px;
+			position: absolute; top: 38px; left: -150px;
 			display: block;
 			background: $bleu;
 			@include border-radius(.5em);

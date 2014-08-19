@@ -9,7 +9,7 @@
 			<span class="label-information">Ville</span>
 			<input type="text" name="rechercheVille" id="changementAdresse-rechercheVille" data-fiche="<?php echo $_GET['id']; ?>">
 		</li>
-		<li id="resultats">
+		<li id="resultatsVille">
 			<span class="label-information">Choisir</span>
 			<ul id="liste-villes" class="listeEncadree"></ul>
 		</li>

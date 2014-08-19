@@ -27,7 +27,7 @@ $rouge:		rgba(171,  62,  91, 1);
 $bleu:		rgba( 44,  62,  80, 1);
 $blanc:		rgba(255, 255, 255, 1);
 $noir:		rgba(  0,   0,   0, 1);
-$orange:		rgba(255, 190,  64, 1);
+$orange:	rgba(255, 190,  64, 1);
 $jaune:		rgba(253, 231, 180, 1);
 $vert:		rgba(179, 204,  87, 1);
 $lime:		rgba(236, 240, 129, 1);
@@ -328,8 +328,8 @@ ul.deuxColonnes {
 			width: 35%;
 	
 			@media all and (max-width: 1500px) {
-				left: -35%;
-				width: 35%;
+				left: -55%;
+				width: 55%;
 			}
 		}
 		

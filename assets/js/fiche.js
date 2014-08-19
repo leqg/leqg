@@ -4,8 +4,9 @@ var fiche = function() {
 		$(".ficheContact div").hide();
 		$("#historique").show();
 		$("#premierContact").show();
-		$("#resultats").hide();
 		$("#resultatsRue").hide();
+		$("#resultatsVille").hide();
+		$("#resultats").hide();
 		
 	
 	// On cache tout ce qui doit être caché
@@ -181,13 +182,13 @@ var fiche = function() {
 					data: { 'fiche': fiche, 'ville': ville },
 					dataType: 'html'
 				}).done(function(data){
-					$("#resultats").show();
+					$("#resultatsVille").show();
 					$("#liste-villes").html(data);
 				}).error(function(){
 					console.log('Erreur AJAX');
 				});
 			} else {
-				$("#resultats").hide();
+				$("#resultatsVille").hide();
 			}
 		});
 			
