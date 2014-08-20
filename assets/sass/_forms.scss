@@ -113,6 +113,12 @@ a.bouton {
 			border: 1px solid rgba($bleu, 1);
 		}
 	}
+	
+	&.bouton {
+		@media all and (max-width: 1500px) {
+			padding: 0 1em;
+		}
+	}
 }
 	
 input[type='file'] {
