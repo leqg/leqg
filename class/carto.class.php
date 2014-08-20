@@ -77,6 +77,48 @@ class carto extends core {
 	}
 	
 	
+	// region( int ) permet de renvoyer toutes les informations relatives à une région demandée par son id
+	public	function region( $id ) {
+		// On sécurise la recherche
+			$id = $this->securisation_string($id);
+		
+		// On prépare la requête de recherche des informations
+			$query = 'SELECT	*
+					  FROM		regions
+					  WHERE		region_id = ' . $id;
+		
+		// On effectue la requête
+			$sql = $this->db->query($query);
+		
+		// On traite les résultats
+			$result = $this->formatage_donnees($sql->fetch_assoc());
+		
+		// On retourne les résultats
+			return $result;
+	}
+	
+	
+	// departement( int ) permet de renvoyer toutes les informations relatives à un département demandé par son id
+	public	function departement( $id ) {
+		// On sécurise la recherche
+			$id = $this->securisation_string($id);
+		
+		// On prépare la requête de recherche des informations
+			$query = 'SELECT	*
+					  FROM		departements
+					  WHERE		departement_id = ' . $id;
+		
+		// On effectue la requête
+			$sql = $this->db->query($query);
+		
+		// On traite les résultats
+			$result = $this->formatage_donnees($sql->fetch_assoc());
+		
+		// On retourne les résultats
+			return $result;
+	}
+	
+	
 	// ville( int ) permet de renvoyer toutes les informations relatives à une ville demandée par son id
 	public	function ville( $id ) {
 		// On sécurise la recherche
@@ -174,6 +216,20 @@ class carto extends core {
 	}
 	
 	
+	// afficherRegion( int , bool ) permet d'afficher le nom de la région entrée par son ID
+	public	function afficherRegion( $id , $return = false ) {
+		// On lance la recherche dans la base de données pour retrouver la région
+		$query = 'SELECT * FROM regions WHERE region_id = ' . $id;
+		$sql = $this->db->query($query);
+		$data = $sql->fetch_assoc();
+		
+		// On retourne l'information
+		if (!$return) echo $data['region_nom'];
+		
+		return $data['region_nom'];
+	}
+	
+	
 	// afficherImmeuble( int [ , bool ] ) permet d'afficher le numéro d'un immeuble grâce à son ID
 	public	function afficherImmeuble( $id , $return = false ) {
 		// On lance la recherche d'informations
@@ -181,6 +237,30 @@ class carto extends core {
 			
 		// On retourne le résultat demandé
 			if ($return) : return $immeuble['numero']; else : echo $immeuble['numero']; endif;
+	}
+	
+	
+	// listeRues( int ) permet de retourner la liste des rues d'une commune 
+	public	function listeRues( $ville ) {
+		// On vérifie que les arguments sont bien des éléments numériques
+			if (!is_numeric($ville)) return false;
+			
+		// On prépare la requête de récupération des immeubles correspondant
+			$query = 'SELECT	*
+					  FROM		rues
+					  WHERE		commune_id = ' . $ville . '
+					  ORDER BY	rue_nom ASC
+					  LIMIT		0, 50';
+		
+		// On prépare le tableau qui permettra de renvoyer les données
+			$rues = array();
+		
+		// On effectue la requête BDD et on affiche les résultats dans un tableau $immeubles
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) $rues[] = $this->formatage_donnees($row);
+		
+		// On retourne les données
+			return $rues;
 	}
 	
 	
@@ -362,6 +442,44 @@ class carto extends core {
 		// On enregistre le tout dans la base de données puis on retourne l'ID de l'insertion
 		$this->db->query($query);
 		return $this->db->insert_id;
+	}
+	
+	
+	// nombreElecteurs( string , int ) permet de savoir combien d'électeurs existent dans une ville, une rue ou un immeuble
+	public	function nombreElecteurs( $branche , $id , $coordonnees = null ) {
+		if (!is_string($branche) || !is_numeric($id)) return false;
+		
+		if ($branche == 'ville') {
+			// On prépare la requête de calcul du nombre d'électeur dans la commune
+			$query = 'SELECT	COUNT(*)
+					  AS		nombre
+					  FROM		contacts
+					  LEFT JOIN immeubles
+					  ON		immeubles.immeuble_id = contacts.immeuble_id
+					  LEFT JOIN	rues
+					  ON		rues.rue_id = immeubles.rue_id
+					  LEFT JOIN	communes
+					  ON		communes.commune_id = rues.commune_id
+					  WHERE		communes.commune_id = ' . $id . '
+					  AND		contacts.contact_electeur = 1';
+		}
+		
+		
+		// On regarde si on demandait seulement ceux ayant des coordonnées
+		if (!is_null($coordonnees) && !empty($query)) {
+			$query .= ' AND contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0';
+		}
+		
+		
+		// On vérifie qu'il y a bien une requête de préparée, si oui on l'exécute et on imprime le résultat
+		if (!empty($query)) {
+			$sql = $this->db->query($query);
+			$nombre = $sql->fetch_assoc();
+			
+			return number_format($nombre['nombre'], 0, ',', '&nbsp;');
+		}
+		
+		return false;
 	}
 }
 ?>

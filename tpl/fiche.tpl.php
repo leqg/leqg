@@ -1,6 +1,6 @@
 <?php $core->tpl_header(); ?>
 
-<section id="fiche-electeur" data-fiche="<?php $fiche->the_ID(); ?>">
+<section id="fiche" data-fiche="<?php $fiche->the_ID(); ?>">
 	<header>
 		<h2><?php $fiche->affichage_nom('span'); ?></h2>
 		<a href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierInformations' => 'true')); ?>" class="nostyle" id="config-icon">&#xe855;</a>

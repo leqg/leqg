@@ -292,6 +292,55 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			
 		}
 		
+		
+	// Mise en place des conditions concernant le module cartographique
+		
+			else if ($_GET['page'] == 'carto') {
+			
+				// On charge d'abord le header
+				$core->tpl_header();
+				
+					// On regarde quel module est demandé
+					if (isset($_GET['module'])) {
+					
+						// Si on demande le module de l'arborescence
+						if ($_GET['module'] == 'arborescence') {
+						
+							// On charge les sous-modules demandés (branches)
+							
+							if (isset($_GET['branche'])) {
+								
+								// On appelle la branche
+								$core->tpl_load('carto', 'arborescence-' . $_GET['branche']);
+								
+							} else {
+								
+								// On charge le sommaire du module
+								$core->tpl_load('carto', 'arborescence');
+								
+							}
+							
+						} else {
+						
+							// On charge le module 
+							$core->tpl_load('carto', $_GET['module']);
+							
+						}
+						
+						
+					} else {
+						
+						// On charge la page d'accueil du module cartographique si aucun module spécifique n'est demandé
+						$core->tpl_load('carto');
+						
+					}
+				
+				// On charge ensuite le footer
+				$core->tpl_footer();
+			
+			}
+			
+		
 		else {
 			// On redirige temporairement vers la page contacts
 			$core->tpl_redirection('contacts');
