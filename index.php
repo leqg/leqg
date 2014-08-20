@@ -182,7 +182,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$recherche = $core->formatage_recherche($_POST['recherche']);
 
 			// On fait la recherche
-			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE "%' . $recherche . '%"';
+			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE "%' . $recherche . '%" ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
 
 			if (!empty($query)) $sql = $db->query($query);
 			
@@ -201,7 +201,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				// On load les différentes fiches
 				echo '<section class="liste">';
 				
+				// On prépare le tableau des différentes fiches
+				$fiches = array();
+				
 				while ($row = $sql->fetch_array()) {
+				
 					$fiche->acces($row[0], true);
 					
 					// On charge le template de la fiche

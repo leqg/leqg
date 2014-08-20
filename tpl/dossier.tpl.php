@@ -42,10 +42,22 @@
 		<li>
 			<span class="label-information">Fiches associées</span>
 			<ul class="listeEncadree">
-				<?php $fiches = explode(',', $dossier['contacts']); foreach ($fiches as $contact) : ?>
-				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
+				<?php 
+					$fiches = explode(',', $dossier['contacts']);
+					$contacts = array();
+					foreach($fiches as $key => $contact) { 
+						$nom = $fiche->affichageNomByID($contact, '', true);
+						$contacts[$key]['id'] = $contact;
+						$contacts[$key]['nom'] = $nom;
+					}
+					
+					$core->triParColonne($contacts, 'nom');
+					
+					foreach ($contacts as $contact) :
+				?>
+				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact['id'])); ?>">
 					<li class="electeur">
-						<strong><?php $fiche->nomByID($contact, '', false); ?></strong>
+						<strong><?php $fiche->nomByID($contact['id'], '', false); ?></strong>
 					</li>
 				</a>
 				<?php endforeach; ?>
