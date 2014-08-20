@@ -534,14 +534,15 @@ class carto extends core {
 					  ON		rues.rue_id = immeubles.rue_id
 					  LEFT JOIN	communes
 					  ON		communes.commune_id = rues.commune_id
-					  WHERE		' . $branche . 's.' . $branche . '_id = ' . $id . '
-					  AND		contacts.contact_electeur = 1';
+					  WHERE		' . $branche . 's.' . $branche . '_id = ' . $id;
 		}
 		
 		
 		// On regarde si on demandait seulement ceux ayant des coordonnées
 		if (!is_null($coordonnees) && !empty($query)) {
 			$query .= ' AND contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0';
+		} else if (is_null($coordonnees) && !empty($query)) {
+			$query .= '  AND contacts.contact_electeur = 1';
 		}
 		
 		

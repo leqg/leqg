@@ -26,15 +26,15 @@
 		</li>
 		<li>
 			<span class="label-information">Emails</span><?php $nombre = $carto->nombreElecteurs('commune', $ville['id'], 'email'); ?>
-			<p><?php echo $nombre; ?> adresse<?php echo ($nombre > 1) ? 's' : ''; ?> d'électeur récoltée<?php echo ($nombre > 1) ? 's' : ''; ?></p>
+			<p><?php echo $nombre; ?> contact<?php echo ($nombre > 1) ? 's' : ''; ?> récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
 		</li>
 		<li>
 			<span class="label-information">Téléphones mobiles</span><?php $nombre = $carto->nombreElecteurs('commune', $ville['id'], 'mobile'); ?>
-			<p><?php echo $nombre; ?> numéro<?php echo ($nombre > 1) ? 's' : ''; ?> d'électeur récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
+			<p><?php echo $nombre; ?> contact<?php echo ($nombre > 1) ? 's' : ''; ?> récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
 		</li>
 		<li>
 			<span class="label-information">Téléphones fixes</span><?php $nombre = $carto->nombreElecteurs('commune', $ville['id'], 'telephone'); ?>
-			<p><?php echo $nombre; ?> numéro<?php echo ($nombre > 1) ? 's' : ''; ?> d'électeur récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
+			<p><?php echo $nombre; ?> contact<?php echo ($nombre > 1) ? 's' : ''; ?> récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
 		</li>
 	</ul>
 </section>
