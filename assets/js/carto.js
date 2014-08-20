@@ -88,7 +88,7 @@ var carto = function() {
 				data: $('#export').serialize(),
 				dataType: 'html'
 			}).done(function(data){
-				$('#fichier a').attr('href', 'exports/' + data);
+				$('#fichier a').attr('href', data);
 				$('#fichier').show();
 				$('#calcul').hide();
 			});

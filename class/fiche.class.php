@@ -799,7 +799,7 @@ class fiche extends core {
 			fclose($f);
 			
 			// On retourne le nom du fichier
-			return $nomFichier;
+			return 'exports/' . $nomFichier;
 		}
 	}
 }
