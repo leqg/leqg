@@ -716,7 +716,9 @@ class fiche extends core {
 				  LEFT JOIN	rues
 				  ON		rues.rue_id = immeubles.rue_id
 				  LEFT JOIN	communes
-				  ON		communes.commune_id = rues.commune_id';
+				  ON		communes.commune_id = rues.commune_id
+				  LEFT JOIN	codes_postaux
+				  ON		codes_postaux.commune_id = communes.commune_id';
 		
 		// tableau des critères initialisé
 		$criteres = array();
@@ -735,9 +737,9 @@ class fiche extends core {
 		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
 		if ($formulaire['age-min'] > 0) $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', $age_min) . '"';
 		if ($formulaire['age-max'] > 0) $criteres[] = 'contact_naissance_date >= "' . date('Y-m-d', $age_max) . '"';
-		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL';
-		if ($formulaire['mobile']) $criteres[] = 'contact_mobile IS NOT NULL';
-		if ($formulaire['fixe']) $criteres[] = 'contact_telephone IS NOT NULL';
+		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL AND contact_optout_email = 0';
+		if ($formulaire['mobile']) $criteres[] = 'contact_mobile IS NOT NULL AND contact_optout_mobile = 0';
+		if ($formulaire['fixe']) $criteres[] = 'contact_telephone IS NOT NULL AND contact_optout_telephone = 0';
 		
 		// On applique les critères à la requête SQL
 		foreach ($criteres as $key => $critere) {
@@ -748,12 +750,60 @@ class fiche extends core {
 		// On applique un tri des contacts
 		$query .= ' ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
 		
+		// On lance la requête
+		$sql = $this->db->query($query);
+		
 		// Si c'est une simulation, on calcule le nombre de fiches et on retourne l'information
 		if ($simulation) { //$this->debug($query);
-			$sql = $this->db->query($query);
-			$nb = $sql->num_rows;
+			return $sql->num_rows;
 			
-			return $nb;
+		// Sinon, on fait la requête de tous les utilisateurs pour fabriquer le fichier et on le créé
+		} else {
+			// On prépare le contenu du fichier sous forme de tableau
+			$fichier = array();
+			
+			// On y entre la première ligne du fichier
+			$fichier[] = array('nom',
+							   'nom_usage',
+							   'prenoms',
+							   'date_naissance',
+							   'adresse',
+							   'cp',
+							   'ville',
+							   'sexe',
+							   'email',
+							   'mobile',
+							   'fixe',
+							   'electeur');
+		
+			while ($contact = $sql->fetch_assoc()) {
+				// on rassemble les informations qu'on balance dans le fichier
+				$fichier[] = array($contact['contact_nom'],
+								   $contact['contact_nom_usage'],
+								   $contact['contact_prenoms'],
+								   date('d/m/Y', strtotime($contact['contact_naissance_date'])),
+								   $contact['immeuble_numero'] . ' ' . $contact['rue_nom'],
+								   $contact['code_postal'],
+								   $contact['commune_nom_propre'],
+								   $contact['contact_sexe'],
+								   $contact['contact_email'],
+								   $contact['contact_mobile'],
+								   $contact['contact_telephone'],
+								   $contact['contact_electeur']);
+			}
+			
+			// On créé le fichier
+			$nomFichier = 'export-' . $_COOKIE['leqg-user'] . '-' .date('Y-m-d-H\hi'). '-' . time() . '.csv';
+			$f = fopen('exports/' . $nomFichier, 'w+');
+			
+				// On ajoute les lignes dans le fichier
+				foreach ($fichier as $ligne) { fputcsv($f, $ligne, ';', '"'); }
+			
+			// On ferme le fichier
+			fclose($f);
+			
+			// On retourne le nom du fichier
+			return $nomFichier;
 		}
 	}
 }

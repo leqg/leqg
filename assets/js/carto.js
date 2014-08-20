@@ -46,7 +46,9 @@ var carto = function() {
 	// Données relative au système d'export
 	
 		// On commence par cacher le moteur de calcul
-		$('#calcul').hide();	
+		$('#calcul').hide();
+		$('#fichier').hide();	
+		$('#boutonExportation').hide();
 		
 		// On prépare ce qu'il se passe quand on clique sur l'estimation du nombre de fiches du formulaire
 		$("#export").on('submit', function() {
@@ -63,10 +65,35 @@ var carto = function() {
 				dataType: 'html'
 			}).done(function(data){
 				$("#affichageEstimation").html(data);
+				$('#boutonExportation').show();
+				$('#fichier').hide();
 				$('#calcul').hide();
 			});
 			
 			// On retourne une erreur pour ne pas rediriger vers la page du formulaire
+			return false;
+		});
+		
+		
+		// On envoi les données pour l'exportation
+		$("#exportation").on('click', function() {
+			
+			// On commence par enlever le bouton d'export pour afficher le calcul en cours et puis le bouton vers le fichier
+			$('#calcul').show();
+			$('#boutonExportation').hide();
+			
+			$.ajax({
+				url: $(this).attr('href'),
+				type: 'POST',
+				data: $('#export').serialize(),
+				dataType: 'html'
+			}).done(function(data){
+				$('#fichier').html(data);
+				$('#fichier').show();
+				$('#calcul').hide();
+			});
+			
+			// On annule le clique sur le lien
 			return false;
 		});
 }

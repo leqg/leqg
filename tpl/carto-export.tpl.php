@@ -67,6 +67,10 @@
 		<p>
 			D'après les critères sélectionnés, <strong id="affichageEstimation">0</strong> fiches seront exportées.
 		</p>
+		<p style="text-align: center;" id="boutonExportation">
+			<a href="ajax.php?script=export" id="exportation" class="nostyle bouton boutonRouge">Exporter les fiches</a>
+		</p>
+		<p id="fichier"></p>
 		<div id="calcul"><p><span><span>&#xe8eb;</span></span>Calcul en cours</p></div>
 	</div>
 </aside>
