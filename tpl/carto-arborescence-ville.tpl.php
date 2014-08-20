@@ -4,7 +4,7 @@
 	$region = $carto->region($departement['region_id']);
 ?>
 <section id="fiche" data-fiche="<?php echo $ville['id']; ?>">
-	<header>
+	<header class="ville">
 		<h2>
 			Ville de
 			<span><?php $carto->afficherVille($ville['id']); ?></span>

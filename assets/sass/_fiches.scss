@@ -46,6 +46,11 @@
 			width: 125px;
 		}
 		
+		&.ville::before { content: '\e844'; }
+		&.rue::before { content: '\e841'; }
+		&.immeuble::before { content: '\e842'; }
+		&.export::before { content: '\e90b'; }
+		
 		#config-icon {
 			position: absolute; top: 135px; left: -50px;
 			display: block;

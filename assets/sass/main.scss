@@ -281,6 +281,16 @@ main {
 			margin-bottom: 1em;
 			padding: 0 5%;
 			width: 100%;
+			
+			& > p {
+				font-size: 1.2em;
+				padding: 0 .66em 1.5em .66em;
+				
+				& > strong {
+					font-size: 1.1em;
+					font-weight: 500;
+				}
+			}
 		}
 	}
 }
@@ -356,6 +366,17 @@ ul.deuxColonnes {
 		& > p {
 			max-height: calc(1.5em * 5 + .66em);
 			overflow: scroll;
+					
+			&.radioBool {
+				display: table;
+				width: 100%;
+				
+				& > label {
+					display: table-cell;
+					text-align: left;
+					vertical-align: bottom;
+				}
+			}
 		}
 		
 		& > span[class^='icone-'],

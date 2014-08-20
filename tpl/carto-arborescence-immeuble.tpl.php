@@ -8,7 +8,7 @@
 	$region = $carto->region($departement['region_id']);
 ?>
 <section id="fiche" data-fiche="<?php echo $ville['id']; ?>">
-	<header>
+	<header class="immeuble">
 		<h2>
 			<?php $carto->afficherVille($rue['commune_id']); ?>
 			<span><?php echo $immeuble['numero']; ?> <?php $carto->afficherRue($rue['id']); ?></span>
