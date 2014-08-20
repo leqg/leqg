@@ -267,7 +267,8 @@ main {
 	aside {
 		position: absolute; top: 0; right: 0;
 		height: 100%;
-		overflow: scroll;
+		overflow-x: hidden;
+		overflow-y: scroll;
 		padding-top: 50px;
 		width: 40%;
 		
@@ -447,7 +448,8 @@ ul.deuxColonnes {
 				&.dossier,
 				&.ville,
 				&.rue,
-				&.immeuble {
+				&.immeuble,
+				&.electeur {
 					position: relative;
 					padding-left: 70px;
 					padding-top: .6em;
@@ -512,6 +514,7 @@ ul.deuxColonnes {
 				&.immeuble::before { content: '\e842'; }
 				&.dossier::before { content: '\e850'; }
 				&.ajoutDossier::before { content: '\e851'; }
+				&.electeur::before { content: '\e80a'; }
 				
 				&:hover {
 					background-color: rgba($rouge, .05);

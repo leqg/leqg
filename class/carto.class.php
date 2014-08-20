@@ -119,6 +119,48 @@ class carto extends core {
 	}
 	
 	
+	// canton( int ) permet de renvoyer toutes les informations relatives à un canton demandé par son id
+	public	function canton( $id ) {
+		// On sécurise la recherche
+			$id = $this->securisation_string($id);
+		
+		// On prépare la requête de recherche des informations
+			$query = 'SELECT		*
+					  FROM		cantons
+					  WHERE		canton_id = ' . $id;
+		
+		// On effectue la requête
+			$sql = $this->db->query($query);
+		
+		// On traite les résultats
+			$result = $this->formatage_donnees($sql->fetch_assoc());
+		
+		// On retourne les résultats
+			return $result;
+	}
+	
+	
+	// bureau( int ) permet de renvoyer toutes les informations relatives à un bureau de vote demandé par son id
+	public	function bureau( $id ) {
+		// On sécurise la recherche
+			$id = $this->securisation_string($id);
+		
+		// On prépare la requête de recherche des informations
+			$query = 'SELECT		*
+					  FROM		bureaux
+					  WHERE		bureau_id = ' . $id;
+		
+		// On effectue la requête
+			$sql = $this->db->query($query);
+		
+		// On traite les résultats
+			$result = $this->formatage_donnees($sql->fetch_assoc());
+		
+		// On retourne les résultats
+			return $result;
+	}
+	
+	
 	// ville( int ) permet de renvoyer toutes les informations relatives à une ville demandée par son id
 	public	function ville( $id ) {
 		// On sécurise la recherche
@@ -249,8 +291,7 @@ class carto extends core {
 			$query = 'SELECT	*
 					  FROM		rues
 					  WHERE		commune_id = ' . $ville . '
-					  ORDER BY	rue_nom ASC
-					  LIMIT		0, 50';
+					  ORDER BY	rue_nom ASC';
 		
 		// On prépare le tableau qui permettra de renvoyer les données
 			$rues = array();
@@ -270,7 +311,7 @@ class carto extends core {
 			if (!is_numeric($rue)) return false;
 		
 		// On prépare la requête de récupération des immeubles correspondant
-			$query = 'SELECT		*
+			$query = 'SELECT	*
 					  FROM		immeubles
 					  WHERE		rue_id = ' . $rue . '
 					  ORDER BY	immeuble_numero ASC';
@@ -281,12 +322,45 @@ class carto extends core {
 		// On effectue la requête BDD et on affiche les résultats dans un tableau $immeubles
 			$sql = $this->db->query($query);
 			while ($row = $sql->fetch_assoc()) $immeubles[] = $this->formatage_donnees($row);
+		
+		// Pour le tri, on retire toutes les lettres de la colonne numéro
+			foreach ($immeubles as $key => $immeuble) {
+				// On copie la colonne numéro
+				$immeuble['numero_safe'] = $immeuble['numero'];
 				
+				// On retire ce qui n'est pas un chiffre
+				$immeuble['numero_safe'] = preg_replace('#[^0-9]#', '', $immeuble['numero_safe']);
+				
+				// On enregistre ce numéro safe
+				$immeubles[$key]['numero_safe'] = $immeuble['numero_safe'];
+			}
+
 		// On trie le tableau pour des résultats dans l'ordre logique
-			$this->triParColonne($immeubles, 'numero');
+			$this->triParColonne($immeubles, 'numero_safe');
 		
 		// On retourne les données
 			return $immeubles;
+	}
+	
+	
+	// listeElecteurs( int ) permet de retourner la liste des électeurs pour un immeuble
+	public	function listeElecteurs( $immeuble ) {
+		// On vérifie que les arguments sont bien des élements numériques
+			if (!is_numeric($immeuble)) return false;
+		
+		// On prépare la requête de récupération des électeurs correspondant
+			$query = 'SELECT	*
+					  FROM		contacts
+					  WHERE		immeuble_id = ' . $immeuble . '
+					  ORDER BY	contact_nom, contact_nom_usage, contact_prenoms ASC';
+		
+		// On effectue la requête BDD et on affiche les résultats dans un tableau $electeurs
+			$electeurs = array();
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) $electeurs[] = $this->formatage_donnees($row);
+		
+		// On retourne les données
+			return $electeurs;
 	}
 	
 	
@@ -449,7 +523,7 @@ class carto extends core {
 	public	function nombreElecteurs( $branche , $id , $coordonnees = null ) {
 		if (!is_string($branche) || !is_numeric($id)) return false;
 		
-		if ($branche == 'ville') {
+		if (isset($branche)) {
 			// On prépare la requête de calcul du nombre d'électeur dans la commune
 			$query = 'SELECT	COUNT(*)
 					  AS		nombre
@@ -460,7 +534,7 @@ class carto extends core {
 					  ON		rues.rue_id = immeubles.rue_id
 					  LEFT JOIN	communes
 					  ON		communes.commune_id = rues.commune_id
-					  WHERE		communes.commune_id = ' . $id . '
+					  WHERE		' . $branche . 's.' . $branche . '_id = ' . $id . '
 					  AND		contacts.contact_electeur = 1';
 		}
 		
