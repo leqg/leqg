@@ -1,7 +1,7 @@
 <?php
 	$immeuble = $carto->immeuble($_GET['immeuble']);
 	$bureau = $carto->bureau($immeuble['bureau_id']);
-	$canton = $carto->canton($bureau['canton_id']);
+	//$canton = $carto->canton($bureau['canton_id']);
 	$rue = $carto->rue($immeuble['rue_id']);
 	$ville = $carto->ville($rue['commune_id']);
 	$departement = $carto->departement($ville['departement_id']);
@@ -24,12 +24,12 @@
 			<span class="label-information">Département</span>
 			<p><?php echo $departement['nom']; ?> (<?php echo $departement['id']; ?>)</p>
 		</li>
-		<?php if ($canton != null) : ?>
+		<?php /*if ($canton != null) : ?>
 		<li>
 			<span class="label-information">Canton</span>
 			<p><?php echo $canton['nom']; ?> (<?php echo $canton['id']; ?>)</p>
 		</li>
-		<?php endif; ?>
+		<?php endif;*/ ?>
 		<li>
 			<span class="label-information">Électeurs</span><?php $nombre = $carto->nombreElecteurs('immeuble', $immeuble['id']); ?>
 			<p><?php echo $nombre; ?> électeur<?php echo ($nombre > 1) ? 's' : ''; ?> connu<?php echo ($nombre > 1) ? 's' : ''; ?></p>
