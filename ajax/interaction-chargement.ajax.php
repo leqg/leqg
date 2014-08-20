@@ -69,7 +69,7 @@
 				</li>
 			<?php if(!empty($f['url'])) { ?></a><?php } ?>
 			<?php endforeach; endif; ?>
-			<a href="<?php $core->tpl_get_url('fiche', $interaction['contact_id'], 'id', $interaction['id'], 'interaction'); ?>&fichier=true"><li class="fichier ajoutFichier"><strong>Ajouter un nouveau fichier</li></a>
+			<a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'], 'fichier' => 'true')); ?>"><li class="fichier ajoutFichier"><strong>Ajouter un nouveau fichier</strong></li></a>
 		</ul><!--
  --></li>
 </ul>

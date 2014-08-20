@@ -50,6 +50,7 @@
 		&.rue::before { content: '\e841'; }
 		&.immeuble::before { content: '\e842'; }
 		&.export::before { content: '\e90b'; }
+		&.dossier::before { content: '\e850'; }
 		
 		#config-icon {
 			position: absolute; top: 135px; left: -50px;

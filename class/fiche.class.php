@@ -128,6 +128,30 @@ class fiche extends core {
 	}
 	
 	
+	// Méthode de calcul du rendu du nom d'une fiche demandée
+	public	function affichageNomByID($id, $separateur = null, $return = false) {
+		// On récupère les information
+		$query = 'SELECT * FROM contacts WHERE contact_id = ' . $id;
+		$sql = $this->db->query($query);
+		$row = $sql->fetch_assoc();
+	
+		$nom = $row['contact_nom']; 
+		$nom_usage = $row['contact_nom_usage'];
+		$prenoms = $row['contact_prenoms'];
+	
+		if ($separateur) { $begin = '<' . $separateur . '>'; $end = '</' . $separateur . '>'; }
+		else { $begin = null; $end = null; }
+	
+		if (!empty($nom)) { $affichage = $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
+		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($nom_usage, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
+		if (!empty($prenoms)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($prenoms, ENT_NOQUOTES, 'utf-8'), MB_CASE_TITLE, 'utf-8') . $end; }
+		
+		if ($return == false) : echo $affichage; else : return $affichage; endif;
+		
+		unset($affichage);
+	}
+	
+	
 	// Méthode de calcul de l'affiche des informations liées à la date de naissance
 	public	function date_naissance($separateur='/', $return = false, $date = null) {
 		// Si aucune date n'est fourni, on utilise celle de la fiche ouverte

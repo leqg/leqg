@@ -37,6 +37,26 @@ class historique extends core {
 	}
 	
 	
+	// rechercheParDossier( int ) permet d'extraire de la BDD les entrées de l'historique pour un dossier demandé
+	public	function rechercheParDossier( $dossier ) {
+		// On vérifie que la fiche est bien un nombre (id = numeric)
+		if ( is_numeric( $dossier ) ) :
+		
+			// On effectue la recherche dans la BDD des entrées dans l'historique rattachées à la fiche contact demandée
+			$query = 'SELECT * FROM historique WHERE dossier_id = ' . $dossier . ' ORDER BY historique_timestamp DESC';
+			$sql = $this->db->query($query);
+			
+			// On fait la liste de toutes les entrées pour les affecter dans un tableau
+			$entrees = array();
+			
+			while ( $row = $sql->fetch_assoc() ) $entrees[] = $this->formatage_donnees($row);
+			
+			return $entrees;
+		
+		else : return false; endif;
+	}
+	
+	
 	// nombre( int ) permet d'extraire le nombres d'entrées dans l'historique du compte rattachés à la fiche contact demandée
 	public	function nombre( $fiche ) {
 		// On vérifie que la fiche est bien un nombre
