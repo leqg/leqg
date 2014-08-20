@@ -70,7 +70,7 @@
 		<p style="text-align: center;" id="boutonExportation">
 			<a href="ajax.php?script=export" id="exportation" class="nostyle bouton boutonRouge">Exporter les fiches</a>
 		</p>
-		<p id="fichier"></p>
+		<p id="fichier"><a href="#" target="_blank" class="nostyle bouton boutonVert" style="margin-top: 2em;">Télécharger le fichier</a></p>
 		<div id="calcul"><p><span><span>&#xe8eb;</span></span>Calcul en cours</p></div>
 	</div>
 </aside>
