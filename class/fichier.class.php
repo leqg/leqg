@@ -87,7 +87,7 @@ class fichier extends core {
 	// listeFichiers( string , int ) permet de rechercher tous les fichiers par objet
 	public	function listeFichiers( $objet , $id ) {
 		// On défini tout d'abord la liste des objets possibles
-			$objets = array('contact', 'interaction');
+			$objets = array('contact', 'interaction', 'dossier');
 		
 		// On vérifie que l'objet demandé est autorisé
 			if (!in_array($objet, $objets)) return false;
