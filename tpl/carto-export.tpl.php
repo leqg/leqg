@@ -5,7 +5,7 @@
 		</h2>
 	</header>
 	
-	<form action="export.php" method="post">
+	<form action="ajax.php?script=estimation-export" method="post" id="export">
 		<input type="hidden" name="ville" value="">
 		<input type="hidden" name="rue" value="">
 		<input type="hidden" name="immeuble" value="">
@@ -19,7 +19,7 @@
 			</li>
 			<li id="selectionSexe">
 				<span class="label-information"><label for="form-sexe">Sexe</label></span>
-				<span class="bordure-form"><label class="selectbox"><select name="sexe" id="form-sexe"><option value="I">Indifférent</option><option value="M">Homme</option><option value="F">Femme</opion></select></label></span>
+				<span class="bordure-form"><label class="selectbox"><select name="sexe" id="form-sexe"><option value="i">Indifférent</option><option value="m">Homme</option><option value="f">Femme</opion></select></label></span>
 			</li>
 			<li id="selectionAgeMin">
 				<span class="label-information"><label for="form-age-min">&Acirc;ge minimal</label></span>
@@ -55,7 +55,7 @@
 				<p><a class="nostyle bouton boutonOrange" href="#">Choisir</a><em id="critereGeographique" style="padding-left: 1em"></em></p>
 			</li>
 			<li class="submit">
-				<input type="submit" value="Exporter les fiches correspondantes">
+				<input type="submit" value="Estimer le nombre de fiches">
 			</li>
 		</ul>
 	</form>
@@ -67,5 +67,6 @@
 		<p>
 			D'après les critères sélectionnés, <strong id="affichageEstimation">0</strong> fiches seront exportées.
 		</p>
+		<div id="calcul"><p><span><span>&#xe8eb;</span></span>Calcul en cours</p></div>
 	</div>
 </aside>

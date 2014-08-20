@@ -701,6 +701,61 @@ class fiche extends core {
 		$donnees = array($ville_origine, $dept_origine);
 		return $donnees;
 	}
+	
+	
+	// export( array , bool ) permet d'effectuer un export de données en CSV depuis la base de données
+	public	function export( $formulaire , $simulation = false ) {
+		// On commence par vérifier le format des arguments
+		if (!is_array($formulaire) || !is_bool($simulation)) return false;
+		
+		// On prépare la requête SQL
+		$query = 'SELECT	*
+				  FROM		contacts
+				  LEFT JOIN	immeubles
+				  ON		immeubles.immeuble_id = contacts.immeuble_id
+				  LEFT JOIN	rues
+				  ON		rues.rue_id = immeubles.rue_id
+				  LEFT JOIN	communes
+				  ON		communes.commune_id = rues.commune_id';
+		
+		// tableau des critères initialisé
+		$criteres = array();
+		
+		// On calcule les âges mini et maxi en date
+		if ($formulaire['age-min'] > $formulaire['age-max']) { $formulaire['age'] = $formulaire['age-min']; $formulaire['age-min'] = $formulaire['age-max']; $formulaire['age-max'] = $formulaire['age']; unset($formulaire['age']); }
+		
+		$age_min = mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-min']);
+		$age_max = mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-max']);
+		
+		if (!empty($formulaire['ville'])) $criteres[] = 'commune_id = ' . $formulaire['ville'];
+		if (!empty($formulaire['rue'])) $criteres[] = 'rue_id = ' . $formulaire['rue'];
+		if (!empty($formulaire['immeuble'])) $criteres[] = 'immeuble_id = ' . $formulaire['immeuble'];
+		if (!empty($formulaire['electeur'])) $criteres[] = 'contact_electeur = ' . $formulaire['electeur'];
+		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
+		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
+		if ($formulaire['age-min'] > 0) $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', $age_min) . '"';
+		if ($formulaire['age-max'] > 0) $criteres[] = 'contact_naissance_date >= "' . date('Y-m-d', $age_max) . '"';
+		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL';
+		if ($formulaire['mobile']) $criteres[] = 'contact_mobile IS NOT NULL';
+		if ($formulaire['fixe']) $criteres[] = 'contact_telephone IS NOT NULL';
+		
+		// On applique les critères à la requête SQL
+		foreach ($criteres as $key => $critere) {
+			if ($key == 0) { $query .= ' WHERE '; } else { $query .= ' AND '; }
+			$query .= $critere;
+		}
+		
+		// On applique un tri des contacts
+		$query .= ' ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
+		
+		// Si c'est une simulation, on calcule le nombre de fiches et on retourne l'information
+		if ($simulation) { //$this->debug($query);
+			$sql = $this->db->query($query);
+			$nb = $sql->num_rows;
+			
+			return $nb;
+		}
+	}
 }
 
 ?>

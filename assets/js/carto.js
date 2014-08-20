@@ -42,6 +42,34 @@ var carto = function() {
 		});
 	});
 	
+	
+	// Données relative au système d'export
+	
+		// On commence par cacher le moteur de calcul
+		$('#calcul').hide();	
+		
+		// On prépare ce qu'il se passe quand on clique sur l'estimation du nombre de fiches du formulaire
+		$("#export").on('submit', function() {
+			// On lance le script AJAX
+			var donnees = $(this).serialize();
+			
+			// On lance le moteur de calcul
+			$('#calcul').show();
+			
+			$.ajax({
+				url: $(this).attr('action'),
+				type: $(this).attr('method'),
+				data: $(this).serialize(),
+				dataType: 'html'
+			}).done(function(data){
+				$("#affichageEstimation").html(data);
+				$('#calcul').hide();
+			});
+			
+			// On retourne une erreur pour ne pas rediriger vers la page du formulaire
+			return false;
+		});
 }
+
 
 $(document).ready(carto);

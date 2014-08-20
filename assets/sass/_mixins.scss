@@ -55,6 +55,13 @@
 	    		transform: scaleX(-1);
 }
 
+@mixin animation($attr) {
+	-webkit-animation: $attr;
+	   -moz-animation: $attr;
+	    -ms-animation: $attr;
+	    	animation: $attr;
+}
+
 @mixin linear-gradient($from, $to) {
 	/* Fallback for sad browsers */
 	background-color: $to;
