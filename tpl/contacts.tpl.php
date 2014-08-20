@@ -1,9 +1,15 @@
-<?php $core->tpl_header(); ?>
+<?php
 
-<?php $core->tpl_load('liste', 'taches'); ?>
+	// On charge le header de la page
+	$core->tpl_header();
+	
+	// On charge les dernières interactions ayant eu lieu sur la page
+	$core->tpl_load('contact', 'interactions');
 
-<?php $core->tpl_load('liste', 'dossiers'); ?>
+	// On charge le aside de la page contacts
+	$core->tpl_load('aside', 'contacts');
 
-<?php $core->tpl_load('aside', 'contacts'); ?>
-
-<?php $core->tpl_footer(); ?>
+	// On charge le footer de la page
+	$core->tpl_footer();
+	
+?>

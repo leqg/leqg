@@ -250,4 +250,29 @@ class historique extends core {
 			return false;
 		}
 	}
+	
+	
+	// dernieresInteractions( int ) permet d'afficher les x dernières interactions
+	public	function dernieresInteractions( $nombre ) {
+		// On vérifie qu'il s'agit bien d'un nombre
+		if (!is_numeric($nombre)) return false;
+		
+		// On calcule la liste des dernières interactions selon le timestamp
+		$query = 'SELECT	*
+				  FROM		historique
+				  ORDER BY	historique_timestamp DESC
+				  LIMIT		0, ' . $nombre;
+		
+		// On effectue la requête
+		$sql = $this->db->query($query);
+		
+		// On prépare le tableau des interactions
+		$interactions = array();
+		
+		// On affecte les résultats au tableau
+		while ($row = $sql->fetch_assoc()) $interactions[] = $this->formatage_donnees($row);
+		
+		// On retourne les interactions
+		return $interactions;
+	}
 }

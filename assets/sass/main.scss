@@ -530,8 +530,18 @@ ul.deuxColonnes {
 					&.archive::before { content: '\e908'; }
 					&.ajoutFichier::before { content: '\e822'; }
 					
-					& > strong { line-height: 30px; }
-					& > p { margin: 0; padding-bottom: .5em; }
+					& > strong {
+						line-height: 30px;
+					}
+					
+					& > p {
+						margin: 0;
+						padding-bottom: .5em;
+						
+						&.tailleNormale {
+							font-size: .85em;
+						}
+					}
 				}
 				
 				&.ville::before { content: '\e844'; }
