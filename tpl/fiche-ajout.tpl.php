@@ -1,5 +1,5 @@
 <div id="creationNouvelleFiche">
-	<section id="fiche-electeur">
+	<section id="fiche">
 		<header>
 			<h2 class="titre">Création d'une fiche</h2>
 		</header>
