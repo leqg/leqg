@@ -49,25 +49,27 @@
 	</ul>
 </section>
 <aside>
-	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $immeuble['rue_id'])); ?>">Retour à la rue</a>
-	</nav>
-
-	<h6>Accéder aux informations sur les électeurs du <em><?php echo $immeuble['numero']; ?> <?php $carto->afficherRue($rue['id']); ?></em></h6>
+	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $immeuble['rue_id'])); ?>">Retour à la rue</a>
+		</nav>
 	
-	<ul class="deuxColonnes petit">
-		<li>
-			<span class="label-information">Électeurs</span>
-			<ul class="listeEncadree" id="listeImmeubles">
-				<?php $electeurs = $carto->listeElecteurs($immeuble['id']); foreach ($electeurs as $electeur) : ?>
-				<a class="nostyle" href="<?php $core->tpl_go_to('fiche', array('id' => $electeur['id'])); ?>">
-					<li class="electeur">
-						<?php $fiche->acces($electeur['id'], true); ?>
-						<strong><?php echo $fiche->affichage_nom(); ?> (<?php $fiche->age(); ?>)</strong>
-					</li>
-				</a>
-				<?php endforeach; ?>
-			</ul>
-		</li>
-	</ul>
+		<h6>Accéder aux informations sur les électeurs du <em><?php echo $immeuble['numero']; ?> <?php $carto->afficherRue($rue['id']); ?></em></h6>
+		
+		<ul class="deuxColonnes petit">
+			<li>
+				<span class="label-information">Électeurs</span>
+				<ul class="listeEncadree" id="listeImmeubles">
+					<?php $electeurs = $carto->listeElecteurs($immeuble['id']); foreach ($electeurs as $electeur) : ?>
+					<a class="nostyle" href="<?php $core->tpl_go_to('fiche', array('id' => $electeur['id'])); ?>">
+						<li class="electeur">
+							<?php $fiche->acces($electeur['id'], true); ?>
+							<strong><?php echo $fiche->affichage_nom(); ?> (<?php $fiche->age(); ?>)</strong>
+						</li>
+					</a>
+					<?php endforeach; ?>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </aside>

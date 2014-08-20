@@ -1,4 +1,4 @@
-<section id="liste-taches" class="central">
+<section id="liste-taches" class="sectionCentrale">
 	<h3>Tâches restantes à réaliser</h3>
 	<ul class="taches">
 		<?php $taches = $tache->recherche( $user->get_the_id() ); foreach ( $taches as $t ) : ?>

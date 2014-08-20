@@ -40,24 +40,26 @@
 	</ul>
 </section>
 <aside>
-	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $rue['commune_id'])); ?>">Retour à la ville</a>
-	</nav>
-
-	<h6>Accéder aux informations sur les immeubles : <em><?php $carto->afficherRue($rue['id']); ?></em></h6>
+	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $rue['commune_id'])); ?>">Retour à la ville</a>
+		</nav>
 	
-	<ul class="deuxColonnes petit">
-		<li>
-			<span class="label-information">Immeubles</span>
-			<ul class="listeEncadree" id="listeImmeubles">
-				<?php $immeubles = $carto->listeImmeubles($rue['id']); foreach ($immeubles as $immeuble) : ?>
-				<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'immeuble', 'immeuble' => $immeuble['id'])); ?>">
-					<li class="immeuble">
-						<strong><?php echo $immeuble['numero']; ?> <?php echo $rue['nom']; ?></strong>
-					</li>
-				</a>
-				<?php endforeach; ?>
-			</ul>
-		</li>
-	</ul>
+		<h6>Accéder aux informations sur les immeubles : <em><?php $carto->afficherRue($rue['id']); ?></em></h6>
+		
+		<ul class="deuxColonnes petit">
+			<li>
+				<span class="label-information">Immeubles</span>
+				<ul class="listeEncadree" id="listeImmeubles">
+					<?php $immeubles = $carto->listeImmeubles($rue['id']); foreach ($immeubles as $immeuble) : ?>
+					<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'immeuble', 'immeuble' => $immeuble['id'])); ?>">
+						<li class="immeuble">
+							<strong><?php echo $immeuble['numero']; ?> <?php echo $rue['nom']; ?></strong>
+						</li>
+					</a>
+					<?php endforeach; ?>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </aside>

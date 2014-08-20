@@ -34,8 +34,8 @@ $lime:		rgba(236, 240, 129, 1);
 $gris:		rgba(205, 203, 202, 1);
 $grisMoyen:	darken($gris, 15%);
 $grisFonce:	darken($gris, 50%);
-$fonts1:		'Roboto', Helvetica, Arial, sans-serif;
-$fonts2:		'Fira Sans', Helvetica, Arial, sans-serif;
+$fonts1:	'Roboto', Helvetica, Arial, sans-serif;
+$fonts2:	'Fira Sans', Helvetica, Arial, sans-serif;
 $monospaced:'Fira Mono', monospace;
 $icons:		'fontello';
 
@@ -288,7 +288,7 @@ main {
 section {
 	position: relative;
 
-	&.central {
+	&.sectionCentrale {
 		width: 55%;
 	}
 }

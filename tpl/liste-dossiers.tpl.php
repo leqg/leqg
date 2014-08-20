@@ -1,4 +1,4 @@
-<section id="liste-dossier" class="central">
+<section id="liste-dossier" class="sectionCentrale">
 	<h3>Dossiers ouverts actuellement</h3>
 	<ul id="listeDossiers">
 		<?php $dossiers = $dossier->recherche(); foreach ( $dossiers as $d ) : ?>

@@ -1,4 +1,4 @@
-<section id="recherche-fiche">
+<div id="recherche-fiche">
 	<h6>Recherche de contacts</h6>
 	<form action="<?php $core->tpl_get_url('recherche'); ?>" method="post">
 		<ul>
@@ -11,4 +11,4 @@
 			</li>
 		</ul>
 	</form>
-</section>
+</div>

@@ -1,4 +1,4 @@
-<section id="recherche-tags">
+<div id="recherche-tags">
 	<h6>Recherche par étiquette</h6>
 	<form action="<?php $core->tpl_get_url('recherche-tag'); ?>" method="post">
 		<ul>
@@ -20,4 +20,4 @@
  	 		<?php } ?>
 		</datalist>
 	</form>
-</section>
+</div>
