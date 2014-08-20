@@ -153,7 +153,7 @@ class fiche extends core {
 	    if(($arr1[1] < $arr2[1]) || (($arr1[1] == $arr2[1]) && ($arr1[0] <= $arr2[0]))) { $age = $arr2[2] - $arr1[2]; }
 	    else { $age = $arr2[2] - $arr1[2] - 1; }
 	    
-	    if ($return) : return $age; else : echo $age . ' ans'; endif;
+	    if ($return) : return $age; else : echo $age . '&nbsp;ans'; endif;
 	}
 	
 	
