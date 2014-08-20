@@ -721,22 +721,17 @@ class fiche extends core {
 				  ON		codes_postaux.commune_id = communes.commune_id';
 		
 		// tableau des critères initialisé
-		$criteres = array();
+		$criteres = array(); //$this->debug($formulaire);
 		
 		// On calcule les âges mini et maxi en date
-		if ($formulaire['age-min'] > $formulaire['age-max']) { $formulaire['age'] = $formulaire['age-min']; $formulaire['age-min'] = $formulaire['age-max']; $formulaire['age-max'] = $formulaire['age']; unset($formulaire['age']); }
-		
-		$age_min = mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-min']);
-		$age_max = mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-max']);
-		
+		if ($formulaire['age-min'] == 0) { $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', time()). '"'; } else { $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-min'])). '"'; }
+		if ($formulaire['age-max'] == 0) { $a = ''; } else { $criteres[] = 'contact_naissance_date >= "' . date('Y-m-d', mktime(0, 0, 0, date('n'), date('j')-1, date('Y')-$formulaire['age-max']-1)).'"'; }
+				
 		if (!empty($formulaire['ville'])) $criteres[] = 'commune_id = ' . $formulaire['ville'];
 		if (!empty($formulaire['rue'])) $criteres[] = 'rue_id = ' . $formulaire['rue'];
 		if (!empty($formulaire['immeuble'])) $criteres[] = 'immeuble_id = ' . $formulaire['immeuble'];
 		if (!empty($formulaire['electeur'])) $criteres[] = 'contact_electeur = ' . $formulaire['electeur'];
 		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
-		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
-		if ($formulaire['age-min'] > 0) $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', $age_min) . '"';
-		if ($formulaire['age-max'] > 0) $criteres[] = 'contact_naissance_date >= "' . date('Y-m-d', $age_max) . '"';
 		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL AND contact_optout_email = 0';
 		if ($formulaire['mobile']) $criteres[] = 'contact_mobile IS NOT NULL AND contact_optout_mobile = 0';
 		if ($formulaire['fixe']) $criteres[] = 'contact_telephone IS NOT NULL AND contact_optout_telephone = 0';
