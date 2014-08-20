@@ -43,7 +43,7 @@
 			<p><?php echo $nombre; ?> contact<?php echo ($nombre > 1) ? 's' : ''; ?> récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
 		</li>
 		<li>
-			<span class="label-information">Téléphones fixes</span><?php $nombre = $carto->nombreElecteurs('immeuble', $$immeuble['id'], 'telephone'); ?>
+			<span class="label-information">Téléphones fixes</span><?php $nombre = $carto->nombreElecteurs('immeuble', $immeuble['id'], 'telephone'); ?>
 			<p><?php echo $nombre; ?> contact<?php echo ($nombre > 1) ? 's' : ''; ?> récolté<?php echo ($nombre > 1) ? 's' : ''; ?></p>
 		</li>
 	</ul>
