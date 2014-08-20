@@ -50,7 +50,7 @@
 </section>
 <aside>
 	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $rue['commune_id'])); ?>">Retour à la ville</a>
+		<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $immeuble['rue_id'])); ?>">Retour à la rue</a>
 	</nav>
 
 	<h6>Accéder aux informations sur les électeurs du <em><?php echo $immeuble['numero']; ?> <?php $carto->afficherRue($rue['id']); ?></em></h6>
