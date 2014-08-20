@@ -751,7 +751,7 @@ class fiche extends core {
 		$query .= ' ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
 		
 		// On lance la requête
-		$this->debug($query);
+		//$this->debug($query);
 		$sql = $this->db->query($query);
 		
 		// Si c'est une simulation, on calcule le nombre de fiches et on retourne l'information
