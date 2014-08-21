@@ -174,7 +174,16 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			// On lance la page d'accueil du module contact
 			$core->tpl_load('contacts');
 			
-		}	
+		}
+		
+		else if ($_GET['page'] == 'dossiers') {
+			
+			// On charge les tpl header, le tpl de la page d'accueil des dossiers et le tpl footer
+			$core->tpl_header();
+			$core->tpl_load('dossiers');
+			$core->tpl_footer();
+			
+		}
 		
 		else if ($_GET['page'] == 'recherche') {
 
