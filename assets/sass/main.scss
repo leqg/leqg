@@ -230,6 +230,7 @@ table {
  
 * {
 	@include box-sizing();
+	outline: none;
 } 
 
 html,
