@@ -38,6 +38,7 @@
 			<li>
 				<span class="label-information">Bureau de vote</span>
 				<p><?php $carto->bureauDeVote($fiche->get_immeuble()); ?></p>
+				<a class="nostyle icone" title="Emplacement du bureau de vote" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $carto->bureauParImmeuble($fiche->get_immeuble()))); ?>">&#xe844;</a>
 			</li>
 			<?php endif; ?>
 			<li>

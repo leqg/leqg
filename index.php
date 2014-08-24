@@ -333,6 +333,22 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 								
 							}
 							
+						} else if ($_GET['module'] == 'bureaux') {
+						
+							// On charge les templates demandés dans ce module
+							
+							if (isset($_GET['bureau']) && is_numeric($_GET['bureau'])) {
+								
+								// Si on demande un bureau de vote directement, on charge le module correspondant
+								$core->tpl_load('carto', 'bureau');
+								
+							} else {
+								
+								// On charge le sommaire du module
+								$core->tpl_load('carto', 'bureaux');
+								
+							} 
+							
 						} else {
 						
 							// On charge le module 

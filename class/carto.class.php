@@ -224,6 +224,16 @@ class carto extends core {
 	}
 	
 	
+	// afficherCanton( int [ , bool ] ) permet d'afficher le nom d'un canton grâce à son ID
+	public	function afficherCanton( $id , $return = false ) {
+		// On lance la recherche d'informations
+			$canton = $this->canton($id);
+		
+		// On retourne le résultat demandé
+			if ($return) : return $canton['nom']; else : echo $canton['nom']; endif;
+	}
+	
+	
 	// afficherVille( int [ , bool ] ) permet d'afficher le nom d'une ville grâce à son ID
 	public	function afficherVille( $id , $return = false ) {
 		// On lance la recherche d'informations
@@ -534,6 +544,10 @@ class carto extends core {
 					  ON		rues.rue_id = immeubles.rue_id
 					  LEFT JOIN	communes
 					  ON		communes.commune_id = rues.commune_id
+					  LEFT JOIN	bureaux
+					  ON		bureaux.bureau_id = immeubles.bureau_id
+					  LEFT JOIN	cantons
+					  ON		cantons.canton_id = bureaux.canton_id
 					  WHERE		' . $branche . 's.' . $branche . '_id = ' . $id;
 		}
 		
