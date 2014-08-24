@@ -113,6 +113,7 @@ nav.navigationFiches {
 				color: $bleu;
 			}
 		}
+		
 		&.modifier {
 			left: 50%;
 			left: calc(50% - 60px);
@@ -122,6 +123,19 @@ nav.navigationFiches {
 			&:hover {
 				background-color: rgba($orange, .05);
 				border-color: $orange;
+				color: $bleu;
+			}
+		}
+		
+		&.liste {
+			left: 50%;
+			left: calc(50% - 60px);
+			
+			&::before { content: '\e8dd'; }
+			
+			&:hover {
+				background-color: rgba($vert, .1);
+				border-color: $vert;
 				color: $bleu;
 			}
 		}

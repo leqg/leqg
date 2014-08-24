@@ -498,7 +498,8 @@ ul.listeEncadree {
 		&.ville,
 		&.rue,
 		&.immeuble,
-		&.electeur {
+		&.electeur,
+		&.bureau {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -574,6 +575,7 @@ ul.listeEncadree {
 		&.dossier::before { content: '\e850'; }
 		&.ajoutDossier::before { content: '\e851'; }
 		&.electeur::before { content: '\e80a'; }
+		&.bureau::before { content: '\e821'; }
 		
 		&:hover {
 			background-color: rgba($rouge, .05);

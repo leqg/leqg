@@ -38,8 +38,15 @@
 		</li>
 	</ul>
 </section>
+
 <aside>
+	<?php if (!isset($_GET['liste']) || $_GET['liste'] == 'rues') : ?>
 	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence')); ?>">Retour aux communes</a>
+			<a class="liste" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $ville['id'], 'liste' => 'bureaux')); ?>">Bureaux</a>
+		</nav>
+
 		<h6>Accéder aux informations sur les rues de <em><?php $carto->afficherVille($ville['id']); ?></em></h6>
 		
 		<ul class="deuxColonnes petit">
@@ -60,4 +67,26 @@
 			</li>
 		</ul>
 	</div>
+	<?php elseif (isset($_GET['liste']) && $_GET['liste'] == 'bureaux') : ?>
+	<div>
+	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence')); ?>">Retour aux communes</a>
+			<a class="liste" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $ville['id'], 'liste' => 'rues')); ?>">Rues</a>
+		</nav>
+
+		<h6>Accéder aux informations sur les bureaux de <em><?php $carto->afficherVille($ville['id']); ?></em></h6>
+		
+		<ul class="listeEncadree" id="listeBureaux">
+			<?php $bureaux = $carto->listeBureaux($ville['id']); foreach ($bureaux as $bureau) : $coordonnees = $carto->coordonneesDansBureau($bureau['id']); ?>
+			<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $bureau['id'])); ?>">
+				<li class="bureau <?php if ($coordonnees) echo 'coordonnees'; ?>">
+					<strong>Bureau <?php echo $bureau['numero']; ?></strong>
+					<p><?php echo $core->tpl_transform_texte($bureau['nom']); ?> (<?php $carto->afficherCanton($bureau['canton_id']); ?>)</p>
+				</li>
+			</a>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+	<?php endif; ?>
 </aside>

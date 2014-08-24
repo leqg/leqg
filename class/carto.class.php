@@ -292,6 +292,29 @@ class carto extends core {
 	}
 	
 	
+	// listeBureaux( int ) permet de retourner la liste des bureaux d'une commune 
+	public	function listeBureaux( $ville ) {
+		// On vérifie que les arguments sont bien des éléments numériques
+			if (!is_numeric($ville)) return false;
+			
+		// On prépare la requête de récupération des immeubles correspondant
+			$query = 'SELECT	*
+					  FROM		bureaux
+					  WHERE		commune_id = ' . $ville . '
+					  ORDER BY	bureau_numero ASC';
+		
+		// On prépare le tableau qui permettra de renvoyer les données
+			$bureaux = array();
+		
+		// On effectue la requête BDD et on affiche les résultats dans un tableau $immeubles
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) $bureaux[] = $this->formatage_donnees($row);
+		
+		// On retourne les données
+			return $bureaux;
+	}
+	
+	
 	// listeRues( int ) permet de retourner la liste des rues d'une commune 
 	public	function listeRues( $ville ) {
 		// On vérifie que les arguments sont bien des éléments numériques
@@ -547,8 +570,13 @@ class carto extends core {
 					  LEFT JOIN	bureaux
 					  ON		bureaux.bureau_id = immeubles.bureau_id
 					  LEFT JOIN	cantons
-					  ON		cantons.canton_id = bureaux.canton_id
-					  WHERE		' . $branche . 's.' . $branche . '_id = ' . $id;
+					  ON		cantons.canton_id = bureaux.canton_id ';
+					  
+			if ($branche == 'bureau') {
+				$query .= 'WHERE ' . $branche . 'x.' . $branche . '_id = ' . $id;
+			} else {
+				$query .= 'WHERE ' . $branche . 's.' . $branche . '_id = ' . $id;
+			}
 		}
 		
 		
@@ -581,6 +609,37 @@ class carto extends core {
 		$query = 'SELECT	contact_id
 				  FROM		contacts
 				  WHERE		immeuble_id = ' . $immeuble . '
+				  AND		( 
+					  				( contact_email IS NOT NULL AND contact_optout_email = 0 )
+					  			 OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 )
+					  			 OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 )
+				  			 )
+				  AND		contact_optout_global = 0';
+				  
+		// On effectue la requête
+		$sql = $this->db->query($query);
+		
+		// On récupère le résultat
+		$resultat = $sql->num_rows;
+		
+		// On retourne le résultat
+		return $resultat;
+	}
+	
+	
+	// coordonneesDansBureau( int ) permet de savoir s'il existe des fiches dont nous possédons les coordonnées dans le bureau
+	public	function coordonneesDansBureau( $bureau ) {
+		// on vérifie le format des arguments
+		if (!is_numeric($bureau)) return false;
+		
+		// On prépare la requête
+		$query = 'SELECT	contact_id
+				  FROM		contacts
+				  LEFT JOIN	immeubles
+				  ON		immeubles.immeuble_id = contacts.immeuble_id
+				  LEFT JOIN	bureaux
+				  ON		bureaux.bureau_id = immeubles.bureau_id
+				  WHERE		bureaux.bureau_id = ' . $bureau . '
 				  AND		( 
 					  				( contact_email IS NOT NULL AND contact_optout_email = 0 )
 					  			 OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 )
