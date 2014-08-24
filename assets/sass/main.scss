@@ -330,7 +330,6 @@ ul.deuxColonnes {
 		font: 400 1.2em/1.5em $fonts1;
 		margin-bottom: 1.5em;
 		min-height: 1.5em;
-		
 		&.submit {
 			text-align: center;
 		}
@@ -444,134 +443,140 @@ ul.deuxColonnes {
 			text-align: center;
 			width: auto;
 		}
+	}
+}
+
 		
-		& > ul.listeEncadree {
-			list-style: none;
+ul.listeEncadree {
+	font-size: 1.2em;
+	list-style: none;
+	
+	&.seul {
+		margin: 0 5%;
+	}
+	
+	& > a {
+		color: inherit;
+		text-decoration: none;
+	}
+	
+	li {
+		display: block;
+		border: 1px solid $rouge;
+		@include border-radius(.5em);
+		font-size: 1em;
+		font-weight: 300;
+		margin: 0;
+		margin-bottom: .5em;
+		min-height: 50px;
+		padding: .5em 1em;
+		width: 100%;
+		@include transition(all);
+		
+		&.cursor {
+			cursor: pointer;
+		}
+						
+		&.fichier,
+		&.dossier,
+		&.ville,
+		&.rue,
+		&.immeuble,
+		&.electeur {
+			position: relative;
+			padding-left: 70px;
+			padding-top: .6em;
 			
-			& > a {
-				color: inherit;
-				text-decoration: none;
-			}
-			
-			li {
-				display: block;
-				border: 1px solid $rouge;
-				@include border-radius(.5em);
-				font-size: 1em;
-				font-weight: 300;
-				margin: 0;
-				margin-bottom: .5em;
-				min-height: 50px;
-				padding: .5em 1em;
-				width: 100%;
-				@include transition(all);
+			&.ajoutFichier,
+			&.ajoutDossier,
+			&.ajoutRue,
+			&.ajoutImmeuble {
+				border-color: $bleu;
+				color: $bleu;
 				
-				&.cursor {
-					cursor: pointer;
+				&::before {
+					border-color: $bleu;
+					color: $bleu;
 				}
-								
-				&.fichier,
-				&.dossier,
-				&.ville,
-				&.rue,
-				&.immeuble,
-				&.electeur {
-					position: relative;
-					padding-left: 70px;
-					padding-top: .6em;
-					
-					&.ajoutFichier,
-					&.ajoutDossier,
-					&.ajoutRue,
-					&.ajoutImmeuble {
-						border-color: $bleu;
-						color: $bleu;
-						
-						&::before {
-							border-color: $bleu;
-							color: $bleu;
-						}
-						
-						&:hover {
-							background-color: rgba($bleu, .05);
-							
-							&::before {
-								background-color: $bleu;
-								color: $blanc;
-							}
-							
-							strong { border-bottom-color: $bleu; }
-						}
-						
-						strong { color: $bleu; }
-					}
-					
-					&::before {
-						position: absolute; left: 20px; top: .66em; top: calc(50% - 15px);
-						border: 1px solid $rouge;
-						@include border-radius(50%);
-						color: $rouge;
-						content: '\e823';
-						font-family: $icons;
-						font-size: 17px;
-						height: 30px;
-						line-height: 30px;
-						text-align: center;
-						width: 30px;
-						@include transition(all);
-					}
-					
-					&.pdf::before { content: '\e823'; }
-					&.texte::before { content: '\e837'; }
-					&.tableur::before { content: '\e8fd'; }
-					&.presentation::before { content: '\e8f4'; }
-					&.image::before { content: '\e80e'; }
-					&.video::before { content: '\e903'; }
-					&.audio::before { content: '\e800'; }
-					&.archive::before { content: '\e908'; }
-					&.ajoutFichier::before { content: '\e822'; }
-					
-					& > strong {
-						line-height: 30px;
-					}
-					
-					& > p {
-						margin: 0;
-						padding-bottom: .5em;
-						
-						&.tailleNormale {
-							font-size: .85em;
-						}
-					}
-				}
-				
-				&.ville::before { content: '\e844'; }
-				&.rue::before { content: '\e841'; }
-				&.immeuble::before { content: '\e842'; }
-				&.dossier::before { content: '\e850'; }
-				&.ajoutDossier::before { content: '\e851'; }
-				&.electeur::before { content: '\e80a'; }
 				
 				&:hover {
-					background-color: rgba($rouge, .05);
+					background-color: rgba($bleu, .05);
 					
 					&::before {
-						background-color: $rouge;
+						background-color: $bleu;
 						color: $blanc;
 					}
-				
-					& > strong {
-						border-bottom: 1px solid $rouge;
-						@include bordure-fine();
-					}
+					
+					strong { border-bottom-color: $bleu; }
 				}
 				
-				p {
-					font-size: .75em;
-					font-weight: 300;
-					line-height: 1.3em;
+				strong { color: $bleu; }
+			}
+			
+			&::before {
+				position: absolute; left: 20px; top: .66em; top: calc(50% - 15px);
+				border: 1px solid $rouge;
+				@include border-radius(50%);
+				color: $rouge;
+				content: '\e823';
+				font-family: $icons;
+				font-size: 17px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				width: 30px;
+				@include transition(all);
+			}
+			
+			&.pdf::before { content: '\e823'; }
+			&.texte::before { content: '\e837'; }
+			&.tableur::before { content: '\e8fd'; }
+			&.presentation::before { content: '\e8f4'; }
+			&.image::before { content: '\e80e'; }
+			&.video::before { content: '\e903'; }
+			&.audio::before { content: '\e800'; }
+			&.archive::before { content: '\e908'; }
+			&.ajoutFichier::before { content: '\e822'; }
+			
+			& > strong {
+				line-height: 30px;
+			}
+			
+			& > p {
+				margin: 0;
+				padding-bottom: .5em;
+				
+				&.tailleNormale {
+					font-size: .85em;
 				}
 			}
+		}
+		
+		&.ville::before { content: '\e844'; }
+		&.rue::before { content: '\e841'; }
+		&.immeuble::before { content: '\e842'; }
+		&.dossier::before { content: '\e850'; }
+		&.ajoutDossier::before { content: '\e851'; }
+		&.electeur::before { content: '\e80a'; }
+		
+		&:hover {
+			background-color: rgba($rouge, .05);
+			
+			&::before {
+				background-color: $rouge;
+				color: $blanc;
+			}
+		
+			& > strong {
+				border-bottom: 1px solid $rouge;
+				@include bordure-fine();
+			}
+		}
+		
+		p {
+			font-size: .75em;
+			font-weight: 300;
+			line-height: 1.3em;
 		}
 	}
 }
