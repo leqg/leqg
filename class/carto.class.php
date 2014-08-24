@@ -556,5 +556,32 @@ class carto extends core {
 		
 		return false;
 	}
+	
+	
+	// coordonneesDansImmeuble( int ) permet de savoir s'il existe des fiches dont nous possédons les coordonnées dans l'immeuble
+	public	function coordonneesDansImmeuble( $immeuble ) {
+		// on vérifie le format des arguments
+		if (!is_numeric($immeuble)) return false;
+		
+		// On prépare la requête
+		$query = 'SELECT	contact_id
+				  FROM		contacts
+				  WHERE		immeuble_id = ' . $immeuble . '
+				  AND		( 
+					  				( contact_email IS NOT NULL AND contact_optout_email = 0 )
+					  			 OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 )
+					  			 OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 )
+				  			 )
+				  AND		contact_optout_global = 0';
+				  
+		// On effectue la requête
+		$sql = $this->db->query($query);
+		
+		// On récupère le résultat
+		$resultat = $sql->num_rows;
+		
+		// On retourne le résultat
+		return $resultat;
+	}
 }
 ?>

@@ -51,9 +51,9 @@
 			<li>
 				<span class="label-information">Immeubles</span>
 				<ul class="listeEncadree" id="listeImmeubles">
-					<?php $immeubles = $carto->listeImmeubles($rue['id']); foreach ($immeubles as $immeuble) : ?>
+					<?php $immeubles = $carto->listeImmeubles($rue['id']); foreach ($immeubles as $immeuble) : $coordonnees = $carto->coordonneesDansImmeuble($immeuble['id']); ?>
 					<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'immeuble', 'immeuble' => $immeuble['id'])); ?>">
-						<li class="immeuble">
+						<li class="immeuble <?php if ($coordonnees) echo 'coordonnees'; ?>">
 							<strong><?php echo $immeuble['numero']; ?> <?php echo $rue['nom']; ?></strong>
 						</li>
 					</a>
