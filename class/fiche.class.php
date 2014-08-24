@@ -25,9 +25,26 @@ class fiche extends core {
 		$this->compte = $compte;
 		$this->url = $url;
 	}
-		
 	
-	// Méthodes liées au templating
+	
+	// informations( int ) permet de récupérer toutes les informations sur une fiche contact sans forcément l'ouvrir dans le template
+	public	function informations( $contact ) {
+		if (!is_numeric($contact)) return false;
+		
+		// On prépare la requête de récupération des informations
+		$query = 'SELECT	*
+				  FROM		contacts
+				  WHERE		contact_id = ' . $contact;
+				  
+		// On effectue la requête et on retourne le tableau des résultats s'il existe un résultat
+		$sql = $this->db->query($query);
+		
+		if ($sql->num_rows == 1) return $this->formatage_donnees($sql->fetch_assoc());
+		
+		// Sinon on retourne une erreur
+		return false;
+	}
+	
 	
 	// On ouvre l'accès aux informations d'une fiche existante
 	public	function acces($id, $ouverture = false) {
@@ -825,6 +842,28 @@ class fiche extends core {
 			// On retourne le nom du fichier
 			return 'exports/' . $nomFichier;
 		}
+	}
+	
+	
+	// coordonneesExistantes( array/int ) permet de savoir si nous possédons des coordonnées concernant une fiche
+	public	function coordonneesExistantes( $contact ) {
+		if (!is_numeric($contact) && !is_array($contact)) return false;
+		
+		// Si l'argument est un ID, on récupère les informations
+		if (is_numeric($contact)) {
+			$contact = $this->informations($contact);
+		}
+		
+		// On vérifie qu'il n'y a pas un optout global
+		if ($contact['optout_global']) return false;
+		
+		// On vérifie maintenant s'il existe des coordonnées non interdites par optout
+		if (!is_null($contact['email']) && !$contact['optout_email']) return true;
+		if (!is_null($contact['mobile']) && !$contact['optout_mobile']) return true;
+		if (!is_null($contact['telephone']) && !$contact['optout_telephone']) return true;
+		
+		// Si aucune condition n'est remplie jusqu'ici, c'est que nous n'avons pas de coordonnées !
+		return false;
 	}
 }
 
