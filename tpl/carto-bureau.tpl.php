@@ -17,26 +17,26 @@
 		<li>
 			<span class="label-information">Commune</span>
 			<p><?php $carto->afficherVille($bureau['commune_id']); ?></p>
-			<a class="nostyle icone" title="Accéder à la fiche de présentation de la commune" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $bureau['commune_id'])); ?>">&#xe844;</a>
+			<a class="nostyle icone" title="Accéder à la fiche de présentation de la commune" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $bureau['commune_id'], 'liste' => 'bureaux')); ?>">&#xe844;</a>
 		</li>
 		<li>
 			<span class="label-information">Canton</span>
 			<p><?php $carto->afficherCanton($bureau['canton_id']); ?></p>
 		</li>
 		<li>
-			<span class="label-information">Recensement</span><?php $electeurs = $carto->nombreElecteurs('canton', $bureau['canton_id']); ?>
+			<span class="label-information">Recensement</span><?php $electeurs = $carto->nombreElecteurs('bureau', $bureau['id']); ?>
 			<p><?php echo $electeurs; ?> électeur<?php if ($electeurs > 1) echo 's'; ?></p>
 		</li>
 		<li>
-			<span class="label-information">Emails collectés</span><?php $emails = $carto->nombreElecteurs('canton', $bureau['canton_id'], 'email'); ?>
+			<span class="label-information">Emails collectés</span><?php $emails = $carto->nombreElecteurs('bureau', $bureau['id'], 'email'); ?>
 			<p><?php echo $emails; ?> adresse<?php if ($emails > 1) echo 's'; ?> récoltée<?php if ($emails > 1) echo 's'; ?></p>
 		</li>
 		<li>
-			<span class="label-information">Mobiles collectés</span><?php $mobiles = $carto->nombreElecteurs('canton', $bureau['canton_id'], 'mobile'); ?>
+			<span class="label-information">Mobiles collectés</span><?php $mobiles = $carto->nombreElecteurs('bureau', $bureau['id'], 'mobile'); ?>
 			<p><?php echo $mobiles; ?> numéro<?php if ($mobiles > 1) echo 's'; ?> récolté<?php if ($emails > 1) echo 's'; ?></p>
 		</li>
 		<li>
-			<span class="label-information">Fixes collectés</span><?php $fixes = $carto->nombreElecteurs('canton', $bureau['canton_id'], 'telephone'); ?>
+			<span class="label-information">Fixes collectés</span><?php $fixes = $carto->nombreElecteurs('bureau', $bureau['id'], 'telephone'); ?>
 			<p><?php echo $fixes; ?> numéro<?php if ($fixes > 1) echo 's'; ?> récolté<?php if ($fixes > 1) echo 's'; ?></p>
 		</li>
 	</ul>
