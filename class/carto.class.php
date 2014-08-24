@@ -397,6 +397,41 @@ class carto extends core {
 	}
 	
 	
+	// listeElecteursParBureau( int ) permet de retourner la liste des électeurs pour un bureau dont les coordonnées sont ou non connues
+	public	function listeElecteursParBureau( $bureau , $coordonnees = false ) {
+		// On vérifie que les arguments sont bien des élements numériques
+			if (!is_numeric($bureau)) return false;
+		
+		// On prépare la requête de récupération des électeurs correspondant
+			$query = 'SELECT	*
+					  FROM		contacts
+					  LEFT JOIN	immeubles
+					  ON		immeubles.immeuble_id = contacts.immeuble_id
+					  LEFT JOIN	bureaux
+					  ON		bureaux.bureau_id = immeubles.bureau_id
+					  WHERE		bureaux.bureau_id = ' . $bureau;
+					  
+		// On rajoute la condition 'coordonnees' si demandé
+		if ($coordonnees) {
+			
+			$query .= ' AND	( ( contact_email IS NOT NULL AND contact_optout_email = 0 ) OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 ) OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 ) )';
+			$query .= ' AND contact_optout_global = 0';
+			
+		}
+		
+		// On rajoute l'ordre nécessaire aux résultats
+			$query .= ' ORDER BY	contact_nom, contact_nom_usage, contact_prenoms ASC';
+		
+		// On effectue la requête BDD et on affiche les résultats dans un tableau $electeurs
+			$electeurs = array();
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) $electeurs[] = $this->formatage_donnees($row);
+		
+		// On retourne les données
+			return $electeurs;
+	}
+	
+	
 	// bureauParImmeuble( int ) permet d'afficher l'ID d'un bureau de vote pour un immeuble demandé
 	public	function bureauParImmeuble( $immeuble ) {
 		// On vérifie que l'argument est bien un ID

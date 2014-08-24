@@ -1,7 +1,7 @@
 <?php $bureau = $carto->bureau($_GET['bureau']); ?>
 <section id="fiche">
 	<header class="bureau">
-		<h2><span>Bureau</span><span id="titre-dossier"><?php echo $bureau['nom']; ?></span></h2>
+		<h2><span>Bureau <?php echo $bureau['numero']; ?></span><span id="titre-dossier"><?php echo $bureau['nom']; ?></span></h2>
 		<a class="nostyle" id="config-icon" href="<?php $core->tpl_go_to('carto', array('module' => 'bureau', 'bureau' => $bureau['id'], 'modifierInfos' => 'true')); ?>">&#xe855;</a>
 	</header>
 	
@@ -43,9 +43,56 @@
 </section>
 
 <aside>
+	<?php if (isset($_GET['modifierInfos'])) : ?>
+	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux')); ?>">Annuler les modifications</a>
+		</nav>
+		
+		<h6>Modification des informations du bureau de vote</h6>
+		
+		<form action="ajax.php?script=modifier-infos-bureau" method="post">
+			<input type="hidden" name="bureau" value="<?php echo $bureau['id']; ?>">
+			<ul class="deuxColonnes">
+				<li>
+					<span class="label-information"><label for="form-nom">Nom</label></span>
+					<input type="text" name="nom" id="form-nom" value="<?php echo $core->tpl_transform_texte($bureau['nom']); ?>">
+				</li>
+				<li>
+					<span class="label-information"><label for="form-adresse">Adresse</label></span>
+					<input type="text" name="adresse" id="form-adresse" value="<?php echo $core->tpl_transform_texte($bureau['adresse']); ?>">
+				</li>
+				<li>
+					<span class="label-information"><label for="form-cp">Code postal</label></span>
+					<input type="text" name="cp" id="form-cp" value="<?php echo $core->tpl_transform_texte($bureau['cp']); ?>">
+				</li>
+				<li>
+					<span class="label-information">Ville</span>
+					<p><?php $carto->afficherVille($bureau['commune_id']); ?></p>
+				</li>
+				<li class="submit">
+					<input type="submit" value="Valider les modifications">
+				</li>
+			</ul>
+		</form>
+	</div>
+	<?php else : ?>
 	<div>
 		<nav class="navigationFiches">
 			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux')); ?>">Retour aux bureaux</a>
 		</nav>
+		
+		<h6>Liste des contacts connus dans la base de données</h6>
+		
+		<ul class="listeEncadree">
+			<?php $electeurs = $carto->listeElecteursParBureau($bureau['id'], true); foreach ($electeurs as $electeur) : ?>
+			<a href="<?php echo $core->tpl_go_to('fiche', array('id' => $electeur['id'])); ?>">
+				<li class="electeur">
+					<strong><?php $fiche->nomByID($electeur['id']); ?></strong>
+				</li>
+			</a>
+			<?php endforeach; ?>
+		</ul>
 	</div>
+	<?php endif; ?>
 </aside>
