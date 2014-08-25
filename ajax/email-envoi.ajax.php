@@ -35,7 +35,7 @@
 						'type' => 'courriel',
 						'date' => date('d/m/Y'),
 						'lieu' => 'leQG',
-						'objet' => 'Envoi d\'un email',
+						'objet' => $objet,
 						'texte' => $texte );
 		$historique->ajout( $infos['contact'] , $infos['user'] , $infos['type'] , $infos['date'] , $infos['lieu'] , $infos['objet'] , $infos['texte'] );
 	
