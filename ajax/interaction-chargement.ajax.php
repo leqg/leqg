@@ -39,7 +39,7 @@
  --></li>
 	<li>
 		<span class="label-information">Notes</span>
-	 	<?php if ($interaction['type'] == 'email') : ?>
+	 	<?php if ($interaction['type'] == 'courriel') : ?>
 	 	<p><?php echo nl2br(html_entity_decode($interaction['notes'], ENT_HTML5, 'UTF-8')); ?></p>
 	 	<?php else : ?>
 	 	<p><?php echo nl2br($interaction['notes']); ?></p>
