@@ -73,6 +73,7 @@ a {
 
 a.icone,
 span[class^='icone-'] {
+	position: relative;
 	display: block;
 	background-color: $blanc;
 	@include border-radius(50%);
@@ -546,7 +547,8 @@ ul.listeEncadree {
 		&.bureau,
 		&.vide,
 		&.canton,
-		&.numero {
+		&.numero,
+		&.email {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -628,6 +630,7 @@ ul.listeEncadree {
 		&.canton::before { content: '\e843'; }
 		&.vide::before { content: '\e81e'; }
 		&.numero::before { content: '\e8e4'; }
+		&.email::before { content: '\e805'; }
 		
 		&:hover {
 			background-color: rgba($rouge, .05);
