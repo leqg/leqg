@@ -74,6 +74,19 @@
 		}
 	}
 	
+	nav.actions {
+		position: absolute; top: 65px; right: 1em;
+		
+		& > a.icone {
+			display: inline-block;
+			margin: 0 1em;
+			
+			&:last-of-type {
+				margin-right: 0;
+			}
+		}
+	}
+	
 	p.adresse {
 		text-transform: capitalize;
 	}

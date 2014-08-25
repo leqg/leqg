@@ -34,7 +34,7 @@ var fiche = function() {
 	
 	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
-		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance') && !getURLVar('modifierInformations')) {
+		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance') && !getURLVar('modifierInformations') && !getURLVar('envoyerSMS')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
 			
 			$(".ficheContact div").hide(); // On ferme tous les volets
@@ -105,6 +105,11 @@ var fiche = function() {
 		else if (getURLVar('modifierInformations')) {
 			$(".ficheContact div").hide();
 			$("#changementEtatCivil").show();
+		}
+		
+		else if (getURLVar('envoyerSMS')) {
+			$('.ficheContact div').hide();
+			$('#nouveauSMS').show();
 		}
 		
 	
@@ -274,6 +279,19 @@ var fiche = function() {
 			$('#nomVilleChoisie').html(affichage);
 			$('#choixDeVilleDeNaissance').show();
 		});
+	
+	
+	// script d'estimation du coût d'un SMS
+		$("#form-sms").keyup(function(){
+			var message = $(this).val();
+			var taille = message.length;
+			var tailleSMS = 160;
+			
+			var nombreExact = taille / tailleSMS;
+			var nombre = Math.ceil(nombreExact);
+			
+			$('#estimation-sms').html(nombre);
+		})
 };
 
 $(document).ready(fiche);

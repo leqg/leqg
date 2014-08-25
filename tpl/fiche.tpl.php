@@ -5,6 +5,12 @@
 		<h2><?php $fiche->affichage_nom('span'); ?></h2>
 		<a href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierInformations' => 'true')); ?>" class="nostyle" id="config-icon">&#xe855;</a>
 	</header>
+
+	<nav class="actions">
+		<?php if (!empty($fiche->get_infos('mobile'))) : ?>
+			<a class="nostyle icone carre positif" title="Envoyer un SMS" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_ID(), 'envoyerSMS' => 'true')); ?>">&#xe8e4;<span class="legende">Envoyer&nbsp;un&nbsp;SMS</span></a>
+		<?php endif; ?>
+	</nav>
 	
 	<div id="carte" data-nom="<?php $fiche->affichage_nom(); ?>" data-adresse="<?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?>"></div>
 
@@ -106,6 +112,9 @@
 			
 			// On charge le script de changement des informations de naissance
 			$core->tpl_load('aside', 'changement-information');
+			
+			// On charge le script de changement des informations de naissance
+			$core->tpl_load('aside', 'envoi-sms');
 		
 		
 		// On charge les informations de changement d'adresse, si c'est demandé

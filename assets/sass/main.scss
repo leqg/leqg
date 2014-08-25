@@ -71,6 +71,57 @@ a {
 	}
 }
 
+a.icone,
+span[class^='icone-'] {
+	display: block;
+	background-color: $blanc;
+	@include border-radius(50%);
+	color: $bleu;
+	cursor: pointer;
+	font-family: $icons;
+	font-size: 20px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	width: 40px;
+	@include transition(all);
+	
+	&:hover {
+		background-color: $rouge;
+		color: $blanc;
+		
+		& > span.legende {
+			display: block;
+			opacity: 1;
+		}
+	}
+	
+	&.carre {
+		@include border-radius(.66em);
+	}
+	
+	&.positif:hover {
+		background-color: $bleu;
+		color: $blanc;
+	}
+	
+	& > span.legende {
+		position: absolute; top: 50px; right: 0px;
+		display: none;
+		background-color: $blanc;
+		border: 1px solid $bleu;
+		@include border-radius(.66em);
+		color: $bleu;
+		font-size: .66em;
+		line-height: 2em;
+		opacity: 0;
+		padding: 0 .66em;
+		width: auto;
+		@include transition(opacity);
+	}
+}
+
+
 abbr {
 	border-bottom: none;
 	outline: none;
@@ -180,6 +231,10 @@ strong {
 	color: $rouge;
 	font-size: 1em;
 	font-weight: 300;
+	
+	&.gras {
+		font-weight: 500;
+	}
 }
 
 svg:not(:root) {
@@ -386,21 +441,10 @@ ul.deuxColonnes {
 		& > span[class^='icone-'],
 		& a.icone {
 			position: absolute; bottom: .5em; right: .5em;
-			background-color: $blanc;
-			@include border-radius(50%);
-			color: $bleu;
-			cursor: pointer;
-			font-family: $icons;
+			font-size: 17px;
 			height: 30px;
 			line-height: 30px;
-			text-align: center;
 			width: 30px;
-			@include transition(all);
-			
-			&:hover {
-				background-color: $rouge;
-				color: $blanc;
-			}
 		}
 		
 		& > span[id^='sauvegarde-form-'] {
@@ -501,7 +545,8 @@ ul.listeEncadree {
 		&.electeur,
 		&.bureau,
 		&.vide,
-		&.canton {
+		&.canton,
+		&.numero {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -582,6 +627,7 @@ ul.listeEncadree {
 		&.bureau::before { content: '\e821'; }
 		&.canton::before { content: '\e843'; }
 		&.vide::before { content: '\e81e'; }
+		&.numero::before { content: '\e8e4'; }
 		
 		&:hover {
 			background-color: rgba($rouge, .05);
