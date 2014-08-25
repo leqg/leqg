@@ -55,4 +55,7 @@ global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier,
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
 
+// On configure les données des API extérieures
+$api['sms']['auth'] = new \Esendex\Authentication\LoginAuthentication($config['SMS']['compte'], $config['SMS']['login'], $config['SMS']['pass']);
+
 ?>
