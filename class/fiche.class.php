@@ -850,20 +850,20 @@ class fiche extends core {
 				$immeuble = $this->formatage_donnees($immeuble->fetch_assoc());
 				
 				$rue = $this->db->query('SELECT * FROM rues WHERE rue_id = ' . $immeuble['rue_id']);
-				$rue = $this->formatage_donnees($rue->fetch_assoc());
+				if ($rue->num_rows > 0) : $rue = $this->formatage_donnees($rue->fetch_assoc()); else: $rue['nom'] = '';
 				
 				$ville = $this->db->query('SELECT * FROM communes WHERE commune_id = ' . $rue['commune_id']);
-				$ville = $this->formatage_donnees($ville->fetch_assoc());
+				if ($ville->num_rows > 0) $ville = $this->formatage_donnees($ville->fetch_assoc()); else: $ville['nom'] = '';
 				
 				$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
-				$cp = $cp->fetch_assoc();
+				if ($cp->num_rows > 0) = $cp->fetch_assoc(); else: $cp['code_postal'] = '';
 				
 				// on rassemble les informations qu'on balance dans le fichier
 				$ligne = array($contact['contact_nom'],
 								   $contact['contact_nom_usage'],
 								   $contact['contact_prenoms'],
 								   date('d/m/Y', strtotime($contact['contact_naissance_date'])),
-								   $immeuble['numero'] . ' ' . $rue['nom'],
+								   $immeuble['numero'] . ' ' . trim($rue['nom']),
 								   $cp['code_postal'],
 								   $ville['nom'],
 								   $contact['contact_sexe'],
