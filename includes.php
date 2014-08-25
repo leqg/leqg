@@ -42,12 +42,12 @@ $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD'][
 $core =			new core($db, $noyau, $config['SERVER']['url']);
 $csv =			new csv($db, $config['SERVER']['url']);
 $user =			new user($db, $noyau, $config['SERVER']['url']);
-$fiche =			new fiche($db, $cookie, $config['SERVER']['url']);
-$tache =			new tache($db, $cookie, $config['SERVER']['url']);
+$fiche =		new fiche($db, $cookie, $config['SERVER']['url']);
+$tache =		new tache($db, $cookie, $config['SERVER']['url']);
 $dossier =		new dossier($db, $cookie, $config['SERVER']['url']);
 $historique =	new historique($db, $cookie, $config['SERVER']['url']);
 $fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
-$carto =			new carto($db, $cookie, $config['SERVER']['url']);
+$carto =		new carto($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
 global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
