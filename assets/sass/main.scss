@@ -223,7 +223,12 @@ pre {
 	padding: 1.5em;
 	padding-top: 1.55em;
 	text-align: left;
+	white-space: normal;
 	width: auto;
+	
+	&.nowrap {
+		white-space: pre;
+	}
 	
 	span {
 		display: block;
