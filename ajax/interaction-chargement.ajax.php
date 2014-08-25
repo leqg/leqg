@@ -37,10 +37,14 @@
 	 --><span class="label-information">Objet</span><!--
 	 --><p><?php echo $interaction['objet']; ?></p><!--
  --></li>
-	<li><!--
-	 --><span class="label-information">Notes</span><!--
-	 --><p><?php echo nl2br($interaction['notes']); ?></p><!--
- --></li>
+	<li>
+		<span class="label-information">Notes</span>
+	 	<?php if ($interaction['type'] == 'email') : ?>
+	 	<p><?php echo nl2br(html_entity_decode($interaction['notes'], ENT_HTML5, 'UTF-8')); ?></p>
+	 	<?php else : ?>
+	 	<p><?php echo nl2br($interaction['notes']); ?></p>
+	 	<?php endif; ?>
+	 </li>
  	<li><!--
 	 --><span class="label-information">Dossier</span><!--
 	 --><ul class="listeEncadree">

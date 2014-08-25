@@ -32,7 +32,7 @@
 		
 		$infos = array( 'contact' => $contact,
 						'user' => $_COOKIE['leqg-user'],
-						'type' => 'email',
+						'type' => 'courriel',
 						'date' => date('d/m/Y'),
 						'lieu' => 'leQG',
 						'objet' => 'Envoi d\'un email',
