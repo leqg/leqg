@@ -849,32 +849,20 @@ class fiche extends core {
 				$immeuble = $this->db->query('SELECT * FROM immeubles WHERE immeuble_id = ' . $contact['immeuble_id']);
 				$immeuble = $this->formatage_donnees($immeuble->fetch_assoc());
 				
-				$rue = $this->db->query('SELECT * FROM rues WHERE rue_id = ' . $immeuble['rue_id']);
-				if ($rue->num_rows > 0) :
+				if ($immeuble['rue_id'] != $immeuble['bureau_id']) {
+					$rue = $this->db->query('SELECT * FROM rues WHERE rue_id = ' . $immeuble['rue_id']);
 					$rue = $this->formatage_donnees($rue->fetch_assoc()); 
+					
 					$ville = $this->db->query('SELECT * FROM communes WHERE commune_id = ' . $rue['commune_id']);
-					if ($ville->num_rows > 0) :
-						$ville = $this->formatage_donnees($ville->fetch_assoc());
-						$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
-						if ($cp->num_rows > 0) :
-							$cp = $cp->fetch_assoc();
-						else:
-							$cp['code_postal'] = '';
-						endif;
-					else:
-						$ville['nom'] = '';
-						$cp['code_postal'] = '';
-					endif;
-				else: 
+					$ville = $this->formatage_donnees($ville->fetch_assoc());
+					
+					$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
+					$cp = $cp->fetch_assoc();
+				} else {
 					$rue['nom'] = '';
 					$ville['nom'] = '';
 					$cp['code_postal'] = '';
-				endif;
-				
-				
-				
-				
-				
+				}
 				
 				// on rassemble les informations qu'on balance dans le fichier
 				$ligne = array($contact['contact_nom'],
