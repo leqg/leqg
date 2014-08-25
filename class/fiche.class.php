@@ -751,16 +751,8 @@ class fiche extends core {
 		
 		// On prépare la requête SQL
 		$query = 'SELECT	*
-				  FROM		contacts
-				  LEFT JOIN	immeubles
-				  ON		immeubles.immeuble_id = contacts.immeuble_id
-				  LEFT JOIN	rues
-				  ON		rues.rue_id = immeubles.rue_id
-				  LEFT JOIN	communes
-				  ON		communes.commune_id = rues.commune_id
-				  LEFT JOIN	codes_postaux
-				  ON		codes_postaux.commune_id = communes.commune_id';
-		
+				  FROM		contacts';
+
 		// tableau des critères initialisé
 		$criteres = array(); //$this->debug($formulaire);
 		
@@ -768,9 +760,9 @@ class fiche extends core {
 		if ($formulaire['age-min'] == 0) { $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', time()). '"'; } else { $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-min'])). '"'; }
 		if ($formulaire['age-max'] == 0) { $a = ''; } else { $criteres[] = 'contact_naissance_date >= "' . date('Y-m-d', mktime(0, 0, 0, date('n'), date('j')-1, date('Y')-$formulaire['age-max']-1)).'"'; }
 				
-		if (!empty($formulaire['ville'])) $criteres[] = 'commune_id = ' . $formulaire['ville'];
-		if (!empty($formulaire['rue'])) $criteres[] = 'rue_id = ' . $formulaire['rue'];
-		if (!empty($formulaire['immeuble'])) $criteres[] = 'immeuble_id = ' . $formulaire['immeuble'];
+		//if (!empty($formulaire['ville'])) $criteres[] = 'commune_id = ' . $formulaire['ville'];
+		//if (!empty($formulaire['rue'])) $criteres[] = 'rue_id = ' . $formulaire['rue'];
+		//if (!empty($formulaire['immeuble'])) $criteres[] = 'immeuble_id = ' . $formulaire['immeuble'];
 		if (!empty($formulaire['electeur'])) $criteres[] = 'contact_electeur = ' . $formulaire['electeur'];
 		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
 		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL AND contact_optout_email = 0';
