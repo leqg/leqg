@@ -82,7 +82,7 @@
 			<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $bureau['id'])); ?>">
 				<li class="bureau <?php if ($coordonnees) echo 'coordonnees'; ?>">
 					<strong>Bureau <?php echo $bureau['numero']; ?></strong>
-					<p><?php echo $core->tpl_transform_texte($bureau['nom']); ?> (<?php $carto->afficherCanton($bureau['canton_id']); ?>)</p>
+					<p><?php echo $core->tpl_transform_texte($bureau['nom']); ?><?php if ($bureau['canton_id']) echo ' (' . $carto->afficherCanton($bureau['canton_id'], true) . ')'; ?></p>
 				</li>
 			</a>
 			<?php endforeach; ?>

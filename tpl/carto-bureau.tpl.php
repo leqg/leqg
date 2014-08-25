@@ -19,10 +19,12 @@
 			<p><?php $carto->afficherVille($bureau['commune_id']); ?></p>
 			<a class="nostyle icone" title="Accéder à la fiche de présentation de la commune" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $bureau['commune_id'], 'liste' => 'bureaux')); ?>">&#xe844;</a>
 		</li>
+		<?php if ($bureau['canton_id']) : ?>
 		<li>
 			<span class="label-information">Canton</span>
 			<p><?php $carto->afficherCanton($bureau['canton_id']); ?></p>
 		</li>
+		<?php endif; ?>
 		<li>
 			<span class="label-information">Recensement</span><?php $electeurs = $carto->nombreElecteurs('bureau', $bureau['id']); ?>
 			<p><?php echo $electeurs; ?> électeur<?php if ($electeurs > 1) echo 's'; ?></p>
