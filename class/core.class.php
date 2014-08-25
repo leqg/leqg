@@ -88,6 +88,8 @@ class core {
 	
 	// formatage_donnees( array , string ) permet de retourner le tableau entré sans les préfixes BDD
 		public	function formatage_donnees($array) {
+			if (!is_array($array)) return $array;
+			
 			// On initialise le nouveau tableau
 			$keys = array_keys($array);
 			

@@ -125,7 +125,7 @@ class carto extends core {
 			$id = $this->securisation_string($id);
 		
 		// On prépare la requête de recherche des informations
-			$query = 'SELECT		*
+			$query = 'SELECT	*
 					  FROM		cantons
 					  WHERE		canton_id = ' . $id;
 		
