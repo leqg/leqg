@@ -19,7 +19,7 @@
 	endif;
 	
 	// On recherche les informations concernant le compte connecté
-	$query = 'SELECT * FROM users WHERE user_id = ' . $_COOKIE['leqg-site'];
+	$query = 'SELECT * FROM users WHERE user_id = ' . $_COOKIE['leqg-user'];
 	$sql = $noyau->query($query);
 	$utilisateur = $core->formatage_donnees($sql->fetch_assoc());
 	
