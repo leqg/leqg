@@ -7,14 +7,20 @@ require_once('includes.php');
 // On vérifie qu'une personne est connectée au système, on affiche le script de login
 
 if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'login')) {
+
 	// On regarde si on a reçu des informations POST
 	if (isset($_POST['login'], $_POST['pass'])) {
+	
 		// On effectue la démarche de connexion
 		$user->connexion($_POST['login'], $_POST['pass']);
+		
 	} else {
+	
 		// On affiche le script de connexion
 		$core->tpl_load('login');
+		
 	}
+	
 } else {
 
 	// On commence par appeler l'index.tpl si aucune page n'est appelée
@@ -371,8 +377,10 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			
 		
 		else {
-			// On redirige temporairement vers la page contacts
-			$core->tpl_redirection('contacts');
+			// On redirige temporairement vers la page de présentation des services
+			$core->tpl_header();
+			$core->tpl_load('services');
+			$core->tpl_footer();
 		}
 	}
 }
