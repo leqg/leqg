@@ -12,7 +12,7 @@
 		$objet = 'LeQG – Votre export est prêt à être téléchargé.';
 		
 		// On insère dans le mail l'URL du fichier pour qu'il puisse être téléchargé
-		$email = strtr($email, array('{URL}' => $f));
+		$email = strtr($email, array('{URL}' => 'http://' . $config['SERVER']['url'] . '/' . $f));
 	else :
 		//$email = file_get_contents('tpl/mail/export-echec.tpl.html');
 		$objet = 'LeQG – Votre export a provoqué une erreur.';

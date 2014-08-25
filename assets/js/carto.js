@@ -94,7 +94,7 @@ var carto = function() {
 				data: $('#export').serialize(),
 				dataType: 'html'
 			}).done(function(data){
-				$('#affichage-envoi').html(data);
+				//$('#affichage-envoi').html(data);
 			});
 			
 			// On annule le clique sur le lien
