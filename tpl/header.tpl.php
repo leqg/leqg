@@ -20,7 +20,7 @@
 <body>	
 	<!-- Contenu concret de la page -->
 	<header id="top">
-		<h1><a class="nostyle" href="<?php $core->tpl_go_to(); ?>">LeQG</a></h1>
+		<h1><a class="nostyle" href="http://<?php echo $config['SERVER']['url']; ?>">LeQG</a></h1>
 		
 		<ul id="parametres">
 			<a href="<?php $core->tpl_go_to('options'); ?>"><li>Options générales</li></a>
