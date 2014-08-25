@@ -19,12 +19,11 @@
 			<p><?php $carto->afficherVille($bureau['commune_id']); ?></p>
 			<a class="nostyle icone" title="Accéder à la fiche de présentation de la commune" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $bureau['commune_id'], 'liste' => 'bureaux')); ?>">&#xe844;</a>
 		</li>
-		<?php if ($bureau['canton_id']) : ?>
 		<li>
 			<span class="label-information">Canton</span>
-			<p><?php $carto->afficherCanton($bureau['canton_id']); ?></p>
+			<p><?php if ($bureau['canton_id']) : $carto->afficherCanton($bureau['canton_id']); else : echo 'Aucun canton rattaché au bureau de vote'; endif; ?></p>
+			<a class="nostyle icone" title="Modifier le canton rattaché au bureau de vote" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $bureau['id'], 'modifierCanton' => 'true')); ?>">&#xe855;</a>
 		</li>
-		<?php endif; ?>
 		<li>
 			<span class="label-information">Recensement</span><?php $electeurs = $carto->nombreElecteurs('bureau', $bureau['id']); ?>
 			<p><?php echo $electeurs; ?> électeur<?php if ($electeurs > 1) echo 's'; ?></p>
@@ -48,7 +47,7 @@
 	<?php if (isset($_GET['modifierInfos'])) : ?>
 	<div>
 		<nav class="navigationFiches">
-			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux')); ?>">Annuler les modifications</a>
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $bureau['id'])); ?>">Annuler les modifications</a>
 		</nav>
 		
 		<h6>Modification des informations du bureau de vote</h6>
@@ -62,15 +61,15 @@
 				</li>
 				<li>
 					<span class="label-information"><label for="form-nom">Nom</label></span>
-					<input type="text" name="nom" id="form-nom" value="<?php echo $core->tpl_transform_texte($bureau['nom']); ?>">
+					<input type="text" name="nom" id="form-nom" value="<?php echo trim($core->tpl_transform_texte($bureau['nom'])); ?>">
 				</li>
 				<li>
 					<span class="label-information"><label for="form-adresse">Adresse</label></span>
-					<input type="text" name="adresse" id="form-adresse" value="<?php echo $core->tpl_transform_texte($bureau['adresse']); ?>">
+					<input type="text" name="adresse" id="form-adresse" value="<?php echo trim($core->tpl_transform_texte($bureau['adresse'])); ?>">
 				</li>
 				<li>
 					<span class="label-information"><label for="form-cp">Code postal</label></span>
-					<input type="text" name="cp" id="form-cp" value="<?php echo $core->tpl_transform_texte($bureau['cp']); ?>">
+					<input type="text" name="cp" id="form-cp" value="<?php echo trim($core->tpl_transform_texte($bureau['cp'])); ?>">
 				</li>
 				<li>
 					<span class="label-information">Ville</span>
