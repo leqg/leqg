@@ -6,6 +6,7 @@
 	</header>
 	
 	<form action="ajax.php?script=estimation-export" method="post" id="export">
+		<input type="hidden" name="canton" value="">
 		<input type="hidden" name="ville" value="">
 		<input type="hidden" name="rue" value="">
 		<input type="hidden" name="immeuble" value="">

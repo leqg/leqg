@@ -749,6 +749,26 @@ class fiche extends core {
 		// On commence par vérifier le format des arguments
 		if (!is_array($formulaire) || !is_bool($simulation)) return false;
 		
+		// On prépare les critères géographiques
+		$immeubles = array();
+		
+		if (!empty($formulaire['canton']) || !empty($formulaire['ville']) || !empty($formulaire['rue']) || !empty($formulaire['immeuble'])) {
+			if (!empty($formulaire['ville']) && empty($formulaire['rue']) && empty($formulaire['immeuble'])) {
+				
+				// On recherche tous les immeubles présents 
+				$query = 'SELECT	*
+						  FROM		immeubles
+						  LEFT JOIN	rues
+						  ON		rues.rue_id = immeubles.rue_id
+						  WHERE		rues.commune_id = ' . $formulaire['ville'];
+				$sql = $this->db->query($query);
+				
+				if ($sql->num_rows > 0) { while($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id']; }
+				
+				
+			}
+		}
+		
 		// On prépare la requête SQL
 		$query = 'SELECT	*
 				  FROM		contacts';
@@ -775,12 +795,25 @@ class fiche extends core {
 			$query .= $critere;
 		}
 		
+		// On travaille maintenant les critères géographiques
+		if (count($immeubles) > 0) {
+			$query.= ' AND (';
+		
+			foreach ( $immeubles as $key => $batiment ) {
+				if ($key > 0) $query.= ' OR';
+				$query.= ' immeuble_id = ' . $batiment;
+			}
+			
+			$query.= ' )';
+		}
+		
 		// On applique un tri des contacts
 		$query .= ' ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
 		
 		// On lance la requête
 		//$this->debug($query);
 		$sql = $this->db->query($query);
+		
 		
 		// Si c'est une simulation, on calcule le nombre de fiches et on retourne l'information
 		if ($simulation) {
