@@ -52,4 +52,7 @@ $carto =			new carto($db, $cookie, $config['SERVER']['url']);
 // On transforme ces classes générales en variables globales
 global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
 
+// On charge les API extérieures
+require_once 'api/esendex/autoload.php';
+
 ?>
