@@ -15,7 +15,7 @@
 ?>
 <nav class="navigationFiches">
 	<a class="retour" href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>">Retour à l'historique</a>
-	<a class="modifier" href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>&modifier=true">Modifier</a>
+	<?php if ($interaction['type'] != 'sms' || $interaction['type'] != 'courriel') : ?><a class="modifier" href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>&modifier=true">Modifier</a><?php endif; ?>
 </nav>
 
 <h6>Interaction n° <?php echo $interaction['id']; ?></h6>
