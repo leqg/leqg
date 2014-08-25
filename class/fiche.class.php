@@ -856,7 +856,7 @@ class fiche extends core {
 				if ($ville->num_rows > 0) : $ville = $this->formatage_donnees($ville->fetch_assoc()); else: $ville['nom'] = '';
 				
 				$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
-				if ($cp->num_rows > 0) : = $cp->fetch_assoc(); else: $cp['code_postal'] = '';
+				if ($cp->num_rows > 0) : $cp->fetch_assoc(); else: $cp['code_postal'] = '';
 				
 				// on rassemble les informations qu'on balance dans le fichier
 				$ligne = array($contact['contact_nom'],
