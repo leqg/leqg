@@ -77,6 +77,31 @@ class carto extends core {
 	}
 	
 	
+	// recherche_canton( string ) permet de renvoyer une liste de tous les cantons répondant à une recherche proposée
+	public	function recherche_canton( $search = '' ) {
+		// On sécurise la recherche
+		$search = $this->formatage_recherche($search);
+		
+		// On prépare le tableau des résultats
+		$cantons = array();
+		
+		// On prépare la requête de recherche
+		$query = 'SELECT	*
+				  FROM		cantons
+				  WHERE		canton_nom LIKE "%' . $search . '%"
+				  ORDER BY	canton_nom ASC';
+		
+		// On exécute la recherche
+		$sql = $this->db->query($query);
+		
+		// On affecte les résultats au tableau
+		while ($row = $sql->fetch_assoc()) $cantons[] = $this->formatage_donnees($row);
+		
+		// On retourne le tableau
+		return $cantons;
+	}
+	
+	
 	// region( int ) permet de renvoyer toutes les informations relatives à une région demandée par son id
 	public	function region( $id ) {
 		// On sécurise la recherche
@@ -107,6 +132,27 @@ class carto extends core {
 			$query = 'SELECT	*
 					  FROM		departements
 					  WHERE		departement_id = ' . $id;
+		
+		// On effectue la requête
+			$sql = $this->db->query($query);
+		
+		// On traite les résultats
+			$result = $this->formatage_donnees($sql->fetch_assoc());
+		
+		// On retourne les résultats
+			return $result;
+	}
+	
+	
+	// arrondissement( int ) permet de renvoyer toutes les informations relatives à un arrondissement demandé par son id
+	public	function arrondissement( $id ) {
+		// On sécurise la recherche
+			$id = $this->securisation_string($id);
+		
+		// On prépare la requête de recherche des informations
+			$query = 'SELECT	*
+					  FROM		arrondissements
+					  WHERE		arrondissement_id = ' . $id;
 		
 		// On effectue la requête
 			$sql = $this->db->query($query);
@@ -221,6 +267,16 @@ class carto extends core {
 		
 		// On retourne les résultats
 			return $result;
+	}
+	
+	
+	// afficherArrondissement( int [ , bool ] ) permet d'afficher le nom d'un arrondissement grâce à son ID
+	public	function afficherArrondissement( $id , $return = false ) {
+		// On lance la recherche d'informations
+			$arrondissement = $this->arrondissement($id);
+		
+		// On retourne le résultat demandé
+			if ($return) : return $arrondissement['nom']; else : echo $arrondissement['nom']; endif;
 	}
 	
 	

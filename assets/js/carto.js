@@ -1,6 +1,7 @@
 var carto = function() {
 	// On cache ce qui doit être caché
-	$("#listeVilles").hide();
+	$('#listeVilles').hide();
+	$('#resultatsCantons').hide();
 	
 	// Script concernant la recherche d'une ville dans l'arborescence
 	$("#recherche").keyup(function(){
@@ -95,6 +96,34 @@ var carto = function() {
 			
 			// On annule le clique sur le lien
 			return false;
+		});
+		
+		
+	// Données relatives à la recherche d'un nouveau canton
+		$('#rechercheCanton').keyup(function(){
+			// On commence par récupérer le contenu du formulaire
+			var canton = $(this).val();
+			var bureau = $(this).data('bureau');
+			
+			// On vérifie qu'il possède au moins trois caractères
+			if (canton.length >= 3) {
+			
+				// On lance la recherche de cantons
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=recherche-canton',
+					data: { 'canton': canton, 'bureau': bureau },
+					dataType: 'html'
+				}).done(function(data){
+					$('#listeCantons').html(data);
+					$('#resultatsCantons').show();
+				}).error(function(){
+					$('#resultatsCantons').hide();
+				})
+				
+			} else {
+				$('#resultatsCantons').hide();
+			}
 		});
 }
 

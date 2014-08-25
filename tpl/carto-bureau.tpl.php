@@ -81,6 +81,25 @@
 			</ul>
 		</form>
 	</div>
+	<?php elseif (isset($_GET['modifierCanton'])) : ?>
+	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $bureau['id'])); ?>">Annuler les modifications</a>
+		</nav>
+		
+		<h6>Modification du canton rattaché au bureau de vote</h6>
+		
+		<ul class="deuxColonnes">
+			<li>
+				<span class="label-information">Recherche du canton</span>
+				<input type="text" name="rechercheCanton" id="rechercheCanton" placeholder="e.g. Strasbourg" data-bureau="<?php echo $bureau['id']; ?>">
+			</li>
+			<li id="resultatsCantons">
+				<span class="label-information">Confirmez le canton</span>
+				<ul class="listeEncadree" id="listeCantons"></ul>
+			</li>
+		</ul>
+	</div>
 	<?php else : ?>
 	<div>
 		<nav class="navigationFiches">

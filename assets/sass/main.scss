@@ -499,7 +499,9 @@ ul.listeEncadree {
 		&.rue,
 		&.immeuble,
 		&.electeur,
-		&.bureau {
+		&.bureau,
+		&.vide,
+		&.canton {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -569,6 +571,8 @@ ul.listeEncadree {
 			}
 		}
 		
+		&.vide { pointer-events: none; }
+		
 		&.ville::before { content: '\e844'; }
 		&.rue::before { content: '\e841'; }
 		&.immeuble::before { content: '\e842'; }
@@ -576,6 +580,8 @@ ul.listeEncadree {
 		&.ajoutDossier::before { content: '\e851'; }
 		&.electeur::before { content: '\e80a'; }
 		&.bureau::before { content: '\e821'; }
+		&.canton::before { content: '\e843'; }
+		&.vide::before { content: '\e81e'; }
 		
 		&:hover {
 			background-color: rgba($rouge, .05);
