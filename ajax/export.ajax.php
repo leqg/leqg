@@ -14,9 +14,14 @@
 		// On insère dans le mail l'URL du fichier pour qu'il puisse être téléchargé
 		$email = strtr($email, array('{URL}' => $f));
 	else :
-		$email = file_get_contents('tpl/mail/export-echec.tpl.html');
+		//$email = file_get_contents('tpl/mail/export-echec.tpl.html');
 		$objet = 'LeQG – Votre export a provoqué une erreur.';
 	endif;
+	
+	// On recherche les informations concernant le compte connecté
+	$query = 'SELECT * FROM users WHERE user_id = ' . $_COOKIE['leqg-site'];
+	$sql = $noyau->query($query);
+	$utilisateur = $core->formatage_donnees($sql->fetch_assoc());
 	
 	// On démarre l'instance
 	$mail = new PHPMailer();
@@ -33,7 +38,7 @@
 	$mail->CharSet = $api['mail']['charset'];
 	$mail->SetFrom('noreply@leqg.info', 'LeQG');
 	$mail->AddReplyTo('tech@leqg.info', 'LeQG équipe technique');
-	$mail->AddAddress($user->get_the_email(), $user->get_the_nickname(););
+	$mail->AddAddress($utilisateur['email'], $utilisateur['firstname'] . ' ' . $utilisateur['lastname']);
 	$mail->Subject = $objet;
 	$mail->MsgHTML($email);
 
