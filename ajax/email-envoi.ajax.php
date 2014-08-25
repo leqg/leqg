@@ -42,7 +42,7 @@
 		unset($mail);
 		
 		// On redirige vers la page de la fiche en question
-		$core->tpl_go_to('fiche', array('id' => $contact), true);
+		$core->tpl_go_to('fiche', array('id' => $contact, 'interaction' => $db->insert_id), true);
 	
 	} else {
 		echo 'Contactez l\'administrateur système avec les informations suivantes :<br><br><pre>' . $mail->ErrorInfo . '</pre>';
