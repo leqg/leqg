@@ -780,9 +780,6 @@ class fiche extends core {
 		if ($formulaire['age-min'] == 0) { $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', time()). '"'; } else { $criteres[] = 'contact_naissance_date <= "' . date('Y-m-d', mktime(0, 0, 0, date('n'), date('j'), date('Y')-$formulaire['age-min'])). '"'; }
 		if ($formulaire['age-max'] == 0) { $a = ''; } else { $criteres[] = 'contact_naissance_date >= "' . date('Y-m-d', mktime(0, 0, 0, date('n'), date('j')-1, date('Y')-$formulaire['age-max']-1)).'"'; }
 				
-		//if (!empty($formulaire['ville'])) $criteres[] = 'commune_id = ' . $formulaire['ville'];
-		//if (!empty($formulaire['rue'])) $criteres[] = 'rue_id = ' . $formulaire['rue'];
-		//if (!empty($formulaire['immeuble'])) $criteres[] = 'immeuble_id = ' . $formulaire['immeuble'];
 		if (!empty($formulaire['electeur'])) $criteres[] = 'contact_electeur = ' . $formulaire['electeur'];
 		if ($formulaire['sexe'] != 'i') $criteres[] = 'contact_sexe = "' . $formulaire['sexe'] . '"';
 		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL AND contact_optout_email = 0';
@@ -821,11 +818,16 @@ class fiche extends core {
 			
 		// Sinon, on fait la requête de tous les utilisateurs pour fabriquer le fichier et on le créé
 		} else {
+
 			// On prépare le contenu du fichier sous forme de tableau
 			$fichier = array();
 			
+			// On ouvre le fichier
+			$nomFichier = 'export-' . $_COOKIE['leqg-user'] . '-' .date('Y-m-d-H\hi'). '-' . time() . '.csv';
+			$f = fopen('exports/' . $nomFichier, 'w+');
+			
 			// On y entre la première ligne du fichier
-			$fichier[] = array('nom',
+			$entete = array(   'nom',
 							   'nom_usage',
 							   'prenoms',
 							   'date_naissance',
@@ -837,29 +839,41 @@ class fiche extends core {
 							   'mobile',
 							   'fixe',
 							   'electeur');
-		
+			
+			fputcsv($f, $entete, ';', '"');
+			
+			
+			// On fait la boucle des contacts pour y ajouter les lignes
 			while ($contact = $sql->fetch_assoc()) {
+				// On commence par rechercher les coordonnées d'après l'immeuble
+				$immeuble = $this->db->query('SELECT * FROM immeubles WHERE immeuble_id = ' . $contact['immeuble_id']);
+				$immeuble = $this->formatage_donnees($immeuble->fetch_assoc());
+				
+				$rue = $this->db->query('SELECT * FROM rues WHERE rue_id = ' . $immeuble['rue_id']);
+				$rue = $this->formatage_donnees($rue->fetch_assoc());
+				
+				$ville = $this->db->query('SELECT * FROM communes WHERE commune_id = ' . $rue['commune_id']);
+				$ville = $this->formatage_donnees($ville->fetch_assoc());
+				
+				$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
+				$cp = $cp->fetch_assoc();
+				
 				// on rassemble les informations qu'on balance dans le fichier
-				$fichier[] = array($contact['contact_nom'],
+				$ligne = array($contact['contact_nom'],
 								   $contact['contact_nom_usage'],
 								   $contact['contact_prenoms'],
 								   date('d/m/Y', strtotime($contact['contact_naissance_date'])),
-								   $contact['immeuble_numero'] . ' ' . $contact['rue_nom'],
-								   $contact['code_postal'],
-								   $contact['commune_nom_propre'],
+								   $immeuble['numero'] . ' ' . $rue['nom'],
+								   $cp['code_postal'],
+								   $ville['nom'],
 								   $contact['contact_sexe'],
 								   $contact['contact_email'],
 								   $contact['contact_mobile'],
 								   $contact['contact_telephone'],
 								   $contact['contact_electeur']);
+								   
+				fputcsv($f, $ligne, ';', '"');
 			}
-			
-			// On créé le fichier
-			$nomFichier = 'export-' . $_COOKIE['leqg-user'] . '-' .date('Y-m-d-H\hi'). '-' . time() . '.csv';
-			$f = fopen('exports/' . $nomFichier, 'w+');
-			
-				// On ajoute les lignes dans le fichier
-				foreach ($fichier as $ligne) { fputcsv($f, $ligne, ';', '"'); }
 			
 			// On ferme le fichier
 			fclose($f);

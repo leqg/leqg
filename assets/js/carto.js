@@ -2,6 +2,7 @@ var carto = function() {
 	// On cache ce qui doit être caché
 	$('#listeVilles').hide();
 	$('#resultatsCantons').hide();
+	$('#affichage-envoi').hide();
 	
 	// Script concernant la recherche d'une ville dans l'arborescence
 	$("#recherche").keyup(function(){
@@ -50,6 +51,7 @@ var carto = function() {
 		$('#calcul').hide();
 		$('#fichier').hide();	
 		$('#boutonExportation').hide();
+		$('#affichage-envoi').hide();
 		
 		// On prépare ce qu'il se passe quand on clique sur l'estimation du nombre de fiches du formulaire
 		$("#export").on('submit', function() {
@@ -65,6 +67,7 @@ var carto = function() {
 				data: $(this).serialize(),
 				dataType: 'html'
 			}).done(function(data){
+				$('#affichage-envoi').hide();
 				$("#affichageEstimation").html(data);
 				$('#boutonExportation').show();
 				$('#fichier').hide();
@@ -82,16 +85,14 @@ var carto = function() {
 			// On commence par enlever le bouton d'export pour afficher le calcul en cours et puis le bouton vers le fichier
 			$('#calcul').show();
 			$('#boutonExportation').hide();
+			$('#affichage-envoi').show();
+			$('#calcul').hide();
 			
 			$.ajax({
 				url: $(this).attr('href'),
 				type: 'POST',
 				data: $('#export').serialize(),
 				dataType: 'html'
-			}).done(function(data){
-				$('#fichier a').attr('href', data);
-				$('#fichier').show();
-				$('#calcul').hide();
 			});
 			
 			// On annule le clique sur le lien
