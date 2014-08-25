@@ -12,3 +12,4 @@ csv/*.traite.csv
 config.ini
 
 exports/*.csv
+*.codekit
