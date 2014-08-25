@@ -57,6 +57,10 @@
 			<input type="hidden" name="bureau" value="<?php echo $bureau['id']; ?>">
 			<ul class="deuxColonnes">
 				<li>
+					<span class="label-information"><label for="form-numero">Numéro</label></span>
+					<input type="text" name="numero" id="form-numero" value="<?php echo $bureau['numero']; ?>">
+				</li>
+				<li>
 					<span class="label-information"><label for="form-nom">Nom</label></span>
 					<input type="text" name="nom" id="form-nom" value="<?php echo $core->tpl_transform_texte($bureau['nom']); ?>">
 				</li>

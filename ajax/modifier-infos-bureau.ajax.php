@@ -4,6 +4,7 @@
 	$infos = $_POST;
 	
 	// On reformate les informations
+	$numero = $core->securisation_string($infos['numero']);
 	$nom = $core->securisation_string($infos['nom']);
 	$adresse = $core->securisation_string($infos['adresse']);
 	$cp = $core->securisation_string($infos['cp']);
@@ -11,8 +12,9 @@
 	
 	// On enregistre les modifications
 	$query = 'UPDATE	bureaux
-			  SET		bureau_nom = "' . $nom . '",
-			  			bureau_adresse = "' . $adresse . '",
+			  SET		bureau_numero = ' . $numero . ',
+			  			bureau_nom = "' . trim($nom) . '",
+			  			bureau_adresse = "' . trim($adresse) . '",
 			  			bureau_cp = "' . $cp . '"
 			  WHERE		bureau_id = ' . $bureau;
 			  
