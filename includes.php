@@ -54,8 +54,19 @@ global $db, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier,
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
+require_once 'api/phpmailer/class.phpmailer.php';
 
 // On configure les données des API extérieures
 $api['sms']['auth'] = new \Esendex\Authentication\LoginAuthentication($config['SMS']['compte'], $config['SMS']['login'], $config['SMS']['pass']);
+
+$api['mail']['charset'] = 'UTF-8';
+$api['mail']['smtp']['host'] = $config['MAIL']['host'];
+$api['mail']['smtp']['user'] = $config['MAIL']['user'];
+$api['mail']['smtp']['pass'] = $config['MAIL']['pass'];
+$api['mail']['smtp']['port'] = $config['MAIL']['port'];
+$api['mail']['from']['email'] = 'no-reply@leqg.info';
+$api['mail']['from']['nom'] = 'Ne Pas Répondre';
+$api['mail']['reply']['email'] = 'serveur@leqg.info';
+$api['mail']['reply']['nom'] = 'LeQG';
 
 ?>
