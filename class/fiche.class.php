@@ -805,7 +805,7 @@ class fiche extends core {
 		}
 		
 		// On applique un tri des contacts
-		$query .= ' ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC'; $this->debug($query);
+		$query .= ' ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
 		
 		// On lance la requête
 		//$this->debug($query);
