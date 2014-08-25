@@ -375,6 +375,32 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			
 			}
 			
+	
+	// Mise en place des templates liés aux modules de recherche
+	
+			else if ( $_GET['page'] == 'rechercher' ) {
+			
+				// On charge d'abord le template de header
+				$core->tpl_header(); 
+				
+				// On regarde s'il s'agit d'une recherche par tags, de fiches ou de dossiers
+				
+				if ( isset($_POST['tags']) ) {
+					
+					// S'il s'agit d'une recherche par tags
+					$core->tpl_load('recherche', 'tags');
+					
+				} else {
+					
+					
+					
+				}
+				
+				// On charge enfin le template de footer
+				$core->tpl_footer();
+				
+			}
+			
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services

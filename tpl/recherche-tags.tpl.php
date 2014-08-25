@@ -1,23 +1,23 @@
-<div id="recherche-tags">
-	<h6>Recherche par étiquette</h6>
-	<form action="<?php $core->tpl_get_url('recherche-tag'); ?>" method="post">
-		<ul>
-			<li style="width: 100%">
-				<input type="text" name="tag" id="form-tag" placeholder="mobilités, logement, sport, etc." pattern=".{3,}" autocomplete="off" list="list-tag">
-				<label for="form-prenom" pattern=".{3,}">Étiquette recherchée</label>
-			</li><!--
-		 --><li>
-				<input class="loupe" type="submit" value="&#xe803;">
-			</li>
-		</ul>
-		<datalist id="list-tag">
- 	 		<?php
- 	 			$query = 'SELECT * FROM tags ORDER BY rand() LIMIT 0,10';
- 	 			$sql = $db->query($query);
- 	 			while ($row = $sql->fetch_array()) {
-	 	 	?>
-	 	 	<option value="<?php echo utf8_encode($row[0]); ?>">
- 	 		<?php } ?>
-		</datalist>
-	</form>
-</div>
+<input type="hidden" name="recherche" id="recherche" value="<?php echo $_POST['tags']; ?>">
+<table class="rechercheGlobale">
+	<tr>
+		<td id="resultatsFiches">
+			<h3>Fiches trouvées</h3>
+			<ul class="listeEncadree" id="fichesTrouvees"><li class="vide"><strong>Recherche en cours…</strong></li></ul>
+		</td>
+		<td id="resultatsInteractions">
+			<h3>Interactions trouvées</h3>
+			<ul class="listeEncadree" id="interactionsTrouvees"><li class="vide"><strong>Recherche en cours…</strong></li></ul>
+		</td>
+	</tr>
+	<tr>
+		<td id="resultatsDossiers">
+			<h3>Dossiers trouvés</h3>
+			<ul class="listeEncadree" id="dossiersTrouves"><li class="vide"><strong>Recherche en cours…</strong></li></ul>
+		</td>
+		<td id="resultatsFichiers">
+			<h3>Fichiers trouvés</h3>
+			<ul class="listeEncadree" id="fichiersTrouves"><li class="vide"><strong>Recherche en cours…</strong></li></ul>
+		</td>
+	</tr>
+</table>

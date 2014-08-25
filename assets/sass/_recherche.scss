@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage du système de recherche du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+
+
+/************************************
+ *									*
+ *			  RECHERCHE				* 
+ *									*
+ ************************************/
+
+.searching {
+	position: absolute; top: 0; left: 0;
+	display: table;
+	background-color: rgba($blanc, .85);
+	height: 100%;
+	pointer-events: none;
+	width: 100%;
+	
+	& > p {
+		display: table-cell;
+		font-size: 2.5em;
+		font-weight: 300;
+		padding-top: 4em;
+		text-align: center;
+		vertical-align: middle;
+		
+		& > span {
+			display: block;
+			color: $bleu;
+			font-family: $icons;
+			font-size: 85px;
+			height: 150px;
+			line-height: 150px;
+			margin: 0 auto .33em auto;
+			width: 150px;
+			
+			& > span {
+				display: block;
+				@include animation(rotfocus 3s linear infinite);
+			}
+		}
+	}
+}
+
+
+
+/************************************
+ *									*
+ *		TABLEAU DES RÉSULTATS		* 
+ *									*
+ ************************************/
+
+table.rechercheGlobale {
+	border: none;
+	height: 90%;
+	margin: 0 auto;
+	width: 85%;
+	
+	tr {
+		border: none;
+		height: 50%;
+		
+		td {
+			position: relative;
+			border: none;
+			overflow-x: hidden;
+			overflow-y: scroll;
+			vertical-align: top;
+			width: 50%;
+		}
+	}
+	
+}
