@@ -175,6 +175,7 @@ class historique extends core {
 						'telephone'	=> 'Entretien téléphonique',
 						'email'		=> 'Échange électronique',
 						'courrier'	=> 'Correspondance',
+						'sms'		=> 'Envoi SMS',
 						'autre'		=> 'Autre' );
 				
 		$retour = $types[$type];
