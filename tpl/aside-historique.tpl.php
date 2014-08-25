@@ -16,8 +16,13 @@
 			<tr>
 				<td><?php $historique->returnType($interaction['type']); ?></td>
 				<td><?php echo date('d/m/Y', strtotime($interaction['date'])); ?></td>
-				<td><a href="<?php $core->tpl_get_url('fiche', $fiche->get_the_ID(), 'id', $interaction['id'], 'interaction'); ?>"><?php echo $interaction['objet']; ?></a></td>
-				<!--<td class="liste-tags"><?php $historique->affichageThematiques($interaction['thematiques']); ?></td>-->
+				<td>
+				<?php if ($interaction['type'] == 'sms') : ?>
+					<?php echo $interaction['notes']; ?>
+				<?php else : ?>
+					<a href="<?php $core->tpl_get_url('fiche', $fiche->get_the_ID(), 'id', $interaction['id'], 'interaction'); ?>"><?php echo $interaction['objet']; ?></a>
+				<?php endif; ?>
+				</td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
