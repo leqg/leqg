@@ -43,7 +43,7 @@ $icons:		'fontello';
 
 /********************************
  *								*
- *		 STYLES GÉNÉRAUX			* 
+ *		 STYLES GÉNÉRAUX		* 
  *								*
  ********************************/
 
@@ -206,6 +206,7 @@ ul {
 }
 
 pre {
+	display: block;
 	background-color: lighten($rouge, 33%);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
 	background-image: -moz-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
@@ -218,13 +219,19 @@ pre {
 	font-size: 1.1em;
 	line-height: 1.5em;
 	margin: 3em;
+	overflow: hidden;
 	padding: 1.5em;
 	padding-top: 1.55em;
 	text-align: left;
+	width: auto;
 	
 	span {
 		display: block;
 		padding-left: 2em;
+		
+		&.wrap {
+			white-space: normal;
+		}
 	}
 }
 

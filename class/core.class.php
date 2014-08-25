@@ -31,13 +31,13 @@ class core {
 			
 			else if (is_object($array)) { print_r($array); }
 			
-			else if (is_bool($array)) { echo ucwords(gettype($array)).'<br>(<span>' . var_dump($array) . '</span>)'; }
+			else if (is_bool($array)) { echo ucwords(gettype($array)).'<br>(<span class="wrap">' . var_dump($array) . '</span>)'; }
 			
-			else if (is_numeric($array)) { echo 'Numeric<br>(<span>' . $array . '</span>)'; }
+			else if (is_numeric($array)) { echo 'Numeric<br>(<span class="wrap">' . $array . '</span>)'; }
 			
 			// On affiche une phrase d'erreur s'il ne s'agit pas d'un tableau avec le contenu de la variable en question
 			else {
-				echo ucwords(gettype($array)).'<br>(<span>';
+				echo ucwords(gettype($array)).'<br>(<span class="wrap">';
 					echo $array;
 				echo '</span>)';
 			}
