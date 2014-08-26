@@ -23,7 +23,7 @@ class historique extends core {
 		if ( is_numeric( $fiche ) ) :
 		
 			// On effectue la recherche dans la BDD des entrées dans l'historique rattachées à la fiche contact demandée
-			$query = 'SELECT * FROM historique WHERE contact_id = ' . $fiche . ' ORDER BY historique_timestamp DESC';
+			$query = 'SELECT * FROM historique WHERE contact_id = ' . $fiche . ' ORDER BY historique_date DESC';
 			$sql = $this->db->query($query);
 			
 			// On fait la liste de toutes les entrées pour les affecter dans un tableau
