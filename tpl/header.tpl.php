@@ -40,9 +40,10 @@
 			 --><a class="nostyle" href="<?php $core->tpl_go_to('contacts'); ?>"><li><span>&#xe840;</span>Contacts</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_go_to('dossiers'); ?>"><li><span>&#xe851;</span>Dossiers</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_go_to('carto'); ?>"><li><span>&#xe845;</span>Cartographie</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('boite'); ?>"><li><span>&#xe84d;</span>Diffusion</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('poste'); ?>"><li><span>&#xe8ef;</span>Publipostage</li></a><!--
+			 --><?php /*	<a class="nostyle" href="<?php $core->tpl_go_to('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('boite'); ?>"><li><span>&#xe84d;</span>Boîtage</li></a><!--
+			 --><a class="nostyle" href="<?php $core->tpl_go_to('rappels'); ?>"><li><span>&#xe854;</span>Rappels</li></a><!--
+			 -->*/ ?><a class="nostyle" href="<?php $core->tpl_go_to('poste'); ?>"><li><span>&#xe8ef;</span>Publipostage</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_go_to('email'); ?>"><li><span>&#xe805;</span>Emailing</li></a><!--
 			 --><a class="nostyle" href="<?php $core->tpl_go_to('sms'); ?>"><li><span>&#xe8e4;</span>SMS</li></a><!--
 		 --></ul>
