@@ -19,6 +19,8 @@
 		<input type="hidden" name="rue" value="<?php if (isset($_GET['rue'])) echo $_GET['rue']; ?>">
 		<input type="hidden" name="immeuble" value="<?php if (isset($_GET['immeuble'])) echo $_GET['immeuble']; ?>">
 		<input type="hidden" name="mobile" value="1">
+		<input type="hidden" name="email" value="0">
+		<input type="hidden" name="fixe" value="0">
 		<ul class="deuxColonnes">
 			<li>
 				<span class="label-information">Campagne</span>
