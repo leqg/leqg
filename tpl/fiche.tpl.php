@@ -105,6 +105,9 @@
 			
 			// On charge le script de liaison d'un événement à un dossier
 			$core->tpl_load('aside', 'creer-un-dossier');
+			
+			// On charge le script de liaison d'un événement à un dossier
+			$core->tpl_load('aside', 'ajout-tache');
 
 		endif;
 		

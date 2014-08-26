@@ -8,6 +8,7 @@ var fiche = function() {
 		$("#resultatsVille").hide();
 		$("#resultats").hide();
 		$('#listeDesDossiers').hide();
+		$('#nouvelleTache').hide();
 		
 	
 	// On cache tout ce qui doit être caché
@@ -35,7 +36,7 @@ var fiche = function() {
 	
 	
 	// script permettant de se rendre directement à un volet suivant les requêtes GET
-		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance') && !getURLVar('modifierInformations') && !getURLVar('envoyerSMS') && !getURLVar('envoyerEmail') && !getURLVar('afficherDossiers')) {
+		if (getURLVar('interaction') && !getURLVar('fichier') && !getURLVar('modifier') && !getURLVar('dossier') && !getURLVar('creerDossier') && !getURLVar('changementNaissance') && !getURLVar('modifierInformations') && !getURLVar('envoyerSMS') && !getURLVar('envoyerEmail') && !getURLVar('afficherDossiers') && !getURLVar('ajoutTache')) {
 			var interaction = getURLVar('interaction'); // On récupère l'ID de l'interaction demandée
 			
 			$(".ficheContact div").hide(); // On ferme tous les volets
@@ -121,6 +122,11 @@ var fiche = function() {
 		else if (getURLVar('afficherDossiers')) {
 			$('.ficheContact div').hide();
 			$('#listeDesDossiers').show();
+		}
+		
+		else if (getURLVar('ajoutTache')) {
+			$('.ficheContact div').hide();
+			$('#nouvelleTache').show();
 		}
 		
 	

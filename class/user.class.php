@@ -119,6 +119,17 @@ class user extends core {
 	}
 	
 	
+	// Méthode permettant de trouver le login d'un utilisateur à partir de son ID
+	
+	public	function get_login_by_ID($id) {
+		$query = "SELECT * FROM users WHERE user_id = '" . $id . "'";
+		$sql = $this->noyau->query($query);
+		$donnees = $sql->fetch_assoc();
+		
+		return $donnees['user_firstname'] . ' ' . $donnees['user_lastname'];
+	}
+	
+	
 	// Méthode de connexion des comptes à l'interface
 	
 	public	function connexion($login, $pass) {
@@ -169,6 +180,37 @@ class user extends core {
 		$this->noyau->query('UPDATE users SET user_reinit = NOW() WHERE user_id = ' . $compte);
 		
 		$this->tpl_go_to(true);
+	}
+	
+	
+	// client( ) est une méthode permettant de renvoyer les informations du compte client pour un utilisateur demandé
+	public	function client( $user = null ) {
+		if (is_null($user)) $user = $_COOKIE['leqg-user'];
+		
+		$query = 'SELECT * FROM users WHERE user_id = ' . $user;
+		$sql = $this->noyau->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		$query = 'SELECT * FROM clients WHERE client_id = ' . $infos['client_id'];
+		$sql = $this->noyau->query($query);
+		
+		return $this->formatage_donnees($sql->fetch_assoc());
+	}
+	
+	
+	// liste( ) est une méthode renvoyant la liste des comptes associés au compte en cours
+	public	function liste() {
+		$compte = $this->client();
+		$compte = $compte['id'];
+		
+		$query = 'SELECT * FROM users WHERE client_id = ' . $compte . ' ORDER BY user_firstname, user_lastname ASC';
+		$sql = $this->noyau->query($query);
+		
+		$users = array();
+		
+		while ($row = $sql->fetch_assoc()) $users[] = $this->formatage_donnees($row);
+		
+		return $users; 
 	}
 }
 

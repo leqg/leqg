@@ -20,23 +20,22 @@ class tache extends core {
 	
 	
 	// creation( string , int ) est la méthode de création d'une nouvelle tâche (avec la possibilité d'y assigner de suite une fiche
-	public	function creation( $contenu , $deadline , $contacts , $destinataire ) {
-		// On vérifie le contenu des données
-		$contenu = $this->securisation_string($contenu);
-		$date = explode('/', $deadline);
-		if (!checkdate($date[1], $date[0], $date[2])) { $deadline = null; } else { $deadline = mktime(0, 0, 0, $date[1], $date[0], $date[2]); }
+	public	function creation( $info ) {
+		if (!is_array($info)) return false;
 	
 		// On prépare la requête
-		$query = 'INSERT INTO taches (	compte_id,
+		$query = 'INSERT INTO taches (	createur_id,
+										compte_id,
+										dossier_id,
+										historique_id,
 										tache_description,
-										tache_deadline,
-										tache_contacts, 
-										tache_destinataire )
+										tache_deadline )
 				   VALUES	(	"' . $_COOKIE['leqg-user'] . '",
-				   				"' . $contenu . '",
-				   				"' . date( 'Y-m-d' , $deadline ) . '",
-				   				"' . $contacts . '",
-				   				"' . $destinataire . '" ) ';
+				   				"' . $info['destinataire'] . '",
+				   				"' . $info['dossier'] . '",
+				   				"' . $info['interaction'] . '",
+				   				"' . $info['description'] . '",
+				   				"' . $info['deadline'] . '" )';
 		
 		// On effectue la requête
 		$sql = $this->db->query($query);
@@ -69,6 +68,36 @@ class tache extends core {
 			return $taches;
 			
 		else : return false; endif;
+	}
+	
+	
+	// listeParInteraction( int ) permet d'avoir la liste de toutes les tâches pour une interaction donnée
+	public	function listeParInteraction( $interaction ) {
+		if (!is_numeric($interaction)) return false;
+		
+		// On exécute la recherche
+		$query = 'SELECT * FROM taches WHERE tache_terminee = 0 AND historique_id = ' . $interaction;
+		$sql = $this->db->query($query);
+		
+		// On initialise la liste des tâches
+		$taches = array();
+		
+		// On affecte les résultats au tableau
+		while ($row = $sql->fetch_assoc()) $taches[] = $this->formatage_donnees($row);
+		
+		// On retourne la liste des tâches
+		return $taches;
+	}
+	
+	
+	// fermetureTache( int ) permet de fermer une tâche
+	public	function fermetureTache( $task ) {
+		if (!is_numeric($task)) return false;
+		
+		$query = 'UPDATE taches SET tache_terminee = 1 WHERE tache_id = ' . $task;
+		$this->db->query($query);
+		
+		return true;
 	}
 		
 }	

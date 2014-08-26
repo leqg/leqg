@@ -277,4 +277,16 @@ class historique extends core {
 		// On retourne les interactions
 		return $interactions;
 	}
+	
+	
+	// dossierParInteraction( int ) permet de retourner l'ID du dossier rattaché à une interaction
+	public	function dossierParInteraction( $interaction ) {
+		if (!is_numeric($interaction)) return false;
+		
+		$query = 'SELECT dossier_id FROM historique WHERE historique_id = ' . $interaction;
+		$sql = $this->db->query($query);
+		$row = $sql->fetch_assoc();
+		
+		return $row['dossier_id']; 
+	}
 }

@@ -52,7 +52,29 @@
 	 	<?php else : ?>
 	 	<p>&nbsp;</p>
 	 	<?php endif; ?>
-	 </li>
+	</li>
+	<li>
+		<span class="label-information">Tâches</span>
+		<ul class="listeEncadree">
+			<?php
+				$taches = $tache->listeParInteraction($interaction['id']);
+				
+				foreach ($taches as $task) :
+			?>
+			<a href="ajax.php?script=fin-tache&tache=<?php echo $task['id']; ?>&fiche=<?php echo $interaction['contact_id']; ?>&interaction=<?php echo $interaction['id']; ?>">
+				<li class="tache">
+					<strong><?php echo $task['description']; ?></strong>
+					<?php if (!is_null($task['compte_id'])) : ?><p>Attribué à <?php echo $user->get_login_by_ID($task['compte_id']); ?></p><?php endif; ?>
+				</li>
+			</a>
+			<?php endforeach; ?>
+			<a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'], 'ajoutTache' => 'true')); ?>">
+				<li class="tache ajoutTache">
+					<strong>Ajouter une nouvelle tâche</strong>
+				</li>
+			</a>
+		</ul>
+	</li> 
  	<li><!--
 	 --><span class="label-information">Dossier</span><!--
 	 --><ul class="listeEncadree">
