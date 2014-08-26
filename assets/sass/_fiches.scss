@@ -53,6 +53,7 @@
 		&.dossier::before { content: '\e850'; }
 		&.bureau::before { content: '\e821'; }
 		&.sms::before { content: '\e8e4'; }
+		&.email::before { content: '\e805'; }
 		&.historique::before { content: '\e8dd'; }
 		&.reglages::before { content: '\e856'; }
 		
