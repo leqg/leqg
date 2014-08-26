@@ -64,7 +64,7 @@
 			<a href="ajax.php?script=fin-tache&tache=<?php echo $task['id']; ?>&fiche=<?php echo $interaction['contact_id']; ?>&interaction=<?php echo $interaction['id']; ?>">
 				<li class="tache">
 					<strong><?php echo $task['description']; ?></strong>
-					<?php if (!is_null($task['compte_id'])) : ?><p>Attribué à <?php echo $user->get_login_by_ID($task['compte_id']); ?></p><?php endif; ?>
+					<?php if ($task['compte_id'] > 0) : ?><p>Attribué à <?php echo $user->get_login_by_ID($task['compte_id']); ?></p><?php endif; ?>
 				</li>
 			</a>
 			<?php endforeach; ?>
