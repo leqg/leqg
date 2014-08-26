@@ -19,7 +19,7 @@
 <a href="<?php $core->tpl_go_to('fiche', array('id' => $file['contact_id'], 'interaction' => $file['interaction_id'])); ?>">
 	<li class="fichier">
 		<strong><?php echo $file['nom']; ?></strong>
-		<p><?php echo $fiche->nomByID($file['contact_id']); ?>&nbsp;&nbsp;–&nbsp;&nbsp;<?php echo $interaction['description']; ?></p>
+		<p><?php echo $fiche->nomByID($file['contact_id']); ?>&nbsp;&nbsp;–&nbsp;&nbsp;<?php echo $file['description']; ?></p>
 	</li>
 </a>
 <?php
