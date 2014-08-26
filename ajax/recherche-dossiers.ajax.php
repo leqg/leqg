@@ -7,7 +7,7 @@
 	$query = 'SELECT	*
 			  FROM		dossiers
 			  WHERE		dossier_nom LIKE "%' . $recherche . '%"
-			  AND		dossier_description LIKE "%' . $recherche . '%"
+			  OR			dossier_description LIKE "%' . $recherche . '%"
 			  ORDER BY	dossier_nom ASC';
 			  
 	$sql = $db->query($query);
