@@ -29,10 +29,16 @@
 	 --><span class="label-information">Date</span><!--
 	 --><p><?php echo strtolower(htmlentities(strftime('%A %e %B %Y', $date))); ?></p><!--
  --></li>
-	<li><!--
-	 --><span class="label-information">Lieu</span><!--
-	 --><p><?php echo ucwords($interaction['lieu']); ?></p><!--
- --></li>
+	<li>
+		<span class="label-information">Lieu</span>
+	 	<p>
+	 	<?php if (!empty($interaction['lieu'])) : ?>
+	 		<?php echo ucwords($interaction['lieu']); ?>
+	 	<?php else : ?>
+	 		&nbsp;
+	 	<?php endif; ?>
+	 	</p>
+	 </li>
 	<li><!--
 	 --><span class="label-information">Objet</span><!--
 	 --><p><?php echo $interaction['objet']; ?></p><!--
