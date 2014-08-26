@@ -2,6 +2,12 @@
 	
 	if (isset($_GET['campagne'])) :
 	
+		// On récupère les informations de réglage
+		$query = 'SELECT * FROM reglages WHERE nom = "sms-expediteur"';
+		$sql = $db->query($query);
+		$expediteur = $sql->fetch_assoc();
+		$expediteur = $expediteur['valeur'];
+
 		// On récupère le numéro de la campagne à lancer
 		$query = 'SELECT * FROM envois WHERE envoi_id = ' . $_GET['campagne'];
 		$sql = $db->query($query);
@@ -29,7 +35,7 @@
 			
 			// On prépare l'envoi
 			$message = new \Esendex\Model\DispatchMessage(
-			    "LeQG", // Send from
+			    $expediteur, // Send from
 			    $numero[0], // Send to any valid number
 			    html_entity_decode($texte),
 			    \Esendex\Model\Message::SmsType

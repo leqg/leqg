@@ -1,4 +1,9 @@
 <?php
+	// On récupère les informations de réglage
+	$query = 'SELECT * FROM reglages WHERE nom = "sms-expediteur"';
+	$sql = $db->query($query);
+	$expediteur = $sql->fetch_assoc();
+	$expediteur = $expediteur['valeur'];
 
 	// On récupère les informations
 	$contact = $_POST['contact'];
@@ -7,7 +12,7 @@
 
 	// On prépare l'envoi
 	$message = new \Esendex\Model\DispatchMessage(
-	    "Webapp", // Send from
+	    $expediteur, // Send from
 	    $destinataire, // Send to any valid number
 	    $texte,
 	    \Esendex\Model\Message::SmsType
