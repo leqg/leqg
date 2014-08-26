@@ -47,7 +47,7 @@
 	<?php if (isset($_GET['modifierInfos'])) : ?>
 	<div>
 		<nav class="navigationFiches">
-			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux', 'bureau' => $bureau['id'])); ?>">Annuler les modifications</a>
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array(/*'module' => 'bureaux', 'bureau' => $bureau['id']*/)); ?>">Annuler les modifications</a>
 		</nav>
 		
 		<h6>Modification des informations du bureau de vote</h6>
