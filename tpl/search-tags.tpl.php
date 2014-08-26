@@ -1,5 +1,5 @@
 <div id="recherche-tags">
-	<h6>Recherche d'un contact par thématiques</h6>
+	<h6>Recherche thématique</h6>
 	<form action="<?php $core->tpl_go_to('rechercher'); ?>" method="post">
 		<ul>
 			<li style="width: 100%">
