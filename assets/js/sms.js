@@ -39,7 +39,8 @@ var sms = function() {
 				var tailleSMS = 160;
 				var nombre = taille / tailleSMS;
 				var nombre = Math.ceil(nombre);
-				var cout = nombre * 0.10 * data;
+				var cout = nombre * data * 0.1;
+				var cout = Math.round(cout, 2)
 			
 				$('#affichage-envoi').hide();
 				$("#affichageEstimation").html(data);
