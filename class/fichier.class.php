@@ -43,6 +43,9 @@ class fichier extends core {
 	
 	// enregistrement( string , array ) permet d'enregistrer un fichier dans la base de données
 	public	function enregistrement( $url , $donnees ) {
+		if (!isset($donnees['objet'])) $donnees['objet'] = 0;
+		if (!isset($donnees['dossier'])) $donnees['dossier'] = 0;
+		
 		$query = 'INSERT INTO fichiers (contact_id,
 										compte_id,
 										interaction_id,
@@ -56,7 +59,7 @@ class fichier extends core {
 								VALUES (	"' . $donnees['contact'] . '",
 										"' . $this->compte . '",
 										"' . $donnees['objet'] . '",
-										"",
+										"' . $donnees['dossier'] . '",
 										"' . $donnees['nom'] . '",
 										"' . implode(',' , $donnees['labels']) . '",
 										"' . $donnees['description'] . '",
