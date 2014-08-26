@@ -12,7 +12,11 @@
 		</li>
 		<li>
 			<span class="label-information"><label for="description">Description</label></span>
+			<?php if (!empty($d['description'])) : ?>
 			<p><?php echo nl2br($d['description']); ?></p>
+			<?php else : ?>
+			<p>&nbsp;</p>
+			<?php endif; ?>
 		</li>
 		<li>
 			<span class="label-information">Fichiers associés au dossier</span>
