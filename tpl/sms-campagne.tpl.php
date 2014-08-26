@@ -35,6 +35,7 @@
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
 					<li class="electeur">
 						<strong><?php $fiche->affichageNomByID($contact); ?>
+						<p><?php $fiche->contact('sms', false, false, $contact); ?></p>
 					</li>
 				</a>
 				<?php endforeach; ?>
