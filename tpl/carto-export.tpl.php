@@ -74,7 +74,7 @@
 </section>
 
 <aside>
-	<?php if ($_GET['criteresGeographiques'] == true) : ?>
+	<?php if (isset($_GET['criteresGeographiques'])) : ?>
 	<div id="geo">
 		<nav class="navigationFiches">
 			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'export')); ?>">Revenir à l'estimation</a>
