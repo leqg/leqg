@@ -54,6 +54,7 @@
 		&.bureau::before { content: '\e821'; }
 		&.sms::before { content: '\e8e4'; }
 		&.historique::before { content: '\e8dd'; }
+		&.reglages::before { content: '\e856'; }
 		
 		#config-icon {
 			position: absolute; top: 135px; left: -50px;
