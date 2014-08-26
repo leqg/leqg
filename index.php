@@ -459,6 +459,35 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				
 			}
 			
+			
+	// Mise en place des templates liés au module de publipostage
+	
+			else if ( $_GET['page'] == 'poste' ) {
+				
+				// On charge d'abord le template de header
+				$core->tpl_header(); 
+				
+				// On charge les templates de page selon la demande
+				if ( isset($_GET['action'])) {
+					
+					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('poste', 'nouveau');
+					elseif ( $_GET['action'] == 'historique' ) : $core->tpl_load('poste', 'historique');
+					elseif ( $_GET['action'] == 'campagne' ) : $core->tpl_load('poste', 'campagne');
+					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('poste', 'reglages');
+					else : $core->tpl_load('email'); endif;
+					
+				} else {
+					
+					$core->tpl_load('poste');
+					
+				}
+				
+				
+				// On charge enfin le template de footer
+				$core->tpl_footer();
+				
+			}
+			
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services
