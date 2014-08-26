@@ -410,9 +410,12 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				$core->tpl_header(); 
 				
 				// On charge les templates de page selon la demande
-				if ( $_GET['id'] == 'campagne' ) {
+				if ( isset($_GET['action'])) {
 					
-					
+					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('sms', 'nouveau');
+					elseif ( $_GET['action'] == 'historique' ) : $core->tpl_load('sms', 'historique');
+					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('sms', 'reglages');
+					else : $core->tpl_load('sms'); endif;
 					
 				} else {
 					

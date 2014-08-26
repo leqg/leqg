@@ -561,7 +561,8 @@ ul.listeEncadree {
 		&.canton,
 		&.numero,
 		&.email,
-		&.interaction {
+		&.interaction,
+		&.sms {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -645,6 +646,7 @@ ul.listeEncadree {
 		&.numero::before { content: '\e8e4'; }
 		&.email::before { content: '\e805'; }
 		&.interaction::before { content: '\e83c'; }
+		&.sms::before { content: '\e8e4'; }
 		
 		&:hover {
 			background-color: rgba($rouge, .05);

@@ -745,7 +745,7 @@ class fiche extends core {
 	
 	
 	// export( array , bool ) permet d'effectuer un export de données en CSV depuis la base de données
-	public	function export( $formulaire , $simulation = false ) {
+	public	function export( $formulaire , $simulation = false , $export_liste = false) {
 		// On commence par vérifier le format des arguments
 		if (!is_array($formulaire) || !is_bool($simulation)) return false;
 		
@@ -834,7 +834,19 @@ class fiche extends core {
 		
 		// Si c'est une simulation, on calcule le nombre de fiches et on retourne l'information
 		if ($simulation) {
-			return $sql->num_rows;
+			if ($export_liste) {
+				
+				// On fait la liste des différentes fiches dans un tableau qu'on va renvoyer au demandeur
+				$exportation = array();
+				while ($row = $sql->fetch_assoc()) $exportation[] = $row['contact_id'];
+				
+				return $exportation;
+				
+			} else {
+				
+				return $sql->num_rows;
+				
+			}
 			
 		// Sinon, on fait la requête de tous les utilisateurs pour fabriquer le fichier et on le créé
 		} else {

@@ -1,4 +1,4 @@
-<section id="fiche" data-fiche="<?php echo $ville['id']; ?>">
+<section id="fiche">
 	<header class="export">
 		<h2>
 			Module d'export de fiches

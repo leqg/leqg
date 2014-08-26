@@ -52,6 +52,7 @@
 		&.export::before { content: '\e90b'; }
 		&.dossier::before { content: '\e850'; }
 		&.bureau::before { content: '\e821'; }
+		&.sms::before { content: '\e8e4'; }
 		
 		#config-icon {
 			position: absolute; top: 135px; left: -50px;
