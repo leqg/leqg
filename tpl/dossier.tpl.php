@@ -157,6 +157,9 @@
 				<li class="submit">
 					<input type="submit" value="Enregistrer les modifications">
 				</li>
+			 	<li class="submit" style="margin-top: 3em;">
+			 		<a href="ajax.php?script=dossier-suppression&id=<?php echo $d['id']; ?>" class="nostyle bouton boutonRouge" onclick="return confirm('Voulez-vous réellement supprimer ce dossier ? Cela supprimera les fichiers associés et les liaisons avec les interactions.')">Supprimer ce dossier</a>
+			 	</li>
 			</ul>
 		</form>
 	</div>
