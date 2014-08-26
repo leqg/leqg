@@ -7,9 +7,9 @@
 	
 	<form action="ajax.php?script=estimation-export" method="post" id="export">
 		<input type="hidden" name="canton" value="">
-		<input type="hidden" name="ville" value="">
-		<input type="hidden" name="rue" value="">
-		<input type="hidden" name="immeuble" value="">
+		<input type="hidden" name="ville" value="<?php if (isset($_GET['ville'])) echo $_GET['ville']; ?>">
+		<input type="hidden" name="rue" value="<?php if (isset($_GET['rue'])) echo $_GET['rue']; ?>">
+		<input type="hidden" name="immeuble" value="<?php if (isset($_GET['immeuble'])) echo $_GET['immeuble']; ?>">
 		<ul class="deuxColonnes">
 			<li id="electeur">
 				<span class="label-information"><label>Est électeur</label></span>
@@ -53,7 +53,18 @@
 			</li>
 			<li>
 				<span class="label-information">Critère géographique</span>
-				<p><a class="nostyle bouton boutonOrange" href="#">Choisir</a><em id="critereGeographique" style="padding-left: 1em"></em></p>
+				<p>
+					<a class="nostyle bouton boutonOrange" href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'criteresGeographiques' => 'true')); ?>">Choisir</a>
+					<em id="critereGeographique" style="padding-left: 1em">
+						<?php if (isset($_GET['immeuble'])) : ?>
+						<?php $carto->afficherImmeuble($_GET['immeuble']); ?> <?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
+						<?php elseif (isset($_GET['rue'])) : ?>
+						<?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
+						<?php elseif (isset($_GET['ville'])) : ?>
+						<?php $carto->afficherVille($_GET['ville']); ?>
+						<?php endif; ?>
+					</em>
+				</p>
 			</li>
 			<li class="submit">
 				<input type="submit" value="Estimer le nombre de fiches">
@@ -63,6 +74,75 @@
 </section>
 
 <aside>
+	<?php if ($_GET['criteresGeographiques'] == true) : ?>
+	<div id="geo">
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'export')); ?>">Revenir à l'estimation</a>
+		</nav>
+		
+		
+		<?php if (isset($_GET['rue'])) : ?>
+		
+		<h6>Validation du critère géographique</h6>
+
+		<ul class="listeEncadree">
+			<a href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'ville' => $_GET['ville'], 'rue' => $_GET['rue'])); ?>">
+				<li class="rue">
+					<strong>Valider la sélection &laquo;&nbsp;<em><?php $carto->afficherRue($_GET['rue']); ?></em>&nbsp;&raquo;</strong>
+					<p><?php $carto->afficherVille($_GET['ville']); ?></p>
+				</li>
+			</a>
+		</ul>
+		
+		<h6>Sélection d'un critère plus précis</h6>
+		
+		<ul class="listeEncadree" id="immeuble-resultats">
+			<?php $immeubles = $carto->listeImmeubles($_GET['rue']); foreach($immeubles as $immeuble) : ?>
+			<a href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'ville' => $_GET['ville'], 'rue' => $immeuble['rue_id'], 'immeuble' => $immeuble['id'])); ?>">
+				<li class="immeuble">
+					<strong><?php echo $immeuble['numero']; ?> <?php $carto->afficherRue($immeuble['rue_id']); ?></strong>
+				</li>
+			</a>
+			<?php endforeach; ?>
+		</ul>
+		
+		<?php elseif (isset($_GET['ville'])) : ?>
+		
+		<h6>Validation du critère géographique</h6>
+
+		<ul class="listeEncadree">
+			<a href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'ville' => $_GET['ville'])); ?>">
+				<li class="ville">
+					<strong>Valider la sélection &laquo;&nbsp;<em><?php $carto->afficherVille($_GET['ville']); ?></em>&nbsp;&raquo;</strong>
+				</li>
+			</a>
+		</ul>
+		
+		<h6>Sélection d'un critère plus précis</h6>
+		
+		<ul class="deuxColonnes">
+			<li>
+				<span class="label-information"><label for="rue-recherche">Rue :</label></span>
+				<input type="text" name="rue-recherche" id="rue-recherche" data-ville="<?php echo $_GET['ville']; ?>">
+			</li>
+		</ul>
+		<ul class="listeEncadree" id="rue-resultats"></ul>
+		
+		<?php else : ?>
+		
+		<h6>Mise en place d'un critère géographique</h6>
+		
+		<ul class="deuxColonnes">
+			<li>
+				<span class="label-information"><label for="ville-recherche">Ville :</label></span>
+				<input type="text" name="ville-recherche" id="ville-recherche">
+			</li>
+		</ul>
+		<ul class="listeEncadree" id="ville-resultats"></ul>
+		
+		<?php endif; ?>
+	</div>
+	<?php else : ?>
 	<div id="estimation">
 		<h6>Estimation du nombre de fiches ciblées</h6>
 		<p>
@@ -74,4 +154,5 @@
 		<p id="affichage-envoi"><strong class="gras">Le lien vers le fichier vous sera envoyé dans la demi-heure, une fois que celui-ci sera prêt.</strong></p>
 		<div id="calcul"><p><span><span>&#xe8eb;</span></span>Calcul en cours</p></div>
 	</div>
+	<?php endif; ?>
 </aside>

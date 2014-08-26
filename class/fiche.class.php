@@ -765,6 +765,25 @@ class fiche extends core {
 				
 				if ($sql->num_rows > 0) { while($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id']; }
 				
+			} elseif (!empty($formulaire['ville']) && !empty($formulaire['rue']) && empty($formulaire['immeuble'])) {
+				
+				// On recherche tous les immeubles présents 
+				$query = 'SELECT	*
+						  FROM		immeubles
+						  WHERE		rue_id = ' . $formulaire['rue'];
+				$sql = $this->db->query($query);
+				
+				if ($sql->num_rows > 0) { while($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id']; }
+				
+			} else {
+				
+				// On recherche tous les immeubles présents 
+				$query = 'SELECT	*
+						  FROM		immeubles
+						  WHERE		immeuble_id = ' . $formulaire['immeuble'];
+				$sql = $this->db->query($query);
+				
+				if ($sql->num_rows > 0) { while($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id']; }
 				
 			}
 		}
@@ -865,7 +884,7 @@ class fiche extends core {
 				}
 				
 				// on rassemble les informations qu'on balance dans le fichier
-				$ligne = array($contact['contact_nom'],
+				$ligne = array(    $contact['contact_nom'],
 								   $contact['contact_nom_usage'],
 								   $contact['contact_prenoms'],
 								   date('d/m/Y', strtotime($contact['contact_naissance_date'])),

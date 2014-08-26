@@ -128,6 +128,45 @@ var carto = function() {
 				$('#resultatsCantons').hide();
 			}
 		});
+		
+	
+	// Scripts relative au système de critère géographique de l'export
+	
+		$('#ville-recherche').keyup(function(){
+			var value = $(this).val();
+			
+			if (value.length >= 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=export-ville',
+					data: { 'ville': value },
+					dataType: 'html'
+				}).done(function(data){
+					$('#ville-resultats').html(data).show();
+				});
+			} else {
+				$('#ville-resultats').hide().html('');
+			}
+		});
+	
+		$('#rue-recherche').keyup(function(){
+			var value = $(this).val();
+			var ville = $(this).data('ville');
+			
+			if (value.length >= 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=export-rue',
+					data: { 'ville': ville, 'rue': value },
+					dataType: 'html'
+				}).done(function(data){
+					$('#rue-resultats').html(data).show();
+				}).error(function(){
+				});
+			} else {
+				$('#rue-resultats').hide().html('');
+			}
+		});
 }
 
 
