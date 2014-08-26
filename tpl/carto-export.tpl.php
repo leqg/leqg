@@ -11,6 +11,21 @@
 		<input type="hidden" name="rue" value="<?php if (isset($_GET['rue'])) echo $_GET['rue']; ?>">
 		<input type="hidden" name="immeuble" value="<?php if (isset($_GET['immeuble'])) echo $_GET['immeuble']; ?>">
 		<ul class="deuxColonnes">
+			<li>
+				<span class="label-information">Critère géographique</span>
+				<p>
+					<a class="nostyle bouton boutonOrange" href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'criteresGeographiques' => 'true')); ?>">Choisir</a>
+					<em id="critereGeographique" style="padding-left: 1em">
+						<?php if (isset($_GET['immeuble'])) : ?>
+						<?php $carto->afficherImmeuble($_GET['immeuble']); ?> <?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
+						<?php elseif (isset($_GET['rue'])) : ?>
+						<?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
+						<?php elseif (isset($_GET['ville'])) : ?>
+						<?php $carto->afficherVille($_GET['ville']); ?>
+						<?php endif; ?>
+					</em>
+				</p>
+			</li>
 			<li id="electeur">
 				<span class="label-information"><label>Est électeur</label></span>
 				<p class="radioBool">
@@ -29,21 +44,6 @@
 			<li id="selectionAgeMax">
 				<span class="label-information"><label for="form-age-max">&Acirc;ge maximal</label></span>
 				<span class="bordure-form"><label class="selectbox"><select name="age-max" id="form-age-max"><option value="0">Indifférent</option><?php $age = 18; while ($age <= 100) { ?><option value="<?php echo $age; ?>"><?php echo $age; ?> ans</option><?php $age++; } ?></select></label></span>
-			</li>
-			<li>
-				<span class="label-information">Critère géographique</span>
-				<p>
-					<a class="nostyle bouton boutonOrange" href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'criteresGeographiques' => 'true')); ?>">Choisir</a>
-					<em id="critereGeographique" style="padding-left: 1em">
-						<?php if (isset($_GET['immeuble'])) : ?>
-						<?php $carto->afficherImmeuble($_GET['immeuble']); ?> <?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
-						<?php elseif (isset($_GET['rue'])) : ?>
-						<?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
-						<?php elseif (isset($_GET['ville'])) : ?>
-						<?php $carto->afficherVille($_GET['ville']); ?>
-						<?php endif; ?>
-					</em>
-				</p>
 			</li>
 			<li id="thematiques">
 				<span class="label-information"><label for="tags">Thématique</label></span>
