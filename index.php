@@ -414,6 +414,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 					
 					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('sms', 'nouveau');
 					elseif ( $_GET['action'] == 'historique' ) : $core->tpl_load('sms', 'historique');
+					elseif ( $_GET['action'] == 'campagne' ) : $core->tpl_load('sms', 'campagne');
 					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('sms', 'reglages');
 					else : $core->tpl_load('sms'); endif;
 					
