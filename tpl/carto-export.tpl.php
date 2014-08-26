@@ -30,6 +30,25 @@
 				<span class="label-information"><label for="form-age-max">&Acirc;ge maximal</label></span>
 				<span class="bordure-form"><label class="selectbox"><select name="age-max" id="form-age-max"><option value="0">Indifférent</option><?php $age = 18; while ($age <= 100) { ?><option value="<?php echo $age; ?>"><?php echo $age; ?> ans</option><?php $age++; } ?></select></label></span>
 			</li>
+			<li>
+				<span class="label-information">Critère géographique</span>
+				<p>
+					<a class="nostyle bouton boutonOrange" href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'criteresGeographiques' => 'true')); ?>">Choisir</a>
+					<em id="critereGeographique" style="padding-left: 1em">
+						<?php if (isset($_GET['immeuble'])) : ?>
+						<?php $carto->afficherImmeuble($_GET['immeuble']); ?> <?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
+						<?php elseif (isset($_GET['rue'])) : ?>
+						<?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
+						<?php elseif (isset($_GET['ville'])) : ?>
+						<?php $carto->afficherVille($_GET['ville']); ?>
+						<?php endif; ?>
+					</em>
+				</p>
+			</li>
+			<li id="thematiques">
+				<span class="label-information"><label for="tags">Thématique</label></span>
+				<input type="text" id="tags" name="tags" placeholder="e.g. sport">
+			</li>
 			<li id="emailConnu">
 				<span class="label-information"><label>Email connu</label></span>
 				<p class="radioBool">
@@ -49,21 +68,6 @@
 				<p class="radioBool">
 					<label for="fixe-oui"><input type="radio" name="fixe" id="fixe-oui" value="1">&nbsp;Nécessaire</label>
 					<label for="fixe-non"><input type="radio" name="fixe" id="fixe-non" value="0" checked>&nbsp;Indifférent</label>
-				</p>
-			</li>
-			<li>
-				<span class="label-information">Critère géographique</span>
-				<p>
-					<a class="nostyle bouton boutonOrange" href="<?php $core->tpl_go_to('carto', array('module' => 'export', 'criteresGeographiques' => 'true')); ?>">Choisir</a>
-					<em id="critereGeographique" style="padding-left: 1em">
-						<?php if (isset($_GET['immeuble'])) : ?>
-						<?php $carto->afficherImmeuble($_GET['immeuble']); ?> <?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
-						<?php elseif (isset($_GET['rue'])) : ?>
-						<?php $carto->afficherRue($_GET['rue']); ?>, <?php $carto->afficherVille($_GET['ville']); ?>
-						<?php elseif (isset($_GET['ville'])) : ?>
-						<?php $carto->afficherVille($_GET['ville']); ?>
-						<?php endif; ?>
-					</em>
 				</p>
 			</li>
 			<li class="submit">
