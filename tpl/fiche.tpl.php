@@ -90,6 +90,9 @@
 
 			// On charge d'abord le volet de l'historique des événements
 			$core->tpl_load('aside', 'historique');
+
+			// On charge d'abord le volet de l'historique des événements
+			$core->tpl_load('aside', 'liste-dossiers');
 			
 			// On charge le script de chargement d'un nouveau fichier
 			$core->tpl_load('aside', 'fichier-nouveau');

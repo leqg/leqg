@@ -1,4 +1,8 @@
 <div id="historique">
+	<nav class="navigationFiches">
+		<a class="liste" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_ID(), 'afficherDossiers' => 'true')); ?>">Dossiers</a>
+	</nav>
+	
 	<h6>Historique des interactions</h6>
 	<?php $interactions = $historique->rechercheParFiche($fiche->get_the_ID()); // On initialise la liste des interactions à afficher ?>
 	
@@ -7,7 +11,7 @@
 			<tr>
 				<th>Type</th>
 				<th>Date</th>
-				<th>Objet <a class="add-historique" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id())); ?>&nouvelleInteraction=true">&#xe816;</span></th>
+				<th>Objet <a class="add-historique" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'nouvelleInteraction' => 'true')); ?>">&#xe816;</span></th>
 				<!--<th>Thématiques</th>-->
 			</tr>
 		</thead>
