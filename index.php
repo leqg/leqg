@@ -401,6 +401,31 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				
 			}
 			
+			
+	// Mise en place des templates liés au module de SMS
+	
+			else if ( $_GET['page'] == 'sms' ) {
+				
+				// On charge d'abord le template de header
+				$core->tpl_header(); 
+				
+				// On charge les templates de page selon la demande
+				if ( $_GET['id'] == 'campagne' ) {
+					
+					
+					
+				} else {
+					
+					$core->tpl_load('sms');
+					
+				}
+				
+				
+				// On charge enfin le template de footer
+				$core->tpl_footer();
+				
+			}
+			
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services
