@@ -658,6 +658,15 @@ ul.listeEncadree {
 				background-color: $rouge;
 				color: $blanc;
 			}
+			
+			&.tache::before {
+				content: '\e813';
+				font-size: 1.1em;
+			}
+			
+			&.ajoutTache::before {
+				content: '\e837';
+			}
 		
 			& > strong {
 				border-bottom: 1px solid $rouge;
