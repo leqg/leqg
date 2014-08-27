@@ -32,7 +32,7 @@
 			$lignes[] = array('nom' => $row['nom'],
 							  'nom_usage' => $row['nom_usage'],
 							  'prenoms' => $row['prenoms'],
-							  'adresse' => $carte['immeuble_numero'] . ' ' . $carto['rue_nom'],
+							  'adresse' => $carte['immeuble_numero'] . ' ' . $carte['rue_nom'],
 							  'cp' => $carte['code_postal'],
 							  'ville' => $carte['commune_nom']);
 				
