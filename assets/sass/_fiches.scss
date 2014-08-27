@@ -56,6 +56,7 @@
 		&.email::before { content: '\e805'; }
 		&.historique::before { content: '\e8dd'; }
 		&.reglages::before { content: '\e856'; }
+		&.poste::before { content: '\e8ef'; }
 		
 		#config-icon {
 			position: absolute; top: 135px; left: -50px;

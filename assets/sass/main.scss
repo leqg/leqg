@@ -563,7 +563,8 @@ ul.listeEncadree {
 		&.email,
 		&.interaction,
 		&.sms,
-		&.tache {
+		&.tache,
+		&.poste {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -619,6 +620,7 @@ ul.listeEncadree {
 			&.audio::before { content: '\e800'; }
 			&.archive::before { content: '\e908'; }
 			&.ajoutFichier::before { content: '\e822'; }
+			&.poste::before { content: '\e8ef'; }
 			
 			& > strong {
 				line-height: 30px;
