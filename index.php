@@ -460,6 +460,36 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			}
 			
 			
+	// Mise en place des templates liés au module de porte à porte
+	
+			else if ( $_GET['page'] == 'porte' ) {
+				
+				// On charge d'abord le template de header
+				$core->tpl_header(); 
+				
+				// On charge les templates de page selon la demande
+				if ( isset($_GET['action'])) {
+					
+					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('porte', 'nouveau');
+					elseif ( $_GET['action'] == 'missions' ) : $core->tpl_load('porte', 'missions');
+					elseif ( $_GET['action'] == 'mission' ) : $core->tpl_load('porte', 'mission');
+					elseif ( $_GET['action'] == 'reporting' ) : $core->tpl_load('porte', 'reporting');
+					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('porte', 'reglages');
+					else : $core->tpl_load('porte'); endif;
+					
+				} else {
+					
+					$core->tpl_load('porte');
+					
+				}
+				
+				
+				// On charge enfin le template de footer
+				$core->tpl_footer();
+				
+			}
+			
+			
 	// Mise en place des templates liés au module de publipostage
 	
 			else if ( $_GET['page'] == 'poste' ) {
