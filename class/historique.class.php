@@ -177,6 +177,7 @@ class historique extends core {
 						'courrier'	=> 'Correspondance',
 						'sms'		=> 'Envoi SMS',
 						'courriel'	=> 'Envoi d\'un email',
+						'poste'		=> 'Publipostage',
 						'porte'		=> 'Porte-à-porte',
 						'boite'		=> 'Boîtage',
 						'rappel'		=> 'Rappel',
@@ -266,6 +267,7 @@ class historique extends core {
 		$query = 'SELECT	*
 				  FROM		historique
 				  WHERE		historique_type != "sms"
+				  AND 		historique_type != "poste"
 				  AND		historique_type != "courriel"
 				  AND 		historique_type != "porte"
 				  AND 		historique_type != "boite"
