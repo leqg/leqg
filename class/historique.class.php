@@ -266,10 +266,10 @@ class historique extends core {
 		$query = 'SELECT	*
 				  FROM		historique
 				  WHERE		historique_type != "sms"
-				  OR			historique_type != "courriel"
-				  OR 		historique_type != "porte"
-				  OR 		historique_type != "boite"
-				  OR 		historique_type != "rappel"
+				  AND		historique_type != "courriel"
+				  AND 		historique_type != "porte"
+				  AND 		historique_type != "boite"
+				  AND 		historique_type != "rappel"
 				  ORDER BY	historique_timestamp DESC
 				  LIMIT		0, ' . $nombre;
 		
