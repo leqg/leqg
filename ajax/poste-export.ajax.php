@@ -16,7 +16,7 @@
 			$query = 'SELECT * FROM contacts WHERE contact_id = ' . $c;
 			$sql = $db->query($query); 
 			$row = $sql->fetch_assoc();
-			$row = $core->securisation_string($row); $core->debug($row);
+			$row = $core->formatage_donnees($row);
 			$query = 'SELECT		*
 					  FROM		immeubles
 					  LEFT JOIN	rues
