@@ -21,7 +21,8 @@ table#services {
 	width: 75%;
 	
 	@media all and (max-width: 1500px) {
-		height: 95%;
+		font-size: .85em;
+		height: 90%;
 	}
 	
 	tr {
@@ -46,6 +47,10 @@ table#services {
 					@media all and (max-width: 1500px) {
 						font-size: 2em;
 					}
+					
+					&.inactif {
+						color: $grisMoyen;
+					}
 				}
 			
 				span {
@@ -68,17 +73,37 @@ table#services {
 						line-height: 100px;
 						width: 100px;
 					}
+					
+					&.inactif {
+						background-color: $gris;
+						pointer-events: none;
+					}
 				}
 				
 				&:hover {
+					&.inactif {
+						cursor: default;
+					}
+				
 					p {
 						color: $rouge;
 						font-weight: 400;
+						
+						&.inactif {
+							font-weight: 300;
+							color: $grisMoyen;
+						}
 					}
 				
 					span {
 						background-color: $rouge;
 						@include scale(1.15);
+					
+						&.inactif {
+							background-color: $gris;
+							pointer-events: none;
+							@include scale(1);
+						}
 					}
 				}
 			}
