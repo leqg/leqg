@@ -76,11 +76,11 @@
 		$utilisateur = $core->formatage_donnees($sql->fetch_assoc());
 		
 		// On envoit l'adresse du fichier par mail
-			$email = file_get_contents('tpl/mail/publipostage-reussi.tpl.html');
+			$corps = file_get_contents('tpl/mail/publipostage-reussi.tpl.html');
 			$sujet = 'LeQG – Votre fichier de publipostage est prêt à être téléchargé.';
 			
 			// On insère dans le mail l'URL du fichier pour qu'il puisse être téléchargé
-			$email = strtr($email, array('{URL}' => 'http://' . $config['SERVER']['url'] . '/' . $f));
+			$texte = strtr($corps, array('{URL}' => 'http://' . $config['SERVER']['url'] . '/' . $f));
 
 			$mail = new PHPMailer();
 			
@@ -98,7 +98,7 @@
 			$mail->AddReplyTo('tech@leqg.info', 'LeQG équipe technique');
 			$mail->AddAddress($utilisateur['email'], $utilisateur['firstname'] . ' ' . $utilisateur['lastname']);
 			$mail->Subject = $sujet;
-			$mail->MsgHTML(nl2br($texte));
+			$mail->MsgHTML($corps);
 
 			$mail->Send();
 							
