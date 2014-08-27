@@ -676,6 +676,14 @@ ul.listeEncadree {
 			}
 		}
 		
+		&.choisi {
+			background-color: rgba($vert, .33) !important;
+			
+			&:hover {
+				background-color: rgba($vert, .5) !important;
+			}
+		}
+		
 		p {
 			font-size: .75em;
 			font-weight: 300;

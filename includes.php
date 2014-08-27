@@ -48,9 +48,10 @@ $dossier =		new dossier($db, $cookie, $config['SERVER']['url']);
 $historique =	new historique($db, $cookie, $config['SERVER']['url']);
 $fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
 $carto =		new carto($db, $cookie, $config['SERVER']['url']);
+$mission =		new mission($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $db, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto;
+global $db, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';

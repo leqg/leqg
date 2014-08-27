@@ -441,6 +441,7 @@ class carto extends core {
 			$query = 'SELECT	*
 					  FROM		contacts
 					  WHERE		immeuble_id = ' . $immeuble . '
+					  AND		contact_electeur  = 1
 					  ORDER BY	contact_nom, contact_nom_usage, contact_prenoms ASC';
 		
 		// On effectue la requête BDD et on affiche les résultats dans un tableau $electeurs
@@ -450,6 +451,15 @@ class carto extends core {
 		
 		// On retourne les données
 			return $electeurs;
+	}
+	
+	
+	// nombreElecteursParImmeuble( int ) permet de retourner la liste des électeurs pour un immeuble
+	public	function nombreElecteursParImmeuble( $immeuble ) {		
+		// On retourne les données
+			$electeurs = $this->listeElecteurs($immeuble);
+		
+			return count($electeurs);
 	}
 	
 	
@@ -592,7 +602,7 @@ class carto extends core {
 	
 	
 	// bureauDeVote( int ) permet d'afficher les informations relatives à un bureau de vote demandé d'après un immeuble
-	public	function bureauDeVote( $immeuble , $return = false ) {
+	public	function bureauDeVote( $immeuble , $return = false , $mini = false ) {
 		// On vérifie le format de l'id de l'immeuble pour continuer
 		if (!is_numeric($immeuble)) return false;
 		
@@ -605,7 +615,11 @@ class carto extends core {
 		$bureau['ville'] = $this->tpl_transform_texte($informations['commune_nom']);
 		
 		// On prépare le rendu 
-		$affichage = 'Bureau ' . $bureau['numero'] . ' – ' . $bureau['ville'] . '<br>' . $bureau['nom'];
+		if ($mini) {
+			$affichage = 'Bureau ' . $bureau['numero'] . ' – ' . $bureau['nom'];
+		} else {
+			$affichage = 'Bureau ' . $bureau['numero'] . ' – ' . $bureau['ville'] . '<br>' . $bureau['nom'];
+		}
 
 		// On affiche le rendu si demandé
 		if (!$return) echo $affichage;
