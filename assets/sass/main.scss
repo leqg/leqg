@@ -684,6 +684,34 @@ ul.listeEncadree {
 			}
 		}
 		
+		&.fait {
+			background-color: $blanc;
+			border-color: $bleu;
+			color: $bleu !important;
+			cursor: default;
+			
+			&::before {	
+				border-color: $bleu;
+				color: $bleu;
+				content: '\e812';
+			}
+			
+			&:hover {
+				&::before {
+					background-color: $blanc;
+					color: $bleu !important;
+				}
+			
+				strong {
+					border-bottom: none;
+				}
+			}
+			
+			strong {
+				color: $bleu;
+			}
+		}
+		
 		p {
 			font-size: .75em;
 			font-weight: 300;

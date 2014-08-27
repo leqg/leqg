@@ -262,6 +262,11 @@ class historique extends core {
 		// On calcule la liste des dernières interactions selon le timestamp
 		$query = 'SELECT	*
 				  FROM		historique
+				  WHERE		historique_type != "sms"
+				  OR			historique_type != "courriel"
+				  OR 		historique_type != "porte"
+				  OR 		historique_type != "boite"
+				  OR 		historique_type != "rappel"
 				  ORDER BY	historique_timestamp DESC
 				  LIMIT		0, ' . $nombre;
 		

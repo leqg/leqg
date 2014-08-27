@@ -27,6 +27,16 @@ class mission extends core {
 	}
 	
 	
+	// liste( string ) permet de lister toutes les missions en cours
+	public	function liste( $type ) {
+		$query = 'SELECT * FROM missions WHERE mission_a_faire != "" AND mission_type = "' . $type . '"';
+		$sql = $this->db->query($query);
+		$missions = array();
+		while ($row = $sql->fetch_assoc()) $missions[] = $this->formatage_donnees($row);
+		return $missions;
+	}
+	
+	
 	// creation( string , int , int , array ) permet de créer une mission
 	public	function creation( $type , $ville , $rue , $immeubles ) {
 	
@@ -66,13 +76,11 @@ class mission extends core {
 		$query = 'INSERT INTO	missions (`ville_id`,
 										  `rue_id`,
 										  `mission_type`,
-										  `mission_creation`,
 										  `mission_immeubles`,
 										  `mission_a_faire`)
 				  VALUES (' . $ville . ',
 				  		  ' . $rue . ',
 				  		  "' . $type . '",
-				  		  ' . date('Y-m-d') . ',
 				  		  "' . $buildings . '",
 				  		  "' . $afaire . '")';
 		
