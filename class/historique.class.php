@@ -177,6 +177,9 @@ class historique extends core {
 						'courrier'	=> 'Correspondance',
 						'sms'		=> 'Envoi SMS',
 						'courriel'	=> 'Envoi d\'un email',
+						'porte'		=> 'Porte-à-porte',
+						'boite'		=> 'Boîtage',
+						'rappel'		=> 'Rappel',
 						'autre'		=> 'Autre' );
 				
 		$retour = $types[$type];
