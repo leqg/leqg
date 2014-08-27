@@ -9,14 +9,13 @@
 		
 		// On récupère la liste des personnes à contacter
 		$contacts = explode(',', $campagne['destinataire']);
-		
+		$core->debug($contacts);
 		// On prépare leur numéros de téléphone dans un tableau numéros
 		$lignes = array();
 		foreach ($contacts as $c) {
 			$query = 'SELECT * FROM contacts WHERE contact_id = ' . $c;
 			$sql = $db->query($query); 
 			$row = $core->securisation_string($sql->fetch_assoc());
-			$core->debug($row);
 			$query = 'SELECT		*
 					  FROM		immeubles
 					  LEFT JOIN	rues
