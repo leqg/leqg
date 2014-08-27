@@ -1,3 +1,4 @@
+<?php $types_avec_fiche = array('contact', 'telephone', 'email', 'courrier', 'autre', 'terrain'); ?>
 <div id="historique">
 	<nav class="navigationFiches">
 		<a class="liste" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_ID(), 'afficherDossiers' => 'true')); ?>">Dossiers</a>
@@ -24,7 +25,7 @@
 				<?php if ($interaction['type'] == 'sms') : ?>
 					<?php echo $interaction['notes']; ?>
 				<?php else : ?>
-					<a href="<?php $core->tpl_get_url('fiche', $fiche->get_the_ID(), 'id', $interaction['id'], 'interaction'); ?>"><?php echo $interaction['objet']; ?></a>
+					<?php if (in_array($interaction['type'], $types_avec_fiche)) : ?><a href="<?php $core->tpl_get_url('fiche', $fiche->get_the_ID(), 'id', $interaction['id'], 'interaction'); ?>"><?php endif; ?><?php echo $interaction['objet']; ?><?php if (in_array($interaction['type'], $types_avec_fiche)) : ?></a><?php endif; ?>
 				<?php endif; ?>
 				</td>
 			</tr>
