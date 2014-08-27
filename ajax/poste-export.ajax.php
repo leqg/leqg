@@ -80,7 +80,7 @@
 			$sujet = 'LeQG – Votre fichier de publipostage est prêt à être téléchargé.';
 			
 			// On insère dans le mail l'URL du fichier pour qu'il puisse être téléchargé
-			$corps = strtr($corps, array('{URL}' => 'http://' . $config['SERVER']['url'] . '/' . $f));
+			$corps = strtr($corps, array('{URL}' => 'http://' . $config['SERVER']['url'] . '/' . $nomFichier));
 
 			$mail = new PHPMailer();
 			
