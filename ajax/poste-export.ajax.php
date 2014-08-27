@@ -13,10 +13,10 @@
 		// On prépare leur numéros de téléphone dans un tableau numéros
 		$lignes = array();
 		foreach ($contacts as $c) {
-			$core->debug($c);
 			$query = 'SELECT * FROM contacts WHERE contact_id = ' . $c;
 			$sql = $db->query($query); 
-			$row = $core->securisation_string($sql->fetch_assoc());
+			$row = $sql->fetch_assoc();
+			$row = $core->securisation_string($row); $core->debug($row);
 			$query = 'SELECT		*
 					  FROM		immeubles
 					  LEFT JOIN	rues
