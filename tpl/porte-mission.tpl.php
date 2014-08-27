@@ -85,6 +85,63 @@
 			<nav class="navigationFiches">
 				<a class="retour" href="<?php $core->tpl_go_to('porte', array('action' => 'missions')); ?>">Retour aux missions</a>
 			</nav>
+			
+			<div id="carte" style="width: 100%; height: 400px; background-color: gray; margin-top: 3em;"></div>
 		</div>
-	</aside>	
+	</aside>
+	<script>
+		// Script relatif à l'affichage de la carte par utilisateur
+		function initialize() {
+			// On récupère les data liées à la carte
+			var nom_electeur = $("#carte").data('nom');
+			var adresse_electeur = $("#carte").data('adresse');
+		
+			geocoder = new google.maps.Geocoder();
+		
+			var latlng = new google.maps.LatLng(48.58476, 7.750576);
+			var mapOptions = {
+				//center: latlng,
+				disableDefaultUI: true,
+				draggable: true,
+				rotateControl: false,
+				scrollwheel: false,
+				zoomControl: true,
+				zoom: 17
+			};
+			var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
+		
+			
+			// On marque les différents bâtiments
+			// L'adresse à rechercher
+			
+			// La function qui va traiter le résultat
+			function GeocodingResult(results, status) {
+				// Si la recherche a fonctionnée
+				if (status == google.maps.GeocoderStatus.OK) {
+					// On créé un nouveau marker sur la map
+					markerAdresse = new google.maps.Marker({
+						position: results[0].geometry.location,
+						map: map,
+						title: 'Immeuble à visiter'
+					});
+					
+					// On centre sur ce marker
+					map.setCenter(results[0].geometry.location);
+				}
+			}
+			
+			
+			<?php foreach ($immeubles as $immeuble) : ?>
+			
+			var GeocoderOptions<?php echo $immeuble; ?> = { 'address': "<?php $carto->afficherImmeuble($immeuble); ?> <?php $carto->afficherRue($parcours['rue_id']); ?> <?php $carto->afficherVille($parcours['ville_id']); ?>", 'region': 'FR' };
+			
+			// On lance la recherche de l'adresse
+			geocoder.geocode(GeocoderOptions<?php echo $immeuble; ?>, GeocodingResult);
+			
+			<?php endforeach; ?>
+			
+		}
+		
+		google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
 <?php endif; ?>
