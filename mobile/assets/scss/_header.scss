@@ -22,6 +22,7 @@ header#barreHaute {
 	color: $blanc;
 	height: 40px;
 	width: 100%;
+	z-index: 500;
 	@include transition(all);
 	
 	& > h1 {
@@ -56,11 +57,13 @@ header#barreHaute {
 nav#menu {
 	position: fixed; top: -135px; left: 0;
 	width: 100%;
+	z-index: 500;
 	@include transition(all);
 	
 	& > a {
 		position: relative;
 		display: block;
+		background-color: $blanc;
 		border-top: 1px solid $gris;
 		color: $bleu;
 		font-family: $fonts2;
@@ -71,10 +74,6 @@ nav#menu {
 		text-align: center;
 		text-decoration: none;
 		width: 100%;
-		
-		&:hover {
-			background-color: rgba($bleu, .05);
-		}
 		
 		& > span {
 			position: absolute; top: 0; left: .66em;

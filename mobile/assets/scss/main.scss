@@ -60,6 +60,16 @@ a {
 		color: $rouge;
 		text-decoration: underline;
 	}
+	
+	&.nostyle {
+		color: inherit;
+		text-decoration: none;
+		
+		&:hover {
+			color: inherit;
+			text-decoration: none;
+		}
+	}
 }
 
 input {
@@ -83,6 +93,11 @@ input {
 	}
 }
 
+ul {
+	margin: 0;
+	padding: 1em 15px;
+}
+
 
 
 /********************************
@@ -102,6 +117,55 @@ body {
 	font-family: $fonts2;
 	font-size: 14px;
 	padding-top: 50px;
+}
+
+h2 {
+	border-bottom: 1px solid $rouge;
+	color: $bleu;
+	font-size: 1.33em;
+	font-weight: 300;
+	margin: 0 10px 0 0;
+	padding: .33em 0 0 10px;
+}
+
+pre {
+	display: block;
+	background-color: lighten($rouge, 33%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
+	background-image: -moz-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: -o-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+	@include background-size(3em 3em);
+	border: 5px solid lighten($rouge, 10%);
+	color: $noir;
+	font-family: $monospaced;
+	font-size: 1.1em;
+	line-height: 1.5em;
+	margin: 3em;
+	overflow: hidden;
+	padding: 1.5em;
+	padding-top: 1.55em;
+	text-align: left;
+	white-space: normal;
+	width: auto;
+	
+	&.nowrap {
+		white-space: pre;
+	}
+	
+	span {
+		display: block;
+		padding-left: 2em;
+		
+		&.wrap {
+			white-space: normal;
+		}
+	}
+}
+
+strong {
+	color: $rouge;
+	font-weight: 500;
 }
 
 ul#actions {
@@ -144,6 +208,223 @@ ul#actions {
 		}
 	}
 }
+
+ul.listeEncadree {
+	font-size: 1.2em;
+	list-style: none;
+	
+	&.seul {
+		margin: 0 5%;
+	}
+	
+	& > a {
+		color: inherit;
+		text-decoration: none;
+	}
+	
+	li {
+		display: block;
+		border: 1px solid $rouge;
+		@include border-radius(.5em);
+		font-size: 1em;
+		font-weight: 300;
+		margin: 0;
+		margin-bottom: .5em;
+		min-height: 50px;
+		padding: .5em 1em;
+		width: 100%;
+		@include transition(all);
+		
+		&.cursor {
+			cursor: pointer;
+		}
+		
+		&.coordonnees::after {
+			position: absolute; top: 0em; top: calc(50% - 25px); right: 1em;
+			display: block;
+			color: rgba($rouge, .5);
+			content: '\e840';
+			font-family: $icons;
+			font-size: 30px;
+			height: 50px;
+			line-height: 50px;
+			@include transition(all);
+		}
+		
+		&.coordonnees:hover::after {
+			color: rgba($rouge, .85);
+		}
+						
+		&.fichier,
+		&.dossier,
+		&.ville,
+		&.rue,
+		&.immeuble,
+		&.electeur,
+		&.bureau,
+		&.vide,
+		&.canton,
+		&.numero,
+		&.email,
+		&.interaction,
+		&.sms,
+		&.tache,
+		&.poste {
+			position: relative;
+			padding-left: 60px;
+			padding-top: .7em;
+			
+			&.ajoutFichier,
+			&.ajoutDossier,
+			&.ajoutRue,
+			&.ajoutImmeuble,
+			&.ajoutTache {
+				border-color: $bleu;
+				color: $bleu;
+				
+				&::before {
+					border-color: $bleu;
+					color: $bleu;
+				}
+				
+				&:hover {
+					background-color: rgba($bleu, .05);
+					
+					&::before {
+						background-color: $bleu;
+						color: $blanc;
+					}
+					
+					strong { border-bottom-color: $bleu; }
+				}
+				
+				strong { color: $bleu; }
+			}
+			
+			&::before {
+				position: absolute; left: 10px; top: .66em; top: calc(50% - 15px);
+				border: 1px solid $rouge;
+				@include border-radius(50%);
+				color: $rouge;
+				content: '\e823';
+				font-family: $icons;
+				font-size: 17px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				width: 30px;
+				@include transition(all);
+			}
+			
+			&.pdf::before { content: '\e823'; }
+			&.texte::before { content: '\e837'; }
+			&.tableur::before { content: '\e8fd'; }
+			&.presentation::before { content: '\e8f4'; }
+			&.image::before { content: '\e80e'; }
+			&.video::before { content: '\e903'; }
+			&.audio::before { content: '\e800'; }
+			&.archive::before { content: '\e908'; }
+			&.ajoutFichier::before { content: '\e822'; }
+			&.poste::before { content: '\e8ef'; }
+			
+			& > strong {
+				line-height: 30px;
+			}
+			
+			& > p {
+				margin: 0;
+				padding-bottom: .5em;
+				
+				&.tailleNormale {
+					font-size: .85em;
+				}
+			}
+		}
+		
+		&.vide { pointer-events: none; }
+		
+		&.ville::before { content: '\e844'; }
+		&.rue::before { content: '\e841'; }
+		&.immeuble::before { content: '\e842'; }
+		&.dossier::before { content: '\e850'; }
+		&.ajoutDossier::before { content: '\e851'; }
+		&.electeur::before { content: '\e80a'; }
+		&.bureau::before { content: '\e821'; }
+		&.canton::before { content: '\e843'; }
+		&.vide::before { content: '\e81e'; }
+		&.numero::before { content: '\e8e4'; }
+		&.email::before { content: '\e805'; }
+		&.interaction::before { content: '\e83c'; }
+		&.sms::before { content: '\e8e4'; }
+		&.tache::before { content: '\e837'; }
+		
+		&:hover {
+			background-color: rgba($rouge, .05);
+			
+			&::before {
+				background-color: $rouge;
+				color: $blanc;
+			}
+			
+			&.tache::before {
+				content: '\e813';
+				font-size: 1.1em;
+			}
+			
+			&.ajoutTache::before {
+				content: '\e837';
+			}
+		
+			& > strong {
+				border-bottom: 1px solid $rouge;
+				@include bordure-fine();
+			}
+		}
+		
+		&.choisi {
+			background-color: rgba($vert, .33) !important;
+			
+			&:hover {
+				background-color: rgba($vert, .5) !important;
+			}
+		}
+		
+		&.fait {
+			background-color: $blanc;
+			border-color: $bleu;
+			color: $bleu !important;
+			cursor: default;
+			
+			&::before {	
+				border-color: $bleu;
+				color: $bleu;
+				content: '\e812';
+			}
+			
+			&:hover {
+				&::before {
+					background-color: $blanc;
+					color: $bleu !important;
+				}
+			
+				strong {
+					border-bottom: none;
+				}
+			}
+			
+			strong {
+				color: $bleu;
+			}
+		}
+		
+		p {
+			font-size: .75em;
+			font-weight: 300;
+			line-height: 1.3em;
+		}
+	}
+}
+
 
 
 

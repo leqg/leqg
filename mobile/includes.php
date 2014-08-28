@@ -27,7 +27,7 @@ if (isset($_COOKIE['leqg-user'])) {
 } else { $base = null; $cookie = null; }
 
 // Appel de la classe MySQL du compte
-$base = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
+$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
 
 // Constructeur de classes
 function __autoload($class_name) {

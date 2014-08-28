@@ -49,6 +49,51 @@ else :
 			$core->tpl_header();
 			$core->tpl_load('recherche');
 			$core->tpl_footer();
+					
+		
+		// S'il s'agit de l'affichage des résultats d'une recherche
+		elseif ($_GET['page'] == 'resultats') :
+			
+			// On prépare le contenu à rechercher
+			$recherche = $core->formatage_recherche($_POST['recherche']);
+			
+			// On prépare la requête
+			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE "%' . $recherche . '%" ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
+			
+			// On exécute la recherche et on enregistre les contacts trouvés dans un tableau contacts
+			$sql = $db->query($query);
+			
+			// On regarde s'il n'y a qu'une réponse à la recherche. Si oui, on charge directement la fiche
+			if ($sql->num_rows == 1) :
+			
+				$contact = $sql->fetch_assoc();
+				$core->tpl_go_to('contacts', array('fiche' => $contact['contact_id']), true);
+			
+			else :
+			
+				// On met en place le tableau des contacts trouvés
+				$contacts = array();
+				while ($row = $sql->fetch_assoc()) $contacts[] = $row['contact_id'];
+				
+				// On charge les templates d'affichage des résultats
+				$core->tpl_header();
+				
+					// On affiche les premières lignes d'encadrement du résultat
+					echo '<h2>Résultats</h2>';
+					echo '<ul class="listeEncadree">';
+					
+					// On lance la boucle par fiche contact trouvée
+					foreach($contacts as $contact) : $fiche->acces($contact, true);
+						$core->tpl_load('resultats');
+					endforeach;
+					
+					// On affiche les dernières lignes d'encadrement du résultat
+					echo '</ul>';
+				
+				// On charge le template du pied de page
+				$core->tpl_footer();
+			
+			endif;
 		
 			
 		// S'il s'agit du module contact
