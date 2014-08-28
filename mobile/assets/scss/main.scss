@@ -47,7 +47,103 @@ $icons: 'fontello';
  *								*
  ********************************/
 
+* {
+	@include box-sizing();
+	outline: none;
+}
 
+a {
+	color: $bleu;
+	text-decoration: underline;
+	
+	&:hover {
+		color: $rouge;
+		text-decoration: underline;
+	}
+}
+
+input {
+	display: block;
+	background-color: transparent;
+	border: 0px;
+	border-bottom: 1px solid $bleu;
+	color: $grisFonce;
+	font-family: $fonts2;
+	font-size: 1.25em;
+	font-weight: 300;
+	margin: 1em auto;
+	padding: .33em .66em;
+	text-align: center;
+	
+	&[type='submit'] {
+		border: 1px solid $bleu;
+		cursor: pointer;
+		@include border-radius(.33em);
+		padding: .33em .66em;
+	}
+}
+
+
+
+/********************************
+ *								*
+ *		 	   BLOCS				* 
+ *								*
+ ********************************/
+
+html, body, main {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+body {
+	font-family: $fonts2;
+	font-size: 14px;
+	padding-top: 50px;
+}
+
+ul#actions {
+	display: table;
+	height: 100%;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	table-layout: fixed;
+	width: 100%;
+	
+	& > li {
+		display: table-row;
+		width: 100%;
+		
+		& > a {
+			display: table-cell;
+			color: $bleu;
+			text-align: center;
+			text-decoration: none;
+			vertical-align: middle;
+			
+			& > span {
+				display: block;
+				background-color: $bleu;
+				@include border-radius(.5em);
+				color: $blanc;
+				font-family: $icons;
+				font-size: 40px;
+				height: 75px;
+				line-height: 75px;
+				margin: 0 auto;
+				width: 75px;				
+			}
+			
+			& > p {
+				display: block;
+				font-size: 1.4em;
+			}
+		}
+	}
+}
 
 
 
@@ -59,3 +155,6 @@ $icons: 'fontello';
  
 // fichier dédié au style du header
 @import "header.scss";
+
+// fichier dédié au style du formulaire de login
+@import "login.scss";

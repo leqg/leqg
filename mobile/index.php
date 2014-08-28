@@ -6,18 +6,28 @@ $loading['begin'] = microtime();
 // On appelle le fichier d'inclusion du coeur du système
 require_once('includes.php');
 
-// On essaye de savoir s'il existe une page demandée
-if (isset($_GET['page'])) :
+
+// On vérifie qu'une personne est connectée au système, on affiche le script de login
+
+if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'login')) :
+
+	// On regarde si on a reçu des informations POST
+	if (isset($_POST['login'], $_POST['pass'])) :
 	
-
-
-// Si on ne détecte pas de page demandée, on charge l'accueil
+		// On effectue la démarche de connexion
+		$user->connexion($_POST['login'], $_POST['pass']);
+		
+	else :
+	
+		// On affiche le script de connexion
+		$core->tpl_header('login');
+		$core->tpl_load('login');
+		$core->tpl_footer();
+		
+	endif;
+	
 else :
-
-	$core->tpl_header();
-	$core->tpl_load('services');
-	$core->tpl_footer();
-
+	
 	// On essaye de savoir s'il existe une page demandée
 	if (isset($_GET['page'])) :
 		
@@ -87,6 +97,7 @@ else :
 		$core->tpl_footer();
 	
 	endif;
+	
 endif;
 
 // Une fois les templates chargés, on met en place la purge et on calcule le temps nécessaire au chargement de la page à des fins de statistique
