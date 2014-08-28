@@ -106,9 +106,13 @@ else :
 				$core->tpl_header();
 				
 				// On ouvre la fiche contact
-				
+				$fiche->acces($_GET['fiche'], true);
+
 				// On charge le template contact
 				$core->tpl_load('fiche');
+				
+				// On ferme la fiche ouverte
+				$fiche->fermeture();
 				
 				// On charge le footer
 				$core->tpl_footer();

@@ -126,6 +126,17 @@ h2 {
 	font-weight: 300;
 	margin: 0 10px 0 0;
 	padding: .33em 0 0 10px;
+	
+	& > span {
+		display: block;
+		font-weight: 300;
+		line-height: 1.25em;
+		
+		&:last-of-type {
+			font-weight: 500;
+			padding-bottom: .33em;
+		}
+	}
 }
 
 pre {
@@ -439,3 +450,6 @@ ul.listeEncadree {
 
 // fichier dédié au style du formulaire de login
 @import "login.scss";
+
+// fichier dédié au style des fiches contact
+@import "fiche.scss";

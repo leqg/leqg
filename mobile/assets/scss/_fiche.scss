@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée aux fiches contact de la version mobile du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+
+/********************************
+ *								*
+ *		 	  FICHES				* 
+ *								*
+ ********************************/
+
+ul.infos {
+	list-style: none;
+	margin: 1em 10px;
+	padding: 0 0 0 30px;
+	
+	& > li {
+		position: relative;
+		font-size: 1.1em;
+		line-height: 1.3em;
+		margin: 0 0 1.3em 0;
+		
+		&::before {
+			position: absolute; top: 0; left: -30px;
+			display: block;
+			color: $bleu;
+			content: '\e871';
+			font-family: $icons;
+			font-size: .85em;
+			text-align: center;
+			width: 30px;
+		}
+		
+		&.age::before { content: '\e85b'; }
+		&.adresse::before { content: '\e841'; }
+		&.email::before { content: '\e805'; }
+		&.mobile::before { content: '\e8e4'; }
+		&.fixe::before { content: '\e854'; }
+		
+		p {
+			margin-top: 0;
+			padding-top: 2px;
+		}
+		
+		strong {
+			display: inline-block;
+			color: $bleu;
+			letter-spacing: .025em;
+			margin: 0 .15em;
+		}
+	}
+}
+
+
+nav#actions-fiche {
+	position: fixed; bottom: 1em;
+	width: 100%;
+	
+	a {
+		position: absolute; bottom: 0;
+		display: block;
+		@include border-radius(50%);
+		color: $blanc;
+		font-family: $icons;
+		font-size: 30px;
+		height: 45px;
+		line-height: 45px;
+		text-align: center;
+		text-decoration: none;
+		width: 45px;
+		z-index: 250;
+	}
+	
+	a.historique { left: .5em; background-color: $rouge; }
+	a.modifier { right: .5em; background-color: $bleu; }
+}
