@@ -15,6 +15,10 @@
  *								*
  ********************************/
 
+h2 {
+	padding-left: 40px;
+}
+
 ul.infos {
 	list-style: none;
 	margin: 1em 10px;
@@ -58,6 +62,19 @@ ul.infos {
 }
 
 
+section#historique {
+	position: absolute; top: 0; left: -100%;
+	background-color: $blanc;
+	@include shadow(4px, 0, 0, $gris);
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	width: 90%;
+	z-index: 300;
+	@include transition(all);
+}
+
+
 nav#actions-fiche {
 	position: fixed; bottom: 1em;
 	width: 100%;
@@ -79,4 +96,5 @@ nav#actions-fiche {
 	
 	a.historique { left: .5em; background-color: $rouge; }
 	a.modifier { right: .5em; background-color: $bleu; }
+	a.retour { right: 1.5em; background-color: $grisMoyen; }
 }

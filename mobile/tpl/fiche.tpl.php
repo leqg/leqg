@@ -30,7 +30,15 @@
 	</ul>
 </section>
 
+<section id="historique">
+	&nbsp;
+	
+	<nav id="actions-fiche">
+		<a href="#" id="retourDepuisHistorique" class="retour">&#xe813;</a>
+	</nav>
+</section>
+
 <nav id="actions-fiche">
-	<a href="#" class="historique">&#xe8dd;</a>
-	<a href="#" class="modifier">&#xe855;</a>
+	<a href="#" id="goToHistorique" class="historique">&#xe8dd;</a>
+	<a href="#" id="goToModif" class="modifier">&#xe855;</a>
 </nav>
