@@ -15,7 +15,7 @@
  *								*
  ********************************/
 
-h2 {
+header > h2 {
 	padding-left: 40px;
 }
 
@@ -34,7 +34,7 @@ ul.infos {
 			position: absolute; top: 0; left: -30px;
 			display: block;
 			color: $bleu;
-			content: '\e871';
+			content: '\e885';
 			font-family: $icons;
 			font-size: .85em;
 			text-align: center;
@@ -49,14 +49,11 @@ ul.infos {
 		
 		p {
 			margin-top: 0;
-			padding-top: 2px;
-		}
-		
-		strong {
-			display: inline-block;
-			color: $bleu;
-			letter-spacing: .025em;
-			margin: 0 .15em;
+			padding-top: 1px;
+			
+			em {
+				font-size: .85em;
+			}
 		}
 	}
 }
@@ -69,6 +66,7 @@ section#historique {
 	height: 100%;
 	overflow-x: hidden;
 	overflow-y: scroll;
+	padding-top: 50px;
 	width: 90%;
 	z-index: 300;
 	@include transition(all);
