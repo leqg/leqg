@@ -35,6 +35,7 @@ ul.formulaire {
 			background-color: $blanc;
 			border: 1px solid $gris;
 			@include border-radius(.25em);
+			color: $bleu;
 			font-weight: 500;
 			margin: .15em auto 1.5em;
 			padding: .33em .66em .15em;

@@ -132,7 +132,7 @@ else :
 		else :
 		
 			$core->tpl_header();
-			$core->tpl_load('services');
+			$core->tpl_load('contacts');
 			$core->tpl_footer();
 		
 		endif;
@@ -142,7 +142,7 @@ else :
 	else :
 	
 		$core->tpl_header();
-		$core->tpl_load('services');
+		$core->tpl_load('contacts');
 		$core->tpl_footer();
 	
 	endif;

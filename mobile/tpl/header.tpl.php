@@ -20,7 +20,7 @@
 	<body>
 	
 		<header id="barreHaute">
-			<h1>LeQG</h1>
+			<h1><a href="<?php $core->tpl_go_to(); ?>" class="nostyle">LeQG</a></h1>
 			<a id="goToMenu" href="#menu">&#xe811;</a>
 		</header>
 		
