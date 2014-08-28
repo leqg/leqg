@@ -15,16 +15,26 @@
  ************************************/
 
 main.login {
+	background-color: $bleu;
+
 	form {
 		position: absolute; top: 50%; left: 50%;
-		background: $bleu;
+		display: table;
+		background: $blanc;
 		@include border-radius(2em);
-		@include shadow(0, 0, 3em, $grisMoyen);
-		color: $blanc;
-		height: 275px;
+		//@include shadow(0, 0, 3em, $grisMoyen);
+		color: $bleu;
+		height: 310px;
 		margin-left: -200px;
 		margin-top: -137px;
 		width: 400px;
+		
+		ul {
+			display: table-cell;
+			height: 100%;
+			vertical-align: middle;
+			width: 100%;
+		}
 		
 		ul, ul li {
 			list-style: none;
@@ -37,8 +47,10 @@ main.login {
 		ul li {
 			& > label {
 				display: block;
-				font: 900 1em/1.8em $fonts1;
-				text-align: center;
+				font: 900 1.25em/1.8em $fonts1;
+				margin: 0 auto;
+				text-align: left;
+				width: 80%;
 				
 				&:first-of-type {
 					margin-top: 1.8em;
@@ -51,12 +63,11 @@ main.login {
 				border: 3px solid rgba(127, 140, 141, 1);
 				@include border-radius(.66em);
 				font: 300 1.2em/1.5em $fonts1;
-				height: 1.8em;
 				margin: .33em auto 1.8em auto;
 				outline: none;
-				padding: .1em .5em;
+				padding: .33em .66em;
 				text-align: center;
-				width: 300px;
+				width: 80%;
 				@include transition(all);
 				
 				&:focus,
@@ -71,7 +82,6 @@ main.login {
 					border: 3px solid rgba(127, 140, 141, 1);
 					@include border-radius(.66em);
 					font: 300 1em/1.8em $fonts1;
-					height: 2.3em;
 					text-align: center;
 					width: 200px;
 					
