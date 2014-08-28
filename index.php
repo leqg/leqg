@@ -568,12 +568,13 @@ $loading['time'] = $loading['end'] - $loading['begin'];
 $loading['time-sql'] = number_format($loading['time'], 6, '.', '');
 
 // On prépare la requête d'analyse du temps de chargement
+$personne_connectee = (isset($_COOKIE['leqg-user'])) ? $_COOKIE['leqg-user'] : 0;
 $page = (isset($_GET['page'])) ? $_GET['page'] : 'index';
 $query = 'INSERT INTO	`chargements` (`user_id`,
 									   `chargement_page`,
 									   `chargement_plateforme`,
 									   `chargement_temps`)
-							VALUES	  (' . $_COOKIE['leqg-user'] . ',
+							VALUES	  (' . $personne_connectee . ',
 									   "' . $page . '",
 									   "desktop",
 									   "' . $loading['time-sql'] . '")';
