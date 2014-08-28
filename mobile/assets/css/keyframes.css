@@ -1,0 +1,101 @@
+@-webkit-keyframes rotate {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@-moz-keyframes rotate {
+	from {
+		-moz-transform: rotate(0deg);
+	}
+	to {
+		-moz-transform: rotate(360deg);
+	}
+}
+
+@-ms-keyframes rotate {
+	from {
+		-ms-transform: rotate(0deg);
+	}
+	to {
+		-ms-transform: rotate(360deg);
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+
+
+
+
+
+
+@keyframes typofocus {
+	0% {
+		font-size: 45px;
+		transform: translate(0, 0);
+	}
+	25% {
+		transform: translateX(-20px) translateY(20px);
+	}
+	33% {
+		font-size: 60px;
+	}
+	50% {
+		transform: translateY(-40px) translateX(-40px);
+	}
+	66% {
+		font-size: 30px;
+	}
+	75% {
+		transform: translateX(55px) translateY(10px);
+	}
+}
+
+@-webkit-keyframes typofocus {
+	0% {
+		font-size: 45px;
+		-webkit-transform: translate(0, 0);
+	}
+	25% {
+		-webkit-transform: translateX(-20px) translateY(20px);
+	}
+	33% {
+		font-size: 60px;
+	}
+	50% {
+		-webkit-transform: translateY(-40px) translateX(-40px);
+	}
+	66% {
+		font-size: 30px;
+	}
+	75% {
+		-webkit-transform: translateX(55px) translateY(10px);
+	}
+}
+
+
+@keyframes rotfocus {
+	0% {
+		font-size: 60px;
+		//transform: rotate(0deg);
+	}
+	50% {
+		font-size: 150px;
+		//transform: rotate(180deg);
+	}
+	100% {
+		font-size: 60px;
+		//transform: rotate(360deg);
+	}
+}

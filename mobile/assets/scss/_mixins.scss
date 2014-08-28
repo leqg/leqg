@@ -1,0 +1,94 @@
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	   -moz-border-radius: $radius;
+	        border-radius: $radius;
+}
+
+@mixin shadow($x, $y, $blur, $color) {
+	-webkit-box-shadow: $x $y $blur $color;
+	   -moz-box-shadow: $x $y $blur $color;
+	   		box-shadow: $x $y $blur $color;
+}
+
+@mixin shadow-inset($x, $y, $blur, $color) {
+	-webkit-box-shadow: inset $x $y $blur $color;
+	   -moz-box-shadow: inset $x $y $blur $color;
+	   		box-shadow: inset $x $y $blur $color;
+}
+
+@mixin transition($property) {
+	-webkit-transition: $property .2s ease-in-out;
+	   -moz-transition: $property .2s ease-in-out;
+	   		transition: $property .2s ease-in-out;
+}
+
+@mixin box-sizing {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	   		box-sizing: border-box;
+}
+
+@mixin appearance($val) {
+	-webkit-appearance: $val;
+	   -moz-appearance: $val;
+	   		appearance: $val;
+}
+
+@mixin rotate($deg) {
+	-webkit-transform: rotate($deg);
+	   -moz-transform: rotate($deg);
+	    -ms-transform: rotate($deg);
+	    		transform: rotate($deg);
+}
+
+@mixin scale($val) {
+	-webkit-transform: scale($val);
+	   -moz-transform: scale($val);
+	    -ms-transform: scale($val);
+	    		transform: scale($val);
+}
+
+@mixin miroir() {
+	-webkit-transform: scaleX(-1);
+	   -moz-transform: scaleX(-1);
+	    -ms-transform: scaleX(-1);
+	    		transform: scaleX(-1);
+}
+
+@mixin animation($attr) {
+	-webkit-animation: $attr;
+	   -moz-animation: $attr;
+	    -ms-animation: $attr;
+	    	animation: $attr;
+}
+
+@mixin linear-gradient($from, $to) {
+	/* Fallback for sad browsers */
+	background-color: $to;
+	/* Mozilla Firefox */
+	background-image: -moz-linear-gradient($from, $to);
+	/* Opera */
+	background-image: -o-linear-gradient($from, $to);
+	/* Webkit (Chrome 11+) */
+	background-image: -webkit-linear-gradient(linear, left top, left bottom, color-stop(0, $from), color-stop(1, $to));
+	/* IE 10 */
+	background-image: -ms-linear-gradient($from, $to);
+	/* W3C */
+	background-image: linear-gradient($from, $to);
+}
+
+@mixin bordure-fine {
+	@media (-webkit-min-device-pixel-ratio: 1.5),
+			  (min--moz-device-pixel-ratio: 1.5),
+				(-o-min-device-pixel-ratio: 3/2),
+				   (min-device-pixel-ratio: 1.5),
+				       (min-resolution: 1.5dppx) {
+		border-bottom-width: .5px;
+	}
+}
+
+@mixin background-size($size) {
+	-webkit-background-size: $size;
+	   -moz-background-size: $size;
+	   		background-size: $size;
+}
