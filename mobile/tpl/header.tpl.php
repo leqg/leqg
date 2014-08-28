@@ -12,8 +12,21 @@
 		<!-- Scripts relatifs au serivce -->
 		<script src="assets/js/jquery-2.1.1.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSkeqzB0suNWsj8fU3If9tA0spIl_xN2A&sensor=false"></script>
-		<script src="assets/js/<?php echo (isset($_GET['page'])) ? $_GET['page'] : 'main'; ?>.js"></script>
+		<script src="assets/js/main.js"></script>
+		<?php if (isset($_GET['page'])) : ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php endif; ?>
 	</head>
 	
 	<body>
 	
+		<header id="barreHaute">
+			<h1>LeQG</h1>
+			<a id="goToMenu" href="#menu">&#xe811;</a>
+		</header>
+		
+		<nav id="menu">
+			<a href="<?php $core->tpl_go_to('recherche'); ?>"><span>&#xe803;</span>Recherche</a>
+			<a href="<?php $core->tpl_go_to('contacts'); ?>"><span>&#xe840;</span>Contacts</a>
+			<a href="<?php $core->tpl_go_to('deconnexion'); ?>" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');"><span>&#xe85d;</span>Déconnexion</a>
+		</nav>
+		
+		<main>

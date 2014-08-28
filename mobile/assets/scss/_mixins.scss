@@ -17,9 +17,9 @@
 }
 
 @mixin transition($property) {
-	-webkit-transition: $property .2s ease-in-out;
-	   -moz-transition: $property .2s ease-in-out;
-	   		transition: $property .2s ease-in-out;
+	-webkit-transition: $property .3s ease-in-out;
+	   -moz-transition: $property .3s ease-in-out;
+	   		transition: $property .3s ease-in-out;
 }
 
 @mixin box-sizing {

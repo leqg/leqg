@@ -15,3 +15,74 @@
  *								*
  ********************************/
 
+header#barreHaute {
+	position: fixed; top: 0; left: 0;
+	background-color: $bleu;
+	@include shadow(0, 4px, 0, $gris);
+	color: $blanc;
+	height: 40px;
+	width: 100%;
+	@include transition(all);
+	
+	& > h1 {
+		color: $blanc;
+		font-family: $fonts1;
+		margin: 0 .5em;
+		line-height: 40px;
+		padding: 0;
+	}
+	
+	& > a {
+		position: absolute; top: 0; right: .33em;
+		border: 0;
+		display: block;
+		color: $blanc;
+		font-family: $icons;
+		font-size: 30px;
+		height: 40px;
+		line-height: 38px;
+		padding: 0;
+		text-align: center;
+		text-decoration: none;
+		width: 40px;
+		@include transition(all);
+			
+		&.rotate {
+			@include rotate(90deg);
+		}
+	}
+}
+
+nav#menu {
+	position: fixed; top: -135px; left: 0;
+	width: 100%;
+	@include transition(all);
+	
+	& > a {
+		position: relative;
+		display: block;
+		border-top: 1px solid $gris;
+		color: $bleu;
+		font-family: $fonts2;
+		font-size: 1.33em;
+		height: 45px;
+		line-height: 45px;
+		padding: 0;
+		text-align: center;
+		text-decoration: none;
+		width: 100%;
+		
+		&:hover {
+			background-color: rgba($bleu, .05);
+		}
+		
+		& > span {
+			position: absolute; top: 0; left: .66em;
+			font-family: $icons;
+			height: 45px;
+			line-height: 42px;
+			text-align: center;
+			width: 45px;
+		}
+	}
+}
