@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée aux fiches contact de la version mobile du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+
+/********************************
+ *								*
+ *		 	FORMULAIRES			* 
+ *								*
+ ********************************/
+
+ul.formulaire {
+	list-style: none;
+	width: 100%;
+	
+	li {
+		width: 100%;
+		
+		label {
+			display: block;
+			font-size: 1.1em;
+			font-weight: 400;
+			margin: 0 auto;
+			text-align: left;
+			width: 90%;
+		}
+	
+		input {
+			background-color: $blanc;
+			border: 1px solid $gris;
+			@include border-radius(.25em);
+			font-weight: 500;
+			margin: .15em auto 1.5em;
+			padding: .33em .66em .15em;
+			text-align: left;
+			width: 90%;
+			@include transition(all);
+			
+			&:hover,
+			&:focus {
+				border-color: $orange;
+			}
+			
+			&[type="submit"] {
+				background-color: $rouge;
+				border: none;
+				color: $blanc;
+				font-weight: 300;
+				margin-top: 1.33em;
+				text-align: center;
+			}
+		}
+	}
+}

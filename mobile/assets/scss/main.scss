@@ -75,8 +75,8 @@ a {
 input {
 	display: block;
 	background-color: transparent;
-	border: 0px;
-	border-bottom: 1px solid $bleu;
+	border: 1px solid $gris;
+	@include border-radius(.33em);
 	color: $grisFonce;
 	font-family: $fonts2;
 	font-size: 1.25em;
@@ -86,10 +86,12 @@ input {
 	text-align: center;
 	
 	&[type='submit'] {
-		border: 1px solid $bleu;
-		cursor: pointer;
-		@include border-radius(.33em);
-		padding: .33em .66em;
+		background-color: $rouge;
+		border: none;
+		color: $blanc;
+		font-weight: 300;
+		margin-top: 1.5em;
+		text-align: center;
 	}
 }
 
@@ -119,6 +121,7 @@ body {
 	font-family: $fonts2;
 	font-size: 14px;
 	padding-top: 50px;
+	overflow-x: hidden;
 }
 
 h1 {
@@ -470,3 +473,6 @@ ul.listeEncadree {
 
 // fichier dédié au style des fiches contact
 @import "fiche.scss";
+
+// fichier dédié au style des formulaires
+@import "forms.scss";

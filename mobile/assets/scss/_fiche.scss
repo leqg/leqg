@@ -16,29 +16,29 @@
  ********************************/
 
 header > h2 {
-	padding-left: 40px;
+	padding-left: 20px;
 }
 
 ul.infos {
 	list-style: none;
 	margin: 1em 10px;
-	padding: 0 0 0 30px;
+	padding: 0 0 0 40px;
 	
 	& > li {
 		position: relative;
-		font-size: 1.1em;
+		font-size: 1.2em;
 		line-height: 1.3em;
 		margin: 0 0 1.3em 0;
 		
 		&::before {
-			position: absolute; top: 0; left: -30px;
+			position: absolute; top: -1px; left: -40px;
 			display: block;
 			color: $bleu;
 			content: '\e885';
 			font-family: $icons;
-			font-size: .85em;
+			font-size: .9em;
 			text-align: center;
-			width: 30px;
+			width: 40px;
 		}
 		
 		&.age::before { content: '\e85b'; }
@@ -73,7 +73,16 @@ section#modification {
 	@include transition(all);
 }
 
-section#historique { left: -100%; }
+section#historique {
+	left: -100%;
+	
+	#scroll {
+		position: absolute; top: 0; left: 0;
+		padding-top: 50px;
+		overflow-x: hidden;
+		overflow-y: scroll;
+	}
+}
 section#modification { right: -100%; border-left: 4px solid $gris; }
 
 
@@ -98,6 +107,7 @@ nav#actions-fiche {
 	
 	a.historique { left: .5em; background-color: $rouge; }
 	a.modifier { right: .5em; background-color: $bleu; }
+	a.central { left: 50%; background-color: $vert; }
 	a.retour { right: 1.5em; background-color: $grisMoyen; }
 	a#retourDepuisModif { left: .5em; }
 }
