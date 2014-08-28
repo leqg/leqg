@@ -25,14 +25,6 @@ header#barreHaute {
 	z-index: 500;
 	@include transition(all);
 	
-	& > h1 {
-		color: $blanc;
-		font-family: $fonts1;
-		margin: 0 .5em;
-		line-height: 40px;
-		padding: 0;
-	}
-	
 	& > a {
 		position: absolute; top: 0; right: .33em;
 		border: 0;
@@ -71,6 +63,9 @@ nav#menu {
 		height: 45px;
 		line-height: 45px;
 		padding: 0;
+		padding-left: 50px;
+		padding-left: calc(.66em + 45px);
+		padding-right: .66em;
 		text-align: center;
 		text-decoration: none;
 		width: 100%;

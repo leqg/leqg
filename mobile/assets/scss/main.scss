@@ -109,6 +109,8 @@ ul {
 html, body, main {
 	height: 100%;
 	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	padding: 0;
 	width: 100%;
 }
@@ -117,6 +119,14 @@ body {
 	font-family: $fonts2;
 	font-size: 14px;
 	padding-top: 50px;
+}
+
+h1 {
+	color: $blanc;
+	font-family: $fonts1;
+	margin: 0 .5em;
+	line-height: 40px;
+	padding: 0;
 }
 
 h2 {

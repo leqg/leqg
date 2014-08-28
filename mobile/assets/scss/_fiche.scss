@@ -59,8 +59,9 @@ ul.infos {
 }
 
 
-section#historique {
-	position: absolute; top: 0; left: -100%;
+section#historique,
+section#modification {
+	position: absolute; top: 0;
 	background-color: $blanc;
 	@include shadow(4px, 0, 0, $gris);
 	height: 100%;
@@ -71,6 +72,9 @@ section#historique {
 	z-index: 300;
 	@include transition(all);
 }
+
+section#historique { left: -100%; }
+section#modification { right: -100%; border-left: 4px solid $gris; }
 
 
 nav#actions-fiche {
@@ -95,4 +99,5 @@ nav#actions-fiche {
 	a.historique { left: .5em; background-color: $rouge; }
 	a.modifier { right: .5em; background-color: $bleu; }
 	a.retour { right: 1.5em; background-color: $grisMoyen; }
+	a#retourDepuisModif { left: .5em; }
 }

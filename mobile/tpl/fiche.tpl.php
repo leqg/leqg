@@ -53,6 +53,14 @@
 	</nav>
 </section>
 
+<section id="modification">
+	<h2>Modification de la fiche</h2>
+	
+	<nav id="actions-fiche">
+		<a href="#" id="retourDepuisModif" class="retour">&#xe813;</a>
+	</nav>
+</section>
+
 <nav id="actions-fiche">
 	<a href="#" id="goToHistorique" class="historique">&#xe8dd;</a>
 	<a href="#" id="goToModif" class="modifier">&#xe855;</a>

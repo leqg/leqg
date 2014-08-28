@@ -17,5 +17,9 @@
 	</head>
 	
 	<body id="login">
+	
+		<header id="loginLogo">
+			<h1>LeQG</h1>
+		</header>
 
 		<main>
