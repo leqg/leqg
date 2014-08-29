@@ -107,7 +107,7 @@ nav#actions-fiche {
 	
 	a.historique { left: .5em; background-color: $rouge; }
 	a.modifier { right: .5em; background-color: $bleu; }
-	a.central { left: 50%; background-color: $vert; }
+	a.central { left: 50%; left: calc(50% - 22.5px); background-color: $vert; }
 	a.retour { right: 1.5em; background-color: $grisMoyen; }
 	a#retourDepuisModif { left: .5em; }
 }

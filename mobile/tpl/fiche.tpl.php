@@ -42,7 +42,7 @@
 					<?php if (in_array($interaction['type'], $lienVersFiche)) : ?><a href="<?php $core->tpl_go_to('contacts', array('fiche' => $fiche->get_the_ID(), 'interaction' => $interaction['id'])); ?>" class="nostyle"><?php endif; ?>
 						<em><?php echo date('d/m/Y', strtotime($interaction['date'])); ?></em><br>
 						<?php if (in_array($interaction['type'], $lienVersFiche)) : ?><em><?php $historique->returnType($interaction['type']); ?></em><br><?php endif; ?>
-						<?php if ($interaction['type'] == 'sms') : ?><strong>Envoi d'un SMS</strong><br><em>&laquo;&nbsp;<?php echo $interaction['notes']; ?>&nbsp;&raquo;</em><?php else : ?><strong><?php echo $interaction['objet']; ?></strong><?php endif; ?>
+						<?php if ($interaction['type'] == 'sms') : ?><strong>Envoi d'un SMS</strong><br><em>&laquo;&nbsp;<?php echo $interaction['notes']; ?>&nbsp;&raquo;</em><?php elseif ($interaction['type'] == 'porte') : ?><strong>Porte à porte</strong><br><em>&laquo;&nbsp;<?php echo $interaction['objet']; ?>&nbsp;&raquo;</em><?php else : ?><strong><?php echo $interaction['objet']; ?></strong><?php endif; ?>
 					<?php if (in_array($interaction['type'], $lienVersFiche)) : ?></a><?php endif; ?>
 				</p>
 			</li>
@@ -86,5 +86,6 @@
 
 <nav id="actions-fiche">
 	<a href="#" id="goToHistorique" class="historique">&#xe8dd;</a>
+	<a href="#" id="ajoutInteraction" class="central">&#xe816;</a>
 	<a href="#" id="goToModif" class="modifier">&#xe855;</a>
 </nav>
