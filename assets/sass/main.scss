@@ -113,6 +113,7 @@ span[class^='icone-'] {
 		border: 1px solid $bleu;
 		@include border-radius(.66em);
 		color: $bleu;
+		font-family: $fonts1;
 		font-size: .66em;
 		line-height: 2em;
 		opacity: 0;
