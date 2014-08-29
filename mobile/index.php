@@ -67,8 +67,26 @@ else :
 			if ($sql->num_rows == 1) :
 			
 				$contact = $sql->fetch_assoc();
-				$core->tpl_go_to('contacts', array('fiche' => $contact['contact_id']), true);
-			
+				
+				// On regarde la destination demandée
+				if (isset($_GET['destination'])) :
+				
+					if ($_GET['destination'] == 'interaction') :
+					
+						$core->tpl_go_to('interaction', array('action' => 'ajout', 'fiche' => $contact['contact_id']), true);
+					
+					else :
+						
+						$core->tpl_go_to('contacts', array('fiche' => $contact['contact_id']), true);
+						
+					endif;
+				
+				else :
+				
+					$core->tpl_go_to('contacts', array('fiche' => $contact['contact_id']), true);
+				
+				endif;
+							
 			else :
 			
 				// On met en place le tableau des contacts trouvés
@@ -125,6 +143,54 @@ else :
 				$core->tpl_load('contacts');
 				$core->tpl_footer();
 			
+			endif;
+			
+		
+		// S'il s'agit d'une page du module d'interactions
+		elseif ($_GET['page'] == 'interaction') :
+		
+			// On regarde si une action particulière est demandée
+			if (isset($_GET['action'])) :
+			
+				// Si l'action demandée concerne l'ajout d'une interaction
+				if ($_GET['action'] == 'ajout') :
+				
+					// On charge les éléments de template
+					$core->tpl_header();
+					$core->tpl_load('interaction-ajout');
+					$core->tpl_footer();
+
+				// Sinon, on redirige vers le module contact, vers une fiche si une fiche existait				
+				else :
+				
+					if (isset($_GET['fiche'])) :
+					
+						$core->tpl_go_to('contacts', array('fiche' => $_GET['fiche']), true);
+					
+					else :
+					
+						$core->tpl_go_to('contacts', array(), true);
+					
+					endif;
+				
+				endif;
+			
+			else :
+			
+				// Si aucune action n'est demandée, on charge la page de lecture d'une interaction s'il existe une fiche demandée
+				if (isset($_GET['interaction'])) :
+				
+					$core->tpl_header();
+					$core->tpl_load('interaction');
+					$core->tpl_footer();
+				
+				// Sinon, on charge le module "contacts"	
+				else :
+				
+					$core->tpl_go_to('contacts', array(), true);
+					
+				endif;
+					
 			endif;
 			
 		

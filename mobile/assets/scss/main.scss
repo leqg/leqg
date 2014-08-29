@@ -72,7 +72,8 @@ a {
 	}
 }
 
-input {
+input,
+textarea {
 	display: block;
 	background-color: transparent;
 	border: 1px solid $gris;
@@ -223,6 +224,7 @@ ul#actions {
 				display: block;
 				background-color: $bleu;
 				@include border-radius(.5em);
+				@include shadow(0, 4px, 0, $gris);
 				color: $blanc;
 				font-family: $icons;
 				font-size: 40px;

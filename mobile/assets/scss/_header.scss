@@ -16,7 +16,7 @@
  ********************************/
 
 header#barreHaute {
-	position: fixed; top: 0; left: 0;
+	position: absolute; top: 0; left: 0;
 	background-color: $bleu;
 	@include shadow(0, 4px, 0, $gris);
 	color: $blanc;
@@ -47,7 +47,7 @@ header#barreHaute {
 }
 
 nav#menu {
-	position: fixed; top: -135px; left: 0;
+	position: absolute; top: -135px; left: 0;
 	width: 100%;
 	z-index: 500;
 	@include transition(all);

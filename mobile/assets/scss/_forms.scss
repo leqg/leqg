@@ -31,13 +31,16 @@ ul.formulaire {
 			width: 90%;
 		}
 	
-		input {
+		input,
+		select,
+		textarea {
+			display: block;
 			background-color: $blanc;
 			border: 1px solid $gris;
 			@include border-radius(.25em);
 			color: $bleu;
 			font-weight: 500;
-			margin: .15em auto 1.5em;
+			margin: .15em auto 1.5em auto;
 			padding: .33em .66em .15em;
 			text-align: left;
 			width: 90%;
@@ -56,6 +59,100 @@ ul.formulaire {
 				margin-top: 1.33em;
 				text-align: center;
 			}
+		}
+		
+		textarea {
+			resize: none;
+			line-height: 1.3em;
+			height: 6em;
+		}
+	}
+}
+
+
+
+/************************************
+ *									*
+ *			  SELECTBOX				* 
+ *									*
+ ************************************/
+ 
+label.selectbox {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+
+	select {
+		display: inline-block;
+		@include appearance(none);
+		border: none;
+		@include border-radius(4px);
+		background: $blanc;
+		color: $noir;
+		cursor: pointer;
+		font: 300 1em / 1.5em $fonts2;
+		height: 36px;
+		margin: 0;
+		margin-left: -.33em;
+		margin-top: -.33em;
+		outline: none;
+		padding: 3px;
+		padding-left: 0;
+		width: 100%;
+		
+		@media screen and (-webkit-min-device-pixel-ratio: 0) {
+			padding-right: 18px;
+		}
+	}
+	
+	&::after {
+		position: absolute; top: 3px; right: 25px;
+		background: $blanc;
+		border: 1px solid $bleu;
+		@include border-radius(50% 50% 0 0);
+		color: $grisFonce;
+		content: '\e834';
+		font-family: $icons;
+		font-size: .85em;
+		height: 33px;
+		line-height: 33px;
+		padding: 0;
+		pointer-events: none;
+		text-align: center;
+		width: 33px;
+		@include rotate(90deg);
+		@include transition(all);
+		
+		@media (-webkit-min-device-pixel-ratio: 1.5),
+				  (min--moz-device-pixel-ratio: 1.5),
+					(-o-min-device-pixel-ratio: 3/2),
+					   (min-device-pixel-ratio: 1.5),
+					       (min-resolution: 1.5dppx) {
+			top: 3px;
+		}
+	}
+	
+	&:hover::after {
+		background: $orange;
+		color: $bleu;
+	}
+	
+	&::before {
+		position: absolute; top: -6px; right: 7px;
+		display: block;
+		background: $blanc;
+		content: '';
+		height: 38px;
+		line-height: 35px;
+		pointer-events: none;
+		width: 35px;
+		
+		@media (-webkit-min-device-pixel-ratio: 1.5),
+				  (min--moz-device-pixel-ratio: 1.5),
+					(-o-min-device-pixel-ratio: 3/2),
+					   (min-device-pixel-ratio: 1.5),
+					       (min-resolution: 1.5dppx) {
+			height: 45px;
 		}
 	}
 }

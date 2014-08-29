@@ -86,6 +86,6 @@
 
 <nav id="actions-fiche">
 	<a href="#" id="goToHistorique" class="historique">&#xe8dd;</a>
-	<a href="#" id="ajoutInteraction" class="central">&#xe816;</a>
+	<a href="<?php $core->tpl_go_to('interaction', array('action' => 'ajout', 'fiche' => $fiche->get_the_ID())); ?>" id="ajoutInteraction" class="central">&#xe816;</a>
 	<a href="#" id="goToModif" class="modifier">&#xe855;</a>
 </nav>
