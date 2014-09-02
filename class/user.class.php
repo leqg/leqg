@@ -32,7 +32,7 @@ class user extends core {
 			$donnees = $sql->fetch_assoc();
 			
 			// On vérifie si une demande de réinitialisation de la connexion n'a pas été demandée
-			if (strtotime($_COOKIE['leqg-time']) >= strtotime($donnees['user_reinit'])) {
+			if ($_COOKIE['leqg-time'] >= strtotime($donnees['user_reinit'])) {
 				
 				// On prépare le tableau des informations
 				$user = $this->formatage_donnees($donnees);
