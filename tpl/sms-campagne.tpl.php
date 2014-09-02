@@ -34,8 +34,8 @@
 				<?php foreach ($contacts as $contact) : ?>
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
 					<li class="electeur">
-						<strong><?php $fiche->affichageNomByID($contact); ?>
-						<p><?php $fiche->contact('sms', false, false, $contact); ?></p>
+						<strong><?php $fiche->affichageNomByID($contact); ?></strong>
+						<p><?php echo $core->tpl_phone($fiche->contact('mobile', false, true, $contact)); ?></p>
 					</li>
 				</a>
 				<?php endforeach; ?>
