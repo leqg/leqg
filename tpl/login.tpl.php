@@ -3,7 +3,7 @@
 		<ul>
 			<li>
 				<label for="login">Nom d'utilisateur :</label>
-				<input type="text" name="login" id="login">
+				<input type="text" name="login" id="login" autocomplete="off" autofocus="on">
 			</li>
 			<li>
 				<label for="pass">Mot de passe :</label>
