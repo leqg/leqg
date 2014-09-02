@@ -43,7 +43,7 @@ var main = function() {
 		});
 
 		
-	// À chaque clique sur un lien du menu principal, on range le menu le temps du chargement
+	// À chaque clique sur un lien du menu principal ou sur un lien de la page en général, on range le menu le temps du chargement
 		$('nav#principale a').click(function(){
 			$('#menu').toggleClass('actif');
 			$('nav#principale').css('left', '-260px');
@@ -56,6 +56,51 @@ var main = function() {
 			
 			// On annule le clique sur le lien
 			return false;
+		});
+		
+	
+	// Script relatif à la recherche rapide de fiche
+		$('#recherche').click(function(){
+			if ($(this).hasClass('fermer')) {
+				// On affiche d'abord le formulaire
+				$('#searchSubmit').css({
+					'opacity': 0,
+					'pointer-events': 'none'
+				});
+				
+				$('#searchForm').css({
+					'opacity': 0,
+					'pointer-events': 'none',
+					'width': '0'
+				});
+				
+				// On transforme la croix en loupe
+				$(this).removeClass('fermer');
+				
+				// On annule le clique sur le lien pour éviter le # en fin d'URL
+				return false;
+			} else {
+				// On affiche d'abord le formulaire
+				$('#searchForm').css({
+					'opacity': 1,
+					'pointer-events': 'all',
+					'width': '400px'
+				});
+				
+				$('#searchSubmit').css({
+					'opacity': 1,
+					'pointer-events': 'all'
+				});
+				
+				// On transforme la loupe en croix
+				$(this).addClass('fermer');
+				
+				// On déplace le pointeur dans le formulaire ouvert
+				$('#searchForm').focus();
+				
+				// On annule le clique sur le lien pour éviter le # en fin d'URL
+				return false;
+			}
 		});
 };
 
