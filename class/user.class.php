@@ -187,7 +187,8 @@ class user extends core {
 		if (!is_numeric($compte)) return false;
 		
 		// On lance une demande de réinitialisation à l'instant T
-		$this->noyau->query('UPDATE users SET user_reinit = NOW() WHERE user_id = ' . $compte);
+		$query = 'UPDATE `users` SET `user_reinit` = NOW() WHERE `user_id` = ' . $compte;
+		$this->noyau->query($query);
 		
 		$this->tpl_go_to(true);
 	}
@@ -213,7 +214,7 @@ class user extends core {
 		$compte = $this->client();
 		$compte = $compte['id'];
 		
-		$query = 'SELECT * FROM users WHERE client_id = ' . $compte . ' ORDER BY user_firstname, user_lastname ASC';
+		$query = 'SELECT * FROM `users` WHERE client_id = ' . $compte . ' ORDER BY user_firstname, user_lastname ASC';
 		$sql = $this->noyau->query($query);
 		
 		$users = array();

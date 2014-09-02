@@ -1,4 +1,3 @@
 <?php
-	$user->reinitialisation($user->get_the_id());
-	$core->tpl_go_to(true);
+	$user->reinitialisation($_COOKIE['leqg-user']);
 ?>
