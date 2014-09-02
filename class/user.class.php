@@ -75,6 +75,9 @@ class user extends core {
 	public	function get_the_phone($espaces = false) { if ($espaces) { return $this->tpl_phone($this->user['phone']); } else { return $this->user['phone']; } }
 	public	function the_phone($espaces = false) { echo $this->get_the_phone($espaces); }
 	
+	public	function get_the_lasttime() { return $this->user['lasttime']; }
+	public	function the_lasttime() { echo $this->get_the_lasttime(); }
+	
 	
 	// Méthode de vérification de l'exitence d'un login 
 	

@@ -29,7 +29,7 @@
 		</ul><!--#parametres-->
 		
 		<ul id="gestion-compte">
-			<a class="nostyle" href="<?php $core->tpl_go_to('profile', array('utilisateur' => $user->get_the_ID())); ?>"><li><?php $user->the_nickname(); ?></li></a>
+			<a class="nostyle" href="<?php $core->tpl_go_to('utilisateur'); ?>"><li><?php $user->the_nickname(); ?></li></a>
 			<li><?php $user->the_email(); ?></li>
 			<li><?php $user->the_phone(true); ?></li>
 			<a class="nostyle" href="<?php $core->tpl_go_to('logout'); ?>"><li>Déconnexion</li></a>

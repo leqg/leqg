@@ -551,6 +551,32 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				
 			}
 			
+	
+	// Mise en place des templates associés au système de gestion des utilisateurs
+	
+			else if ( $_GET['page'] == 'utilisateur' ) {
+				
+				// On charge d'abord le template de header
+				$core->tpl_header();
+				
+				// ON regarde si une action est demandée
+				if (isset($_GET['action'])) {
+					
+					
+					
+				// Sinon, on charge la fiche utilisateur pour information et modification
+				} else {
+					
+					// Template de modification de la fiche de l'utilisateur courant
+					$core->tpl_load('utilisateur'); 
+					
+				}
+				
+				// On charge enfin le template de footer
+				$core->tpl_footer();
+				
+			}
+			
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services
