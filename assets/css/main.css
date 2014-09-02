@@ -671,10 +671,10 @@ header#top #menu::after {
 header#top #menu:hover {
   background-color: rgba(255, 255, 255, 0.15); }
 header#top #menu.actif::after {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  transform: rotate(90deg); }
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg); }
 header#top > h1 {
   position: absolute;
   top: 0;
@@ -775,7 +775,7 @@ header#top input[type='search'] {
   font-weight: 300;
   height: 60px;
   opacity: 0;
-  padding: 0 60px 0 10px;
+  padding: 0 75px 0 15px;
   pointer-events: none;
   line-height: 60px;
   width: 0; }
