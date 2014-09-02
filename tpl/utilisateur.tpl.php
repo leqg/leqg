@@ -24,7 +24,7 @@
 		<li>
 			<span class="label-information">Dernière connexion</span>
 			<p><?php echo date('d/m/Y \à H:i', strtotime($user->get_the_lasttime())); ?></p>
-			<a class="nostyle icone" title="Réinitialiser toutes les connexions" href="ajax.php?script=reinitialiser-connexions">&#xe8fb;</a>
+			<a class="nostyle icone" onclick="return confirm('Êtes-vous sûr de vouloir réinitialiser toutes les connexions à votre compte?');" title="Réinitialiser toutes les connexions" href="ajax.php?script=reinitialiser-connexions">&#xe8fb;</a>
 		</li>
 	</ul>
 
