@@ -19,7 +19,7 @@ var utilisateur = function() {
 
 
 	// Simplement quand on sort du formulaire, on supprime le bouton valider
-		$("#form-email").blur(function(){
+		$("#form-phone").blur(function(){
 			$("#valider-form-phone").fadeOut('slow');
 		});
 				
