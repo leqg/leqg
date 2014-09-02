@@ -18,8 +18,11 @@
 			<p><a href="<?php $core->tpl_go_to('utilisateur', array('modification' => 'pass')); ?>">Mettre à jour votre mot de passe</a></p>
 		</li>
 		<li>
-			<span class="label-information"><label for="form-mobile">Téléphone</label></span>
-			<input type="text" name="mobile" id="form-mobile" placeholder="01 02 03 04 05" value="<?php $user->the_phone(true); ?>">
+			<span class="label-information"><label for="form-phone">Téléphone</label></span>
+			<input type="text" name="phone" id="form-phone" placeholder="01 02 03 04 05" value="<?php $user->the_phone(true); ?>" data-user="<?php $user->the_id(); ?>">
+			<span id="valider-form-phone">Valider</span>
+			<span id="reussite-form-phone">&#xe812;</span>
+			<span id="sauvegarde-form-phone">&#xe917;</span>
 		</li>
 		<li>
 			<span class="label-information">Dernière connexion</span>
