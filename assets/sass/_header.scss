@@ -19,154 +19,167 @@ header#top {
 	background: $bleu;
 	color: $blanc;
 	font-size: 1em;
-	height: 50px;
-	padding: .33em 1em;
+	height: 60px;
+	padding: 0;
 	width: 100%;
 	z-index: 9999;
 	
-	& > nav {
-		position: absolute; top: 50px; right: 115px;
-		display: block;
-		margin: 0;
-		padding: 0;
+	#menu {
+		position: absolute; top: 0; left: 0;
+		display: inline-block;
+		background-color: $bleu;
+		color: $blanc;
+		font-family: $fonts1;
+		height: 60px;
+		line-height: 60px;
+		overflow: hidden;
+		text-align: center;
+		width: 60px;
 		
-		&::before {
-			position: absolute; top: -50px; right: 1px;
+		&::after {
+			position: absolute; top: 0; left: 0;
 			display: block;
-			background: rgba($blanc, 0);
-			color: rgba($blanc, 1);
-			content: '\e810';
+			background-color: transparent;
+			color: $blanc;
+			content: '\e811';
 			font-family: $icons;
-			font-size: 2em;
-			height: 50px;
-			line-height: 50px;
-			text-align: center;
-			width: 50px;
+			font-size: 35px;
+			height: 60px;
+			line-height: 60px;
+			width: 60px;
 			@include transition(all);
 		}
 		
 		&:hover {
-			&::before {
-				background: rgba($blanc, 1);
-				color: rgba($bleu, 1);
-			}
-			
-			ul {
-				display: table;
-				border: 1px solid $bleu;
-				border-collapse: collapse;
-				border-top: none;
-				margin: 0;
-				width: 347px;
-			}
+			background-color: rgba($blanc, .15);
 		}
 		
-		ul {
-			display: none;
-			background: rgba($blanc, 1);
-				
-			a {
-				display: inline-block;
-				color: $bleu;
-				text-decoration: none;
-			}
-				
-			li {
-				display: table-cell;
-				height: 100px;
-				overflow: hidden;
-				padding: 1em;
-				text-align: center;
-				vertical-align: middle;
-				width: 115px;
-				z-index: 500;
-				@include transition(all);
-				
-				&:hover {
-					color: rgba($rouge, 1);
-				}
-				
-				span {
-					display: block;
-					font-family: $icons;
-					font-size: 2.5em;
-				}
-			}
+		&.actif::after {
+			@include rotate(90deg);
 		}
 	}
 	
-	& > ul {
-		position: absolute; top: 50px;
-		display: block;
-		background: rgba($blanc, 1);
-		color: $bleu;
+	& > h1 {
+		position: absolute; top: 0; left: 60px;
+		display: inline-block;
+		height: 60px;
+		line-height: 60px;
 		margin: 0;
-		padding: .33em 0 .5em 0;
+		padding: 0 0 0 15px;
+		width: 200px;
+	}
+	
+	& > a#notifications {
+		position: absolute; top: 0; right: 0;
+		display: block;
+		color: $bleu;
+		height: 60px;
+		line-height: 60px;
+		text-align: center;
+		width: 60px;
+		@include transition(all);
 		
 		&::before {
-			position: absolute; top: -50px; right: 0;
+			position: absolute; top: 0; right: 0;
 			display: block;
-			background: rgba($blanc, 0);
-			border: 0;
-			color: rgba($blanc, 1);
+			color: $blanc;
+			content: '\e83d';
 			font-family: $icons;
-			font-size: 1.66em;
-			height: 50px;
-			line-height: 50px;
+			font-size: 25px;
+			height: 60px;
+			line-height: 60px;
 			text-align: center;
-			width: 50px;
+			width: 60px;
 			@include transition(all);
-		}
-		
-		&:hover {
-			border: 1px solid $bleu;
-			border-top: 0;
 		}
 		
 		&:hover::before {
-			background: rgba($blanc, 1);
-			border: 0;
-			color: $bleu;
+			background-color: rgba($blanc, .15);
 		}
 		
-		&:hover li {
+		& > span {
+			position: absolute; top: 8px; right: 8px;
 			display: block;
+			background-color: $rouge;
+			@include border-radius(50%);
+			color: $blanc;
+			font-size: 15px;
+			height: 15px;
+			width: 15px;
 		}
+	}
+	
+	& > a#recherche {
+		position: absolute; top: 0; right: 60px;
+		display: block;
+		color: $bleu;
+		height: 60px;
+		line-height: 60px;
+		text-align: center;
+		width: 60px;
+		@include transition(all);
 		
-		&#parametres {
-			right: 65px;
-			
-			&::before {
-				content: '\e855';
-			}
-		}
-		
-		&#gestion-compte {
-			right: 15px;
-			
-			&::before {
-				content: '\e80a';
-			}
-		}
-		
-		a {
-			color: $bleu;
-			text-decoration: none;
-		}
-		
-		li {
-			display: none;
-			line-height: 1.5em;
-			margin: .15em 0;
-			padding: .6em 1.33em .5em 4em;
-			text-align: right;
-			z-index: 500;
+		&::before {
+			position: absolute; top: 0; right: 0;
+			display: block;
+			color: $blanc;
+			content: '\e803';
+			font-family: $icons;
+			font-size: 25px;
+			height: 60px;
+			line-height: 60px;
+			text-align: center;
+			width: 60px;
 			@include transition(all);
-			
-			&:hover {
-				background-color: rgba($rouge, .15);
-				color: $rouge;
-			}
+		}
+		
+		&:hover::before {
+			background-color: rgba($blanc, .15);
+		}
+		
+		&.fermer::before {
+			content: '\e813';
+		}
+	}
+	
+	input[type='search'] {
+		position: absolute; top: 0; right: 120px;
+		display: block;
+		background-color: rgba($blanc, .15);
+		border: 0;
+		color: $blanc;
+		font-family: $fonts2;
+		font-size: 20px;
+		font-weight: 300;
+		height: 60px;
+		opacity: 0;
+		padding: 0 60px 0 10px;
+		pointer-events: none;
+		line-height: 60px;
+		width: 0;
+	}
+	
+	input[type='submit'] {
+		position: absolute; top: 10px; right: 130px;
+		display: block;
+		background-color: rgba($blanc, .66);
+		color: $bleu;
+		display: block;
+		font-family: $icons;
+		font-size: 20px;
+		height: 40px;
+		line-height: 38px;
+		margin: 0;
+		opacity: 0;
+		padding: 0;
+		pointer-events: none;
+		text-align: center;
+		width: 40px;
+		@include transition(all);
+		
+		&:hover {
+			background-color: rgba($blanc, 1);
+			color: $bleu;
 		}
 	}
 }

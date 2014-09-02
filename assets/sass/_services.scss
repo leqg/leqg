@@ -57,7 +57,7 @@ table#services {
 					display: block;
 					background-color: $bleu;
 					@include border-radius(.25em);
-					@include shadow(0, 0, .5em, $grisMoyen);
+					@include shadow(0, 5px, 0, $gris);
 					color: $blanc;
 					font-family: $icons;
 					font-size: 100px;
@@ -75,7 +75,7 @@ table#services {
 					}
 					
 					&.inactif {
-						background-color: $gris;
+						background-color: $grisMoyen;
 						pointer-events: none;
 					}
 				}
@@ -100,7 +100,7 @@ table#services {
 						@include scale(1.15);
 					
 						&.inactif {
-							background-color: $gris;
+							background-color: $grisMoyen;
 							pointer-events: none;
 							@include scale(1);
 						}
