@@ -741,6 +741,14 @@ ul.listeEncadree {
 		}
 	}
 	
+	&.rouge {
+		background-color: rgba($rouge, .33);
+		
+		strong {
+			color: $rouge;
+		}
+	}
+	
 	p {
 		margin: .33em 0 0;
 	}

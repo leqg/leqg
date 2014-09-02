@@ -58,7 +58,32 @@
 				</form>
 			</div>
 		<?php elseif ($_GET['modification'] == 'pass') : ?>
-		
+			<div>
+				<?php if (isset($_GET['message']) && $_GET['message'] == 'erreur-motdepasse') : ?>
+					<div class="message rouge">
+						<strong>Mot de passe incorrect</strong>
+						<p>Le mot de passe entré ne correspond pas au mot de passe actuel, merci de bien vouloir recommencer.</p>
+					</div>
+				<?php endif; ?>
+				<h6>Modification de votre mot de passe</h6>
+				
+				<form action="ajax.php?script=utilisateur-changement-pass" method="post">
+					<input type="hidden" name="user" value="<?php $user->the_id(); ?>">
+					<ul class="deuxColonnes">
+						<li>
+							<span class="label-information"><label for="form-pass">Mot de passe actuel</label></span>
+							<input type="password" name="actuel" id="form-pass" autofocus>
+						</li>
+						<li>
+							<span class="label-information"><label for="form-pass-new">Nouveau mot de passe</label></span>
+							<input type="password" id="form-pass-new" name="nouveau">
+						</li>
+						<li class="submit">
+							<input type="submit" value="Changer mon mot de passe">
+						</li>
+					</ul>
+				</form>
+			</div>
 		<?php endif; ?>
 	<?php else : ?>
 		<div>
@@ -77,8 +102,8 @@
 			<table id="historique-contact">
 				<thead>
 					<tr>
-						<th width="200px">Plateforme</th>
-						<th width="300px">Date</th>
+						<th>Plateforme</th>
+						<th>Date</th>
 						<th>Adresse IP</th>
 						<!--<th>Host</th>-->
 					</tr>

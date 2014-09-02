@@ -595,6 +595,10 @@ ul.listeEncadree li p {
   background-color: rgba(255, 190, 64, 0.33); }
 .message.orange strong {
   color: #ab3e5b; }
+.message.rouge {
+  background-color: rgba(171, 62, 91, 0.33); }
+.message.rouge strong {
+  color: #ab3e5b; }
 .message p {
   margin: .33em 0 0; }
 .message strong {
