@@ -132,7 +132,7 @@ class user extends core {
 	
 	// Méthode de connexion des comptes à l'interface
 	
-	public	function connexion($login, $pass) {
+	public	function connexion($login, $pass, $plateforme='desktop') {
 		// On vérifie si le login existe
 		if ($this->existence_login($login)) {
 			if ($this->verification_pass($pass, $login)) {
@@ -145,6 +145,13 @@ class user extends core {
 				
 				// On défini le timestamp dans la base de données
 				$this->noyau->query('UPDATE users SET user_lasttime = NOW() WHERE user_id = ' . $id_user);
+				
+				// On enregistre la connexion dans la table d'historique des connexions
+				$client['ipv4'] = $_SERVER['REMOTE_ADDR'];
+				$client['host'] = $_SERVER['REMOTE_HOST'];
+				$query = 'INSERT INTO `connexions` (`user_id`, `connexion_plateforme`, `connexion_ip`, `connexion_host`)
+						  VALUES ("' . $id_user . '", "' . $plateforme . '", "' . $client['ipv4'] . '", "' . $client['host'] . '")';
+				$this->noyau->query($query);
 				
 				$this->tpl_go_to(true);
 			}

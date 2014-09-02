@@ -15,7 +15,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	if (isset($_POST['login'], $_POST['pass'])) :
 	
 		// On effectue la démarche de connexion
-		$user->connexion($_POST['login'], $_POST['pass']);
+		$user->connexion($_POST['login'], $_POST['pass'], 'mobile');
 		
 	else :
 	
