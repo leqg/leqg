@@ -36,6 +36,7 @@
 			display: block;
 			background: $bleu;
 			@include border-radius(.5em);
+			@include shadow(0, 4px, 0, $gris);
 			color: $blanc;
 			content: '\e80a';
 			font-family: $icons;

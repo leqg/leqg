@@ -868,6 +868,9 @@ main.login form ul li input[type=submit]::-moz-focus-inner {
   -webkit-border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   border-radius: 0.5em;
+  -webkit-box-shadow: 0 4px 0 #cdcbca;
+  -moz-box-shadow: 0 4px 0 #cdcbca;
+  box-shadow: 0 4px 0 #cdcbca;
   color: white;
   content: '\e80a';
   font-family: "fontello";
