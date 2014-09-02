@@ -1,7 +1,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-CREATE TABLE `arrondissements` (
+CREATE TABLE IF NOT EXISTS `arrondissements` (
   `arrondissement_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
   `arrondissement_numero` smallint(2) unsigned zerofill NOT NULL,
   `departement_id` smallint(3) unsigned NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `arrondissements` (
   UNIQUE KEY `Arrondissement` (`departement_id`,`arrondissement_numero`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `bureaux` (
+CREATE TABLE IF NOT EXISTS `bureaux` (
   `bureau_id` int(11) NOT NULL AUTO_INCREMENT,
   `canton_id` smallint(4) unsigned NOT NULL,
   `commune_id` mediumint(5) unsigned NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE `bureaux` (
   PRIMARY KEY (`bureau_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `cantons` (
+CREATE TABLE IF NOT EXISTS `cantons` (
   `canton_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   `arrondissement_id` smallint(2) unsigned NOT NULL,
   `canton_numero` smallint(3) unsigned NOT NULL,
@@ -31,12 +31,12 @@ CREATE TABLE `cantons` (
   PRIMARY KEY (`canton_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `codes_postaux` (
+CREATE TABLE IF NOT EXISTS `codes_postaux` (
   `code_postal` mediumint(5) unsigned zerofill NOT NULL,
   `commune_id` mediumint(5) unsigned zerofill NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `communes` (
+CREATE TABLE IF NOT EXISTS `communes` (
   `commune_id` mediumint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `departement_id` smallint(3) unsigned NOT NULL,
   `commune_nom` varchar(100) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `communes` (
   KEY `departement_id` (`departement_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `compte` (
+CREATE TABLE IF NOT EXISTS `compte` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(50) NOT NULL,
   `nickname` varchar(100) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `compte` (
   UNIQUE KEY `login` (`login`,`email`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `contacts` (
+CREATE TABLE IF NOT EXISTS `contacts` (
   `contact_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `immeuble_id` mediumint(6) unsigned NOT NULL,
   `contact_nom` varchar(100) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `contacts` (
   KEY `commune_id` (`immeuble_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `departements` (
+CREATE TABLE IF NOT EXISTS `departements` (
   `departement_id` smallint(3) unsigned NOT NULL,
   `region_id` smallint(2) unsigned DEFAULT NULL,
   `departement_nom` varchar(50) DEFAULT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE `departements` (
   KEY `region_id` (`region_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `dossiers` (
+CREATE TABLE IF NOT EXISTS `dossiers` (
   `dossier_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dossier_nom` varchar(255) CHARACTER SET latin1 NOT NULL,
   `dossier_description` text CHARACTER SET latin1 NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE `dossiers` (
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `envois` (
+CREATE TABLE IF NOT EXISTS `envois` (
   `envoi_id` int(11) NOT NULL AUTO_INCREMENT,
   `compte_id` int(11) NOT NULL,
   `envoi_type` set('email','sms','poste') NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE `envois` (
   KEY `compte_id` (`compte_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `fichiers` (
+CREATE TABLE IF NOT EXISTS `fichiers` (
   `fichier_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` int(11) NOT NULL,
   `compte_id` int(11) NOT NULL,
@@ -146,7 +146,7 @@ CREATE TABLE `fichiers` (
   KEY `dossier_id` (`dossier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `historique` (
+CREATE TABLE IF NOT EXISTS `historique` (
   `historique_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` bigint(20) NOT NULL,
   `compte_id` int(11) NOT NULL,
@@ -165,7 +165,7 @@ CREATE TABLE `historique` (
   KEY `dossier_id` (`dossier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `immeubles` (
+CREATE TABLE IF NOT EXISTS `immeubles` (
   `immeuble_id` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
   `bureau_id` mediumint(5) unsigned DEFAULT NULL,
   `rue_id` mediumint(6) unsigned NOT NULL,
@@ -175,7 +175,7 @@ CREATE TABLE `immeubles` (
   KEY `rue_id` (`rue_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `missions` (
+CREATE TABLE IF NOT EXISTS `missions` (
   `mission_id` int(11) NOT NULL AUTO_INCREMENT,
   `ville_id` int(11) NOT NULL,
   `rue_id` int(11) NOT NULL,
@@ -190,7 +190,7 @@ CREATE TABLE `missions` (
   KEY `ville_id` (`ville_id`,`rue_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `regions` (
+CREATE TABLE IF NOT EXISTS `regions` (
   `region_id` smallint(2) unsigned NOT NULL,
   `region_nom` varchar(50) DEFAULT NULL,
   `region_chef_lieu` int(5) NOT NULL,
@@ -199,13 +199,13 @@ CREATE TABLE `regions` (
   KEY `region_chef_lieu` (`region_chef_lieu`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `reglages` (
+CREATE TABLE IF NOT EXISTS `reglages` (
   `nom` varchar(255) NOT NULL,
   `valeur` varchar(255) NOT NULL,
   UNIQUE KEY `nom` (`nom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `rues` (
+CREATE TABLE IF NOT EXISTS `rues` (
   `rue_id` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
   `commune_id` mediumint(5) unsigned zerofill NOT NULL,
   `rue_nom` tinytext NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE `rues` (
   KEY `commune_id` (`commune_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `taches` (
+CREATE TABLE IF NOT EXISTS `taches` (
   `tache_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `createur_id` int(11) NOT NULL,
   `compte_id` int(10) unsigned DEFAULT NULL,
@@ -230,7 +230,7 @@ CREATE TABLE `taches` (
   KEY `createur_id` (`createur_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `tags` (
+CREATE TABLE IF NOT EXISTS `tags` (
   `tag_nom` varchar(100) NOT NULL,
   PRIMARY KEY (`tag_nom`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
