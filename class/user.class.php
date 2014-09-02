@@ -32,7 +32,7 @@ class user extends core {
 			$donnees = $sql->fetch_assoc();
 			
 			// On vérifie si une demande de réinitialisation de la connexion n'a pas été demandée
-			if (strtotime($donnees['user_lasttime']) >= strtotime($donnees['user_reinit'])) {
+			if (strtotime($_COOKIE['leqg-time']) >= strtotime($donnees['user_reinit'])) {
 				
 				// On prépare le tableau des informations
 				$user = $this->formatage_donnees($donnees);
@@ -145,6 +145,7 @@ class user extends core {
 				
 				// On lance le cookie
 				setcookie('leqg-user', $id_user, $expire);
+				setcookie('leqg-time', time(), $expire);
 				
 				// On défini le timestamp dans la base de données
 				$this->noyau->query('UPDATE users SET user_lasttime = NOW() WHERE user_id = ' . $id_user);
