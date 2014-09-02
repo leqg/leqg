@@ -37,8 +37,8 @@
 	$mail->Subject = $objet;
 	$mail->MsgHTML($email);
 
-	$mail->Send();
-	
 	// On redirige vers la page de profil avec un message spécifique
-	$core->tpl_go_to('utilisateur', array('message' => 'changement-email'), true); 
+	if ($mail->Send()) $core->tpl_go_to('utilisateur', array('message' => 'changement-email'), true);
+	
+	
 ?>
