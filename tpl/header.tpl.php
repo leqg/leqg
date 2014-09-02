@@ -21,33 +21,22 @@
 	<!-- Contenu concret de la page -->
 	<header id="top">
 		<h1><a class="nostyle" href="http://<?php echo $config['SERVER']['url']; ?>">LeQG</a></h1>
-		
-		<ul id="parametres">
-			<a href="<?php $core->tpl_go_to('options'); ?>"><li>Options générales</li></a>
-			<a href="<?php $core->tpl_go_to('confidentialite'); ?>"><li>Confidentialité</li></a>
-			<a href="<?php $core->tpl_go_to('mentions-legales'); ?>"><li>Mentions légales</li></a>
-		</ul><!--#parametres-->
-		
-		<ul id="gestion-compte">
-			<a class="nostyle" href="<?php $core->tpl_go_to('utilisateur'); ?>"><li><?php $user->the_nickname(); ?></li></a>
-			<li><?php $user->the_email(); ?></li>
-			<li><?php $user->the_phone(true); ?></li>
-			<a class="nostyle" href="<?php $core->tpl_go_to('logout'); ?>"><li>Déconnexion</li></a>
-		</ul><!--#gestion-compte-->
+		<a class="nostyle" id="menu" href="#" title="Afficher le menu"></a>
+		<a class="nostyle" id="notifications" href="#" title="Afficher les notifications"><span></span></a>
+	</header><!--header#top-->
 	
-		<nav id="applications">
-			<ul><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('contacts'); ?>"><li><span>&#xe840;</span>Contacts</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('dossiers'); ?>"><li><span>&#xe851;</span>Dossiers</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('carto'); ?>"><li><span>&#xe845;</span>Cartographie</li></a><!--
-			 -->	<a class="nostyle" href="<?php $core->tpl_go_to('porte'); ?>"><li><span>&#xe841;</span>Porte à porte</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('boite'); ?>"><li><span>&#xe84d;</span>Boîtage</li></a><!--
-			 --><?php /*<a class="nostyle" href="<?php $core->tpl_go_to('rappels'); ?>"><li><span>&#xe854;</span>Rappels</li></a><!--
-			 -->*/ ?><a class="nostyle" href="<?php $core->tpl_go_to('poste'); ?>"><li><span>&#xe8ef;</span>Publipostage</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('email'); ?>"><li><span>&#xe805;</span>Emailing</li></a><!--
-			 --><a class="nostyle" href="<?php $core->tpl_go_to('sms'); ?>"><li><span>&#xe8e4;</span>SMS</li></a><!--
-		 --></ul>
-		</nav>
-	</header><!--#top-->
+	<!-- Navigation principale -->
+	<nav id="principale">
+		<a href="<?php $core->tpl_go_to('utilisateur'); ?>" id="lien-utilisateur">Mon compte</a>
+		<a href="<?php $core->tpl_go_to('contacts'); ?>" id="lien-contacts">Contacts</a>
+		<a href="<?php $core->tpl_go_to('dossiers'); ?>" id="lien-dossiers">Dossiers</a>
+		<a href="<?php $core->tpl_go_to('carto'); ?>" id="lien-carto">Cartographie</a>
+		<a href="<?php $core->tpl_go_to('sms'); ?>" id="lien-sms">SMS groupés</a>
+		<a href="<?php $core->tpl_go_to('email'); ?>" id="lien-email">Emails groupés</a>
+		<a href="<?php $core->tpl_go_to('poste'); ?>" id="lien-poste">Publipostage</a>
+		<a href="<?php $core->tpl_go_to('porte'); ?>" id="lien-porte">Porte-à-porte</a>
+		<a href="<?php $core->tpl_go_to('boite'); ?>" id="lien-boite">Boîtage</a>
+		<a href="<?php $core->tpl_go_to('rappels'); ?>" id="lien-rappels" class="inactif">Rappels</a>
+	</nav><!--nav#principale-->
 	
 	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; } ?>">

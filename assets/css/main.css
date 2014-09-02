@@ -234,6 +234,8 @@ html, body {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   height: 100%;
   margin: 0;
+  overflow-x: hidden;
+  overflow-y: visible;
   padding: 0;
   width: 100%; }
 
@@ -259,7 +261,10 @@ main {
   overflow-y: scroll;
   padding: 0;
   padding-top: 50px;
-  width: 100%; }
+  width: 100%;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
 main aside {
   position: absolute;
   top: 0;
@@ -630,127 +635,190 @@ header#top {
   background: #2c3e50;
   color: white;
   font-size: 1em;
-  height: 50px;
-  padding: .33em 1em;
+  height: 60px;
+  padding: 0;
   width: 100%;
   z-index: 9999; }
-header#top > nav {
+header#top #menu {
   position: absolute;
-  top: 50px;
-  right: 115px;
-  display: block;
-  margin: 0;
-  padding: 0; }
-header#top > nav::before {
-  position: absolute;
-  top: -50px;
-  right: 1px;
-  display: block;
-  background: rgba(255, 255, 255, 0);
-  color: white;
-  content: '\e810';
-  font-family: "fontello";
-  font-size: 2em;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  width: 50px;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out; }
-header#top > nav:hover::before {
-  background: white;
-  color: #2c3e50; }
-header#top > nav:hover ul {
-  display: table;
-  border: 1px solid #2c3e50;
-  border-collapse: collapse;
-  border-top: none;
-  margin: 0;
-  width: 347px; }
-header#top > nav ul {
-  display: none;
-  background: white; }
-header#top > nav ul a {
+  top: 0;
+  left: 0;
   display: inline-block;
-  color: #2c3e50;
-  text-decoration: none; }
-header#top > nav ul li {
-  display: table-cell;
-  height: 100px;
+  background-color: #2c3e50;
+  color: white;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  height: 60px;
+  line-height: 60px;
   overflow: hidden;
-  padding: 1em;
   text-align: center;
-  vertical-align: middle;
-  width: 115px;
-  z-index: 500;
+  width: 60px; }
+header#top #menu::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  background-color: transparent;
+  color: white;
+  content: '\e811';
+  font-family: "fontello";
+  font-size: 35px;
+  height: 60px;
+  line-height: 60px;
+  width: 60px;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out; }
-header#top > nav ul li:hover {
-  color: #ab3e5b; }
-header#top > nav ul li span {
-  display: block;
-  font-family: "fontello";
-  font-size: 2.5em; }
-header#top > ul {
+header#top #menu:hover {
+  background-color: rgba(255, 255, 255, 0.15); }
+header#top #menu.actif::after {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg); }
+header#top > h1 {
   position: absolute;
-  top: 50px;
-  display: block;
-  background: white;
-  color: #2c3e50;
+  top: 0;
+  left: 60px;
+  display: inline-block;
+  height: 60px;
+  line-height: 60px;
   margin: 0;
-  padding: .33em 0 .5em 0; }
-header#top > ul::before {
+  padding: 0 0 0 15px;
+  width: 200px; }
+header#top > a#notifications {
   position: absolute;
-  top: -50px;
+  top: 0;
   right: 0;
   display: block;
-  background: rgba(255, 255, 255, 0);
-  border: 0;
-  color: white;
-  font-family: "fontello";
-  font-size: 1.66em;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  width: 50px;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out; }
-header#top > ul:hover {
-  border: 1px solid #2c3e50;
-  border-top: 0; }
-header#top > ul:hover::before {
-  background: white;
-  border: 0;
-  color: #2c3e50; }
-header#top > ul:hover li {
-  display: block; }
-header#top > ul#parametres {
-  right: 65px; }
-header#top > ul#parametres::before {
-  content: '\e855'; }
-header#top > ul#gestion-compte {
-  right: 15px; }
-header#top > ul#gestion-compte::before {
-  content: '\e80a'; }
-header#top > ul a {
   color: #2c3e50;
-  text-decoration: none; }
-header#top > ul li {
-  display: none;
-  line-height: 1.5em;
-  margin: .15em 0;
-  padding: .6em 1.33em .5em 4em;
-  text-align: right;
-  z-index: 500;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  width: 60px;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out; }
-header#top > ul li:hover {
-  background-color: rgba(171, 62, 91, 0.15);
+header#top > a#notifications::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  color: white;
+  content: '\e83d';
+  font-family: "fontello";
+  font-size: 25px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  width: 60px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
+header#top > a#notifications:hover::before {
+  background-color: rgba(255, 255, 255, 0.15); }
+header#top > a#notifications > span {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: block;
+  background-color: #ab3e5b;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  color: white;
+  font-size: 15px;
+  height: 15px;
+  width: 15px; }
+
+/*
+ *
+ *	Feuille de style dédiée à la navigation du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+/************************************
+ *									*
+ *				 NAV				* 
+ *									*
+ ************************************/
+nav#principale {
+  position: absolute;
+  top: 0;
+  left: -260px;
+  display: block;
+  background-color: #edeceb;
+  height: 100%;
+  margin: 0;
+  padding: 70px 0 0 5px;
+  width: 260px;
+  z-index: 1000;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
+nav#principale > a {
+  position: relative;
+  display: block;
+  color: #a8a4a3;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  height: 65px;
+  line-height: 65px;
+  padding: 0 15px 0 70px;
+  text-decoration: none;
+  width: 100%; }
+nav#principale > a::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  font-family: "fontello";
+  font-size: 30px;
+  height: 65px;
+  line-height: 65px;
+  text-align: center;
+  width: 65px; }
+nav#principale > a#lien-contacts::before {
+  content: '\e840'; }
+nav#principale > a#lien-dossiers::before {
+  content: '\e851'; }
+nav#principale > a#lien-carto::before {
+  content: '\e845'; }
+nav#principale > a#lien-sms::before {
+  content: '\e8e4'; }
+nav#principale > a#lien-email::before {
+  content: '\e805'; }
+nav#principale > a#lien-poste::before {
+  content: '\e8ef'; }
+nav#principale > a#lien-porte::before {
+  content: '\e841'; }
+nav#principale > a#lien-boite::before {
+  content: '\e84d'; }
+nav#principale > a#lien-rappels::before {
+  content: '\e854'; }
+nav#principale > a#lien-utilisateur::before {
+  content: '\e952';
+  font-size: 45px; }
+nav#principale > a#lien-utilisateur::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #edeceb;
+  content: '\e80a';
+  font-family: "fontello";
+  font-size: 25px;
+  height: 65px;
+  line-height: 65px;
+  text-align: center;
+  width: 65px; }
+nav#principale > a#lien-utilisateur:hover {
   color: #ab3e5b; }
+nav#principale > a:hover {
+  color: #2c3e50; }
+nav#principale > a.inactif {
+  color: #d9d8d7;
+  pointer-events: none; }
 
 /*
  *
@@ -1530,9 +1598,9 @@ table#services tr td a span {
   -webkit-border-radius: 0.25em;
   -moz-border-radius: 0.25em;
   border-radius: 0.25em;
-  -webkit-box-shadow: 0 0 0.5em #a8a4a3;
-  -moz-box-shadow: 0 0 0.5em #a8a4a3;
-  box-shadow: 0 0 0.5em #a8a4a3;
+  -webkit-box-shadow: 0 5px 0 #cdcbca;
+  -moz-box-shadow: 0 5px 0 #cdcbca;
+  box-shadow: 0 5px 0 #cdcbca;
   color: white;
   font-family: "fontello";
   font-size: 100px;
@@ -1550,7 +1618,7 @@ table#services tr td a span {
     line-height: 100px;
     width: 100px; } }
 table#services tr td a span.inactif {
-  background-color: #cdcbca;
+  background-color: #a8a4a3;
   pointer-events: none; }
 table#services tr td a:hover.inactif {
   cursor: default; }
@@ -1567,7 +1635,7 @@ table#services tr td a:hover span {
   -ms-transform: scale(1.15);
   transform: scale(1.15); }
 table#services tr td a:hover span.inactif {
-  background-color: #cdcbca;
+  background-color: #a8a4a3;
   pointer-events: none;
   -webkit-transform: scale(1);
   -moz-transform: scale(1);

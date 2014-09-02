@@ -39,6 +39,13 @@ $fonts2:	'Fira Sans', Helvetica, Arial, sans-serif;
 $monospaced:'Fira Mono', monospace;
 $icons:		'fontello';
 
+// Nouvelles couleurs
+$lightGrey:	rgba(237, 236, 235, 1);
+$mediumGrey:rgba(186, 186, 186, 1);
+$grey:		rgba(130, 134, 135, 1);
+$darkerGrey:rgba( 67,  77,  84, 1);
+$darkGrey:	rgba( 42,  52,  58, 1);
+
 
 
 /********************************
@@ -309,6 +316,8 @@ body {
 	font-family: $fonts1;
 	height: 100%;
 	margin: 0;
+	overflow-x: hidden;
+	overflow-y: visible;
 	padding: 0;
 	width: 100%;
 }
@@ -337,6 +346,7 @@ main {
 	padding: 0;
 	padding-top: 50px;
 	width: 100%;
+	@include transition(all);
 	
 	aside {
 		position: absolute; top: 0; right: 0;
@@ -772,6 +782,9 @@ ul.listeEncadree {
 
 // Style dédié au header
 @import "header.scss";
+
+// Style dédié à la navigation
+@import "nav.scss";
 
 // Style dédié au formulaire de login
 @import "login.scss";
