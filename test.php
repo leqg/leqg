@@ -18,6 +18,8 @@ while ($row = $sql->fetch_assoc()) :
 
 	$rue = $row['rue_nom'];
 	$rue = str_replace('Chem ', 'Chemin ', $rue);
+	$rue = str_replace('Pce ', 'Place ', $rue);
+	$rue = str_replace('Rte ', 'Route ', $rue);
 	$db->query('UPDATE `rues` SET `rue_nom` = "' . $rue . '" WHERE `rue_id` = ' . $row['rue_id']);
 
 endwhile;
