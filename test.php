@@ -5,12 +5,22 @@ require_once('includes.php');
 
 
 // On teste la recherche
-$recherche = 'rue du';
-$rue = $core->formatage_recherche($recherche);
-$rues = $carto->recherche_rue('67482', $rue);
+//$recherche = 'chem';
+//$rue = $core->formatage_recherche($recherche);
+//$rues = $carto->recherche_rue('67482', $rue);
 
-$core->debug($rues);
+//$core->debug($rues);
 
+$query = 'SELECT * FROM `rues` WHERE `rue_id` LIKE "%chem %"';
+$sql = $db->query($query);
+
+while ($row = $sql->fetch_assoc()) :
+
+	$rue = $row['rue_nom'];
+	$rue = str_replace('Chem ', 'Chemin ', $rue);
+	$db->query('UPDATE `rues` SET `rue_nom` = "' . $rue . '" WHERE `rue_id` = ' . $row['rue_id']);
+
+endwhile;
 
 
 
