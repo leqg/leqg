@@ -16,6 +16,18 @@
 	   		box-shadow: inset $x $y $blur $color;
 }
 
+@mixin text-shadow($x, $y, $blur, $color) {
+	-webkit-text-shadow: $x $y $blur $color;
+	   -moz-text-shadow: $x $y $blur $color;
+	   		text-shadow: $x $y $blur $color;
+}
+
+@mixin text-shadow-inset($x, $y, $blur, $color) {
+	-webkit-text-shadow: inset $x $y $blur $color;
+	   -moz-text-shadow: inset $x $y $blur $color;
+	   		text-shadow: inset $x $y $blur $color;
+}
+
 @mixin transition($property) {
 	-webkit-transition: $property .2s ease-in-out;
 	   -moz-transition: $property .2s ease-in-out;

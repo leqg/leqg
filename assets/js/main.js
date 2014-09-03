@@ -115,6 +115,7 @@ var main = function() {
 				$('#notificationCenter').css('right', 0);
 			}
 		});
+		
 };
 
 $(document).ready(main);

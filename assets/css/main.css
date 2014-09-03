@@ -822,13 +822,35 @@ aside#notificationCenter {
   position: absolute;
   top: 0;
   right: -350px;
-  display: block;
+  display: table;
   background-color: #edeceb;
   height: 100%;
+  margin: 0;
+  padding: 60px 0 0;
   width: 350px;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out; }
+aside#notificationCenter #vide {
+  display: table-cell;
+  color: #a8a4a3;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+  font-size: 1.66em;
+  pointer-events: none;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%; }
+aside#notificationCenter #vide::before {
+  display: block;
+  color: #a8a4a3;
+  content: '\e83d';
+  font-family: "fontello";
+  font-size: 100px;
+  height: 150px;
+  line-height: 100px;
+  margin: 0 auto;
+  text-align: center;
+  width: 200px; }
 
 /*
  *

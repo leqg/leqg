@@ -16,9 +16,35 @@
 
 aside#notificationCenter {
 	position: absolute; top: 0; right: -350px;
-	display: block;
+	display: table;
 	background-color: $lightGrey;
 	height: 100%;
+	margin: 0;
+	padding: 60px 0 0;
 	width: 350px;
 	@include transition(all);
+	
+	#vide {
+		display: table-cell;
+		color: $grisMoyen;
+		font-family: $fonts2;
+		font-size: 1.66em;
+		pointer-events: none;
+		text-align: center;
+		vertical-align: middle;
+		width: 100%;
+		
+		&::before {
+			display: block;
+			color: $grisMoyen;
+			content: '\e83d';
+			font-family: $icons;
+			font-size: 100px;
+			height: 150px;
+			line-height: 100px;
+			margin: 0 auto;
+			text-align: center;
+			width: 200px;
+		}
+	}
 }
