@@ -824,6 +824,7 @@ aside#notificationCenter {
   right: -350px;
   display: table;
   background-color: #edeceb;
+  border-left: 5px solid #cdcbca;
   height: 100%;
   margin: 0;
   padding: 60px 0 0;

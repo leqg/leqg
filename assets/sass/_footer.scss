@@ -18,6 +18,7 @@ aside#notificationCenter {
 	position: absolute; top: 0; right: -350px;
 	display: table;
 	background-color: $lightGrey;
+	border-left: 5px solid $gris;
 	height: 100%;
 	margin: 0;
 	padding: 60px 0 0;
