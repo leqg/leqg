@@ -11,7 +11,7 @@ require_once('includes.php');
 
 //$core->debug($rues);
 
-$query = 'SELECT * FROM `rues` WHERE `rue_id` LIKE "%chem %"';
+$query = 'SELECT * FROM `rues`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) :
