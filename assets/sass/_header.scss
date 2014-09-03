@@ -98,14 +98,14 @@ header#top {
 		}
 		
 		& > span {
-			position: absolute; top: 8px; right: 8px;
+			position: absolute; top: 12px; right: 12px;
 			display: block;
 			background-color: $rouge;
 			@include border-radius(50%);
 			color: $blanc;
-			font-size: 15px;
-			height: 15px;
-			width: 15px;
+			font-size: 10px;
+			height: 10px;
+			width: 10px;
 		}
 	}
 	
