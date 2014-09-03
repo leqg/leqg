@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée au footer du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			  	FOOTER				* 
+ *									*
+ ************************************/
+
+aside#notificationCenter {
+	position: absolute; top: 0; right: -350px;
+	display: block;
+	background-color: $lightGrey;
+	height: 100%;
+	width: 350px;
+	@include transition(all);
+}

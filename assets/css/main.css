@@ -729,6 +729,8 @@ header#top > a#notifications > span {
   font-size: 10px;
   height: 10px;
   width: 10px; }
+header#top > a#notifications.actif {
+  background-color: #ab3e5b; }
 header#top > a#recherche {
   position: absolute;
   top: 0;
@@ -803,6 +805,30 @@ header#top input[type='submit'] {
 header#top input[type='submit']:hover {
   background-color: white;
   color: #2c3e50; }
+
+/*
+ *
+ *	Feuille de style dédiée au footer du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+/************************************
+ *									*
+ *			  	FOOTER				* 
+ *									*
+ ************************************/
+aside#notificationCenter {
+  position: absolute;
+  top: 0;
+  right: -350px;
+  display: block;
+  background-color: #edeceb;
+  height: 100%;
+  width: 350px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
 
 /*
  *

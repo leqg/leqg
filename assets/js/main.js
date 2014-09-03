@@ -102,6 +102,19 @@ var main = function() {
 				return false;
 			}
 		});
+		
+		
+	// Script d'ouverture du centre de notification
+		$('#notifications').click(function(){
+			if ($(this).hasClass('actif')) {
+				$(this).toggleClass('actif');
+				$('#notificationCenter').css('right', '-350px');
+			} else {
+				$(this).toggleClass('actif');
+				$('#notifications').html('');
+				$('#notificationCenter').css('right', 0);
+			}
+		});
 };
 
 $(document).ready(main);
