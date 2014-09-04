@@ -706,6 +706,9 @@ class fiche extends core {
 		if (!empty($infos['email'])) {
 			$this->db->query('UPDATE contacts SET contact_email = "' .$infos['email']. '" WHERE contact_id = ' . $id);
 		}
+		if (!empty($infos['tags'])) {
+			$this->db->query('UPDATE contacts SET contact_tags = "' .$infos['tags']. '" WHERE contact_id = ' . $id);
+		}
 		
 		// On renvoit l'id de l'entrée
 		return $id; 

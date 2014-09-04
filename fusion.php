@@ -3,8 +3,8 @@
 	require_once 'includes.php';
 	
 	// On règle d'abord les paramètres
-	$file = 'parti';
-	$tag = 'militant';
+	if (isset($_GET['fichier'])) { $file = $_GET['fichier']; } else { exit; }
+	$tag = array('militant', 'parti');
 
 
 	// On lance la lecture du fichier
@@ -14,30 +14,40 @@
 	
 	// On prépare un tableau des anomalies
 	$anomalies = array();
+	$afficher = array();
 	
 	// On lance l'analyse ligne par ligne
 	foreach ($data as $key => $line) :
 	
 		// On ne lance l'analyse que s'il ne s'agit pas de la première ligne d'entête
-		if ($key > 0) :
+		if ($key >= 0) :
 		
-			$donnees = array('nom'		=> $line[3],
-							 'prenom'	=> $line[4],
-							 'fixe'		=> $line[7],
-							 'mobile'	=> $line[9],
-							 'email'	=> $line[8],
-							 'adresse'	=> $line[10],
+			$donnees = array('nom'		=> trim($line[3]),
+							 'prenom'	=> trim($line[4]),
+							 'fixe'		=> trim($line[7]),
+							 'mobile'	=> trim($line[9]),
+							 'email'	=> trim($line[8]),
+							 'adresse'	=> trim($line[10]),
 							 'numero'	=> null,
 							 'rue'		=> null,
-							 'cp'		=> $line[11],
-							 'ville'	=> $line[12]);
+							 'cp'		=> trim($line[11]),
+							 'ville'	=> trim($line[12]));
 						
 							 
 			// On commence par retraiter l'adresse
-				$rue = explode(' ', $line[10], 2);
-				$donnees['numero'] = $rue[0];
-				$donnees['rue'] = $rue[1];
-			
+				$rue = explode(' ', $line[10], 3);
+				$bis = array('a', 'b', 'c', 'bis', 'ter');
+				if (in_array(strtolower($rue[1]), $bis)) {
+					$donnees['numero'] = $rue[0].$rue[1];
+					$donnees['rue'] = $rue[2];
+				} elseif (isset($rue[2])) {
+					$donnees['numero'] = $rue[0];
+					$donnees['rue'] = $rue[1] . ' ' . $rue[2];
+				} else {
+					$donnees['numero'] = $rue[0];
+					$donnees['rue'] = $rue[1];
+				}
+							
 			
 			// On retraite les numéros de téléphone pour retirer tout ce qui n'est pas des chiffres
 				$donnees['fixe'] = preg_replace('`[^0-9]`', '', $donnees['fixe']);
@@ -61,7 +71,7 @@
 				} else {
 					// On rajoute la rue dans la base de données
 					$query = 'INSERT INTO rues (commune_id, rue_nom) VALUES (' . $code['ville'] . ', "' . $donnees['rue'] . '")';
-	//				$db->query($query);
+					$db->query($query);
 					$code['rue'] = $db->insert_id;
 				}
 		
@@ -76,8 +86,8 @@
 					$code['immeuble'] = $row['immeuble_id'];
 				} else {
 					// On rajoute l'immeuble dans la base de données
-					$query = 'INSERT INTO immeubles (bureau_id, rue_id, immeuble_numero) VALUES (' . $code['bureau'] . ', ' . $code['rue'] . ', "' . $donnees['immeuble'] . '")';
-	//				$db->query($query);
+					$query = 'INSERT INTO immeubles (bureau_id, rue_id, immeuble_numero) VALUES ("", ' . $code['rue'] . ', "' . $donnees['numero'] . '")';
+					$db->query($query);
 					$code['immeuble'] = $db->insert_id;
 				}
 				
@@ -112,16 +122,54 @@
 							// S'il existe plusieurs fiches, on note l'anomalie
 							else :
 								
-								$code['fiche'] = 0;
-								$anomalies[] = array('multi-adresse', $donnees, $code);
+								// On cherche si dans la base il existe exactement le même prénom pour les fiches où la recherche donne trop de noms
+								$query = 'SELECT * FROM `contacts` WHERE ( `contact_nom` = "' . $core->formatage_recherche($donnees['nom']) . '" OR `contact_nom_usage`= "' . $core->formatage_recherche($donnees['nom']) . '" ) AND `contact_prenoms` LIKE "' . $core->formatage_recherche($donnees['prenom']) . ' %"';
+								$sql = $db->query($query);
+
+								// Si une fiche seule est trouvée
+								if ($sql->num_rows == 1) :
+								
+									$row = $sql->fetch_assoc();
+									$code['fiche'] = $row['contact_id'];
+									
+								elseif ($sql->num_rows > 1) :
+								
+									$code['fiche'] = null;
+									$anomalies[$key] = array('multi-nom-strict', $donnees, $code);
+									
+								else :
+								
+									$code['fiche'] = null;
+									$anomalies[$key] = array('multi-adresse', $donnees, $code);
+								
+								endif;
 															
 							endif;
 						
 						// Si aucune fiche ne correspond
 						else :
 						
-							$code['fiche'] = 0;
-							$anomalies[] = array('multi-nom', $donnees, $code);
+							// On cherche si dans la base il existe exactement le même prénom pour les fiches où la recherche donne trop de noms
+							$query = 'SELECT * FROM `contacts` WHERE ( `contact_nom` = "' . $core->formatage_recherche($donnees['nom']) . '" OR `contact_nom_usage`= "' . $core->formatage_recherche($donnees['nom']) . '" ) AND ( `contact_prenoms` LIKE "' . $core->formatage_recherche($donnees['prenom']) . '" OR `contact_prenoms` LIKE "' . $core->formatage_recherche($donnees['prenom']) . ' %" )';
+							$sql = $db->query($query);
+
+							// Si une fiche seule est trouvée
+							if ($sql->num_rows == 1) :
+							
+								$row = $sql->fetch_assoc();
+								$code['fiche'] = $row['contact_id'];
+								
+							elseif ($sql->num_rows > 1) :
+							
+								$code['fiche'] = null;
+								$anomalies[$key] = array('multi-nom-strict', $donnees, $code);
+								
+							else :
+							
+								$code['fiche'] = null;
+								$anomalies[$key] = array('multi-nom', $donnees, $code);
+							
+							endif;
 						
 						endif;
 						
@@ -134,9 +182,73 @@
 				
 					// Aucune fiche
 					$code['fiche'] = null;
-					//$anomalies[] = array('aucun', $donnees, $code);
 				
 				endif;
+				
+				
+				// Une fois que l'on possède les informations sur la fiche à fusionner, on regarde ce qu'on peut faire
+				if (!is_null($code['fiche'])) :
+				
+					// On recherche des informations sur la fiche du fichier électoral
+					$query = 'SELECT * FROM `contacts` WHERE `contact_id` = ' . $code['fiche'];
+					$sql = $db->query($query);
+					$row = $sql->fetch_assoc();
+					
+					// On va récupérer les tags et ajouter les tags demandés
+					$tags = explode(',', $row['contact_tags']);
+					foreach ($tag as $t) $tags[] = $t;
+					$tags = trim(implode(',', $tags), ',');
+					
+					// On va préparer le fusion des données dans un tableau $modifs
+					$modifs = array();
+					if (preg_match('`^[0-9]{9,10}$`', $donnees['fixe'])) $modifs[] = '`contact_telephone` = ' . $donnees['fixe'];
+					if (preg_match('`^[0-9]{9,10}$`', $donnees['mobile'])) $modifs[] = '`contact_mobile` = ' . $donnees['mobile'];
+					if (!is_null($donnees['email']) && !empty($donnees['email'])) $modifs[] = '`contact_email` = "' . $donnees['email'] . '"';
+					if (!is_null($code['immeuble']) && !empty($code['immeuble'])) $modifs[] = '`adresse_id` = ' . $code['immeuble'];
+					
+					// Dans tous les cas, on ajoute les tags
+					$modifs[] = '`contact_tags` = "' . $tags . '"';
+					
+					$condition = '';
+					
+					foreach ($modifs as $key => $modif) :
+					
+						$condition.= ($key == 0) ? ' SET ' : ' , ';
+						
+						$condition.= $modif;
+					
+					endforeach;
+					
+					$query = 'UPDATE `contacts`' . $condition . ' WHERE `contact_id` = ' . $code['fiche'];
+					$db->query($query);
+					
+					unset($condition);
+					unset($tags);
+				
+				else :
+				
+					if (!preg_match('`^[0-9]{9,10}$`', $donnees['fixe'])) $donnees['fixe'] = '';
+					if (!preg_match('`^[0-9]{9,10}$`', $donnees['mobile'])) $donnees['mobile'] = '';
+
+					// Si aucune fiche n'existe, on créé cette fiche
+					$informations = array('immeuble' => $code['immeuble'],
+										  'nom' => $core->securisation_string($donnees['nom']),
+										  'nom-usage' => '',
+										  'prenoms' => $core->securisation_string($donnees['prenom']),
+										  'sexe' => 'i',
+										  'date-naissance' => '',
+										  'mobile' => $donnees['mobile'],
+										  'telephone' => $donnees['fixe'],
+										  'email' => $donnees['email'],
+										  'tags' => trim(implode(',', $tag), ','));
+					$id_fiche = $fiche->creerContact($informations);
+	
+					// Si la fiche existe dans le tableau des anomalies, on créé un rapport de doublon
+					if (array_key_exists($key, $anomalies)) $db->query('INSERT INTO `doublons` (`contact_id`) VALUES (' . $id_fiche . ')');
+				
+				endif;
+				
+				$afficher[] = array_merge($donnees, $code);
 		
 		elseif ($key != 0) :
 		
@@ -145,8 +257,6 @@
 		endif;
 	
 	endforeach;
-	
-	$core->debug($anomalies);
-
-
 ?>
+
+<a href="analyse-fusion.php?fichier=<?php echo $_GET['fichier']; ?>">On passe à l'analyse des données du fichier</a>

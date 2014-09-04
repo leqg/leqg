@@ -11,7 +11,7 @@ require_once('includes.php');
 
 //$core->debug($rues);
 
-$query = 'SELECT * FROM `rues`';
+/*$query = 'SELECT * FROM `rues`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) :
@@ -26,8 +26,39 @@ while ($row = $sql->fetch_assoc()) :
 	$rue = str_replace('Bd ', 'Boulevard ', $rue);
 	$db->query('UPDATE `rues` SET `rue_nom` = "' . $rue . '" WHERE `rue_id` = ' . $row['rue_id']);
 
-endwhile;
+endwhile;*/
 
+
+$data = $csv->lectureFichier('csv/parti.csv');
+
+// On prépare les tableaux des résultats
+$resultats = array();
+
+foreach ($data as $key => $line) {
+	
+	$donnees = array('nom'		=> trim($line[3]),
+					 'prenom'	=> trim($line[4]),
+					 'fixe'		=> trim($line[7]),
+					 'mobile'	=> trim($line[9]),
+					 'email'	=> trim($line[8]),
+					 'adresse'	=> trim($line[10]),
+					 'numero'	=> null,
+					 'rue'		=> null,
+					 'cp'		=> trim($line[11]),
+					 'ville'	=> trim($line[12]));
+
+	if ($key > 0) break;
+	
+	// On cherche la fiche dont le nom correspond à la ligne, avec pour tag 'parti'
+	$query = 'SELECT * FROM `contacts` WHERE (`contact_nom` LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%" OR `contact_nom_usage` LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%") AND `contact_prenoms` LIKE "%' . $core->formatage_recherche($donnees['prenom']) . '%" AND `contact_tags` LIKE "%parti%"';
+	$sql = $db->query($query); $core->debug($query);
+	
+	if ($sql->num_rows == 1) { $resultats['correct'][] = $line; }
+	elseif ($sql->num_rows > 1) { $resultats['doublons'][] = $line; }
+	else { $resultats['aucun'][] = $line; }
+}
+
+	$core->debug($resultats['doublons']);
 
 
 // Traitement de la date de naissance

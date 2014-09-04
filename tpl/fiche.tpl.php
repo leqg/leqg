@@ -71,6 +71,11 @@
 				<span id="reussite-form-telephone">&#xe812;</span>
 				<span id="sauvegarde-form-telephone">&#xe917;</span>
 			</li>
+			<li>
+				<span class="label-information">Tags</span>
+				<?php $sql = $db->query('SELECT * FROM `contacts` WHERE `contact_id` = ' . $_GET['id']); $ttttags = $sql->fetch_assoc(); ?>
+				<p><?php echo $ttttags['contact_tags']; ?>&nbsp;</p>
+			</li>
 		</ul>
 	</form>
 </section>
