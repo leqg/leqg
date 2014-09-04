@@ -45,10 +45,13 @@
 				// On récupère les informations de la fiche
 				$row = $sql->fetch_assoc();
 				
+				if ($row['contact_mobile'] == '0000000000') $row['contact_mobile'] = '';
+				if ($row['contact_telephone'] == '0000000000') $row['contact_telephone'] = '';
+				
 				// On regarde si des informations diffères et on créé un rapport
 				if ($row['contact_mobile'] != $donnees['mobile']) $anomalies[] = array($row['contact_id'], 'mobile', trim($line[9]));
-				if ($row['contact_telephone'] != $donnees['fixe']) $anomalies[] = array($row['contact_id'], 'mobile', trim($line[7]));
-				if ($row['contact_email'] != $donnees['email']) $anomalies[] = array($row['contact_id'], 'mobile', trim($line[8]));
+				if ($row['contact_telephone'] != $donnees['fixe']) $anomalies[] = array($row['contact_id'], 'fixe', trim($line[7]));
+				if ($row['contact_email'] != $donnees['email']) $anomalies[] = array($row['contact_id'], 'email', trim($line[8]));
 				
 			endif;
 		
