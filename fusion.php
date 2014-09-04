@@ -62,10 +62,10 @@
 				
 			// On continu en vérifiant si la rue existe déjà
 				$query = 'SELECT * FROM rues WHERE commune_id = ' . $code['ville'] . ' AND rue_nom LIKE "%' . $core->formatage_recherche($donnees['rue']) . '%" LIMIT 0,1';
-				$sql = $db->query($query); $nb = $sql->num_rows;
+				$sql = $db->query($query);
 			
 				// S'il existe déjà une rue dans la base de données, on récupère l'identifiant
-				if ($nb == 1) {
+				if ($sql->num_rows == 1) {
 					$row = $sql->fetch_assoc();
 					$code['rue'] = $row['rue_id'];
 				} else {
