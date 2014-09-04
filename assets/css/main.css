@@ -1890,6 +1890,7 @@ table.rechercheGlobale tr {
 table.rechercheGlobale tr td {
   position: relative;
   border: none;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
   vertical-align: top;
