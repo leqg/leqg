@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `bureaux` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `cantons` (
-  `canton_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  `canton_id` smallint(4) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `arrondissement_id` smallint(2) unsigned NOT NULL,
   `canton_numero` smallint(3) unsigned NOT NULL,
   `canton_nom` varchar(50) NOT NULL,
@@ -62,11 +62,12 @@ CREATE TABLE IF NOT EXISTS `compte` (
 CREATE TABLE IF NOT EXISTS `contacts` (
   `contact_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `immeuble_id` mediumint(6) unsigned NOT NULL,
+  `adresse_id` int(11) NOT NULL,
   `contact_nom` varchar(100) NOT NULL,
   `contact_nom_usage` varchar(100) NOT NULL,
   `contact_prenoms` varchar(100) NOT NULL,
   `contact_naissance_date` date NOT NULL,
-  `contact_naissance_commune_id` mediumint(5) NOT NULL,
+  `contact_naissance_commune_id` mediumint(5) DEFAULT NULL,
   `contact_sexe` set('M','F','i') NOT NULL DEFAULT 'i',
   `contact_deces` tinyint(1) NOT NULL,
   `contact_email` varchar(255) DEFAULT NULL,
@@ -85,7 +86,8 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   `contact_tags` text,
   PRIMARY KEY (`contact_id`),
   KEY `contact_nom` (`contact_nom`,`contact_nom_usage`,`contact_prenoms`),
-  KEY `commune_id` (`immeuble_id`)
+  KEY `commune_id` (`immeuble_id`),
+  KEY `adresse_id` (`adresse_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `departements` (
@@ -109,6 +111,16 @@ CREATE TABLE IF NOT EXISTS `dossiers` (
   PRIMARY KEY (`dossier_id`),
   KEY `dossier_nom` (`dossier_nom`,`dossier_date_ouverture`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `doublons` (
+  `doublon_id` int(11) NOT NULL AUTO_INCREMENT,
+  `contact_id` int(11) NOT NULL,
+  `doublon_statut` int(11) NOT NULL DEFAULT '1',
+  `doublon_date_ouverture` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `doublon_date_fermeture` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`doublon_id`),
+  KEY `contact_id` (`contact_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='doublon_statut 1 = ouvert 0 = fermé';
 
 CREATE TABLE IF NOT EXISTS `envois` (
   `envoi_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -146,12 +158,21 @@ CREATE TABLE IF NOT EXISTS `fichiers` (
   KEY `dossier_id` (`dossier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `fusion_erreurs` (
+  `fusion_erreur_id` int(11) NOT NULL AUTO_INCREMENT,
+  `contact_id` int(11) NOT NULL,
+  `fusion_erreur_case` varchar(255) NOT NULL,
+  `fusion_erreur_entree` varchar(255) NOT NULL,
+  PRIMARY KEY (`fusion_erreur_id`),
+  KEY `contact_id` (`contact_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `historique` (
   `historique_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` bigint(20) NOT NULL,
   `compte_id` int(11) NOT NULL,
   `dossier_id` int(11) DEFAULT NULL,
-  `historique_type` set('contact','telephone','email','courrier','autre','sms','courriel','porte','boite','rappel','poste') NOT NULL,
+  `historique_type` set('contact','telephone','email','courrier','sms','autre','courriel','porte','boite','rappel') NOT NULL,
   `historique_date` date NOT NULL,
   `historique_lieu` varchar(255) NOT NULL,
   `historique_objet` varchar(255) NOT NULL,
@@ -161,6 +182,7 @@ CREATE TABLE IF NOT EXISTS `historique` (
   PRIMARY KEY (`historique_id`),
   KEY `contact_id` (`contact_id`),
   KEY `compte_id` (`compte_id`),
+  KEY `contact_id_2` (`contact_id`),
   KEY `historique_objet` (`historique_objet`),
   KEY `dossier_id` (`dossier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
