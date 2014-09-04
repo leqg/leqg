@@ -1310,6 +1310,28 @@ ul#creationsRapides li.creationFiche::before {
 ul#creationsRapides li.creationDossier::before {
   content: '\e851'; }
 
+.listeTags .tag {
+  display: inline-block;
+  background-color: #fde7b4;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  border-radius: 0.5em;
+  -webkit-box-shadow: 0 2px 0 #cdcbca;
+  -moz-box-shadow: 0 2px 0 #cdcbca;
+  box-shadow: 0 2px 0 #cdcbca;
+  color: #ab3e5b;
+  cursor: default;
+  font-size: .85em;
+  margin: 0 1em .5em 0;
+  padding: .05em 1em; }
+.listeTags .tag::before {
+  display: inline-block;
+  color: #ab3e5b;
+  font-family: "fontello";
+  font-size: .85em;
+  content: '\e827';
+  padding-right: .66em; }
+
 /*
  *
  *	Feuille de style dédiée à l'affichage des formulaires du service en ligne LeQG

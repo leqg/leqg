@@ -93,6 +93,12 @@ class fiche extends core {
 	
 	
 	// Méthode permettant de retourner l'ID de l'immeuble de l'électeur, très important pour l'accès aux fonctions cartographiques
+	public	function get_adresse() {
+		return $this->fiche_ouverte['adresse_id'];
+	}
+	
+	
+	// Méthode permettant de retourner l'ID de l'immeuble de l'électeur, très important pour l'accès aux fonctions cartographiques
 	public	function get_immeuble() {
 		return $this->fiche_ouverte['immeuble_id'];
 	}
@@ -335,7 +341,7 @@ class fiche extends core {
 	
 	
 	// Méthode permettant l'affichage des tags relatifs à une fiche
-	public	function tags($element = null, $return = false, $id = null) {
+	public	function tags($element = 'span', $return = false, $id = null) {
 		if (empty($id)) {
 			$id = $this->get_infos('id');
 			$tags = $this->get_infos('tags');
@@ -586,8 +592,8 @@ class fiche extends core {
 			if (!is_numeric($contact) && !is_array($immeuble)) { return false; }
 				
 		// On prépare la requête BDD
-			$query = 'UPDATE		contacts
-					  SET		immeuble_id = ' . $immeuble . '
+			$query = 'UPDATE	contacts
+					  SET		adresse_id = ' . $immeuble . '
 					  WHERE		contact_id = ' . $contact;
 			
 		// On effectue la requête dans la BDD et on retourne le résultat

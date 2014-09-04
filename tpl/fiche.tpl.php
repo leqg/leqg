@@ -36,13 +36,19 @@
 			</li>
 			<li>
 				<span class="label-information">Adresse déclarée</span>
-				<?php if ($fiche->get_immeuble()) : ?>
-				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
+				<?php if ($fiche->get_adresse()) : ?>
+				<p class="adresse"><?php $carto->adressePostale($fiche->get_adresse()); ?></p>
 				<?php else : ?>
 				<p>Aucune adresse connue</p>
 				<?php endif; ?>
 				<a class="nostyle icone" title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'modifierAdresse' => 'true')); ?>">&#xe855;</a>
 			</li>
+			<?php if ($fiche->get_immeuble()) : ?>
+			<li>
+				<span class="label-information">Fichier électoral</span>
+				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
+			</li>
+			<?php endif; ?>
 			<?php if ($fiche->get_immeuble() && $carto->bureauParImmeuble($fiche->get_immeuble()) != 0) : ?>
 			<li>
 				<span class="label-information">Bureau de vote</span>
@@ -73,8 +79,7 @@
 			</li>
 			<li>
 				<span class="label-information">Tags</span>
-				<?php $sql = $db->query('SELECT * FROM `contacts` WHERE `contact_id` = ' . $_GET['id']); $ttttags = $sql->fetch_assoc(); ?>
-				<p><?php echo $ttttags['contact_tags']; ?>&nbsp;</p>
+				<p class="listeTags"><?php $fiche->tags(); ?></p>
 			</li>
 		</ul>
 	</form>

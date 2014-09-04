@@ -317,3 +317,28 @@ ul#creationsRapides {
 		&.creationDossier::before { content: '\e851'; }
 	}
 }
+
+
+
+.listeTags {
+	.tag {
+		display: inline-block;
+		background-color: $jaune;
+		@include border-radius(.5em);
+		@include shadow(0, 2px, 0, $gris);
+		color: $rouge;
+		cursor: default;
+		font-size: .85em;
+		margin: 0 1em .5em 0;
+		padding: .05em 1em;
+		
+		&::before {
+			display: inline-block;
+			color: $rouge;
+			font-family: $icons;
+			font-size: .85em;
+			content: '\e827';
+			padding-right: .66em;
+		}
+	}
+}
