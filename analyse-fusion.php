@@ -71,5 +71,9 @@
 	
 	endforeach;
 	
+	// On supprime les numéros de téléphone qui correspondent à 00 00 00 00 00
+	$db->query('UPDATE `contacts` SET `contact_mobile` = NULL WHERE `contact_mobile` = 0000000000');
+	$db->query('UPDATE `contacts` SET `contact_telephone` = NULL WHERE `contact_telephone` = 0000000000');
+	
 	$core->debug($anomalies);
 ?>
