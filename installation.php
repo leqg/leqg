@@ -7,8 +7,8 @@
 ?>
 
 	<div id="installation" style="margin: 3em;">
-		<h2 id="titre">Installation des données cartographiques</h2>
-		<h3 id="titre">Mise en place des régions</h3>
+		<h2 id="titre">Installation du système central LeQG</h2>
+		<h3 id="titre">Mise en place de la base de données et des données cartographiques</h3>
 		<div id="install" style="margin: 1em 5%;">
 			<span id="demarrage">Cliquez ici pour lancer l'installation</span>
 		</div>
