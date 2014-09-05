@@ -49,7 +49,7 @@ class tache extends core {
 	public	function recherche( $id , $toutes = false ) {
 		if ( is_numeric( $id ) ) :
 			// On prépare la requête de récupération de toutes les tâches associées à un membre
-			$query = 'SELECT * FROM taches WHERE tache_destinataire LIKE "%' . $id . '%"';
+			$query = 'SELECT * FROM taches WHERE compte_id = ' . $id;
 			
 			// Si on ne demande pas l'affichage des tâches même terminées, on adapte la requête
 			if ( $toutes == false ) $query = $query . " AND tache_terminee = 0";
@@ -60,9 +60,7 @@ class tache extends core {
 			// On effectue la requête et on vérifie que les requêtes extraites correspondent bien au compte demandé
 			$sql = $this->db->query( $query );
 			while ( $row = $sql->fetch_assoc() ) :
-				$destinataires = explode(',', $row['tache_destinataire']);
-				
-				if ( in_array( $id , $destinataires ) ) $taches[] = $this->formatage_donnees( $row );
+				$taches[] = $this->formatage_donnees( $row );
 			endwhile;
 			
 			return $taches;

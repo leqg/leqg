@@ -150,6 +150,7 @@ ul.listeIcone {
 		
 		&.connexion.desktop::after { content: '\e8e3'; }
 		&.connexion.mobile::after { content: '\e8e4'; }
+		&.tache::after { content: '\e89a'; }
 		
 		strong {
 			display: block;
