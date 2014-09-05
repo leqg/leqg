@@ -46,7 +46,7 @@
 			<?php if ($fiche->get_immeuble()) : ?>
 			<li>
 				<span class="label-information">Fichier électoral</span>
-				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
+				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?>&nbsp;</p>
 			</li>
 			<?php endif; ?>
 			<?php if ($fiche->get_immeuble() && $carto->bureauParImmeuble($fiche->get_immeuble()) != 0) : ?>
@@ -79,7 +79,7 @@
 			</li>
 			<li>
 				<span class="label-information">Tags</span>
-				<p class="listeTags"><?php $fiche->tags(); ?></p>
+				<p class="listeTags"><?php $fiche->tags(); ?><span class="tag ajoutTag">+</span></p>
 			</li>
 		</ul>
 	</form>
