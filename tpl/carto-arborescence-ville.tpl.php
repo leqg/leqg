@@ -54,17 +54,15 @@
 				<span class="label-information"><label for="rechercheRue">Recherche</label></span>
 				<input type="text" name="recherche" id="rechercheRue" data-ville="<?php echo $ville['id']; ?>">
 			</li>
-			<li>
-				<ul class="listeEncadree" id="listeRues">
-					<?php $rues = $carto->listeRues($ville['id']); foreach ($rues as $rue) : ?>
-					<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $rue['id'])); ?>">
-						<li class="rue">
-							<strong><?php echo $rue['nom']; ?></strong>
-						</li>
-					</a>
-					<?php endforeach; ?>
-				</ul>
-			</li>
+		</ul>
+		<ul class="listeEncadree" id="listeRues">
+			<?php $rues = $carto->listeRues($ville['id']); foreach ($rues as $rue) : ?>
+			<a class="nostyle" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $rue['id'])); ?>">
+				<li class="rue">
+					<strong><?php echo $rue['nom']; ?></strong>
+				</li>
+			</a>
+			<?php endforeach; ?>
 		</ul>
 	</div>
 	<?php elseif (isset($_GET['liste']) && $_GET['liste'] == 'bureaux') : ?>

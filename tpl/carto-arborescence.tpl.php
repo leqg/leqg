@@ -5,9 +5,7 @@
 				<span class="label-information"><label for="recherche">Ville à rechercher</label></span>
 				<input type="text" name="recherche" id="recherche">
 			</li>
-			<li>
-				<ul class="listeEncadree" id="listeVilles"></ul>
-			</li>
 		</ul>
+		<ul class="listeEncadree" id="listeVilles"></ul>
 	</div>
 </div>

@@ -10,11 +10,8 @@
 			<span class="label-information">Ville</span>
 			<input type="text" name="rechercheVille" id="changementAdresse-rechercheVille" data-fiche="<?php echo $_GET['id']; ?>">
 		</li>
-		<li id="resultatsVille">
-			<span class="label-information">Choisir</span>
-			<ul id="liste-villes" class="listeEncadree"></ul>
-		</li>
 	</ul>
+	<ul id="liste-villes" class="listeEncadree"></ul>
 	<?php endif; ?>
 </div>
 <div id="changementRue">
@@ -33,10 +30,8 @@
 			<span class="label-information">Rue</span>
 			<input type="text" name="rechercheRue" id="changementAdresse-rechercheRue" data-fiche="<?php echo $_GET['id']; ?>" data-ville="<?php echo $_GET['ville']; ?>">
 		</li>
-		<li id="resultatsRue">
-			<span class="label-information">Choisir</span>
-			<ul id="liste-rues" class="listeEncadree" data-ville="<?php echo $ville; ?>" data-fiche="<?php echo $_POST['fiche']; ?>"></ul>
-		</li>
+	</ul>
+	<ul id="liste-rues" class="listeEncadree" data-ville="<?php echo $ville; ?>" data-fiche="<?php echo $_POST['fiche']; ?>"></ul>
 	</ul>
 	<?php endif; ?>
 </div>
@@ -57,8 +52,8 @@
 			<span class="label-information">Rue</span>
 			<ul class="listeEncadree"><li class="rue"><?php echo $carto->afficherRue($_GET['rue']); ?></li></ul>
 		</li>
-		<li id="resultatsImmeuble">
-			<span class="label-information">Choisir</span>
+		<li>
+			<span class="label-information">Immeuble</span>
 			<ul id="liste-rues" class="listeEncadree">
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'creerImmeuble' => 'true', 'rue' => $_GET['rue'], 'ville' => $_GET['ville'])); ?>" class="nostyle" id="ajoutImmeuble">
 					<li class="immeuble ajoutImmeuble">
