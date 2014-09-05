@@ -48,10 +48,10 @@
 	
 	// On recherche si le bureau de vote existe déjà
 		$query = 'SELECT * FROM bureaux WHERE bureau_numero = ' . $bureau . ' AND commune_id = ' . $code['ville'];
-		$sql = $db->query($query); $nb = $sql->num_rows;
+		$sql = $db->query($query);
 		
 			// S'il existe déjà un bureau de vote dans la base de données, on en récupère l'identifiant
-			if ($nb == 1) {
+			if ($sql->num_rows == 1) {
 				$row = $sql->fetch_assoc();
 				$code['bureau'] = $row['bureau_id'];
 			} else {
@@ -64,10 +64,10 @@
 		
 	// On continu en vérifiant si la rue existe déjà
 		$query = 'SELECT * FROM rues WHERE commune_id = ' . $code['ville'] . ' AND rue_nom LIKE "' . $adresse['rue'] . '" LIMIT 0,1';
-		$sql = $db->query($query); $nb = $sql->num_rows;
+		$sql = $db->query($query);
 		
 			// S'il existe déjà une rue dans la base de données, on récupère l'identifiant
-			if ($nb == 1) {
+			if ($sql->num_rows == 1) {
 				$row = $sql->fetch_assoc();
 				$code['rue'] = $row['rue_id'];
 			} else {
@@ -80,10 +80,10 @@
 		
 	// On regarde ensuite si l'immeuble existe déjà dans cette rue
 		$query = 'SELECT * FROM immeubles WHERE rue_id = ' . $code['rue'] . ' AND immeuble_numero LIKE "' . $adresse['immeuble'] . '" LIMIT 0,1';
-		$sql = $db->query($query); $nb = $sql->num_rows;
+		$sql = $db->query($query);
 		
 			// S'il existe déjà un immeuble dans la base de données, on récupère l'identifiant
-			if ($nb == 1) {
+			if ($sql->num_rows == 1) {
 				$row = $sql->fetch_assoc();
 				$code['immeuble'] = $row['immeuble_id'];
 			} else {
