@@ -110,7 +110,7 @@ class fiche extends core {
 		
 		// On cherche les informations sur la rue
 		$query = 'SELECT * FROM `immeubles` LEFT JOIN `rues` ON `rues`.`rue_id` = `immeubles`.`rue_id` WHERE `immeuble_id` = ' . $immeuble;
-		$sql = $db->query($query);
+		$sql = $this->db->query($query);
 		$row = $sql->num_rows;
 		
 		return (!is_null($row['rue_nom'])) ? true : false;
