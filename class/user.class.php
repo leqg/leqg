@@ -224,6 +224,34 @@ class user extends core {
 		
 		return $users; 
 	}
+	
+	
+	// liste_connexion( [ int ] ) permet d'afficher la liste des connexions d'une fiche utilisateur à la plateforme
+	public	function liste_connexions( $id = null ) {
+		if (is_null($id) || !is_numeric($id)) $id = $this->get_the_id();
+		
+		// On prépare le tableau des connexions
+		$connexions = array();
+		
+		// On récupère l'historique des connexions dans la base SQL
+		$query = 'SELECT * FROM `connexions` WHERE `user_id` = ' . $id . ' ORDER BY connexion_date DESC LIMIT 0, 30';
+		$sql = $this->noyau->query($query);
+		
+		if ($sql->num_rows) while($row = $sql->fetch_assoc()) $connexions[] = $this->formatage_donnees($row);
+		
+		// On retourne le tableau
+		return $connexions;
+	}
+	
+	
+	// description_ip( $ip ) permet de retourner pour une IP entrée l'adresse de connexion ou une remarque
+	public	function description_ip( $ip ) {
+		$local = array('127.0.0.1', '192.168.0.1', '192.168.1.1', '::1');
+		
+		echo (in_array($ip, $local)) ? 'Connexion locale au serveur' : 'Connexion depuis l\'adresse ' . $ip;
+
+		return true;
+	}
 }
 
 ?>

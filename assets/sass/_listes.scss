@@ -107,3 +107,65 @@ section.liste {
 		}
 	}
 }
+
+
+
+ul.listeIcone {
+	display: table;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	
+	li {
+		display: table-cell;
+		position: relative;
+		margin: 0 0 1em;
+		height: 60px;
+		padding: 0 0 0 70px;
+		vertical-align: middle;
+		
+		&::before {
+			position: absolute; top: 0; left: 0;
+			color: $bleu;
+			content: '\e952';
+			font-family: $icons;
+			font-size: 50px;
+			height: 60px;
+			line-height: 60px;
+			text-align: center;
+			@include text-shadow(0, 2px, 0, $gris);
+			width: 70px;
+		}
+		
+		&::after {
+			position: absolute; top: 0; left: 0;
+			color: $blanc;
+			font-family: $icons;
+			font-size: 30px;
+			height: 60px;
+			line-height: 60px;
+			text-align: center;
+			width: 70px;
+		}
+		
+		&.connexion.desktop::after { content: '\e8e3'; }
+		&.connexion.mobile::after { content: '\e8e4'; }
+		
+		strong {
+			display: block;
+			color: $bleu;
+			font-family: $fonts1;
+			font-size: 1.25em;
+			font-weight: 500;
+			line-height: 1.5em;
+		}
+		
+		em {
+			display: block;
+			color: $grisMoyen;
+			font-family: $fonts1;
+			font-style: italic;
+		}
+	}
+}

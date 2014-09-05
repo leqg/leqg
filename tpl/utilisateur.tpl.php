@@ -100,27 +100,14 @@
 		<?php endif; ?>
 			<h6>Historique des dernières connexions</h6>
 			
-			<?php $query = 'SELECT * FROM `connexions` WHERE `user_id` = ' . $user->get_the_id() . ' ORDER BY connexion_date DESC LIMIT 0, 30'; $sql = $noyau->query($query); while($row = $sql->fetch_assoc()) $connexions[] = $core->formatage_donnees($row); ?>
-		
-			<table id="historique-contact">
-				<thead>
-					<tr>
-						<th>Plateforme</th>
-						<th>Date</th>
-						<th>Adresse IP</th>
-						<!--<th>Host</th>-->
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($connexions as $connexion) : ?>
-					<tr>
-						<td><?php echo ($connexion['plateforme']) ? 'Internet' : 'Mobile'; ?></td>
-						<td><?php echo ucwords(strftime('%A %e %B %Y %X', strtotime($connexion['date']))); ?></td>
-						<td><?php echo $connexion['ip']; ?></td>
-					</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
+			<ul class="listeIcone">
+			<?php $connexions = $user->liste_connexions(); foreach ($connexions as $connexion) : ?>		
+				<li class="connexion <?php echo $connexion['plateforme']; ?>">
+					<strong><?php echo ucwords(strftime('%A %e %B %Y à %X', strtotime($connexion['date']))); ?></strong>
+					<em><?php $user->description_ip($connexion['ip']); ?></em>
+				</li>
+			<?php endforeach; ?>
+			</ul>
 		</div>
 	<?php endif; ?>
 </aside>
