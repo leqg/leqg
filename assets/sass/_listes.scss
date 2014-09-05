@@ -120,8 +120,8 @@ ul.listeIcone {
 		display: block;
 		position: relative;
 		margin: 0 0 1em;
-		height: 60px;
-		padding: 0 0 0 70px;
+		min-height: 60px;
+		padding: 10px 0 0 70px;
 		vertical-align: middle;
 		
 		&::before {
@@ -149,6 +149,7 @@ ul.listeIcone {
 		}
 		
 		&.connexion.desktop::after { content: '\e8e3'; }
+		&.connexion.mobile::before { background-color: rgba($bleu, .66); }
 		&.connexion.mobile::after { content: '\e8e4'; }
 		
 		strong {
