@@ -46,7 +46,7 @@
 			<?php if ($fiche->is_adresse_fichier()) : ?>
 			<li>
 				<span class="label-information">Fichier électoral</span>
-				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?>&nbsp;</p>
+				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?></p>
 			</li>
 			<?php endif; ?>
 			<?php if ($fiche->is_adresse_fichier() && $carto->bureauParImmeuble($fiche->get_immeuble()) != 0) : ?>
