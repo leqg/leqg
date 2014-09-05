@@ -7,6 +7,7 @@ var carto = function() {
 	// Script concernant la recherche d'une ville dans l'arborescence
 	$("#recherche").keyup(function(){
 		var recherche = $(this).val();
+		console.log(recherche);
 		
 		if (recherche.length > 3) {
 			$.ajax({

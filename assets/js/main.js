@@ -60,7 +60,7 @@ var main = function() {
 		
 	
 	// Script relatif à la recherche rapide de fiche
-		$('#recherche').click(function(){
+		$('#rechercheRapide').click(function(){
 			if ($(this).hasClass('fermer')) {
 				// On affiche d'abord le formulaire
 				$('#searchSubmit').css({
