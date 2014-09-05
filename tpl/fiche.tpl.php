@@ -43,13 +43,13 @@
 				<?php endif; ?>
 				<a class="nostyle icone" title="Modifier l'adresse déclarée" href="<?php $core->tpl_go_to('fiche', array('id' => $_GET['id'], 'modifierAdresse' => 'true')); ?>">&#xe855;</a>
 			</li>
-			<?php if ($fiche->get_immeuble()) : ?>
+			<?php if ($fiche->is_adresse_fichier()) : ?>
 			<li>
 				<span class="label-information">Fichier électoral</span>
 				<p class="adresse"><?php $carto->adressePostale($fiche->get_immeuble()); ?>&nbsp;</p>
 			</li>
 			<?php endif; ?>
-			<?php if ($fiche->get_immeuble() && $carto->bureauParImmeuble($fiche->get_immeuble()) != 0) : ?>
+			<?php if ($fiche->is_adresse_fichier() && $carto->bureauParImmeuble($fiche->get_immeuble()) != 0) : ?>
 			<li>
 				<span class="label-information">Bureau de vote</span>
 				<p><?php $carto->bureauDeVote($fiche->get_immeuble()); ?></p>

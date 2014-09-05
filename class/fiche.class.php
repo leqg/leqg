@@ -103,6 +103,19 @@ class fiche extends core {
 		return $this->fiche_ouverte['immeuble_id'];
 	}
 	
+	
+	// Méthode permettant de savoir si l'immeuble est bien rattaché à une rue, et donc savoir si l'adresse existe vraiment
+	public	function is_adresse_fichier() {
+		$immeuble = $this->get_immeuble();
+		
+		// On cherche les informations sur la rue
+		$query = 'SELECT * FROM `immeubles` LEFT JOIN `rues` ON `rues`.`rue_id` = `immeubles`.`rue_id` WHERE `immeuble_id` = ' . $immeuble;
+		$sql = $db->query($query);
+		$row = $sql->num_rows;
+		
+		return (!is_null($row['rue_nom'])) ? true : false;
+	}
+	
 	// Méthode permettant de savoir si une information a été remplie
 	public	function is_info($colonne) {
 		return (!empty($this->get_infos($colonne)) && $this->get_infos($colonne) != 0) ? true : false;
