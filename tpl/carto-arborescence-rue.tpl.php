@@ -9,6 +9,7 @@
 		<h2>
 			<?php $carto->afficherVille($rue['commune_id']); ?>
 			<span><?php $carto->afficherRue($rue['id']); ?></span>
+			<a href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $rue['id'], 'modifier' => 'informations')); ?>" class="nostyle" id="config-icon">&#xe855;</a>
 		</h2>
 	</header>
 	
@@ -40,6 +41,32 @@
 	</ul>
 </section>
 <aside>
+	<?php if (isset($_GET['modifier']) && $_GET['modifier'] == 'informations') : ?>
+	<div>
+		<nav class="navigationFiches">
+			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'rue', 'rue' => $rue['id'])); ?>">Retour aux immeubles</a>
+		</nav>
+		
+		<h6>Modifier le nom de la rue</h6>
+		
+		<form method="post" action="ajax.php?script=rue-changement-nom">
+			<input type="hidden" name="rue" value="<?php echo $rue['id']; ?>">
+			<ul class="deuxColonnes">
+				<li>
+					<span class="label-information"><label for="nouveau-nom">Nom actuel</label></span>
+					<p><?php echo $rue['nom']; ?></p>
+				</li>
+				<li>
+					<span class="label-information"><label for="nouveau-nom">Nouveau nom</label></span>
+					<input type="text" id="nouveau-nom" name="nom" placeholder="Rue des acacias" value="<?php echo $rue['nom']; ?>">
+				</li>
+				<li class="submit">
+					<input type="submit" value="Valider les changements">
+				</li>
+			</ul>
+		</form>
+	</div>
+	<?php else : ?>
 	<div>
 		<nav class="navigationFiches">
 			<a class="retour" href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence', 'branche' => 'ville', 'ville' => $rue['commune_id'])); ?>">Retour à la ville</a>
@@ -62,4 +89,5 @@
 			</li>
 		</ul>
 	</div>
+	<?php endif; ?>
 </aside>
