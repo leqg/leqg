@@ -11,7 +11,7 @@ require_once('includes.php');
 
 //$core->debug($rues);
 
-/*$query = 'SELECT * FROM `rues`';
+$query = 'SELECT * FROM `rues`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) :
@@ -24,12 +24,13 @@ while ($row = $sql->fetch_assoc()) :
 	$rue = str_replace('Rle ', 'Ruelle ', $rue);
 	$rue = str_replace('Ave ', 'Avenue ', $rue);
 	$rue = str_replace('Bd ', 'Boulevard ', $rue);
+	$rue = str_replace('All ', 'Allée ', $rue);
 	$db->query('UPDATE `rues` SET `rue_nom` = "' . $rue . '" WHERE `rue_id` = ' . $row['rue_id']);
 
-endwhile;*/
+endwhile;
 
 
-$data = $csv->lectureFichier('csv/parti.csv');
+/*$data = $csv->lectureFichier('csv/parti.csv');
 
 // On prépare les tableaux des résultats
 $resultats = array();
@@ -58,7 +59,7 @@ foreach ($data as $key => $line) {
 	else { $resultats['aucun'][] = $line; }
 }
 
-	$core->debug($resultats['doublons']);
+	$core->debug($resultats['doublons']);*/
 
 
 // Traitement de la date de naissance
