@@ -111,14 +111,13 @@ section.liste {
 
 
 ul.listeIcone {
-	display: table;
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	width: 100%;
 	
 	li {
-		display: table-cell;
+		display: block;
 		position: relative;
 		margin: 0 0 1em;
 		height: 60px;
