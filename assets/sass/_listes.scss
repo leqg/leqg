@@ -149,7 +149,6 @@ ul.listeIcone {
 		}
 		
 		&.connexion.desktop::after { content: '\e8e3'; }
-		&.connexion.mobile::before { background-color: rgba($bleu, .66); }
 		&.connexion.mobile::after { content: '\e8e4'; }
 		
 		strong {
