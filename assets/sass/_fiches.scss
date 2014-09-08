@@ -484,6 +484,7 @@ table.fusion {
 				&.resultats::before { content: '\e8dd'; }
 				&.nom::before { content: '\e80a'; }
 				&.adresse::before { content: '\e841'; }
+				&.naissance::before { content: '\e85b'; }
 				&.email::before { content: '\e805'; }
 				&.fixe::before { content: '\e854'; }
 				&.mobile::before { content: '\e8e4'; }
