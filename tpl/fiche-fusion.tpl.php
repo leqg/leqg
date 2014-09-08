@@ -138,7 +138,7 @@
 			<tr>
 				<td class="fixe">
 					<?php if ($contact1['telephone']) : ?>
-						<?php echo $contact1['telephone']; ?>
+						<?php echo $core->tpl_phone($contact1['telephone']); ?>
 					<?php else : ?>
 						<em>Aucune adresse</em>
 					<?php endif; ?>
@@ -152,7 +152,7 @@
 				</td>
 				<td class="fixe">
 					<?php if ($contact2['telephone']) : ?>
-						<?php echo $contact2['telephone']; ?>
+						<?php echo $core->tpl_phone($contact2['telephone']); ?>
 					<?php else : ?>
 						<em>Aucune adresse</em>
 					<?php endif; ?>
@@ -162,7 +162,7 @@
 			<tr>
 				<td class="mobile">
 					<?php if ($contact1['mobile']) : ?>
-						<?php echo $contact1['mobile']; ?>
+						<?php echo $core->tpl_phone($contact1['mobile']); ?>
 					<?php else : ?>
 						<em>Aucune adresse</em>
 					<?php endif; ?>
@@ -176,7 +176,7 @@
 				</td>
 				<td class="mobile">
 					<?php if ($contact2['mobile']) : ?>
-						<?php echo $contact2['mobile']; ?>
+						<?php echo $core->tpl_phone($contact2['mobile']); ?>
 					<?php else : ?>
 						<em>Aucune adresse</em>
 					<?php endif; ?>
