@@ -52,8 +52,8 @@
 				<span class="bordure-form">
 					<label class="selectbox">
 						<select name="fixe">
-							<?php if (!is_null($contact1['fixe'])) : ?><option value="<?php echo $contact1['fixe']; ?>"><?php echo $core->tpl_phone($contact1['fixe']); ?></option><?php endif; ?>
-							<?php if (!is_null($contact2['fixe'])) : ?><option value="<?php echo $contact2['fixe']; ?>"><?php echo $core->tpl_phone($contact2['fixe']); ?></option><?php endif; ?>
+							<?php if (!is_null($contact1['telephone'])) : ?><option value="<?php echo $contact1['telephone']; ?>"><?php echo $core->tpl_phone($contact1['telephone']); ?></option><?php endif; ?>
+							<?php if (!is_null($contact2['telephone'])) : ?><option value="<?php echo $contact2['telephone']; ?>"><?php echo $core->tpl_phone($contact2['telephone']); ?></option><?php endif; ?>
 						</select>
 					</label>
 				</span>
