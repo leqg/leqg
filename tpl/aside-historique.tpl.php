@@ -12,7 +12,7 @@
 			<tr>
 				<th>Type</th>
 				<th>Date</th>
-				<th>Objet <a class="add-historique" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'nouvelleInteraction' => 'true')); ?>">&#xe816;</span></th>
+				<th>Objet <a class="add-historique" href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'nouvelleInteraction' => 'true')); ?>">&#xe816;</a></th>
 				<!--<th>Thématiques</th>-->
 			</tr>
 		</thead>
