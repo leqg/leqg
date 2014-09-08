@@ -11,7 +11,7 @@ require_once('includes.php');
 
 //$core->debug($rues);
 
-$query = 'SELECT * FROM `rues`';
+/*$query = 'SELECT * FROM `rues`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) :
@@ -27,7 +27,15 @@ while ($row = $sql->fetch_assoc()) :
 	$rue = str_replace('All ', 'Allée ', $rue);
 	$db->query('UPDATE `rues` SET `rue_nom` = "' . $rue . '" WHERE `rue_id` = ' . $row['rue_id']);
 
-endwhile;
+endwhile;*/
+
+$query = 'SELECT * FROM `contacts`';
+$sql = $db->query($query);
+
+while ($row = $sql->fetch_assoc()) {
+	$tags = trim($row['contact_tags'], ',');
+	$db->query('UPDATE `contacts` SET `contact_tags` = "' . $tags . '" WHERE `contact_id` = ' . $row['contact_id']);
+}
 
 
 /*$data = $csv->lectureFichier('csv/parti.csv');
