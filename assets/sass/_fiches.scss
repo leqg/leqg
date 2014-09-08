@@ -58,6 +58,7 @@
 		&.historique::before { content: '\e8dd'; }
 		&.reglages::before { content: '\e856'; }
 		&.poste::before { content: '\e8ef'; }
+		&.fusion::before { content: '\e911'; }
 		
 		#config-icon {
 			position: absolute; top: 135px; left: -50px;
@@ -315,6 +316,7 @@ ul#creationsRapides {
 		
 		&.creationFiche::before { content: '\e80c'; }
 		&.creationDossier::before { content: '\e851'; }
+		&.fusionFiches::before { content: '\e912'; }
 	}
 }
 
@@ -395,5 +397,132 @@ ul#creationsRapides {
 		background-color: $vert;
 		@include border-radius(50%);
 		margin-left: -.5em;
+	}
+}
+
+
+
+/************************************
+ *									*
+ *				FUSION				* 
+ *									*
+ ************************************/
+
+#goFusion {
+	margin: 2em 0 0;
+	text-align: center;
+	
+	a.bouton {
+		background-color: $bleu;
+		border: 0;
+		color: $blanc;
+		font-size: 1.33em;
+		font-weight: 400;
+		line-height: 1.5em;
+		padding: .5em 1em .33em;
+		text-decoration: none;
+	}
+}
+
+table.fusion {
+	border: 0;
+	margin: 1em auto 0;
+	padding: 0;
+	table-layout: fixed;
+	width: 85%;
+	
+	thead {
+		background-color: $bleu;
+		border: 0;
+		color: $blanc;
+		font-variant: small-caps;
+		letter-spacing: .15em;
+		
+		tr {
+			border: 1px solid $bleu;
+			
+			th {
+				border: 0;
+		
+				&:nth-of-type(2) {
+					border-left: 1px solid $blanc;
+					border-right: 1px solid $blanc;
+					font-family: $icons;
+					font-size: 1.33em;
+					font-weight: 400;
+					text-align: center;
+					width: 50px;
+				}
+			}
+		}
+	}
+	
+	tbody {
+		tr {
+			td {
+				position: relative;
+				font-size: 1.25em;
+				line-height: 30px;
+				padding: 10px 2em 10px 50px;
+				vertical-align: top;
+				
+				&::before {
+					position: absolute; top: 10px; left: 0;
+					font-family: $icons;
+					font-size: 20px;
+					height: 30px;
+					line-height: 30px;
+					text-align: center;
+					width: 50px;
+				}
+				
+				&.iconeCentre::before {
+					top: calc(50% - 25px);
+				}
+				
+				&.recherche::before { content: '\e803'; }
+				&.resultats::before { content: '\e8dd'; }
+				&.nom::before { content: '\e80a'; }
+				&.adresse::before { content: '\e841'; }
+				&.email::before { content: '\e805'; }
+				&.fixe::before { content: '\e854'; }
+				&.mobile::before { content: '\e8e4'; }
+				
+				input {
+					border: 0;
+					font-family: $fonts1;
+					font-size: 20px;
+					height: 50px;
+				}
+				
+				em {
+					color: $grisMoyen;
+					font-style: italic;
+					font-weight: 300;
+				}
+				
+				&.merging {
+					margin: 0;
+					padding: 10px 0 0;
+					text-align: center;
+					
+					span {
+						display: inline-block;
+						@include border-radius(50%);
+						color: $blanc;
+						font-family: $icons;
+						font-size: 20px;
+						height: 30px;
+						line-height: 30px;
+						pointer-events: none;
+						text-align: center;
+						width: 30px;
+						
+						&.egal { background-color: $vert; }
+						&.inegal { background-color: $rouge; }
+					}
+				}
+			}
+		}
 	}
 }

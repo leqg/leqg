@@ -392,6 +392,39 @@ var fiche = function() {
 			
 			$(id).remove();
 		});
+		
+	
+	// Recherche de fiche pour fusion
+		$('#form-fiche1').keyup(function(){
+			var recherche = $(this).val();
+			
+			if (recherche.length >= 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=recherche-fusion&fiche=1',
+					data: { 'recherche': recherche },
+					dataType: 'html'
+				}).done(function(data){
+					$('#resultats-fiche1').html(data);
+				});
+			}
+		});
+
+		$('#form-fiche2').keyup(function(){
+			var recherche = $(this).val();
+			var fiche1 = $(this).data('fiche1');
+			
+			if (recherche.length >= 3) {
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=recherche-fusion&fiche=2',
+					data: { 'recherche': recherche, 'fiche1': fiche1 },
+					dataType: 'html'
+				}).done(function(data){
+					$('#resultats-fiche2').html(data);
+				});
+			}
+		});
 };
 
 $(document).ready(fiche);

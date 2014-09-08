@@ -344,7 +344,7 @@ main {
 	overflow-x: hidden;
 	overflow-y: scroll;
 	padding: 0;
-	padding-top: 50px;
+	padding-top: 60px;
 	width: 100%;
 	@include transition(all);
 	
@@ -575,7 +575,8 @@ ul.listeEncadree {
 		&.interaction,
 		&.sms,
 		&.tache,
-		&.poste {
+		&.poste,
+		&.retour {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;
@@ -663,6 +664,7 @@ ul.listeEncadree {
 		&.interaction::before { content: '\e83c'; }
 		&.sms::before { content: '\e8e4'; }
 		&.tache::before { content: '\e837'; }
+		&.retour::before { content: '\e888'; }
 		
 		&:hover {
 			background-color: rgba($rouge, .05);

@@ -72,6 +72,23 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				$core->tpl_footer();
 		}
 		
+		else if ($_GET['page'] == 'fiche' && !empty($_GET['operation'])) {
+			
+			// On regarde si on demande la fusion de fiche
+			if ($_GET['operation'] == 'fusion') {
+				// On charge le template de fusion de fiche
+				$core->tpl_header();
+				$core->tpl_load('fiche', 'fusion');
+				$core->tpl_footer();
+			} elseif ($_GET['operation'] == 'choix') {
+				// On charge le template de résolution des conflits
+				$core->tpl_header();
+				$core->tpl_load('fiche', 'fusion-conflits');
+				$core->tpl_footer();
+			}
+			
+		}
+		
 		else if ($_GET['page'] == 'creation' && isset($_GET['id'])) {
 			// S'il s'agit de la création d'un dossier ou d'une tâche, on charge les templates relatifs à la page demandée
 			$core->tpl_header();
