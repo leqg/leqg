@@ -89,22 +89,22 @@
 			
 			<tr>
 				<td class="adresse">
-					<?php if ($contact1['immeuble_id']) : ?>
-						<?php echo $carto->adressePostale($contact1['immeuble_id']); ?>
+					<?php if ($contact1['adresse_id']) : ?>
+						<?php $carto->adressePostale($contact1['adresse_id']); ?>
 					<?php else : ?>
 						<em>Aucune adresse</em>
 					<?php endif; ?>
 				</td>
 				<td class="merging">
-					<?php if ($contact1['immeuble_id'] == $contact2['immeuble_id']) : ?>
+					<?php if ($contact1['adresse_id'] == $contact2['adresse_id']) : ?>
 					<span class="egal">&#xe896;</span>
 					<?php else : ?>
 					<span class="inegal">&#xe898;</span>
 					<?php endif; ?>
 				</td>
 				<td class="adresse">
-					<?php if ($contact2['immeuble_id']) : ?>
-						<?php $carto->adressePostale($contact2['immeuble_id']); ?>
+					<?php if ($contact2['adresse_id']) : ?>
+						<?php $carto->adressePostale($contact2['adresse_id']); ?>
 					<?php else : ?>
 						<em>Aucune adresse</em>
 					<?php endif; ?>
