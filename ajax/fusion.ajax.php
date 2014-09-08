@@ -54,6 +54,10 @@
 		$query = 'DELETE FROM `contacts` WHERE `contact_id` = ' . $off;
 		$db->query($query);
 		
+		// On déplace les interactions passées d'une fiche vers l'autre
+		$query = 'UPDATE `historique` SET `contact_id` = ' . $on . ' WHERE `contact_id` = ' . $off;
+		$query = 'UPDATE `fichiers` SET `contact_id` = ' . $on . ' WHERE `contact_id` = ' . $off;
+		
 		// On se déplace vers la nouvelle fiche fusionnée
 		$core->tpl_go_to('fiche', array('id' => $on), true);
 	
