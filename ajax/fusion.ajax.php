@@ -12,6 +12,11 @@
 	$contact2 = $sql2->fetch_assoc();
 	$contact1 = $core->formatage_donnees($contact1);
 	$contact2 = $core->formatage_donnees($contact2);
+	
+	// On retraite les formats de téléphone ou email
+	if (empty($infos['email'])) $infos['email'] = null;
+	if (empty($infos['fixe'])) $infos['fixe'] = null;
+	if (empty($infos['mobile'])) $infos['mobile'] = null;
 
 
 	// On regarde si la première fiche ou la deuxième fiche correspond à une fiche électeur
