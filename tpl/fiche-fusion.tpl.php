@@ -112,6 +112,30 @@
 			</tr>
 			
 			<tr>
+				<td class="naissance">
+					<?php if ($contact1['naissance_date']) : ?>
+						<?php echo date('d/m/Y', $contact1['naissance_date']); ?>
+					<?php else : ?>
+						<em>Aucune date de naissance</em>
+					<?php endif; ?>
+				</td>
+				<td class="merging">
+					<?php if ($contact1['naissance_date'] == $contact2['naissance_date']) : ?>
+					<span class="egal">&#xe896;</span>
+					<?php else : ?>
+					<span class="inegal">&#xe898;</span>
+					<?php endif; ?>
+				</td>
+				<td class="naissance">
+					<?php if ($contact2['naissance_date']) : ?>
+						<?php echo date('d/m/Y', $contact2['naissance_date']); ?>
+					<?php else : ?>
+						<em>Aucune date de naissance</em>
+					<?php endif; ?>
+				</td>
+			</tr>
+			
+			<tr>
 				<td class="email">
 					<?php if ($contact1['email']) : ?>
 						<?php echo $contact1['email']; ?>
