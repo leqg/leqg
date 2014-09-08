@@ -4,7 +4,7 @@
 			<h3><?php $fiche->affichage_nom('span'); ?></h3>
 		</header>
 		<ul>
-			<li><?php $fiche->date_naissance(' / '); ?> – <?php $fiche->age(); ?></li>
+			<li><?php if ($fiche->get_infos('naissance_date') != '0000-00-00') : $fiche->date_naissance(' / '); ?> – <?php $fiche->age(); endif; ?></li>
 			<?php if ($fiche->is_adresse_fichier()) : ?><li><?php $carto->afficherVille($carto->villeParImmeuble($fiche->get_immeuble())); ?></li><?php endif; ?>
 		</ul>
 	</article>
