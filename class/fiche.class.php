@@ -375,8 +375,8 @@ class fiche extends core {
 			$affichage = '';
 			
 			// On affiche le résultat
-			foreach ($tags as $tag) {
-				$affichage .= '<' . $element . ' class="tag">' . $tag . '</' . $element . '>'; 
+			foreach ($tags as $key => $tag) {
+				$affichage .= '<' . $element . ' class="tag" id="tag-' . $key . '">' . $tag . '</' . $element . '>'; 
 			}
 		}
 		

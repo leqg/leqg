@@ -331,6 +331,7 @@ ul#creationsRapides {
 		font-size: .85em;
 		margin: 0 1em .5em 0;
 		padding: .05em 1em;
+		@include transition(all);
 		
 		&::before {
 			display: inline-block;
@@ -339,6 +340,60 @@ ul#creationsRapides {
 			font-size: .85em;
 			content: '\e827';
 			padding-right: .66em;
+			width: 1em;
+			@include transition(all);
 		}
+		
+		&:hover {
+			background-color: $rouge;
+			color: $jaune;
+			cursor: pointer;
+			text-decoration: line-through;
+			
+			&::before {
+				color: $jaune;
+				content: '\e847';
+			}
+		}
+	}
+	
+	#tagAjout {
+		display: inline-block;
+		border: 1px solid $gris;
+		@include border-radius(.33em);
+		font-family: $fonts2;
+		font-size: .86em;
+		margin: 0 1em .5em .5em;
+		padding: .1em .85em;
+		width: 200px;
+	}
+	
+	#formulaireTag {
+		display: none;
+	}
+	
+	#ajouterTag,
+	#validerTag {
+		display: inline-block;
+		@include border-radius(50%);
+		color: $blanc;
+		cursor: pointer;
+		font-family: $icons;
+		font-size: .85em;
+		height: 1.5em;
+		line-height: 1.5em;
+		margin: 0 1em 0 0;
+		text-align: center;
+		width: 1.5em;
+	}
+	
+	#ajouterTag {
+		background-color: $rouge;
+	}
+	
+	#validerTag {
+		background-color: $vert;
+		@include border-radius(50%);
+		margin-left: -.5em;
 	}
 }

@@ -79,7 +79,7 @@
 			</li>
 			<li>
 				<span class="label-information">Tags</span>
-				<p class="listeTags"><?php $fiche->tags(); ?><span class="tag ajoutTag">+</span></p>
+				<p class="listeTags" data-fiche="<?php $fiche->the_ID(); ?>"><span id="listesTags"><?php $fiche->tags(); ?></span><span id="formulaireTag"><input type="text" name="tagAjout" id="tagAjout" placeholder="Nouveau tag" data-fiche="<?php $fiche->the_id(); ?>"><span id="validerTag" data-fiche="<?php $fiche->the_id(); ?>">&#xe812;</span></span><span id="ajouterTag">&#xe816;</span></p>
 			</li>
 		</ul>
 	</form>

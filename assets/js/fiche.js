@@ -309,6 +309,89 @@ var fiche = function() {
 			
 			$('#estimation-sms').html(nombre);
 		})
+	
+	
+	// script d'affichage de l'ajout de tag
+		$('#ajouterTag').click(function(){
+			$(this).hide();
+			$('#formulaireTag').show();
+			$('#tagAjout').focus();
+		});
+	
+	
+	// script d'enregistrement d'un nouveau tag pour une fiche donnée
+		$('#validerTag').click(function(){
+			var fiche = $(this).data('fiche');
+			var tag = $('#tagAjout').val();
+			
+			$.ajax({
+				type: 'POST',
+				url: 'ajax.php?script=fiche-ajouttag',
+				data: { 'fiche': fiche, 'tag': tag },
+				dataType: 'html'
+			}).done(function(data){
+				// On ajoute d'abord le tag à la liste des tags
+				$('#listesTags').append('<span class="tag" id="tag-' + $.now() + '">' + tag + '</span>');
+				
+				// On retire après l'affichage du formulaire et on le vide pour réafficher le bouton d'ajout
+				$('#tagAjout').blur();
+				$('#formulaireTag').hide();
+				$('#tagAjout').val('');
+				$('#ajouterTag').show();
+			}).error(function(){
+				$('#formulaireTag').hide();
+				$('#ajouterTag').show();
+			});
+		});
+		
+		$('#tagAjout').bind('keypress', function(e){
+			if (e.keyCode == 13) { // Si la touche entrée a été pressée sur le formulaire
+				var fiche = $('#tagAjout').data('fiche');
+				var tag = $('#tagAjout').val();
+				
+				$.ajax({
+					type: 'POST',
+					url: 'ajax.php?script=fiche-ajouttag',
+					data: { 'fiche': fiche, 'tag': tag },
+					dataType: 'html'
+				}).done(function(data){
+					// On ajoute d'abord le tag à la liste des tags
+					$('#listesTags').append('<span class="tag" id="tag-' + $.now() + '">' + tag + '</span>');
+					
+					// On retire après l'affichage du formulaire et on le vide pour réafficher le bouton d'ajout
+					$('#tagAjout').blur();
+					$('#formulaireTag').hide();
+					$('#tagAjout').val('');
+					$('#ajouterTag').show();
+				}).error(function(){
+					$('#formulaireTag').hide();
+					$('#ajouterTag').show();
+				});
+			}
+			else if (e.keyCode == 27) { // Si la touche échap a été pressée sur le formulaire
+				$('#tagAjout').blur();
+				$('#formulaireTag').hide();
+				$('#tagAjout').val('');
+				$('#ajouterTag').show();
+			}
+		});
+		
+		$('#listesTags').on('click', '.tag', function(){
+			// On supprime un tag sur lequel on a cliqué
+			var tag = $(this).html();
+			var id = $(this).attr('id');
+			var id = '#' + id;
+			var fiche = $('.listeTags').data('fiche');
+			
+			$.ajax({
+				type: 'POST',
+				url: 'ajax.php?script=fiche-removetag',
+				data: { 'tag': tag, 'fiche': fiche },
+				dataType: 'html'
+			});
+			
+			$(id).remove();
+		});
 };
 
 $(document).ready(fiche);
