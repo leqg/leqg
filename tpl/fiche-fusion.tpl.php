@@ -174,7 +174,7 @@
 					<span class="inegal">&#xe898;</span>
 					<?php endif; ?>
 				</td>
-				<td class="fixe">
+				<td class="mobile">
 					<?php if ($contact2['mobile']) : ?>
 						<?php echo $contact2['mobile']; ?>
 					<?php else : ?>
