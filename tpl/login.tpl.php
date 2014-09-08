@@ -10,7 +10,7 @@
 				<input type="password" name="pass" id="pass">
 			</li>
 			<li class="submit">
-				<input type="submit" value="Se loger">
+				<input type="submit" value="Se connecter">
 			</li>
 		</ul>
 	</form>
