@@ -113,7 +113,7 @@
 			
 			<tr>
 				<td class="naissance">
-					<?php if ($contact1['naissance_date']) : ?>
+					<?php if ($contact1['naissance_date'] != '0000-00-00') : ?>
 						<?php echo date('d/m/Y', $contact1['naissance_date']); ?>
 					<?php else : ?>
 						<em>Aucune date de naissance</em>
@@ -127,7 +127,7 @@
 					<?php endif; ?>
 				</td>
 				<td class="naissance">
-					<?php if ($contact2['naissance_date']) : ?>
+					<?php if ($contact2['naissance_date'] != '0000-00-00') : ?>
 						<?php echo date('d/m/Y', $contact2['naissance_date']); ?>
 					<?php else : ?>
 						<em>Aucune date de naissance</em>
