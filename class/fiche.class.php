@@ -690,7 +690,7 @@ class fiche extends core {
 		if ($infos['telephone'] == '') { $infos['telephone'] == NULL; }
 		
 		// On prépare la requête de création de la fiche
-		$query = 'INSERT INTO	contacts (immeuble_id,
+		$query = 'INSERT INTO	contacts (adresse_id,
 										  contact_nom,
 										  contact_nom_usage,
 										  contact_prenoms,
