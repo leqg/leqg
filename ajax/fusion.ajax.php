@@ -43,7 +43,7 @@
 		$tags = array_unique($tags);
 		
 		// On transforme les tags en string
-		$tags = implode(',', $tags);
+		$tags = trim(implode(',', $tags), ',');
 		
 		// On update la fiche restante
 		$query = 'UPDATE	`contacts`
