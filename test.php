@@ -34,6 +34,7 @@ $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) {
 	$tags = trim($row['contact_tags'], ',');
+	$tags = array_unique($tags);
 	$db->query('UPDATE `contacts` SET `contact_tags` = "' . $tags . '" WHERE `contact_id` = ' . $row['contact_id']);
 }
 
