@@ -12,12 +12,6 @@
 	$contact2 = $sql2->fetch_assoc();
 	$contact1 = $core->formatage_donnees($contact1);
 	$contact2 = $core->formatage_donnees($contact2);
-	
-	// On retraite les formats de téléphone ou email
-	if (!isset($infos['email'])) $infos['email'] = null;
-	if (!isset($infos['fixe'])) $infos['fixe'] = null;
-	if (!isset($infos['mobile'])) $infos['mobile'] = null;
-
 
 	// On regarde si la première fiche ou la deuxième fiche correspond à une fiche électeur
 	if ($contact1['electeur'] == 1 || $contact2['electeur'] == 1) :
@@ -47,12 +41,15 @@
 		
 		// On update la fiche restante
 		$query = 'UPDATE	`contacts`
-				  SET		`adresse_id` = ' . $infos['adresse'] . ',
-				  			`contact_email` = "' . $infos['email'] . '",
-				  			`contact_telephone` = "' . $infos['fixe'] . '",
-				  			`contact_mobile` = "' . $infos['mobile'] . '",
-				  			`contact_tags` = "' . $tags . '"
+				  SET		`adresse_id` = ' . $infos['adresse'] . ', ';
+		
+		if (isset($infos['email'])) : $query.= '`contact_email` = "' . $infos['email'] . '", '; else : $query.= '`contact_email` = NULL, '; endif;
+		if (isset($infos['fixe'])) : $query.= '`contact_telephone` = "' . $infos['fixe'] . '", '; else : $query.= '`contact_telephone` = NULL, '; endif;
+		if (isset($infos['mobile'])) : $query.= '`contact_mobile` = "' . $infos['mobile'] . '", '; else : $query.= '`contact_mobile` = NULL, '; endif;
+		
+		$query.= '			`contact_tags` = "' . $tags . '" 
 				  WHERE		`contact_id` = ' . $on;
+
 		$db->query($query);
 	
 		// On supprime l'autre fiche
