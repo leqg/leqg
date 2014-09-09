@@ -30,8 +30,8 @@
 				<span class="bordure-form">
 					<label class="selectbox">
 						<select name="adresse">
-							<?php if ($contact1['immeuble_id'] != 0) : ?><option value="<?php echo $contact1['immeuble_id']; ?>"><?php $carto->adressePostale($contact1['immeuble_id'], ' '); ?></option><?php endif; ?>
-							<?php if ($contact2['immeuble_id'] != 0) : ?><option value="<?php echo $contact2['immeuble_id']; ?>"><?php $carto->adressePostale($contact2['immeuble_id'], ' '); ?></option><?php endif; ?>
+							<?php if ($contact1['adresse_id'] != 0) : ?><option value="<?php echo $contact1['adresse_id']; ?>"><?php $carto->adressePostale($contact1['adresse_id'], ' '); ?></option><?php endif; ?>
+							<?php if ($contact2['adresse_id'] != 0) : ?><option value="<?php echo $contact2['adresse_id']; ?>"><?php $carto->adressePostale($contact2['adresse_id'], ' '); ?></option><?php endif; ?>
 						</select>
 					</label>
 				</span>
