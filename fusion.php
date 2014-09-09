@@ -4,7 +4,7 @@
 	
 	// On règle d'abord les paramètres
 	if (isset($_GET['fichier'])) { $file = $_GET['fichier']; } else { exit; }
-	$tag = array('militant', 'parti');
+	$tag = array('gare', 'force vive');
 
 
 	// On lance la lecture du fichier
@@ -329,5 +329,6 @@
 	
 	endforeach;
 ?>
+<pre><?php print_r($afficher); ?></pre>
 
 <a href="analyse-fusion.php?fichier=<?php echo $_GET['fichier']; ?>">On passe à l'analyse des données du fichier</a>
