@@ -826,7 +826,7 @@ class fiche extends core {
 		if ($formulaire['email']) $criteres[] = 'contact_email IS NOT NULL AND contact_optout_email = 0';
 		if ($formulaire['mobile']) $criteres[] = 'contact_mobile IS NOT NULL AND contact_optout_mobile = 0';
 		if ($formulaire['fixe']) $criteres[] = 'contact_telephone IS NOT NULL AND contact_optout_telephone = 0';
-		if (!empty($formulaire['tags'])) $criteres[] = 'contact_tags LIKE "%' . $this->formatage_recherche($formulaire['tags']) . '%"';
+		if (!empty($formulaire['tags'])) $criteres[] = 'contact_tags LIKE "%' . $this->securisation_string($formulaire['tags']) . '%"';
 		
 		// On applique les critères à la requête SQL
 		foreach ($criteres as $key => $critere) {
