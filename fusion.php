@@ -272,8 +272,8 @@
 					if (preg_match('`^[0-9]{9,10}$`', $donnees['mobile'])) $modifs[] = '`contact_mobile` = ' . $donnees['mobile'];
 					if (!is_null($donnees['email']) && !empty($donnees['email'])) $modifs[] = '`contact_email` = "' . $donnees['email'] . '"';
 					if (!is_null($code['immeuble']) && !empty($code['immeuble'])) $modifs[] = '`adresse_id` = ' . $code['immeuble'];
-					if (!is_null($donnees['organisme'])) $modifs[] = '`contact_organisme` = ' . $donnees['organisme'];
-					if (!is_null($donnees['fonction'])) $modifs[] = '`contact_fonction` = ' . $donnees['fonction'];
+					if (!is_null($donnees['organisme'])) $modifs[] = '`contact_organisme` = "' . $donnees['organisme'] . '";
+					if (!is_null($donnees['fonction'])) $modifs[] = '`contact_fonction` = "' . $donnees['fonction'] . '";
 					
 					// Dans tous les cas, on ajoute les tags
 					$modifs[] = '`contact_tags` = "' . $tags . '"';
