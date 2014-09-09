@@ -20,7 +20,7 @@
 	foreach ($data as $key => $line) :
 	
 		// On ne lance l'analyse que s'il ne s'agit pas de la première ligne d'entête
-		if ($key > 0) :
+		if ($key > 0 && $key < 10) :
 		
 			$donnees = array('nom'		=> trim($line[4]),
 							 'prenom'	=> trim($line[3]),
