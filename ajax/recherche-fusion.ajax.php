@@ -7,6 +7,7 @@
 	$query = 'SELECT	* 
 			  FROM		`contacts`
 			  WHERE 	CONCAT_WS(" ", `contact_prenoms`, `contact_nom`, `contact_nom_usage`, `contact_nom`, `contact_prenoms`) LIKE "%' . $recherche . '%"
+			  AND		`contact_id` != "' . $_POST['fiche1'] . '"
 			  ORDER BY	`contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC
 			  LIMIT		0, 30';
 			  

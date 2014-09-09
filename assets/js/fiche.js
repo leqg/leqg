@@ -376,6 +376,12 @@ var fiche = function() {
 			}
 		});
 		
+		$(document).bind('keypress', function(e) {
+			if (e.keyCode == 84) {
+				$('#tagAjout').click();
+			}
+		});
+		
 		$('#listesTags').on('click', '.tag', function(){
 			// On supprime un tag sur lequel on a cliqué
 			var tag = $(this).html();
