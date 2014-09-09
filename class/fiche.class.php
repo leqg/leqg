@@ -688,6 +688,8 @@ class fiche extends core {
 		// On formate les téléphones, au cas où
 		if ($infos['mobile'] == '') { $infos['mobile'] == NULL; }
 		if ($infos['telephone'] == '') { $infos['telephone'] == NULL; }
+		if (empty($infos['organisme'])) { $infos['organisme'] == ''; }
+		if (empty($infos['fonction'])) { $infos['organisme'] == ''; }
 		
 		// On prépare la requête de création de la fiche
 		$query = 'INSERT INTO	contacts (adresse_id,
@@ -698,7 +700,9 @@ class fiche extends core {
 										  contact_email,
 										  contact_mobile,
 										  contact_telephone,
-										  contact_naissance_date)
+										  contact_naissance_date,
+										  contact_organisme,
+										  contact_fonction)
 				  VALUES (' . $infos['immeuble'] . ',
 				  		  "' . $infos['nom'] . '",
 				  		  "' . $infos['nom-usage'] . '",
@@ -707,7 +711,9 @@ class fiche extends core {
 				  		  NULL,
 				  		  NULL,
 				  		  NULL,
-				  		  "' . $infos['date-naissance'] . '")';
+				  		  "' . $infos['date-naissance'] . '",
+				  		  "' . $infos['organisme'] . '",
+				  		  "' . $infos['fonction'] . '")';
 		
 		// On exécute la requête au serveur
 		$this->db->query($query);

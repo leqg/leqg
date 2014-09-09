@@ -8,7 +8,7 @@
 
 
 	// On lance la lecture du fichier
-	$data = $csv->lectureFichier('csv/' . $file . '.csv');
+	$data = $csv->lectureFichier('csv/' . $file . '.csv', ',');
 	$lignes = count($data);
 	
 	
@@ -20,40 +20,107 @@
 	foreach ($data as $key => $line) :
 	
 		// On ne lance l'analyse que s'il ne s'agit pas de la première ligne d'entête
-		if ($key >= 0) :
+		if ($key > 0 && $key < 10) :
 		
-			$donnees = array('nom'		=> trim($line[3]),
-							 'prenom'	=> trim($line[4]),
-							 'fixe'		=> trim($line[7]),
-							 'mobile'	=> trim($line[9]),
-							 'email'	=> trim($line[8]),
-							 'adresse'	=> trim($line[10]),
-							 'numero'	=> null,
-							 'rue'		=> null,
-							 'cp'		=> trim($line[11]),
-							 'ville'	=> trim($line[12]));
+			$donnees = array('nom'		=> trim($line[4]),
+							 'prenom'	=> trim($line[3]),
+							 'fixe'		=> null,
+							 'mobile'	=> null,
+							 'telephone'=> trim($line[10]),
+							 'email'	=> trim($line[12]),
+							 'adresse'	=> null,
+							 'numero'	=> trim($line[6]),
+							 'rue'		=> trim($line[7]),
+							 'cp'		=> trim($line[8]),
+							 'ville'	=> trim($line[9]),
+							 'organisme'=> trim($line[1]),
+							 'function' => trim($line[5]));
 						
 							 
 			// On commence par retraiter l'adresse
-				$rue = explode(' ', $line[10], 3);
-				$bis = array('a', 'b', 'c', 'bis', 'ter');
-				if (in_array(strtolower($rue[1]), $bis)) {
-					$donnees['numero'] = $rue[0].$rue[1];
-					$donnees['rue'] = $rue[2];
-				} elseif (isset($rue[2])) {
-					$donnees['numero'] = $rue[0];
-					$donnees['rue'] = $rue[1] . ' ' . $rue[2];
-				} else {
-					$donnees['numero'] = $rue[0];
-					$donnees['rue'] = $rue[1];
+				if (!is_null($donnees['adresse'])) {
+					$rue = explode(' ', $line[10], 3);
+					$bis = array('a', 'b', 'c', 'bis', 'ter');
+					if (in_array(strtolower($rue[1]), $bis)) {
+						$donnees['numero'] = $rue[0].$rue[1];
+						$donnees['rue'] = $rue[2];
+					} elseif (isset($rue[2])) {
+						$donnees['numero'] = $rue[0];
+						$donnees['rue'] = $rue[1] . ' ' . $rue[2];
+					} else {
+						$donnees['numero'] = $rue[0];
+						$donnees['rue'] = $rue[1];
+					}
 				}
 							
 			
 			// On retraite les numéros de téléphone pour retirer tout ce qui n'est pas des chiffres
 				$donnees['fixe'] = preg_replace('`[^0-9]`', '', $donnees['fixe']);
 				$donnees['mobile'] = preg_replace('`[^0-9]`', '', $donnees['mobile']);
+				
+		
+			// En cas de numéro global, on retraite pour détecter s'il s'agit d'un portable ou d'un fixe
+				if (!is_null($donnees['telephone'])) {
+					
+					// On commence par supprimer les espaces et tout ce qui n'est pas des chiffres
+					$phone = preg_replace('`[^0-9]`', '', $donnees['telephone']);
+					
+					// On regarde s'il commence ou non par un 0, et sinon on rajoute un 0
+					$phone = str_split($phone);
+					if ($phone[0] != 0) array_unshift($phone, 0);
+					
+					// On regarde s'il possède bien 10 chiffres, sinon on supprime le contenu de l'entrée téléphone ou on divise en deux
+					if (count($phone) != 10) {
+						if (count($phone) == 20) {
+							$phone = array_chunk($phone, 10);
+							$phone1 = $phone[0];
+							$phone2 = $phone[1];
+							
+							if ($phone1[1] == 6 || $phone1[2] == 7) {
+								$donnees['mobile'] = implode('', $phone1);
+								$donnees['fixe'] = implode('', $phone2);
+								$donnees['telephone'] = null;
+							} else {
+								$donnees['mobile'] = implode('', $phone2);
+								$donnees['fixe'] = implode('', $phone1);
+								$donnees['telephone'] = null;
+							}
+						} else {
+							$donnees['telephone'] = null;
+						}
+					}
+					else {
+						// On regarde s'il s'agit d'un mobile ou d'un fixe
+						if ($phone[1] == 6 || $phone[2] == 7) {
+							$donnees['mobile'] = implode('', $phone);
+							$donnees['telephone'] = null;
+						} else {
+							$donnees['fixe'] = implode('', $phone);
+							$donnees['telephone'] = null;
+						}
+					}
+				}
 			
-			
+			// On retraite juste le nom de la rue pour qu'il existe sans les abréviations standard
+				if (is_null($donnees['adresse'])) {
+					$rue = $donnees['rue'];
+					$rue = str_replace('Chem ', 'Chemin ', $rue);
+					$rue = str_replace('Pce ', 'Place ', $rue);
+					$rue = str_replace('Plc ', 'Place ', $rue);
+					$rue = str_replace('Pl ', 'Place ', $rue);
+					$rue = str_replace('Pte ', 'petite ', $rue);
+					$rue = str_replace('Rte ', 'Route ', $rue);
+					$rue = str_replace('Imp ', 'Impasse ', $rue);
+					$rue = str_replace('Rle ', 'Ruelle ', $rue);
+					$rue = str_replace('Ave ', 'Avenue ', $rue);
+					$rue = str_replace('Bd ', 'Boulevard ', $rue);
+					$rue = str_replace('All ', 'Allée ', $rue);
+					$rue = str_replace('Fbg ', 'Faubourg ', $rue);
+					$rue = str_replace('Fb ', 'Faubourg ', $rue);
+					
+					$donnees['rue'] = $rue;
+				}
+				
 			// On commence d'abord par récupérer l'ID de la ville en question
 				$query = 'SELECT * FROM communes WHERE commune_nom LIKE "' . $core->formatage_recherche($donnees['ville']) . '" LIMIT 0,1';
 				$sql = $db->query($query); $row = $sql->fetch_assoc();
@@ -205,6 +272,8 @@
 					if (preg_match('`^[0-9]{9,10}$`', $donnees['mobile'])) $modifs[] = '`contact_mobile` = ' . $donnees['mobile'];
 					if (!is_null($donnees['email']) && !empty($donnees['email'])) $modifs[] = '`contact_email` = "' . $donnees['email'] . '"';
 					if (!is_null($code['immeuble']) && !empty($code['immeuble'])) $modifs[] = '`adresse_id` = ' . $code['immeuble'];
+					if (!is_null($donnees['organisme'])) $modifs[] = '`contact_organisme` = ' . $donnees['organisme'];
+					if (!is_null($donnees['fonction'])) $modifs[] = '`contact_fonction` = ' . $donnees['fonction'];
 					
 					// Dans tous les cas, on ajoute les tags
 					$modifs[] = '`contact_tags` = "' . $tags . '"';
@@ -240,7 +309,9 @@
 										  'mobile' => $donnees['mobile'],
 										  'telephone' => $donnees['fixe'],
 										  'email' => $donnees['email'],
-										  'tags' => trim(implode(',', $tag), ','));
+										  'tags' => trim(implode(',', $tag), ','),
+										  'organisme' => $donnees['organisme'],
+										  'fonction' => $donnees['fonction']);
 					$id_fiche = $fiche->creerContact($informations);
 	
 					// Si la fiche existe dans le tableau des anomalies, on créé un rapport de doublon
