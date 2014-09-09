@@ -29,7 +29,7 @@
 	endif;
 ?>
 	<h3>Fichiers à importer</h3>
-	<ul class="listeEncadree">
+	<ul class="listeEncadree" id="liste-fichiers">
 		<?php foreach ($scripts as $file) : ?>
 		<li data-file="<?php echo $file; ?>" class="fichier" style="cursor: pointer;"><strong><?php echo $file; ?></strong></li>
 		<?php endforeach; ?>
