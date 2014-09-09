@@ -28,9 +28,10 @@
 	
 	endif;
 ?>
-	<ul id="liste-fichiers">
+	<h3>Fichiers à importer</h3>
+	<ul class="listeEncadree">
 		<?php foreach ($scripts as $file) : ?>
-		<li data-file="<?php echo $file; ?>"><?php echo $file; ?></li>
+		<li data-file="<?php echo $file; ?>" class="fichier" style="cursor: pointer;"><strong><?php echo $file; ?></strong></li>
 		<?php endforeach; ?>
 	</ul>
 	<div id="analyse" style="margin: 1.5em;"></div>
@@ -38,6 +39,7 @@
 		$("#liste-fichiers li").click(function(){
 			var file =  $(this).data('file');
 			
+			$(this).remove();
 			$("#analyse").html('Fichier CSV en cours d\'import...<br>');
 			
 			$.ajax({
