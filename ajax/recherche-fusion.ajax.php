@@ -8,7 +8,7 @@
 			  FROM		`contacts`
 			  WHERE 	CONCAT_WS(" ", `contact_prenoms`, `contact_nom`, `contact_nom_usage`, `contact_nom`, `contact_prenoms`) LIKE "%' . $recherche . '%"
 			  ORDER BY	`contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC
-			  LIMIT		0, 45';
+			  LIMIT		0, 30';
 			  
 	$sql = $db->query($query);
 	
