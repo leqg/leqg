@@ -26,7 +26,7 @@
 		if ($contact1['electeur'] == 1 && $contact2['electeur'] == 0) :
 			$on = $contact1['id'];
 			$off = $contact2['id'];
-		elseif ($contact1['contact_electeur'] == 0 && $contact2['contact_electeur'] == 1) :
+		elseif ($contact1['electeur'] == 0 && $contact2['electeur'] == 1) :
 			$on = $contact2['id'];
 			$off = $contact1['id'];
 		else :
