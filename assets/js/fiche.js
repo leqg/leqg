@@ -376,8 +376,9 @@ var fiche = function() {
 			}
 		});
 		
-		$(document).bind('keypress', function(e) {
-			if (e.keyCode == 84) {
+		$('body').bind('keypress', function(e){
+			console.log(e.keyCode);
+			if (e.keyCode == 192) {
 				$('#tagAjout').click();
 			}
 		});
