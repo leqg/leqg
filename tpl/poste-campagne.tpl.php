@@ -8,7 +8,7 @@
 	$cout = $nombre * 0.1;
 ?>
 <section id="fiche">
-	<header class="sms">
+	<header class="poste">
 		<h2>
 			<span>Campagne de publipostage</span>
 			<span><?php echo $campagne['titre']; ?></span>
@@ -25,17 +25,13 @@
 			<p><?php echo date('d/m/Y H:i', strtotime($campagne['time'])); ?></p>
 		</li>
 		<li>
-			<span class="label-information">Coût de l'envoi</span>
-			<p><?php echo number_format($cout, 2, ',', ' '); ?> &euro;</p>
-		</li>
-		<li>
 			<span class="label-information">Destinataires</span>
 			<ul class="listeEncadree">
 				<?php foreach ($contacts as $contact) : ?>
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
 					<li class="electeur">
 						<strong><?php $fiche->affichageNomByID($contact); ?>
-						<p><?php $fiche->contact('poste', false, false, $contact); ?></p>
+						<?php if ($fiche->is_adresse_fichier()) : ?><p><?php $fiche->adressePostale($fiche->get_immeuble(), ' '); ?></p><?php endif; ?>
 					</li>
 				</a>
 				<?php endforeach; ?>
