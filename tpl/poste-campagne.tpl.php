@@ -30,7 +30,7 @@
 				<?php foreach ($contacts as $contact) : $fiche->acces($contact, true); ?>
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
 					<li class="electeur">
-						<strong><?php $fiche->affichageNomByID($contact); ?>
+						<strong><?php $fiche->affichageNomByID($contact); ?></strong>
 						<?php if ($fiche->is_adresse_fichier()) : ?><p><?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?></p><?php endif; ?>
 					</li>
 				</a>
