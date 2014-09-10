@@ -27,14 +27,14 @@
 		<li>
 			<span class="label-information">Destinataires</span>
 			<ul class="listeEncadree">
-				<?php foreach ($contacts as $contact) : ?>
+				<?php foreach ($contacts as $contact) : $fiche->acces($contact, true); ?>
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
 					<li class="electeur">
 						<strong><?php $fiche->affichageNomByID($contact); ?>
 						<?php if ($fiche->is_adresse_fichier()) : ?><p><?php $fiche->adressePostale($fiche->get_immeuble(), ' '); ?></p><?php endif; ?>
 					</li>
 				</a>
-				<?php endforeach; ?>
+				<?php $fiche->fermeture(); endforeach; ?>
 			</ul>
 		</li>
 	</ul>
