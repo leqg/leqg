@@ -31,7 +31,7 @@
 				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
 					<li class="electeur">
 						<strong><?php $fiche->affichageNomByID($contact); ?>
-						<?php if ($fiche->is_adresse_fichier()) : ?><p><?php $fiche->adressePostale($fiche->get_immeuble(), ' '); ?></p><?php endif; ?>
+						<?php if ($fiche->is_adresse_fichier()) : ?><p><?php $carto->adressePostale($fiche->get_immeuble(), ' '); ?></p><?php endif; ?>
 					</li>
 				</a>
 				<?php $fiche->fermeture(); endforeach; ?>
