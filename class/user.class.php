@@ -212,10 +212,9 @@ class user extends core {
 	
 	// liste( ) est une méthode renvoyant la liste des comptes associés au compte en cours
 	public	function liste() {
-		$compte = $this->client();
-		$compte = $compte['id'];
+		if (empty($this->user['client_id'])) { $compte = $this->client(); $compte = $compte['id']; } else { $compte = $this->user['client_id']; }
 		
-		$query = 'SELECT * FROM `users` WHERE client_id = ' . $compte . ' ORDER BY user_firstname, user_lastname ASC';
+		$query = 'SELECT * FROM `users` WHERE client_id = ' . $compte . ' AND `user_auth` < 9 ORDER BY user_firstname, user_lastname ASC';
 		$sql = $this->noyau->query($query);
 		
 		$users = array();
@@ -224,6 +223,64 @@ class user extends core {
 		
 		return $users; 
 	}
+	
+	
+	// infos( int ) permet de renvoyer les informations relatives à un compte demandé
+	public	function infos( $id ) {
+		if (!is_numeric($id)) return false;
+		
+		// On récupère les informations sur le compte demandé
+		$query = 'SELECT * FROM `users` WHERE `user_id` = ' . $id;
+		$sql = $this->noyau->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne le tableau des informations sur l'utilisateur
+		return $this->formatage_donnees($infos);
+	}
+	
+	
+	// status( int , bool ) permet de renvoyer le statut correspondant à un niveau d'autorisation demandé
+	public	function status( $niveau , $return = false ) {
+		if (!is_numeric($niveau)) return false;
+		
+		// On met en place le tableau de correspondance
+		$autorisation = array( 9 => 'Technicien',
+							   8 => 'Administrateur',
+							   5 => 'Équipe salariée',
+						 	   1 => 'Militant' );
+						 
+		// On retourne le type d'autorisation
+		if (!$return) echo $autorisation[$niveau];
+		
+		return $autorisation[$niveau];
+	}
+	
+	
+	/**
+	 * Retourne une URL gravatar ou le tag image complet pour une adresse email spécifiée
+	 Get either a Gravatar URL or complete image tag for a specified email address.
+	 *
+	 * @param string $email L'adresse email
+	 * @param string $s Taille en pixel, par défaut à 80px [ 1 - 2048 ]
+	 * @param string $d L'image par défaut à utiliser en cas d'absence [ 404 | mm | identicon | monsterid | wavatar ]
+	 * @param string $r Classification maximale [ g | pg | r | x ]
+	 * @param boole $img True pour retourner un tag image complet False pour l'URL seule
+	 * @param array $atts Tableau d'attributs à rajouter au tag image
+	 * @return Chaîne texte contenant le tag ou l'url du gravatar
+	 * @source http://gravatar.com/site/implement/images/php/
+	 */
+	public	function gravatar( $email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array() ) {
+	    $url = 'http://www.gravatar.com/avatar/';
+	    $url.= md5( strtolower( trim( $email ) ) );
+	    $url.= "?s=$s&d=$d&r=$r";
+	    if ( $img ) {
+	        $url = '<img src="' . $url . '"';
+	        foreach ( $atts as $key => $val )
+	            $url .= ' ' . $key . '="' . $val . '"';
+	        $url .= ' />';
+	    }
+	    return $url;
+	}	
 	
 	
 	// liste_connexion( [ int ] ) permet d'afficher la liste des connexions d'une fiche utilisateur à la plateforme
@@ -251,6 +308,39 @@ class user extends core {
 		echo (in_array($ip, $local)) ? 'Connexion locale au serveur' : 'Connexion depuis l\'adresse ' . $ip;
 
 		return true;
+	}
+	
+	
+	// pass_generator( int ) permet de générer un mot de passe de la taille demandé
+	public	function pass_generator( $taille = 8 ) {
+		$chaine = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		$char = str_split($chaine);
+		shuffle($char);
+		$pass = array_slice($char, 0, $taille);
+		
+		return implode($pass);
+	}
+	
+	
+	// creation( array ) permet de créer un utilisateur d'après les informations données
+	public	function creation( $infos ) {
+		// On vérifie que les infos ont bien la forme d'un tableau
+		if (!is_array($infos)) return false;
+
+		// On recherche l'information sur le compte client
+		$query = "SELECT * FROM users WHERE user_id = " . $_COOKIE['leqg-user'];
+		$sql = $this->noyau->query($query);
+		$donnees = $sql->fetch_assoc();
+		
+		// On prépare la requête d'insertion
+		$query = 'INSERT INTO `users` (`client_id`, `user_email`, `user_password`, `user_firstname`, `user_lastname`, `user_auth`)
+				  VALUES (' . $donnees['client_id'] . ', "' . $infos['email'] . '", "' . $infos['pass'] . '", "' . $infos['firstname'] . '", "' . $infos['lastname'] . '", ' . $infos['auth'] . ')';
+
+		// On exécute la requête
+		$this->noyau->query($query);
+		
+		// On retourne l'identifiant du compte créé
+		return $this->noyau->insert_id;
 	}
 }
 

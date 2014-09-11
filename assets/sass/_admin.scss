@@ -1,0 +1,235 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage de l'administration du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			ADMINISTRATION			* 
+ *									*
+ ************************************/
+
+section#administration {
+	position: absolute; top: 0; left: 0;
+	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 60px 0 0;
+	height: 100%;
+	width: 100%;
+	
+	h2 {
+		display: block;
+		font-family: $fonts1;
+		font-size: 2em;
+		font-weight: 300;
+		margin: 2em auto 1em auto;
+		text-align: center;
+	}
+	
+	ul.listeUtilisateurs {
+		display: block;
+		list-style: none;
+		margin: 0 auto;
+		text-align: center;
+		width: 85%;
+		
+		li {
+			display: inline-block;
+			margin: 0 1em 3em;
+			vertical-align: top;
+			width: 250px;
+			
+			img,
+			.avatar {
+				position: relative;
+				display: block;
+				color: $blanc;
+				@include border-radius(50%);
+				content: '\e80a';
+				font-family: $icons;
+				font-size: 50px;
+				height: 100px;
+				line-height: 100px;
+				margin: 0 auto;
+				opacity: 1;
+				text-align: center;
+				width: 100px;
+				@include transition(all);
+			}
+			
+			img { background-color: $bleu; }
+			.avatar { background-color: $gris; }
+			
+			h3 {
+				border: 0;
+				color: $noir;
+				font-size: 1.33em;
+				font-weight: 700;
+				line-height: 1.5em;
+				margin: .75em 0 .15em;
+				padding: 0;
+			}
+			
+			&#ajoutCompte { cursor: pointer; }
+			&#ajoutCompte:hover .avatar { background-color: $vert; }
+			
+			p {
+				color: $grisMoyen;
+				font-size: .85em;
+				font-weight: 500;
+				letter-spacing: .066em;
+				line-height: 1.5em;
+				margin: 0;
+				padding: 0;
+				text-transform: uppercase;
+			}
+		}
+	}
+	
+	
+	.overlayForm {
+		position: absolute; top: 120px; top: calc(60px + 3em); left: 0;
+		display: none;
+		background-color: rgba($blanc, .66);
+		height: 100%;
+		width: 100%;
+		
+		form {
+			position: relative;
+			display: block;
+			background-color: $blanc;
+			@include border-radius(.5em);
+			@include shadow(0, 0, 3em, $gris);
+			margin: 0 auto;
+			padding: 0 0 2em;
+			vertical-align: middle;
+			width: 450px;
+		
+			.fermetureOverlay {
+				position: absolute; top: .5em; right: .5em;
+				display: block;
+				background-color: $blanc;
+				@include border-radius(.33em);
+				color: $gris;
+				font-family: $icons;
+				font-size: 20px;
+				height: 25px;
+				line-height: 25px;
+				text-align: center;
+				text-decoration: none;
+				width: 25px;
+				@include transition(all);
+				
+				&:hover {
+					background-color: $gris;
+					color: $blanc;
+				}
+			}
+			
+			h3 {
+				border: 0;
+				font-family: $fonts1;
+				font-size: 1.5em;
+				font-weight: 500;
+				text-align: center;
+			}
+			
+			ul {
+				display: block;
+				list-style: none;
+				margin: 0 auto;
+				padding: 0;
+				width: 85%;
+				
+				li {
+					padding: .53em 0 .85em;
+				
+					label {
+						display: block;
+						color: $grisMoyen;
+						font-size: 1em;
+						line-height: 1.5em;
+						padding: 0 0 .33em .33em;
+						text-transform: uppercase;
+					}
+					
+					input {
+						display: block;
+						//background-color: lighten($gris, 16%);
+						border: 1px solid $gris;
+						@include border-radius(.33em);
+						font-family: $fonts1;
+						font-size: 1.33em;
+						font-weight: 400;
+						padding: .33em 1em .33em .5em;
+						
+						&[type='radio'] {
+							display: inline-block;
+							margin: 0 .5em 0 1em;
+						}
+						
+						&[type='submit'] {
+							background-color: $blanc;
+							color: $grisMoyen;
+							font-weight: 500;
+							width: 100%;
+							@include transition(all);
+							
+							&:hover {
+								color: $noir;
+								border-color: $vert;
+							}
+						}
+					}
+					
+					.radio {
+						color: $grisMoyen;
+						letter-spacing: .05em;
+						padding: .15em 0 .15em 0;
+						
+						input[type='radio'] {
+							display: none;
+						}
+						
+						label {
+							display: block;
+							cursor: pointer;
+							
+							& > span {
+								display: inline-block;
+								border: 1px solid $gris;
+								@include border-radius(.33em);
+								height: 15px;
+								margin: 0 1em;
+								vertical-align: sub;
+								width: 15px;
+								
+								& > span {
+									display: block;
+									background-color: $blanc;
+									@include border-radius(.15em);
+									height: 9px;
+									margin: 2px;
+									width: 9px;
+								}
+							}
+						}
+						
+						input[type='radio']:checked + label {
+							color: $noir;
+							font-weight: 700;
+							
+							& > span > span { background-color: $grisFonce; }
+						}
+					}
+				}
+			}
+		}
+	}
+}
