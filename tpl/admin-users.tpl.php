@@ -4,7 +4,7 @@
 	<ul class="listeUtilisateurs">
 	<?php $utilisateurs = $user->liste(); foreach ($utilisateurs as $utilisateur) : ?><!--
 	 --><li>
-	 		<img src="<?php echo $user->gravatar($utilisateur['email'], 100); ?>" alt="&#xe80a;" class="actif" title="Avatar de <?php echo $utilisateur['firstname'] . ' ' . $utilisateur['lastname']; ?>">
+	 		<img src="<?php echo $user->gravatar($utilisateur['email'], 100, 404); ?>" alt="&#xe80a;" class="actif" title="Avatar de <?php echo $utilisateur['firstname'] . ' ' . $utilisateur['lastname']; ?>">
 			<h3><?php echo $utilisateur['firstname'] . ' ' . $utilisateur['lastname']; ?></h3>
 			<p><?php $user->status($utilisateur['auth']); ?></p>
 			<ul></ul>
