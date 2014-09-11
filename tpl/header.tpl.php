@@ -38,6 +38,7 @@
 		<a href="<?php $core->tpl_go_to('poste'); ?>" id="lien-poste">Publipostage</a>
 		<a href="<?php $core->tpl_go_to('porte'); ?>" id="lien-porte">Porte-à-porte</a>
 		<a href="<?php $core->tpl_go_to('boite'); ?>" id="lien-boite">Boîtage</a>
+		<a href="<?php $core->tpl_go_to('administration'); ?>" id="lien-administration">Gestion</a>
 		<a href="<?php $core->tpl_go_to('rappels'); ?>" id="lien-rappels" class="inactif">Rappels</a>
 	</nav><!--nav#principale-->
 	

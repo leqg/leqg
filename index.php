@@ -594,6 +594,33 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				
 			}
 			
+			
+	// Mise en place des templates associés à l'administration
+	
+			else if ( $_GET['page'] == 'administration' ) {
+				
+				// On charge d'abord le template de header
+				$core->tpl_header();
+				
+				// On regarde si une action spécifique est demandée
+				if (isset($_GET['module'])) {
+					
+					
+				
+					
+				// Sinon, on charge la page de gestion des utilisateurs	
+				} else {
+					
+					// Template de gestion des comptes utilisateurs
+					$core->tpl_load('admin', 'users');
+					
+				}
+				
+				// On termine en chargeant le template de footer
+				$core->tpl_footer();
+				
+			}
+			
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services
