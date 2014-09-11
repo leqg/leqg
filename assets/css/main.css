@@ -2370,3 +2370,112 @@ section#administration .overlayForm form ul li .radio input[type='radio']:checke
   font-weight: 700; }
 section#administration .overlayForm form ul li .radio input[type='radio']:checked + label > span > span {
   background-color: #4e4b4a; }
+
+section#timeline-usr {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 60px 0 0;
+  height: 100%;
+  width: 100%; }
+section#timeline-usr h2 {
+  display: block;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 2em;
+  font-weight: 300;
+  margin: 2em auto 1em auto;
+  text-align: center; }
+section#timeline-usr ul.timeline {
+  border-left: 6px solid #ab3e5b;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 65%; }
+section#timeline-usr ul.timeline > li {
+  position: relative;
+  min-height: 75px;
+  margin: 0 auto 2.5em auto;
+  padding: 4px 0 0 40px; }
+section#timeline-usr ul.timeline > li.fin, section#timeline-usr ul.timeline > li.suite {
+  height: 50px;
+  min-height: 50px; }
+section#timeline-usr ul.timeline > li::before {
+  position: absolute;
+  top: 0px;
+  left: -34px;
+  display: block;
+  background-color: #2c3e50;
+  border: 6px solid white;
+  -webkit-border-radius: 0.66em;
+  -moz-border-radius: 0.66em;
+  border-radius: 0.66em;
+  color: white;
+  content: '\e837';
+  font-family: "fontello";
+  font-size: 25px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 50px; }
+section#timeline-usr ul.timeline > li.fin::before {
+  content: "\e898"; }
+section#timeline-usr ul.timeline > li.suite::before {
+  content: "\e8f7"; }
+section#timeline-usr ul.timeline > li.connexion::before {
+  content: "\e86c"; }
+section#timeline-usr ul.timeline > li.contact::before {
+  content: "\e80b"; }
+section#timeline-usr ul.timeline > li.telephone::before {
+  content: "\e854"; }
+section#timeline-usr ul.timeline > li.email::before {
+  content: "\e8e3"; }
+section#timeline-usr ul.timeline > li.courrier::before {
+  content: "\e805"; }
+section#timeline-usr ul.timeline > li.autre::before {
+  content: "\e8dd"; }
+section#timeline-usr ul.timeline > li.sms::before {
+  content: "\e8e4"; }
+section#timeline-usr ul.timeline > li.courriel::before {
+  content: "\e8e3"; }
+section#timeline-usr ul.timeline > li.porte::before {
+  content: "\e841"; }
+section#timeline-usr ul.timeline > li.boite::before {
+  content: "\e84e"; }
+section#timeline-usr ul.timeline > li.rappel::before {
+  content: "\e854"; }
+section#timeline-usr ul.timeline > li.poste::before {
+  content: "\e8ef"; }
+section#timeline-usr ul.timeline > li strong {
+  display: block;
+  color: #2c3e50;
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 50px;
+  overflow-x: scroll;
+  overflow-y: hidden; }
+section#timeline-usr ul.timeline > li > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+section#timeline-usr ul.timeline > li > ul > li {
+  font-size: 1.2em;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  padding: .15em 0 .33em; }
+section#timeline-usr ul.timeline > li > ul > li::before {
+  display: inline-block;
+  color: #4e4b4a;
+  font-family: "fontello";
+  text-align: center;
+  width: 30px; }
+section#timeline-usr ul.timeline > li > ul > li.date::before {
+  content: "\e862"; }
+section#timeline-usr ul.timeline > li > ul > li.contact::before {
+  content: "\e840"; }
+section#timeline-usr ul.timeline > li > ul > li > a {
+  text-decoration: underline; }
+section#timeline-usr ul.timeline > li > ul > li > a:hover {
+  color: #ab3e5b; }

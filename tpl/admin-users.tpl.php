@@ -10,6 +10,7 @@
 			<a href="#" class="ouvrirMenu">Actions</a>
 			<ul class="menuContextuel">
 				<a href="#" class="modifier" data-user="<?php echo $utilisateur['id']; ?>"><li>Modifier</li></a>
+				<a href="<?php $core->tpl_go_to('administration', array('historique' => $utilisateur['id'])); ?>"><li>Voir l'historique</li></a>
 				<?php if ($user->get_the_id() != $utilisateur['id']) : ?>
 				<a href="ajax.php?script=user-suppression&id=<?php echo $utilisateur['id']; ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte ?');"><li class="supprimer">Supprimer</li></a>
 				<?php endif; ?>

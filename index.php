@@ -603,10 +603,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				$core->tpl_header();
 				
 				// On regarde si une action spécifique est demandée
-				if (isset($_GET['module'])) {
+				if (isset($_GET['historique'])) {
 					
+					// On charge le template d'historique
+					$core->tpl_load('admin', 'historique');
 					
-				
 					
 				// Sinon, on charge la page de gestion des utilisateurs	
 				} else {
