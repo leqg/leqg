@@ -1,4 +1,5 @@
 <table id="services">
+	<?php if ($user->get_auth() >= 5) : ?>
 	<tr>
 		<td><a href="<?php $core->tpl_go_to('contacts'); ?>"><span>&#xe840;</span><p>Contacts</p></a></td>
 		<td><a href="<?php $core->tpl_go_to('dossiers'); ?>"><span>&#xe851;</span><p>Dossiers</p></a></td>
@@ -14,4 +15,11 @@
 		<td><a href="<?php $core->tpl_go_to('boite'); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
 		<td><a href="<?php $core->tpl_go_to('rappels'); ?>" class="inactif"><span class="inactif">&#xe854;</span><p class="inactif">Rappels</p></a></td>
 	</tr>
+	<?php else : ?>
+	<tr>
+		<td><a href="<?php $core->tpl_go_to('porte'); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
+		<td><a href="<?php $core->tpl_go_to('boite'); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
+		<td><a href="<?php $core->tpl_go_to('rappels'); ?>" class="inactif"><span class="inactif">&#xe854;</span><p class="inactif">Rappels</p></a></td>
+	</tr>
+	<?php endif; ?>
 </table>
