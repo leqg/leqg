@@ -34,9 +34,9 @@
 				</li>
 				<li>
 					<label>Autorisations</label>
-					<div class="radio"><input type="radio" name="auth" id="auth-8" value="8"><label for="auth-8"><span><span></span></span>Administrateur</label></div>
-					<div class="radio"><input type="radio" name="auth" id="auth-5" value="5"><label for="auth-5"><span><span></span></span>Équipe salariée</label></div>
-					<div class="radio"><input type="radio" name="auth" id="auth-1" value="1"><label for="auth-1"><span><span></span></span>Militant</label></div>
+					<div class="radio"><input type="radio" name="auth" id="auth-8" value="8" required><label for="auth-8"><span><span></span></span>Administrateur</label></div>
+					<div class="radio"><input type="radio" name="auth" id="auth-5" value="5" required><label for="auth-5"><span><span></span></span>Équipe salariée</label></div>
+					<div class="radio"><input type="radio" name="auth" id="auth-1" value="1" required><label for="auth-1"><span><span></span></span>Militant</label></div>
 				</li>
 				<li>
 					<input type="submit" value="Créer le compte">
