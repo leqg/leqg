@@ -242,6 +242,20 @@ class user extends core {
 	}
 	
 	
+	// infos_publiques( int ) permet de renvoyer les informations publiques relatives à un compte demandé
+	public	function infos_publiques( $id ) {
+		if (!is_numeric($id)) return false;
+		
+		// On récupère les informations sur le compte demandé
+		$query = 'SELECT `user_firstname`, `user_lastname`, `user_email`, `user_id`, `user_auth` FROM `users` WHERE `user_id` = ' . $id;
+		$sql = $this->noyau->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne le tableau des informations sur l'utilisateur
+		return $this->formatage_donnees($infos);
+	}
+	
+	
 	// status( int , bool ) permet de renvoyer le statut correspondant à un niveau d'autorisation demandé
 	public	function status( $niveau , $return = false ) {
 		if (!is_numeric($niveau)) return false;
@@ -341,7 +355,7 @@ class user extends core {
 		// On prépare la requête d'insertion
 		$query = 'INSERT INTO `users` (`client_id`, `user_email`, `user_password`, `user_firstname`, `user_lastname`, `user_auth`)
 				  VALUES (' . $donnees['client_id'] . ', "' . $infos['email'] . '", "' . $pass . '", "' . $infos['firstname'] . '", "' . $infos['lastname'] . '", ' . $infos['auth'] . ')';
-
+		
 		// On exécute la requête
 		$this->noyau->query($query);
 		

@@ -50,7 +50,7 @@ section#administration {
 				position: relative;
 				display: block;
 				color: $blanc;
-				@include border-radius(50%);
+				@include border-radius(.66em);
 				content: '\e80a';
 				font-family: $icons;
 				font-size: 50px;
@@ -126,7 +126,8 @@ section#administration {
 				list-style: none;
 				margin: .33em auto 0;
 				padding: 0;
-				width: 175px;
+				text-align: left;
+				width: 150px;
 				
 				& > a { 
 					color: $grisFonce;
@@ -147,10 +148,12 @@ section#administration {
 	
 	
 	.overlayForm {
-		position: absolute; top: 120px; top: calc(60px + 3em); left: 0;
+		position: absolute; top: 0; left: 0;
 		display: none;
 		background-color: rgba($blanc, .66);
 		height: 100%;
+		padding-top: 120px;
+		padding-top: calc(60px + 3em);
 		width: 100%;
 		
 		form {

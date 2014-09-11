@@ -2164,9 +2164,9 @@ section#administration ul.listeUtilisateurs > li img, section#administration ul.
   position: relative;
   display: block;
   color: white;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
+  -webkit-border-radius: 0.66em;
+  -moz-border-radius: 0.66em;
+  border-radius: 0.66em;
   content: '\e80a';
   font-family: "fontello";
   font-size: 50px;
@@ -2232,7 +2232,8 @@ section#administration ul.listeUtilisateurs > li ul.menuContextuel {
   list-style: none;
   margin: .33em auto 0;
   padding: 0;
-  width: 175px; }
+  text-align: left;
+  width: 150px; }
 section#administration ul.listeUtilisateurs > li ul.menuContextuel > a {
   color: #4e4b4a;
   text-decoration: none; }
@@ -2246,12 +2247,13 @@ section#administration ul.listeUtilisateurs > li ul.menuContextuel li.supprimer 
   color: #ab3e5b; }
 section#administration .overlayForm {
   position: absolute;
-  top: 120px;
-  top: calc(60px + 3em);
+  top: 0;
   left: 0;
   display: none;
   background-color: rgba(255, 255, 255, 0.66);
   height: 100%;
+  padding-top: 120px;
+  padding-top: calc(60px + 3em);
   width: 100%; }
 section#administration .overlayForm form {
   position: relative;
