@@ -1,13 +1,22 @@
 <section id="administration">
 	<h2>Passez en revue toute votre équipe</h2>
-	
+
 	<ul class="listeUtilisateurs">
 	<?php $utilisateurs = $user->liste(); foreach ($utilisateurs as $utilisateur) : ?><!--
 	 --><li>
 	 		<img src="<?php echo $user->gravatar($utilisateur['email'], 100, 404); ?>" alt="&#xe80a;" class="actif" title="Avatar de <?php echo $utilisateur['firstname'] . ' ' . $utilisateur['lastname']; ?>">
 			<h3><?php echo $utilisateur['firstname'] . ' ' . $utilisateur['lastname']; ?></h3>
 			<p><?php $user->status($utilisateur['auth']); ?></p>
-			<ul></ul>
+			<a href="#" class="ouvrirMenu">Actions</a>
+			<ul class="menuContextuel">
+				<?php if ($user->get_the_id() == $utilisateur['id']) : ?>
+				<a href="<?php $core->tpl_go_to('utilisateur'); ?>"><li>Votre profil</li></a>
+				<?php else : ?>
+				<a href="#"><li>Modifier</li></a>
+				<a href="#"><li>Écrire un message</li></a>
+				<a href="ajax.php?script=user-suppression&id=<?php echo $utilisateur['id']; ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte ?');"><li class="supprimer">Supprimer</li></a>
+				<?php endif; ?>
+			</ul>
 		</li><?php endforeach; ?><!--
 	 --><li id="ajoutCompte">
 	 		<span class="avatar">&#xe80c;</span>

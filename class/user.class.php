@@ -27,7 +27,7 @@ class user extends core {
 	public	function statut_connexion() {
 		if (isset($_COOKIE['leqg-user'])) {
 			// La connexion existe, on construit les propriétés
-			$query = "SELECT * FROM users WHERE user_id = " . $_COOKIE['leqg-user'];
+			$query = "SELECT * FROM `users` WHERE `user_auth` > 0 AND `user_id` = " . $_COOKIE['leqg-user'];
 			$sql = $this->noyau->query($query);
 			$donnees = $sql->fetch_assoc();
 			
@@ -85,7 +85,7 @@ class user extends core {
 	// Méthode de vérification de l'exitence d'un login 
 	
 	private	function existence_login($login) {
-		$query = "SELECT user_email FROM users WHERE user_email = '" . $login . "'";
+		$query = "SELECT user_email FROM users WHERE user_email = '" . $login . "' AND `user_auth` > 0";
 		$sql = $this->noyau->query($query);
 		$nb_login = $sql->num_rows;
 		
@@ -217,7 +217,7 @@ class user extends core {
 	public	function liste() {
 		if (empty($this->user['client_id'])) { $compte = $this->client(); $compte = $compte['id']; } else { $compte = $this->user['client_id']; }
 		
-		$query = 'SELECT * FROM `users` WHERE client_id = ' . $compte . ' AND `user_auth` < 9 ORDER BY user_firstname, user_lastname ASC';
+		$query = 'SELECT * FROM `users` WHERE client_id = ' . $compte . ' AND `user_auth` < 9 AND `user_auth` > 0 ORDER BY user_firstname, user_lastname ASC';
 		$sql = $this->noyau->query($query);
 		
 		$users = array();
@@ -335,15 +335,28 @@ class user extends core {
 		$sql = $this->noyau->query($query);
 		$donnees = $sql->fetch_assoc();
 		
+		// On encrypte le mot de passe
+		$pass = $this->encrypt_pass($infos['pass']);
+		
 		// On prépare la requête d'insertion
 		$query = 'INSERT INTO `users` (`client_id`, `user_email`, `user_password`, `user_firstname`, `user_lastname`, `user_auth`)
-				  VALUES (' . $donnees['client_id'] . ', "' . $infos['email'] . '", "' . $infos['pass'] . '", "' . $infos['firstname'] . '", "' . $infos['lastname'] . '", ' . $infos['auth'] . ')';
+				  VALUES (' . $donnees['client_id'] . ', "' . $infos['email'] . '", "' . $pass . '", "' . $infos['firstname'] . '", "' . $infos['lastname'] . '", ' . $infos['auth'] . ')';
 
 		// On exécute la requête
 		$this->noyau->query($query);
 		
 		// On retourne l'identifiant du compte créé
 		return $this->noyau->insert_id;
+	}
+	
+	
+	// suppression( int ) permet de désactiver un compte utilisateur à partir de son numéro identifiant
+	public	function suppression( $id ) {
+		// On vérifie le format de l'identifiant
+		if (!is_numeric($id)) return false;
+		
+		// On modifie son statut
+		return ($this->noyau->query('UPDATE `users` SET `user_auth` = 0 WHERE `user_id` = ' . $id)) ? true : false;
 	}
 }
 

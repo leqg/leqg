@@ -2155,12 +2155,12 @@ section#administration ul.listeUtilisateurs {
   margin: 0 auto;
   text-align: center;
   width: 85%; }
-section#administration ul.listeUtilisateurs li {
+section#administration ul.listeUtilisateurs > li {
   display: inline-block;
   margin: 0 1em 3em;
   vertical-align: top;
   width: 250px; }
-section#administration ul.listeUtilisateurs li img, section#administration ul.listeUtilisateurs li .avatar {
+section#administration ul.listeUtilisateurs > li img, section#administration ul.listeUtilisateurs > li .avatar {
   position: relative;
   display: block;
   color: white;
@@ -2179,11 +2179,11 @@ section#administration ul.listeUtilisateurs li img, section#administration ul.li
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out; }
-section#administration ul.listeUtilisateurs li img {
+section#administration ul.listeUtilisateurs > li img {
   background-color: #a8a4a3; }
-section#administration ul.listeUtilisateurs li .avatar {
+section#administration ul.listeUtilisateurs > li .avatar {
   background-color: #cdcbca; }
-section#administration ul.listeUtilisateurs li h3 {
+section#administration ul.listeUtilisateurs > li h3 {
   border: 0;
   color: black;
   font-size: 1.33em;
@@ -2191,19 +2191,59 @@ section#administration ul.listeUtilisateurs li h3 {
   line-height: 1.5em;
   margin: .75em 0 .15em;
   padding: 0; }
-section#administration ul.listeUtilisateurs li#ajoutCompte {
+section#administration ul.listeUtilisateurs > li#ajoutCompte {
   cursor: pointer; }
-section#administration ul.listeUtilisateurs li#ajoutCompte:hover .avatar {
+section#administration ul.listeUtilisateurs > li#ajoutCompte:hover .avatar {
   background-color: #b3cc57; }
-section#administration ul.listeUtilisateurs li p {
+section#administration ul.listeUtilisateurs > li p {
   color: #a8a4a3;
   font-size: .85em;
   font-weight: 500;
   letter-spacing: .066em;
   line-height: 1.5em;
-  margin: 0;
+  margin: 0 0 .5em 0;
   padding: 0;
   text-transform: uppercase; }
+section#administration ul.listeUtilisateurs > li .ouvrirMenu {
+  color: #ffbe40;
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: .066em;
+  padding: 0 .25em;
+  text-decoration: none; }
+section#administration ul.listeUtilisateurs > li .ouvrirMenu:hover {
+  color: #ab3e5b; }
+section#administration ul.listeUtilisateurs > li .ouvrirMenu::after {
+  display: inline;
+  content: '\e877';
+  font-family: "fontello";
+  font-size: 1em;
+  padding: 0 0 0 .33em; }
+section#administration ul.listeUtilisateurs > li .ouvrirMenu.actif::after {
+  content: '\e87a'; }
+section#administration ul.listeUtilisateurs > li .ouvrirMenu.actif + ul.menuContextuel {
+  display: block; }
+section#administration ul.listeUtilisateurs > li ul.menuContextuel {
+  display: none;
+  border: 1px solid #cdcbca;
+  -webkit-border-radius: 0.33em;
+  -moz-border-radius: 0.33em;
+  border-radius: 0.33em;
+  list-style: none;
+  margin: .33em auto 0;
+  padding: 0;
+  width: 175px; }
+section#administration ul.listeUtilisateurs > li ul.menuContextuel > a {
+  color: #4e4b4a;
+  text-decoration: none; }
+section#administration ul.listeUtilisateurs > li ul.menuContextuel li {
+  display: block;
+  letter-spacing: .025em;
+  padding: .33em .5em; }
+section#administration ul.listeUtilisateurs > li ul.menuContextuel li:hover {
+  background-color: rgba(44, 62, 80, 0.05); }
+section#administration ul.listeUtilisateurs > li ul.menuContextuel li.supprimer {
+  color: #ab3e5b; }
 section#administration .overlayForm {
   position: absolute;
   top: 120px;
