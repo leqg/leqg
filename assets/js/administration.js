@@ -45,6 +45,7 @@ var administration = function() {
 	});
 	
 	$('.fermetureOverlay').click(function(){
+		$('.ouvrirMenu').removeClass('actif');
 		$('.overlayForm').fadeOut();
 		return false;
 	});
