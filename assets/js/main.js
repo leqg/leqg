@@ -32,9 +32,9 @@ var main = function() {
 			
 			if ($(this).hasClass('actif')) {
 				$('nav#principale').css('left', 0);
-				$('main').css('left', '260px');
+				$('main').css('left', '165px');
 			} else {
-				$('nav#principale').css('left', '-260px');
+				$('nav#principale').css('left', '-165px');
 				$('main').css('left', 0);
 			}
 			
@@ -45,9 +45,11 @@ var main = function() {
 		
 	// À chaque clique sur un lien du menu principal ou sur un lien de la page en général, on range le menu le temps du chargement
 		$('nav#principale a').click(function(){
-			$('#menu').toggleClass('actif');
-			$('nav#principale').css('left', '-260px');
-			$('main').css('left', 0);
+			if ($('#menu').hasClass('actif')) {
+				$('#menu').toggleClass('actif');
+				$('nav#principale').css('left', '-165px');
+				$('main').css('left', 0);
+			}
 		});
 	
 	

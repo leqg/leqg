@@ -34,7 +34,7 @@ header#top {
 		line-height: 60px;
 		overflow: hidden;
 		text-align: center;
-		width: 60px;
+		width: 95px;
 		
 		&::after {
 			position: absolute; top: 0; left: 0;
@@ -46,7 +46,7 @@ header#top {
 			font-size: 35px;
 			height: 60px;
 			line-height: 60px;
-			width: 60px;
+			width: 95px;
 			@include transition(all);
 		}
 		
@@ -60,13 +60,13 @@ header#top {
 	}
 	
 	& > h1 {
-		position: absolute; top: 0; left: 60px;
+		position: absolute; top: 0; left: 95px;
 		display: inline-block;
 		height: 60px;
 		line-height: 60px;
 		margin: 0;
 		padding: 0 0 0 15px;
-		width: 200px;
+		width: 165px;
 	}
 	
 	& > a#notifications {

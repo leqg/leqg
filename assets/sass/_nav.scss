@@ -15,7 +15,7 @@
  ************************************/
 
 nav#principale {
-	position: absolute; top: 0; left: -260px;
+	position: absolute; top: 0; left: -165px; /* 260 - 95 */
 	display: block;
 	background-color: $lightGrey;
 	height: 100%;
@@ -36,12 +36,13 @@ nav#principale {
 		font-weight: 400;
 		height: 60px;
 		line-height: 60px;
-		padding: 0 15px 0 70px;
+		padding: 0 95px 0 15px;
+		text-align: right;
 		text-decoration: none;
 		width: 100%;
 		
 		&::before {
-			position: absolute; top: 0; left: 0;
+			position: absolute; top: 0; right: 15px; /* 65 + 15 + 15 = 95*/
 			display: block;
 			font-family: $icons;
 			font-size: 30px;
@@ -69,7 +70,7 @@ nav#principale {
 			}
 			
 			&::after {
-				position: absolute; top: 0; left: 0;
+				position: absolute; top: 0; right: 15px;
 				color: $lightGrey;
 				content: '\e80a';
 				font-family: $icons;
