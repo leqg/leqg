@@ -197,8 +197,10 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 
 		else if ($_GET['page'] == 'contacts') {
 			
-			// On lance la page d'accueil du module contact
+			// On charge le header, la page d'accueil du module contact et le footer
+			$core->tpl_header();
 			$core->tpl_load('contacts');
+			$core->tpl_footer();
 			
 		}
 		

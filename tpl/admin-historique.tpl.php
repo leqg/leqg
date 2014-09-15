@@ -2,7 +2,7 @@
 <section id="timeline-usr">
 	<h2>Historique de l'utilisateur <strong><?php echo $user->get_login_by_ID($usr['id']); ?></strong></h2>
 
-	<ul class="timeline">
+	<ul class="timelineHistorique">
 		<?php if ($usr['lastaction'] != '0000-00-00 00:00:00') : ?>
 		<li class="connexion">
 			<strong>Dernière action sur le système</strong>

@@ -88,6 +88,21 @@ class tache extends core {
 	}
 	
 	
+	// liste( int , string ) permet d'avoir une liste des x tâches les plus anciennes ou les plus récentes
+	public	function liste( $nombre , $ordre='DESC' ) {
+		if (!is_numeric($nombre) && !is_string($ordre)) return false;
+		
+		// On prépare et on exécute la recherche
+		$query = 'SELECT * FROM taches WHERE tache_terminee = 0 ORDER BY tache_creation ' . $ordre . ' LIMIT 0, ' . $nombre;
+		$sql = $this->db->query($query);
+		
+		// On initialise la liste de ces tâches
+		while ($row = $sql->fetch_assoc()) { $taches[] = $this->formatage_donnees($row); }
+		
+		return $taches;
+	}
+	
+	
 	// fermetureTache( int ) permet de fermer une tâche
 	public	function fermetureTache( $task ) {
 		if (!is_numeric($task)) return false;
