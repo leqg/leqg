@@ -3,7 +3,7 @@
 		<h3>Dernières interactions</h3>
 		
 		<ul class="timeline debutNow">
-			<?php $interactions = $historique->dernieresInteractions(15); foreach ($interactions as $interaction) : ?>
+			<?php $interactions = $historique->dernieresInteractions(15); if (count($interactions) > 0) : foreach ($interactions as $interaction) : ?>
 			<li class="<?php echo $interaction['type']; ?>">
 				<strong><?php echo $interaction['objet']; ?></strong>
 				<ul>
@@ -12,7 +12,7 @@
 					<li class="lieu"><?php echo $interaction['lieu']; ?></li>
 				</ul>
 			</li>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
 			<li class="fin"></li>
 		</ul>
 	</div><!--
@@ -21,7 +21,7 @@
 		<h3>Dernières tâches créées</h3>
 		
 		<ul class="timeline debutNow">
-			<?php $taches = $tache->liste(15); foreach ($taches as $t) : ?>
+			<?php $taches = $tache->liste(15); if (count($taches) > 0) : foreach ($taches as $t) : ?>
 			<li class="tache">
 				<strong><?php echo $t['description']; ?></strong>
 				<?php if (!empty($t['historique_id']) && $t['historique_id'] > 0) : ?>
@@ -32,7 +32,7 @@
 				</ul>
 				<?php endif; ?>
 			</li>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
 			<li class="fin"></li>
 		</ul>
 	</div>
