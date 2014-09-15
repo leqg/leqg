@@ -97,6 +97,7 @@ class tache extends core {
 		$sql = $this->db->query($query);
 		
 		// On initialise la liste de ces tâches
+		$taches = array();
 		while ($row = $sql->fetch_assoc()) { $taches[] = $this->formatage_donnees($row); }
 		
 		return $taches;
