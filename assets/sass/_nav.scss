@@ -41,7 +41,7 @@ nav#principale {
 		text-decoration: none;
 		width: 100%;
 		
-		&::before {
+		&::after {
 			position: absolute; top: 0; right: 15px; /* 65 + 15 + 15 = 95*/
 			display: block;
 			font-family: $icons;
@@ -52,42 +52,43 @@ nav#principale {
 			width: 65px;
 		}
 		
-		&#lien-contacts::before { content: '\e840'; }
-		&#lien-dossiers::before { content: '\e851'; }
-		&#lien-carto::before { content: '\e845'; }
-		&#lien-sms::before { content: '\e8e4'; }
-		&#lien-email::before { content: '\e805'; }
-		&#lien-poste::before { content: '\e8ef'; }
-		&#lien-porte::before { content: '\e841'; }
-		&#lien-boite::before { content: '\e84d'; }
-		&#lien-rappels::before { content: '\e854'; }
-		&#lien-administration::before { content: '\e855'; }
+		&#lien-contacts::after { content: '\e840'; }
+		&#lien-dossiers::after { content: '\e851'; }
+		&#lien-carto::after { content: '\e845'; }
+		&#lien-sms::after { content: '\e8e4'; }
+		&#lien-email::after { content: '\e805'; }
+		&#lien-poste::after { content: '\e8ef'; }
+		&#lien-porte::after { content: '\e841'; }
+		&#lien-boite::after { content: '\e84d'; }
+		&#lien-rappels::after { content: '\e854'; }
+		&#lien-administration::after { content: '\e855'; }
 		
-		&#lien-utilisateur {
+		&.actif {
+			color: $bleu;
+		
 			&::before {
-				content: '\e952';
-				font-size: 45px;
-			}
-			
-			&::after {
 				position: absolute; top: 0; right: 15px;
-				color: $lightGrey;
-				content: '\e80a';
+				display: block;
+				color: $bleu;
+				content: '\e952';
 				font-family: $icons;
-				font-size: 25px;
+				font-size: 45px;
 				height: 65px;
 				line-height: 65px;
 				text-align: center;
 				width: 65px;
+				@include transition(all);
 			}
 			
-			&:hover {
-				color: $rouge;
+			&::after {
+				color: $lightGrey;
 			}
 		}
 		
 		&:hover {
-			color: $bleu;
+			color: $rouge;
+			
+			&.actif::before { color: $rouge; }
 		}
 		
 		&.inactif {
