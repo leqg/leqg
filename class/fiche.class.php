@@ -970,6 +970,39 @@ class fiche extends core {
 		// Si aucune condition n'est remplie jusqu'ici, c'est que nous n'avons pas de coordonnées !
 		return false;
 	}
+	
+	
+	// liste( array , [ int ] , [ bool ] ) permet de retourner ou d'exporter une liste de contacts au format JSON selon des conditions entrées en argument
+	public	function liste( $args = null , $nombre = 30 , $export = false ) {
+		if (is_bool($nombre)) { $export = $nombre; $nombre = 30; }
+		if (is_bool($args)) { $export = $args; $nombre = 30; $args = null; }
+		
+		// On prépare la requête de recherche des données
+		$query = 'SELECT	 	`immeuble_id`,
+							`adresse_id`,
+							`contact_nom`,
+							`contact_nom_usage`,
+							`contact_prenoms`,
+							`contact_naissance_date`,
+							`contact_sexe`,
+							`contact_email`,
+							`contact_mobile`,
+							`contact_telephone`,
+							`contact_organisme`,
+							`contact_fonction`
+				  FROM		`contacts` ';
+		
+		// On termine la préparation de la requête
+		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT 0, ' . $nombre;
+
+		// On exécute la requête SQL et on l'affecte au tableau $contacts
+		$sql = $db->query($query);
+		$contacts = array();
+		while ($row = $sql->fetch_assoc()) $contacts[] = $this->formatage_donnees($row);
+		
+		// On retourne sous format JSON les données
+		return json_encode($contacts);
+	}
 }
 
 ?>

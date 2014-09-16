@@ -554,3 +554,37 @@ section#contacts {
 		}
 	}
 }
+
+table#listeFiches {
+	border: none;
+	margin: 0 auto;
+	width: 90%;
+	
+	tr,
+	th,
+	td {
+		background: none;
+		border: 0;
+		text-align: left;
+	}
+	
+	thead {
+		border: none;
+		border-bottom: 1px solid $noir;
+		color: $bleu;
+		font-size: 1.15em;
+		font-weight: 600;
+	}
+	
+	tbody {
+		td {
+			a {
+				color: $bleu;
+				
+				&:hover {
+					color: $rouge;
+				}
+			}
+		}
+	}
+}
