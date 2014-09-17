@@ -340,3 +340,52 @@ ul.boutonsRadio {
 }
 
 
+
+/************************************
+ *									*
+ *			 BOUTON RADIO			* 
+ *									*
+ ************************************/
+ 
+.radio {
+	color: $grisMoyen;
+	letter-spacing: .05em;
+	padding: .15em 0 .15em 0;
+	
+	input[type='radio'],
+	input[type='checkbox'] {
+		display: none;
+	}
+	
+	label {
+		display: block;
+		cursor: pointer;
+		
+		& > span {
+			display: inline-block;
+			border: 1px solid $gris;
+			@include border-radius(.33em);
+			height: 15px;
+			margin: 0 1em;
+			vertical-align: sub;
+			width: 15px;
+			
+			& > span {
+				display: block;
+				background-color: $blanc;
+				@include border-radius(.15em);
+				height: 9px;
+				margin: 2px;
+				width: 9px;
+			}
+		}
+	}
+	
+	input[type='radio']:checked + label,
+	input[type='checkbox']:checked + label {
+		color: $noir;
+		font-weight: 700;
+		
+		& > span > span { background-color: $grisFonce; }
+	}
+}

@@ -18,29 +18,37 @@
 				<th>Mobile</th>
 				<th>Tél.</th>
 				<th>Tags</th>
-				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		
 		<tbody>
 			<?php
-				$query = 'SELECT * FROM `contacts` WHERE `contact_email` IS NOT NULL OR `contact_telephone` IS NOT NULL OR `contact_mobile` IS NOT NULL ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT 0, 10';
-				$sql = $db->query($query);
-				$contacts = array();
-				while ($row = $sql->fetch_assoc()) $contacts[] = $core->formatage_donnees($row);
+				$argsOnLoad = array('tag' => 'parti');
+				$contacts = $fiche->liste('php', $argsOnLoad, 5000);
 				foreach ($contacts as $contact) :
 			?>
 			<tr>
-				<td></td>
+				<td><div class="radio"><input type="checkbox" name="fiche-<?php echo $contact['id']; ?>" id="fiche-<?php echo $contact['id']; ?>"><label for="fiche-<?php echo $contact['id']; ?>"><span><span></span></span></label></div></td>
 				<td><a href="<?php $core->tpl_go_to('fiche', array('id' => $contact['id'])); ?>"><?php $fiche->affichageNomByID($contact['id']); ?></a></td>
 				<td><?php $fiche->contact('email', false, false, $contact['id']); ?></td>
-				<td><?php $fiche->contact('mobile', false, false, $contact['id']); ?></td>
-				<td><?php $fiche->contact('telephone', false, false, $contact['id']); ?></td>
+				<td><?php $core->tpl_phone($fiche->contact('mobile', false, true, $contact['id'])); ?></td>
+				<td><?php $core->tpl_phone($fiche->contact('telephone', false, true, $contact['id'])); ?></td>
+				<td class="listeTags"><?php $fiche->tags('span', false, $contact['id']); ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
 </section>
+
+
+
+
+
+
+
+
+
+
 <section id="contacts-ancien" style="display:none;">
 	<div id="historique">
 		<h3>Dernières interactions</h3>

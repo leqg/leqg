@@ -577,12 +577,24 @@ table#listeFiches {
 	}
 	
 	tbody {
-		td {
-			a {
-				color: $bleu;
-				
-				&:hover {
-					color: $rouge;
+		tr {
+			&:nth-of-type(odd) {
+				background-color: rgba($rouge, .05);
+			}
+			
+			td {
+				&:first-of-type { 
+					padding: 0;
+					text-align: center;
+					width: 50px;
+				}
+			
+				a {
+					color: $bleu;
+					
+					&:hover {
+						color: $rouge;
+					}
 				}
 			}
 		}
