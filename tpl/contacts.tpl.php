@@ -8,7 +8,7 @@
 			<a href="#" class="ouvertureOverlay" data-overlay="ajoutCritere">Ajouter un critère</a>
 		</nav>
 		
-		<div id="criteres" class="listeTags"><span class="tag" data-critere="coordonnees">Fiches avec coordonnées</span></div>
+		<div id="criteres" class="listeTags"><span class="tag" data-critere="contact:tous">contact:tous</span></div>
 	</section>
 	<section id="blocFiches">
 		<table id="listeFiches">
@@ -23,9 +23,9 @@
 				</tr>
 			</thead>
 			
-			<tbody>
+			<tbody id="majListeFiches">
 				<?php
-					$argsOnLoad = array('coordonnees' => true);
+					$argsOnLoad = array('contact' => 'tous');
 					$contacts = $fiche->liste('php', $argsOnLoad, 5000);
 					foreach ($contacts as $contact) :
 				?>
@@ -44,28 +44,34 @@
 </section>
 
 <div id="ajoutCritere" class="overlayForm">
-	<form method="post" action="ajax.php?script=user-modification" id="formModificationCompte">
-		<a class="fermetureOverlay" href="#">&#xe813;</a>
+	<form method="post" action="ajax.php?script=contacts-liste" id="form-ajoutCritere">
+		<input type="hidden" name="summaryTri" id="summaryTri" value="contact:tous">
+		<a class="fermetureOverlay" data-overlay="ajoutCritere" href="#">&#xe813;</a>
 		<h3>Ajout d'un critère de tri</h3>
 		<ul>
 			<li>
 				<label>Critère de tri</label>
-				<div class="radio"><input type="radio" name="critere" id="critere-coordonnees" value="8" required><label for="critere-coordonnees"><span><span></span></span>Coordonnées (mail, téléphone)</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-etatcivil" value="5" required><label for="critere-etatcivil"><span><span></span></span>État civil</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-adresse" value="5" required><label for="critere-adresse"><span><span></span></span>Adresse</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-tags" value="1" required><label for="critere-tags"><span><span></span></span>Tags</label></div>
+				<div class="radio"><input type="radio" name="critere" id="critere-contact" class="selectionCritere" data-critere="contact" value="contact" required><label for="critere-contact"><span><span></span></span>Coordonnées (mail, téléphone)</label></div>
+				<div class="radio"><input type="radio" name="critere" id="critere-electoral" class="selectionCritere" data-critere="electoral" value="electoral" required><label for="critere-electoral"><span><span></span></span>Liste électorale</label></div>
+				<div class="radio"><input type="radio" name="critere" id="critere-bureau" class="selectionCritere" data-critere="bureau" value="bureau" required><label for="critere-bureau"><span><span></span></span>Bureau de vote</label></div>
+				<div class="radio"><input type="radio" name="critere" id="critere-etatcivil" class="selectionCritere" data-critere="etatcivil" value="etatcivil" required><label for="critere-etatcivil"><span><span></span></span>État civil</label></div>
+				<div class="radio"><input type="radio" name="critere" id="critere-adresse" class="selectionCritere" data-critere="adresse" value="adresse" required><label for="critere-adresse"><span><span></span></span>Adresse</label></div>
+				<div class="radio"><input type="radio" name="critere" id="critere-tags" class="selectionCritere" data-critere="tags" value="tags" required><label for="critere-tags"><span><span></span></span>Tags</label></div>
+			</li>
+			<li class="detail-critere detail-critere-contact affichageOptionnel">
+				<label>Afficher les fiches où</label>
+				<div class="radio"><input type="radio" name="contact" id="contact-tous" value="tous"><label for="contact-tous"><span><span></span></span>Un téléphone ou l'email est connu</label></div>
+				<div class="radio"><input type="radio" name="contact" id="contact-email" value="email"><label for="contact-email"><span><span></span></span>L'adresse email est connue</label></div>
+				<div class="radio"><input type="radio" name="contact" id="contact-mobile" value="mobile"><label for="contact-mobile"><span><span></span></span>Le mobile est connu</label></div>
+				<div class="radio"><input type="radio" name="contact" id="contact-telephone" value="telephone"><label for="contact-telephone"><span><span></span></span>Le fixe est connu</label></div>
+			</li>
+			<li class="detail-critere detail-critere-electoral affichageOptionnel">
+				<label>Afficher les fiches où</label>
+				<div class="radio"><input type="radio" name="electoral" id="electoral-oui" value="oui"><label for="electoral-oui"><span><span></span></span>Le contact est électeur</label></div>
+				<div class="radio"><input type="radio" name="electoral" id="electoral-non" value="non"><label for="electoral-non"><span><span></span></span>Le contact n'est pas électeur</label></div>
 			</li>
 			<li>
-				<input type="submit" value="Définir le critère">
-			</li>
-		</ul>
-		<ul id="detail-critere-coordonnees">
-			<li>
-				<label>Afficher les fiches possédant</label>
-				<div class="radio"><input type="radio" name="critere" id="critere-coordonnees" value="8" required><label for="critere-coordonnees"><span><span></span></span>Coordonnées (mail, téléphone)</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-etatcivil" value="5" required><label for="critere-etatcivil"><span><span></span></span>État civil</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-adresse" value="5" required><label for="critere-adresse"><span><span></span></span>Adresse</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-tags" value="1" required><label for="critere-tags"><span><span></span></span>Tags</label></div>
+				<input type="submit" value="Ajouter le critère de tri">
 			</li>
 		</ul>
 	</form>

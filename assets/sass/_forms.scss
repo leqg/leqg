@@ -484,6 +484,8 @@ ul.boutonsRadio {
 			
 			li {
 				padding: .53em 0 .85em;
+				
+				&.detail-critere { display: none; }
 			
 				label {
 					display: block;

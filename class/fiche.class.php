@@ -973,9 +973,7 @@ class fiche extends core {
 	
 	
 	// liste( string = PHP/JSON , [ array ] , [ int ] , [ bool ] ) permet de retourner ou d'exporter une liste de contacts au format JSON ou Tableau PHP selon des conditions entrées en argument
-	public	function liste( $output , $args = null , $nombre = 30 , $export = false ) {
-		if (is_bool($nombre)) { $export = $nombre; $nombre = 30; }
-		if (is_bool($args)) { $export = $args; $nombre = 30; $args = null; }
+	public	function liste( $output , $args = null , $nombre = false , $export = false ) {
 		
 		// On prépare la requête de recherche des données
 		$query = 'SELECT	`contact_id`,
@@ -989,6 +987,7 @@ class fiche extends core {
 							`contact_email`,
 							`contact_mobile`,
 							`contact_telephone`,
+							`contact_tags`,
 							`contact_organisme`,
 							`contact_fonction`
 				  FROM		`contacts` ';
@@ -996,33 +995,25 @@ class fiche extends core {
 		// On lance le traitement des arguments dans un tableau $conditions
 		$conditions = array();
 		$immeubles = array(); // On prépare également le tableau $immeubles pour le traitement des critères géographiques
+
 		if (!is_null($args) && is_array($args)) {
 			// On lance une boucle de traitement des arguments
 			foreach ($args as $key => $arg) :
-				
+
 				// conditions relatives aux coordonnées
-				if ($key == 'email' && $arg === true) $conditions[] = '`contact_email` IS NOT NULL';
-				if ($key == 'email' && $arg === false) $conditions[] = '`contact_email` IS NULL';
-				if ($key == 'mobile' && $arg === true) $conditions[] = '`contact_mobile` IS NOT NULL';
-				if ($key == 'mobile' && $arg === false) $conditions[] = '`contact_mobile` IS NULL';
-				if ($key == 'telephone' && $arg === true) $conditions[] = '`contact_telephone` IS NOT NULL';
-				if ($key == 'telephone' && $arg === false) $conditions[] = '`contact_telephone` IS NULL';
-				if ($key == 'coordonnees' && $arg === true) $conditions[] = '( `contact_email` IS NOT NULL OR `contact_mobile` IS NOT NULL OR `contact_telephone` IS NOT NULL )';
+				if ($key == 'contact') {
 				
-				// conditions relatives à la liste électorale
-				if ($key == 'electeur' && $arg === true) $conditions[] = '`contact_electeur` = 1';
-				if ($key == 'electeur' && $arg === false) $conditions[] = '`contact_electeur` = 0';
+					if ($arg == 'tous') $conditions[] = '( `contact_email` IS NOT NULL OR `contact_mobile` IS NOT NULL OR `contact_telephone` IS NOT NULL )';
+					if ($arg == 'email') $conditions[] = '`contact_email` IS NOT NULL';
+					if ($arg == 'mobile') $conditions[] = '`contact_mobile` IS NOT NULL';
+					if ($arg == 'telephone') $conditions[] = '`contact_telephone` IS NOT NULL';
+					
+				} elseif ($key == 'electoral') {
+					
+					if ($arg == 'oui') $conditions[] = '`contact_electeur` = 1';
+					if ($arg == 'non') $conditions[] = '`contact_electeur` = 0';
 				
-				// conditions relatives à un tag
-				if ($key == 'tag' && is_string($arg)) $conditions[] = '`contact_tags` LIKE "%' . $this->securisation_string($arg) . '%"';
-				
-				// conditions relatives à un bureau de vote
-				if ($key == 'bureau' && is_numeric($arg)) :
-					// On récupère la liste de tous les immeubles du bureau de vote demandé
-					$q = 'SELECT `immeuble_id` FROM `immeubles` WHERE `bureau_id` = ' . $arg;
-					$sql = $this->db->query($q);
-					while ($row = $sql->fetch_row()) if (!in_array($row[0], $immeubles)) $immeubles[] = $row[0];
-				endif;
+				}
 				
 			endforeach;
 		}
@@ -1049,8 +1040,9 @@ class fiche extends core {
 		}
 		
 		// On termine la préparation de la requête
-		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT 0, ' . $nombre;
-
+		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
+		if (is_numeric($nombre)) $query.= 'LIMIT 0, ' . $nombre;
+		
 		// On exécute la requête SQL et on l'affecte au tableau $contacts
 		$sql = $this->db->query($query);
 		$contacts = array();
@@ -1058,7 +1050,15 @@ class fiche extends core {
 		if ($sql->num_rows > 0) while ($row = $sql->fetch_assoc()) $contacts[] = $this->formatage_donnees($row);
 
 		// On retourne sous format JSON ou tableau PHP les données
-		return ($output == 'JSON') ? json_encode($contacts) : $contacts;
+		if ($output == 'JSON') {
+			$json = json_encode($contacts);
+			//$json = str_replace('null', '', $json);
+			echo $json;
+		} elseif ($output == 'debug') {
+			$this->debug($contacts);
+		} else {
+			return $contacts;
+		}
 	}
 }
 

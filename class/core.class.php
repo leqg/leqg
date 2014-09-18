@@ -23,7 +23,7 @@ class core {
 	
 	
 	// debug( array ) permet d'afficher un array mis en forme par la fonction print_r et d'arrêter le script à des fins de debug
-		public	function debug($array, $htmlentities = false) {
+		public	function debug($array, $exit = true) {
 			echo '<pre class="nowrap">';
 		
 			// On affiche le tableau préformaté s'il s'agit d'un tableau
@@ -44,8 +44,8 @@ class core {
 			
 			echo '</pre>';
 			
-			// Dans tous les cas, on arrête le script à l'appel de la fonction
-			exit;
+			// On regarde si on arrête ou non l'exécution du script à la demande
+			if ($exit) exit;
 		}
 	
 	
