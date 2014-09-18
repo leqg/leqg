@@ -537,6 +537,8 @@ table.fusion {
  ************************************/
 
 section#contacts {
+	height: 100%;
+
 	& > div {
 		display: inline-block;
 		padding: 0 2.5%;
@@ -557,7 +559,9 @@ section#contacts {
 
 table#listeFiches {
 	border: none;
+	border-collapse: collapse;
 	margin: 0 auto;
+	//table-layout: fixed;
 	width: 90%;
 	
 	tr,
@@ -568,26 +572,50 @@ table#listeFiches {
 		text-align: left;
 	}
 	
+	th,
+	td {
+		&:first-of-type {
+			padding: 0 0 0 10px;
+			text-align: center;
+			width: 50px;
+		}
+		
+		&:nth-of-type(3) {
+			width: 250px;
+		}
+		
+		&:nth-of-type(4) {
+			width: 130px;
+		}
+		
+		&:nth-of-type(5) {
+			width: 130px;
+		}
+	}
+	
 	thead {
 		border: none;
 		border-bottom: 1px solid $noir;
 		color: $bleu;
 		font-size: 1.15em;
 		font-weight: 600;
+		
+		th {
+			background: $blanc;
+			height: 40px;
+			line-height: 40px;
+			margin: 0;
+		}
 	}
 	
 	tbody {
+	
 		tr {
 			&:nth-of-type(odd) {
 				background-color: rgba($rouge, .05);
 			}
 			
 			td {
-				&:first-of-type { 
-					padding: 0;
-					text-align: center;
-					width: 50px;
-				}
 			
 				a {
 					color: $bleu;
@@ -599,4 +627,29 @@ table#listeFiches {
 			}
 		}
 	}
+}
+
+#blocFiches {
+	position: relative;
+ 	height: 75%;
+ 	margin: 55px auto 0;
+ 	overflow-x: hidden;
+ 	overflow-y: auto;
+ 	width: 90%;
+ 	
+ 	table {
+	 	width: 100%;
+	 	
+	 	thead {
+		 	position: fixed;
+		 	border-collapse: collapse;
+		 	margin-top: -55px;
+		 	z-index: 10;
+		 	
+		 	th:nth-of-type(1) { width:  50px; }
+		 	th:nth-of-type(3) { width: 250px; }
+		 	th:nth-of-type(4) { width: 130px; }
+		 	th:nth-of-type(5) { width: 130px; }
+	 	}
+ 	}
 }
