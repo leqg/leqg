@@ -5,7 +5,7 @@
 		<ul class="timeline debutNow">
 			<?php $interactions = $historique->dernieresInteractions(15); if (count($interactions) > 0) : foreach ($interactions as $interaction) : ?>
 			<li class="<?php echo $interaction['type']; ?>">
-				<strong><?php echo $interaction['objet']; ?></strong>
+				<strong><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>" class="nostyle"><?php if (empty($interaction['objet'])) { echo $historique->returnType($interaction['type']); } else { echo $interaction['objet']; } ?></a></strong>
 				<ul>
 					<li class="contact"><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>"><?php $fiche->affichageNomByID($interaction['contact_id']); ?></a></li>
 					<li class="date"><?php echo date('d/m/Y', strtotime($interaction['date'])); ?></li>
@@ -24,7 +24,7 @@
 			<?php $taches = $tache->liste(15); if (count($taches) > 0) : foreach ($taches as $t) : ?>
 			<li class="tache">
 				<?php $interaction = $historique->recherche($t['historique_id']); ?>
-				<strong><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>" class="nostyle"><?php if (empty($t['description'])) { echo $historique->returnType($t['type']); } else { echo $t['description']; } ?></a></strong>
+				<strong><?php echo $t['description']; ?></strong>
 				<?php if (!empty($t['historique_id']) && $t['historique_id'] > 0) : ?>
 				<ul>
 					<li class="contact"><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>"><?php $fiche->affichageNomByID($interaction['contact_id']); ?></a></li>
