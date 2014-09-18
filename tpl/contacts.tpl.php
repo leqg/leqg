@@ -24,7 +24,7 @@
 			<?php $taches = $tache->liste(15); if (count($taches) > 0) : foreach ($taches as $t) : ?>
 			<li class="tache">
 				<?php $interaction = $historique->recherche($t['historique_id']); ?>
-				<strong><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>" class="nostyle"><?php if (empty($t['description'])) { $historique->returnType($t['type']); } else { echo $t['description']; } ?></a></strong>
+				<strong><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>" class="nostyle"><?php if (empty($t['description'])) { echo $historique->returnType($t['type']); } else { echo $t['description']; } ?></a></strong>
 				<?php if (!empty($t['historique_id']) && $t['historique_id'] > 0) : ?>
 				<ul>
 					<li class="contact"><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>"><?php $fiche->affichageNomByID($interaction['contact_id']); ?></a></li>
