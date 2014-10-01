@@ -1,8 +1,9 @@
 <?php $core->tpl_header('login'); ?>
 	<form action="<?php $core->tpl_get_url('login'); ?>" method="post">
+		<h1><span>Le</span>QG<span>.info</span></h1>
 		<ul>
 			<li>
-				<label for="login">Nom d'utilisateur :</label>
+				<label for="login">Email de connexion :</label>
 				<input type="text" name="login" id="login" autocomplete="off" autofocus="on">
 			</li>
 			<li>
@@ -17,4 +18,4 @@
 	
 	<?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'login') { ?><div id="erreur">Erreur login</div><?php } ?>
 	<?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'pass') { ?><div id="erreur">Erreur pass</div><?php } ?>
-<?php $core->tpl_footer(); ?>
+<?php $core->tpl_footer('login'); ?>

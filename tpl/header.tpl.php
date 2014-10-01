@@ -11,8 +11,8 @@
 	<link href='http://fonts.googleapis.com/css?family=Fira+Sans:300,300italic,400,400italic,500,500italic,700,700italic&subset=latin-ext' rel='stylesheet' type='text/css'>
 
 	<!-- lien vers les ressources Javascript / jQuery -->
+	<!--[if lt IE 9]><script src="assets/js/html5shiv.min.js"></script><![endif]-->
 	<script src="assets/js/jquery-2.1.1.min.js"></script>
-	<script src="assets/js/jquery.inputmask.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSkeqzB0suNWsj8fU3If9tA0spIl_xN2A&sensor=false"></script>
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
@@ -29,16 +29,26 @@
 	
 	<!-- Navigation principale -->
 	<nav id="principale">
-		<a href="<?php $core->tpl_go_to('utilisateur'); ?>" id="lien-utilisateur">Mon compte</a>
-		<a href="<?php $core->tpl_go_to('contacts'); ?>" id="lien-contacts">Contacts</a>
-		<a href="<?php $core->tpl_go_to('dossiers'); ?>" id="lien-dossiers">Dossiers</a>
-		<a href="<?php $core->tpl_go_to('carto'); ?>" id="lien-carto">Cartographie</a>
-		<a href="<?php $core->tpl_go_to('sms'); ?>" id="lien-sms">SMS groupés</a>
-		<a href="<?php $core->tpl_go_to('email'); ?>" id="lien-email">Emails groupés</a>
-		<a href="<?php $core->tpl_go_to('poste'); ?>" id="lien-poste">Publipostage</a>
-		<a href="<?php $core->tpl_go_to('porte'); ?>" id="lien-porte">Porte-à-porte</a>
-		<a href="<?php $core->tpl_go_to('boite'); ?>" id="lien-boite">Boîtage</a>
-		<a href="<?php $core->tpl_go_to('rappels'); ?>" id="lien-rappels" class="inactif">Rappels</a>
+		<?php 
+			$menu = array(/*'utilisateur' => 'Mon compte',*/
+							'contacts' => 'Contacts',
+							'dossiers' => 'Dossiers',
+							'carto' => 'Cartographie',
+							'sms' => 'SMS groupés',
+							'email' => 'Emails groupés',
+							'poste' => 'Publipostage',
+							'porte' => 'Porte-à-porte',
+							'boite' => 'Boîtage',
+							'administration' => 'Gestion',
+							'rappels' => 'Rappels');
+							
+			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'fiche') ? 'contacts' : $_GET['page'];
+							
+			$inactif = array('rappels');
+		
+			foreach ($menu as $key => $element) : ?>
+		<a href="<?php $core->tpl_go_to($key); ?>" <?php if (isset($_GET['page']) && $actuel == $key) echo 'class="actif"'; if (in_array($key, $inactif)) echo 'class="inactif"'; ?> id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
+		<?php endforeach; ?>
 	</nav><!--nav#principale-->
 	
 	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; } ?>">

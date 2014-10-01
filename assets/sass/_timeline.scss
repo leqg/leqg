@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage des timelines du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+/************************************
+ *									*
+ *			   TIMELINE				* 
+ *									*
+ ************************************/
+
+ul.timeline {
+	border-left: 6px solid $rouge;
+	list-style: none;
+	margin: 0 auto;
+	padding: 0;
+	width: 75%;
+	
+	&.debutNow {
+		margin-top: -1.5em;
+		padding-top: 2em;
+	}
+	
+	& > li {
+		position: relative;
+		min-height: 75px;
+		margin: 0 auto 2.5em auto;
+		padding: 4px 0 0 40px;
+		
+		&.fin,
+		&.suite {
+			height: 50px;
+			min-height: 50px;
+		}
+		
+		&::before {
+			position: absolute; top: 0px; left: -34px;
+			display: block;
+			background-color: $bleu;
+			border: 6px solid $blanc;
+			@include border-radius(.66em);
+			color: $blanc;
+			content: '\e837';
+			font-family: $icons;
+			font-size: 25px;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			width: 50px;
+		}
+		
+		$icon-names: (fin '\e952') (suite '\e8f7') (connexion '\e86c') (contact '\e80b') (telephone '\e854') (email '\e8e3') (courrier '\e805') (autre '\e8dd') (sms '\e8e4') (courriel '\e8e3') (porte '\e841') (boite '\e84e') (rappel '\e854') (poste '\e8ef');
+		@each $icon-name in $icon-names {
+			&.#{nth($icon-name, 1)}::before {
+				content: nth($icon-name, 2);
+			}
+		}
+		
+		strong {
+			display: block;
+			color: $bleu;
+			font-size: 2em;
+			font-weight: 700;
+			line-height: 1.5em;
+			overflow-x: scroll;
+			overflow-y: hidden;
+			
+			&:first-line {
+				line-height: 50px;
+			}
+		}
+		
+		& > ul {
+			list-style: none;
+			margin: .5em 0;
+			padding: 0;
+			
+			& > li {
+				font-size: 1.2em;
+				font-weight: 400;
+				padding: .15em 0 .33em;
+				
+				&::before {
+					display: inline-block;
+					color: $grisFonce;
+					font-family: $icons;
+					text-align: center;
+					width: 30px;
+				}
+				
+				$icon-names: (date '\e862') (contact '\e840') (lieu '\e842');
+				@each $icon-name in $icon-names {
+					&.#{nth($icon-name, 1)}::before {
+						content: nth($icon-name, 2);
+					}
+				}
+				
+				& > a {
+					color: $noir;
+					text-decoration: underline; 
+				}
+				
+				& > a:hover { color: $rouge; }
+			}
+		}
+	}
+}

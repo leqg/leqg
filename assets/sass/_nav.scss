@@ -15,11 +15,13 @@
  ************************************/
 
 nav#principale {
-	position: absolute; top: 0; left: -260px;
+	position: absolute; top: 0; left: -165px; /* 260 - 95 */
 	display: block;
 	background-color: $lightGrey;
 	height: 100%;
 	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	padding: 70px 0 0 5px;
 	width: 260px;
 	z-index: 1000;
@@ -32,14 +34,15 @@ nav#principale {
 		font-family: $fonts1;
 		font-size: 18px;
 		font-weight: 400;
-		height: 65px;
-		line-height: 65px;
-		padding: 0 15px 0 70px;
+		height: 60px;
+		line-height: 60px;
+		padding: 0 95px 0 15px;
+		text-align: right;
 		text-decoration: none;
 		width: 100%;
 		
-		&::before {
-			position: absolute; top: 0; left: 0;
+		&::after {
+			position: absolute; top: 0; right: 15px; /* 65 + 15 + 15 = 95*/
 			display: block;
 			font-family: $icons;
 			font-size: 30px;
@@ -49,41 +52,43 @@ nav#principale {
 			width: 65px;
 		}
 		
-		&#lien-contacts::before { content: '\e840'; }
-		&#lien-dossiers::before { content: '\e851'; }
-		&#lien-carto::before { content: '\e845'; }
-		&#lien-sms::before { content: '\e8e4'; }
-		&#lien-email::before { content: '\e805'; }
-		&#lien-poste::before { content: '\e8ef'; }
-		&#lien-porte::before { content: '\e841'; }
-		&#lien-boite::before { content: '\e84d'; }
-		&#lien-rappels::before { content: '\e854'; }
+		&#lien-contacts::after { content: '\e840'; }
+		&#lien-dossiers::after { content: '\e851'; }
+		&#lien-carto::after { content: '\e845'; }
+		&#lien-sms::after { content: '\e8e4'; }
+		&#lien-email::after { content: '\e805'; }
+		&#lien-poste::after { content: '\e8ef'; }
+		&#lien-porte::after { content: '\e841'; }
+		&#lien-boite::after { content: '\e84d'; }
+		&#lien-rappels::after { content: '\e854'; }
+		&#lien-administration::after { content: '\e855'; }
 		
-		&#lien-utilisateur {
+		&.actif {
+			color: $bleu;
+		
 			&::before {
+				position: absolute; top: 0; right: 15px;
+				display: block;
+				color: $bleu;
 				content: '\e952';
-				font-size: 45px;
-			}
-			
-			&::after {
-				position: absolute; top: 0; left: 0;
-				color: $lightGrey;
-				content: '\e80a';
 				font-family: $icons;
-				font-size: 25px;
+				font-size: 45px;
 				height: 65px;
 				line-height: 65px;
 				text-align: center;
 				width: 65px;
+				@include transition(all);
 			}
 			
-			&:hover {
-				color: $rouge;
+			&::after {
+				color: $lightGrey;
 			}
 		}
 		
 		&:hover {
-			color: $bleu;
+			color: $rouge;
+			
+			&.actif::before { color: $rouge; }
 		}
 		
 		&.inactif {

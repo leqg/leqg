@@ -197,8 +197,10 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 
 		else if ($_GET['page'] == 'contacts') {
 			
-			// On lance la page d'accueil du module contact
+			// On charge le header, la page d'accueil du module contact et le footer
+			$core->tpl_header();
 			$core->tpl_load('contacts');
+			$core->tpl_footer();
 			
 		}
 		
@@ -590,6 +592,34 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				}
 				
 				// On charge enfin le template de footer
+				$core->tpl_footer();
+				
+			}
+			
+			
+	// Mise en place des templates associés à l'administration
+	
+			else if ( $_GET['page'] == 'administration' ) {
+				
+				// On charge d'abord le template de header
+				$core->tpl_header();
+				
+				// On regarde si une action spécifique est demandée
+				if (isset($_GET['historique'])) {
+					
+					// On charge le template d'historique
+					$core->tpl_load('admin', 'historique');
+					
+					
+				// Sinon, on charge la page de gestion des utilisateurs	
+				} else {
+					
+					// Template de gestion des comptes utilisateurs
+					$core->tpl_load('admin', 'users');
+					
+				}
+				
+				// On termine en chargeant le template de footer
 				$core->tpl_footer();
 				
 			}

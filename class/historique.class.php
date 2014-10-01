@@ -57,6 +57,26 @@ class historique extends core {
 	}
 	
 	
+	// rechercheParUser( int , int , int ) permet d'extraire de la BDD les entrées de l'historique pour un utilisateur donné
+	public	function rechercheParUser( $user , $debut = 0, $limite = 30 ) {
+		// On vérifie que la fiche est bien un nombre (id = numeric)
+		if ( is_numeric( $user ) ) :
+		
+			// On effectue la recherche dans la BDD des entrées dans l'historique rattachées à la fiche contact demandée
+			$query = 'SELECT * FROM `historique` WHERE `compte_id` = ' . $user . ' ORDER BY historique_date DESC LIMIT ' . $debut . ', ' . $limite;
+			$sql = $this->db->query($query);
+			
+			// On fait la liste de toutes les entrées pour les affecter dans un tableau
+			$entrees = array();
+			
+			while ( $row = $sql->fetch_assoc() ) $entrees[] = $this->formatage_donnees($row);
+			
+			return $entrees;
+		
+		else : return false; endif;
+	}
+	
+	
 	// nombre( int ) permet d'extraire le nombres d'entrées dans l'historique du compte rattachés à la fiche contact demandée
 	public	function nombre( $fiche ) {
 		// On vérifie que la fiche est bien un nombre

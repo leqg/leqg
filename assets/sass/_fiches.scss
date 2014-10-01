@@ -527,3 +527,30 @@ table.fusion {
 		}
 	}
 }
+
+
+
+/************************************
+ *									*
+ *			   CONTACTS				* 
+ *									*
+ ************************************/
+
+section#contacts {
+	& > div {
+		display: inline-block;
+		padding: 0 2.5%;
+		vertical-align: top;
+		width: 50%;
+	
+		
+		h3 {
+			display: block;
+			font-family: $fonts1;
+			font-size: 1.5em;
+			font-weight: 300;
+			margin: 0 auto 1em auto;
+			text-align: center;
+		}
+	}
+}

@@ -343,8 +343,7 @@ main {
 	margin: 0;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	padding: 0;
-	padding-top: 60px;
+	padding: 60px 0 0 95px;
 	width: 100%;
 	@include transition(all);
 	
@@ -422,8 +421,8 @@ ul.deuxColonnes {
 			width: 35%;
 	
 			@media all and (max-width: 1500px) {
-				left: -55%;
-				width: 55%;
+				left: -35%;
+				width: 35%;
 			}
 		}
 		
@@ -811,3 +810,9 @@ ul.listeEncadree {
 
 // Style dédié au système de recherche de la plateforme
 @import "recherche.scss";
+
+// Style dédié au système d'administration de la plateforme
+@import "admin.scss";
+
+// Style dédié aux timelines sur la plateforme
+@import "timeline.scss";
