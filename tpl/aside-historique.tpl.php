@@ -25,7 +25,7 @@
 				<?php if ($interaction['type'] == 'sms') : ?>
 					<?php echo $interaction['notes']; ?>
 				<?php else : ?>
-					<?php if (in_array($interaction['type'], $types_avec_fiche)) : ?><a href="<?php $core->tpl_get_url('fiche', $fiche->get_the_ID(), 'id', $interaction['id'], 'interaction'); ?>"><?php endif; ?><?php echo $interaction['objet']; ?><?php if (in_array($interaction['type'], $types_avec_fiche)) : ?></a><?php endif; ?>
+					<?php if (in_array($interaction['type'], $types_avec_fiche)) : ?><a href="<?php $core->tpl_get_url('fiche', $fiche->get_the_ID(), 'id', $interaction['id'], 'interaction'); ?>"><?php endif; ?><?php echo (empty($interaction['objet'])) ? $historique->returnType($interaction['type']) : $interaction['objet']; ?><?php if (in_array($interaction['type'], $types_avec_fiche)) : ?></a><?php endif; ?>
 				<?php endif; ?>
 				</td>
 			</tr>
