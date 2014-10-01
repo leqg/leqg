@@ -970,6 +970,104 @@ class fiche extends core {
 		// Si aucune condition n'est remplie jusqu'ici, c'est que nous n'avons pas de coordonnées !
 		return false;
 	}
+	
+	
+	// liste( string = PHP/JSON , [ array ] , [ int ] , [ bool ] ) permet de retourner ou d'exporter une liste de contacts au format JSON ou Tableau PHP selon des conditions entrées en argument
+	public	function liste( $output , $args = null , $nombre = false , $export = false ) {
+		
+		// On prépare la requête de recherche des données
+		$query = 'SELECT	`contact_id`,
+							`immeuble_id`,
+							`adresse_id`,
+							`contact_nom`,
+							`contact_nom_usage`,
+							`contact_prenoms`,
+							`contact_naissance_date`,
+							`contact_sexe`,
+							`contact_email`,
+							`contact_mobile`,
+							`contact_telephone`,
+							`contact_tags`,
+							`contact_organisme`,
+							`contact_fonction`
+				  FROM		`contacts` ';
+
+		// On lance le traitement des arguments dans un tableau $conditions
+		$conditions = array();
+		$immeubles = array(); // On prépare également le tableau $immeubles pour le traitement des critères géographiques
+
+		if (!is_null($args) && is_array($args)) {
+			// On lance une boucle de traitement des arguments
+			foreach ($args as $key => $arg) :
+
+				// conditions relatives aux coordonnées
+				if ($key == 'contact') {
+				
+					if ($arg == 'tous') $conditions[] = '( `contact_email` IS NOT NULL OR `contact_mobile` IS NOT NULL OR `contact_telephone` IS NOT NULL )';
+					if ($arg == 'email') $conditions[] = '`contact_email` IS NOT NULL';
+					if ($arg == 'mobile') $conditions[] = '`contact_mobile` IS NOT NULL';
+					if ($arg == 'telephone') $conditions[] = '`contact_telephone` IS NOT NULL';
+					
+				} elseif ($key == 'bureau') {
+					
+					$conditions[] = '`bureau_id` = ' . $arg;
+					
+				} elseif ($key == 'tags') {
+				
+					$conditions[] = '`contact_tags` LIKE "%' . $arg . '%"';
+					
+				} elseif ($key == 'electoral') {
+					
+					if ($arg == 'oui') $conditions[] = '`contact_electeur` = 1';
+					if ($arg == 'non') $conditions[] = '`contact_electeur` = 0';
+				
+				}
+				
+			endforeach;
+		}
+		
+		// On prépare le tableau $conditionSQL qui contient les différentes conditions à installer dans la requête (géographique, coordonnées, divers)
+		$conditionSQL = array();
+		
+		// S'il existe des immeubles sélectionnés, on installe le critère géographique dans la base de données
+		if (count($immeubles) > 0) {
+			$conditionSQL[] = ' ( `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ) ';
+		}
+		
+		// S'il existe des conditions, on les reformate et on les ajoute à la requête
+		if (count($conditions) > 0) :
+		
+			// On formate la liste des conditions en SQL
+			$conditionSQL[] = ' ( ' . implode(' AND ', $conditions) . ' ) ';
+						
+		endif;
+		
+		// S'il existe des conditions à installer dans la requête SQL, on le fait
+		if (count($conditionSQL) > 0) {
+			$query.= ' WHERE ' . implode(' AND ', $conditionSQL);
+		}
+		
+		// On termine la préparation de la requête
+		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
+		if (is_numeric($nombre)) $query.= 'LIMIT 0, ' . $nombre;
+		
+		// On exécute la requête SQL et on l'affecte au tableau $contacts
+		$sql = $this->db->query($query);
+		$contacts = array();
+		
+		if ($sql->num_rows > 0) while ($row = $sql->fetch_assoc()) $contacts[] = $this->formatage_donnees($row);
+
+		// On retourne sous format JSON ou tableau PHP les données
+		if ($output == 'JSON') {
+			$json = json_encode($contacts);
+			//$json = str_replace('null', '', $json);
+			echo $json;
+		} elseif ($output == 'debug') {
+			$this->debug($contacts);
+		} else {
+			return $contacts;
+		}
+	}
 }
 
 ?>

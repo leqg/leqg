@@ -362,11 +362,30 @@ class carto extends core {
 		// On prépare le tableau qui permettra de renvoyer les données
 			$bureaux = array();
 		
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $immeubles
+		// On effectue la requête BDD et on affiche les résultats dans un tableau $bureaux
 			$sql = $this->db->query($query);
 			while ($row = $sql->fetch_assoc()) $bureaux[] = $this->formatage_donnees($row);
 		
 		// On retourne les données
+			return $bureaux;
+	}
+	
+	
+	// listeTousBureaux( ) permet de renvoyer la liste de tous les bureaux de vote intégré au compte
+	public	function listeTousBureaux( ) {
+		// On prépare la requête de récupération des immeubles correspondant
+			$query = 'SELECT	*
+					  FROM		`bureaux`
+					  ORDER BY	`bureau_numero` ASC';
+		
+		// On prépare le tableau chargé d'accueillir les résultats
+			$bureaux = array();
+			
+		// On effectue la requête BDD et on affiche les résultats dans un tableau $bureaux
+			$sql = $this->db->query($query);
+			while ($row = $sql->fetch_assoc()) $bureaux[] = $this->formatage_donnees($row);
+			
+		// On retourne les résultats
 			return $bureaux;
 	}
 	

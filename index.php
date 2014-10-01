@@ -65,13 +65,6 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$fiche->fermeture();
 		}
 		
-		else if ($_GET['page'] == 'fiche' && !empty($_GET['action']) && $_GET['action'] == 'creation') {
-			// On charge les éléments de template
-				$core->tpl_header();
-				$core->tpl_load('fiche' , 'ajout');
-				$core->tpl_footer();
-		}
-		
 		else if ($_GET['page'] == 'fiche' && !empty($_GET['operation'])) {
 			
 			// On regarde si on demande la fusion de fiche
@@ -84,6 +77,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				// On charge le template de résolution des conflits
 				$core->tpl_header();
 				$core->tpl_load('fiche', 'fusion-conflits');
+				$core->tpl_footer();
+			} else if ($_GET['operation'] == 'creation') {
+				// On charge le template de création de fiches
+				$core->tpl_header();
+				$core->tpl_load('fiche', 'ajout');
 				$core->tpl_footer();
 			}
 			

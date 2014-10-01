@@ -16,6 +16,20 @@ function getURLVar(variable)
 
 var main = function() {
 
+	// Fonctionnement des overlays
+		$('.ouvertureOverlay').click(function(){
+			var overlay = $(this).data('overlay');
+			$("#" + overlay).fadeIn();
+			return false;
+		});
+		
+		$('.fermetureOverlay').click(function(){
+			var overlay = $(this).data('overlay');
+			$("#" + overlay).fadeOut();
+			return false;
+		});
+
+
 	// On fait que les formulaires d'upload d'un fichier s'affichent mieux
 		$("#form-fichier").change(function(){
 			var value = $(this).val();
