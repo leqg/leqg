@@ -74,9 +74,13 @@
 				<label>Les électeurs au sein du bureau de vote</label>
 				<select name="bureau" id="listeBureau">
 					<?php $bureaux = $carto->listeTousBureaux(); foreach ($bureaux as $bureau) : ?>
-					<option value="<?php echo $bureau['id']; ?>">Bureau <?php echo $bureau['numero']; ?> – <?php $carto->afficherVille($bureau['commune_id']); ?></option>
+					<option value="<?php echo $bureau['id']; ?>" data-numero="<?php echo $bureau['numero']; ?>">Bureau <?php echo $bureau['numero']; ?> – <?php $carto->afficherVille($bureau['commune_id']); ?></option>
 					<?php endforeach; ?>
 				</select>
+			</li>
+			<li class="detail-critere detail-critere-tags affichageOptionnel">
+				<label>Afficher les fiches avec pour tag</label>
+				<input type="text" name="tags" id="tagDemande">
 			</li>
 			<li>
 				<input type="submit" value="Ajouter le critère de tri">

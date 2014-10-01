@@ -1012,6 +1012,10 @@ class fiche extends core {
 					
 					$conditions[] = '`bureau_id` = ' . $arg;
 					
+				} elseif ($key == 'tags') {
+				
+					$conditions[] = '`contact_tags` LIKE "%' . $arg . '%"';
+					
 				} elseif ($key == 'electoral') {
 					
 					if ($arg == 'oui') $conditions[] = '`contact_electeur` = 1';
