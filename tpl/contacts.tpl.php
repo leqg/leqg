@@ -70,6 +70,14 @@
 				<div class="radio"><input type="radio" name="electoral" id="electoral-oui" value="oui"><label for="electoral-oui"><span><span></span></span>Le contact est électeur</label></div>
 				<div class="radio"><input type="radio" name="electoral" id="electoral-non" value="non"><label for="electoral-non"><span><span></span></span>Le contact n'est pas électeur</label></div>
 			</li>
+			<li class="detail-critere detail-critere-bureau affichageOptionnel">
+				<label>Les électeurs au sein du bureau de vote</label>
+				<select name="bureau" id="listeBureau">
+					<?php $bureaux = $carto->listeTousBureaux(); foreach ($bureaux as $bureau) : ?>
+					<option value="<?php echo $bureau['id']; ?>">Bureau <?php echo $bureau['numero']; ?> – <?php $carto->afficherVille($bureau['commune_id']); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</li>
 			<li>
 				<input type="submit" value="Ajouter le critère de tri">
 			</li>

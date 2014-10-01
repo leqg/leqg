@@ -27,7 +27,12 @@ var contacts = function() {
 		var action = $(this).attr('action');
 		var triActu = $('#summaryTri').val();
 		var critere = $('input[name=critere]:checked').val();
-		var tri = $('input[name=' + critere + ']:checked').val();
+		console.log(critere);
+		if (critere == 'bureau') {
+			var tri = $('#listeBureau').val();
+		} else {
+			var tri = $('input[name=' + critere + ']:checked').val();
+		}
 		
 		// On réinitialise les choix
 		$('#form-ajoutCritere input[type=radio]').prop('checked', false);

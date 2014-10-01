@@ -29,13 +29,11 @@ while ($row = $sql->fetch_assoc()) :
 
 endwhile;*/
 
-$query = 'SELECT * FROM `contacts`';
+$query = 'SELECT * FROM `contacts` LEFT JOIN `immeubles` ON `immeubles`.`immeuble_id` = `contacts`.`immeuble_id`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) {
-	$tags = trim($row['contact_tags'], ',');
-	$tags = array_unique($tags);
-	$db->query('UPDATE `contacts` SET `contact_tags` = "' . $tags . '" WHERE `contact_id` = ' . $row['contact_id']);
+	$db->query('UPDATE `contacts` SET `bureau_id` = ' . $row['bureau_id'] . ' WHERE `contact_id` = ' . $row['contact_id']);
 }
 
 

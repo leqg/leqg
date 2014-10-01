@@ -1008,6 +1008,10 @@ class fiche extends core {
 					if ($arg == 'mobile') $conditions[] = '`contact_mobile` IS NOT NULL';
 					if ($arg == 'telephone') $conditions[] = '`contact_telephone` IS NOT NULL';
 					
+				} elseif ($key == 'bureau') {
+					
+					$conditions[] = '`bureau_id` = ' . $arg;
+					
 				} elseif ($key == 'electoral') {
 					
 					if ($arg == 'oui') $conditions[] = '`contact_electeur` = 1';
