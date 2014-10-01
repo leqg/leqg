@@ -41,7 +41,7 @@
 	 </li>
 	<li><!--
 	 --><span class="label-information">Objet</span><!--
-	 --><p><?php echo $interaction['objet']; ?></p><!--
+	 --><p><?php echo (!empty($interaction['objet'])) ? $interaction['objet'] : '&nbsp;'; ?></p><!--
  --></li>
 	<li>
 		<span class="label-information">Notes</span>
