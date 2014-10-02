@@ -1015,7 +1015,8 @@ class fiche extends core {
 					
 				} elseif ($key == 'bureau') {
 					
-					$bureaux[] = $arg;
+					// on fait la liste des bureaux dans un tableau bureaux
+					$bureaux = $arg;
 					
 				} elseif ($key == 'tags') {
 				
