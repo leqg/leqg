@@ -983,6 +983,7 @@ class fiche extends core {
 		$query = 'SELECT	`contact_id`,
 							`immeuble_id`,
 							`adresse_id`,
+							`bureau_id`,
 							`contact_nom`,
 							`contact_nom_usage`,
 							`contact_prenoms`,
@@ -991,6 +992,7 @@ class fiche extends core {
 							`contact_email`,
 							`contact_mobile`,
 							`contact_telephone`,
+							`contact_electeur`,
 							`contact_tags`,
 							`contact_organisme`,
 							`contact_fonction`
@@ -1055,7 +1057,7 @@ class fiche extends core {
 		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
 		if (is_numeric($nombre) && is_numeric($debut)) $query.= 'LIMIT ' . $debut . ', ' . $nombre;
 		if (is_numeric($nombre) && !is_numeric($debut)) $query.= 'LIMIT 0, ' . $nombre;
-		
+
 		// On exécute la requête SQL et on l'affecte au tableau $contacts
 		$sql = $this->db->query($query);
 		$contacts = array();
@@ -1076,7 +1078,7 @@ class fiche extends core {
 		
 		// Sinon, on procède à un export des données dans un fichier
 		} else {
-
+		
 			// On prépare le contenu du fichier sous forme de tableau
 			$fichier = array();
 			
@@ -1105,7 +1107,7 @@ class fiche extends core {
 			
 			
 			// On fait la boucle des contacts pour y ajouter les lignes
-			while ($contact = $sql->fetch_assoc()) {
+			foreach ($contacts as $contact) {
 				// On commence par rechercher les coordonnées d'après l'immeuble
 				$immeuble = $this->db->query('SELECT * FROM immeubles WHERE immeuble_id = ' . $contact['immeuble_id']);
 				$immeuble = $this->formatage_donnees($immeuble->fetch_assoc());
@@ -1131,20 +1133,20 @@ class fiche extends core {
 				
 				// on rassemble les informations qu'on balance dans le fichier
 				$ligne = array(    $bureau['bureau_numero'],
-								   $contact['contact_nom'],
-								   $contact['contact_nom_usage'],
-								   $contact['contact_prenoms'],
-								   $contact['contact_organisme'],
-								   $contact['contact_fonction'],
-								   date('d/m/Y', strtotime($contact['contact_naissance_date'])),
+								   $contact['nom'],
+								   $contact['nom_usage'],
+								   $contact['prenoms'],
+								   $contact['organisme'],
+								   $contact['fonction'],
+								   ($contact['naissance_date'] == '0000-00-00') ? '' : date('d/m/Y', strtotime($contact['naissance_date'])),
 								   $immeuble['numero'] . ' ' . trim($rue['nom']),
 								   $cp['code_postal'],
 								   $ville['nom'],
-								   $contact['contact_sexe'],
-								   $contact['contact_email'],
-								   $contact['contact_mobile'],
-								   $contact['contact_telephone'],
-								   $contact['contact_electeur']);
+								   ($contact['sexe'] == 'i') ? '' : $contact['sexe'],
+								   $contact['email'],
+								   $contact['mobile'],
+								   $contact['telephone'],
+								   $contact['electeur']);
 								   
 				fputcsv($f, $ligne, ';', '"');
 			}

@@ -14,7 +14,7 @@
 		endforeach;
 		
 		// On lance la recherche des fiches correspondances aux arguments
-		$f = $fiche->liste( 'fichier' , $args , true );
+		$f = $fiche->liste( 'fichier' , $args , true ); $core->debug($f);
 		
 		// Une fois que le nom du fichier est connu, on télécharge le template de mail pour avertir l'utilisateur
 		if ($f) :
