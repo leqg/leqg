@@ -33,6 +33,7 @@ $vert:		rgba(179, 204,  87, 1);
 $lime:		rgba(236, 240, 129, 1);
 $gris:		rgba(205, 203, 202, 1);
 $grisMoyen:	darken($gris, 15%);
+$grisMedium:darken($gris, 33%);
 $grisFonce:	darken($gris, 50%);
 $fonts1:	'Roboto', Helvetica, Arial, sans-serif;
 $fonts2:	'Fira Sans', Helvetica, Arial, sans-serif;
@@ -816,3 +817,6 @@ ul.listeEncadree {
 
 // Style dédié aux timelines sur la plateforme
 @import "timeline.scss";
+
+// Style dédié au module contacts sur la plateforme
+@import "contacts.scss";

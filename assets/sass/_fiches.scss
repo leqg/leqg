@@ -325,19 +325,19 @@ ul#creationsRapides {
 .listeTags {
 	.tag {
 		display: inline-block;
-		background-color: $jaune;
+		border: 1px solid $gris;
 		@include border-radius(.5em);
-		@include shadow(0, 2px, 0, $gris);
-		color: $rouge;
+		color: $bleu;
 		cursor: default;
-		font-size: .85em;
-		margin: 0 1em .5em 0;
+		font-size: 1em;
+		line-height: 1.5em;
+		margin: .4em 1em .5em 0;
 		padding: .05em 1em;
 		@include transition(all);
 		
 		&::before {
 			display: inline-block;
-			color: $rouge;
+			color: $bleu;
 			font-family: $icons;
 			font-size: .85em;
 			content: '\e827';
@@ -346,14 +346,14 @@ ul#creationsRapides {
 			@include transition(all);
 		}
 		
-		&:hover {
-			background-color: $rouge;
-			color: $jaune;
+		&.interactif:hover {
+			border-color: $rouge;
+			color: $rouge;
 			cursor: pointer;
 			text-decoration: line-through;
 			
 			&::before {
-				color: $jaune;
+				color: $rouge;
 				content: '\e847';
 			}
 		}
@@ -569,6 +569,7 @@ table#listeFiches {
 	td {
 		background: none;
 		border: 0;
+		height: 57px;
 		text-align: left;
 	}
 	
@@ -611,12 +612,11 @@ table#listeFiches {
 	tbody {
 	
 		tr {
-			&:nth-of-type(odd) {
+			&:nth-of-type(even) {
 				background-color: rgba($rouge, .05);
 			}
 			
 			td {
-			
 				a {
 					color: $bleu;
 					
@@ -627,29 +627,4 @@ table#listeFiches {
 			}
 		}
 	}
-}
-
-#blocFiches {
-	position: relative;
- 	height: 75%;
- 	margin: 55px auto 0;
- 	overflow-x: hidden;
- 	overflow-y: auto;
- 	width: 90%;
- 	
- 	table {
-	 	width: 100%;
-	 	
-	 	thead {
-		 	position: fixed;
-		 	border-collapse: collapse;
-		 	margin-top: -55px;
-		 	z-index: 10;
-		 	
-		 	th:nth-of-type(1) { width:  50px; }
-		 	th:nth-of-type(3) { width: 250px; }
-		 	th:nth-of-type(4) { width: 130px; }
-		 	th:nth-of-type(5) { width: 130px; }
-	 	}
- 	}
 }
