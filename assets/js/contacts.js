@@ -153,6 +153,22 @@ var contacts = function() {
 		// On évite le lancement du formulaire
 		return false;
 	});
+	
+	
+	// Script permettant l'exportation de la sélection actuelle
+	$('.exportation').click(function(){
+		// On récupère les critères de tri
+		var criteres = $('#summaryTri').val();
+		
+		// On lance le script d'export
+		$.get('ajax.php?script=contacts-export', {'tri': criteres})
+		 .always(function(){
+			$('#exportation-lancee').fadeIn(1000).delay(5000).fadeOut(1000);
+		 });
+		
+		// On annule le clic sur le lien
+		return false;
+	});
 };
 
 $(document).ready(contacts);

@@ -178,9 +178,13 @@ class fiche extends core {
 		if ($separateur) { $begin = '<' . $separateur . '>'; $end = '</' . $separateur . '>'; }
 		else { $begin = null; $end = null; }
 	
-		if (!empty($nom)) { $affichage = $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
+		$affichage = '';
+		if (!empty($nom)) { $affichage .= $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($nom_usage, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($prenoms)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($prenoms, ENT_NOQUOTES, 'utf-8'), MB_CASE_TITLE, 'utf-8') . $end; }
+		
+		// S'il n'y a ni nom, ni prénom, on cherche l'organisme à afficher
+		if (empty($affichage)) $affichage = $row['contact_organisme'];
 		
 		if ($return == false) : echo $affichage; else : return $affichage; endif;
 		
@@ -973,12 +977,13 @@ class fiche extends core {
 	
 	
 	// liste( string = PHP/JSON , [ array ] , [ int ] , [ bool ] ) permet de retourner ou d'exporter une liste de contacts au format JSON ou Tableau PHP selon des conditions entrées en argument
-	public	function liste( $output , $args = null , $nombre = false , $export = false ) {
+	public	function liste( $output , $args = null , $export = false , $nombre = false , $debut = false ) {
 		
 		// On prépare la requête de recherche des données
 		$query = 'SELECT	`contact_id`,
 							`immeuble_id`,
 							`adresse_id`,
+							`bureau_id`,
 							`contact_nom`,
 							`contact_nom_usage`,
 							`contact_prenoms`,
@@ -987,14 +992,14 @@ class fiche extends core {
 							`contact_email`,
 							`contact_mobile`,
 							`contact_telephone`,
-							`contact_tags`,
-							`contact_organisme`,
-							`contact_fonction`
+							`contact_electeur`,
+							`contact_tags`
 				  FROM		`contacts` ';
 
 		// On lance le traitement des arguments dans un tableau $conditions
 		$conditions = array();
 		$immeubles = array(); // On prépare également le tableau $immeubles pour le traitement des critères géographiques
+		$bureaux = array(); // On prépare également le tableau $buraeux pour le traitement des critères de bureaux électoraux
 
 		if (!is_null($args) && is_array($args)) {
 			// On lance une boucle de traitement des arguments
@@ -1010,7 +1015,8 @@ class fiche extends core {
 					
 				} elseif ($key == 'bureau') {
 					
-					$conditions[] = '`bureau_id` = ' . $arg;
+					// on fait la liste des bureaux dans un tableau bureaux
+					$bureaux = $arg;
 					
 				} elseif ($key == 'tags') {
 				
@@ -1028,6 +1034,11 @@ class fiche extends core {
 		
 		// On prépare le tableau $conditionSQL qui contient les différentes conditions à installer dans la requête (géographique, coordonnées, divers)
 		$conditionSQL = array();
+		
+		// S'il existe des bureaux de vote sélectionnés, on installe le critère bureau de vote dans la base de données
+		if (count($bureaux) > 0) {
+			$conditionSQL[] = ' ( `bureau_id` = ' . implode(' OR `bureau_id` = ', $bureaux) . ' ) ';
+		}
 		
 		// S'il existe des immeubles sélectionnés, on installe le critère géographique dans la base de données
 		if (count($immeubles) > 0) {
@@ -1049,23 +1060,107 @@ class fiche extends core {
 		
 		// On termine la préparation de la requête
 		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
-		if (is_numeric($nombre)) $query.= 'LIMIT 0, ' . $nombre;
-		
+		if (is_numeric($nombre) && is_numeric($debut)) $query.= 'LIMIT ' . $debut . ', ' . $nombre;
+		if (is_numeric($nombre) && !is_numeric($debut)) $query.= 'LIMIT 0, ' . $nombre;
+
 		// On exécute la requête SQL et on l'affecte au tableau $contacts
 		$sql = $this->db->query($query);
 		$contacts = array();
 		
 		if ($sql->num_rows > 0) while ($row = $sql->fetch_assoc()) $contacts[] = $this->formatage_donnees($row);
 
-		// On retourne sous format JSON ou tableau PHP les données
-		if ($output == 'JSON') {
-			$json = json_encode($contacts);
-			//$json = str_replace('null', '', $json);
-			echo $json;
-		} elseif ($output == 'debug') {
-			$this->debug($contacts);
+		// Si on demande une sortie des données sans export, on retourne sous format JSON ou tableau PHP les données
+		if ($export == false) {
+			if ($output == 'JSON') {
+				$json = json_encode($contacts);
+				//$json = str_replace('null', '', $json);
+				echo $json;
+			} elseif ($output == 'debug') {
+				$this->debug($contacts);
+			} else {
+				return $contacts;
+			}
+		
+		// Sinon, on procède à un export des données dans un fichier
 		} else {
-			return $contacts;
+		
+			// On prépare le contenu du fichier sous forme de tableau
+			$fichier = array();
+			
+			// On ouvre le fichier
+			$nomFichier = 'export-' . $_COOKIE['leqg-user'] . '-' .date('Y-m-d-H\hi'). '-' . rand(1, 100) . '.csv';
+			$f = fopen('exports/' . $nomFichier, 'w+');
+			
+			// On y entre la première ligne du fichier
+			$entete = array(   'bureau',
+							   'nom',
+							   'nom_usage',
+							   'prenoms',
+							   'organisation',
+							   'fonction',
+							   'date_naissance',
+							   'adresse',
+							   'cp',
+							   'ville',
+							   'sexe',
+							   'email',
+							   'mobile',
+							   'fixe',
+							   'electeur');
+			
+			fputcsv($f, $entete, ';', '"');
+			
+			
+			// On fait la boucle des contacts pour y ajouter les lignes
+			foreach ($contacts as $contact) {
+				// On commence par rechercher les coordonnées d'après l'immeuble
+				$immeuble = $this->db->query('SELECT * FROM immeubles WHERE immeuble_id = ' . $contact['immeuble_id']);
+				$immeuble = $this->formatage_donnees($immeuble->fetch_assoc());
+				
+				if ($immeuble['rue_id'] != $immeuble['bureau_id']) {
+					$rue = $this->db->query('SELECT * FROM rues WHERE rue_id = ' . $immeuble['rue_id']);
+					$rue = $this->formatage_donnees($rue->fetch_assoc()); 
+					
+					$ville = $this->db->query('SELECT * FROM communes WHERE commune_id = ' . $rue['commune_id']);
+					$ville = $this->formatage_donnees($ville->fetch_assoc());
+					
+					$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
+					$cp = $cp->fetch_assoc();
+					
+					$bureau = $this->db->query('SELECT `bureau_numero` FROM `bureaux` WHERE `bureau_id` = ' . $contact['bureau_id']);
+					$bureau = $bureau->fetch_assoc();
+				} else {
+					$rue['nom'] = '';
+					$ville['nom'] = '';
+					$cp['code_postal'] = '';
+					$bureau['bureau_numero'] = '0';
+				}
+				
+				// on rassemble les informations qu'on balance dans le fichier
+				$ligne = array(    $bureau['bureau_numero'],
+								   $contact['nom'],
+								   $contact['nom_usage'],
+								   $contact['prenoms'],
+								   $contact['organisme'],
+								   $contact['fonction'],
+								   ($contact['naissance_date'] == '0000-00-00') ? '' : date('d/m/Y', strtotime($contact['naissance_date'])),
+								   $immeuble['numero'] . ' ' . trim($rue['nom']),
+								   $cp['code_postal'],
+								   $ville['nom'],
+								   ($contact['sexe'] == 'i') ? '' : $contact['sexe'],
+								   $contact['email'],
+								   $contact['mobile'],
+								   $contact['telephone'],
+								   $contact['electeur']);
+								   
+				fputcsv($f, $ligne, ';', '"');
+			}
+			
+			// On ferme le fichier
+			fclose($f);
+			
+			// On retourne le nom du fichier
+			return 'exports/' . $nomFichier;
 		}
 	}
 }

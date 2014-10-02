@@ -6,6 +6,7 @@
 			<a href="<?php echo $core->tpl_go_to('fiche', array('operation' => 'creation')); ?>">Nouveau contact</a>
 			<a href="<?php echo $core->tpl_go_to('fiche', array('operation' => 'fusion')); ?>">Fusion de fiches</a>
 			<a href="#" class="ouvertureOverlay" data-overlay="ajoutCritere">Ajouter un critère</a>
+			<a href="#" class="exportation">Exporter la sélection</a>
 		</nav>
 		
 		<div id="criteres" class="listeTags"><span class="tag" data-critere="contact:tous">contact:tous</span></div>
@@ -26,7 +27,7 @@
 			<tbody id="majListeFiches">
 				<?php
 					$argsOnLoad = array('contact' => 'tous');
-					$contacts = $fiche->liste('php', $argsOnLoad, 5000);
+					$contacts = $fiche->liste('php', $argsOnLoad, false, 5000);
 					foreach ($contacts as $contact) :
 				?>
 				<tr>
@@ -89,6 +90,8 @@
 	</form>
 </div>
 
+<div id="exportation-lancee">L'exportation a été lancée, vous recevrez le fichier demandé par email.</div>
+
 
 
 
@@ -103,7 +106,7 @@
 		<ul class="timeline debutNow">
 			<?php $interactions = $historique->dernieresInteractions(15); if (count($interactions) > 0) : foreach ($interactions as $interaction) : ?>
 			<li class="<?php echo $interaction['type']; ?>">
-				<strong><?php echo $interaction['objet']; ?></strong>
+				<strong><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'], 'interaction' => $interaction['id'])); ?>" class="nostyle"><?php if (empty($interaction['objet'])) { echo $historique->returnType($interaction['type']); } else { echo $interaction['objet']; } ?></a></strong>
 				<ul>
 					<li class="contact"><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>"><?php $fiche->affichageNomByID($interaction['contact_id']); ?></a></li>
 					<li class="date"><?php echo date('d/m/Y', strtotime($interaction['date'])); ?></li>
@@ -121,10 +124,10 @@
 		<ul class="timeline debutNow">
 			<?php $taches = $tache->liste(15); if (count($taches) > 0) : foreach ($taches as $t) : ?>
 			<li class="tache">
+				<?php $interaction = $historique->recherche($t['historique_id']); ?>
 				<strong><?php echo $t['description']; ?></strong>
 				<?php if (!empty($t['historique_id']) && $t['historique_id'] > 0) : ?>
 				<ul>
-					<?php $interaction = $historique->recherche($t['historique_id']); ?>
 					<li class="contact"><a href="<?php $core->tpl_go_to('fiche', array('id' => $interaction['contact_id'])); ?>"><?php $fiche->affichageNomByID($interaction['contact_id']); ?></a></li>
 					<li class="date"><?php echo date('d/m/Y', strtotime($t['creation'])); ?></li>
 				</ul>

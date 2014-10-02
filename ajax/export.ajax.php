@@ -36,7 +36,7 @@
 
 	// On configure le mail à envoyer
 	$mail->CharSet = $api['mail']['charset'];
-	$mail->SetFrom('noreply@leqg.info', 'LeQG');
+	$mail->SetFrom('ne-pas-repondre@leqg.info', 'LeQG');
 	$mail->AddReplyTo('tech@leqg.info', 'LeQG équipe technique');
 	$mail->AddAddress($utilisateur['email'], $utilisateur['firstname'] . ' ' . $utilisateur['lastname']);
 	$mail->Subject = $objet;
