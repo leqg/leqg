@@ -6,6 +6,7 @@
 			<a href="<?php echo $core->tpl_go_to('fiche', array('operation' => 'creation')); ?>">Nouveau contact</a>
 			<a href="<?php echo $core->tpl_go_to('fiche', array('operation' => 'fusion')); ?>">Fusion de fiches</a>
 			<a href="#" class="ouvertureOverlay" data-overlay="ajoutCritere">Ajouter un critère</a>
+			<a href="#" class="exportation">Exporter la sélection</a>
 		</nav>
 		
 		<div id="criteres" class="listeTags"><span class="tag" data-critere="contact:tous">contact:tous</span></div>
@@ -26,7 +27,7 @@
 			<tbody id="majListeFiches">
 				<?php
 					$argsOnLoad = array('contact' => 'tous');
-					$contacts = $fiche->liste('php', $argsOnLoad, 5000);
+					$contacts = $fiche->liste('php', $argsOnLoad, false, 5000);
 					foreach ($contacts as $contact) :
 				?>
 				<tr>
@@ -88,6 +89,8 @@
 		</ul>
 	</form>
 </div>
+
+<div id="exportation-lancee">L'exportation a été lancée, vous recevrez le fichier demandé par email.</div>
 
 
 
