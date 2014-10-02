@@ -10,7 +10,11 @@
 		$args = array();
 		foreach($tri as $key => $t) :
 			$t = explode(':', $t);
-			$args[$t[0]] = $t[1];
+			if ($t[0] == 'bureau') {
+				$args[$t[0]][] = $t[1];
+			} else {
+				$args[$t[0]] = $t[1];
+			}
 		endforeach;
 		
 		// On lance la recherche des fiches correspondances aux arguments
