@@ -178,7 +178,8 @@ class fiche extends core {
 		if ($separateur) { $begin = '<' . $separateur . '>'; $end = '</' . $separateur . '>'; }
 		else { $begin = null; $end = null; }
 	
-		if (!empty($nom)) { $affichage = $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
+		$affichage = '';
+		if (!empty($nom)) { $affichage .= $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($nom_usage, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($prenoms)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($prenoms, ENT_NOQUOTES, 'utf-8'), MB_CASE_TITLE, 'utf-8') . $end; }
 		
