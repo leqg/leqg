@@ -183,6 +183,9 @@ class fiche extends core {
 		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($nom_usage, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($prenoms)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($prenoms, ENT_NOQUOTES, 'utf-8'), MB_CASE_TITLE, 'utf-8') . $end; }
 		
+		// S'il n'y a ni nom, ni prénom, on cherche l'organisme à afficher
+		if (empty($affichage)) $affichage = $row['contact_organisme'];
+		
 		if ($return == false) : echo $affichage; else : return $affichage; endif;
 		
 		unset($affichage);
