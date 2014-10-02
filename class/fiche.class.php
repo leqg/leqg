@@ -993,9 +993,7 @@ class fiche extends core {
 							`contact_mobile`,
 							`contact_telephone`,
 							`contact_electeur`,
-							`contact_tags`,
-							`contact_organisme`,
-							`contact_fonction`
+							`contact_tags`
 				  FROM		`contacts` ';
 
 		// On lance le traitement des arguments dans un tableau $conditions
