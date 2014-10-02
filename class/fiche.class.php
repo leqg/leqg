@@ -1015,7 +1015,7 @@ class fiche extends core {
 					
 				} elseif ($key == 'bureau') {
 					
-					$bureaux[] = '`bureau_id` = ' . $arg;
+					$bureaux[] = $arg;
 					
 				} elseif ($key == 'tags') {
 				
