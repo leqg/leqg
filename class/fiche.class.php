@@ -999,6 +999,7 @@ class fiche extends core {
 		// On lance le traitement des arguments dans un tableau $conditions
 		$conditions = array();
 		$immeubles = array(); // On prépare également le tableau $immeubles pour le traitement des critères géographiques
+		$bureaux = array(); // On prépare également le tableau $buraeux pour le traitement des critères de bureaux électoraux
 
 		if (!is_null($args) && is_array($args)) {
 			// On lance une boucle de traitement des arguments
@@ -1014,7 +1015,7 @@ class fiche extends core {
 					
 				} elseif ($key == 'bureau') {
 					
-					$conditions[] = '`bureau_id` = ' . $arg;
+					$bureaux[] = '`bureau_id` = ' . $arg;
 					
 				} elseif ($key == 'tags') {
 				
@@ -1032,6 +1033,11 @@ class fiche extends core {
 		
 		// On prépare le tableau $conditionSQL qui contient les différentes conditions à installer dans la requête (géographique, coordonnées, divers)
 		$conditionSQL = array();
+		
+		// S'il existe des bureaux de vote sélectionnés, on installe le critère bureau de vote dans la base de données
+		if (count($bureaux) > 0) {
+			$conditionSQL[] = ' ( `bureau_id` = ' . implode(' OR `bureau_id` = ', $bureaux) . ' ) ';
+		}
 		
 		// S'il existe des immeubles sélectionnés, on installe le critère géographique dans la base de données
 		if (count($immeubles) > 0) {
