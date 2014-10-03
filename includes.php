@@ -43,7 +43,7 @@ $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD'][
 
 // On appelle l'ensemble des classes générales au site
 $core =			new core($db, $noyau, $config['SERVER']['url']);
-$csv =			new csv($db, $config['SERVER']['url']);
+$csv =			new csv();
 $user =			new user($db, $noyau, $config['SERVER']['url']);
 $fiche =		new fiche($db, $cookie, $config['SERVER']['url']);
 $tache =		new tache($db, $cookie, $config['SERVER']['url']);
