@@ -9,6 +9,8 @@
  * @author		Damien Senger <mail@damiensenger.me>
  * @copyright	2014 MSG SAS – LeQG
  */
+namespace leQG;
+
 class core {
 	
 	/**
@@ -20,7 +22,7 @@ class core {
 	
 
 	/**
-	 * Cette méthode permet la construction de la classe _core_
+	 * Cette méthode permet la construction de la classe core
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -38,9 +40,9 @@ class core {
 	
 	
 	/**
-	 * _debug()_ permet le débogage des scripts de la plateforme en affichant le contenu d'un objet PHP
+	 * Cette méthode permet le débogage des scripts de la plateforme en affichant le contenu d'un objet PHP
 	 * 
-	 * Cette fonction permet d'afficher par l'intermédiaire d'un _print_r()_ le contenu d'un objet permettant
+	 * Cette fonction permet d'afficher par l'intermédiaire d'un print_r() le contenu d'un objet permettant
 	 * son débogage puis d'arrêter ou non, à la demande, l'exécution d'un script.
 	 * Cette fonction assure un rendu des objets PHP adapté selon leur type.
 	 * 
@@ -79,7 +81,7 @@ class core {
 	
 	
 	/**
-	 * *securisation_string()* permet de sécuriser les données qui doivent transiter par la base de données
+	 * Cette méthode permet de sécuriser les données qui doivent transiter par la base de données
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -99,7 +101,7 @@ class core {
 	
 	
 	/**
-	 * *formatage_recherche() permet de préparer une chaîne de caractère à être lancé dans une recherche SQL via LIKE
+	 * Cette méthode permet de préparer une chaîne de caractère à être lancé dans une recherche SQL via LIKE
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -133,7 +135,7 @@ class core {
 		
 	
 	/**
-	 * *formatage_donnees() permet de retourner le tableau entré sans les préfixes BDD
+	 * Cette méthode permet de retourner le tableau entré sans les préfixes BDD
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -176,7 +178,7 @@ class core {
 	
 	
 	/**
-	 * *triParColonne()* permet de trier des tableaux multidimentionnels d'après une clé demandée
+	 * Cette méthode permet de trier des tableaux multidimentionnels d'après une clé demandée
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version 1.0
@@ -200,7 +202,7 @@ class core {
 		
 	
 	/**
-	 * *sortie()* permet de traiter un contenu puis de l'afficher
+	 * Cette méthode permet de traiter un contenu puis de l'afficher
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -219,7 +221,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_load()* permet de charger un fichier de template
+	 * Cette méthode permet de charger un fichier de template
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -245,7 +247,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_header()* permet de charger le header de la page demandée
+	 * Cette méthode permet de charger le header de la page demandée
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -258,7 +260,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_footer()* permet de charger le footer de la page demandée
+	 * Cette méthode permet de charger le footer de la page demandée
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -271,7 +273,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_aside()* permet de charger le aside de la page demandée
+	 * Cette méthode permet de charger le aside de la page demandée
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -284,7 +286,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_redirection()* permet d'effectuer le renvoi de l'utisateur vers une autre page
+	 * Cette méthode permet d'effectuer le renvoi de l'utisateur vers une autre page
 	 *
 	 * @author		Damien Senger <mail@damiensenger.me>
 	 * @version		1.0
@@ -311,7 +313,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_go_to()* permet d'effectuer une redirection de l'utilisateur
+	 * Cette méthode permet d'effectuer une redirection de l'utilisateur
 	 *
 	 * Cette méthode permet d'effectuer une redirection de l'utilisateur vers une page demandée 
 	 * en suivant le format de nomage des URL du site, tout en ayant une multitude d'arguments
@@ -361,7 +363,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_return_url()* permet de retourner l'URL d'une page demandée
+	 * Cette méthode permet de retourner l'URL d'une page demandée
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -393,7 +395,7 @@ class core {
 
 	
 	/**
-	 * *tpl_get_url()* permet d'afficher l'URL d'une page demandée
+	 * Cette méthode permet d'afficher l'URL d'une page demandée
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -410,7 +412,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_domaine()* permet de retourner le nom de domaine du site
+	 * Cette méthode permet de retourner le nom de domaine du site
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -425,7 +427,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_get_domain()* permet d'afficher le nom de domaine du site
+	 * Cette méthode permet d'afficher le nom de domaine du site
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -437,7 +439,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_phone()* permet d'afficher un numéro de téléphone formaté
+	 * Cette méthode permet d'afficher un numéro de téléphone formaté
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -450,7 +452,7 @@ class core {
 	
 	
 	/**
-	 * *get_tpl_phone()* permet de retourner un numéro de téléphone formaté
+	 * Cette méthode permet de retourner un numéro de téléphone formaté
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -465,7 +467,7 @@ class core {
 	
 	
 	/**
-	 * *tpl_transform_texte()* permet de transformer le contenu d'un texte
+	 * Cette méthode permet de transformer le contenu d'un texte
 	 *
 	 * Cette méthode permet de transformer un texte pour le formater à la lecture, en traitant les
 	 * adresses de rues pour les rendre plus compréhensible
