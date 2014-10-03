@@ -21,7 +21,7 @@ class carto extends core {
 	
 
 	/**
-	 * Cette méthode permet la construction de la classe core
+	 * Cette méthode permet la construction de la classe carto
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
