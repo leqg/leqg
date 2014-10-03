@@ -9,7 +9,6 @@
  * @author		Damien Senger <mail@damiensenger.me>
  * @copyright	2014 MSG SAS – LeQG
  */
-namespace leQG;
 
 class core {
 	
