@@ -934,7 +934,7 @@ class fiche extends core {
 	 *
 	 * @author		Damien Senger <mail@damiensenger.me>
 	 * @version		1.0
-	 * @deprecated	1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
 	 * @see			Historique
 	 *
 	 * @param		int			$fiche		ID de la fiche concernée
@@ -1141,7 +1141,7 @@ class fiche extends core {
 	 *
 	 * @author		Damien Senger <mail@damiensenger.me>
 	 * @version		1.0
-	 * @deprecated	1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
 	 * @see			Carto
 	 *
 	 * @param		string		$ville_origine	Nom de la ville entrée
