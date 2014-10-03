@@ -1,30 +1,53 @@
 <?php
-
-/*
-	Classe du noyau cartographique du site
-*/
-
+/**
+ * La classe carto représente le noyau cartographique du système LeQG
+ * 
+ * Cette classe comprend l'ensemble des méthodes nécessaires à la récupération d'informations
+ * tirées du module géographique du système leQG.
+ * 
+ * @package		leQG
+ * @author		Damien Senger <mail@damiensenger.me>
+ * @copyright	2014 MSG SAS – LeQG
+ */
 
 class carto extends core {
 	
-// Définition des propriétés
-	private $db; // Lien vers la base MySQL
-	private $compte; // ID du compte utilisant la classe
-	private $url; // Domaine du serveur
+	/**
+	 * @var	object	$db		Propriété concenant le lien vers la base de données de l'utilisateur
+	 * @var	object	$noyau	Propriété contenant le lien vers la base de données globale LeQG
+	 * @var	string	$url		Propriété contenant l'URL du serveur
+	 */
+	private $db, $noyau, $url;
 	
-	
-// Définition des méthodes
-	
-	public	function __construct($db, $compte, $url) {
+
+	/**
+	 * Cette méthode permet la construction de la classe core
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	object $db Lien vers la base de données de l'utilisateur
+	 * @param	object $noyau Lien vers la base de données globale LeQG
+	 * @param	string $url URL du serveur
+	 */
+	 
+	public	function __construct($db, $noyau, $url) {
 		$this->db = $db;
-		$this->compte = $compte;
+		$this->noyau = $noyau;
 		$this->url = $url;
 	}
-		
 	
-// Méthodes liées à la classe sélectionnée
 	
-	// recherche_ville( string ) permet de renvoyer une liste de toutes les villes répondant à la recherche proposée
+	/**
+	 * Cette méthode permet de renvoyer une liste de toutes les villes répondant à la recherche lancée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string $search Ville à rechercher
+	 * @return	array
+	 */
+
 	public	function recherche_ville( $search ) {
 		// On sécurise la recherche
 			$search = $this->formatage_recherche($search);
@@ -49,7 +72,17 @@ class carto extends core {
 	}
 	
 	
-	// recherche_rue( int , string ) permet de renvoyer une liste de toutes les rues répondant à une recherche proposée
+	/**
+	 * Cette méthode permet de renvoyer une liste de toutes les rues répondant à la recherche lancée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$ville		ID de la ville dans laquelle effectuer la recherche
+	 * @param	string	$search		Rue à rechercher
+	 * @return	array
+	 */
+
 	public	function recherche_rue( $ville , $search = '' ) {
 		// On sécurise la recherche
 			$search = $this->formatage_recherche($search);
@@ -77,7 +110,16 @@ class carto extends core {
 	}
 	
 	
-	// recherche_canton( string ) permet de renvoyer une liste de tous les cantons répondant à une recherche proposée
+	/**
+	 * Cette méthode permet de renvoyer une liste de tous les cantons répondant à la recherche lancée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string	$search		Canton à rechercher
+	 * @return	array
+	 */
+
 	public	function recherche_canton( $search = '' ) {
 		// On sécurise la recherche
 		$search = $this->formatage_recherche($search);
@@ -102,7 +144,16 @@ class carto extends core {
 	}
 	
 	
-	// region( int ) permet de renvoyer toutes les informations relatives à une région demandée par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à une région demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de la région demandée
+	 * @return	array
+	 */
+
 	public	function region( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -123,7 +174,16 @@ class carto extends core {
 	}
 	
 	
-	// departement( int ) permet de renvoyer toutes les informations relatives à un département demandé par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un département demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID du département demandé
+	 * @return	array
+	 */
+
 	public	function departement( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -144,7 +204,16 @@ class carto extends core {
 	}
 	
 	
-	// arrondissement( int ) permet de renvoyer toutes les informations relatives à un arrondissement demandé par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un arrondissement demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de l'arrondissement demandé
+	 * @return	array
+	 */
+
 	public	function arrondissement( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -165,7 +234,16 @@ class carto extends core {
 	}
 	
 	
-	// canton( int ) permet de renvoyer toutes les informations relatives à un canton demandé par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un canton demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID du canton demandé
+	 * @return	array
+	 */
+
 	public	function canton( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -186,7 +264,16 @@ class carto extends core {
 	}
 	
 	
-	// bureau( int ) permet de renvoyer toutes les informations relatives à un bureau de vote demandé par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un bureau de vote demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID du bureau de vote demandé
+	 * @return	array
+	 */
+
 	public	function bureau( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -207,7 +294,16 @@ class carto extends core {
 	}
 	
 	
-	// ville( int ) permet de renvoyer toutes les informations relatives à une ville demandée par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à une ville demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de la ville demandée
+	 * @return	array
+	 */
+
 	public	function ville( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -228,7 +324,16 @@ class carto extends core {
 	}
 	
 	
-	// rue( int ) permet de renvoyer toutes les inforations relatives à une rue demandée par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à une rue demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de la rue demandée
+	 * @return	array
+	 */
+
 	public	function rue( $id ) {
 		// On sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -249,7 +354,16 @@ class carto extends core {
 	}
 	
 	
-	// immeuble( int ) permet de renvoyer toutes les informations relatives à un immeuble demandé par son id
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un immeuble demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de l'immeuble demandé
+	 * @return	array
+	 */
+
 	public	function immeuble( $id ) {
 		// on sécurise la recherche
 			$id = $this->securisation_string($id);
@@ -270,7 +384,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherArrondissement( int [ , bool ] ) permet d'afficher le nom d'un arrondissement grâce à son ID
+	/**
+	 * Cette méthode permet d'afficher le nom d'un arrondissement grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID de l'arrondissement demandé
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le nom de l'arrondissement ou rien en fonction de $return
+	 */
+
 	public	function afficherArrondissement( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$arrondissement = $this->arrondissement($id);
@@ -280,7 +404,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherCanton( int [ , bool ] ) permet d'afficher le nom d'un canton grâce à son ID
+	/**
+	 * Cette méthode permet d'afficher le nom d'un canton grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID du canton demandé
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le nom du canton ou rien en fonction de $return
+	 */
+
 	public	function afficherCanton( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$canton = $this->canton($id);
@@ -290,7 +424,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherVille( int [ , bool ] ) permet d'afficher le nom d'une ville grâce à son ID
+	/**
+	 * Cette méthode permet d'afficher le nom d'une ville grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID de la ville demandée
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le nom de la ville ou rien en fonction de $return
+	 */
+
 	public	function afficherVille( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$ville = $this->ville($id);
@@ -300,7 +444,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherRue( int [ , bool ] ) permet d'afficher le nom d'une rue grâce à son ID
+	/**
+	 * Cette méthode permet d'afficher le nom d'une rue grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID de la rue demandée
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le nom de la rue ou rien en fonction de $return
+	 */
+
 	public	function afficherRue( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$rue = $this->rue($id);
@@ -310,7 +464,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherDepartement( int , bool ) permet d'afficher le nom du département entré par son ID
+	/**
+	 * Cette méthode permet d'afficher le nom d'un département grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID du département demandé
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le nom du département ou rien en fonction de $return
+	 */
+
 	public	function afficherDepartement( $id , $return = false ) {
 		// On lance la recherche dans la base de données pour retrouver le département
 		$query = 'SELECT * FROM departements WHERE departement_id = ' . $id;
@@ -324,7 +488,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherRegion( int , bool ) permet d'afficher le nom de la région entrée par son ID
+	/**
+	 * Cette méthode permet d'afficher le nom d'une région grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID de la région demandée
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le nom de la région ou rien en fonction de $return
+	 */
+
 	public	function afficherRegion( $id , $return = false ) {
 		// On lance la recherche dans la base de données pour retrouver la région
 		$query = 'SELECT * FROM regions WHERE region_id = ' . $id;
@@ -338,7 +512,17 @@ class carto extends core {
 	}
 	
 	
-	// afficherImmeuble( int [ , bool ] ) permet d'afficher le numéro d'un immeuble grâce à son ID
+	/**
+	 * Cette méthode permet d'afficher le numéro d'un immeuble grâce à son ID
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id			ID de l'immeuble demandé
+	 * @param	bool 	$return		Méthode de retour de l'information demandée
+	 * @return	string|void			Le numéro de l'immeuble ou rien en fonction de $return
+	 */
+
 	public	function afficherImmeuble( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$immeuble = $this->immeuble($id);
@@ -348,7 +532,16 @@ class carto extends core {
 	}
 	
 	
-	// listeBureaux( int ) permet de retourner la liste des bureaux d'une commune 
+	/**
+	 * Cette méthode permet de récupérer une liste de bureaux de vote par ville
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$ville		ID de la ville contenant les bureaux de vote demandés
+	 * @return	array				La liste des bureaux de vote dans la ville demandée
+	 */
+
 	public	function listeBureaux( $ville ) {
 		// On vérifie que les arguments sont bien des éléments numériques
 			if (!is_numeric($ville)) return false;
@@ -371,7 +564,15 @@ class carto extends core {
 	}
 	
 	
-	// listeTousBureaux( ) permet de renvoyer la liste de tous les bureaux de vote intégré au compte
+	/**
+	 * Cette méthode permet de récupérer la liste de tous les bureaux de vote connus
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @return	array	La liste des bureaux de vote connus
+	 */
+
 	public	function listeTousBureaux( ) {
 		// On prépare la requête de récupération des immeubles correspondant
 			$query = 'SELECT	*
@@ -390,7 +591,16 @@ class carto extends core {
 	}
 	
 	
-	// listeRues( int ) permet de retourner la liste des rues d'une commune 
+	/**
+	 * Cette méthode permet de récupérer une liste de rues par ville
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$ville		ID de la ville demandée
+	 * @return	array				La liste des rues dans la ville demandée
+	 */
+
 	public	function listeRues( $ville ) {
 		// On vérifie que les arguments sont bien des éléments numériques
 			if (!is_numeric($ville)) return false;
@@ -413,7 +623,16 @@ class carto extends core {
 	}
 	
 	
-	// listeImmeubles( int ) permet de retourner la liste des immeubles 
+	/**
+	 * Cette méthode permet de récupérer une liste des immeubles dans une rue demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$rue		ID de la rue demandée
+	 * @return	array			La liste des immeubles dans la rue demandée
+	 */
+
 	public	function listeImmeubles( $rue ) {
 		// On vérifie que les arguments sont bien des éléments numériques
 			if (!is_numeric($rue)) return false;
@@ -451,7 +670,16 @@ class carto extends core {
 	}
 	
 	
-	// listeElecteurs( int ) permet de retourner la liste des électeurs pour un immeuble
+	/**
+	 * Cette méthode permet de récupérer une liste des électeurs d'un immeuble
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble		ID de l'immeuble demandé
+	 * @return	array					La liste des électeurs dans l'immeuble demandé
+	 */
+
 	public	function listeElecteurs( $immeuble ) {
 		// On vérifie que les arguments sont bien des élements numériques
 			if (!is_numeric($immeuble)) return false;
@@ -473,7 +701,16 @@ class carto extends core {
 	}
 	
 	
-	// nombreElecteursParImmeuble( int ) permet de retourner la liste des électeurs pour un immeuble
+	/**
+	 * Cette méthode permet de connaître le nombre d'électeurs dans un immeuble
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble concerné par le comptage
+	 * @return	int					Le nombre d'électeur dans l'immeuble demandé
+	 */
+
 	public	function nombreElecteursParImmeuble( $immeuble ) {		
 		// On retourne les données
 			$electeurs = $this->listeElecteurs($immeuble);
@@ -482,7 +719,18 @@ class carto extends core {
 	}
 	
 	
-	// listeElecteursParBureau( int ) permet de retourner la liste des électeurs pour un bureau dont les coordonnées sont ou non connues
+	/**
+	 * Cette méthode permet de connaître le nombre d'électeurs dans un bureau de vote
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$bureau			ID du bureau de vote concerné par le comptage
+	 * @param	bool 	$coordonnees 	Si true ne compte que les électeurs dont le système 
+	 * 									connait des coordonnées
+	 * @return	int						Le nombre d'électeur dans le bureau de vote demandé
+	 */
+
 	public	function listeElecteursParBureau( $bureau , $coordonnees = false ) {
 		// On vérifie que les arguments sont bien des élements numériques
 			if (!is_numeric($bureau)) return false;
@@ -517,7 +765,16 @@ class carto extends core {
 	}
 	
 	
-	// bureauParImmeuble( int ) permet d'afficher l'ID d'un bureau de vote pour un immeuble demandé
+	/**
+	 * Cette méthode permet de connaître le bureau de vote d'un immeuble demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble demandé
+	 * @return	int					ID du bureau de vote relatif à l'immeuble demandé
+	 */
+
 	public	function bureauParImmeuble( $immeuble ) {
 		// On vérifie que l'argument est bien un ID
 		if (!is_numeric($immeuble)) return false;
@@ -532,7 +789,16 @@ class carto extends core {
 	}
 	
 	
-	// villeParImmeuble( int ) permet d'afficher l'ID d'une ville pour un immeuble demandé
+	/**
+	 * Cette méthode permet de connaître la ville correspondante à un immeuble
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble concerné par la demande
+	 * @return	int					ID de la ville trouvée pour l'immeuble
+	 */
+
 	public	function villeParImmeuble( $immeuble ) {
 		// On vérifie que l'argument est bien un ID
 		if (!is_numeric($immeuble)) return false;
@@ -547,7 +813,16 @@ class carto extends core {
 	}
 	
 	
-	// cantonParImmeuble( int ) permet d'afficher l'ID d'un canton pour un immeuble demandé
+	/**
+	 * Cette méthode permet de connaître le canton correspondant à un immeuble
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble concerné par la demande
+	 * @return	int					ID du canton trouvé pour l'immeuble
+	 */
+
 	public	function cantonParImmeuble( $immeuble ) {
 		// On vérifie que l'argument est bien un ID
 		if (!is_numeric($immeuble)) return false;
@@ -562,7 +837,17 @@ class carto extends core {
 	}
 	
 	
-	// detailAdresse( int ) permet de récupérer un tableau contenant l'ensemble des informations disponibles à partir d'un immeuble
+	/**
+	 * Cette méthode permet de récupérer un tableau contenant toutes les informations
+	 * géographiques disponibles pour un immeuble
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble concerné par la demande
+	 * @return	array				Données géographiques trouvées
+	 */
+
 	public	function detailAdresse( $immeuble ) {
 		// On vérifie le format de l'id de l'immeuble pour continuer
 		if (!is_numeric($immeuble)) return false;
@@ -589,7 +874,18 @@ class carto extends core {
 	}
 	
 	
-	// adressePostale( int , string , bool ) permet d'afficher une adresse postale complète à partir d'id d'un immeuble
+	/**
+	 * Cette méthode permet d'afficher une adresse postale complète à partir d'un immeuble demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble concerné par la demande
+	 * @param	string	$separateur	Séparateur HTML entre les composants de l'adresse
+	 * @param	bool 	$return		Si oui, retourne l'information plutôt que de l'afficher
+	 * @return	string|void			Affiche ou retourne l'adresse postale selon $return
+	 */
+
 	public	function adressePostale( $immeuble , $separateur = '<br>' , $return = false ) {
 		// On vérifie le format de l'id de l'immeuble pour continuer
 		if (!is_numeric($immeuble)) return false;
@@ -620,7 +916,18 @@ class carto extends core {
 	}
 	
 	
-	// bureauDeVote( int ) permet d'afficher les informations relatives à un bureau de vote demandé d'après un immeuble
+	/**
+	 * Cette méthode permet d'obtenir des informations sur le bureau de vote d'un immeuble
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$immeuble	ID de l'immeuble concerné par la demande
+	 * @param	bool 	$return		Si oui, retourne l'information plutôt que de l'afficher
+	 * @param	bool 	$mini		Si oui, prépare une version réduite des informations
+	 * @return	string|void			Affiche ou retourne l'adresse postale selon $return
+	 */
+
 	public	function bureauDeVote( $immeuble , $return = false , $mini = false ) {
 		// On vérifie le format de l'id de l'immeuble pour continuer
 		if (!is_numeric($immeuble)) return false;
@@ -648,7 +955,17 @@ class carto extends core {
 	}
 	
 	
-	// ajoutRue( int , string ) permet d'ajouter une nouvelle rue à la base de données
+	/**
+	 * Cette méthode permet d'ajouter une nouvelle rue à la base de données
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$ville		ID de la ville dans laquelle se trouve la rue
+	 * @param	string 	$rue			Nom de la rue à ajouter dans la base de données
+	 * @return	int					ID de la rue ajoutée
+	 */
+
 	public	function ajoutRue( $ville , $rue ) {
 		// On protège les informations pour la BDD
 		$rue = $this->securisation_string($rue);
@@ -662,8 +979,17 @@ class carto extends core {
 	}
 	
 	
-	// ajoutImmeuble( array ) permet d'ajouter un nouvel immeuble à partir des informations envoyées
-	public	function ajoutImmeuble( $infos ) {
+	/**
+	 * Cette méthode permet d'ajouter un nouvel immeuble à une rue
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	array	$infos		Informations relatives au nouvel immeuble
+	 * @return	int					ID de l'immeuble ajouté
+	 */
+
+	public	function ajoutImmeuble( array $infos ) {
 		// On vérifie que l'entrée est bien un tableau
 		if (!is_array($infos)) return false;
 		
@@ -676,8 +1002,20 @@ class carto extends core {
 	}
 	
 	
-	// nombreElecteurs( string , int ) permet de savoir combien d'électeurs existent dans une ville, une rue ou un immeuble
-	public	function nombreElecteurs( $branche , $id , $coordonnees = null ) {
+	/**
+	 * Cette méthode permet d'estimer le nombre d'électeur pour un découpage géographique demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string	$branche			Découpage géographique concerné par l'estimation
+	 * @param	int	 	$id				ID du découpage géographique concerné par l'estimation
+	 * @param	string	$coordonnees 	Permet de restreindre l'estimation aux électeurs dont 
+	 *									certaines coordonnées sont connues
+	 * @return	int						Nombre d'électeur trouvé
+	 */
+
+	public	function nombreElecteurs( string $branche , int $id , $coordonnees = null ) {
 		if (!is_string($branche) || !is_numeric($id)) return false;
 		
 		if (isset($branche)) {
@@ -724,7 +1062,17 @@ class carto extends core {
 	}
 	
 	
-	// coordonneesDansImmeuble( int ) permet de savoir s'il existe des fiches dont nous possédons les coordonnées dans l'immeuble
+	/**
+	 * Cette méthode permet de savoir s'il existe dans un immeuble des fiches où des coordonnées
+	 * sont connues
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int	$immeuble	Immeuble concerné par la recherche
+	 * @return	int				Nombre de fiches trouvées
+	 */
+
 	public	function coordonneesDansImmeuble( $immeuble ) {
 		// on vérifie le format des arguments
 		if (!is_numeric($immeuble)) return false;
@@ -751,7 +1099,17 @@ class carto extends core {
 	}
 	
 	
-	// coordonneesDansBureau( int ) permet de savoir s'il existe des fiches dont nous possédons les coordonnées dans le bureau
+	/**
+	 * Cette méthode permet de savoir s'il existe dans un bureau de vote des fiches où des 
+	 * coordonnées sont connues
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int	$bureau		Bureau de vote concerné par la recherche
+	 * @return	int				Nombre de fiches trouvées
+	 */
+
 	public	function coordonneesDansBureau( $bureau ) {
 		// on vérifie le format des arguments
 		if (!is_numeric($bureau)) return false;
