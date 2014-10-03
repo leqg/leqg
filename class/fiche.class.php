@@ -821,9 +821,8 @@ class fiche extends core {
 	 * @author		Damien Senger <mail@damiensenger.me>
 	 * @version		1.0
 	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
-	 * @see			Dossier
 	 *
-	 * @param		int			$dossier	ID du dossier recherché
+	 * @param		int			$id			ID du dossier recherché
 	 * @return		array					Tableau des informations liées au dossier recherché
 	 */
 
