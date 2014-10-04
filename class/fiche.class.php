@@ -230,7 +230,7 @@ class fiche extends core {
 	 * @version		1.0
 	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
 	 *
-	 * @param		string		Colonne à vérifier
+	 * @param		string		$colonne 		Colonne à vérifier
 	 * @return		bool 		True si l'information existe, False si elle n'existe pas réellement
 	 */
 
