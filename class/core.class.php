@@ -227,6 +227,7 @@ class core {
 	 *
 	 * @param	string $slug Nom du module appelé
 	 * @param	string $nom Nom du fichier au sein du module demandé
+	 * @param	string $globale Ajout d'une variable globale
 	 * @return	void
 	 */
 
