@@ -230,7 +230,8 @@ class fiche extends core {
 	 * @version		1.0
 	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
 	 *
-	 * @return		bool		True si l'information existe, False si elle n'existe pas réellement
+	 * @param		string		Colonne à vérifier
+	 * @return		bool 		True si l'information existe, False si elle n'existe pas réellement
 	 */
 
 	public	function is_info($colonne) {
