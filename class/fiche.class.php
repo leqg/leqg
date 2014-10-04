@@ -1405,11 +1405,11 @@ class fiche extends core {
 	 * @author		Damien Senger <mail@damiensenger.me>
 	 * @version		1.0
 	 *
-	 * @param		string	$output[JSON|PHP] 	Type de rendu des données (JSON | PHP)
-	 * @param		array	$args				Arguments de sélection et de tri des fiches
-	 * @param		bool	$export				Si true lance un export des fiches, sinon retourne un tableau au format choisi par $output
-	 * @param		int		$nombre				Permet de sélectionner un nombre maximal de fiches à afficher
-	 * @param		int		$debut				Permet de spécifier à quel fiche débuter le rendu des fiches trouvées selon les conditions établies
+	 * @param		string	$output	 	Type de rendu des données (JSON | PHP)
+	 * @param		array	$args		Arguments de sélection et de tri des fiches
+	 * @param		bool	$export		Si true lance un export des fiches, sinon retourne un tableau au format choisi par $output
+	 * @param		int		$nombre		Permet de sélectionner un nombre maximal de fiches à afficher
+	 * @param		int		$debut		Permet de spécifier à quel fiche débuter le rendu des fiches trouvées selon les conditions établies
 	 * @return		mixed
 	 */
 
