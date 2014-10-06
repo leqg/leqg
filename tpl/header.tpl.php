@@ -17,7 +17,8 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<body>	
+<?php $flat = array('boite'); ?>
+<body<?php if (isset($_GET['page']) && in_array($_GET['page'], $flat)) { ?> class="flat"<?php } ?>>	
 	<!-- Contenu concret de la page -->
 	<header id="top">
 		<h1><a class="nostyle" href="http://<?php echo $config['SERVER']['url']; ?>">LeQG</a></h1>

@@ -1,0 +1,87 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage flat du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+
+
+/************************************
+ *									*
+ *			  	 FLAT				* 
+ *									*
+ ************************************/
+
+body.flat {
+	background-color: rgba($bleu, .05);
+}
+
+main.flat,
+main.boite {
+	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
+	margin: 1em auto 0;
+	padding: 1em;
+	width: 1000px;
+	
+	button {
+		display: block;
+		background-color: darken($vert, 10%);
+		border: none;
+		@include shadow(0, 2px, 0, $grisClair);
+		color: $blanc;
+		font-size: 1.15em;
+		font-variant: small-caps;
+		margin: 1.66em auto;
+		padding: .66em 1.5em;
+		text-transform: lowercase;
+		@include transition(all);
+		
+		&:hover { background-color: $vert; }
+	}
+	
+	h2 {
+		color: $grisFonce;
+		font-size: 2em;
+		font-weight: 500;
+	}
+	
+	h3 {
+		border: none;
+		color: $bleu;
+		font-size: 1.33em;
+		font-weight: 300;
+		margin: 0.5em auto 1em;
+		text-align: center;
+	}
+	
+	section {
+		position: relative;
+		background-color: $blanc;
+		@include border-radius(.5em);
+		@include shadow(0, 2px, 2px, $gris);
+		margin: 2em auto 4em;
+		padding: 1em; 
+		
+		&.icone {
+			padding-top: 200px;
+			
+			&::before {
+				position: absolute; top: 50px; left: calc(50% - 75px);
+				background-color: $jaune;
+				@include border-radius(50%);
+				color: $rouge;
+				content: '\e917';
+				font-family: $icons;
+				font-size: 75px;
+				height: 150px;
+				line-height: 150px;
+				text-align: center;
+				width: 150px;
+			}
+		}
+	}
+}

@@ -32,6 +32,7 @@ $jaune:		rgba(253, 231, 180, 1);
 $vert:		rgba(179, 204,  87, 1);
 $lime:		rgba(236, 240, 129, 1);
 $gris:		rgba(205, 203, 202, 1);
+$grisClair:	lighten($gris, 10%);
 $grisMoyen:	darken($gris, 15%);
 $grisMedium:darken($gris, 33%);
 $grisFonce:	darken($gris, 50%);
@@ -820,3 +821,6 @@ ul.listeEncadree {
 
 // Style dédié au module contacts sur la plateforme
 @import "contacts.scss";
+
+// Feuille dédiée au nouveau style Flat de la plateforme
+@import "flat.scss";
