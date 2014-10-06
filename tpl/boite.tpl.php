@@ -1,7 +1,9 @@
-<table id="services">
-	<tr>
-		<td><a href="<?php $core->tpl_go_to('boite', array('action' => 'nouveau')); ?>"><span>&#xe84d;</span><p>Démarrer une nouvelle mission</p></a></td>
-		<td><a href="<?php $core->tpl_go_to('boite', array('action' => 'missions')); ?>"><span>&#xe8dd;</span><p>Consultation des missions</p></a></td>
-		<!--<td><a href="<?php $core->tpl_go_to('porte', array('action' => 'reglages')); ?>"><span>&#xe856;</span><p>Paramétrages</p></a></td>-->
-	</tr>
-</table>
+<h2>Boîtage</h2>
+<?php if ($boitage->nombre() > 0) : ?>
+
+<?php else : ?>
+	<section class="icone" id="aucuneMission">
+		<h3>Aucune mission lancée actuellement !</h3>
+		<a class="nostyle" href="<?php $core->tpl_go_to('boite', array('action' => 'nouveau')); ?>"><button>Créer une mission</button></a>
+	</section>
+<?php endif; ?>
