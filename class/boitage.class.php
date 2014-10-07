@@ -67,13 +67,16 @@ class boitage extends core {
 		// On prépare la requête
 		$query = 'SELECT	*
 				  FROM		`mission`
-				  WHERE		`mission_satut` = 1
+				  WHERE		`mission_statut` = 1
 				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
 				  
 		// On effectue la requête et on retourne le nombre de lignes trouvées
 		$sql = $this->db->query($query);
 		
-		return $sql->fetchAll();
+		$missions = array();
+		while($row = $sql->fetch_assoc()) $missions[] = $row;
+		
+		return $missions;
 	}
 	
 	
@@ -234,7 +237,7 @@ class boitage extends core {
 	 * @version	1.0
 	 *
 	 * @param	int		$mission		Identifiant de la mission concernée par l'estimation
-	 * @param	int		$type		Type d'électeurs à vérifier (1 : déjà boités, 0 : à boiter)
+	 * @param	int		$type		Type d'électeurs à vérifier (1 : déjà boités, 0 : à boiter, 2 : tous)
 	 *
 	 * @return	int					Nombre d'électeur estimé
 	 */

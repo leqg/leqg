@@ -286,7 +286,7 @@ main.boite {
 				
 				& > span {
 					display: inline-block;
-					background-color: darken($bleu, 10%);
+					background-color: lighten($bleu, 10%);
 					@include border-radius(.25em);
 					color: $blanc;
 					font-size: 1.1em;
@@ -298,6 +298,60 @@ main.boite {
 					padding: 0 .5em;
 					text-align: center;
 				}
+			}
+		}
+	}
+	
+	ul.liste-missions {
+		list-style: none;
+		margin: 1em 1em 2.5em;
+		padding: 0;
+		
+		li {
+			position: relative;
+			min-height: 90px;
+			margin: 0 auto 1.5em;
+			padding: 0 0 0 115px;
+			
+			&::before,
+			&::after {
+				position: absolute; top: 0; top: calc(50% - 45px); left: 0;
+				display: block;
+				background-color: $jaune;
+				@include border-radius(50%);
+				color: rgba($rouge, .5);
+				content: '\e843';
+				font-family: $icons;
+				font-size: 50px;
+				height: 90px;
+				line-height: 90px;
+				text-align: center;
+				width: 90px;
+			}
+			
+			&::before { line-height: 105px; }
+			
+			&::after {
+				left: 6px;
+				background-color: transparent;
+				color: $rouge;
+				content: '\e842';
+				line-height: 70px;
+			}
+			
+			h4 {
+				color: $bleu;
+				font-size: 1.66em;
+				font-weight: 600;
+				line-height: 1.5em;
+				margin: 1em 0 0;
+				padding: 0;
+			}
+			
+			& > p {
+				font-size: 1.2em;
+				margin: .5em 0;
+				padding: 0;
 			}
 		}
 	}
