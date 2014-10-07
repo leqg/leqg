@@ -18,6 +18,14 @@
 
 body.flat {
 	background-color: transparent;
+	
+	header#top {
+		position: fixed;
+	}
+	
+	nav#principale {
+		position: fixed;
+	}
 }
 
 main.flat,
@@ -26,7 +34,7 @@ main.boite {
 	font-family: $flat;
 	height: auto;
 	overflow: visible;
-	margin: 0 auto;
+	margin: 0 auto 1em;
 	padding: 2em 1em 1em;
 	width: 1000px;
 	
@@ -75,6 +83,20 @@ main.boite {
 		font-weight: 400;
 		margin: .33em auto 1em;
 		text-align: left;
+	}
+	
+	h5 {
+		border: none;
+		color: $bleu;
+		font-family: $flat;
+		font-size: 1.25em;
+		font-weight: 400;
+		margin: .15em auto 1em;
+		text-align: center;
+		
+		span {
+			color: $rouge;
+		}
 	}
 	
 	section {
@@ -131,6 +153,10 @@ main.boite {
 				&::after { content: '\e842'; }
 			}
 		}
+	}
+	
+	strong {
+		font-weight: 600;
 	}
 	
 	ul.formulaire {
@@ -252,7 +278,26 @@ main.boite {
 			}
 			
 			&.detailImmeuble {
-				margin: .33em 1em .66em 30px;
+				position: relative;
+				margin: .5em 1em .75em 0;
+				padding: 0;
+				font-size: 1.25em;
+				font-weight: 600;
+				
+				& > span {
+					display: inline-block;
+					background-color: darken($bleu, 10%);
+					@include border-radius(.25em);
+					color: $blanc;
+					font-size: 1.1em;
+					font-weight: 600;
+					height: 1.5em;
+					line-height: 1.5em;
+					margin: 0 .5em;
+					min-width: 50px;
+					padding: 0 .5em;
+					text-align: center;
+				}
 			}
 		}
 	}

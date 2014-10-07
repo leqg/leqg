@@ -9,6 +9,4 @@
 	// On effectue l'ajout de la rue à la mission
 	$boitage->ajoutRue($infos['rue'], $mission['mission_id']);
 	
-	echo 'Cool!';
-	
 ?>

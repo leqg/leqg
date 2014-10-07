@@ -225,4 +225,41 @@ class boitage extends core {
 		// On retourne le tableau trié
 		return $rues;
 	}
+	
+	
+	/**
+	 * Cette méthode permet d'estimer le nombre d'électeur concernés par un boitage
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$mission		Identifiant de la mission concernée par l'estimation
+	 * @param	int		$type		Type d'électeurs à vérifier (1 : déjà boités, 0 : à boiter)
+	 *
+	 * @return	int					Nombre d'électeur estimé
+	 */
+	
+	public	function estimation( $mission , $type = 0 ) {
+		// On prépare la requête de recherche des immeubles concernés par le comptage
+		$query = 'SELECT 	*
+				  FROM		`boitage`
+				  WHERE		`mission_id` = ' . $mission;
+		
+		if ($type == 1) { $query .= ' AND `boitage_statut` > 0'; }
+		if ($type == 0) { $query .= ' AND `boitage_statut` = 0'; }
+		
+		$sql = $this->db->query($query);
+		$immeubles = array();
+		while ($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id'];
+		
+		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
+		$query = 'SELECT 	COUNT(*) AS `nombre`
+				  FROM		`contacts`
+				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles);
+		$sql = $this->db->query($query);
+		$sql = $sql->fetch_assoc();
+		
+		// On retourne l'estimation
+		return $sql['nombre'];
+	}
 }

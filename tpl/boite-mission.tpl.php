@@ -41,15 +41,18 @@
 	
 	<div class="coteAcote">
 		<button class="ajouterRue">Ajouter une rue</button>
-		<button class="ajouterBureau">Ajouter un bureau</button>
+		<!--<button class="ajouterBureau">Ajouter un bureau</button>-->
 	</div>
 </section>
 
 <?php if ($boitage->nombreImmeubles($mission['mission_id'], 1)) { ?>
 
 <?php } else { ?>
-	<section id="boitage-non-commence" class="icone fusee demi droite">
+	<section id="boitage-statistiques" class="icone fusee demi droite">
 		<h3>La mission n'a pas été commencée.</h3>
+		<?php if ($boitage->nombreImmeubles($mission['mission_id'], 0)) { ?>
+			<h5>Il existe <span><?php echo $boitage->estimation($mission['mission_id']); ?></span> électeurs à boiter.</h5>
+		<?php } ?>
 	</section>
 <?php } ?>
 
@@ -81,7 +84,7 @@
 </section>
 
 <section id="listeImmeublesParRue" class="demi droite invisible">
-	<h4 class="nomRue"></h4>
+	<h4 class="nomRue">Immeubles restant à boiter <strong><span></span></strong></h4>
 	
 	<ul class="form-liste"></ul>
 </section>

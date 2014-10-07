@@ -15,13 +15,14 @@
 		$immeubles[$key] = $i['numero'];
 	}
 	
-	$core->debug($immeubles, false);
-	
 	// On tri les résultats
 	natsort($immeubles);
+	$liste = array();
 	
-	$core->debug($immeubles, false);
+	foreach ($immeubles as $i) {
+		$liste[] = $i;
+	}
 	
 	// On exporte le tout en JSON
-	echo json_encode($immeubles);
+	echo json_encode($liste);
 ?>

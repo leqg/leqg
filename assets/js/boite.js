@@ -83,26 +83,36 @@ var porte = function() {
 	
 	// Script permettant de voir les immeubles concernés au sein d'une rue
 		$('#listeDesRues').on('click', '.voirRue', function(){
-			$('.droite').hide();
-
-			var mission = $('h2').data('mission');
-			var nom = $(this).data('nom');
-			var rue = $(this).data('rue');
-			
-			// On met en place le nom de la rue
-			$('#listeImmeublesParRue .nomRue').html(nom);
-			$('#listeImmeublesParRue ul.form-liste').html('');
-			
-			// On recherche la liste des immeubles au sein de cette rue
-			$.getJSON('ajax.php?script=boitage-liste-immeubles', { rue: rue, mission: mission }, function(data){
-				$.each( data , function( key , val ) {
-					// On commence par créer ce nouvel élement de liste
-					$('#listeImmeublesParRue ul.form-liste').append('<li class="detailImmeuble" id="detailImmeuble-' + val + '">' + val + ' ' + nom + '</li>');
+			if ($(this).html() == 'Consulter') {
+				$('.droite').fadeOut();
+				$('.voirRue').hide();
+	
+				var mission = $('h2').data('mission');
+				var nom = $(this).data('nom');
+				var rue = $(this).data('rue');
+				
+				// On met en place le nom de la rue
+				$('#listeImmeublesParRue .nomRue span').html(nom);
+				$('#listeImmeublesParRue ul.form-liste').html('');
+				
+				// On recherche la liste des immeubles au sein de cette rue
+				$.getJSON('ajax.php?script=boitage-liste-immeubles', { rue: rue, mission: mission }, function(data){
+					$.each( data , function( key , val ) {
+						// On commence par créer ce nouvel élement de liste
+						$('#listeImmeublesParRue ul.form-liste').append('<li class="detailImmeuble" id="detailImmeuble-' + val + '"><span>' + val + '</span> ' + nom + '</li>');
+					});
 				});
-			});
-			
-			// On affiche le bloc
-			$('#listeImmeublesParRue').show();
+				
+				// On affiche le bloc
+				$('#listeImmeublesParRue').fadeIn();
+				$(this).show();
+				$(this).html('Fermer');
+			} else {
+				$('.droite').fadeOut();
+				$('#boitage-statistiques').fadeIn();
+				$(this).html('Consulter');
+				$('.voirRue').show();
+			}
 		});
 	
 	
