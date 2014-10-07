@@ -1,3 +1,4 @@
+<?php if ($user->user['auth'] >= 5) : ?>
 <ul id="actions">
 	<li>
 		<a href="<?php $core->tpl_go_to('recherche', array('destination' => 'interaction')); ?>">
@@ -12,3 +13,6 @@
 		</a>
 	</li>
 </ul>
+<?php else : ?>
+
+<?php endif; ?>

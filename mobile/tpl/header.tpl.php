@@ -27,6 +27,8 @@
 		<nav id="menu">
 			<a href="<?php $core->tpl_go_to('recherche'); ?>"><span>&#xe803;</span>Recherche</a>
 			<a href="<?php $core->tpl_go_to('contacts'); ?>"><span>&#xe840;</span>Contacts</a>
+			<a href="<?php $core->tpl_go_to('porte'); ?>"><span>&#xe841;</span>Porte à porte</a>
+			<a href="<?php $core->tpl_go_to('boitage'); ?>"><span>&#xe84d;</span>Boîtage</a>
 			<a href="<?php $core->tpl_go_to('deconnexion'); ?>" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');"><span>&#xe85d;</span>Déconnexion</a>
 		</nav>
 		
