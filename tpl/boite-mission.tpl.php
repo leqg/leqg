@@ -13,8 +13,10 @@
 <!-- Blocs de mission vide -->
 <section id="boitage-vide" class="icone rue demi gauche <?php if ($boitage->nombreImmeubles($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
 	<h3>Aucun immeuble à visiter actuellement.</h3>
-	<button class="ajouterRue">Ajouter une rue</button>
-	<button class="ajouterBureau">Ajouter un bureau</button>
+	<div class="coteAcote">
+		<button class="ajouterRue">Ajouter une rue</button>
+		<button class="ajouterBureau">Ajouter un bureau</button>
+	</div>
 </section>
 
 <section id="boitage-afaire" class="demi gauche <?php if (!$boitage->nombreImmeubles($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
