@@ -233,9 +233,9 @@ class core {
 
 	public	function tpl_load( $slug , $nom = null, $globale = null) {
 		if (is_null($globale)) {
-			global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage;
+			global $db, $base, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage;
 		} else {
-			global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $globale;
+			global $db, $base, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $globale;
 		}
 	
 		if (empty($nom)) :

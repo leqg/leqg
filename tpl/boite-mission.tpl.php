@@ -1,136 +1,87 @@
 <?php
-	$parcours = $mission->chargement($_GET['mission']);
-	$immeubles = explode(',', $parcours['immeubles']);
-	
-	$afaire = explode(',', $parcours['a_faire']);
-	$fait = explode(',', $parcours['fait']);
+	// On commence par vérifier qu'il existe bien une mission, et si oui on l'affiche
+	if (isset($_GET['mission']) && $boitage->verification($_GET['mission'])) {
+		$mission = $boitage->informations($_GET['mission']);
+		$core->tpl_header();
+	} else {
+		$core->tpl_go_to('boite', true);
+	}
 ?>
-<section id="fiche">
-	<header class="porte">
-		<h2>
-			<span>Boîtage</span>
-			<span>Mission <?php echo $parcours['id']; ?></span>
-		</h2>
-	</header>
+
+<h2 data-mission="<?php echo $mission['mission_id']; ?>">Boîtage &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
+
+<!-- Blocs de mission vide -->
+<section id="boitage-vide" class="icone rue demi gauche <?php if ($boitage->nombreImmeubles($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
+	<h3>Aucun immeuble à visiter actuellement.</h3>
+	<button class="ajouterRue">Ajouter une rue</button>
+	<button class="ajouterBureau">Ajouter un bureau</button>
+</section>
+
+<section id="boitage-afaire" class="demi gauche <?php if (!$boitage->nombreImmeubles($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
+	<h4>Rues au sein de cette mission</h4>
 	
-	<ul class="deuxColonnes">
-		<li>
-			<span class="label-information">Ville</span>
-			<p><?php echo $carto->afficherVille($parcours['ville_id']); ?></p>
+	<?php $rues = $boitage->liste($mission['mission_id']); ?>
+	<ul class="form-liste" id="listeDesRues">
+		<?php
+			foreach ($rues as $rue => $immeubles) {
+				$r = $carto->afficherRue($rue, true);
+				foreach ($immeubles as $key => $immeuble) {
+					$i = $carto->immeuble($immeuble);
+					$immeubles[$key] = $i['numero'];
+				}
+				natsort($immeubles);
+		?>
+		<li id="immeubles-rue-<?php $rue; ?>">
+			<button class="voirRue gris" data-rue="<?php echo $rue; ?>" data-nom="<?php echo $r; ?>">Consulter</button>
+			<span><?php echo $r; ?></span>
+			<span><?php $carto->afficherVille($carto->villeParRue($rue)); ?></span>
 		</li>
+		<?php } ?>
+	</ul>
+	
+	<div class="coteAcote">
+		<button class="ajouterRue">Ajouter une rue</button>
+		<button class="ajouterBureau">Ajouter un bureau</button>
+	</div>
+</section>
+
+<?php if ($boitage->nombreImmeubles($mission['mission_id'], 1)) { ?>
+
+<?php } else { ?>
+	<section id="boitage-non-commence" class="icone fusee demi droite">
+		<h3>La mission n'a pas été commencée.</h3>
+	</section>
+<?php } ?>
+
+<section id="ajoutRue" class="demi droite invisible">
+	<ul class="formulaire">
 		<li>
-			<span class="label-information">Rue</span>
-			<p><?php echo $carto->afficherRue($parcours['rue_id']); ?></p>
+			<label>Recherchez une rue</label>
+			<span class="form-icon street"><input type="text" name="rechercheRue" id="rechercheRue" placeholder="rue du Marché"></span>
 		</li>
+	</ul>
+	<ul class="form-liste invisible" id="listeRues"></ul>
+</section>
+
+<section id="choixImmeuble" class="demi droite invisible">
+	<ul class="formulaire">
 		<li>
-			<span class="label-information">Immeubles</span>
-			<ul class="listeEncadree">
-				<?php foreach ($immeubles as $immeuble) : ?>
-					<?php if (in_array($immeuble, $afaire)) : ?><a href="ajax.php?script=boitage-fait&mission=<?php echo $parcours['id']; ?>&immeuble=<?php echo $immeuble; ?>" title="Cliquez pour marquer l'immeuble comme fait"><?php endif; ?>
-						<li class="boitage immeuble <?php echo (in_array($immeuble, $afaire)) ? 'afaire' : 'fait'; ?>">
-							<strong><?php $carto->afficherImmeuble($immeuble); ?> <?php $carto->afficherRue($parcours['rue_id']); ?></strong>
-						</li>
-					<?php if (in_array($immeuble, $afaire)) : ?></a><?php endif; ?>
-				<?php endforeach; ?>
-			</ul>
+			<label>Sélectionnez des immeubles</label>
+			<span class="form-icon street"><input type="text" name="rueSelectionImmeuble" id="rueSelectionImmeuble" value=""></span>
+		</li>
+	</ul>
+	
+	<ul class="form-liste">
+		<li>
+			<button class="ajouterLaRue" id="rueEntiere" data-rue="" data-mission="<?php echo $_GET['mission']; ?>">Ajouter</button>
+			<span class="immeuble-numero">Ajouter tous les immeubles de la rue</span>
+			<span class="nombre-electeurs"></span>
 		</li>
 	</ul>
 </section>
 
-<?php if (isset($_GET['immeuble'])) : ?>
-	<aside>
-		<div>
-			<nav class="navigationFiches">
-				<a class="retour" href="<?php $core->tpl_go_to('porte', array('action' => 'mission', 'mission' => $_GET['mission'])); ?>">Quitter l'adresse</a>
-			</nav>
-			
-			<?php $immeuble = $carto->immeuble($_GET['immeuble']); $electeurs = $building[$immeuble['id']]; ?>
-			<h6><?php echo $immeuble['numero']; ?> <?php $carto->afficherRue($immeuble['rue_id']); ?></h6>
-			
-			<form action="ajax.php?script=porte-reporting&mission=<?php echo $_GET['mission']; ?>" method="post">
-				<ul class="listeEncadree">
-					<?php foreach ($electeurs as $electeur) : ?>
-					<li class="electeur">
-						<strong><?php $fiche->nomByID($electeur); ?></strong>
-						<ul class="boutonsRadio"><!--
-						 --><label for="vu-electeur-<?php echo $electeur; ?>"><li><input type="radio" name="<?php echo $electeur; ?>" value="2" id="vu-electeur-<?php echo $electeur; ?>"> Vu</li><!--
-						 --><label for="absent-electeur-<?php echo $electeur; ?>"><li><input type="radio" name="<?php echo $electeur; ?>" value="1" id="absent-electeur-<?php echo $electeur; ?>"> Absent</li><!--
-						 --><label for="afaire-electeur-<?php echo $electeur; ?>"><li><input type="radio" name="<?php echo $electeur; ?>" value="0" id="afaire-electeur-<?php echo $electeur; ?>" checked> À faire</li><!--
-					 --></ul>
-					</li>
-					<?php endforeach; ?>
-				</ul>
-				<ul class="deuxColonnes" style="padding-left: 0px;">
-					<li class="submit">
-						<input type="submit" value="Valider le rapport">
-					</li>
-				</ul>
-			</form>
-		</div>
-	</aside>
-<?php else: ?>
-	<aside>
-		<div>
-			<nav class="navigationFiches">
-				<a class="retour" href="<?php $core->tpl_go_to('porte', array('action' => 'missions')); ?>">Retour aux missions</a>
-			</nav>
-			
-			<div id="carte" style="width: 100%; height: 400px; background-color: gray; margin-top: 3em;"></div>
-		</div>
-	</aside>
-	<script>
-		// Script relatif à l'affichage de la carte par utilisateur
-		function initialize() {
-			// On récupère les data liées à la carte
-			var nom_electeur = $("#carte").data('nom');
-			var adresse_electeur = $("#carte").data('adresse');
-		
-			geocoder = new google.maps.Geocoder();
-		
-			var latlng = new google.maps.LatLng(48.58476, 7.750576);
-			var mapOptions = {
-				//center: latlng,
-				disableDefaultUI: true,
-				draggable: true,
-				rotateControl: false,
-				scrollwheel: false,
-				zoomControl: true,
-				zoom: 17
-			};
-			var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
-		
-			
-			// On marque les différents bâtiments
-			// L'adresse à rechercher
-			
-			// La function qui va traiter le résultat
-			function GeocodingResult(results, status) {
-				// Si la recherche a fonctionnée
-				if (status == google.maps.GeocoderStatus.OK) {
-					// On créé un nouveau marker sur la map
-					markerAdresse = new google.maps.Marker({
-						position: results[0].geometry.location,
-						map: map,
-						title: 'Immeuble à visiter'
-					});
-					
-					// On centre sur ce marker
-					map.setCenter(results[0].geometry.location);
-				}
-			}
-			
-			
-			<?php foreach ($afaire as $immeuble) : ?>
-			
-			var GeocoderOptions<?php echo $immeuble; ?> = { 'address': "<?php $carto->afficherImmeuble($immeuble); ?> <?php $carto->afficherRue($parcours['rue_id']); ?> <?php $carto->afficherVille($parcours['ville_id']); ?>", 'region': 'FR' };
-			
-			// On lance la recherche de l'adresse
-			geocoder.geocode(GeocoderOptions<?php echo $immeuble; ?>, GeocodingResult);
-			
-			<?php endforeach; ?>
-			
-		}
-		
-		google.maps.event.addDomListener(window, 'load', initialize);
-	</script>
-<?php endif; ?>
+<section id="listeImmeublesParRue" class="demi droite invisible">
+	<h4 class="nomRue"></h4>
+	
+	<ul class="form-liste"></ul>
+</section>

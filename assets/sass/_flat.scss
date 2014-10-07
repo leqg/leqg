@@ -17,22 +17,27 @@
  ************************************/
 
 body.flat {
-	background-color: rgba($bleu, .05);
+	background-color: transparent;
 }
 
 main.flat,
 main.boite {
 	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
-	margin: 1em auto 0;
-	padding: 1em;
+	font-family: $flat;
+	height: auto;
+	overflow: visible;
+	margin: 0 auto;
+	padding: 2em 1em 1em;
 	width: 1000px;
 	
-	button {
+	button,
+	input[type='submit'].flat {
 		display: block;
 		background-color: darken($vert, 10%);
 		border: none;
 		@include shadow(0, 2px, 0, $grisClair);
 		color: $blanc;
+		font-family: $flat;
 		font-size: 1.15em;
 		font-variant: small-caps;
 		margin: 1.66em auto;
@@ -41,10 +46,13 @@ main.boite {
 		@include transition(all);
 		
 		&:hover { background-color: $vert; }
+		&.gris { background-color: $gris; }
+		&.gris:hover { background-color: $grisMoyen; }
 	}
 	
 	h2 {
 		color: $grisFonce;
+		font-family: $flat;
 		font-size: 2em;
 		font-weight: 500;
 	}
@@ -52,10 +60,21 @@ main.boite {
 	h3 {
 		border: none;
 		color: $bleu;
+		font-family: $flat;
 		font-size: 1.33em;
-		font-weight: 300;
+		font-weight: 400;
 		margin: 0.5em auto 1em;
 		text-align: center;
+	}
+	
+	h4 {
+		border: none;
+		color: $bleu;
+		font-family: $flat;
+		font-size: 1.33em;
+		font-weight: 400;
+		margin: .33em auto 1em;
+		text-align: left;
 	}
 	
 	section {
@@ -63,13 +82,25 @@ main.boite {
 		background-color: $blanc;
 		@include border-radius(.5em);
 		@include shadow(0, 2px, 2px, $gris);
-		margin: 2em auto 4em;
-		padding: 1em; 
+		font-family: $flat;
+		margin: 2em 0 4em;
+		padding: 1em;
+		width: 100%;
+		
+		&.demi {
+			padding: 1.5em 2em;
+			width: 475px;
+		}
+		
+		&.gauche { position: absolute; left: 1em; }
+		&.droite { position: absolute; right: 1em; }
+		&.invisible { display: none; }
 		
 		&.icone {
 			padding-top: 200px;
 			
-			&::before {
+			&::before,
+			&::after {
 				position: absolute; top: 50px; left: calc(50% - 75px);
 				background-color: $jaune;
 				@include border-radius(50%);
@@ -82,6 +113,158 @@ main.boite {
 				text-align: center;
 				width: 150px;
 			}
+			
+			&::after {
+				top: 35px; left: calc(50% - 66px);
+				background: transparent;
+				content: none;
+			}
+			
+			&.fusee::before { content: '\e915'; }
+			&.rue {
+				&::before {
+					color: rgba($rouge, .5);
+					content: '\e843';
+					line-height: 175px;
+				}
+				
+				&::after { content: '\e842'; }
+			}
+		}
+	}
+	
+	ul.formulaire {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		
+		&.invisible {
+			display: none;
+		}
+		
+		li {
+			display: block;
+			margin: 0 auto 2em auto;
+			
+			&:last-of-type { margin-bottom: .66em; }
+			
+			input {
+				position: relative;
+				display: block;
+				background-color: $background;
+				border: 1px solid $gris;
+				@include border-radius(.33em);
+				font-family: $flat;
+				font-size: 1.15em;
+				font-weight: 400;
+				padding: .5em 1em .5em 40px;
+				z-index: 100;
+				
+				&:focus {
+					border-color: $vert;
+				}
+			}
+			
+			span.form-icon {
+				position: relative;
+				display: block;
+				
+				&::after {
+					position: absolute; top: .5em; top: calc(50% - 15px); left: 15px;
+					display: block;
+					color: $grisFonce;
+					content: '\e827';
+					font-family: $icons;
+					font-size: 15px;
+					height: 30px;
+					line-height: 30px;
+					width: 30px;
+					z-index: 10;
+				}
+				
+				&.street::after { content: '\e841'; }
+				
+				& + input {
+					z-index: 0;
+				}
+			}
+			
+			label {
+				display: block;
+				color: $grisFonce;
+				font-size: 1.33em;
+				font-weight: 400;
+				line-height: 1.5em;
+				padding: 0 0 .66em 0;
+			}
+		}
+	}
+	
+	ul.form-liste {
+		list-style: none;
+		margin: 2em auto .5em;
+		padding: 0 1em;
+		
+		li {
+			position: relative;
+			display: block;
+			font-family: $flat;
+			margin: 1.5em auto 0;
+			
+			button {
+				position: absolute; top: 0; top: calc(50% - 15px); right: 0;
+				display: block;
+				font-size: 1.2em;
+				height: 30px;
+				line-height: 15px;
+				margin: 0;
+				padding: 0 .5em .15em;
+				z-index: 10;
+			}
+			
+			button:hover + span {
+				color: $rouge;
+			}
+			
+			span {
+				display: block;
+				line-height: 1.5em;
+				@include transition(all);
+				
+				&:first-of-type {
+					font-size: 1.2em;
+					font-weight: 600;
+				}
+				
+				&:last-of-type {
+					font-size: 1.1em;
+					font-weight: 300;
+				}
+			}
+			
+			& > ul  {
+				padding: 0 0 1em 3em;
+				
+				& > li {
+					color: $bleu;
+					margin: .33em auto .66em;
+				}
+			}
+			
+			&.detailImmeuble {
+				margin: .33em 1em .66em 30px;
+			}
+		}
+	}
+	
+	.coteAcote {
+		margin: 3em auto 0 auto;
+		padding: 0;
+		text-align: center;
+		
+		& > button {
+			display: inline-block;
+			margin: 1em;
 		}
 	}
 }

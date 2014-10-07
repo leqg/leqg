@@ -46,10 +46,8 @@ var main = function() {
 			
 			if ($(this).hasClass('actif')) {
 				$('nav#principale').css('left', 0);
-				$('main').css('left', '165px');
 			} else {
 				$('nav#principale').css('left', '-165px');
-				$('main').css('left', 0);
 			}
 			
 			// On annule le clique sur le lien pour éviter l'ajout de # à la fin de l'URL

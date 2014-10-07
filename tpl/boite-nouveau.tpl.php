@@ -1,90 +1,34 @@
-<section id="fiche">
-	<header class="porte">
-		<h2>Nouvelle mission de boîtage</h2>
-	</header>
-	
-	<?php if (isset($_GET['rue'])) : ?>
-	
-		<form action="ajax.php?script=boite-creation" method="post">
-			<input type="hidden" name="ville" value="<?php echo $_GET['ville']; ?>">
-			<input type="hidden" name="rue" value="<?php echo $_GET['rue']; ?>">
-			<ul class="deuxColonnes">
-				<ul style="display: none;">
-					<?php $immeubles = $carto->listeImmeubles($_GET['rue']); foreach ($immeubles as $immeuble) : ?>
-					<input type="checkbox" name="immeubles[]" value="<?php echo $immeuble['id']; ?>" class="checkImmeuble" id="immeuble-<?php echo $immeuble['id']; ?>">
-					<?php endforeach; ?>
-				</ul>
-				<li class="submit">
-					<input type="submit" value="Créer la mission">
-				</li>
-				<li>
-					<span class="label-information">Ville</span>
-					<ul class="listeEncadree">
-						<a href="<?php $core->tpl_go_to('boite', array('action' => 'nouveau')); ?>" title="Retour au choix de la ville">
-							<li class="ville">
-								<strong><?php $carto->afficherVille($_GET['ville']); ?></strong>
-							</li>
-						</a>
-					</ul>
-				</li>
-				<li>
-					<span class="label-information">Rue</span>
-					<ul class="listeEncadree">
-						<a href="<?php $core->tpl_go_to('boite', array('action' => 'nouveau', 'ville' => $_GET['ville'])); ?>" title="Retour au choix de la rue">
-							<li class="rue">
-								<strong><?php $carto->afficherRue($_GET['rue']); ?></strong>
-							</li>
-						</a>
-					</ul>
-				</li>
-				<li>
-					<span class="label-information">Immeubles sélectionnés</span>
-					<ul class="listeEncadree">
-						<?php $immeubles = $carto->listeImmeubles($_GET['rue']); foreach ($immeubles as $immeuble) : $electeurs = count($carto->listeElecteurs($immeuble['id'])); ?>
-						<label for="immeuble-<?php echo $immeuble['id']; ?>">
-							<li class="immeuble cursor " id="labelImmeuble-<?php echo $immeuble['id']; ?>" data-immeuble="<?php echo $immeuble['id']; ?>" data-rue="<?php echo $_GET['rue']; ?>" data-ville="<?php echo $_GET['ville']; ?>">
-								<strong><?php echo $immeuble['numero']; ?> <?php echo trim($carto->afficherRue($_GET['rue'])); ?></strong>
-								<p><?php $carto->bureauDeVote($immeuble['id'], false, true); ?> – <strong><?php echo $electeurs; ?> électeur<?php echo ($electeurs > 1) ? 's' : ''; ?></strong></p>
-							</li>
-						</label>
-						<?php endforeach; ?>
-					</ul>
-				</li>
-			</ul>
-		</form>
-		
-	<?php elseif (isset($_GET['ville'])) : ?>
-	
-		<ul class="deuxColonnes">
+<h2>Nouvelle mission de boîtage</h2>
+
+<form action="ajax.php?script=boite-creation" method="post">
+	<section id="boitage-nouveau" class="demi gauche">
+		<ul class="formulaire">
 			<li>
-				<span class="label-information">Ville</span>
-				<ul class="listeEncadree">
-					<li class="ville">
-						<strong><?php $carto->afficherVille($_GET['ville']); ?></strong>
-					</li>
-				</ul>
+				<label for="form-nom">Quel est le nom de votre campagne ?</label>
+				<span class="form-icon tag"><input type="text" name="nom" id="form-nom" placeholder="Qu'allez-vous diffuser ?"></span>
 			</li>
 			<li>
-				<span class="label-information"><label for="recherche-rue">Rue</label></span>
-				<input type="text" name="recherche-rue" id="recherche-rue" data-ville="<?php echo $_GET['ville']; ?>">
+				<label for="form-nom">Quel est le responsable de cette mission ?</label>
+				<span class="form-icon tag"><input type="text" name="resp" id="form-responsable" placeholder="Sélectionnez un compte leQG"><input type="hidden" id="responsable" name="responsable"></span>
 			</li>
-			<li id="liste-rue">
-				<ul class="listeEncadree" id="resultats-rue"></ul>
+			<li>
+				<label for="form-date">Quelle est la date limite de cette mission ?</label>
+				<span class="form-icon tag"><input type="text" name="date" id="form-date" placeholder="format jj/mm/aaaa"></span>
+			</li>
+			<li>
+				<input type="submit" value="Créer la mission" class="flat">
 			</li>
 		</ul>
-		
-	<?php else : ?>
+	</section>
 	
-		<ul class="deuxColonnes">
+	<section id="boitage-aside" class="demi droite invisible">
+		<ul class="formulaire invisible" id="choixResponsable">
 			<li>
-				<span class="label-information"><label for="recherche-ville">Ville</label></span>
-				<input type="text" name="recherche-ville" id="recherche-ville">
-			</li>
-			<li id="liste-ville">
-				<ul class="listeEncadree" id="resultats-ville"></ul>
+				<label>Faites le choix d'un responsable</label>
+				<?php $comptes = $user->liste(); foreach($comptes as $compte) : ?>
+				<div class="radio"><input type="radio" name="selectResponsable" class="radioResponsable" id="selectResponsable-<?php echo $compte['id']; ?>" value="<?php echo $compte['id']; ?>" data-nom="<?php echo $compte['firstname']; ?> <?php echo $compte['lastname']; ?>"><label for="selectResponsable-<?php echo $compte['id']; ?>"><span><span></span></span><?php echo $compte['firstname']; ?> <?php echo $compte['lastname']; ?></label></div>
+				<?php endforeach; ?>
 			</li>
 		</ul>
-		
-	<?php endif; ?>
-	
-</section>
+	</section>
+</form>

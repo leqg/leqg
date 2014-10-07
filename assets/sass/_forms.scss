@@ -354,7 +354,7 @@ ul.boutonsRadio {
 	
 	input[type='radio'],
 	input[type='checkbox'] {
-		display: none;
+		display: none !important;
 	}
 	
 	label {

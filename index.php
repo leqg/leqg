@@ -514,11 +514,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	
 			else if ( $_GET['page'] == 'boite' ) {
 				
-				// On charge d'abord le template de header
-				$core->tpl_header(); 
-				
 				// On charge les templates de page selon la demande
 				if ( isset($_GET['action'])) {
+					
+					// On charge d'abord le template de header
+					$core->tpl_header(); 
 					
 					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('boite', 'nouveau');
 					elseif ( $_GET['action'] == 'missions' ) : $core->tpl_load('boite', 'missions');
@@ -527,15 +527,18 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('boite', 'reglages');
 					else : $core->tpl_load('boite'); endif;
 					
+					// On charge enfin le template de footer
+					$core->tpl_footer();
+				
+				} else if ( isset($_GET['mission']) ) {
+	
+					$core->tpl_load('boite', 'mission');
+				
 				} else {
 					
 					$core->tpl_load('boite');
 					
 				}
-				
-				
-				// On charge enfin le template de footer
-				$core->tpl_footer();
 				
 			}
 			

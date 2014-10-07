@@ -28,6 +28,7 @@ class carto extends core {
 	 *
 	 * @param	object $db Lien vers la base de données de l'utilisateur
 	 * @param	object $noyau Lien vers la base de données globale LeQG
+	 * @param	object $base Lien vers la base de données de l'utilisateur (mode PDO)
 	 * @param	string $url URL du serveur
 	 */
 	 
@@ -107,6 +108,30 @@ class carto extends core {
 			
 		// On retourne le tableau
 			return $rues;
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer une liste de toutes les rues de la base répondant à la recherche lancée au format JSON
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string	$search		Rue à rechercher, toutes villes confondues
+	 * @result	array				Tableau des informations concernant toutes les rues trouvées
+	 */
+	
+	public	function recherche_rue_json($search) {
+		// On sécurise la recherche
+		$search = $this->formatage_recherche($search);
+		
+		// On exécute la requête
+		$sql = $this->db->query('SELECT * FROM `rues` LEFT JOIN `communes` ON `communes`.`commune_id` = `rues`.`commune_id` WHERE rue_nom LIKE "%' . $search . '%" ORDER BY rue_nom ASC');
+		$rues = array();
+		while ($row = $sql->fetch_assoc()) $rues[] = $row;
+		$rues = json_encode($rues);
+		
+		return $rues;
 	}
 	
 	
@@ -805,6 +830,30 @@ class carto extends core {
 		
 		// On cherche l'information dans la base de données
 		$query = 'SELECT * FROM immeubles LEFT JOIN rues ON rues.rue_id = immeubles.rue_id WHERE immeuble_id = ' . $immeuble;
+		$sql = $this->db->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne l'id du bureau
+		return $infos['commune_id'];
+	}
+	
+	
+	/**
+	 * Cette méthode permet de connaître la ville correspondante à une rue
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$rue		ID de la rue concerné par la demande
+	 * @return	int					ID de la ville trouvée pour l'immeuble
+	 */
+
+	public	function villeParRue( $rue ) {
+		// On vérifie que l'argument est bien un ID
+		if (!is_numeric($rue)) return false;
+		
+		// On cherche l'information dans la base de données
+		$query = 'SELECT * FROM rues WHERE rue_id = ' . $rue;
 		$sql = $this->db->query($query);
 		$infos = $sql->fetch_assoc();
 		

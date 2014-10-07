@@ -9,6 +9,7 @@
 	<link rel="stylesheet" media="all" href="assets/css/fonts.css">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic,900,900italic&subset=latin-ext' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Fira+Sans:300,300italic,400,400italic,500,500italic,700,700italic&subset=latin-ext' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200italic,300,300italic,400,400italic,600,600italic,700,700italic,900,900italic&subset=latin-ext' rel='stylesheet' type='text/css'>
 
 	<!-- lien vers les ressources Javascript / jQuery -->
 	<!--[if lt IE 9]><script src="assets/js/html5shiv.min.js"></script><![endif]-->
