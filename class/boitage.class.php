@@ -286,7 +286,7 @@ class boitage extends core {
 		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
 		$query = 'SELECT 	COUNT(*) AS `nombre`
 				  FROM		`contacts`
-				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles); $core->debug($query);
+				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles); $this->debug($query);
 		$sql = $this->db->query($query);
 		
 		if ($sql) {
