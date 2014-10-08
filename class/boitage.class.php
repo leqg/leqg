@@ -278,11 +278,11 @@ class boitage extends core {
 		
 		if ($type == 1) { $query .= ' AND `boitage_statut` > 0'; }
 		if ($type == 0) { $query .= ' AND `boitage_statut` = 0'; }
-		
+		$this->debug($query, false);
 		$sql = $this->db->query($query);
 		$immeubles = array();
 		while ($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id'];
-		
+		$this->debug($immeubles, false);
 		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
 		$query = 'SELECT 	COUNT(*) AS `nombre`
 				  FROM		`contacts`
