@@ -116,6 +116,7 @@ main.boite {
 		
 		&.gauche { position: absolute; left: 1em; }
 		&.droite { position: absolute; right: 1em; }
+		
 		&.invisible { display: none; }
 		
 		&.icone {
@@ -356,6 +357,32 @@ main.boite {
 		}
 	}
 	
+	ul.statistiquesMission {
+		font-size: 1.2em;
+		list-style: none;
+		margin: -.5em auto 1em;
+		padding: 0 3em;
+		
+		& > li {
+			position: relative;
+			line-height: 2em;
+			min-height: 25px;
+			
+			&::before {
+				position: absolute; top: 0; left: -30px;
+				display: block;
+				color: $grisFonce;
+				content: '\e826';
+				font-family: $icons;
+				font-size: 15px;
+				height: 25px;
+				line-height: 2.33em;
+				text-align: center;
+				width: 25px;
+			}
+		}
+	}
+	
 	.coteAcote {
 		margin: 3em auto 0 auto;
 		padding: 0;
@@ -364,6 +391,33 @@ main.boite {
 		& > button {
 			display: inline-block;
 			margin: 1em;
+		}
+		
+		&.haut {
+			margin: 0 auto 1em;
+		}
+	}
+	
+	#avancementMission {
+		background-color: $grisClair;
+		border: none;
+		@include border-radius(.33em);
+		color: $grisMoyen;
+		height: 1.5em;
+		margin: .33em 0 3em;
+		overflow: hidden;
+		padding: 0;
+		width: 95%;
+		
+		& > div {
+			display: inline-block;
+			background-color: $vert;
+			@include border-radius(.33em);
+			color: $blanc;
+			height: 100%;
+			line-height: 1.5em;
+			overflow: hidden;
+			text-align: center;
 		}
 	}
 }

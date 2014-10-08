@@ -1,5 +1,4 @@
 var porte = function() {
-	
 	// Actions à la création d'une mission
 		$('#form-responsable').focus(function(){
 			$('#boitage-aside').show();

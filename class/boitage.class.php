@@ -155,7 +155,7 @@ class boitage extends core {
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 * 
-	 * @param	int		$mission	 	Identifiant de la mission
+	 * @param	int		$mission 	Identifiant de la mission
 	 * @param	string	$type		La recherche doit-elle porter sur les immeubles fait (1), non-fait (0) ou tous (-1) 
 	 * @result	int					Nombre d'immeubles correspondant à la recherche
 	 */
