@@ -1,13 +1,13 @@
 <?php
 /**
- * Cette classe comprend l'ensemble des méthodes de traitement des boîtages sur le SaaS LeQG
+ * Cette classe comprend l'ensemble des méthodes de traitement des porte-à-porte sur le SaaS LeQG
  * 
  * @package		leQG
  * @author		Damien Senger <mail@damiensenger.me>
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class boitage extends core {
+class porte extends core {
 	
 	/**
 	 * @var	object	$db			Propriété concenant le lien vers la base de données de l'utilisateur
@@ -16,13 +16,12 @@ class boitage extends core {
 	
 
 	/**
-	 * Cette méthode permet la construction de la classe boîtage
+	 * Cette méthode permet la construction de la classe porte-à-porte
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
 	 * @param	object	$db			Lien vers la base de données de l'utilisateur
-	 * @param	object	$base		Lien vers la base de données de l'utilisateur (mode PDO)
 	 * @return	void
 	 */
 	 
@@ -45,7 +44,7 @@ class boitage extends core {
 		$query = 'SELECT	*
 				  FROM		`mission`
 				  WHERE		`mission_statut` = 1
-				  AND		`mission_type` = "boitage"
+				  AND		`mission_type` = "porte"
 				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
 				  
 		// On effectue la requête et on retourne le nombre de lignes trouvées
@@ -69,7 +68,7 @@ class boitage extends core {
 		$query = 'SELECT	*
 				  FROM		`mission`
 				  WHERE		`mission_statut` = 1
-				  AND		`mission_type` = "boitage"
+				  AND		`mission_type` = "porte"
 				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
 				  
 		// On effectue la requête et on retourne le nombre de lignes trouvées
@@ -83,7 +82,7 @@ class boitage extends core {
 	
 	
 	/**
-	 * Cette méthode permet de créer une nouvelle mission de boîtage
+	 * Cette méthode permet de créer une nouvelle mission de porte-à-porte
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version 1.0
@@ -100,7 +99,7 @@ class boitage extends core {
 	
 		// On prépare la requête d'insertion dans la base de données
 		$query = 'INSERT INTO `mission` ( `createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type` )
-				  VALUES ( ' . $_COOKIE['leqg-user'] . ', ' . $infos['responsable'] . ', "' . date('Y-m-d', strtotime($date)) . '", "' . $this->securisation_string($infos['nom']) . '", "boitage" )';
+				  VALUES ( ' . $_COOKIE['leqg-user'] . ', ' . $infos['responsable'] . ', "' . date('Y-m-d', strtotime($date)) . '", "' . $this->securisation_string($infos['nom']) . '", "porte" )';
 		
 		// On lance la requête et on retourne l'identifiant de la nouvelle mission
 		$this->db->query($query);
@@ -110,7 +109,7 @@ class boitage extends core {
 	
 	
 	/**
-	 * Cette méthode permet de vérifier si une mission de boîtage correspond bien à l'ID renvoyé
+	 * Cette méthode permet de vérifier si une mission de porte-à-porte correspond bien à l'ID renvoyé
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -121,7 +120,7 @@ class boitage extends core {
 	
 	public	function verification( $mission ) {
 		// On exécute la requête de vérification
-		$sql = $this->db->query('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = "' . $mission . '" AND `mission_type` = "boitage"');
+		$sql = $this->db->query('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = "' . $mission . '" AND `mission_type` = "porte"');
 		
 		// S'il existe un résultat, on valide la vérification, sinon non
 		if ($sql->num_rows == 1) {
@@ -133,7 +132,7 @@ class boitage extends core {
 	
 	
 	/**
-	 * Cette méthode permet de récupérer toutes les informations concernant une mission de boîtage demandée
+	 * Cette méthode permet de récupérer toutes les informations concernant une mission de porte-à-porte demandée
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -152,32 +151,32 @@ class boitage extends core {
 	
 	
 	/**
-	 * Cette méthode permet de connaître le nombre d'immeubles à réaliser dans une mission
+	 * Cette méthode permet de connaître le nombre d'électeurs à visiter dans une mission
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 * 
 	 * @param	int		$mission 	Identifiant de la mission
-	 * @param	string	$type		La recherche doit-elle porter sur les immeubles fait (1), non-fait (0) ou tous (-1) 
+	 * @param	string	$type		La recherche doit-elle porter sur les électeurs fait (1), non-fait (0) ou tous (-1) 
 	 * @result	int					Nombre d'immeubles correspondant à la recherche
 	 */
 	
-	public	function nombreImmeubles( $mission , $type = 0 ) {
+	public	function nombreVisites( $mission , $type = 0 ) {
 		// On prépare la requête
-		$query = 'SELECT * FROM `boitage` WHERE `mission_id` = ' . $mission;
-		if ($type == 1) { $query .= ' AND `boitage_statut` > 0'; }
-		if ($type == 0) { $query .= ' AND `boitage_statut` = 0'; }
+		$query = 'SELECT * FROM `porte` WHERE `mission_id` = ' . $mission;
+		if ($type == 1) { $query .= ' AND `porte_statut` > 0'; }
+		if ($type == 0) { $query .= ' AND `porte_statut` = 0'; }
 
 		// On exécute la requête
 		$sql = $this->db->query($query);
 		
-		// On retourne le nombre d'immeubles trouvés
+		// On retourne le nombre de visites trouvés
 		return $sql->num_rows;
 	}
 	
 	
 	/**
-	 * Cette méthode permet d'ajouter une rue entière dans une mission de boîtage
+	 * Cette méthode permet d'ajouter une rue entière dans une mission de porte-à-porte
 	 *
 	 * @author	Damien Senger	<mail@damiensenger.me>
 	 * @version 1.0
@@ -190,20 +189,27 @@ class boitage extends core {
 	public	function ajoutRue( $rue , $mission ) {
 		// On effectue une recherche de tous les immeubles contenus dans la rue
 		$immeubles = array();
-		$query = 'SELECT * FROM `immeubles` WHERE `rue_id` = ' . $rue;
+		$query = 'SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = ' . $rue;
 		$sql = $this->db->query($query);
 		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
 		
-		// Pour chaque immeuble, on créé une insertion dans la base de données
+		// Pour chaque immeuble, on cherche tous les électeurs de l'immeuble
 		foreach ($immeubles as $immeuble) {
-			$query = 'INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (' . $mission . ', ' . $rue . ', ' . $immeuble['immeuble_id'] . ')';
-			$this->db->query($query);
+			$contacts = array();
+			$query = 'SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
+			$sql = $this->db->query($query);
+			while($row = $sql->fetch_assoc()) $contacts[] = $row;
+			
+			foreach ($contacts as $contact) {
+				$query = 'INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (' . $mission . ', ' . $rue . ', ' . $immeuble['immeuble_id'] . ', ' . $contact['contact_id'] .')';
+				$this->db->query($query);
+			}
 		}
 	}
 	
 	
 	/**
-	 * Cette méthode permet d'ajouter un bureau entier dans une mission de boîtage
+	 * Cette méthode permet d'ajouter un bureau entier dans une mission de porte-à-porte
 	 *
 	 * @author	Damien Senger	<mail@damiensenger.me>
 	 * @version 1.0
@@ -216,20 +222,27 @@ class boitage extends core {
 	public	function ajoutBureau( $bureau , $mission ) {
 		// On effectue une recherche de tous les immeubles contenus dans la rue
 		$immeubles = array();
-		$query = 'SELECT * FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
+		$query = 'SELECT `immeuble_id` FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
 		$sql = $this->db->query($query);
 		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
 		
-		// Pour chaque immeuble, on créé une insertion dans la base de données
+		// Pour chaque immeuble, on cherche tous les contacts pour ajouter pour chacun une entrée dans la base porte à frapper
 		foreach ($immeubles as $immeuble) {
-			$query = 'INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (' . $mission . ', ' . $immeuble['rue_id'] . ', ' . $immeuble['immeuble_id'] . ')';
-			$this->db->query($query);
+			$contacts = array();
+			$query = 'SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
+			$sql = $this->db->query($query);
+			while($row = $sql->fetch_assoc()) $contacts[] = $row;
+			
+			foreach ($contacts as $contact) {
+				$query = 'INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (' . $mission . ', ' . $rue . ', ' . $immeuble['immeuble_id'] . ', ' . $contact['contact_id'] .')';
+				$this->db->query($query);
+			}
 		}
 	}
 	
 	
 	/**
-	 * Cette méthode permet de pouvoir obtenir une liste des immeubles à boiter par rue
+	 * Cette méthode permet de pouvoir obtenir une liste des immeubles à visiter par rue
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -240,15 +253,21 @@ class boitage extends core {
 	 */
 	 
 	public	function liste( $mission , $statut = 0 ) {
+		$contacts = array();
 		$rues = array();
 		$immeubles = array();
 		
 		// On récupère tous les immeubles 
-		$query = 'SELECT * FROM `boitage` WHERE `mission_id` = ' . $mission;
-		if ($statut == 0) $query .= ' AND `boitage_statut` = 0';
-		if ($statut == 1) $query .= ' AND `boitage_statut > 0';
+		$query = 'SELECT * FROM `porte` WHERE `mission_id` = ' . $mission;
+		if ($statut == 0) $query .= ' AND `porte_statut` = 0';
+		if ($statut == 1) $query .= ' AND `porte_statut > 0';
 		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) { $immeubles[] = $row; }
+		while ($row = $sql->fetch_assoc()) { $contacts[] = $row; }
+		
+		// On lance le tri par immeuble des électeurs
+		foreach ($contacts as $contant) {
+			$immeubles[$contact['immeuble_id']][] = $contact['contact_id'];
+		}
 		
 		// On lance le tri par rues des immeubles
 		foreach ($immeubles as $immeuble) {
@@ -261,7 +280,7 @@ class boitage extends core {
 	
 	
 	/**
-	 * Cette méthode permet d'estimer le nombre d'électeur concernés par un boitage
+	 * Cette méthode permet d'estimer le nombre d'électeur concernés par un porte à porte
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -275,73 +294,54 @@ class boitage extends core {
 	public	function estimation( $mission , $type = 0 ) {
 		// On prépare la requête de recherche des immeubles concernés par le comptage
 		$query = 'SELECT 	*
-				  FROM		`boitage`
+				  FROM		`porte`
 				  WHERE		`mission_id` = ' . $mission;
 		
-		if ($type == 1) { $query .= ' AND `boitage_statut` > 0'; }
-		if ($type == 0) { $query .= ' AND `boitage_statut` = 0'; }
+		if ($type == 1) { $query .= ' AND `porte_statut` > 0'; }
+		if ($type == 0) { $query .= ' AND `porte_statut` = 0'; }
 
-		$sql = $this->db->query($query);
-		$immeubles = array();
-		while ($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id'];
-
-		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
-		$query = 'SELECT 	COUNT(*) AS `nombre`
-				  FROM		`contacts`
-				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles);
 		$sql = $this->db->query($query);
 		
-		if ($sql) {
-			$sql = $sql->fetch_assoc();
-			
-			// On retourne l'estimation
-			return $sql['nombre'];
-		} else {
-			// On retourne zéro
-			return 0;
-		}
+		return $sql->num_rows;
 	}
 	
 	
 	/**
-	 * Cette méthode permet de reporter un boîtage
+	 * Cette méthode permet de reporter un porte-à-porte
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
 	 * @param	int		$mission		Identifiant de la mission concernée par le reporting (MD5)
-	 * @param	int		$immeuble		Identifiant de l'immeuble concerné par le reporting (MD5)
+	 * @param	int		$electeur		Identifiant de l'électeur concerné par le reporting (MD5)
 	 * @param	int		$statut			Statut du reporting : 2 pour fait, 1 pour inaccessible
 	 * @result	void
 	 */
 	
-	public	function reporting( $mission , $immeuble , $statut ) {
+	public	function reporting( $mission , $electeur , $statut ) {
 		// On récupère les informations sur la mission
 		$informations = $this->informations($mission);
 		
 		// On prépare et exécute la requête
-		$query = 'UPDATE `boitage` SET `boitage_statut` = ' . $statut . ', `boitage_date` = NOW(), `boitage_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '"';
+		$query = 'UPDATE `porte` SET `porte_statut` = ' . $statut . ', `porte_date` = NOW(), `porte_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`contact_id`) = "' . $immeuble . '"';
 		$this->db->query($query);
 		
-		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
-		$query = 'SELECT * FROM `contacts` WHERE MD5(`immeuble_id`) = "' . $immeuble . '" OR MD5(`adresse_id`) = "' . $immeuble . '"';
+		$query = 'SELECT `contact_id` FROM `contacts` WHERE MD5( `contact_id` ) = "' . $electeur . '"';
 		$sql = $this->db->query($query);
-		$contacts = array();
-		while ($row = $sql->fetch_assoc()) $contacts[] = $row;
-		
-		// On fait la boucle de tous ces contacts pour ajouter l'élément d'histoire
-		foreach ($contacts as $contact) {
-			$query = 'INSERT INTO	`historique` (`contact_id`, 
-												  `compte_id`, 
-												  `historique_type`, 
-												  `historique_date`, 
-												  `historique_objet`)
-					  VALUES					 (' . $contact['contact_id'] . ',
-					  							  ' . $_COOKIE['leqg-user'] . ',
-					  							  "boite",
-					  							  NOW(),
-					  							  "' . $informations['mission_nom'] . '")';
-			$this->db->query($query);
-		}
+		$contact = $sql->fetch_assoc();
+
+		// On rajoute une entrée d'historique pour le contact en question
+		$query = 'INSERT INTO	`historique` (`contact_id`, 
+											  `compte_id`, 
+											  `historique_type`, 
+											  `historique_date`, 
+											  `historique_objet`)
+				  VALUES					 (' . $contact['contact_id'] . ',
+				  							  ' . $_COOKIE['leqg-user'] . ',
+				  							  "boite",
+				  							  NOW(),
+				  							  "' . $informations['mission_nom'] . '")';
+		$this->db->query($query);
 	}
 }
+?>

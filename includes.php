@@ -53,10 +53,11 @@ $fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
 $carto =		new carto($db, $noyau, $config['SERVER']['url']);
 $mission =		new mission($db, $cookie, $config['SERVER']['url']);
 $boitage =		new boitage($db);
+$porte =		new porte($db);
 $notification =	new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage;
+global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
