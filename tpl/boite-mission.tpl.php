@@ -51,7 +51,7 @@
 		<h4>Avancement de la mission</h4>
 		<?php
 			// On réalise les calculs en nombre d'électeurs
-			$electeursFait = $boitage->estimation($mission['mission_id'], 1);
+			//$electeursFait = $boitage->estimation($mission['mission_id'], 1);
 			$electeursRestant = $boitage->estimation($mission['mission_id'], 0);
 			$electeursTotal = $electeursFait + $electeursRestant;
 			
