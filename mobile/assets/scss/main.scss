@@ -312,9 +312,10 @@ ul.listeImmeubles {
 			@include border-radius(.33em);
 			color: $blanc;
 			font-size: 1.1em;
+			line-height: 1.66em;
 			min-width: 50px;
 			margin: 0 .25em;
-			padding: .15em .5em;
+			padding: 0 .5em;
 			text-align: center;
 		}
 		

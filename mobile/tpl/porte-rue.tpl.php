@@ -22,7 +22,7 @@ $core->tpl_header(); ?>
 		foreach ($immeubles as $immeuble) : ?>
 		<a class="nostyle" href="<?php $core->tpl_go_to('porte', array('mission' => $_GET['mission'], 'immeuble' => md5($idImmeubles[$immeuble]))); ?>">
 			<li id="element-<?php echo md5($idImmeubles[$immeuble]); ?>">
-				<span><?php echo $immeuble; ?></span> <?php echo $nomRue; ?>
+				<span><?php if (!empty($immeuble)) { echo $immeuble; } else { echo '&nbsp;';	 } ?></span> <?php echo $nomRue; ?>
 			</li>
 		</a>
 		<?php endforeach; endif; endforeach; else : ?>
