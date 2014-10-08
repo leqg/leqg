@@ -11,7 +11,7 @@ class user extends core {
 	private $db; // Lien à la base de données
 	private $noyau; // Lien vers la base de données centrale du système
 	private $url; // le nom de domaine du serveur utilisé
-	private	$user; // Informations liées à l'utilisateur
+	public	$user; // Informations liées à l'utilisateur
 	
 	
 	// Définition des méthodes	

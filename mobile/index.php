@@ -192,13 +192,24 @@ else :
 				endif;
 					
 			endif;
+
+		
+		// S'il s'agit du module de boîtage 
+		elseif ($_GET['page'] == 'boitage') :
+		
+			// On regarde s'il s'agit d'une action particulière, sinon on charge le démarrage du module
+				if (isset($_GET['mission']) && isset($_GET['rue'])) { $core->tpl_load($_GET['page'], 'rue'); }
 			
+			elseif (isset($_GET['mission'])) { $core->tpl_load($_GET['page'], 'mission'); }
+				
+			else { $core->tpl_load($_GET['page']); }
+		
 		
 		// S'il ne s'agit d'aucune de ces pages, on redirige vers les services
 		else :
 		
 			$core->tpl_header();
-			$core->tpl_load('contacts');
+			$core->tpl_load($_GET['page']);
 			$core->tpl_footer();
 		
 		endif;
@@ -208,7 +219,7 @@ else :
 	else :
 	
 		$core->tpl_header();
-		$core->tpl_load('contacts');
+		$core->tpl_load('services');
 		$core->tpl_footer();
 	
 	endif;
