@@ -2,7 +2,7 @@
 
 <section id="fiche" data-fiche="<?php $fiche->the_ID(); ?>">
 	<header>
-		<h2><?php if (!empty($fiche->get_infos('nom')) || !empty($fiche->get_infos('nom_usage'))) { $fiche->affichage_nom('span'); } else { $fiche->infos('organisation'); } ?></h2>
+		<h2><?php if (!empty($fiche->get_infos('nom')) || !empty($fiche->get_infos('nom_usage'))) { $fiche->affichage_nom('span'); } else { $fiche->infos('organisme'); } ?></h2>
 		<a href="<?php $core->tpl_go_to('fiche', array('id' => $fiche->get_the_id(), 'modifierInformations' => 'true')); ?>" class="nostyle" id="config-icon">&#xe855;</a>
 	</header>
 
