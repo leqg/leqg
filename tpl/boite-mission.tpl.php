@@ -8,7 +8,7 @@
 	}
 ?>
 
-<h2 data-mission="<?php echo $mission['mission_id']; ?>">Boîtage &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
+<h2 id="titre-mission" data-mission="<?php echo md5($mission['mission_id']); ?>">Boîtage &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
 <!-- Blocs de mission vide -->
 <section id="boitage-vide" class="icone rue demi gauche <?php if ($boitage->nombreImmeubles($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
@@ -43,7 +43,7 @@
 	
 	<div class="coteAcote">
 		<button class="ajouterRue">Ajouter une rue</button>
-		<!--<button class="ajouterBureau">Ajouter un bureau</button>-->
+		<button class="ajouterBureau">Ajouter un bureau</button>
 	</div>
 </section>
 
@@ -66,6 +66,16 @@
 		</li>
 	</ul>
 	<ul class="form-liste invisible" id="listeRues"></ul>
+</section>
+
+<section id="ajoutBureau" class="demi droite invisible">
+	<ul class="formulaire">
+		<li>
+			<label>Recherchez un bureau de vote</label>
+			<span class="form-icon street"><input type="text" name="rechercheBureau" id="rechercheBureau" placeholder="103 ou École des Champs"></span>
+		</li>
+	</ul>
+	<ul class="form-liste invisible" id="listeBureaux"></ul>
 </section>
 
 <section id="choixImmeuble" class="demi droite invisible">

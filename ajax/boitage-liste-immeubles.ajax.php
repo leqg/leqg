@@ -2,8 +2,11 @@
 
 	$infos = $_GET;
 	
+	// On récupère des informations sur la mission
+	$mission = $boitage->informations($infos['mission']);
+	
 	// On récupère les rues de la mission avec leurs immeubles
-	$rues = $boitage->liste($infos['mission'], 0);
+	$rues = $boitage->liste($mission['mission_id'], 0);
 	
 	// On récupère les immeubles à faire de notre rue
 	$immeubles = $rues[$infos['rue']];

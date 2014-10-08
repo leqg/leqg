@@ -201,6 +201,32 @@ class boitage extends core {
 	
 	
 	/**
+	 * Cette méthode permet d'ajouter un bureau entier dans une mission de boîtage
+	 *
+	 * @author	Damien Senger	<mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	int		$rue		Identifiant de la rue à ajouter
+	 * @param	int		$mission	Identifiant de la mission dans laquelle ajouter la rue
+	 * @return	bool
+	 */
+	 
+	public	function ajoutBureau( $bureau , $mission ) {
+		// On effectue une recherche de tous les immeubles contenus dans la rue
+		$immeubles = array();
+		$query = 'SELECT * FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
+		$sql = $this->db->query($query);
+		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
+		
+		// Pour chaque immeuble, on créé une insertion dans la base de données
+		foreach ($immeubles as $immeuble) {
+			$query = 'INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (' . $mission . ', ' . $immeuble['rue_id'] . ', ' . $immeuble['immeuble_id'] . ')';
+			$this->db->query($query);
+		}
+	}
+	
+	
+	/**
 	 * Cette méthode permet de pouvoir obtenir une liste des immeubles à boiter par rue
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
@@ -286,7 +312,7 @@ class boitage extends core {
 		$informations = $this->informations($mission);
 		
 		// On prépare et exécute la requête
-		$query = 'UPDATE `boitage` SET `boitage_statut` = ' . $statut . ', `boitage_date` = NOW() WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '"';
+		$query = 'UPDATE `boitage` SET `boitage_statut` = ' . $statut . ', `boitage_date` = NOW(), `boitage_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '"';
 		$this->db->query($query);
 		
 		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique

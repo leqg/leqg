@@ -136,6 +136,48 @@ class carto extends core {
 	
 	
 	/**
+	 * Cette méthode permet de renvoyer une liste de toutes les bureaux de la base répondant à la recherche lancée au format JSON
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string	$search		Bureau à rechercher, toutes villes confondues
+	 * @result	array				Tableau des informations concernant tous les bureaux trouvés
+	 */
+	
+	public	function recherche_bureau_json($search) {
+		// On sécurise la recherche
+		$search = $this->formatage_recherche($search);
+		
+		// On exécute la requête
+		$sql = $this->db->query('SELECT * FROM `bureaux` WHERE `bureau_numero` LIKE "%' . $search . '%" OR `bureau_nom` LIKE "%' . $search . '%" ORDER BY bureau_numero, bureau_nom ASC');
+		$bureaux = array();
+		while ($row = $sql->fetch_assoc()) $bureaux[] = $row;
+		$communes = array();
+		$communes_donnees = array();
+		
+		// On recherche les communes de chaque bureau
+		foreach ($bureaux as $key => $bureau) {
+			if (in_array($bureau['commune_id'], $communes)) {
+				$bureaux[$key] = array_merge($bureau, $communes_donnees[$bureau['commune_id']]);
+			} else {
+				$sql = $this->db->query('SELECT * FROM `communes` WHERE `commune_id` = ' . $bureau['commune_id']);
+				$i = $sql->fetch_assoc();
+				
+				$communes[] = $i['commune_id'];
+				$communes_donnees[$i['commune_id']] = $i;
+				
+				$bureaux[$key] = array_merge($bureau, $i);
+			}
+		}
+		
+		$bureaux = json_encode($bureaux);
+		
+		return $bureaux;
+	}
+	
+	
+	/**
 	 * Cette méthode permet de renvoyer une liste de tous les cantons répondant à la recherche lancée
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>

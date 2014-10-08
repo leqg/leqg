@@ -23,6 +23,13 @@ var porte = function() {
 			$('.droite').fadeOut();
 			$('#ajoutRue').fadeIn();
 		});
+		
+	
+	// Bouton d'ajout d'une rue à une mission
+		$('.ajouterBureau').click(function(){
+			$('.droite').fadeOut();
+			$('#ajoutBureau').fadeIn();
+		});
 	
 	// Recherche d'une rue pour l'ajout à une mission
 		$('#rechercheRue').keyup(function(){
@@ -49,6 +56,31 @@ var porte = function() {
 			}
 		});
 	
+	// Recherche d'une rue pour l'ajout à une mission
+		$('#rechercheBureau').keyup(function(){
+			var bureau = $(this).val();
+			
+			if (bureau.length >= 2) {
+				$.getJSON('ajax.php?script=bureaux', { 'bureau' : bureau }, function(data) {
+					// On commence par vider la liste des résultats avant d'y installer les nouveaux
+					$('#listeBureaux').html('');
+					
+					$.each( data, function( key, val ) {
+					
+						// On créé d'abord une nouvelle puce
+						$('#listeBureaux').append('<li id="bureau-' + val.bureau_id + '"></li>');
+						
+						// On ajoute après les différents span
+						$('#bureau-' + val.bureau_id).append('<button class="ajouterLeBureau" data-bureau="' + val.bureau_id + '" data-numero="' + val.bureau_numero + '" data-nom="' + val.bureau_nom + '">Ajouter</button>');
+						$('#bureau-' + val.bureau_id).append('<span class="bureau-nom">Bureau ' + val.bureau_numero + ' ' + val.bureau_nom + '</span>');
+						$('#bureau-' + val.bureau_id).append('<span class="bureau-ville">' + val.commune_nom + '</span>');
+					});
+					
+					$('#listeBureaux').show();
+				});
+			}
+		});
+	
 	// Script d'ajout d'une rue à la mission
 		$('#ajoutRue').on('click', '.ajouterLaRue', function(){
 			var rue = $(this).data('rue');
@@ -59,6 +91,20 @@ var porte = function() {
 			
 			$('#ajoutRue').fadeOut();
 			$('#choixImmeuble').fadeIn();
+		});
+	
+	// Script d'ajout d'un bureau à la mission
+		$('#ajoutBureau').on('click', '.ajouterLeBureau', function(){
+			var bureau = $(this).data('bureau');
+			var bureauNumero = $(this).data('numero');
+			var bureauNom = $(this).data('nom');
+			var bureauVille = $(this).data('ville');
+			var mission = $('#titre-mission').data('mission');
+			console.log(mission);
+			$.post('ajax.php?script=boitage-ajout-bureau', { bureau: bureau, mission: mission }, function(){
+				var destination = 'index.php?page=boite&mission=' + mission;
+				$(location).attr('href', destination);
+			});
 		});
 		
 	// Script qui permet de revenir à la recherche d'une rue au clic sur le nom de la rue
@@ -87,7 +133,7 @@ var porte = function() {
 				$('.droite').fadeOut();
 				$('.voirRue').hide();
 	
-				var mission = $('h2').data('mission');
+				var mission = $('#titre-mission').data('mission');
 				var nom = $(this).data('nom');
 				var rue = $(this).data('rue');
 				
