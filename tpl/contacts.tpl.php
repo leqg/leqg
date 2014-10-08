@@ -55,9 +55,9 @@
 				<div class="radio"><input type="radio" name="critere" id="critere-contact" class="selectionCritere" data-critere="contact" value="contact" required><label for="critere-contact"><span><span></span></span>Coordonnées (mail, téléphone)</label></div>
 				<div class="radio"><input type="radio" name="critere" id="critere-electoral" class="selectionCritere" data-critere="electoral" value="electoral" required><label for="critere-electoral"><span><span></span></span>Liste électorale</label></div>
 				<div class="radio"><input type="radio" name="critere" id="critere-bureau" class="selectionCritere" data-critere="bureau" value="bureau" required><label for="critere-bureau"><span><span></span></span>Bureau de vote</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-etatcivil" class="selectionCritere" data-critere="etatcivil" value="etatcivil" required><label for="critere-etatcivil"><span><span></span></span>État civil</label></div>
+			<!--<div class="radio"><input type="radio" name="critere" id="critere-etatcivil" class="selectionCritere" data-critere="etatcivil" value="etatcivil" required><label for="critere-etatcivil"><span><span></span></span>État civil</label></div>
 				<div class="radio"><input type="radio" name="critere" id="critere-adresse" class="selectionCritere" data-critere="adresse" value="adresse" required><label for="critere-adresse"><span><span></span></span>Adresse</label></div>
-				<div class="radio"><input type="radio" name="critere" id="critere-tags" class="selectionCritere" data-critere="tags" value="tags" required><label for="critere-tags"><span><span></span></span>Tags</label></div>
+			 --><div class="radio"><input type="radio" name="critere" id="critere-tags" class="selectionCritere" data-critere="tags" value="tags" required><label for="critere-tags"><span><span></span></span>Tags</label></div>
 			</li>
 			<li class="detail-critere detail-critere-contact affichageOptionnel">
 				<label>Afficher les fiches où</label>
