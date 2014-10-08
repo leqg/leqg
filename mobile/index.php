@@ -194,8 +194,8 @@ else :
 			endif;
 
 		
-		// S'il s'agit du module de boîtage 
-		elseif ($_GET['page'] == 'boitage') :
+		// S'il s'agit du module de boîtage ou de porte-à-porte 
+		elseif ($_GET['page'] == 'boitage' || $_GET['page'] == 'porte') :
 		
 			// On regarde s'il s'agit d'une action particulière, sinon on charge le démarrage du module
 				if (isset($_GET['mission']) && isset($_GET['rue'])) { $core->tpl_load($_GET['page'], 'rue'); }
