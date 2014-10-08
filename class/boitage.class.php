@@ -288,10 +288,16 @@ class boitage extends core {
 				  FROM		`contacts`
 				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles);
 		$sql = $this->db->query($query);
-		$sql = $sql->fetch_assoc();
 		
-		// On retourne l'estimation
-		return $sql['nombre'];
+		if ($sql->num_rows) {
+			$sql = $sql->fetch_assoc();
+			
+			// On retourne l'estimation
+			return $sql['nombre'];
+		} else {
+			// On retourne zéro
+			return 0;
+		}
 	}
 	
 	
