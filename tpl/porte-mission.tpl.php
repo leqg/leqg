@@ -44,6 +44,13 @@
 		</li>
 		<?php } ?>
 	</ul>
+
+	<?php if (count($indexRues) >= 20) { ?>
+		<div class="coteAcote">
+			<button class="ajouterRue">Ajouter une rue</button>
+			<button class="ajouterBureau">Ajouter un bureau</button>
+		</div>
+	<?php } ?>
 </section>
 
 <?php if ($porte->nombreVisites($mission['mission_id'], 1)) { ?>
@@ -76,7 +83,7 @@
 	<section id="porte-statistiques" class="icone fusee demi droite">
 		<h3>La mission n'a pas été commencée.</h3>
 		<?php if ($porte->nombreVisites($mission['mission_id'], 0)) { ?>
-			<h5>Il existe <span><?php echo $porte->estimation($mission['mission_id']); ?></span> électeurs à visiter.</h5>
+			<h5>Il existe <span><?php echo number_format($porte->estimation($mission['mission_id']), 0, ',', ' '); ?></span> électeurs à visiter.</h5>
 		<?php } ?>
 	</section>
 <?php } ?>

@@ -69,7 +69,8 @@ class porte extends core {
 				  FROM		`mission`
 				  WHERE		`mission_statut` = 1
 				  AND		`mission_type` = "porte"
-				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
+				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )
+				  ORDER BY	`mission_deadline` ASC';
 				  
 		// On effectue la requête et on retourne le nombre de lignes trouvées
 		$sql = $this->db->query($query);
@@ -225,7 +226,7 @@ class porte extends core {
 		$query = 'SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
 		$sql = $this->db->query($query);
 		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
-		
+
 		// Pour chaque immeuble, on cherche tous les contacts pour ajouter pour chacun une entrée dans la base porte à frapper
 		foreach ($immeubles as $immeuble) {
 			$contacts = array();
