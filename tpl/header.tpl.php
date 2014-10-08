@@ -18,7 +18,7 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<?php $flat = array('boite'); ?>
+<?php $flat = array('boite', 'porte'); ?>
 <body<?php if (isset($_GET['page']) && in_array($_GET['page'], $flat)) { ?> class="flat"<?php } ?>>	
 	<!-- Contenu concret de la page -->
 	<header id="top">
