@@ -289,7 +289,7 @@ class boitage extends core {
 				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles);
 		$sql = $this->db->query($query);
 		
-		if ($sql->num_rows) {
+		if ($sql) {
 			$sql = $sql->fetch_assoc();
 			
 			// On retourne l'estimation
