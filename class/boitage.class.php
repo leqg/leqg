@@ -217,6 +217,8 @@ class boitage extends core {
 		
 		// On récupère tous les immeubles 
 		$query = 'SELECT * FROM `boitage` WHERE `mission_id` = ' . $mission;
+		if ($statut == 0) $query .= ' AND `boitage_statut` = 0';
+		if ($statut == 1) $query .= ' AND `boitage_statut > 0';
 		$sql = $this->db->query($query);
 		while ($row = $sql->fetch_assoc()) { $immeubles[] = $row; }
 		
@@ -237,7 +239,7 @@ class boitage extends core {
 	 * @version	1.0
 	 *
 	 * @param	int		$mission		Identifiant de la mission concernée par l'estimation
-	 * @param	int		$type		Type d'électeurs à vérifier (1 : déjà boités, 0 : à boiter, 2 : tous)
+	 * @param	int		$type			Type d'électeurs à vérifier (1 : déjà boités, 0 : à boiter, 2 : tous)
 	 *
 	 * @return	int					Nombre d'électeur estimé
 	 */
@@ -264,5 +266,48 @@ class boitage extends core {
 		
 		// On retourne l'estimation
 		return $sql['nombre'];
+	}
+	
+	
+	/**
+	 * Cette méthode permet de reporter un boîtage
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$mission		Identifiant de la mission concernée par le reporting (MD5)
+	 * @param	int		$immeuble		Identifiant de l'immeuble concerné par le reporting (MD5)
+	 * @param	int		$statut			Statut du reporting : 2 pour fait, 1 pour inaccessible
+	 * @result	void
+	 */
+	
+	public	function reporting( $mission , $immeuble , $statut ) {
+		// On récupère les informations sur la mission
+		$informations = $this->informations($mission);
+		
+		// On prépare et exécute la requête
+		$query = 'UPDATE `boitage` SET `boitage_statut` = ' . $statut . ', `boitage_date` = NOW() WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '"';
+		$this->db->query($query);
+		
+		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
+		$query = 'SELECT * FROM `contacts` WHERE MD5(`immeuble_id`) = "' . $immeuble . '" OR MD5(`adresse_id`) = "' . $immeuble . '"';
+		$sql = $this->db->query($query);
+		$contacts = array();
+		while ($row = $sql->fetch_assoc()) $contacts[] = $row;
+		
+		// On fait la boucle de tous ces contacts pour ajouter l'élément d'histoire
+		foreach ($contacts as $contact) {
+			$query = 'INSERT INTO	`historique` (`contact_id`, 
+												  `compte_id`, 
+												  `historique_type`, 
+												  `historique_date`, 
+												  `historique_objet`)
+					  VALUES					 (' . $contact['contact_id'] . ',
+					  							  ' . $_COOKIE['leqg-user'] . ',
+					  							  "boite",
+					  							  NOW(),
+					  							  "' . $informations['mission_nom'] . '")';
+			$this->db->query($query);
+		}
 	}
 }

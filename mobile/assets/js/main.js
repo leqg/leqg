@@ -16,6 +16,28 @@ var main = function() {
 		return false;
 	});
 	
+	
+	// Script de reporting
+	$('button.choix').click(function(){
+		var immeuble = $(this).data('immeuble');
+		$(this).fadeOut();
+		$('button.report-' + immeuble).fadeIn();
+	});
+	
+	$('button.report').click(function(){
+		// On récupère toutes les informations
+		var mission = $(this).data('mission');
+		var immeuble = $(this).data('immeuble');
+		var statut = $(this).data('statut');
+		var type = $(this).data('type');
+		
+		// On envoie les informations au serveur
+		$.post('ajax.php?script=reporting', { type: type, mission: mission, immeuble: immeuble, statut: statut });
+		
+		// On supprime de la liste
+		$('li#element-' + immeuble).remove();
+	});
+	
 };
 
 $(document).ready(main);
