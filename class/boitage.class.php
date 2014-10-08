@@ -293,7 +293,7 @@ class boitage extends core {
 			$sql = $sql->fetch_assoc();
 			
 			// On retourne l'estimation
-			return $sql['nombre'];
+			return number_format($sql['nombre'], 0, ',', ' ');
 		} else {
 			// On retourne zéro
 			return 0;
