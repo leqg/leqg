@@ -189,14 +189,14 @@ class porte extends core {
 	public	function ajoutRue( $rue , $mission ) {
 		// On effectue une recherche de tous les immeubles contenus dans la rue
 		$immeubles = array();
-		$query = 'SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = ' . $rue;
+		$query = 'SELECT * FROM `immeubles` WHERE `rue_id` = ' . $rue;
 		$sql = $this->db->query($query);
 		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
 		
 		// Pour chaque immeuble, on cherche tous les électeurs de l'immeuble
 		foreach ($immeubles as $immeuble) {
 			$contacts = array();
-			$query = 'SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
+			$query = 'SELECT * FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
 			$sql = $this->db->query($query);
 			while($row = $sql->fetch_assoc()) $contacts[] = $row;
 			
@@ -214,7 +214,7 @@ class porte extends core {
 	 * @author	Damien Senger	<mail@damiensenger.me>
 	 * @version 1.0
 	 *
-	 * @param	int		$rue		Identifiant de la rue à ajouter
+	 * @param	int		$bureau		Identifiant de la rue à ajouter
 	 * @param	int		$mission	Identifiant de la mission dans laquelle ajouter la rue
 	 * @return	bool
 	 */
@@ -222,7 +222,7 @@ class porte extends core {
 	public	function ajoutBureau( $bureau , $mission ) {
 		// On effectue une recherche de tous les immeubles contenus dans la rue
 		$immeubles = array();
-		$query = 'SELECT `immeuble_id` FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
+		$query = 'SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
 		$sql = $this->db->query($query);
 		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
 		
@@ -232,9 +232,9 @@ class porte extends core {
 			$query = 'SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
 			$sql = $this->db->query($query);
 			while($row = $sql->fetch_assoc()) $contacts[] = $row;
-			
+
 			foreach ($contacts as $contact) {
-				$query = 'INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (' . $mission . ', ' . $rue . ', ' . $immeuble['immeuble_id'] . ', ' . $contact['contact_id'] .')';
+				$query = 'INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (' . $mission . ', ' . $immeuble['rue_id'] . ', ' . $immeuble['immeuble_id'] . ', ' . $contact['contact_id'] .')';
 				$this->db->query($query);
 			}
 		}
@@ -262,13 +262,15 @@ class porte extends core {
 		if ($statut == 0) $query .= ' AND `porte_statut` = 0';
 		if ($statut == 1) $query .= ' AND `porte_statut > 0';
 		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) { $contacts[] = $row; }
-		
-		// On lance le tri par immeuble des électeurs
-		foreach ($contacts as $contant) {
-			$immeubles[$contact['immeuble_id']][] = $contact['contact_id'];
+		while ($row = $sql->fetch_assoc()) { $portes[] = $row; }
+
+		// On lance le tri par immeuble des portes à frapper
+		foreach ($portes as $porte) {
+			if (!array_key_exists($porte['immeuble_id'], $immeubles)) {
+				$immeubles[$porte['immeuble_id']] = array('immeuble_id' => $porte['immeuble_id'], 'rue_id' => $porte['rue_id']);
+			}
 		}
-		
+
 		// On lance le tri par rues des immeubles
 		foreach ($immeubles as $immeuble) {
 			$rues[$immeuble['rue_id']][] = $immeuble['immeuble_id'];

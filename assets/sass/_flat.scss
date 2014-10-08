@@ -29,7 +29,8 @@ body.flat {
 }
 
 main.flat,
-main.boite {
+main.boite,
+main.porte {
 	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
 	font-family: $flat;
 	height: auto;
