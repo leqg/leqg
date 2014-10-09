@@ -1106,7 +1106,7 @@ class carto extends core {
 	 * @return	int						Nombre d'électeur trouvé
 	 */
 
-	public	function nombreElecteurs( string $branche , int $id , $coordonnees = null ) {
+	public	function nombreElecteurs( $branche , $id , $coordonnees = null ) {
 		if (!is_string($branche) || !is_numeric($id)) return false;
 		
 		if (isset($branche)) {
@@ -1131,7 +1131,6 @@ class carto extends core {
 				$query .= 'WHERE ' . $branche . 's.' . $branche . '_id = ' . $id;
 			}
 		}
-		
 		
 		// On regarde si on demandait seulement ceux ayant des coordonnées
 		if (!is_null($coordonnees) && !empty($query)) {

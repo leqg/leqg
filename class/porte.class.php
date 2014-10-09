@@ -376,7 +376,7 @@ class porte extends core {
 											  `historique_objet`)
 				  VALUES					 (' . $contact['contact_id'] . ',
 				  							  ' . $_COOKIE['leqg-user'] . ',
-				  							  "boite",
+				  							  "porte",
 				  							  NOW(),
 				  							  "' . $informations['mission_nom'] . '")';
 		$this->db->query($query);
