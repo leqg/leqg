@@ -13,7 +13,9 @@
 				   'mobile' => $_POST['mobile'],
 				   'email' => $_POST['email'],
 				   'date-naissance' => $_POST['dateNaissance'],
-				   'immeuble' => 0);
+				   'immeuble' => 0,
+				   'organisme' => '',
+				   'fonction' => '');
 	
 	// On commence par créer la fiche
 	$contact = $fiche->creerContact($infos);
