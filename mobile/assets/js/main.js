@@ -19,23 +19,35 @@ var main = function() {
 	
 	// Script de reporting
 	$('button.choix').click(function(){
-		var immeuble = $(this).data('immeuble');
+		var type = $(this).data('type');
+		
+		if (type == 'porte') {
+			var id = $(this).data('electeur');
+		} else {
+			var id = $(this).data('immeuble');
+		}
+		
 		$(this).fadeOut();
-		$('button.report-' + immeuble).fadeIn();
+		$('button.report-' + id).fadeIn();
 	});
 	
 	$('button.report').click(function(){
 		// On récupère toutes les informations
 		var mission = $(this).data('mission');
-		var immeuble = $(this).data('immeuble');
 		var statut = $(this).data('statut');
 		var type = $(this).data('type');
 		
+		if (type == 'porte') {
+			var id = $(this).data('electeur');
+		} else {
+			var id = $(this).data('immeuble');
+		}
+		
 		// On envoie les informations au serveur
-		$.post('ajax.php?script=reporting', { type: type, mission: mission, immeuble: immeuble, statut: statut });
+		$.post('ajax.php?script=reporting', { type: type, mission: mission, id: id, statut: statut });
 		
 		// On supprime de la liste
-		$('li#element-' + immeuble).remove();
+		$('li#element-' + id).remove();
 	});
 	
 };

@@ -283,6 +283,41 @@ class porte extends core {
 	
 	
 	/**
+	 * Cette méthode permett de charger les électeurs d'une mission à visiter liés à un immeuble
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param	int		$mission		Identifiant de la mission concernée par l'estimation (md5)
+	 * @param 	int		$immeuble		Identifiant de l'immeuble dont nous souhaitons extraire les électeurs (md5)
+	 * 
+	 * @return	array					Tableau des électeurs de l'immeuble demandé
+	 */
+	
+	public	function electeurs( $mission , $immeuble ) {
+		// On prépare le tableau des électeurs
+		$electeurs = array();
+	
+		// On récupère la liste des portes à frapper dans l'immeuble demandé
+		$query = 'SELECT * FROM `porte` WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '" AND `porte_statut` = 0';
+		$sql = $this->db->query($query);
+		while ($row = $sql->fetch_assoc()) $electeurs[] = $row;
+		
+		foreach ($electeurs as $key => $electeur) {
+			$query = 'SELECT * FROM `contacts` WHERE `contact_id` = ' . $electeur['contact_id'];
+			$sql = $this->db->query($query);
+			$contact = $sql->fetch_assoc();
+			
+			$electeurs[$key] = array_merge($electeurs[$key], $contact);
+		}
+		
+		// On retourne le tableau des électeurs triés par nom
+		$this->triParColonne($electeurs, 'contact_nom', SORT_ASC);
+		return $electeurs;
+	}
+	
+	
+	/**
 	 * Cette méthode permet d'estimer le nombre d'électeur concernés par un porte à porte
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
@@ -326,7 +361,7 @@ class porte extends core {
 		$informations = $this->informations($mission);
 		
 		// On prépare et exécute la requête
-		$query = 'UPDATE `porte` SET `porte_statut` = ' . $statut . ', `porte_date` = NOW(), `porte_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`contact_id`) = "' . $immeuble . '"';
+		$query = 'UPDATE `porte` SET `porte_statut` = ' . $statut . ', `porte_date` = NOW(), `porte_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`contact_id`) = "' . $electeur . '"';
 		$this->db->query($query);
 		
 		$query = 'SELECT `contact_id` FROM `contacts` WHERE MD5( `contact_id` ) = "' . $electeur . '"';

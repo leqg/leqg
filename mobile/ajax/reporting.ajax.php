@@ -5,7 +5,9 @@
 	
 	// On enregistre les informations
 	if ($infos['type'] == 'boitage') {
-		$boitage->reporting($infos['mission'], $infos['immeuble'], $infos['statut']);
+		$boitage->reporting($infos['mission'], $infos['id'], $infos['statut']);
+	} else if ($infos['type'] == 'porte') {
+		$porte->reporting($infos['mission'], $infos['id'], $infos['statut']);
 	} else {
 		//$boitage->reporting();
 	}
