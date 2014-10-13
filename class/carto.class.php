@@ -502,7 +502,7 @@ class carto extends core {
 	 * @return	string|void			Le nom de la ville ou rien en fonction de $return
 	 */
 
-	public static function afficherVille( $id , $return = false ) {
+	public function afficherVille( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$ville = $this->ville($id);
 		
