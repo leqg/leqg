@@ -21,7 +21,7 @@
 		<ul class="etatcivil">
 			<li class="naissance"><?php echo $contact->naissance(); ?></li>
 			<li class="age"><?php echo $contact->age(); ?></li>
-			<li class="adresse"><?php echo $contact->adresse('declaree'); ?></li>
+			<?php if ($contact->contact['adresse_id']) { ?><li class="adresse"><?php echo $contact->adresse('declaree'); ?></li><?php } ?>
 		</ul>
 		
 		<?php if ($contact->contact['contact_electeur'] == 1) : ?>
@@ -33,7 +33,7 @@
 		<?php endif; ?>
 		
 		<h4>Données de contact</h4>
-		<ul class="etatcivil">
+		<ul class="etatcivil coordonnees">
 			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : ?>
 			<li class="<?php echo $coordonnee['coordonnee_type']; ?>">
 				<?php 
@@ -51,9 +51,40 @@
 			<li class="ajout ajouterCoordonnees">Ajouter une nouvelle information de contact</li>
 		</ul>
 	</section>
-	
+</div>
+
+<div class="colonne demi droite">
 	<section id="carte" class="contenu demi"></section>
 </div>
+
+<!-- Formulaires en overlay -->
+<div id="ajoutCoordonnees" class="overlayForm">
+	<form id="ajoutDeCoordonnees" method="post" action="ajax.php?script=coordonnees–ajout">
+		<input type="hidden" name="fiche" id="idFiche" value="<?php echo $_GET['contact']; ?>">
+		<a class="fermetureOverlay" href="#">&#xe813;</a>
+		<h3>Ajout d'un moyen de contact</h3>
+		<ul>
+			<li>
+				<label>Type de coordonnées</label>
+				<div class="radio"><input class="selectionType" data-type="email" type="radio" name="type" id="ajoutCoordonneesEmail" value="email" required><label for="ajoutCoordonneesEmail"><span><span></span></span>Adresse email</label></div>
+				<div class="radio"><input class="selectionType" data-type="telephone" type="radio" name="type" id="ajoutCoordonneesMobile" value="mobile" required><label for="ajoutCoordonneesMobile"><span><span></span></span>Téléphone mobile</label></div>
+				<div class="radio"><input class="selectionType" data-type="telephone" type="radio" name="type" id="ajoutCoordonneesFixe" value="fixe" required><label for="ajoutCoordonneesFixe"><span><span></span></span>Téléphone fixe</label></div>
+			</li>
+			<li class="detail-critere detail-critere-email affichageOptionnel">
+				<label for="form-modifier-email">Adresse email</label>
+				<input type="email" name="email" id="form-ajout-email" autocomplete="off">
+			</li>
+			<li class="detail-critere detail-critere-telephone affichageOptionnel">
+				<label for="form-modifier-email">Numéro de téléphone</label>
+				<input type="text" name="numero" id="form-ajout-telephone" autocomplete="off">
+			</li>
+			<li>
+				<input type="submit" value="Ajouter l'information">
+			</li>
+		</ul>
+	</form>
+</div>
+
 
 
 <script>
@@ -67,7 +98,7 @@
 			rotateControl: false,
 			scrollwheel: false,
 			zoomControl: true,
-			zoom: 17
+			zoom: 16
 		};
 		var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
 		
@@ -82,7 +113,7 @@
 				markerAdresse = new google.maps.Marker({
 				position: results[0].geometry.location,
 				map: map,
-				title: "<?php echo $contact->noms(); ?>"
+				title: "<?php echo $contact->noms(' ', ' '); ?>"
 				});
 				// On centre sur ce marker
 				map.setCenter(results[0].geometry.location);

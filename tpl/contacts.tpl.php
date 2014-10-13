@@ -32,7 +32,7 @@
 				?>
 				<tr>
 					<td><div class="radio"><input type="checkbox" name="fiche-<?php echo $contact['id']; ?>" id="fiche-<?php echo $contact['id']; ?>"><label for="fiche-<?php echo $contact['id']; ?>"><span><span></span></span></label></div></td>
-					<td><a href="<?php $core->tpl_go_to('fiche', array('id' => $contact['id'])); ?>"><?php $fiche->affichageNomByID($contact['id']); ?></a></td>
+					<td><a href="<?php $core->tpl_go_to('contact', array('contact' => md5($contact['id']))); ?>"><?php $fiche->affichageNomByID($contact['id']); ?></a></td>
 					<td><?php $fiche->contact('email', false, false, $contact['id']); ?></td>
 					<td><?php $core->tpl_phone($fiche->contact('mobile', false, true, $contact['id'])); ?></td>
 					<td><?php $core->tpl_phone($fiche->contact('telephone', false, true, $contact['id'])); ?></td>

@@ -41,6 +41,9 @@ class contact extends carto
 
 		$this->link = new PDO($dsn, $user, $pass);
 		
+		// TEMPORAIRE !!!
+		if (is_numeric($contact)) { $contact = md5($contact); }
+		
 		// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
 		$query = $this->link->prepare('SELECT * FROM `contacts` WHERE MD5(`contact_id`) = :contact');
 		$query->bindParam(':contact', $contact);
@@ -437,6 +440,40 @@ class contact extends carto
 		
 		// On retourne le contenu
 		return $retour;
+	}
+	
+	
+	/**
+	 * Cette méthode permet l'ajout de coordonnées en lien avec la fiche ouverte
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	string		$type			Type de coordonnées envoyées
+	 * @param	string|int	$coordonnees 	Coordonnées à rajouter
+	 *
+	 * @result	void
+	 */
+	
+	public function ajoutCoordonnees( $type , $coordonnees )
+	{
+		// On prépare la requête selon le type fourni
+		if ($type == 'email')
+		{
+			$query = $this->link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_email`) VALUES (:contact, :type, :coordonnees)');
+		}
+		else
+		{
+			$query = $this->link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, :type, :coordonnees)');
+		}
+		
+		// On affecte les variables à la requête
+		$query->bindParam(':contact', $this->contact['contact_id']);
+		$query->bindParam(':type', $type);
+		$query->bindParam(':coordonnees', $coordonnees);
+		
+		// On exécute la requête
+		$query->execute();
 	}
 }
 

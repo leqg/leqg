@@ -426,7 +426,7 @@ ul.boutonsRadio {
  ************************************/
  
 .overlayForm {
-	position: absolute; top: 0; left: 0;
+	position: fixed; top: 0; left: 0;
 	display: none;
 	background-color: rgba($blanc, .66);
 	height: 100%;
@@ -505,6 +505,9 @@ ul.boutonsRadio {
 					font-size: 1.33em;
 					font-weight: 400;
 					padding: .33em 1em .33em .5em;
+					
+					&:hover { border-color: $grisFonce; }
+					&:focus { border-color: $grisMoyen; }
 					
 					&[type='radio'] {
 						display: none;

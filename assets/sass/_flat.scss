@@ -69,6 +69,7 @@ main.contact {
 		& > span {
 			display: inline-block;
 			font-variant: normal;
+			margin: 0 .15em 0 0;
 			
 			&:last-of-type { font-weight: 300; }
 		}
@@ -499,6 +500,10 @@ main.contact {
 		margin: -.66em auto 2.5em;
 		padding: 0 0 0 40px;
 		
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+		
 		li {
 			position: relative;
 			display: block;
@@ -529,9 +534,9 @@ main.contact {
 				color: $grisMoyen;
 				cursor: pointer;
 				
-				&:hover { color: $rouge; }
+				&:hover { color: $vert; }
 				&::before { color: $grisMoyen; }
-				&:hover::before { color: $rouge; }
+				&:hover::before { color: $vert; }
 			}
 
 		}
