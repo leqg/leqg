@@ -7,16 +7,15 @@
 // On intègre les fonctions essentielles et l'appel aux classes LeQG
 	require_once 'includes.php';
 
-
 // On initialise le tableau listant les scripts AJAX créés
 	$scripts = array();
-
+	
 // On tente d'ouvrir le dossier AJAX pour connaître le contenu des appels AJAX créés
 	if ($doss = opendir('./ajax')) :
 	
 	// On vérifie que l'ouverture et la lecture du dossier n'a pas retourné d'erreur
 		while (false !== ($file = readdir($doss))) :
-					
+		
 		// On analyse le nom du fichier
 			$file = explode('.', $file);
 			
@@ -34,11 +33,11 @@
 		endwhile;
 	
 	endif;
-
+	
 // On fait la liste des différents scripts pouvant être appelés ci-après
 
 // On vérifie que le script demandé existe
-	$script = $core->securisation_string($_GET['script']);
+	$script = $_GET['script'];
 	
 	if (!in_array($script, $scripts)) exit; // Si le script demandé n'existe pas, on arrête l'exécution de la page ici.
 	

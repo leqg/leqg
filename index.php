@@ -65,6 +65,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$fiche->fermeture();
 		}
 		
+		else if ($_GET['page'] == 'contact' && isset($_GET['contact'])) { 
+			// On charge le template correspondant à la fiche contact
+			$core->tpl_load('contact');
+		}
+		
 		else if ($_GET['page'] == 'fiche' && !empty($_GET['operation'])) {
 			
 			// On regarde si on demande la fusion de fiche

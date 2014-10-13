@@ -4,7 +4,6 @@
 */
 
 // On met en place l'affichage des erreurs en mode développement
-error_reporting(-1); // -1 reporte toutes les erreurs PHP (=E_ALL) / 0 en mode production
 ini_set('error_reporting', E_ALL);
 
 // On détermine les problématiques de langage des données PHP
@@ -16,6 +15,28 @@ header('Content-Type: text/html; charset=utf-8');
 
 // On récupère le fichier de configuration
 $config = parse_ini_file('config.ini', true);
+
+// On lance la classe de configuration
+class Configuration
+{
+	static $confArray;
+	
+	public static function read($name)
+	{
+		return self::$confArray[$name];
+	}
+	
+	public static function write($name, $value)
+	{
+		self::$confArray[$name] = $value;
+	}
+}
+
+// On applique la configuration chargée
+Configuration::write('db.host', $config['BDD']['host']);
+Configuration::write('db.basename', 'strasbourg');
+Configuration::write('db.user', $config['BDD']['user']);
+Configuration::write('db.pass', $config['BDD']['pass']);
 
 // Appel de la classe MySQL du noyau
 $noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
@@ -75,5 +96,8 @@ $api['mail']['from']['email'] = 'no-reply@leqg.info';
 $api['mail']['from']['nom'] = 'Ne Pas Répondre';
 $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
+
+// On inclut les classes non chargées
+include 'class/contact.class.php';
 
 ?>

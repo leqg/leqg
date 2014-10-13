@@ -502,7 +502,7 @@ class carto extends core {
 	 * @return	string|void			Le nom de la ville ou rien en fonction de $return
 	 */
 
-	public	function afficherVille( $id , $return = false ) {
+	public static function afficherVille( $id , $return = false ) {
 		// On lance la recherche d'informations
 			$ville = $this->ville($id);
 		
@@ -542,7 +542,7 @@ class carto extends core {
 	 * @return	string|void			Le nom du département ou rien en fonction de $return
 	 */
 
-	public	function afficherDepartement( $id , $return = false ) {
+	public static function afficherDepartement( $id , $return = false ) {
 		// On lance la recherche dans la base de données pour retrouver le département
 		$query = 'SELECT * FROM departements WHERE departement_id = ' . $id;
 		$sql = $this->db->query($query);
@@ -901,6 +901,30 @@ class carto extends core {
 		
 		// On retourne l'id du bureau
 		return $infos['commune_id'];
+	}
+	
+	
+	/**
+	 * Cette méthode permet de connaître le département à partir d'une ville
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$ville		ID de la ville concerné par la demande
+	 * @return	int					ID du département trouvé pour l'immeuble
+	 */
+
+	public static function departementParVille( $ville ) {
+		// On vérifie que l'argument est bien un ID
+		if (!is_numeric($rue)) return false;
+		
+		// On cherche l'information dans la base de données
+		$query = 'SELECT * FROM `communes` WHERE `commune_id` = ' . $ville;
+		$sql = $this->db->query($query);
+		$infos = $sql->fetch_assoc();
+		
+		// On retourne l'id du bureau
+		return $infos['departement_id'];
 	}
 	
 	

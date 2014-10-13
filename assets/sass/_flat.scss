@@ -30,7 +30,8 @@ body.flat {
 
 main.flat,
 main.boite,
-main.porte {
+main.porte,
+main.contact {
 	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
 	font-family: $flat;
 	height: auto;
@@ -64,6 +65,14 @@ main.porte {
 		font-family: $flat;
 		font-size: 2em;
 		font-weight: 500;
+		
+		& > span {
+			display: inline-block;
+			font-variant: normal;
+			margin: 0 .15em 0 0;
+			
+			&:last-of-type { font-weight: 300; }
+		}
 	}
 	
 	h3 {
@@ -100,15 +109,39 @@ main.porte {
 		}
 	}
 	
-	section {
+	.colonne {
+		position: relative;
+		background-color: transparent;
+		margin: 30px 0 60px;
+		padding: 0;
+		width: 100%;
+		
+		& > section {
+			margin: 15px 0 30px !important;
+		}
+		
+		&.demi {
+			padding: 0;
+			width: 475px;
+		}
+		
+		&.gauche { position: absolute; left: 1em; }
+		&.droite { position: absolute; right: 1em; }
+	}
+	
+	section{
 		position: relative;
 		background-color: $blanc;
 		@include border-radius(.5em);
 		@include shadow(0, 2px, 2px, $gris);
 		font-family: $flat;
-		margin: 2em 0 4em;
-		padding: 1em;
+		margin: 30px 0 60px !important;
+		padding: 20px 30px !important;
 		width: 100%;
+		
+		&.contenu {
+			font-size: 1.2em;
+		}
 		
 		&.demi {
 			padding: 1.5em 2em;
@@ -154,6 +187,11 @@ main.porte {
 				
 				&::after { content: '\e842'; }
 			}
+		}
+		
+		&#carte {
+			height: 200px;
+			padding: 0;
 		}
 	}
 	
@@ -381,6 +419,126 @@ main.porte {
 				text-align: center;
 				width: 25px;
 			}
+		}
+	}
+	
+	ul.icones-etatcivil {
+		display: block;
+		list-style: none;
+		margin: 0 0 1.5em 0;
+		padding: 0;
+		text-align: center;
+		
+		li {
+			position: relative;
+			display: inline-block;
+			color: $grisClair;
+			font-variant: small-caps;
+			font-weight: 600;
+			margin: 0 10px;
+			padding: 35px 0 0 0;
+			text-transform: lowercase;
+			width: 70px;
+			
+			&::before {
+				position: absolute; top: 0; left: 30%; left: calc(50% - 15px);
+				display: block;
+				font-family: $icons;
+				font-size: 30px;
+				font-weight: 400;
+				height: 30px;
+				line-height: 30px;
+				width: 30px;
+			}
+			
+			&.sexe {
+				&.homme {
+					color: $bleu;
+					&::before { content: '\e8a6'; }
+				}
+				&.femme {
+					color: $bleu;
+					&::before { content: '\e8a7'; }
+				}
+				&.inconnu {
+					color: $grisMoyen;
+					
+					&::before { 
+						left: 5px; left: calc(50% - 30px);
+						content: '\e8a8';
+						width: 60px;
+					}
+				}
+			}
+			
+			&.electeur {
+				&.oui {
+					color: $bleu;
+					&::before { content: '\e8af'; }
+				}
+				
+				&.non {
+					color: $grisMoyen;
+					&::before { content: '\e8b0'; }
+				}
+			}
+			
+			&.sms {
+				&.envoyerSMS { color: $bleu; }
+				&::before { content: '\e961'; }
+			}
+			
+			&.email {
+				&.envoyerEmail { color: $bleu; }
+				&::before { content: '\e96d'; }
+			}
+		}
+	}
+	
+	ul.etatcivil {
+		list-style: none;
+		margin: -.66em auto 2.5em;
+		padding: 0 0 0 40px;
+		
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+		
+		li {
+			position: relative;
+			display: block;
+			line-height: 1.5em;
+			margin: .66em auto;
+			padding: 0;
+			
+			&::before {
+				position: absolute; top: 0; left: -40px;
+				display: block;
+				color: rgba($bleu, .85);
+				font-family: $icons;
+				font-size: 400;
+				height: 1.5em;
+				line-height: 1.5em;
+				text-align: center;
+				width: 40px;
+			}
+			
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854');
+			@each $icon-name in $icon-names {
+				&.#{nth($icon-name, 1)}::before {
+					content: nth($icon-name, 2);
+				}
+			}
+			
+			&.ajout {
+				color: $grisMoyen;
+				cursor: pointer;
+				
+				&:hover { color: $vert; }
+				&::before { color: $grisMoyen; }
+				&:hover::before { color: $vert; }
+			}
+
 		}
 	}
 	

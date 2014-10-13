@@ -53,7 +53,7 @@ class core {
 	 * @return	void
 	 */
 	 
-	public	function debug($objet, $exit = true) {
+	public static function debug($objet, $exit = true) {
 		echo '<pre class="nowrap">';
 	
 		// On affiche le tableau préformaté s'il s'agit d'un tableau
@@ -327,7 +327,7 @@ class core {
 	 * @return	void
 	 */
 
-	public	function tpl_go_to( $page = null , $arguments = array() , $redirect = false ) {
+	public static function tpl_go_to( $page = null , $arguments = array() , $redirect = false ) {
 		// Si $page == true, on demande une redirection immédiate vers la page d'accueil
 		if (is_bool($page) && $page === true) header('Location: index.php');
 		
@@ -448,7 +448,7 @@ class core {
 	 * @return	void
 	 */
 
-	public	function tpl_phone( $numero ) { if (!empty($numero)) echo $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
+	public static function tpl_phone( $numero ) { if (!empty($numero)) echo $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
 	
 	
 	/**
@@ -461,7 +461,7 @@ class core {
 	 * @return	string
 	 */
 
-	public	function get_tpl_phone( $numero ) { if (!empty($numero)) return $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
+	public static function get_tpl_phone( $numero ) { if (!empty($numero)) return $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
 
 
 	
