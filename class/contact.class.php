@@ -40,10 +40,7 @@ class contact extends carto
 		$pass = Configuration::read('db.pass');
 
 		$this->link = new PDO($dsn, $user, $pass);
-		
-		// TEMPORAIRE !!!
-		if (is_numeric($contact)) { $contact = md5($contact); }
-		
+				
 		// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
 		$query = $this->link->prepare('SELECT * FROM `contacts` WHERE MD5(`contact_id`) = :contact');
 		$query->bindParam(':contact', $contact);
