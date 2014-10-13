@@ -1,5 +1,9 @@
 <?php
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
+
+//require_once('includes.php');
+
+// L'idée, c'est de tester PDO
 
 require_once('includes.php');
 
@@ -29,12 +33,12 @@ while ($row = $sql->fetch_assoc()) :
 
 endwhile;*/
 
-$query = 'SELECT * FROM `contacts` LEFT JOIN `immeubles` ON `immeubles`.`immeuble_id` = `contacts`.`immeuble_id`';
+/*$query = 'SELECT * FROM `contacts` LEFT JOIN `immeubles` ON `immeubles`.`immeuble_id` = `contacts`.`immeuble_id`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) {
 	$db->query('UPDATE `contacts` SET `bureau_id` = ' . $row['bureau_id'] . ' WHERE `contact_id` = ' . $row['contact_id']);
-}
+}*/
 
 
 /*$data = $csv->lectureFichier('csv/parti.csv');
