@@ -73,9 +73,9 @@
 		<h4>Tags liés au contact</h4>
 		
 		<ul class="listeDesTags">
-			<?php $tags = explode(',', $contact->contact['contact_tags']); foreach ($tags as $tag) : ?>
+			<?php $tags = explode(',', $contact->contact['contact_tags']); if (!empty($contact->contact['contact_tags'])) : foreach ($tags as $tag) : ?>
 			<li class="tag"><?php echo $tag; ?></li>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
 		</ul>
 	</section>

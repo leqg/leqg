@@ -73,6 +73,10 @@ main.contact {
 			
 			&:last-of-type { font-weight: 300; }
 		}
+		
+		&#nomContact {
+			font-size: 2.5em;
+		}
 	}
 	
 	h3 {
@@ -616,4 +620,12 @@ main.contact {
 			text-align: center;
 		}
 	}
+}
+
+main.contact {
+	padding: 1em 1em 0;
+	
+	h2 { margin-bottom: -2em; }
+	
+	.colonne { margin-top: 10px; }
 }
