@@ -531,7 +531,7 @@ main.contact {
 				width: 40px;
 			}
 			
-			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7');
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e967');
 			@each $icon-name in $icon-names {
 				&.#{nth($icon-name, 1)}::before {
 					content: nth($icon-name, 2);
@@ -553,6 +553,8 @@ main.contact {
 				
 				&:hover { color: $rouge; }	
 			}
+			
+			span.inconnu { color: $grisMoyen; }
 		}
 	}
 	
