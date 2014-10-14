@@ -6,7 +6,7 @@
 	$core->tpl_header();
 ?>
 
-<h2><?php echo $contact->noms(); ?></h2>
+<h2 id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php echo $contact->noms(); ?></h2>
 
 <div class="colonne demi gauche">
 	<section id="fiche-details" class="contenu demi">
@@ -51,11 +51,45 @@
 			<li class="ajout ajouterCoordonnees">Ajouter une nouvelle information de contact</li>
 		</ul>
 	</section>
+	
+	<section id="fichesLiees" class="contenu demi">
+		<h4>Fiches liées</h4>
+		
+		<ul class="etatcivil">
+			<?php $fiches = $contact->fichesLiees(); foreach ($fiches as $identifiant => $fiche) : ?>
+			<li class="lien"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($identifiant))); ?>"><?php echo strtoupper($fiche['contact_nom']); ?> <?php echo strtoupper($fiche['contact_nom_usage']); ?> <?php echo ucwords(strtolower($fiche['contact_prenoms'])); ?></a></li>
+			<?php endforeach; ?>
+			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
+		</ul>
+	</section>
 </div>
 
-<div class="colonne demi droite">
+
+<div id="colonneDroite" class="colonne demi droite">
 	<section id="carte" class="contenu demi"></section>
+	
+	<section id="TagsContact" class="contenu demi">
+		<h4>Tags liés au contact</h4>
+		
+		<ul class="listeDesTags">
+			<?php $tags = explode(',', $contact->contact['contact_tags']); foreach ($tags as $tag) : ?>
+			<li class="tag"><?php echo $tag; ?></li>
+			<?php endforeach; ?>
+			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
+		</ul>
+	</section>
+
+	<section id="ChercherFicheALier" class="contenu demi invisible">
+		<ul class="formulaire">
+			<li>
+				<label>Recherchez une fiche à lier</label>
+				<span class="form-icon search"><input type="text" name="rechercheFiche" id="rechercheFiche" placeholder="Pierre Dupont"></span>
+			</li>
+		</ul>
+		<ul class="form-liste invisible" id="listeFichesALier"></ul>
+	</section>
 </div>
+
 
 <!-- Formulaires en overlay -->
 <div id="ajoutCoordonnees" class="overlayForm">

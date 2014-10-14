@@ -78,6 +78,63 @@ var contact = function() {
 		// On annule la validation du formulaire
 		return false;
 	});
+	
+	
+	// Affichage du formulaire de recherche de fiches à lier
+	$('.ajouterLien').click(function() {
+		$('#colonneDroite section').fadeOut().delay(500);
+		$('#ChercherFicheALier').fadeIn();
+	});
+	
+	
+	// Recherche de fiches à lier
+	$('#rechercheFiche').change(function() {
+		var recherche = $(this).val();
+		var fiche = $('#nomContact').data('fiche');
+		
+		if (recherche.length >= 3)
+		{
+			// On commence par vider la liste actuellement affichée
+			$('#listeFichesALier').html('');
+			
+			// On lance la recherche
+			$.getJSON('ajax.php?script=fiches', { recherche: recherche, limite: 25, fiche: fiche }).done(function(data) {
+				// On lance une boucle pour affecter chaque résultat à la liste
+				$.each( data, function( key, val ) {
+					$('#listeFichesALier').append('<li id="contact-' + val.contact_id + '"></li>');
+					$('#contact-' + val.contact_id).append('<button class="lierLaFiche" data-fiche-a="' + fiche + '" data-fiche-b="' + val.contact_id + '" data-noms="' + val.contact_nom.toUpperCase() + ' ' + val.contact_nom_usage.toUpperCase() + '" data-prenoms="' + val.contact_prenoms.toLowerCase() + '">Choisir</button>');
+					$('#contact-' + val.contact_id).append('<span class="contact">' + val.contact_nom.toUpperCase() + ' ' + val.contact_nom_usage.toUpperCase() + '</span><span class="prenoms">' + val.contact_prenoms.toLowerCase() + '</span>');
+				});
+		
+				// On fini par afficher la liste des fiches à lier
+				$('#listeFichesALier').show();
+			});
+		}
+		else
+		{
+			$('#listeFichesALier').hide();
+		}
+	});
+	
+	
+	// Action lors de la demande de liaison de deux fiches
+	$('#ChercherFicheALier').on('click', '.lierLaFiche', function() {
+		var ficheA = $(this).data('fiche-a');
+		var ficheB = $(this).data('fiche-b');
+		var noms = $(this).data('noms');
+		var prenoms = $(this).data('prenoms');
+		console.log(ficheA);
+		console.log(ficheB);
+	
+		// On commence par enlever le formulaire de choix des fiches à lier
+		$('#ChercherFicheALier').fadeOut().delay(500);
+		$('#colonneDroite section:not(.invisible)').fadeIn();
+		
+		// On lance la requête AJAX
+		$.post('ajax.php?script=lier-fiches', { ficheA: ficheA, ficheB: ficheB }).done(function() {
+			$('.ajouterLien').before('<li class="lien">' + noms + ' ' + prenoms + '</li>');
+		});
+	});
 };
 
 $(document).ready(contact);

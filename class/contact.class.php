@@ -40,10 +40,7 @@ class contact extends carto
 		$pass = Configuration::read('db.pass');
 
 		$this->link = new PDO($dsn, $user, $pass);
-		
-		// TEMPORAIRE !!!
-		if (is_numeric($contact)) { $contact = md5($contact); }
-		
+				
 		// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
 		$query = $this->link->prepare('SELECT * FROM `contacts` WHERE MD5(`contact_id`) = :contact');
 		$query->bindParam(':contact', $contact);
@@ -427,7 +424,7 @@ class contact extends carto
 	private function contenir( $contenu, $conteneur = '' )
 	{
 		// On prépare la variable contenant le retour demandé
-		$retour;
+		$retour = '';
 	
 		// On ajoute l'ouverture du conteneur
 		if (!empty($conteneur)) { $retour.= '<' . $conteneur . '>'; }
@@ -474,6 +471,56 @@ class contact extends carto
 		
 		// On exécute la requête
 		$query->execute();
+	}
+	
+	
+	/**
+	 * Cette méthode permet de retourner un tableau des différentes fiches liées à cette fiche
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result	array		Tableau des fiches liées
+	 */
+	 
+	public function fichesLiees()
+	{
+		// On prépare la requête de récupération des fiches liées
+		$query = $this->link->prepare('SELECT `ficheA`, `ficheB` FROM `liaisons` WHERE `ficheA` = :contact OR `ficheB` = :contact');
+		$query->bindParam(':contact', $this->contact['contact_id']);
+		
+		// On exécute la requête
+		$query->execute();
+		$fiches = $query->fetchAll();
+		
+		// On prépare le tableau des contacts trouvés $contacts
+		$contacts = array();
+		
+		// Pour chaque résultat, on cherche les noms et prénoms du contact
+		foreach ($fiches as $fiche)
+		{
+			// On regarde quelle est la deuxième fiche liée, et on l'affecte à la variable $fiche_id
+			if ($fiche['ficheA'] == $this->contact['contact_id'])
+			{
+				$fiche_id = $fiche['ficheB'];
+			}
+			else
+			{
+				$fiche_id = $fiche['ficheA'];
+			}
+			
+			// On prépare la requête de recherche
+			$query = $this->link->prepare('SELECT `contact_nom`, `contact_nom_usage`, `contact_prenoms` FROM `contacts` WHERE `contact_id` = :contact');
+			$query->bindParam(':contact', $fiche_id);
+			
+			// On exécute la requête et on ajoute les informations au tableau des contacts trouvés $contacts
+			$query->execute();
+			$infos = $query->fetch(PDO::FETCH_ASSOC);
+			$contacts[$fiche_id] = $infos;
+		}
+		
+		// On retourne le tableau final des contacts liés
+		return $contacts;
 	}
 }
 

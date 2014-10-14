@@ -248,7 +248,12 @@ main.contact {
 					z-index: 10;
 				}
 				
-				&.street::after { content: '\e841'; }
+				$icon-names: (street '\e841') (search '\e8a2');
+				@each $icon-name in $icon-names {
+					&.#{nth($icon-name, 1)}::after {
+						content: nth($icon-name, 2);
+					}
+				}
 				
 				& + input {
 					z-index: 0;
@@ -305,6 +310,8 @@ main.contact {
 				&:last-of-type {
 					font-size: 1.1em;
 					font-weight: 300;
+					
+					&.prenoms { text-transform: capitalize; }
 				}
 			}
 			
@@ -495,7 +502,8 @@ main.contact {
 		}
 	}
 	
-	ul.etatcivil {
+	ul.etatcivil,
+	ul.listeDesTags {
 		list-style: none;
 		margin: -.66em auto 2.5em;
 		padding: 0 0 0 40px;
@@ -523,7 +531,7 @@ main.contact {
 				width: 40px;
 			}
 			
-			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854');
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7');
 			@each $icon-name in $icon-names {
 				&.#{nth($icon-name, 1)}::before {
 					content: nth($icon-name, 2);
@@ -538,7 +546,34 @@ main.contact {
 				&::before { color: $grisMoyen; }
 				&:hover::before { color: $vert; }
 			}
-
+			
+			a {
+				color: $bleu;
+				text-decoration: underline;
+				
+				&:hover { color: $rouge; }	
+			}
+		}
+	}
+	
+	ul.listeDesTags {
+		margin: -.66em 0 0;
+		padding: 0;
+		
+		li {
+			display: inline-block;
+			margin: .25em 0;
+			padding-left: 40px;
+			
+			&::before {
+				left: 5px;
+				width: 35px;
+			}
+			
+			&.ajout {
+				display: block;
+				border: 0;
+			}
 		}
 	}
 	
