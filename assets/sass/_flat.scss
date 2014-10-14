@@ -248,7 +248,12 @@ main.contact {
 					z-index: 10;
 				}
 				
-				&.street::after { content: '\e841'; }
+				$icon-names: (street '\e841') (search '\e8a2');
+				@each $icon-name in $icon-names {
+					&.#{nth($icon-name, 1)}::after {
+						content: nth($icon-name, 2);
+					}
+				}
 				
 				& + input {
 					z-index: 0;
@@ -305,6 +310,8 @@ main.contact {
 				&:last-of-type {
 					font-size: 1.1em;
 					font-weight: 300;
+					
+					&.prenoms { text-transform: capitalize; }
 				}
 			}
 			

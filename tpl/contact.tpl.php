@@ -6,7 +6,7 @@
 	$core->tpl_header();
 ?>
 
-<h2><?php echo $contact->noms(); ?></h2>
+<h2 id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php echo $contact->noms(); ?></h2>
 
 <div class="colonne demi gauche">
 	<section id="fiche-details" class="contenu demi">
@@ -65,7 +65,7 @@
 </div>
 
 
-<div class="colonne demi droite">
+<div id="colonneDroite" class="colonne demi droite">
 	<section id="carte" class="contenu demi"></section>
 	
 	<section id="TagsContact" class="contenu demi">
@@ -77,6 +77,16 @@
 			<?php endforeach; ?>
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
 		</ul>
+	</section>
+
+	<section id="ChercherFicheALier" class="contenu demi invisible">
+		<ul class="formulaire">
+			<li>
+				<label>Recherchez une fiche à lier</label>
+				<span class="form-icon search"><input type="text" name="rechercheFiche" id="rechercheFiche" placeholder="Pierre Dupont"></span>
+			</li>
+		</ul>
+		<ul class="form-liste invisible" id="listeFichesALier"></ul>
 	</section>
 </div>
 
