@@ -1,4 +1,4 @@
-<a href="<?php $core->tpl_go_to('contact', array('contact' => md5($fiche->get_infos('id'))), true); ?>">
+<a href="<?php $core->tpl_go_to('contact', array('contact' => md5($fiche->get_infos('id')))); ?>">
 	<article class="fiche">
 		<header>
 			<h3><?php $fiche->affichage_nom('span'); ?></h3>

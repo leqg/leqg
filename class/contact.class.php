@@ -126,7 +126,7 @@ class contact extends carto
 		$retour[] = date('d' . $separateur . 'm' . $separateur . 'Y', $time);
 		
 		// On ne prépare les informations relatives aux départements et communes de naissance que si c'est demandé
-		if ($date_uniquement === false)
+		if ($date_uniquement === false && $this->contact['contact_naissance_commune_id'] != 0)
 		{
 			// on récupère les informations géographiques
 			$query = $this->link->prepare('SELECT `commune_nom`, `departement_id` FROM `communes` WHERE `commune_id` = :commune');
@@ -339,19 +339,19 @@ class contact extends carto
 		// On prépare les requêtes SQL
 		if ( $type == 'email' )
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_type` = "email" AND `coordonnee_email` IS NOT NULL AND `contact_id` = :contact');
+			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_type` = "email" AND `coordonnee_email` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_email` ASC');
 		}
 		else if ( $type == 'fixe' )
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "fixe" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact');
+			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "fixe" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
 		}	
 		else if ( $type == 'mobile' )
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "mobile" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact');
+			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "mobile" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
 		}
 		else
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` FROM `coordonnees` WHERE ( `coordonnee_numero` IS NOT NULL OR `coordonnee_email` IS NOT NULL ) AND `contact_id` = :contact ORDER BY `coordonnee_type` ASC');
+			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` FROM `coordonnees` WHERE ( `coordonnee_numero` IS NOT NULL OR `coordonnee_email` IS NOT NULL ) AND `contact_id` = :contact ORDER BY `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` ASC');
 		}
 		
 		// On affecte au sein de la requête les données d'identification du contact et on exécute la requête

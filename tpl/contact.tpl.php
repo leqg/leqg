@@ -22,7 +22,7 @@
 			<li class="naissance"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->naissance(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
 			<li class="age"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->age(); } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
 			<?php if ($contact->contact['adresse_id']) { ?><li class="adresse"><?php echo $contact->adresse('declaree'); ?></li><?php } ?>
-			<?php if (!empty($contact->contact['contact_organisme'])) { ?><li class="organisme"><?php echo $contact->contact['contact_organisme']; ?> <?php if (!empty($contact->contact['contact_fonction'])) { echo $contact->contact['contact_fonction']; } ?></li><?php } ?>
+			<?php if (!empty($contact->contact['contact_organisme'])) { ?><li class="organisme"><?php echo utf8_encode($contact->contact['contact_organisme']); ?> <?php if (!empty($contact->contact['contact_fonction'])) { echo $contact->contact['contact_fonction']; } ?></li><?php } ?>
 		</ul>
 		
 		<?php if ($contact->contact['contact_electeur'] == 1) : ?>
