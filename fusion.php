@@ -4,7 +4,7 @@
 	
 	// On règle d'abord les paramètres
 	if (isset($_GET['fichier'])) { $file = $_GET['fichier']; } else { exit; }
-	$tag = array('gare', 'force vive');
+	$tag = array('parti', 'militant', 'parti2014');
 
 
 	// On lance la lecture du fichier
@@ -15,31 +15,32 @@
 	// On prépare un tableau des anomalies
 	$anomalies = array();
 	$afficher = array();
-	
+	Core::debug($data[0], false);
 	// On lance l'analyse ligne par ligne
 	foreach ($data as $key => $line) :
 	
 		// On ne lance l'analyse que s'il ne s'agit pas de la première ligne d'entête
 		if ($key > 0) :
 		
-			$donnees = array('nom'		=> trim($line[4]),
-							 'prenom'	=> trim($line[3]),
-							 'fixe'		=> null,
-							 'mobile'	=> null,
-							 'telephone'=> trim($line[10]),
-							 'email'	=> trim($line[12]),
-							 'adresse'	=> null,
-							 'numero'	=> trim($line[6]),
-							 'rue'		=> trim($line[7]),
-							 'cp'		=> trim($line[8]),
-							 'ville'	=> trim($line[9]),
-							 'organisme'=> trim($line[1]),
-							 'function' => trim($line[5]));
+			$donnees = array('nom'		=> trim($line[0]),
+							 'prenom'	=> trim($line[1]),
+							 'fixe'		=> trim($line[5]),
+							 'mobile'	=> trim($line[6]),
+							 'telephone'=> null,
+							 'email'	=> trim($line[4]),
+							 'adresse'	=> trim($line[13]),
+							 'numero'	=> null,
+							 'rue'		=> null,
+							 'cp'		=> null,
+							 'ville'	=> null,
+							 'organisme'=> null,
+							 'function' => null,
+							 'tagsplus' => array($line[2],$line[3]));
 						
 							 
 			// On commence par retraiter l'adresse
 				if (!is_null($donnees['adresse'])) {
-					$rue = explode(' ', $line[10], 3);
+					$rue = explode(' ', $donnees['adresse'], 3);
 					$bis = array('a', 'b', 'c', 'bis', 'ter');
 					if (in_array(strtolower($rue[1]), $bis)) {
 						$donnees['numero'] = $rue[0].$rue[1];
@@ -52,7 +53,14 @@
 						$donnees['rue'] = $rue[1];
 					}
 				}
-							
+				
+			// On regarde s'il existe un code postal et une ville dans le nom de la rue existant
+				if (preg_match("`(.*) ([0-9]{5}) (.*)`s", $donnees['rue'], $analyse))
+				{
+					$donnees['rue'] = $analyse[1];
+					$donnees['cp'] = $analyse[2];
+					$donnees['ville'] = $analyse[3];
+				}
 			
 			// On retraite les numéros de téléphone pour retirer tout ce qui n'est pas des chiffres
 				$donnees['fixe'] = preg_replace('`[^0-9]`', '', $donnees['fixe']);
@@ -264,6 +272,7 @@
 					// On va récupérer les tags et ajouter les tags demandés
 					$tags = explode(',', $row['contact_tags']);
 					foreach ($tag as $t) $tags[] = $t;
+					foreach ($donnees['tagsplus'] as $t) $tags[] = $t;
 					$tags = trim(implode(',', $tags), ',');
 					
 					// On va préparer le fusion des données dans un tableau $modifs
@@ -299,6 +308,11 @@
 					if (!preg_match('`^[0-9]{9,10}$`', $donnees['fixe'])) $donnees['fixe'] = '';
 					if (!preg_match('`^[0-9]{9,10}$`', $donnees['mobile'])) $donnees['mobile'] = '';
 
+					// On fusionne les tags généraux et les tags spécifique
+					$tags = array();
+					foreach ($tag as $t) $tags[] = $t;
+					foreach ($donnees['tagsplus'] as $t) $tags[] = $t;
+
 					// Si aucune fiche n'existe, on créé cette fiche
 					$informations = array('immeuble' => $code['immeuble'],
 										  'nom' => $core->securisation_string($donnees['nom']),
@@ -309,7 +323,7 @@
 										  'mobile' => $donnees['mobile'],
 										  'telephone' => $donnees['fixe'],
 										  'email' => $donnees['email'],
-										  'tags' => trim(implode(',', $tag), ','),
+										  'tags' => trim(implode(',', $tags), ','),
 										  'organisme' => $donnees['organisme'],
 										  'fonction' => $donnees['fonction']);
 					$id_fiche = $fiche->creerContact($informations);
