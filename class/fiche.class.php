@@ -1496,8 +1496,10 @@ class fiche extends core {
 		
 		// On termine la préparation de la requête
 		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
-		if (is_numeric($nombre) && is_numeric($debut)) $query.= 'LIMIT ' . $debut . ', ' . $nombre;
-		if (is_numeric($nombre) && !is_numeric($debut)) $query.= 'LIMIT 0, ' . $nombre;
+		//if (is_numeric($nombre) && is_numeric($debut)) $query.= 'LIMIT ' . $debut . ', ' . $nombre;
+		//if (is_numeric($nombre) && !is_numeric($debut)) $query.= 'LIMIT 0, ' . $nombre;
+		
+		if ($export === false) { $query.= 'LIMIT 0, 15'; }
 
 		// On exécute la requête SQL et on l'affecte au tableau $contacts
 		$sql = $this->db->query($query);
