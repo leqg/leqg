@@ -233,7 +233,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				// S'il n'y a qu'un seul résultat, on ouvre la fiche correspondante
 				$row = $sql->fetch_array();
 				
-				$core->tpl_redirection('fiche', $row[0]);
+				$core->tpl_go_to('contact', array('contact' => md5($row[0])), true);
 			} else if ($nb > 1) {
 				// On load le header de la page
 				$core->tpl_header();

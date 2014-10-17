@@ -19,9 +19,10 @@
 	
 		<h4>Données connues</h4>
 		<ul class="etatcivil">
-			<li class="naissance"><?php echo $contact->naissance(); ?></li>
-			<li class="age"><?php echo $contact->age(); ?></li>
+			<li class="naissance"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->naissance(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
+			<li class="age"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->age(); } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
 			<?php if ($contact->contact['adresse_id']) { ?><li class="adresse"><?php echo $contact->adresse('declaree'); ?></li><?php } ?>
+			<?php if (!empty($contact->contact['contact_organisme'])) { ?><li class="organisme"><?php echo utf8_encode($contact->contact['contact_organisme']); ?> <?php if (!empty($contact->contact['contact_fonction'])) { echo $contact->contact['contact_fonction']; } ?></li><?php } ?>
 		</ul>
 		
 		<?php if ($contact->contact['contact_electeur'] == 1) : ?>
@@ -72,9 +73,9 @@
 		<h4>Tags liés au contact</h4>
 		
 		<ul class="listeDesTags">
-			<?php $tags = explode(',', $contact->contact['contact_tags']); foreach ($tags as $tag) : ?>
+			<?php $tags = explode(',', $contact->contact['contact_tags']); if (!empty($contact->contact['contact_tags'])) : foreach ($tags as $tag) : ?>
 			<li class="tag"><?php echo $tag; ?></li>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
 		</ul>
 	</section>
