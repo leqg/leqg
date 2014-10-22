@@ -9,7 +9,8 @@
 			<a href="#" class="exportation">Exporter la sélection</a>
 		</nav>
 		
-		<div id="criteres" class="listeTags"><span class="tag interactif" data-critere="contact:tous">contact:tous</span></div>
+		<!-- <span class="tag interactif" data-critere="contact:tous">contact:tous</span> -->
+		<div id="criteres" class="listeTags"></div>
 	</section>
 	<section id="blocFiches">
 		<table id="listeFiches">
@@ -24,22 +25,7 @@
 				</tr>
 			</thead>
 			
-			<tbody id="majListeFiches">
-				<?php
-					$argsOnLoad = array('contact' => 'tous');
-					$contacts = $fiche->liste('php', $argsOnLoad, false, 5000);
-					foreach ($contacts as $contact) :
-				?>
-				<tr>
-					<td><div class="radio"><input type="checkbox" name="fiche-<?php echo $contact['id']; ?>" id="fiche-<?php echo $contact['id']; ?>"><label for="fiche-<?php echo $contact['id']; ?>"><span><span></span></span></label></div></td>
-					<td><a href="<?php $core->tpl_go_to('contact', array('contact' => md5($contact['id']))); ?>"><?php $fiche->affichageNomByID($contact['id']); ?></a></td>
-					<td><?php $fiche->contact('email', false, false, $contact['id']); ?></td>
-					<td><?php $core->tpl_phone($fiche->contact('mobile', false, true, $contact['id'])); ?></td>
-					<td><?php $core->tpl_phone($fiche->contact('telephone', false, true, $contact['id'])); ?></td>
-					<td class="listeTags"><?php $fiche->tags('span', false, $contact['id']); ?></td>
-				</tr>
-				<?php endforeach; ?>
-			</tbody>
+			<tbody id="majListeFiches"></tbody>
 		</table>
 	</section>
 </section>

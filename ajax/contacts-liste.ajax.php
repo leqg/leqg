@@ -1,28 +1,57 @@
 <?php
-	// On récupère la liste des tris
-	if (isset($_GET['tri'])) :
-	
+	// On récupère la liste des tris envoyés par GET
+	if (isset($_GET['tri']))
+	{
 		// On récupère la liste des tris
 		$tri = $_GET['tri'];
 		
-		// On retraite la liste des tris sous forme d'un tableau d'arguments $args
-		$tri = explode(',', $tri);
+		// On retraite la liste sous forme d'un tableau d'arguments $args
 		$args = array();
-		foreach($tri as $key => $t) :
-			$t = explode(':', $t);
-			if ($t[0] == 'bureau') {
-				$args[$t[0]][] = $t[1];
-			} else {
-				$args[$t[0]] = $t[1];
+		
+		if (!empty($_GET['tri']))
+		{
+			$tri = explode(',', $tri);
+			
+			foreach ($tri as $key => $val)
+			{
+				$val = explode(':', $val);
+				
+				if ($val[0] == 'bureau')
+				{
+					$args[$val[0]][] = $val[1];
+				}
+				else
+				{
+					$args[$val[0]] = $val[1];
+				}
 			}
-		endforeach;
+		}
+		else
+		{
+			$args = array('tri' => 'last');
+		}
 		
-		// On lance la recherche des fiches correspondances aux arguments
-		$fiches = $fiche->liste( 'JSON' , $args );
+		// On travaille la pagination
+		$contactParPage = 15;
 		
-	else :
+		if (isset($_GET['page']))
+		{
+			$pageActuelle = $_GET['page'];
+		}
+		else
+		{
+			$pageActuelle = 1;
+		}
 		
+		// On calcule le numéro d'ordre du premier contact à afficher
+		$premierContact = $contactParPage * ($pageActuelle - 1);
+		
+		// On lance alors la recherche des fiches
+		$fiches = $fiche->liste('JSON', $args, false, $contactParPage, $premierContact);
+	}
+	else
+	{
+		// On retourne une erreur dans le cas inverse
 		return false;
-	
-	endif;
+	}
 ?>

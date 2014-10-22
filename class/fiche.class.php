@@ -1491,15 +1491,28 @@ class fiche extends core {
 		
 		// S'il existe des conditions à installer dans la requête SQL, on le fait
 		if (count($conditionSQL) > 0) {
-			$query.= ' WHERE ' . implode(' AND ', $conditionSQL);
+			$query.= ' WHERE ' . implode(' AND ', $conditionSQL) . ' ';
 		}
 		
-		// On termine la préparation de la requête
-		$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
-		//if (is_numeric($nombre) && is_numeric($debut)) $query.= 'LIMIT ' . $debut . ', ' . $nombre;
-		//if (is_numeric($nombre) && !is_numeric($debut)) $query.= 'LIMIT 0, ' . $nombre;
+		// On termine la préparation de la requête en ajoutant l'ordre des tris
+		if ($args['tri'] == 'last')
+		{
+			$query.= 'ORDER BY `contact_id` DESC ';
+		}
+		else
+		{
+			$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
+		}
 		
-		if ($export === false) { $query.= 'LIMIT 0, 15'; }
+		// Puis on s'occupe du nombre d'affichages à produire
+		if (is_numeric($nombre) && is_numeric($debut) && $export === false)
+		{
+			$query.= 'LIMIT ' . $debut . ', ' . $nombre;
+		}
+		else if (is_numeric($nombre) && !is_numeric($debut) && $export === false)
+		{
+			$query.= 'LIMIT 0, ' . $nombre;
+		}
 
 		// On exécute la requête SQL et on l'affecte au tableau $contacts
 		$sql = $this->db->query($query);
