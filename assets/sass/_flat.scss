@@ -583,6 +583,134 @@ main.contact {
 		}
 	}
 	
+	ul.listeDesEvenements
+	{
+		list-style: none;
+		margin: -.66em 0 0;
+		padding: 0;
+		
+		li.evenement
+		{
+			position: relative;
+			margin: 0 0 1em;
+			padding: 0 0 0 50px;
+			
+			&::before
+			{
+				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
+				color: $bleu;
+				content: '\e952';
+				font-family: $icons;
+				font-size: 40px;
+				line-height: 45px;
+				height: 45px;
+				text-align: center;
+				width: 45px;
+				@include text-shadow(0, 3px, 0, $grisClair);
+				@include transition(all);
+			}
+			
+			&::after
+			{
+				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
+				color: $blanc;
+				content: '\e858';
+				font-family: $icons;
+				font-size: 25px;
+				height: 45px;
+				line-height: 45px;
+				text-align: center;
+				width: 45px;
+			}
+			
+			@each $typeEvent in $typesEvent
+			{
+				&.#{nth($typeEvent, 1)}::after { content: nth($typeEvent, 2); }
+			}
+						
+			&:hover::before { color: $rouge; }
+			
+			& > small
+			{
+				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
+				font-size: 1em;
+				height: 45px;
+				width: 45px;
+				z-index: 250;
+				
+				& > span
+				{
+					position: absolute; top: 25%; top: calc(50% - 1em); left: 47px;
+					display: block;
+					background-color: $bleu;
+					@include border-radius(.33em);
+					color: $blanc;
+					font-size: .9em;
+					font-weight: 600;
+					line-height: 1.5em;
+					opacity: 0;
+					padding: .15em .66em;
+					pointer-events: none;
+					white-space: nowrap;
+					z-index: 100;
+					@include transition(all);
+					@include shadow(0, 2px, 0, rgba($grisClair, .85));
+				
+					&::before
+					{
+						position: absolute; top: calc(50% - 5px); left: -3px;
+						background-color: $bleu;
+						content: ' ';
+						height: 10px;
+						width: 10px;
+						@include rotate(45deg);
+					}
+				}
+				
+				&:hover span { opacity: 1; }
+			}
+			
+			& > strong
+			{
+				color: $bleu;
+				@include transition(all);
+			}
+			&:hover > strong 
+			{ 
+				color: $rouge; 
+				text-decoration: underline;
+			}
+			
+			& > ul.infosAnnexes
+			{
+				list-style: none;
+				margin: 0 auto;
+				padding: 0 0 0 .66em;
+				
+				& > li
+				{
+					position: relative;
+					color: $grisFonce;
+					font-weight: 400;
+					line-height: 1.5em;
+					margin: 0;
+					padding: 0 0 0 1.25em;
+					
+					&::before
+					{
+						position: absolute; top: 0; left: 0;
+						color: $grisMoyen;
+						font-family: $icons;
+						line-height: 1.5em;
+					}
+					
+					&.date::before { content: '\e8d5'; }
+					&.lieu::before { content: '\e8c5'; }
+				}
+			}
+		}
+	}
+	
 	.coteAcote {
 		margin: 3em auto 0 auto;
 		padding: 0;

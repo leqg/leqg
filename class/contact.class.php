@@ -522,6 +522,32 @@ class contact extends carto
 		// On retourne le tableau final des contacts liés
 		return $contacts;
 	}
+		
+	
+	/*
+	 * Affiche une liste d'événements pour le contact ouvert
+	 * 
+	 * Cette méthode permet d'afficher une liste des événements connus dans la
+	 * base de données pour le contact ouvert
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result	array					Tableau des informations connues
+	 */
+	
+	public function listeEvenements(  )
+	{
+		// On exécute la recherche PDO et on récupère les informations dans un
+		// tableau $evenements
+		$query = $this->link->prepare('SELECT * FROM `historique` WHERE `contact_id` = :contact ORDER BY `historique_date` DESC');
+		$query->bindParam(':contact', $this->contact['contact_id']);
+		$query->execute();
+		$evenements = $query->fetchAll();
+		
+		// On retourne le tableau trouvé
+		return $evenements;
+	}
 }
 
 ?>

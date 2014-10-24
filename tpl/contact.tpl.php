@@ -79,6 +79,27 @@
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
 		</ul>
 	</section>
+	
+	<section id="listeEvenements" class="contenu demi">
+		<h4>Événements connus</h4>
+		
+		<ul class="listeDesEvenements">
+			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : ?>
+			<a href="#" class="accesEvenement nostyle" data-evenement="<?php echo $event['historique_id']; ?>">
+				<li class="evenement <?php echo $event['historique_type']; ?>">
+					<small><span><?php echo Core::tpl_typeEvenement($event['historique_type']); ?></span></small>
+					<strong><?php echo (!empty($event['historique_objet'])) ? $event['historique_objet'] : Core::tpl_typeEvenement($event['historique_type']); ?></strong>
+					<ul class="infosAnnexes">
+						<li class="date"><?php echo date('d/m/Y', strtotime($event['historique_date'])); ?></li>
+						<?php if (!empty($event['lieu'])) { ?><li class="lieu"><?php echo $event['lieu']; ?></li><?php } ?>
+					</ul>
+				</li>
+			</a>
+			<?php endforeach; else : ?>
+			<li class="evenement"><strong>Aucun événement connu</strong></li>
+			<?php endif; ?>
+		</ul>
+	</section>
 
 	<section id="ChercherFicheALier" class="contenu demi invisible">
 		<ul class="formulaire">

@@ -135,6 +135,15 @@ var contact = function() {
 			$('.ajouterLien').before('<li class="lien">' + noms + ' ' + prenoms + '</li>');
 		});
 	});
+	
+	
+	// Action lors de l'ouverture d'un événement d'historique
+	$('.accesEvenement').click(function(){
+		var identifiant = $(this).data('evenement');
+		
+		// On ferme tous les blocs de la colonne latérale
+		$('#colonneDroite section').fadeOut();
+	});
 };
 
 $(document).ready(contact);

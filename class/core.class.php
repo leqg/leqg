@@ -464,6 +464,39 @@ class core {
 	public static function get_tpl_phone( $numero ) { if (!empty($numero)) return $numero{0}.$numero{1}.' '.$numero{2}.$numero{3}.' '.$numero{4}.$numero{5}.' '.$numero{6}.$numero{7}.' '.$numero{8}.$numero{9}; }
 
 
+	/*
+	 * Retourne le paramètre entré dans un langage compréhensible par tous
+	 *
+	 * Cette méthode permet de traduire le type d'événement entré dans la base
+	 * de données dans une langue compréhensible par tous
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	string	$type	Type d'événement à traduire
+	 *
+	 * @result	string
+	 */
+	 
+	public static function tpl_typeEvenement( $type )
+	{
+		// On prépare le tableau de traduction
+		$types = array(	'contact'	=> 'Entrevue',
+						'telephone'	=> 'Entretien téléphonique',
+						'email'		=> 'Échange électronique',
+						'courrier'	=> 'Correspondance',
+						'sms'		=> 'Envoi SMS',
+						'courriel'	=> 'Envoi d\'un email',
+						'poste'		=> 'Publipostage',
+						'porte'		=> 'Porte-à-porte',
+						'boite'		=> 'Boîtage',
+						'rappel'	=> 'Rappel',
+						'autre'		=> 'Autre' );
+		
+		// On cherche le texte correspondant au type d'événement entré
+		return $types[$type];
+	}
+
 	
 	
 	/**
