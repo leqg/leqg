@@ -14,13 +14,15 @@
  * @version		0.1
  */
 
-class evenement extends carto
+class evenement
 {
 	/**
 	 * @var	array	$evenement	Tableau des informations connues sur l'événement
 	 *							ouvert lors de la construction de la classe
 	 * @var object	$link		Lien vers la base de données
 	 */
+	private $evenement;
+	public $link;
 	
 	
 	/**
@@ -29,14 +31,14 @@ class evenement extends carto
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
-	 * @param	string	$evenement	Identifiant (hashage SHA256) de l'événement demandé
-	 * @param	bool	$securite	Permet de savoir si on doit revenir au module contact
-	 *								si aucune fiche contact n'est trouvée
+	 * @param	string	$evenement	Identifiant de l'événement demandé
+	 * @param	bool	$securite	Permet de savoir si l'idenfiant entré est
+	 * 								hashé par MD5 ou non
 	 *
 	 * @result	void
 	 */
 	 
-	public function __construct( $evenement, $securite = false )
+	public function __construct( $evenement, $securite = true )
 	{
 		// On commence par paramétrer les données PDO
 		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
@@ -47,7 +49,14 @@ class evenement extends carto
 		$this->link = new PDO($dsn, $user, $pass);
 				
 		// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
-		$query = $this->link->prepare('SELECT * FROM `historique` WHERE SHA2(`historique_id`, 256) = :evenement');
+		if ($securite === true)
+		{
+			$query = $this->link->prepare('SELECT * FROM `historique` WHERE MD5(`historique_id`) = :evenement');
+		}
+		else
+		{
+			$query = $this->link->prepare('SELECT * FROM `historique` WHERE `historique_id` = :evenement');
+		}
 		$query->bindParam(':evenement', $evenement);
 		$query->execute();
 		$evenements = $query->fetchAll();
@@ -62,5 +71,82 @@ class evenement extends carto
 		{
 			$this->evenement = $evenements[0];
 		}
+	}
+	
+	
+	/**
+	 * Retourne en JSON les informations liées au tableau
+	 *
+	 * Cette méthode retourne toutes les informations connues sur l'événement
+	 * ouvert actuellement dans un format JSON, retraitées pour éviter les 
+	 * entitées HTML (&...)
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @return  string
+	 */
+	
+	public function json_infos()
+	{
+		// On prépare la fonction de suppression des entités HTML
+		function rendu($string)
+		{
+			return html_entity_decode($string, ENT_QUOTES);
+		}
+		
+		// On applique la fonction au tableau des informations liées à l'événement
+		$event = array_map("rendu", $this->evenement);
+		
+		// On retourne le tableau retraité des informations en JSON
+		return json_encode($event);
+	}
+	
+	
+	/**
+	 * Détermine si un événement donné fait l'objet d'une fiche ou non
+	 *
+	 * Cette méthode retourne un booléen pour déterminer si un événement peut 
+	 * faire l'objet d'un lien vers sa fiche détaillée ou s'il s'agit d'un
+	 * élément d'historique ne pouvant faire l'objet d'un affichage détaillé
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @return bool
+	 */
+	
+	public function lien(  )
+	{
+		// On détermine la liste des types possédant une fiche détaillée
+		$type = array('contact', 'telephone', 'email', 'courrier', 'autre');
+		
+		// On renvoit un booléen selon la présence ou non dans le tableau des types ouvrables
+		if (in_array($this->get_infos('type'), $type))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Retourne une information connue
+	 *
+	 * Cette méthode permet de récupérer les informations connues sur l'événement
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	array	$infos	Information demandée
+	 * @return	mixed
+	 */
+	
+	public function get_infos( $infos )
+	{
+		return $this->evenement['historique_' . $infos];
 	}
 }

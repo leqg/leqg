@@ -84,20 +84,47 @@
 		<h4>Événements connus</h4>
 		
 		<ul class="listeDesEvenements">
-			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : ?>
-			<a href="#" class="accesEvenement nostyle" data-evenement="<?php echo $event['historique_id']; ?>">
-				<li class="evenement <?php echo $event['historique_type']; ?>">
-					<small><span><?php echo Core::tpl_typeEvenement($event['historique_type']); ?></span></small>
-					<strong><?php echo (!empty($event['historique_objet'])) ? $event['historique_objet'] : Core::tpl_typeEvenement($event['historique_type']); ?></strong>
+			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
+			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
+				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
+					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
+					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : Core::tpl_typeEvenement($event->get_infos('type')); ?></strong>
 					<ul class="infosAnnexes">
-						<li class="date"><?php echo date('d/m/Y', strtotime($event['historique_date'])); ?></li>
-						<?php if (!empty($event['lieu'])) { ?><li class="lieu"><?php echo $event['lieu']; ?></li><?php } ?>
+						<li class="date"><?php echo date('d/m/Y', strtotime($event->get_infos('date'))); ?></li>
+						<?php if (!empty($event->get_infos('lieu'))) { ?><li class="lieu"><?php echo $event->get_infos('lieu'); ?></li><?php } ?>
 					</ul>
 				</li>
-			</a>
+			<?php if ($event->lien()) { ?></a><?php } ?>
 			<?php endforeach; else : ?>
 			<li class="evenement"><strong>Aucun événement connu</strong></li>
 			<?php endif; ?>
+		</ul>
+	</section>
+	
+	<section id="evenement" class="contenu demi invisible">
+		<h4>Détails de l'événement</h4>
+		
+		<ul class="eventInfos">
+			<li>
+				<label>Objet</label>
+				<input type="text" name="titre" id="eventTitre" value="">
+			</li>
+			<li>
+				<label>Type</label>
+				<input type="text" name="type" id="eventType" value="">
+			</li>
+			<li>
+				<label>Lieu</label>
+				<input type="text" name="lieu" id="eventLieu" value="">
+			</li>
+			<li>
+				<label>Date</label>
+				<input type="text" name="date" id="eventDate" value="" placeholder="jj/mm/aaaa">
+			</li>
+			<li>
+				<label>Notes</label>
+				<textarea name="notes" id="eventNotes"></textarea>
+			</li>
 		</ul>
 	</section>
 

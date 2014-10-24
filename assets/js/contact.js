@@ -143,6 +143,22 @@ var contact = function() {
 		
 		// On ferme tous les blocs de la colonne latérale
 		$('#colonneDroite section').fadeOut();
+		
+		// On recherche les informations sur l'événement
+		$.getJSON('ajax.php?script=evenement', {evenement: identifiant}, function(data) {
+			// On affecte les informations récupérées
+			$('#eventTitre').val(data.historique_objet);
+			$('#eventType').val(data.historique_type);
+			$('#eventDate').val(data.historique_date);
+			$('#eventLieu').val(data.historique_lieu);
+			$('#eventNotes').val(data.historique_notes);
+			
+			// On affiche le bloc
+			$('#evenement').fadeIn();
+		});
+		
+		// On annule le lien pour éviter le #
+		return false;
 	});
 };
 

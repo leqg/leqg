@@ -586,7 +586,7 @@ main.contact {
 	ul.listeDesEvenements
 	{
 		list-style: none;
-		margin: -.66em 0 0;
+		margin: 0 0 0;
 		padding: 0;
 		
 		li.evenement
@@ -628,7 +628,7 @@ main.contact {
 				&.#{nth($typeEvent, 1)}::after { content: nth($typeEvent, 2); }
 			}
 						
-			&:hover::before { color: $rouge; }
+			&.clic:hover::before { color: $rouge; }
 			
 			& > small
 			{
@@ -673,9 +673,10 @@ main.contact {
 			& > strong
 			{
 				color: $bleu;
+				padding-left: calc(1.25em + .66em);
 				@include transition(all);
 			}
-			&:hover > strong 
+			&.clic:hover > strong 
 			{ 
 				color: $rouge; 
 				text-decoration: underline;
@@ -694,14 +695,15 @@ main.contact {
 					font-weight: 400;
 					line-height: 1.5em;
 					margin: 0;
-					padding: 0 0 0 1.25em;
-					
+					padding: 0 0 0 1.25em;					
 					&::before
 					{
 						position: absolute; top: 0; left: 0;
 						color: $grisMoyen;
 						font-family: $icons;
 						line-height: 1.5em;
+						text-align: center;
+						width: 1em;
 					}
 					
 					&.date::before { content: '\e8d5'; }

@@ -540,7 +540,7 @@ class contact extends carto
 	{
 		// On exécute la recherche PDO et on récupère les informations dans un
 		// tableau $evenements
-		$query = $this->link->prepare('SELECT * FROM `historique` WHERE `contact_id` = :contact ORDER BY `historique_date` DESC');
+		$query = $this->link->prepare('SELECT `historique_id` FROM `historique` WHERE `contact_id` = :contact ORDER BY `historique_date` DESC');
 		$query->bindParam(':contact', $this->contact['contact_id']);
 		$query->execute();
 		$evenements = $query->fetchAll();
