@@ -155,7 +155,7 @@ class user extends core {
 				
 				// On enregistre la connexion dans la table d'historique des connexions
 				$client['ipv4'] = $_SERVER['REMOTE_ADDR'];
-				$client['host'] = $_SERVER['REMOTE_HOST'];
+				$client['host'] = '';
 				$query = 'INSERT INTO `connexions` (`user_id`, `connexion_plateforme`, `connexion_ip`, `connexion_host`)
 						  VALUES ("' . $id_user . '", "' . $plateforme . '", "' . $client['ipv4'] . '", "' . $client['host'] . '")';
 				$this->noyau->query($query);

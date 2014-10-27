@@ -57,7 +57,10 @@ if (isset($_COOKIE['leqg-user'])) {
 } else { $base = null; $cookie = null; }
 
 // On met à jour l'heure de dernière action pour le membre connecté
+if (isset($_COOKIE['leqg-user']))
+{
 	$noyau->query('UPDATE `users` SET `user_lastaction` = NOW() WHERE `user_id` = ' . $_COOKIE['leqg-user']);
+}
 
 // Appel de la classe MySQL du compte
 $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
