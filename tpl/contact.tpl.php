@@ -83,6 +83,8 @@
 	<section id="listeEvenements" class="contenu demi">
 		<h4>Événements connus</h4>
 		
+		<button class="nouvelEvenement new">Créer un nouvel événement</button>
+		
 		<ul class="listeDesEvenements">
 			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
 			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
@@ -101,10 +103,10 @@
 		</ul>
 	</section>
 	
-	<section id="evenement" class="contenu demi invisible">
-		<h4>Détails de l'événement</h4>
+	<section id="evenement" class="contenu demi invisible" data-evenement="">
+		<a href="#" class="fermerColonne">&#xe813;</a>
 		
-		<ul class="eventInfos formulaire">
+		<ul class="eventInfos formulaire small">
 			<li>
 				<label class="small" for="eventTitre">Objet</label>
 				<span class="form-icon objet">
@@ -130,7 +132,7 @@
 			<li>
 				<label class="small" for="eventDate">Date</label>
 				<span class="form-icon date">
-					<input type="text" name="date" id="eventDate" value="" placeholder="jj/mm/aaaa">
+					<input type="text" name="date" id="eventDate" value="" placeholder="jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}">
 				</span>
 			</li>
 			<li>
@@ -138,6 +140,9 @@
 				<span class="form-icon notes">
 					<textarea name="notes" id="eventNotes"></textarea>
 				</span>
+			</li>
+			<li>
+				<button class="supprimerEvenement long deleting">Supprimer l'événement</button>
 			</li>
 		</ul>
 	</section>

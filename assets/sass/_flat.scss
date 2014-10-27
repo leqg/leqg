@@ -58,6 +58,35 @@ main.contact {
 		&:hover { background-color: $vert; }
 		&.gris { background-color: $gris; }
 		&.gris:hover { background-color: $grisMoyen; }
+		
+		&.long { width: 100%; }
+		
+		&.deleting
+		{
+			background-color: $grisClair;
+			color: $rouge;
+			font-weight: 600;
+			margin-top: 3em;
+			
+			&:hover
+			{
+				background-color: $rouge;
+				color: $blanc;
+			}
+		}
+		
+		&.new
+		{
+			background-color: $grisClair;
+			color: darken($vert, 15%);
+			font-weight: 600;
+			
+			&:hover
+			{
+				background-color: $vert;
+				color: $blanc;
+			}
+		}
 	}
 	
 	h2 {
@@ -218,7 +247,8 @@ main.contact {
 			
 			&:last-of-type { margin-bottom: .66em; }
 			
-			input {
+			input,
+			textarea {
 				position: relative;
 				display: block;
 				background-color: $background;
@@ -227,6 +257,7 @@ main.contact {
 				font-family: $flat;
 				font-size: 1.15em;
 				font-weight: 400;
+				line-height: 30px;
 				padding: .5em 1em .5em 40px;
 				z-index: 100;
 				
@@ -235,12 +266,17 @@ main.contact {
 				}
 			}
 			
+			textarea
+			{
+				height: 6em;
+			}
+			
 			span.form-icon {
 				position: relative;
 				display: block;
 				
 				&::after {
-					position: absolute; top: .5em; top: calc(50% - 15px); left: 15px;
+					position: absolute; top: .5em;  left: 15px;
 					display: block;
 					color: $grisFonce;
 					content: '\e827';
@@ -248,7 +284,8 @@ main.contact {
 					font-size: 15px;
 					height: 30px;
 					line-height: 30px;
-					width: 30px;
+					text-align: center;
+					width: 15px;
 					z-index: 10;
 				}
 				
@@ -271,6 +308,28 @@ main.contact {
 				font-weight: 400;
 				line-height: 1.5em;
 				padding: 0 0 .66em 0;
+				
+				&.small
+				{
+					color: $grisMoyen;
+					font-size: 1.15em;
+					font-variant: small-caps;
+					letter-spacing: .015em;
+					line-height: 1.5em;
+					padding: 0 0 0 .33em;
+					text-transform: lowercase;
+				}
+			}
+		}
+		
+		&.small li
+		{
+			margin: 0 auto .85em auto;
+			
+			input,
+			textarea
+			{
+				padding: .33em 1em .33em 40px;
 			}
 		}
 	}
@@ -747,6 +806,29 @@ main.contact {
 			line-height: 1.5em;
 			overflow: hidden;
 			text-align: center;
+		}
+	}
+	
+	.fermerColonne
+	{
+		position: absolute; top: .5em; right: .5em;
+		display: block;
+		background-color: transparent;
+		border: 3px solid $rouge;
+		@include border-radius(.33em);
+		color: $rouge;
+		font-family: $icons;
+		font-size: 20px;
+		height: 30px;
+		line-height: 24px;
+		text-align: center;
+		text-decoration: none;
+		width: 30px;
+		
+		&:hover
+		{
+			background-color: $rouge;
+			color: $blanc;
 		}
 	}
 }

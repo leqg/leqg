@@ -8,6 +8,17 @@ var contact = function() {
 	});
 	
 	
+	// Action de fermerture des colonnes latérales
+	$('.fermerColonne').click(function() {
+		// On ferme toute la colonne latérale
+		$('#colonneDroite section').fadeOut().delay(500);
+		$('#colonneDroite section:not(.invisible)').fadeIn();
+		
+		// On annule le clic sur le lien
+		return false;
+	});
+	
+	
 	// Ouverture de l'overlay d'ajout de coordonnées
 	$('.ajouterCoordonnees').click(function() {
 		$('#ajoutCoordonnees').fadeIn();
@@ -152,6 +163,7 @@ var contact = function() {
 			$('#eventDate').val(data.historique_date_fr);
 			$('#eventLieu').val(data.historique_lieu);
 			$('#eventNotes').val(data.historique_notes);
+			$('#evenement').data('evenement', data.historique_id);
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
@@ -160,6 +172,71 @@ var contact = function() {
 		// On annule le lien pour éviter le #
 		return false;
 	});
+	
+	
+	// Action lors de la création d'un nouvel élément d'historique
+	$('.nouvelEvenement').click(function(){
+		// On ferme tous les blocs de la colonne latérale
+		$('#colonneDroite section').fadeOut();
+		
+		// On récupère l'ID du contact
+		var contact = $('#nomContact').data('fiche');
+		
+		// On lance la création de l'événement
+		$.getJSON('ajax.php?script=evenement-nouveau', { contact: contact }, function(data) {
+			console.log(data);
+			// On affiche l'ID dans la case data concernée
+			$('#evenement').data('evenement', data.historique_id);
+			
+			// On affiche le bloc
+			$('#evenement').fadeIn();
+		});
+		
+		// On annule le clic sur le bouton
+		return false;
+	});
+	
+	
+	// Enregistrement des données formulaire en cas de blur
+		function savingForm( evenement , info , value )
+		{
+			$.post('ajax.php?script=evenement-update', { evenement: evenement , info: info,  value: value });
+		}
+		
+		$('#eventTitre').blur(function(){
+			var info = 'historique_objet';
+			var value = $(this).val();
+			var evenement = $('#evenement').data('evenement');
+			savingForm( evenement , info , value );
+		});
+		
+		$('#eventType').blur(function(){
+			var info = 'historique_type';
+			var value = $(this).val();
+			var evenement = $('#evenement').data('evenement');
+			savingForm( evenement , info , value );
+		});
+		
+		$('#eventLieu').blur(function(){
+			var info = 'historique_lieu';
+			var value = $(this).val();
+			var evenement = $('#evenement').data('evenement');
+			savingForm( evenement , info , value );
+		});
+		
+		$('#eventDate').blur(function(){
+			var info = 'historique_date';
+			var value = $(this).val();
+			var evenement = $('#evenement').data('evenement');
+			savingForm( evenement , info , value );
+		});
+		
+		$('#eventNotes').blur(function(){
+			var info = 'historique_notes';
+			var value = $(this).val();
+			var evenement = $('#evenement').data('evenement');
+			savingForm( evenement , info , value );
+		});
 };
 
 $(document).ready(contact);

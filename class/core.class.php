@@ -90,7 +90,7 @@ class core {
 	 * @return	string
 	 */
 
-	public	function securisation_string($string, $charset = 'utf-8') {
+	public static function securisation_string($string, $charset = 'utf-8') {
 		// On transforme les caractères spéciaux en entités HTML
 			$string = htmlentities($string, ENT_QUOTES, $charset);
 		

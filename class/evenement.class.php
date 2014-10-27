@@ -31,14 +31,17 @@ class evenement
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
-	 * @param	string	$evenement	Identifiant de l'événement demandé
+	 * @param	string	$evenement	Identifiant de l'événement demandé (en cas de
+	 *								création, il s'agit de l'ID du contact lié)
 	 * @param	bool	$securite	Permet de savoir si l'idenfiant entré est
 	 * 								hashé par MD5 ou non
+	 * @param	bool	$creation	La méthode doit-elle créer un nouvel événement
+	 *								où est-ce un événement existant (true = création)
 	 *
 	 * @result	void
 	 */
 	 
-	public function __construct( $evenement, $securite = true )
+	public function __construct( $evenement, $securite = true, $creation = false )
 	{
 		// On commence par paramétrer les données PDO
 		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
@@ -47,34 +50,64 @@ class evenement
 		$pass = Configuration::read('db.pass');
 
 		$this->link = new PDO($dsn, $user, $pass);
-				
-		// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
-		if ($securite === true)
-		{
-			$query = $this->link->prepare('SELECT * FROM `historique` WHERE MD5(`historique_id`) = :evenement');
-		}
-		else
-		{
-			$query = $this->link->prepare('SELECT * FROM `historique` WHERE `historique_id` = :evenement');
-		}
-		$query->bindParam(':evenement', $evenement);
-		$query->execute();
-		$evenements = $query->fetchAll();
 		
-		// Si on ne trouve pas d'utilisateur, on retourne vers la page d'accueil du module contact
-		if (!count($evenements) && $securite)
+		// On regarde si on doit créer un nouvel événement, ou s'il s'agit d'un événement à ouvrir
+		if ($creation === true)
 		{
-			Core::tpl_go_to('contacts', true);
+			// On prépare les variables
+			if (isset($_COOKIE['leqg-user'])) { $user = $_COOKIE['leqg-user']; } else { $user = 0; }
+			
+			// On prépare la requête
+			$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`) VALUES (' . $evenement . ', ' . $user . ', "autre", NOW())');
+			
+			// On exécute la requête
+			$query->execute();
+			
+			// On récupère l'identifiant de l'événement créé
+			$identifiant = $this->link->lastInsertId();
+			
+			// On effectue une recherche des informations liées à cet enregistrement
+			$query = $this->link->prepare('SELECT * FROM `historique` WHERE `historique_id` = :evenement');
+			$query->bindParam(':evenement', $identifiant);
+			$query->execute();
+			$evenements = $query->fetchAll();
+			$evenement = $evenements[0];
+			
+			// On retourne le tout dans la propriété privée evenement
+			$this->evenement = $evenement;
+			
 		}
-		// Sinon, on affecte les données aux propriétés de l'objet
+		// On ouvre, dans ce cas, l'événement demandé
 		else
 		{
-			// On commence par retraiter la date de l'événement pour l'avoir en format compréhensible
-			$evenement = $evenements[0];
-			$evenement['historique_date_fr'] = date('d/m/Y', strtotime($evenement['historique_date']));
+			// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
+			if ($securite === true)
+			{
+				$query = $this->link->prepare('SELECT * FROM `historique` WHERE MD5(`historique_id`) = :evenement');
+			}
+			else
+			{
+				$query = $this->link->prepare('SELECT * FROM `historique` WHERE `historique_id` = :evenement');
+			}
+			$query->bindParam(':evenement', $evenement);
+			$query->execute();
+			$evenements = $query->fetchAll();
 			
-			// On retourne le tout dans la propriété evenement
-			$this->evenement = $evenement;
+			// Si on ne trouve pas d'utilisateur, on retourne vers la page d'accueil du module contact
+			if (!count($evenements))
+			{
+				Core::tpl_go_to('contacts', true);
+			}
+			// Sinon, on affecte les données aux propriétés de l'objet
+			else
+			{
+				// On commence par retraiter la date de l'événement pour l'avoir en format compréhensible
+				$evenement = $evenements[0];
+				$evenement['historique_date_fr'] = date('d/m/Y', strtotime($evenement['historique_date']));
+				
+				// On retourne le tout dans la propriété evenement
+				$this->evenement = $evenement;
+			}
 		}
 	}
 	
@@ -153,5 +186,49 @@ class evenement
 	public function get_infos( $infos )
 	{
 		return $this->evenement['historique_' . $infos];
+	}
+	
+	
+	/**
+	 * Modifie les données dans la base de données
+	 *
+	 * Cette méthode permet de mettre à jour les informations de la base de données
+	 * concernant un champ de l'événément
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	string	$info	Information à modifier
+	 * @param	string	$value	Valeur à enregistrer
+	 * @return	bool			Réussite ou non de l'opération
+	 */
+	 
+	public function modification( $info , $value )
+	{
+		// On retraite la valeur s'il s'agit d'une demande de modification de la date
+		if ($info == 'historique_date')
+		{
+			$value = explode('/', $value);
+			$value = $value[2] . '-' . $value[1] . '-' . $value[0];
+			
+		}
+		// Sinon on retraite les caractères spéciaux
+		else
+		{
+			$value = Core::securisation_string($value);
+		}
+		
+		// On prépare la requête
+		$query = $this->link->prepare('UPDATE `historique` SET `'. $info . '` = "' . $value . '" WHERE `historique_id` = ' . $this->evenement['historique_id']);
+		
+		// On exécute la modification
+		if ($query->execute())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
