@@ -340,3 +340,194 @@ ul.boutonsRadio {
 }
 
 
+
+/************************************
+ *									*
+ *			 BOUTON RADIO			* 
+ *									*
+ ************************************/
+ 
+.radio {
+	color: $grisMoyen;
+	letter-spacing: .05em;
+	padding: .15em 0 .15em 0;
+	
+	input[type='radio'],
+	input[type='checkbox'] {
+		display: none !important;
+	}
+	
+	label {
+		display: block;
+		cursor: pointer;
+		
+		& > span {
+			display: inline-block;
+			border: 1px solid $gris;
+			@include border-radius(.33em);
+			height: 15px;
+			margin: 0 1em;
+			vertical-align: sub;
+			width: 15px;
+			
+			& > span {
+				display: block;
+				background-color: $blanc;
+				@include border-radius(.15em);
+				height: 9px;
+				margin: 2px;
+				width: 9px;
+			}
+		}
+	}
+	
+	input[type='checkbox']:checked + label,
+	input[type='radio']:checked + label {
+		color: $noir;
+		font-weight: 700;
+		
+		& > span > span { background-color: $grisFonce; }
+	}
+	
+	// Version checked ronde
+	/*input[type='checkbox']:checked + label {
+		color: $noir;
+		font-weight: 700;
+		
+		& > span > span {
+			background-color: $grisFonce;
+			@include border-radius(45%);
+		}
+	}*/
+	
+	// Version checked standard
+	/*input[type='checkbox']:checked + label {
+		color: $noir;
+		font-weight: 700;
+		
+		& > span > span {
+			background-color: transparent;
+			border-bottom: 3px solid $grisFonce;
+			border-left: 3px solid $grisFonce;
+			height: 6px;
+			width: 9px;
+			
+			@include rotate(-45deg);
+		}
+	}*/
+}
+
+
+
+/************************************
+ *									*
+ *			 OVERLAY FORMS			* 
+ *									*
+ ************************************/
+ 
+.overlayForm {
+	position: fixed; top: 0; left: 0;
+	display: none;
+	background-color: rgba($blanc, .66);
+	height: 100%;
+	padding-top: 120px;
+	padding-top: calc(60px + 3em);
+	width: 100%;
+	z-index: 1000;
+	
+	form {
+		position: relative;
+		display: block;
+		background-color: $blanc;
+		@include border-radius(.5em);
+		@include shadow(0, 0, 3em, $gris);
+		margin: 0 auto;
+		padding: 0 0 2em;
+		vertical-align: middle;
+		width: 450px;
+	
+		.fermetureOverlay {
+			position: absolute; top: .5em; right: .5em;
+			display: block;
+			background-color: $blanc;
+			@include border-radius(.33em);
+			color: $gris;
+			font-family: $icons;
+			font-size: 20px;
+			height: 25px;
+			line-height: 25px;
+			text-align: center;
+			text-decoration: none;
+			width: 25px;
+			@include transition(all);
+			
+			&:hover {
+				background-color: $gris;
+				color: $blanc;
+			}
+		}
+		
+		h3 {
+			border: 0;
+			font-family: $fonts1;
+			font-size: 1.5em;
+			font-weight: 500;
+			text-align: center;
+		}
+		
+		ul {
+			display: block;
+			list-style: none;
+			margin: 0 auto;
+			padding: 0;
+			width: 85%;
+			
+			li {
+				padding: .53em 0 .85em;
+				
+				&.detail-critere { display: none; }
+			
+				label {
+					display: block;
+					color: $grisMoyen;
+					font-size: 1em;
+					line-height: 1.5em;
+					padding: 0 0 .33em .33em;
+					text-transform: uppercase;
+				}
+				
+				input {
+					display: block;
+					//background-color: lighten($gris, 16%);
+					border: 1px solid $gris;
+					@include border-radius(.33em);
+					font-family: $fonts1;
+					font-size: 1.33em;
+					font-weight: 400;
+					padding: .33em 1em .33em .5em;
+					
+					&:hover { border-color: $grisFonce; }
+					&:focus { border-color: $grisMoyen; }
+					
+					&[type='radio'] {
+						display: none;
+						margin: 0 .5em 0 1em;
+					}
+					
+					&[type='submit'] {
+						background-color: $blanc;
+						color: $grisMoyen;
+						font-weight: 500;
+						width: 100%;
+						@include transition(all);
+						
+						&:hover {
+							color: $noir;
+							border-color: $vert;
+						}
+					}
+				}
+			}
+		}
+	}
+}

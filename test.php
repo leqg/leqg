@@ -1,7 +1,51 @@
 <?php
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
+
+//require_once('includes.php');
+
+// L'idée, c'est de tester PDO
 
 require_once('includes.php');
+
+
+// On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système
+$link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename'), Configuration::read('db.user'), Configuration::read('db.pass'));
+
+$query = $link->prepare('SELECT `contact_id`, `contact_email`, `contact_telephone`, `contact_mobile` FROM `contacts` WHERE `contact_email` IS NOT NULL OR `contact_telephone` IS NOT NULL OR `contact_mobile` IS NOT NULL');
+$query->execute();
+$contacts = $query->fetchAll();
+
+// On prépare les requêtes
+$email = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_email`) VALUES (:contact, "email", :email)');
+$mobile = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, "mobile", :numero)');
+$fixe = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, "fixe", :numero)');
+
+foreach ($contacts as $contact) {
+	// Si le contact possède un email, on l'ajoute à la base de données
+	if (!is_null($contact['contact_email']))
+	{
+		$email->bindParam(':contact', $contact['contact_id']);
+		$email->bindParam(':email', $contact['contact_email']);
+		$email->execute();
+		echo $contact['contact_id'] . ' : ' . $contact['contact_email'] . '<br>';
+	}
+	
+	if (!is_null($contact['contact_mobile']))
+	{
+		$mobile->bindParam(':contact', $contact['contact_id']);
+		$mobile->bindParam(':numero', $contact['contact_mobile'], PDO::PARAM_INT);
+		$mobile->execute();
+		echo $contact['contact_id'] . ' : ' . $contact['contact_mobile'] . '<br>';
+	}
+	
+	if (!is_null($contact['contact_telephone']))
+	{
+		$fixe->bindParam(':contact', $contact['contact_id']);
+		$fixe->bindParam(':numero', $contact['contact_telephone'], PDO::PARAM_INT);
+		$fixe->execute();
+		echo $contact['contact_id'] . ' : ' . $contact['contact_telephone'] . '<br>';
+	}
+}
 
 
 // On teste la recherche
@@ -29,14 +73,12 @@ while ($row = $sql->fetch_assoc()) :
 
 endwhile;*/
 
-$query = 'SELECT * FROM `contacts`';
+/*$query = 'SELECT * FROM `contacts` LEFT JOIN `immeubles` ON `immeubles`.`immeuble_id` = `contacts`.`immeuble_id`';
 $sql = $db->query($query);
 
 while ($row = $sql->fetch_assoc()) {
-	$tags = trim($row['contact_tags'], ',');
-	$tags = array_unique($tags);
-	$db->query('UPDATE `contacts` SET `contact_tags` = "' . $tags . '" WHERE `contact_id` = ' . $row['contact_id']);
-}
+	$db->query('UPDATE `contacts` SET `bureau_id` = ' . $row['bureau_id'] . ' WHERE `contact_id` = ' . $row['contact_id']);
+}*/
 
 
 /*$data = $csv->lectureFichier('csv/parti.csv');

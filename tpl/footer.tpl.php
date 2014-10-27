@@ -2,7 +2,11 @@
 	
 	<!-- Volet de notification -->
 	<aside id="notificationCenter">
+<<<<<<< HEAD
 	<?php if ($notification->nombre() == -2) : ?>
+=======
+	<?php if ($notification->nombre() == -1) : ?>
+>>>>>>> origin/dev
 		<h6>Tâches à réaliser</h6>
 		<ul class="listeIcone">
 			<?php $taches = $tache->recherche($user->get_the_id()); foreach ($taches as $t) : ?>

@@ -16,6 +16,20 @@ function getURLVar(variable)
 
 var main = function() {
 
+	// Fonctionnement des overlays
+		$('.ouvertureOverlay').click(function(){
+			var overlay = $(this).data('overlay');
+			$("#" + overlay).fadeIn();
+			return false;
+		});
+		
+		$('.fermetureOverlay').click(function(){
+			var overlay = $(this).data('overlay');
+			$("#" + overlay).fadeOut();
+			return false;
+		});
+
+
 	// On fait que les formulaires d'upload d'un fichier s'affichent mieux
 		$("#form-fichier").change(function(){
 			var value = $(this).val();
@@ -32,10 +46,8 @@ var main = function() {
 			
 			if ($(this).hasClass('actif')) {
 				$('nav#principale').css('left', 0);
-				$('main').css('left', '165px');
 			} else {
 				$('nav#principale').css('left', '-165px');
-				$('main').css('left', 0);
 			}
 			
 			// On annule le clique sur le lien pour éviter l'ajout de # à la fin de l'URL

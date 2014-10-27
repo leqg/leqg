@@ -65,11 +65,9 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$fiche->fermeture();
 		}
 		
-		else if ($_GET['page'] == 'fiche' && !empty($_GET['action']) && $_GET['action'] == 'creation') {
-			// On charge les éléments de template
-				$core->tpl_header();
-				$core->tpl_load('fiche' , 'ajout');
-				$core->tpl_footer();
+		else if ($_GET['page'] == 'contact' && isset($_GET['contact'])) { 
+			// On charge le template correspondant à la fiche contact
+			$core->tpl_load('contact');
 		}
 		
 		else if ($_GET['page'] == 'fiche' && !empty($_GET['operation'])) {
@@ -84,6 +82,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				// On charge le template de résolution des conflits
 				$core->tpl_header();
 				$core->tpl_load('fiche', 'fusion-conflits');
+				$core->tpl_footer();
+			} else if ($_GET['operation'] == 'creation') {
+				// On charge le template de création de fiches
+				$core->tpl_header();
+				$core->tpl_load('fiche', 'ajout');
 				$core->tpl_footer();
 			}
 			
@@ -230,7 +233,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				// S'il n'y a qu'un seul résultat, on ouvre la fiche correspondante
 				$row = $sql->fetch_array();
 				
-				$core->tpl_redirection('fiche', $row[0]);
+				$core->tpl_go_to('contact', array('contact' => md5($row[0])), true);
 			} else if ($nb > 1) {
 				// On load le header de la page
 				$core->tpl_header();
@@ -486,11 +489,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	
 			else if ( $_GET['page'] == 'porte' ) {
 				
-				// On charge d'abord le template de header
-				$core->tpl_header(); 
-				
 				// On charge les templates de page selon la demande
 				if ( isset($_GET['action'])) {
+					
+					// On charge d'abord le template de header
+					$core->tpl_header(); 
 					
 					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('porte', 'nouveau');
 					elseif ( $_GET['action'] == 'missions' ) : $core->tpl_load('porte', 'missions');
@@ -499,15 +502,18 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('porte', 'reglages');
 					else : $core->tpl_load('porte'); endif;
 					
+					// On charge enfin le template de footer
+					$core->tpl_footer();
+				
+				} else if ( isset($_GET['mission']) ) {
+	
+					$core->tpl_load('porte', 'mission');
+				
 				} else {
 					
 					$core->tpl_load('porte');
 					
 				}
-				
-				
-				// On charge enfin le template de footer
-				$core->tpl_footer();
 				
 			}
 			
@@ -516,11 +522,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	
 			else if ( $_GET['page'] == 'boite' ) {
 				
-				// On charge d'abord le template de header
-				$core->tpl_header(); 
-				
 				// On charge les templates de page selon la demande
 				if ( isset($_GET['action'])) {
+					
+					// On charge d'abord le template de header
+					$core->tpl_header(); 
 					
 					if ( $_GET['action'] == 'nouveau' ) : $core->tpl_load('boite', 'nouveau');
 					elseif ( $_GET['action'] == 'missions' ) : $core->tpl_load('boite', 'missions');
@@ -529,15 +535,18 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 					elseif ( $_GET['action'] == 'reglages' ) : $core->tpl_load('boite', 'reglages');
 					else : $core->tpl_load('boite'); endif;
 					
+					// On charge enfin le template de footer
+					$core->tpl_footer();
+				
+				} else if ( isset($_GET['mission']) ) {
+	
+					$core->tpl_load('boite', 'mission');
+				
 				} else {
 					
 					$core->tpl_load('boite');
 					
 				}
-				
-				
-				// On charge enfin le template de footer
-				$core->tpl_footer();
 				
 			}
 			

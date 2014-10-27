@@ -1,34 +1,57 @@
 <?php
-
-/*
-	Classe du noyau central du système LeQG
-*/
+/**
+ * Cette classe comprend l'ensemble des méthodes de traitement des fiches contact sur le SaaS LeQG
+ * 
+ * @package		leQG
+ * @author		Damien Senger <mail@damiensenger.me>
+ * @copyright	2014 MSG SAS – LeQG
+ */
 
 
 class fiche extends core {
 	
-// Définition des propriétés
-	private $fiches; // tableau des informations disponibles à propos des fiches ouvertes
+	/**
+	 * @var	object	$db			Propriété concenant le lien vers la base de données de l'utilisateur
+	 * @var	string	$url		Propriété contenant l'URL du serveur
+	 * @var	string	$compte		Propriété contenant les informations sur le compte connecté
+	 * @var array	$fiches		Tableau des informations disponibles à propos des fiches ouvertes
+	 */
+	private $db, $url, $compte, $fiches;
+
+	/** @var array	$fiche_ouverte	Talbeau des informations disponibles à propos de la fiche ouverte */
 	public	$fiche_ouverte = null;
 	
-	
-// Définition des propriétés
-	private $db; // Lien vers la base MySQL
-	private $compte; // ID du compte utilisant la classe
-	private $url; // Domaine du serveur
-	
-	
-// Définition des méthodes
-	
+
+	/**
+	 * Cette méthode permet la construction de la classe dossier
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	object	$db			Lien vers la base de données de l'utilisateur
+	 * @param	string	$compte		Informations concernant l'utilisateur connecté
+	 * @param	string	$url		URL du serveur
+	 * @return	void
+	 */
+	 
 	public	function __construct($db, $compte, $url) {
 		$this->db = $db;
 		$this->compte = $compte;
 		$this->url = $url;
 	}
 	
-	
-	// informations( int ) permet de récupérer toutes les informations sur une fiche contact sans forcément l'ouvrir dans le template
-	public	function informations( $contact ) {
+
+	/**
+	 * Cette méthode permet de récupérer toutes les informations sur une fiche contact sans forcément l'ouvrir dans le template
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$contact	ID de la fiche contact à consulter
+	 * @return	array				Tableau des informations concernant la fiche contact demandée
+	 */
+
+	public	function informations( int $contact ) {
 		if (!is_numeric($contact)) return false;
 		
 		// On prépare la requête de récupération des informations
@@ -45,8 +68,19 @@ class fiche extends core {
 		return false;
 	}
 	
-	
-	// On ouvre l'accès aux informations d'une fiche existante
+
+	/**
+	 * Cette méthode permet d'accéder aux informations d'une fiche existante
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		int			$id			ID de la fiche contact à laquelle on souhaite accéder
+	 * @param		bool		$ouverture	Si true, déclenche l'ouverture de la fiche en question
+	 * @return		bool					True si l'accès a été possible, False sinon
+	 */
+
 	public	function acces($id, $ouverture = false) {
 		$query = "SELECT * FROM contacts WHERE contact_id = " . $id;
 		$sql = $this->db->query($query);
@@ -68,8 +102,20 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode d'ouverture d'une fiche
+
+	/**
+	 * Cette méthode permet d'ouvrir une fiche existante
+	 *
+	 * Cette méthode permet de transférer les informations d'une fiche existante dans la propriété $fiche_ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		int			$id			ID de la fiche contact à ouvrir
+	 * @return		void
+	 */
+
 	public function ouverture($id) {
 		// On commence par purger toute fiche ouverte
 		unset($this->fiche_ouverte);
@@ -79,32 +125,92 @@ class fiche extends core {
 		else { $this->acces($id, true); }
 	}
 	
+
+	/**
+	 * Cette méthode permet de fermer une fiche existante
+	 *
+	 * Cette méthode permet de purger les informations contenues dans le propriété $fiche_ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @return		void
+	 */
+
+	public function fermeture() { $this->fiche_ouverte = NULL; }
 	
-	// Méthode de fermeture de la fiche ouverte
-	public function fermeture() {
-		//unset($this->fiche_ouverte);
-		$this->fiche_ouverte = NULL;
-	}
-	
-	
-	// L'ensemble des méthodes liées à l'accès aux informations au sujet de la fiche ouverte
+
+	/**
+	 * Cette méthode permet d'afficher des informations au sujet de la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$colonne		Information à retrouver
+	 * @param		bool		$prefix			Si true, l'information à retrouver entrée ne possède pas le préfixe du nom de la table
+	 * @return		void
+	 */
+
 	public	function infos($colonne, $prefix = true) { if ($prefix) { echo utf8_encode($this->fiche_ouverte['contact_' . $colonne]); } else { echo utf8_encode($this->fiche_ouverte[$colonne]); } }
+	
+
+	/**
+	 * Cette méthode permet de récupérer des informations au sujet de la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$colonne		Information à retrouver
+	 * @param		bool		$prefix			Si true, l'information à retrouver entrée ne possède pas le préfixe du nom de la table
+	 * @return		string						Retourne l'information demandée
+	 */
+
 	public	function get_infos($colonne, $prefix = true) { if ($prefix) { return utf8_encode($this->fiche_ouverte['contact_' . $colonne]); } else { return utf8_encode($this->fiche_ouverte[$colonne]); } }
 	
-	
-	// Méthode permettant de retourner l'ID de l'immeuble de l'électeur, très important pour l'accès aux fonctions cartographiques
+
+	/**
+	 * Cette méthode permet de retourner l'ID de l'immeuble de l'adresse électorale de l'électeur, très important pour l'accès aux fonctions cartographiques
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @return		int			ID de l'immeuble
+	 */
+
 	public	function get_adresse() {
 		return $this->fiche_ouverte['adresse_id'];
 	}
 	
-	
-	// Méthode permettant de retourner l'ID de l'immeuble de l'électeur, très important pour l'accès aux fonctions cartographiques
+
+	/**
+	 * Cette méthode permet de retourner l'ID de l'immeuble de l'adresse connue de l'électeur, très important pour l'accès aux fonctions cartographiques
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @return		int			ID de l'immeuble
+	 */
+
 	public	function get_immeuble() {
 		return $this->fiche_ouverte['immeuble_id'];
 	}
 	
-	
-	// Méthode permettant de savoir si l'immeuble est bien rattaché à une rue, et donc savoir si l'adresse existe vraiment
+
+	/**
+	 * Cette méthode permet de savoir si l'immeuble est bien rattaché à une rue, et donc savoir si l'adresse existe vraiment
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @return		bool		True si la rue existe, False si la rue n'existe pas réellement
+	 */
+
 	public	function is_adresse_fichier() {
 		$immeuble = $this->get_immeuble();
 		
@@ -116,13 +222,34 @@ class fiche extends core {
 		return (!is_null($row['rue_nom'])) ? true : false;
 	}
 	
-	// Méthode permettant de savoir si une information a été remplie
+
+	/**
+	 * Cette méthode permet de savoir si une information existe
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$colonne 		Colonne à vérifier
+	 * @return		bool 		True si l'information existe, False si elle n'existe pas réellement
+	 */
+
 	public	function is_info($colonne) {
 		return (!empty($this->get_infos($colonne)) && $this->get_infos($colonne) != 0) ? true : false;
 	}
 	
-	
-	// Méthode d'information autour des optout de la fiche ouverte
+
+	/**
+	 * Cette méthode permet de récupérer des informations autour des optout de la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$methode		Permet de définir pour quel mode de contact on demande le statut de l'optout
+	 * @return		bool						True si l'optout a été demandé, False s'il n'a pas été demandé
+	 */
+
 	public	function optout($methode = null) {
 		if (empty($methode)) {
 			if ($this->fiche_ouverte['contact_optout_global']) : return true; else : return false; endif;
@@ -131,21 +258,53 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// the_ID() et get_the_ID() permettent de retourner l'ID de la fiche consultée indépendamment de la recherche de paramètre GET
+
+	/**
+	 * Cette méthode permet de retourner l'ID de la fiche consultée indépendamment de la recherche de paramètre GET
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @return		int			ID de la fiche consultée
+	 */
+
 	public	function get_the_ID() {
 		if (is_null($this->fiche_ouverte)) : return false; else :
 			return $this->get_infos('id');
 		endif;
 	}
+	
+
+	/**
+	 * Cette méthode permet d'afficher l'ID de la fiche consultée indépendamment de la recherche de paramètre GET
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @return		bool|void	Si erreur, retourne un booléen sinon rien.
+	 */
+
 	public	function the_ID() {
 		if (is_null($this->fiche_ouverte)) : return false; else :
 			echo $this->get_the_ID();
 		endif;
 	}
 	
-	
-	// Méthode de calcul du rendu du nom de la fiche ouverte
+
+	/**
+	 * Cette méthode permettant de calculer le rendu du nom de la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$separateur		Séparateur HTML demandé pour séparer les éléments du nom de la fiche ouverte
+	 * @param		bool		$return			True pour retourner le nom, False pour afficher le nom
+	 * @return		string|void					Retour ou affichage des informations suivant $return
+	 */
+
 	public	function affichage_nom($separateur = null, $return = false) {
 		$nom = $this->get_infos('nom'); 
 		$nom_usage = $this->get_infos('nom_usage');
@@ -163,8 +322,19 @@ class fiche extends core {
 		unset($affichage);
 	}
 	
-	
-	// Méthode de calcul du rendu du nom d'une fiche demandée
+
+	/**
+	 * Cette méthode permet de retourner le nom mis en forme de la fiche demandée d'après son ID
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		int			$id				ID de la fiche demandée
+	 * @param		string		$separateur		Séparateur HTML demandé pour séparer les éléments du nom de la fiche demandée d'après son ID
+	 * @param		bool		$return			True pour retourner le nom, False pour afficher le nom
+	 * @return		string|void					Retour ou affichage des informations suivant $return
+	 */
+
 	public	function affichageNomByID($id, $separateur = null, $return = false) {
 		// On récupère les information
 		$query = 'SELECT * FROM contacts WHERE contact_id = ' . $id;
@@ -178,17 +348,33 @@ class fiche extends core {
 		if ($separateur) { $begin = '<' . $separateur . '>'; $end = '</' . $separateur . '>'; }
 		else { $begin = null; $end = null; }
 	
-		if (!empty($nom)) { $affichage = $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
+		$affichage = '';
+		if (!empty($nom)) { $affichage .= $begin . mb_convert_case(html_entity_decode($nom, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($nom_usage)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($nom_usage, ENT_NOQUOTES, 'utf-8'), MB_CASE_UPPER, 'utf-8') . $end; }
 		if (!empty($prenoms)) { $affichage .= ' ' . $begin . mb_convert_case(html_entity_decode($prenoms, ENT_NOQUOTES, 'utf-8'), MB_CASE_TITLE, 'utf-8') . $end; }
+		
+		// S'il n'y a ni nom, ni prénom, on cherche l'organisme à afficher
+		if (empty($affichage)) $affichage = $row['contact_organisme'];
 		
 		if ($return == false) : echo $affichage; else : return $affichage; endif;
 		
 		unset($affichage);
 	}
 	
-	
-	// Méthode de calcul de l'affiche des informations liées à la date de naissance
+
+	/**
+	 * Cette méthode permet de préparer l'affichage des informations liée à la date de naissance de la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$separateur		Séparateur de date
+	 * @param		bool		$return			True pour retourner la date de naissance, False pour l'afficher
+	 * @param		string		$date			Si fourni, la date à utiliser
+	 * @return		string|void					Retour ou affichage des informations suivant $return
+	 */
+
 	public	function date_naissance($separateur='/', $return = false, $date = null) {
 		// Si aucune date n'est fourni, on utilise celle de la fiche ouverte
 		if (empty($date)) : $date = $this->get_infos('naissance_date'); endif;
@@ -199,8 +385,18 @@ class fiche extends core {
 		if ($return) : return $date; else : echo $date; endif;
 	}
 	
-	
-	// Méthode de calcul de l'âge d'un individu en fonction de sa date de naissance
+
+	/**
+	 * Cette méthode permet de calculer l'âge d'un individu en fonction de sa date de naissnce
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		string		$date		Si fournie, la date à utiliser
+	 * @param		bool		$return		True pour retourner l'âge, False pour l'afficher
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function age($date = null, $return = false) {
 		// Si la date n'a pas été entrée, on prend celle de la fiche active
 		if (!$date) { $date = $this->get_infos('naissance_date'); }
@@ -216,8 +412,19 @@ class fiche extends core {
 	    if ($return) : return $age; else : echo $age . '&nbsp;ans'; endif;
 	}
 	
-	
-	// Méthode permettant l'affichage du lieu de naissance s'il existe dans la base de données
+
+	/**
+	 * Cette méthode permet d'afficher le lieu de naissance s'il existe dans la base de données
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$before		Contenu à intégrer en amont de la ville de naissance
+	 * @param		bool		$return		True pour retourner l'âge, False pour l'afficher
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function lieu_de_naissance($before = null, $return = false) {
 		// on récupère le département de naissance
 		if ($this->get_infos('naissance_commune_id')) {
@@ -237,8 +444,19 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode de formatage des adresses
+
+	/**
+	 * Cette méthode permet de formater une adresse postale depuis la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$separateur		Séparateur choisi entre les entités de l'adresse postale
+	 * @param		bool		$return			True pour retourner l'âge, False pour l'afficher
+	 * @return		string|void					Retour ou affichage des informations suivant $return
+	 */
+
 	public	function affichage_adresse($separateur = '<br>', $return = false) {
 		$numero = $this->get_infos('adresse_numero');
 		$adresse = mb_convert_case($this->get_infos('adresse_rue'), MB_CASE_LOWER, 'utf-8');
@@ -260,8 +478,19 @@ class fiche extends core {
 		return true;
 	}
 	
-	
-	// Rendu du canton
+
+	/**
+	 * Cette méthode permet d'afficher ou de retourner les informations concernant le canton de la fiche demandée
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		bool		$return		True pour retourner l'âge, False pour l'afficher
+	 * @param		int			$id			Si fourni, le canton pour lequel il faut effectuer la recherche
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function canton($return = false, $id = null) {
 		// S'il n'est pas fourni un id, on utilise celui de la fiche ouverte
 		if (!$id) { $id = $this->fiche_ouverte['canton_id']; }
@@ -277,8 +506,21 @@ class fiche extends core {
 		return true;
 	}
 	
-	
-	// Rendu du bureau de vote
+
+	/**
+	 * Cette méthode permet d'afficher ou de retourner les informations concernant le bureau de vote de la fiche demandée
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		bool		$lien		Afficher ou non un lien clicable
+	 * @param		bool		$return		True pour retourner l'âge, False pour l'afficher
+	 * @param		int			$id			Si fourni, le bureau de vote pour lequel il faut effectuer la recherche
+	 * @param		int			$ville		Si fourni, la commune pour laquelle il faut effectuer la recherche
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function bureau($lien = null, $return = false, $id = null, $ville = null) {
 		// S'il n'est pas fourni un id, on utilise celui de la fiche ouverte
 		if (!$id) { $id = $this->fiche_ouverte['bureau_id']; }
@@ -306,8 +548,18 @@ class fiche extends core {
 		if ($return) : return $numero . ' ' . $nom; else : echo $lien_open . ' ' . $nom . $lien_close; endif;
 	}
 	
-	
-	// Rendu du sexe de la fiche ouverte
+
+	/**
+	 * Cette méthode permet d'afficher ou de retourner le sexe de la fiche ouverte
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		bool		$return		True pour retourner le sexe, False pour l'afficher
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function sexe($return = false) {
 		// On récupère l'information
 		$sexe = $this->get_infos('sexe');
@@ -320,8 +572,20 @@ class fiche extends core {
 		return true;
 	}
 	
-	
-	// Rendu des données de contact de la fiche ouverte ou demandée
+
+	/**
+	 * Cette méthode permet d'afficher ou de retourner les informations de contact de la fiche demandée
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		string		$type		Type du contact demandé
+	 * @param		bool		$lien		Afficher ou non un lien clicable
+	 * @param		bool		$return		True pour retourner les contacts, False pour l'afficher
+	 * @param		int			$id			Si fourni, la fiche pour laquelle il faut effectuer la recherche
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function contact($type, $lien = false, $return = false, $id = NULL) {
 		// Si un ID est fourni, on cherche les infos, sinon on les prend dans la fiche ouverte
 		if ($id) {
@@ -352,8 +616,20 @@ class fiche extends core {
 		if ($return && $affichage) : return $affichage; else : echo $affichage; endif;
 	}
 	
-	
-	// Méthode permettant l'affichage des tags relatifs à une fiche
+
+	/**
+	 * Cette méthode permet d'afficher ou de retourner les tags d'une fiche demandée
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$element	Le type de balise HTML à utiliser pour séparer les différents tags
+	 * @param		bool		$return		True pour retourner les tags, False pour l'afficher
+	 * @param		int			$id			Si fourni, la fiche contact pour laquelle il faut effectuer la recherche
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function tags($element = 'span', $return = false, $id = null) {
 		if (empty($id)) {
 			$id = $this->get_infos('id');
@@ -383,8 +659,19 @@ class fiche extends core {
 		if ($return) : return $affichage; else : echo $affichage; endif;
 	}
 	
-	
-	// Méthode de mise à jour des informations
+
+	/**
+	 * Cette méthode permet de mettre à jour une information d'une fiche contact
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		string		$info		Information à modifier
+	 * @param		string		$valeur		Valeur à enregistrer
+	 * @return		bool
+	 */
+
 	public	function update_contact( $info , $valeur ) {
 		if (!empty($this->fiche_ouverte['contact_id'])) {
 			$query = 'UPDATE contacts SET contact_' . $info . ' = "' . $valeur . '" WHERE contact_id = ' . $this->fiche_ouverte['contact_id'];
@@ -398,8 +685,19 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode permettant de savoir combien de tâches sont affectées à une fiche
+
+	/**
+	 * Cette méthode permet de savoir combien de tâches sont affectées à une fiche
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 * @see			Tache
+	 *
+	 * @param		int			$id			Si fourni, permet de savoir pour quelle fiche lancer le calcul
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function taches_liees($id = null) {
 		if (is_null($id)) $id = $this->get_infos('id');
 		
@@ -427,8 +725,19 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode permettant d'extraire les dossiers liés à une fiche contact
+
+	/**
+	 * Cette méthode permet d'extraire les dossiers liés à une fiche contact
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 * @see			Dossier
+	 *
+	 * @param		int			$id			Si fourni, la fiche contact pour laquelle il faut effectuer la recherche
+	 * @return		string|void				Retour ou affichage des informations suivant $return
+	 */
+
 	public	function dossiers_lies($id = null) {
 		if (is_null($id)) $id = $this->get_infos('id');
 		
@@ -456,8 +765,22 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode permettant l'ajout d'un dossier à la base de données du site
+
+	/**
+	 * Cette méthode permet l'ajout d'un dossier à la base de données du site
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 * @see			Dossier
+	 *
+	 * @param		string			$nom			Nom du dossier à créer
+	 * @param		string			$description	Description du dossier à créer
+	 * @param		string|array	$fiches			Fiches concernées par la création du dossier
+	 * @param		bool			$return			True pour retourner les contacts, False pour l'afficher
+	 * @return		int|void						Retour ou affichage de l'identifiant du dossier créé
+	 */
+
 	public	function dossier_ajout($nom, $description, $fiches = null, $return = true) {
 		// On retraite le tableau des fiches pour l'ajout à la base de données
 		if (is_array($fiches)) {
@@ -492,8 +815,18 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode permettant d'extraire l'ensemble des informations sur le dossier
+
+	/**
+	 * Cette méthode permet d'extraire les informations liées à un dossier demandé
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 *
+	 * @param		int			$id			ID du dossier recherché
+	 * @return		array					Tableau des informations liées au dossier recherché
+	 */
+
 	public	function dossier($id) {
 		// On retravaille l'ID fourni
 		$id = $this->securisation_string($id);
@@ -515,12 +848,20 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Méthode permettant la recherche des dossiers présents dans la base de données du site à partir de leur nom
+
+	/**
+	 * Cette méthode permet d'extraire la liste des dossiers par leur nom
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 * @see			Dossier
+	 *
+	 * @param		int			$recherche	Nom à rechercher
+	 * @return		array					Tableau des dossiers en correspondance avec la recherche
+	 */
+
 	public	function dossier_recherche($recherche) {
-		// On traite la recherche pour qu'elle soit sécurisée
-		//$recherche = $this->securisation_string($recherche);
-		
 		// On recherche dans la base de données les titres similaire à notre recherche si notre recherche est supérieure à 3 caractères
 		if (strlen($recherche) > 3) {
 			// On prépare la recherche dans la base de données
@@ -551,9 +892,19 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// Récupération d'informations sans ouverture de fiches, grâce à l'ID
-	
+
+	/**
+	 * Cette méthode permet de récupérer le nom d'une fiche, formaté, grâce à son identifiant
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		int			$id			ID de la fiche concernée
+	 * @param		string		$separateur Séparateur choisi pour les entités du nom
+	 * @param		bool		$return		True pour retourner le nom, False pour l'afficher
+	 * @return		int|void				Retour ou affichage du nom de la fiche
+	 */
+
 	public	function nomByID($id, $separateur = null, $return = false) {
 		// On récupère les informations dans la base de données concernant la fiche de demandée
 		$query = 'SELECT contact_nom, contact_nom_usage, contact_prenoms FROM contacts WHERE contact_id = "' . $id . '"';
@@ -577,10 +928,24 @@ class fiche extends core {
 		unset($affichage);
 	}
 	
-	
-	// Méthode d'ajout d'une entrée à l'historique d'un utilisateur
+
+	/**
+	 * Cette méthode permet d'ajouter une entrée à l'historique d'un utilisateur
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 * @see			Historique
+	 *
+	 * @param		int			$fiche		ID de la fiche concernée
+	 * @param		string		$type		Type d'entrée
+	 * @param		string		$objet		Objet de l'entrée dans l'historique
+	 * @param		string		$remarques	Remarques à enregistrer dans l'historique
+	 * @return		void
+	 */
+
 	public	function historique_ajout($fiche, $type, $objet, $remarques = 'Entrée automatique du système') {
-			$historique = array(	'fiche'			=> $fiche,
+			$historique = array('fiche'			=> $fiche,
 								'type'			=> $type,
 								'date'			=> date('Y-m-d'),
 								'objet'			=> $objet,
@@ -598,8 +963,18 @@ class fiche extends core {
 												"' . $historique['remarques'] . '" )');
 	}
 	
-	
-	// modificationAdresse ( int , array ) permet de modifier l'adresse d'une fiche utilisateur sélectionnée
+
+	/**
+	 * Cette méthode permet de modifier l'adresse d'une fiche utilisateur sélectionnée
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		int			$contact	ID de la fiche concernée
+	 * @param		int			$immeuble 	Nouvel immeuble à enregistrer pour le contact sélectionné
+	 * @return		bool					Booléen selon la réussite ou non de la requête SQL
+	 */
+
 	public	function modificationAdresse( $contact , $immeuble ) {
 		// On vérifie le format des informations entrées
 			if (!is_numeric($contact) && !is_array($immeuble)) { return false; }
@@ -614,8 +989,20 @@ class fiche extends core {
 			return $sql;
 	}
 	
-	
-	// recherche( string , string , string [, string] ) permet d'effectuer une recherche de fiches selon des critères donnés
+
+	/**
+	 * Cette méthode permet d'effectuer une recherche de fiches selon des critères donnés
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		string		$prenom		Prénoms recherchés
+	 * @param		string		$nom		Nom de famille recherché
+	 * @param		string		$nom_usage	Nom d'usage recherché
+	 * @param		string		$sexe		Sexe recherché
+	 * @return		array					Tableau des fiches trouvées correspondant à la recherche
+	 */
+
 	public	function recherche( $prenom , $nom , $nom_usage , $sexe = '%' ) {
 		// Tout d'abord, on commence par retraiter le sexe entré
 			if ($sexe == 'I') $sexe = '%';
@@ -679,8 +1066,17 @@ class fiche extends core {
 			return $contacts;
 	}
 	
-	
-	// creerContact( array ) permet de rajouter un contact dans la base de données
+
+	/**
+	 * Cette méthode permet de rajouter un contact dans la base de données
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		array		$infos		Tableau des informations liées à la fiche à créer
+	 * @return		int						ID de la fiche créée
+	 */
+
 	public	function creerContact( $infos ) {
 		// On vérifie que les informations entrées prennent bien la forme d'un tableau et qu'elles contiennent les infos minimales
 		if (!is_array($infos) && !isset($infos['nom'], $infos['prenom'])) return false;
@@ -739,8 +1135,20 @@ class fiche extends core {
 		return $id; 
 	}
 	
-	
-	// renommerVille() permet de renommer une ville pour faire une recherche
+
+	/**
+	 * Cette méthode permet de renommer une ville pour faire une recherche
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 * @deprecated	1.0			Cette méthode est obsolète et sera supprimée dans le futur.
+	 * @see			Carto
+	 *
+	 * @param		string		$ville_origine	Nom de la ville entrée
+	 * @param		string		$dept_origine	Département correspondant à la ville en question
+	 * @return		array						Tableau avec le nom modifié
+	 */
+
 	public	function renommerVille($ville_origine, $dept_origine) {
 		// Pour éviter les problèmes d'apostrophes (dans la BDD souvent des espaces) des villes comme L'isle, on remplace par un joker
 		$remplacement = array("'", " ", "OE");
@@ -771,8 +1179,19 @@ class fiche extends core {
 		return $donnees;
 	}
 	
-	
-	// export( array , bool ) permet d'effectuer un export de données en CSV depuis la base de données
+
+	/**
+	 * Cette méthode permet d'effectuer un export de données en CSV depuis la base de données
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		array		$formulaire 	Arguments de sélection des fiches pour l'export
+	 * @param		bool		$simulation		Si true, renvoit une simulation du nombre de fiches, si false export de la liste
+	 * @param		bool		$export_liste	Si true, export de la fiche
+	 * @return		mixed
+	 */
+
 	public	function export( $formulaire , $simulation = false , $export_liste = false) {
 		// On commence par vérifier le format des arguments
 		if (!is_array($formulaire) || !is_bool($simulation)) return false;
@@ -949,8 +1368,17 @@ class fiche extends core {
 		}
 	}
 	
-	
-	// coordonneesExistantes( array/int ) permet de savoir si nous possédons des coordonnées concernant une fiche
+
+	/**
+	 * Cette méthode permet de savoir si nous possédons des coordonnées concernant une fiche
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		int		$contact 	Fiche contact concernée par la recherche de coordonnées
+	 * @return		bool
+	 */
+
 	public	function coordonneesExistantes( $contact ) {
 		if (!is_numeric($contact) && !is_array($contact)) return false;
 		
@@ -969,6 +1397,222 @@ class fiche extends core {
 		
 		// Si aucune condition n'est remplie jusqu'ici, c'est que nous n'avons pas de coordonnées !
 		return false;
+	}
+	
+
+	/**
+	 * Cette méthode permet de retourner ou d'exporter une liste de contacts au format JSON ou tableau PHP selon des conditions entrées en argument
+	 *
+	 * @author		Damien Senger <mail@damiensenger.me>
+	 * @version		1.0
+	 *
+	 * @param		string	$output	 	Type de rendu des données (JSON | PHP)
+	 * @param		array	$args		Arguments de sélection et de tri des fiches
+	 * @param		bool	$export		Si true lance un export des fiches, sinon retourne un tableau au format choisi par $output
+	 * @param		int		$nombre		Permet de sélectionner un nombre maximal de fiches à afficher
+	 * @param		int		$debut		Permet de spécifier à quel fiche débuter le rendu des fiches trouvées selon les conditions établies
+	 * @return		mixed
+	 */
+
+	public	function liste( $output , $args = null , $export = false , $nombre = false , $debut = false ) {
+		// On prépare la requête de recherche des données
+		$query = 'SELECT	`contact_id`,
+							`immeuble_id`,
+							`adresse_id`,
+							`bureau_id`,
+							`contact_nom`,
+							`contact_nom_usage`,
+							`contact_prenoms`,
+							`contact_naissance_date`,
+							`contact_sexe`,
+							`contact_email`,
+							`contact_mobile`,
+							`contact_telephone`,
+							`contact_electeur`,
+							`contact_tags`
+				  FROM		`contacts` ';
+
+		// On lance le traitement des arguments dans un tableau $conditions
+		$conditions = array();
+		$immeubles = array(); // On prépare également le tableau $immeubles pour le traitement des critères géographiques
+		$bureaux = array(); // On prépare également le tableau $buraeux pour le traitement des critères de bureaux électoraux
+
+		if (!is_null($args) && is_array($args)) {
+			// On lance une boucle de traitement des arguments
+			foreach ($args as $key => $arg) :
+
+				// conditions relatives aux coordonnées
+				if ($key == 'contact') {
+				
+					if ($arg == 'tous') $conditions[] = '( `contact_email` IS NOT NULL OR `contact_mobile` IS NOT NULL OR `contact_telephone` IS NOT NULL )';
+					if ($arg == 'email') $conditions[] = '`contact_email` IS NOT NULL';
+					if ($arg == 'mobile') $conditions[] = '`contact_mobile` IS NOT NULL';
+					if ($arg == 'telephone') $conditions[] = '`contact_telephone` IS NOT NULL';
+					
+				} elseif ($key == 'bureau') {
+					
+					// on fait la liste des bureaux dans un tableau bureaux
+					$bureaux = $arg;
+					
+				} elseif ($key == 'tags') {
+				
+					$conditions[] = '`contact_tags` LIKE "%' . $arg . '%"';
+					
+				} elseif ($key == 'electoral') {
+					
+					if ($arg == 'oui') $conditions[] = '`contact_electeur` = 1';
+					if ($arg == 'non') $conditions[] = '`contact_electeur` = 0';
+				
+				}
+				
+			endforeach;
+		}
+		
+		// On prépare le tableau $conditionSQL qui contient les différentes conditions à installer dans la requête (géographique, coordonnées, divers)
+		$conditionSQL = array();
+		
+		// S'il existe des bureaux de vote sélectionnés, on installe le critère bureau de vote dans la base de données
+		if (count($bureaux) > 0) {
+			$conditionSQL[] = ' ( `bureau_id` = ' . implode(' OR `bureau_id` = ', $bureaux) . ' ) ';
+		}
+		
+		// S'il existe des immeubles sélectionnés, on installe le critère géographique dans la base de données
+		if (count($immeubles) > 0) {
+			$conditionSQL[] = ' ( `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ) ';
+		}
+		
+		// S'il existe des conditions, on les reformate et on les ajoute à la requête
+		if (count($conditions) > 0) :
+		
+			// On formate la liste des conditions en SQL
+			$conditionSQL[] = ' ( ' . implode(' AND ', $conditions) . ' ) ';
+						
+		endif;
+		
+		// S'il existe des conditions à installer dans la requête SQL, on le fait
+		if (count($conditionSQL) > 0) {
+			$query.= ' WHERE ' . implode(' AND ', $conditionSQL) . ' ';
+		}
+		
+		// On termine la préparation de la requête en ajoutant l'ordre des tris
+		if ($args['tri'] == 'last')
+		{
+			$query.= 'ORDER BY `contact_id` DESC ';
+		}
+		else
+		{
+			$query.= 'ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC ';
+		}
+		
+		// Puis on s'occupe du nombre d'affichages à produire
+		if (is_numeric($nombre) && is_numeric($debut) && $export === false)
+		{
+			$query.= 'LIMIT ' . $debut . ', ' . $nombre;
+		}
+		else if (is_numeric($nombre) && !is_numeric($debut) && $export === false)
+		{
+			$query.= 'LIMIT 0, ' . $nombre;
+		}
+
+		// On exécute la requête SQL et on l'affecte au tableau $contacts
+		$sql = $this->db->query($query);
+		$contacts = array();
+		
+		if ($sql->num_rows > 0) while ($row = $sql->fetch_assoc()) $contacts[] = $this->formatage_donnees($row);
+
+		// Si on demande une sortie des données sans export, on retourne sous format JSON ou tableau PHP les données
+		if ($export == false) {
+			if ($output == 'JSON') {
+				$json = json_encode($contacts);
+				//$json = str_replace('null', '', $json);
+				echo $json;
+			} elseif ($output == 'debug') {
+				$this->debug($contacts);
+			} else {
+				return $contacts;
+			}
+		
+		// Sinon, on procède à un export des données dans un fichier
+		} else {
+		
+			// On prépare le contenu du fichier sous forme de tableau
+			$fichier = array();
+			
+			// On ouvre le fichier
+			$nomFichier = 'export-' . $_COOKIE['leqg-user'] . '-' .date('Y-m-d-H\hi'). '-' . rand(1, 100) . '.csv';
+			$f = fopen('exports/' . $nomFichier, 'w+');
+			
+			// On y entre la première ligne du fichier
+			$entete = array(   'bureau',
+							   'nom',
+							   'nom_usage',
+							   'prenoms',
+							   'organisation',
+							   'fonction',
+							   'date_naissance',
+							   'adresse',
+							   'cp',
+							   'ville',
+							   'sexe',
+							   'email',
+							   'mobile',
+							   'fixe',
+							   'electeur');
+			
+			fputcsv($f, $entete, ';', '"');
+			
+			
+			// On fait la boucle des contacts pour y ajouter les lignes
+			foreach ($contacts as $contact) {
+				// On commence par rechercher les coordonnées d'après l'immeuble
+				$immeuble = $this->db->query('SELECT * FROM immeubles WHERE immeuble_id = ' . $contact['immeuble_id']);
+				$immeuble = $this->formatage_donnees($immeuble->fetch_assoc());
+				
+				if ($immeuble['rue_id'] != $immeuble['bureau_id']) {
+					$rue = $this->db->query('SELECT * FROM rues WHERE rue_id = ' . $immeuble['rue_id']);
+					$rue = $this->formatage_donnees($rue->fetch_assoc()); 
+					
+					$ville = $this->db->query('SELECT * FROM communes WHERE commune_id = ' . $rue['commune_id']);
+					$ville = $this->formatage_donnees($ville->fetch_assoc());
+					
+					$cp = $this->db->query('SELECT * FROM codes_postaux WHERE commune_id = ' . $ville['id']);
+					$cp = $cp->fetch_assoc();
+					
+					$bureau = $this->db->query('SELECT `bureau_numero` FROM `bureaux` WHERE `bureau_id` = ' . $contact['bureau_id']);
+					$bureau = $bureau->fetch_assoc();
+				} else {
+					$rue['nom'] = '';
+					$ville['nom'] = '';
+					$cp['code_postal'] = '';
+					$bureau['bureau_numero'] = '0';
+				}
+				
+				// on rassemble les informations qu'on balance dans le fichier
+				$ligne = array(    $bureau['bureau_numero'],
+								   $contact['nom'],
+								   $contact['nom_usage'],
+								   $contact['prenoms'],
+								   $contact['organisme'],
+								   $contact['fonction'],
+								   ($contact['naissance_date'] == '0000-00-00') ? '' : date('d/m/Y', strtotime($contact['naissance_date'])),
+								   $immeuble['numero'] . ' ' . trim($rue['nom']),
+								   $cp['code_postal'],
+								   $ville['nom'],
+								   ($contact['sexe'] == 'i') ? '' : $contact['sexe'],
+								   $contact['email'],
+								   $contact['mobile'],
+								   $contact['telephone'],
+								   $contact['electeur']);
+								   
+				fputcsv($f, $ligne, ';', '"');
+			}
+			
+			// On ferme le fichier
+			fclose($f);
+			
+			// On retourne le nom du fichier
+			return 'exports/' . $nomFichier;
+		}
 	}
 }
 

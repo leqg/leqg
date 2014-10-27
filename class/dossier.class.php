@@ -1,24 +1,52 @@
 <?php
+/**
+ * Cette classe comprend l'ensemble des méthodes de traitement des dossiers sur le SaaS LeQG
+ * 
+ * @package		leQG
+ * @author		Damien Senger <mail@damiensenger.me>
+ * @copyright	2014 MSG SAS – LeQG
+ */
+
 
 class dossier extends core {
 	
-// Définition des propriétés
-	private $db; // Lien vers la base MySQL
-	private $compte; // ID du compte utilisant la classe
-	private $url; // Domaine du serveur
-	private $dossier;
+	/**
+	 * @var	object	$db			Propriété concenant le lien vers la base de données de l'utilisateur
+	 * @var	string	$url		Propriété contenant l'URL du serveur
+	 * @var	string	$compte		Propriété contenant les informations sur le compte connecté
+	 */
+	private $db, $url, $compte;
 	
-	
-// Définition des méthodes
-	
+
+	/**
+	 * Cette méthode permet la construction de la classe dossier
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	object	$db			Lien vers la base de données de l'utilisateur
+	 * @param	string	$compte		Informations concernant l'utilisateur connecté
+	 * @param	string	$url		URL du serveur
+	 * @return	void
+	 */
+	 
 	public	function __construct($db, $compte, $url) {
 		$this->db = $db;
 		$this->compte = $compte;
 		$this->url = $url;
 	}
 	
-	
-	// recherche( bool ) est la méthode de recherche des dossiers ouverts actuellement
+
+	/**
+	 * Cette méthode permet de récupérer la liste des dossiers
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	bool	$tous		Si true, la liste contient également les dossiers fermés
+	 * @return	array				Tableau des dossiers enregistrés dans la base de données
+	 */
+	 
 	public	function recherche( $tous = false ) {
 		// On prépare la requête de recherche
 		$query = 'SELECT * FROM dossiers WHERE dossier_statut = 1';
@@ -39,8 +67,17 @@ class dossier extends core {
 		return $rendu;
 	}
 	
-	
-	// rechercheParFiche( int ) est la méthode permettant de rechercher les dossiers rattachés à une fiche
+
+	/**
+	 * Cette méthode permet de récupérer la liste des dossiers rattachés à une fiche demandée
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$fiche		ID de la fiche dont on souhaite récupérer les dossiers
+	 * @return	array				Tableau des dossiers enregistrés pour la fiche demandée
+	 */
+	 
 	public	function rechercheParFiche( $fiche ) {
 		// On vérifie que l'entrée est bien un nombre (ID = numeric only)
 		if (is_numeric( $fiche ) ) {
@@ -73,8 +110,17 @@ class dossier extends core {
 		}
 	}
 	
-	
-	// nombre( int ) est la méthode permettant de savoir combien de dossiers sont ouvert pour une fiche demandée
+
+	/**
+	 * Cette méthode permet de connaître le nombre des dossiers rattachés à une fiche demandée
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$fiche		ID de la fiche dont on souhaite connaître le nombre de dossiers rattachés
+	 * @return	array				Tableau des dossiers enregistrés pour la fiche demandée
+	 */
+	 
 	public	function nombre( $fiche ) {
 		// On vérifie que l'entrée est bien un nombre (id = int)
 		if (is_numeric( $fiche )) :
@@ -91,8 +137,19 @@ class dossier extends core {
 		endif;
 	}
 	
-	
-	// creation_rapide( int , string , string ) est une méthode permettant la création rapide d'un dossier
+
+	/**
+	 * Cette méthode permet de procéder à la création rapide d'un dossier
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string	$contact		ID de la fiche contact concernée par le dossier
+	 * @param	string	$nom			Nom du dossier à créer
+	 * @param	string	$description 	Description du dossier à créer
+	 * @return	int						ID du dossier créé
+	 */
+	 
 	public	function creation_rapide( $contact , $nom , $description ) {
 		// On sécurise les insertions
 		if (!is_numeric($contact) && is_string($nom) && is_string($description)) return false;
@@ -110,8 +167,18 @@ class dossier extends core {
 		return $this->db->insert_id;
 	}
 	
-	
-	// lierInteraction( int , int ) permet de lier ensemble une interaction et un dossier
+
+	/**
+	 * Cette méthode permet de lier ensemble une interaction et un dossier
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$interaction 	ID de l'interaction concernée
+	 * @param	int		$dossier	 	ID du dossier concerné
+	 * @return	bool					Réussite ou non de l'opération
+	 */
+	 
 	public	function lierInteraction( $interaction , $dossier ) {
 		// On vérifie que tout est bien numérique
 		if (!is_numeric($interaction) || !is_numeric($dossier)) return false;
@@ -127,8 +194,18 @@ class dossier extends core {
 		}
 	}
 	
-	
-	// lierFiche( int , int ) permet de lier ensemble une fiche et un dossier
+
+	/**
+	 * Cette méthode permet de lier ensemble une fiche et un dossier
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$interaction 	ID de la fiche concernée
+	 * @param	int		$dossier	 	ID du dossier concerné
+	 * @return	bool					Réussite ou non de l'opération
+	 */
+	 
 	public	function lierFiche( $fiche , $dossier ) {
 		// On vérifie que tout est bien numérique
 		if (!is_numeric($fiche) || !is_numeric($dossier)) return false;
@@ -141,20 +218,37 @@ class dossier extends core {
 		if (!in_array($fiche, $contacts)) {
 			$contacts[] = $fiche;
 			$contacts = implode(',', $contacts);
-			$this->db->query('UPDATE dossiers SET dossier_contacts = "' . $contacts . '" WHERE dossier_id = ' . $dossier);
+			$query = 'UPDATE dossiers SET dossier_contacts = "' . $contacts . '" WHERE dossier_id = ' . $dossier;
 		}
 		
-		return true;
+		if ($this->db->query($query)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
-	
-	// supprimerLiaisonInteraction( int ) permet de supprimer la liaison entre une fiche interaction et un dossier
+
+	/**
+	 * Cette méthode permet de supprimer une liaison entre une interaction et un dossier
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$interaction 	ID de l'interaction concernée
+	 * @param	int		$dossier	 	ID du dossier concerné
+	 * @return	bool					Réussite ou non de l'opération
+	 */
+	 
 	public	function supprimerLiaisonInteraction( $id ) {
 		if (!is_numeric($id)) return false;
 		
 		$query = 'UPDATE historique SET dossier_id = NULL WHERE historique_id = ' . $id;
-		$this->db->query($query);
 		
-		return true;
+		if ($this->db->query($query)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

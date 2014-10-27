@@ -325,19 +325,19 @@ ul#creationsRapides {
 .listeTags {
 	.tag {
 		display: inline-block;
-		background-color: $jaune;
+		border: 1px solid $gris;
 		@include border-radius(.5em);
-		@include shadow(0, 2px, 0, $gris);
-		color: $rouge;
+		color: $bleu;
 		cursor: default;
-		font-size: .85em;
-		margin: 0 1em .5em 0;
+		font-size: 1em;
+		line-height: 1.5em;
+		margin: .4em 1em .5em 0;
 		padding: .05em 1em;
 		@include transition(all);
 		
 		&::before {
 			display: inline-block;
-			color: $rouge;
+			color: $bleu;
 			font-family: $icons;
 			font-size: .85em;
 			content: '\e827';
@@ -346,14 +346,14 @@ ul#creationsRapides {
 			@include transition(all);
 		}
 		
-		&:hover {
-			background-color: $rouge;
-			color: $jaune;
+		&.interactif:hover {
+			border-color: $rouge;
+			color: $rouge;
 			cursor: pointer;
 			text-decoration: line-through;
 			
 			&::before {
-				color: $jaune;
+				color: $rouge;
 				content: '\e847';
 			}
 		}
@@ -537,6 +537,8 @@ table.fusion {
  ************************************/
 
 section#contacts {
+	height: 100%;
+
 	& > div {
 		display: inline-block;
 		padding: 0 2.5%;
@@ -551,6 +553,78 @@ section#contacts {
 			font-weight: 300;
 			margin: 0 auto 1em auto;
 			text-align: center;
+		}
+	}
+}
+
+table#listeFiches {
+	border: none;
+	border-collapse: collapse;
+	margin: 0 auto;
+	//table-layout: fixed;
+	width: 90%;
+	
+	tr,
+	th,
+	td {
+		background: none;
+		border: 0;
+		height: 57px;
+		text-align: left;
+	}
+	
+	th,
+	td {
+		&:first-of-type {
+			padding: 0 0 0 10px;
+			text-align: center;
+			width: 50px;
+		}
+		
+		&:nth-of-type(3) {
+			width: 250px;
+		}
+		
+		&:nth-of-type(4) {
+			width: 130px;
+		}
+		
+		&:nth-of-type(5) {
+			width: 130px;
+		}
+	}
+	
+	thead {
+		border: none;
+		border-bottom: 1px solid $noir;
+		color: $bleu;
+		font-size: 1.15em;
+		font-weight: 600;
+		
+		th {
+			background: $blanc;
+			height: 40px;
+			line-height: 40px;
+			margin: 0;
+		}
+	}
+	
+	tbody {
+	
+		tr {
+			&:nth-of-type(even) {
+				background-color: rgba($rouge, .05);
+			}
+			
+			td {
+				a {
+					color: $bleu;
+					
+					&:hover {
+						color: $rouge;
+					}
+				}
+			}
 		}
 	}
 }

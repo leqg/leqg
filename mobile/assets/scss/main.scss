@@ -31,7 +31,9 @@ $orange: rgba(255, 190, 64, 1);
 $jaune: rgba(253, 231, 180, 1);
 $vert: rgba(179, 204, 87, 1);
 $lime: rgba(236, 240, 129, 1);
-$gris: rgba(205, 203, 202, 1);
+$background:rgba($bleu, .05);
+$gris:		rgba(205, 203, 202, 1);
+$grisClair:	lighten($gris, 10%);
 $grisMoyen: darken($gris, 15%);
 $grisFonce: darken($gris, 50%);
 $fonts1:	 'Roboto', Helvetica, Arial, sans-serif;
@@ -138,8 +140,8 @@ h2 {
 	color: $bleu;
 	font-size: 1.33em;
 	font-weight: 300;
-	margin: 0 10px 0 0;
-	padding: .33em 0 0 10px;
+	margin: 0 10px 1em 0;
+	padding: .33em 0 0 1em;
 	
 	& > span {
 		display: block;
@@ -240,6 +242,115 @@ ul#actions {
 			}
 		}
 	}
+}
+
+ul.listeMissions {
+	font-size: 1.2em;
+	list-style: none;
+	margin: 0 auto;
+	padding: 0 1em;
+	
+	li {
+		position: relative;
+		display: block;
+		margin: 1.5em auto;
+		padding: 0 0 0 50px;
+		
+		&::before {
+			position: absolute; top: 0; top: calc(50% - 20px); left: -3px;
+			display: block;
+			background-color: $jaune;
+			@include border-radius(50%);
+			color: $rouge;
+			content: '\e843';
+			font-family: $icons;
+			font-size: 23px;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			width: 40px;
+		}
+		
+		&.vide::before {
+			background-color: $grisClair;
+			color: $grisFonce;
+			content: '\e917';
+		}
+		
+		&.rue::before { content: '\e841'; }
+		&.immeuble::before { content: '\e842'; }
+		
+		h4 {
+			font-size: 1em;
+			font-weight: 500;
+			margin: 0;
+			padding: 0;
+		}
+		
+		p {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+ul.listeImmeubles {
+	font-size: 1.2em;
+	list-style: none;
+	margin: 0 auto;
+	padding: 0 1em;
+	
+	li {
+		position: relative;
+		display: block;
+		margin: 1.5em auto;
+		padding: 0 .5em;
+		
+		& > span {
+			display: inline-block;
+			background-color: lighten($bleu, 5%);
+			@include border-radius(.33em);
+			color: $blanc;
+			font-size: 1.1em;
+			line-height: 1.66em;
+			min-width: 50px;
+			margin: 0 .25em;
+			padding: 0 .5em;
+			text-align: center;
+		}
+		
+		& > button.choix {
+			position: absolute; top: 0; top: calc(50% - 20px); right: 0;
+			background-color: $grisClair;
+			border: none;
+			@include border-radius(50%);
+			color: $grisMoyen;
+			font-family: $icons;
+			font-size: 25px;
+			height: 40px;
+			line-height: 40px;
+			width: 40px;
+		}
+		
+		& > button.report {
+			position: absolute; top: 0; top: calc(50% - 20px); right: 0;
+			display: none;
+			background-color: $vert;
+			border: none;
+			@include border-radius(50%);
+			color: $blanc;
+			font-family: $icons;
+			font-size: 20px;
+			height: 40px;
+			line-height: 40px;
+			width: 40px;
+			
+			&:last-of-type {
+				right: 50px;
+				background-color: $rouge;
+			}
+		}
+	}	
 }
 
 ul.listeEncadree {

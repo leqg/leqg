@@ -1,10 +1,10 @@
 var administration = function() {
-	$('#ajoutCompte').click(function(){
+	$('#ajoutCompte').click(function() {
 		$('#creationCompte').fadeIn();
 		return false;
 	});
 	
-	$('.modifier').click(function(){
+	$('.modifier').click(function() {
 		var id = $(this).data('user');
 	
 		// On récupère les informations sur la fiche demandée

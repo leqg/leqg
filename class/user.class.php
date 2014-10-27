@@ -11,7 +11,7 @@ class user extends core {
 	private $db; // Lien à la base de données
 	private $noyau; // Lien vers la base de données centrale du système
 	private $url; // le nom de domaine du serveur utilisé
-	private	$user; // Informations liées à l'utilisateur
+	public	$user; // Informations liées à l'utilisateur
 	
 	
 	// Définition des méthodes	
@@ -155,7 +155,7 @@ class user extends core {
 				
 				// On enregistre la connexion dans la table d'historique des connexions
 				$client['ipv4'] = $_SERVER['REMOTE_ADDR'];
-				$client['host'] = $_SERVER['REMOTE_HOST'];
+				$client['host'] = '';
 				$query = 'INSERT INTO `connexions` (`user_id`, `connexion_plateforme`, `connexion_ip`, `connexion_host`)
 						  VALUES ("' . $id_user . '", "' . $plateforme . '", "' . $client['ipv4'] . '", "' . $client['host'] . '")';
 				$this->noyau->query($query);

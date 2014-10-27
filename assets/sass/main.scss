@@ -31,11 +31,15 @@ $orange:	rgba(255, 190,  64, 1);
 $jaune:		rgba(253, 231, 180, 1);
 $vert:		rgba(179, 204,  87, 1);
 $lime:		rgba(236, 240, 129, 1);
+$background:rgba($bleu, .05);
 $gris:		rgba(205, 203, 202, 1);
+$grisClair:	lighten($gris, 10%);
 $grisMoyen:	darken($gris, 15%);
+$grisMedium:darken($gris, 33%);
 $grisFonce:	darken($gris, 50%);
 $fonts1:	'Roboto', Helvetica, Arial, sans-serif;
 $fonts2:	'Fira Sans', Helvetica, Arial, sans-serif;
+$flat:		'Source Sans Pro', Helvetica, Arial, sans-serif;
 $monospaced:'Fira Mono', monospace;
 $icons:		'fontello';
 
@@ -45,6 +49,9 @@ $mediumGrey:rgba(186, 186, 186, 1);
 $grey:		rgba(130, 134, 135, 1);
 $darkerGrey:rgba( 67,  77,  84, 1);
 $darkGrey:	rgba( 42,  52,  58, 1);
+
+// Liste d'icones pour IcoFonts
+$typesEvent: (contact '\e80a') (telephone '\e854') (email '\e96d') (courrier '\e8a3') (autre '\e858') (sms '\e8e4') (courriel '\e96d') (porte '\e821') (boite '\e8c9') (rappel '\e854') (poste '\e8a3');
 
 
 
@@ -309,9 +316,10 @@ table {
 	outline: none;
 } 
 
+.invisible { display: none; }
+
 html,
 body {
-	background-color: $blanc;
 	color: $noir;
 	font-family: $fonts1;
 	height: 100%;
@@ -323,6 +331,7 @@ body {
 }
 
 html {
+	background-color: $background;
 	font-size: 62.5%;
 	font-size: calc(1em * 0.625);
 	-webkit-text-size-adjust: 100%;
@@ -330,6 +339,7 @@ html {
 }
 
 body {
+	background-color: $blanc;
 	font-size: 1.4em;
 	
 	@media all and (max-width: 1500px) {
@@ -340,12 +350,12 @@ body {
 main {
 	position: absolute; top: 0; left: 0;
 	height: 100%;
-	margin: 0;
-	overflow-x: hidden;
-	overflow-y: scroll;
 	padding: 60px 0 0 95px;
 	width: 100%;
 	@include transition(all);
+	margin: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	
 	aside {
 		position: absolute; top: 0; right: 0;
@@ -816,3 +826,9 @@ ul.listeEncadree {
 
 // Style dédié aux timelines sur la plateforme
 @import "timeline.scss";
+
+// Style dédié au module contacts sur la plateforme
+@import "contacts.scss";
+
+// Feuille dédiée au nouveau style Flat de la plateforme
+@import "flat.scss";

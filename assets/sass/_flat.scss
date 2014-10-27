@@ -1,0 +1,842 @@
+@charset "UTF-8";
+
+/*
+ *
+ *	Feuille de style dédiée à l'affichage flat du service en ligne LeQG
+ *	développé par Damien Senger ( www.damiensenger.me )
+ *	au sein de la société MSG SAS
+ *
+ */
+
+
+
+/************************************
+ *									*
+ *			  	 FLAT				* 
+ *									*
+ ************************************/
+
+body.flat {
+	background-color: transparent;
+	
+	header#top {
+		position: fixed;
+	}
+	
+	nav#principale {
+		position: fixed;
+	}
+}
+
+main.flat,
+main.boite,
+main.porte,
+main.contact {
+	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
+	font-family: $flat;
+	height: auto;
+	overflow: visible;
+	margin: 0 auto 1em;
+	padding: 2em 1em 1em;
+	width: 1000px;
+	
+	button,
+	input[type='submit'].flat {
+		display: block;
+		background-color: darken($vert, 10%);
+		border: none;
+		@include shadow(0, 2px, 0, $grisClair);
+		color: $blanc;
+		font-family: $flat;
+		font-size: 1.15em;
+		font-variant: small-caps;
+		margin: 1.66em auto;
+		padding: .66em 1.5em;
+		text-transform: lowercase;
+		@include transition(all);
+		
+		&:hover { background-color: $vert; }
+		&.gris { background-color: $gris; }
+		&.gris:hover { background-color: $grisMoyen; }
+		
+		&.long { width: 100%; }
+		
+		&.deleting
+		{
+			background-color: $grisClair;
+			color: $rouge;
+			font-weight: 600;
+			margin-top: 3em;
+			
+			&:hover
+			{
+				background-color: $rouge;
+				color: $blanc;
+			}
+		}
+		
+		&.new
+		{
+			background-color: $grisClair;
+			color: darken($vert, 15%);
+			font-weight: 600;
+			
+			&:hover
+			{
+				background-color: $vert;
+				color: $blanc;
+			}
+		}
+	}
+	
+	h2 {
+		color: $grisFonce;
+		font-family: $flat;
+		font-size: 2em;
+		font-weight: 500;
+		
+		& > span {
+			display: inline-block;
+			font-variant: normal;
+			margin: 0 .15em 0 0;
+			
+			&:last-of-type { font-weight: 300; }
+		}
+		
+		&#nomContact {
+			font-size: 2.5em;
+		}
+	}
+	
+	h3 {
+		border: none;
+		color: $bleu;
+		font-family: $flat;
+		font-size: 1.33em;
+		font-weight: 400;
+		margin: 0.5em auto 1em;
+		text-align: center;
+	}
+	
+	h4 {
+		border: none;
+		color: $bleu;
+		font-family: $flat;
+		font-size: 1.33em;
+		font-weight: 400;
+		margin: .33em auto 1em;
+		text-align: left;
+	}
+	
+	h5 {
+		border: none;
+		color: $bleu;
+		font-family: $flat;
+		font-size: 1.25em;
+		font-weight: 400;
+		margin: .15em auto 1em;
+		text-align: center;
+		
+		span {
+			color: $rouge;
+		}
+	}
+	
+	.colonne {
+		position: relative;
+		background-color: transparent;
+		margin: 30px 0 60px;
+		padding: 0;
+		width: 100%;
+		
+		& > section {
+			margin: 15px 0 30px !important;
+		}
+		
+		&.demi {
+			padding: 0;
+			width: 475px;
+		}
+		
+		&.gauche { position: absolute; left: 1em; }
+		&.droite { position: absolute; right: 1em; }
+	}
+	
+	section{
+		position: relative;
+		background-color: $blanc;
+		@include border-radius(.5em);
+		@include shadow(0, 2px, 2px, $gris);
+		font-family: $flat;
+		margin: 30px 0 60px;
+		padding: 20px 30px;
+		width: 100%;
+		
+		&.contenu {
+			font-size: 1.2em;
+		}
+		
+		&.demi {
+			padding: 1.5em 2em;
+			width: 475px;
+		}
+		
+		&.gauche { position: absolute; left: 1em; }
+		&.droite { position: absolute; right: 1em; }
+		
+		&.invisible { display: none; }
+		
+		&.icone {
+			padding-top: 200px;
+			
+			&::before,
+			&::after {
+				position: absolute; top: 50px; left: calc(50% - 75px);
+				background-color: $jaune;
+				@include border-radius(50%);
+				color: $rouge;
+				content: '\e917';
+				font-family: $icons;
+				font-size: 75px;
+				height: 150px;
+				line-height: 150px;
+				text-align: center;
+				width: 150px;
+			}
+			
+			&::after {
+				top: 35px; left: calc(50% - 66px);
+				background: transparent;
+				content: none;
+			}
+			
+			&.fusee::before { content: '\e915'; }
+			&.rue {
+				&::before {
+					color: rgba($rouge, .5);
+					content: '\e843';
+					line-height: 175px;
+				}
+				
+				&::after { content: '\e842'; }
+			}
+		}
+		
+		&#carte {
+			height: 200px;
+			padding: 0;
+		}
+	}
+	
+	strong {
+		font-weight: 600;
+	}
+	
+	ul.formulaire {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		
+		&.invisible {
+			display: none;
+		}
+		
+		li {
+			display: block;
+			margin: 0 auto 2em auto;
+			
+			&:last-of-type { margin-bottom: .66em; }
+			
+			input,
+			textarea {
+				position: relative;
+				display: block;
+				background-color: $background;
+				border: 1px solid $gris;
+				@include border-radius(.33em);
+				font-family: $flat;
+				font-size: 1.15em;
+				font-weight: 400;
+				line-height: 30px;
+				padding: .5em 1em .5em 40px;
+				z-index: 100;
+				
+				&:focus {
+					border-color: $vert;
+				}
+			}
+			
+			textarea
+			{
+				height: 6em;
+			}
+			
+			span.form-icon {
+				position: relative;
+				display: block;
+				
+				&::after {
+					position: absolute; top: .5em;  left: 15px;
+					display: block;
+					color: $grisFonce;
+					content: '\e827';
+					font-family: $icons;
+					font-size: 15px;
+					height: 30px;
+					line-height: 30px;
+					text-align: center;
+					width: 15px;
+					z-index: 10;
+				}
+				
+				$icon-names: (street '\e841') (search '\e8a2') (objet '\e827') (type '\e8dd') (lieu '\e842') (date '\e862') (notes '\e8bd');
+				@each $icon-name in $icon-names {
+					&.#{nth($icon-name, 1)}::after {
+						content: nth($icon-name, 2);
+					}
+				}
+				
+				& + input {
+					z-index: 0;
+				}
+			}
+			
+			label {
+				display: block;
+				color: $grisFonce;
+				font-size: 1.33em;
+				font-weight: 400;
+				line-height: 1.5em;
+				padding: 0 0 .66em 0;
+				
+				&.small
+				{
+					color: $grisMoyen;
+					font-size: 1.15em;
+					font-variant: small-caps;
+					letter-spacing: .015em;
+					line-height: 1.5em;
+					padding: 0 0 0 .33em;
+					text-transform: lowercase;
+				}
+			}
+		}
+		
+		&.small li
+		{
+			margin: 0 auto .85em auto;
+			
+			input,
+			textarea
+			{
+				padding: .33em 1em .33em 40px;
+			}
+		}
+	}
+	
+	ul.form-liste {
+		list-style: none;
+		margin: 2em auto .5em;
+		padding: 0 1em;
+		
+		li {
+			position: relative;
+			display: block;
+			font-family: $flat;
+			margin: 1.5em auto 0;
+			
+			button {
+				position: absolute; top: 0; top: calc(50% - 15px); right: 0;
+				display: block;
+				font-size: 1.2em;
+				height: 30px;
+				line-height: 15px;
+				margin: 0;
+				padding: 0 .5em .15em;
+				z-index: 10;
+			}
+			
+			button:hover + span {
+				color: $rouge;
+			}
+			
+			span {
+				display: block;
+				line-height: 1.5em;
+				@include transition(all);
+				
+				&:first-of-type {
+					font-size: 1.2em;
+					font-weight: 600;
+				}
+				
+				&:last-of-type {
+					font-size: 1.1em;
+					font-weight: 300;
+					
+					&.prenoms { text-transform: capitalize; }
+				}
+			}
+			
+			& > ul  {
+				padding: 0 0 1em 3em;
+				
+				& > li {
+					color: $bleu;
+					margin: .33em auto .66em;
+				}
+			}
+			
+			&.detailImmeuble {
+				position: relative;
+				margin: .5em 1em .75em 0;
+				padding: 0;
+				font-size: 1.25em;
+				font-weight: 600;
+				
+				& > span {
+					display: inline-block;
+					background-color: lighten($bleu, 10%);
+					@include border-radius(.25em);
+					color: $blanc;
+					font-size: 1.1em;
+					font-weight: 600;
+					height: 1.5em;
+					line-height: 1.5em;
+					margin: 0 .5em;
+					min-width: 50px;
+					padding: 0 .5em;
+					text-align: center;
+				}
+			}
+		}
+	}
+	
+	ul.liste-missions {
+		list-style: none;
+		margin: 1em 1em 2.5em;
+		padding: 0;
+		
+		li {
+			position: relative;
+			min-height: 90px;
+			margin: 0 auto 1.5em;
+			padding: 0 0 0 115px;
+			
+			&::before,
+			&::after {
+				position: absolute; top: 0; top: calc(50% - 45px); left: 0;
+				display: block;
+				background-color: $jaune;
+				@include border-radius(50%);
+				color: rgba($rouge, .5);
+				content: '\e843';
+				font-family: $icons;
+				font-size: 50px;
+				height: 90px;
+				line-height: 90px;
+				text-align: center;
+				width: 90px;
+			}
+			
+			&::before { line-height: 105px; }
+			
+			&::after {
+				left: 6px;
+				background-color: transparent;
+				color: $rouge;
+				content: '\e842';
+				line-height: 70px;
+			}
+			
+			h4 {
+				color: $bleu;
+				font-size: 1.66em;
+				font-weight: 600;
+				line-height: 1.5em;
+				margin: 1em 0 0;
+				padding: 0;
+			}
+			
+			& > p {
+				font-size: 1.2em;
+				margin: .5em 0;
+				padding: 0;
+			}
+		}
+	}
+	
+	ul.statistiquesMission {
+		font-size: 1.2em;
+		list-style: none;
+		margin: -.5em auto 1em;
+		padding: 0 3em;
+		
+		& > li {
+			position: relative;
+			line-height: 2em;
+			min-height: 25px;
+			
+			&::before {
+				position: absolute; top: 0; left: -30px;
+				display: block;
+				color: $grisFonce;
+				content: '\e826';
+				font-family: $icons;
+				font-size: 15px;
+				height: 25px;
+				line-height: 2.33em;
+				text-align: center;
+				width: 25px;
+			}
+		}
+	}
+	
+	ul.icones-etatcivil {
+		display: block;
+		list-style: none;
+		margin: 0 0 1.5em 0;
+		padding: 0;
+		text-align: center;
+		
+		li {
+			position: relative;
+			display: inline-block;
+			color: $grisClair;
+			font-variant: small-caps;
+			font-weight: 600;
+			margin: 0 10px;
+			padding: 35px 0 0 0;
+			text-transform: lowercase;
+			width: 70px;
+			
+			&::before {
+				position: absolute; top: 0; left: 30%; left: calc(50% - 15px);
+				display: block;
+				font-family: $icons;
+				font-size: 30px;
+				font-weight: 400;
+				height: 30px;
+				line-height: 30px;
+				width: 30px;
+			}
+			
+			&.sexe {
+				&.homme {
+					color: $bleu;
+					&::before { content: '\e8a6'; }
+				}
+				&.femme {
+					color: $bleu;
+					&::before { content: '\e8a7'; }
+				}
+				&.inconnu {
+					color: $grisMoyen;
+					
+					&::before { 
+						left: 5px; left: calc(50% - 30px);
+						content: '\e8a8';
+						width: 60px;
+					}
+				}
+			}
+			
+			&.electeur {
+				&.oui {
+					color: $bleu;
+					&::before { content: '\e8af'; }
+				}
+				
+				&.non {
+					color: $grisMoyen;
+					&::before { content: '\e8b0'; }
+				}
+			}
+			
+			&.sms {
+				&.envoyerSMS { color: $bleu; }
+				&::before { content: '\e961'; }
+			}
+			
+			&.email {
+				&.envoyerEmail { color: $bleu; }
+				&::before { content: '\e96d'; }
+			}
+		}
+	}
+	
+	ul.etatcivil,
+	ul.listeDesTags {
+		list-style: none;
+		margin: -.66em auto 2.5em;
+		padding: 0 0 0 40px;
+		
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+		
+		li {
+			position: relative;
+			display: block;
+			line-height: 1.5em;
+			margin: .66em auto;
+			padding: 0;
+			
+			&::before {
+				position: absolute; top: 0; left: -40px;
+				display: block;
+				color: rgba($bleu, .85);
+				font-family: $icons;
+				font-size: 400;
+				height: 1.5em;
+				line-height: 1.5em;
+				text-align: center;
+				width: 40px;
+			}
+			
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e967');
+			@each $icon-name in $icon-names {
+				&.#{nth($icon-name, 1)}::before {
+					content: nth($icon-name, 2);
+				}
+			}
+			
+			&.ajout {
+				color: $grisMoyen;
+				cursor: pointer;
+				
+				&:hover { color: $vert; }
+				&::before { color: $grisMoyen; }
+				&:hover::before { color: $vert; }
+			}
+			
+			a {
+				color: $bleu;
+				text-decoration: underline;
+				
+				&:hover { color: $rouge; }	
+			}
+			
+			span.inconnu { color: $grisMoyen; }
+		}
+	}
+	
+	ul.listeDesTags {
+		margin: -.66em 0 0;
+		padding: 0;
+		
+		li {
+			display: inline-block;
+			margin: .25em 0;
+			padding-left: 40px;
+			
+			&::before {
+				left: 5px;
+				width: 35px;
+			}
+			
+			&.ajout {
+				display: block;
+				border: 0;
+			}
+		}
+	}
+	
+	ul.listeDesEvenements
+	{
+		list-style: none;
+		margin: 0 0 0;
+		padding: 0;
+		
+		li.evenement
+		{
+			position: relative;
+			margin: 0 0 1em;
+			padding: 0 0 0 60px;
+			
+			&::before
+			{
+				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
+				color: $bleu;
+				content: '\e952';
+				font-family: $icons;
+				font-size: 40px;
+				line-height: 45px;
+				height: 45px;
+				text-align: center;
+				width: 45px;
+				@include text-shadow(0, 3px, 0, $grisClair);
+				@include transition(all);
+			}
+			
+			&::after
+			{
+				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
+				color: $blanc;
+				content: '\e858';
+				font-family: $icons;
+				font-size: 25px;
+				height: 45px;
+				line-height: 45px;
+				text-align: center;
+				width: 45px;
+			}
+			
+			@each $typeEvent in $typesEvent
+			{
+				&.#{nth($typeEvent, 1)}::after { content: nth($typeEvent, 2); }
+			}
+						
+			&.clic:hover::before { color: $rouge; }
+			
+			& > small
+			{
+				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
+				font-size: 1em;
+				height: 45px;
+				width: 45px;
+				z-index: 250;
+				
+				& > span
+				{
+					position: absolute; top: 25%; top: calc(50% - 1em); left: 47px;
+					display: block;
+					background-color: $bleu;
+					@include border-radius(.33em);
+					color: $blanc;
+					font-size: .9em;
+					font-weight: 600;
+					line-height: 1.5em;
+					opacity: 0;
+					padding: .15em .66em;
+					pointer-events: none;
+					white-space: nowrap;
+					z-index: 100;
+					@include transition(all);
+					@include shadow(0, 2px, 0, rgba($grisClair, .85));
+				
+					&::before
+					{
+						position: absolute; top: calc(50% - 5px); left: -3px;
+						background-color: $bleu;
+						content: ' ';
+						height: 10px;
+						width: 10px;
+						@include rotate(45deg);
+					}
+				}
+				
+				&:hover span { opacity: 1; }
+			}
+			
+			& > strong
+			{
+				color: $bleu;
+				@include transition(all);
+			}
+			&.clic:hover > strong 
+			{ 
+				color: $rouge; 
+				text-decoration: underline;
+			}
+			
+			& > ul.infosAnnexes
+			{
+				list-style: none;
+				margin: 0 auto;
+				padding: 0 0 0 .15em;
+				
+				& > li
+				{
+					position: relative;
+					color: $grisFonce;
+					font-weight: 400;
+					line-height: 1.5em;
+					margin: 0;
+					padding: 0 0 0 1.25em;					
+					&::before
+					{
+						position: absolute; top: 0; left: 0;
+						color: $grisMoyen;
+						font-family: $icons;
+						line-height: 1.5em;
+						text-align: center;
+						width: 1em;
+					}
+					
+					&.date::before { content: '\e8d5'; }
+					&.lieu::before { content: '\e8c5'; }
+				}
+			}
+		}
+	}
+	
+	.coteAcote {
+		margin: 3em auto 0 auto;
+		padding: 0;
+		text-align: center;
+		
+		& > button {
+			display: inline-block;
+			margin: 1em;
+		}
+		
+		&.haut {
+			margin: 0 auto 1em;
+		}
+	}
+	
+	#avancementMission {
+		background-color: $grisClair;
+		border: none;
+		@include border-radius(.33em);
+		color: $grisMoyen;
+		height: 1.5em;
+		margin: .33em 0 3em;
+		overflow: hidden;
+		padding: 0;
+		width: 95%;
+		
+		& > div {
+			display: inline-block;
+			background-color: $vert;
+			@include border-radius(.33em);
+			color: $blanc;
+			height: 100%;
+			line-height: 1.5em;
+			overflow: hidden;
+			text-align: center;
+		}
+	}
+	
+	.fermerColonne
+	{
+		position: absolute; top: .5em; right: .5em;
+		display: block;
+		background-color: transparent;
+		border: 3px solid $rouge;
+		@include border-radius(.33em);
+		color: $rouge;
+		font-family: $icons;
+		font-size: 20px;
+		height: 30px;
+		line-height: 24px;
+		text-align: center;
+		text-decoration: none;
+		width: 30px;
+		
+		&:hover
+		{
+			background-color: $rouge;
+			color: $blanc;
+		}
+	}
+}
+
+main.contact {
+	padding: 1em 1em 0;
+	
+	h2 { margin-bottom: -2em; }
+	
+	.colonne { margin-top: 10px; }
+}
