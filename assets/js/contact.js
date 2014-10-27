@@ -149,7 +149,7 @@ var contact = function() {
 			// On affecte les informations récupérées
 			$('#eventTitre').val(data.historique_objet);
 			$('#eventType').val(data.historique_type);
-			$('#eventDate').val(data.historique_date);
+			$('#eventDate').val(data.historique_date_fr);
 			$('#eventLieu').val(data.historique_lieu);
 			$('#eventNotes').val(data.historique_notes);
 			

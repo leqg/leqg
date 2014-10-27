@@ -252,7 +252,7 @@ main.contact {
 					z-index: 10;
 				}
 				
-				$icon-names: (street '\e841') (search '\e8a2');
+				$icon-names: (street '\e841') (search '\e8a2') (objet '\e827') (type '\e8dd') (lieu '\e842') (date '\e862') (notes '\e8bd');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
@@ -593,7 +593,7 @@ main.contact {
 		{
 			position: relative;
 			margin: 0 0 1em;
-			padding: 0 0 0 50px;
+			padding: 0 0 0 60px;
 			
 			&::before
 			{
@@ -673,7 +673,6 @@ main.contact {
 			& > strong
 			{
 				color: $bleu;
-				padding-left: calc(1.25em + .66em);
 				@include transition(all);
 			}
 			&.clic:hover > strong 
@@ -686,7 +685,7 @@ main.contact {
 			{
 				list-style: none;
 				margin: 0 auto;
-				padding: 0 0 0 .66em;
+				padding: 0 0 0 .15em;
 				
 				& > li
 				{

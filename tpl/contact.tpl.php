@@ -104,26 +104,40 @@
 	<section id="evenement" class="contenu demi invisible">
 		<h4>Détails de l'événement</h4>
 		
-		<ul class="eventInfos">
+		<ul class="eventInfos formulaire">
 			<li>
-				<label>Objet</label>
-				<input type="text" name="titre" id="eventTitre" value="">
+				<label class="small" for="eventTitre">Objet</label>
+				<span class="form-icon objet">
+					<input type="text" name="titre" id="eventTitre" value="">
+				</span>
 			</li>
 			<li>
-				<label>Type</label>
-				<input type="text" name="type" id="eventType" value="">
+				<label class="small" for="eventType">Type</label>
+				<select name="type" id="eventType">
+					<option value="contact">Entrevue</option>
+					<option value="telephone">Contact téléphonique</option>
+					<option value="email">Courrier électronique</option>
+					<option value="courrier">Correspondance postale</option>
+					<option value="autre">Autre</option>
+				</select>
 			</li>
 			<li>
-				<label>Lieu</label>
-				<input type="text" name="lieu" id="eventLieu" value="">
+				<label class="small" for="eventLieu">Lieu</label>
+				<span class="form-icon lieu">
+					<input type="text" name="lieu" id="eventLieu" value="">
+				</span>
 			</li>
 			<li>
-				<label>Date</label>
-				<input type="text" name="date" id="eventDate" value="" placeholder="jj/mm/aaaa">
+				<label class="small" for="eventDate">Date</label>
+				<span class="form-icon date">
+					<input type="text" name="date" id="eventDate" value="" placeholder="jj/mm/aaaa">
+				</span>
 			</li>
 			<li>
-				<label>Notes</label>
-				<textarea name="notes" id="eventNotes"></textarea>
+				<label class="small" for="eventNotes">Notes</label>
+				<span class="form-icon notes">
+					<textarea name="notes" id="eventNotes"></textarea>
+				</span>
 			</li>
 		</ul>
 	</section>

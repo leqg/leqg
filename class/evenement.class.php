@@ -69,7 +69,12 @@ class evenement
 		// Sinon, on affecte les données aux propriétés de l'objet
 		else
 		{
-			$this->evenement = $evenements[0];
+			// On commence par retraiter la date de l'événement pour l'avoir en format compréhensible
+			$evenement = $evenements[0];
+			$evenement['historique_date_fr'] = date('d/m/Y', strtotime($evenement['historique_date']));
+			
+			// On retourne le tout dans la propriété evenement
+			$this->evenement = $evenement;
 		}
 	}
 	
