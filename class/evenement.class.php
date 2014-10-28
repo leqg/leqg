@@ -231,4 +231,29 @@ class evenement
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * Supprime l'événement ouvert
+	 *
+	 * Cette méthode réalise la suppression de l'événement ouvert actuellement de
+	 * la base de données
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @result	void
+	 */
+	
+	public function suppression()
+	{
+		// On prépare la requête
+		$query = $this->link->prepare('DELETE FROM `historique` WHERE `historique_id` = :event');
+		
+		// On affecte les informations discriminantes à la requête
+		$query->bindParam(':event', $this->evenement['historique_id'], PDO::PARAM_INT);
+		
+		// On lance la requête
+		$query->execute();
+	}
 }

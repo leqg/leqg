@@ -184,9 +184,15 @@ var contact = function() {
 		
 		// On lance la création de l'événement
 		$.getJSON('ajax.php?script=evenement-nouveau', { contact: contact }, function(data) {
-			console.log(data);
 			// On affiche l'ID dans la case data concernée
 			$('#evenement').data('evenement', data.historique_id);
+			
+			// On vide les éléments du formulaire
+			$('#eventTitre').val(data.historique_objet);
+			$('#eventType').val(data.historique_type);
+			$('#eventDate').val(data.historique_date_fr);
+			$('#eventLieu').val(data.historique_lieu);
+			$('#eventNotes').val(data.historique_notes);
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
@@ -198,45 +204,69 @@ var contact = function() {
 	
 	
 	// Enregistrement des données formulaire en cas de blur
-		function savingForm( evenement , info , value )
+	function savingForm( evenement , info , value )
+	{
+		$.post('ajax.php?script=evenement-update', { evenement: evenement , info: info,  value: value });
+	}
+	
+	$('#eventTitre').blur(function(){
+		var info = 'historique_objet';
+		var value = $(this).val();
+		var evenement = $('#evenement').data('evenement');
+		savingForm( evenement , info , value );
+	});
+	
+	$('#eventType').blur(function(){
+		var info = 'historique_type';
+		var value = $(this).val();
+		var evenement = $('#evenement').data('evenement');
+		savingForm( evenement , info , value );
+	});
+	
+	$('#eventLieu').blur(function(){
+		var info = 'historique_lieu';
+		var value = $(this).val();
+		var evenement = $('#evenement').data('evenement');
+		savingForm( evenement , info , value );
+	});
+	
+	$('#eventDate').blur(function(){
+		var info = 'historique_date';
+		var value = $(this).val();
+		var evenement = $('#evenement').data('evenement');
+		savingForm( evenement , info , value );
+	});
+	
+	$('#eventNotes').blur(function(){
+		var info = 'historique_notes';
+		var value = $(this).val();
+		var evenement = $('#evenement').data('evenement');
+		savingForm( evenement , info , value );
+	});
+	
+	
+	// Action à la demande de suppression d'un événement
+	$('.supprimerEvenement').click(function(){
+		// On demande la confirmation
+		if (confirm('Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est irréversible.'))
 		{
-			$.post('ajax.php?script=evenement-update', { evenement: evenement , info: info,  value: value });
+			// On récupère l'identifiant de l'événement
+			var evenement = $('#evenement').data('evenement');
+			
+			// On supprime l'événement en question
+			$.post('ajax.php?script=evenement-suppression', { evenement: evenement }, function() {
+				// On supprime l'élément de la liste des événements
+				$('.evenement-' + evenement).remove();
+				
+				// On retire tout ce qui est affiché dans la colonne droite
+				$('#colonneDroite section').fadeOut().delay(500);
+				$('#colonneDroite section:not(.invisible)').fadeIn();
+			});
 		}
 		
-		$('#eventTitre').blur(function(){
-			var info = 'historique_objet';
-			var value = $(this).val();
-			var evenement = $('#evenement').data('evenement');
-			savingForm( evenement , info , value );
-		});
-		
-		$('#eventType').blur(function(){
-			var info = 'historique_type';
-			var value = $(this).val();
-			var evenement = $('#evenement').data('evenement');
-			savingForm( evenement , info , value );
-		});
-		
-		$('#eventLieu').blur(function(){
-			var info = 'historique_lieu';
-			var value = $(this).val();
-			var evenement = $('#evenement').data('evenement');
-			savingForm( evenement , info , value );
-		});
-		
-		$('#eventDate').blur(function(){
-			var info = 'historique_date';
-			var value = $(this).val();
-			var evenement = $('#evenement').data('evenement');
-			savingForm( evenement , info , value );
-		});
-		
-		$('#eventNotes').blur(function(){
-			var info = 'historique_notes';
-			var value = $(this).val();
-			var evenement = $('#evenement').data('evenement');
-			savingForm( evenement , info , value );
-		});
+		// On annule le clic sur le bouton, au cas où celui-ci se trouve dans un formulaire
+		return false;
+	});
 };
 
 $(document).ready(contact);
