@@ -548,6 +548,38 @@ class contact extends carto
 		// On retourne le tableau trouvé
 		return $evenements;
 	}
+	
+	
+	/**
+	 * Met à jour des informations dans la base de données
+	 *
+	 * Cette méthode permet de mettre à jour les données intégrées dans la base 
+	 * de données pour le contact ouvert
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param	int 	$info		Information à mettre à jour
+	 * @param	mixed	$value		Valeur à intégrer dans la base
+	 *
+	 * @result	void
+	 */
+	
+	public function update( $info , $value )
+	{
+		// On prépare la requête de mise à jour des données
+		$query = $this->link->prepare('UPDATE `contacts` SET `' . $info . '` = :value WHERE `contact_id` = :id');
+		
+		// On affecte les variables
+		$query->bindParam(':id', $this->contact['contact_id']);
+		$query->bindParam(':value', $value);
+		
+		// On lance la requête
+		$query->execute();
+		
+		// On enregistre dans les propriétés les informations
+		$this->contact[$info] = $value;
+	}	
 }
 
 ?>

@@ -289,7 +289,12 @@ main.contact {
 					z-index: 10;
 				}
 				
-				$icon-names: (street '\e841') (search '\e8a2') (objet '\e827') (type '\e8dd') (lieu '\e842') (date '\e862') (notes '\e8bd');
+				&.decalage::after
+				{
+					top: .75em;
+				}
+				
+				$icon-names: (street '\e841') (search '\e8a2') (objet '\e827') (type '\e8dd') (lieu '\e842') (date '\e862') (notes '\e8bd') (naissance '\e85b') (organisme '\e968') (fonction '\e967') (ville '\e845') (rue '\e841') (immeuble '\e842');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
@@ -594,10 +599,21 @@ main.contact {
 				width: 40px;
 			}
 			
-			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e967');
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (immeuble '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e968');
 			@each $icon-name in $icon-names {
 				&.#{nth($icon-name, 1)}::before {
 					content: nth($icon-name, 2);
+				}
+			}
+			
+			&.modif:hover
+			{
+				cursor: pointer;
+				
+				&::before
+				{
+					color: $rouge;
+					content: '\e8bd';
 				}
 			}
 			
@@ -709,8 +725,14 @@ main.contact {
 						opacity: 1;
 					}
 					
-					&::after { color: $blanc; }					
-					strong { color: $vert; }
+					&::after { color: $blanc; }	
+									
+					strong { font-weight: 600; }
+				}
+				
+				strong
+				{
+					font-weight: 400;
 				}
 			}
 			
@@ -839,13 +861,12 @@ main.contact {
 		position: absolute; top: .5em; right: .5em;
 		display: block;
 		background-color: transparent;
-		border: 3px solid $bleu;
 		@include border-radius(.33em);
 		color: $bleu;
 		font-family: $icons;
 		font-size: 20px;
 		height: 30px;
-		line-height: 24px;
+		line-height: 30px;
 		text-align: center;
 		text-decoration: none;
 		width: 30px;
