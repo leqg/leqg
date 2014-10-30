@@ -23,14 +23,15 @@
 			<li class="age"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->age(); } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
 			<li class="adresse modif" data-info="adresse"><?php if ($contact->contact['adresse_id']) { ?><?php echo $contact->adresse('declaree'); ?><?php } else { ?><span class="inconnu">Adresse inconnue</span><?php } ?></li>
 			<li class="organisme modif" data-info="organisme">
-				<?php if (!empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_organisme'])) : ?>
-				<?php echo $contact->contact['contact_organisme']; ?> (<?php echo $contact->contact['contact_fonction']; ?>)
-				<?php elseif (!empty($contact->contact['contact_organisme']) && empty($contact->contact['contact_organisme'])) : ?>
-				<?php echo $contact->contact['contact_organisme']; ?>
-				<?php elseif (empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_organisme'])) : ?>
-				<?php echo $contact->contact['contact_fonction']; ?>
-				<?php else : ?>
-				<span class="inconnu">Pas d'organisme renseigné</span>
+				<?php 
+				if (!empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_fonction'])) :
+					echo $contact->contact['contact_organisme'] . ' (' . $contact->contact['contact_fonction'] . ')';
+				elseif (!empty($contact->contact['contact_organisme']) && empty($contact->contact['contact_fonction'])) :
+					echo $contact->contact['contact_organisme'];
+				elseif (empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_fonction'])) :
+					echo $contact->contact['contact_fonction'];
+				else : ?>
+					<span class="inconnu">Pas d'organisme renseigné</span>
 				<?php endif; ?>
 			</li>
 		</ul>
@@ -84,9 +85,10 @@
 		
 		<ul class="listeDesTags">
 			<?php $tags = explode(',', $contact->contact['contact_tags']); if (!empty($contact->contact['contact_tags'])) : foreach ($tags as $tag) : ?>
-			<li class="tag"><?php echo $tag; ?></li>
+			<li class="tag" data-tag="<?php echo $tag; ?>"><?php echo $tag; ?></li>
 			<?php endforeach; endif; ?>
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
+			<li class="ajout formulaireTag hide"><input type="text" name="tag" id="tag" class="formulaireCache" placeholder="Indiquez le nouveau tag puis appuyez sur entrée"></li>
 		</ul>
 	</section>
 	

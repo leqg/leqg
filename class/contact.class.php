@@ -579,7 +579,95 @@ class contact extends carto
 		
 		// On enregistre dans les propriétés les informations
 		$this->contact[$info] = $value;
-	}	
+	}
+	
+	
+	/**
+	 * Rajoute un tag à la base de données
+	 *
+	 * Cette méthode permet d'ajouter un tag pour la fiche ouverte
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	string	$tag	Tag à ajouter à la fiche
+	 *
+	 * @result	void
+	 */
+	
+	public function tag_ajout( $tag )
+	{
+		// On récupère la liste des tags et on la transforme en array
+		$tags = $this->contact['contact_tags'];
+		$tags = explode(',', $tags);
+		
+		// On prépare la liste des tags entrés sous forme de tableaux
+		$tag = explode(',', $tag);
+		
+		// On rassemble les deux tableaux
+		$tags = array_merge($tags, $tag);
+		
+		// On supprime les doublons
+		$tags = array_unique($tags);
+		
+		// On fabrique le champ texte à insérer dans la base de données
+		$tags = implode(',', $tags);
+		
+		// On prépare la requête d'insertion dans la base de données
+		$query = $this->link->prepare('UPDATE `contacts` SET `contact_tags` = :tags WHERE `contact_id` = :id');
+		
+		// On insère les paramètres dans la requête
+		$query->bindParam(':id', $this->contact['contact_id'], PDO::PARAM_INT);
+		$query->bindParam(':tags', $tags);
+		
+		// On exécute la requête
+		$query->execute();
+	}
+	
+	
+	/**
+	 * Supprimer le tag demandé de la base de données
+	 *
+	 * Cette méthode supprime le tag demandé de la fiche ouverte
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	string	$tag	Tag à supprimer
+	 *
+	 * @result	void
+	 */
+	
+	public function tag_suppression( $tag )
+	{
+		// On récupère la liste des tags
+		$tags = $this->contact['contact_tags'];
+		
+		// On la retraite sous forme de tableau
+		$tags = explode(',', $tags);
+		
+		// On regarde si on trouve le tag à supprimer dans la base de données
+		if (array_search($tag, $tags))
+		{
+			$cle = array_search($tag, $tags);
+			
+			// On retire le tag de la liste en question
+			unset($tags[$cle]);
+		}
+		
+		// On reformate sous forme de chaîne de caractère la liste
+		$tags = implode(',', $tags);
+		
+		// On enregistre le tout dans la base de données
+		$query = $this->link->prepare('UPDATE `contacts` SET `contact_tags` = :tags WHERE `contact_id` = :id');
+		
+		// On insère les paramètres dans la requête
+		$query->bindParam(':id', $this->contact['contact_id'], PDO::PARAM_INT);
+		$query->bindParam(':tags', $tags);
+		
+		// On exécute la requête
+		$query->execute();
+	}
 }
 
 ?>
