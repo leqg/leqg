@@ -582,6 +582,27 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 				$core->tpl_footer();
 				
 			}
+	
+	
+	// Mise en place des templates liés au module de rappels téléphoniques
+			
+			else if ( $_GET['page'] == 'rappels' )
+			{
+				
+				// On charge d'abord le template de header
+				$core->tpl_header();
+				
+				// On charge les templates de page selon la demande
+				if ( isset($_GET['action']) )
+				{
+					
+				}
+				else
+				{
+					$core->tpl_load('rappels');
+				}
+				
+			}
 			
 	
 	// Mise en place des templates associés au système de gestion des utilisateurs
