@@ -41,12 +41,12 @@
 							'poste' => 'Publipostage',
 							'porte' => 'Porte-à-porte',
 							'boite' => 'Boîtage',
-							'administration' => 'Gestion',
-							'rappels' => 'Rappels');
+							'rappels' => 'Rappels',
+							'administration' => 'Gestion');
 							
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'fiche') ? 'contacts' : $_GET['page'];
 							
-			$inactif = array('rappels');
+			$inactif = array();
 		
 			foreach ($menu as $key => $element) : ?>
 		<a href="<?php $core->tpl_go_to($key); ?>" <?php if (isset($_GET['page']) && $actuel == $key) echo 'class="actif"'; if (in_array($key, $inactif)) echo 'class="inactif"'; ?> id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>

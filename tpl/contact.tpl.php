@@ -19,17 +19,27 @@
 	
 		<h4>Données connues</h4>
 		<ul class="etatcivil">
-			<li class="naissance"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->naissance(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
+			<li class="naissance modif" data-info="naissance"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->naissance(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
 			<li class="age"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->age(); } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
-			<?php if ($contact->contact['adresse_id']) { ?><li class="adresse"><?php echo $contact->adresse('declaree'); ?></li><?php } ?>
-			<?php if (!empty($contact->contact['contact_organisme'])) { ?><li class="organisme"><?php echo utf8_encode($contact->contact['contact_organisme']); ?> <?php if (!empty($contact->contact['contact_fonction'])) { echo $contact->contact['contact_fonction']; } ?></li><?php } ?>
+			<li class="adresse modif" data-info="adresse"><?php if ($contact->contact['adresse_id']) { ?><?php echo $contact->adresse('declaree'); ?><?php } else { ?><span class="inconnu">Adresse inconnue</span><?php } ?></li>
+			<li class="organisme modif" data-info="organisme">
+				<?php if (!empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_organisme'])) : ?>
+				<?php echo $contact->contact['contact_organisme']; ?> (<?php echo $contact->contact['contact_fonction']; ?>)
+				<?php elseif (!empty($contact->contact['contact_organisme']) && empty($contact->contact['contact_organisme'])) : ?>
+				<?php echo $contact->contact['contact_organisme']; ?>
+				<?php elseif (empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_organisme'])) : ?>
+				<?php echo $contact->contact['contact_fonction']; ?>
+				<?php else : ?>
+				<span class="inconnu">Pas d'organisme renseigné</span>
+				<?php endif; ?>
+			</li>
 		</ul>
 		
 		<?php if ($contact->contact['contact_electeur'] == 1) : ?>
 		<h4>Données électorales</h4>
 		<ul class="etatcivil">
 			<li class="bureau"><?php echo $contact->bureau(); ?></li>
-			<li class="adresse"><?php echo $contact->adresse('electorale'); ?></li>
+			<li class="immeuble"><?php echo $contact->adresse('electorale'); ?></li>
 		</ul>
 		<?php endif; ?>
 		
@@ -83,23 +93,21 @@
 	<section id="listeEvenements" class="contenu demi">
 		<h4>Événements connus</h4>
 		
-		<button class="nouvelEvenement new">Créer un nouvel événement</button>
-		
 		<ul class="listeDesEvenements">
+			<li class="evenement nouvelEvenement">
+				<strong>Créer un nouvel événement</strong>
+			</li>
 			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
 			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle evenement-<?php echo $event->get_infos('id'); ?>" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
 				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
 					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
-					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : Core::tpl_typeEvenement($event->get_infos('type')); ?></strong>
+					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : 'Événement sans titre'; ?></strong>
 					<ul class="infosAnnexes">
 						<li class="date"><?php echo date('d/m/Y', strtotime($event->get_infos('date'))); ?></li>
-						<?php if (!empty($event->get_infos('lieu'))) { ?><li class="lieu"><?php echo $event->get_infos('lieu'); ?></li><?php } ?>
 					</ul>
 				</li>
 			<?php if ($event->lien()) { ?></a><?php } ?>
-			<?php endforeach; else : ?>
-			<li class="evenement"><strong>Aucun événement connu</strong></li>
-			<?php endif; ?>
+			<?php endforeach; endif; ?>
 		</ul>
 	</section>
 	
@@ -155,6 +163,63 @@
 			</li>
 		</ul>
 		<ul class="form-liste invisible" id="listeFichesALier"></ul>
+	</section>
+	
+	<section class="contenu demi invisible modifierNaissance">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="dateDeNaissance">Date de naissance</label>
+				<span class="form-icon decalage naissance"><input type="text" name="dateDeNaissance" id="dateDeNaissance" placeholder="jj/mm/aaaa" value="<?php echo date('d/m/Y', strtotime($contact->contact['contact_naissance_date'])); ?>" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
+			</li>
+			<li>
+				<button class="sauvegardeDateNaissance">Sauvegarder les informations</button>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible modifierOrganisme">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="changerOrganisme">Organisme</label>
+				<span class="form-icon decalage organisme"><input type="text" name="changerOrganisme" id="changerOrganisme" value="<?php echo $contact->contact['contact_organisme']; ?>" placeholder="Organisation"></span>
+			</li>
+			<li>
+				<label class="small" for="changerFonction">Fonction</label>
+				<span class="form-icon decalage fonction"><input type="text" name="changerFonction" id="changerFonction" value="<?php echo $contact->contact['contact_fonction']; ?>" placeholder="Fonction"></span>
+			</li>
+			<li>
+				<button class="sauvegarderOrganisation">Sauvegarder les informations</button>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible modifierAdresse">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="rechercherRue">Rue</label>
+				<span class="form-icon decalage rue"><input type="text" name="rechercherRue" id="rechercherRue"></span>
+			</li>
+			<ul class="form-liste invisible" id="listeRues"></ul>
+		</ul>
+	</section>
+
+	<section class="demi droite invisible choixImmeuble">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+
+		<ul class="formulaire">
+			<li>
+				<label>Sélectionnez des immeubles</label>
+				<span class="form-icon rue"><input type="text" name="rueSelectionImmeuble" id="rueSelectionImmeuble" value=""></span>
+			</li>
+		</ul>
+		
+		<ul class="form-liste invisible" id="listeImmeubles"></ul>
 	</section>
 </div>
 
