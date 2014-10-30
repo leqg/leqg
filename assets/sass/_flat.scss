@@ -680,6 +680,7 @@ main.contact {
 				line-height: 45px;
 				text-align: center;
 				width: 45px;
+				@include transition(all);
 			}
 			
 			@each $typeEvent in $typesEvent
@@ -688,6 +689,30 @@ main.contact {
 			}
 						
 			&.clic:hover::before { color: $rouge; }
+			
+			&.nouvelEvenement
+			{
+				&::before { opacity: 0; }
+				&::after
+				{
+					color: $bleu;
+					content: '\e8de';
+				}
+				
+				&:hover
+				{
+					cursor: pointer;
+					
+					&::before
+					{
+						color: $vert;
+						opacity: 1;
+					}
+					
+					&::after { color: $blanc; }					
+					strong { color: $vert; }
+				}
+			}
 			
 			& > small
 			{
@@ -814,9 +839,9 @@ main.contact {
 		position: absolute; top: .5em; right: .5em;
 		display: block;
 		background-color: transparent;
-		border: 3px solid $rouge;
+		border: 3px solid $bleu;
 		@include border-radius(.33em);
-		color: $rouge;
+		color: $bleu;
 		font-family: $icons;
 		font-size: 20px;
 		height: 30px;
@@ -827,7 +852,7 @@ main.contact {
 		
 		&:hover
 		{
-			background-color: $rouge;
+			background-color: $bleu;
 			color: $blanc;
 		}
 	}

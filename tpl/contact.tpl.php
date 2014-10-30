@@ -83,23 +83,21 @@
 	<section id="listeEvenements" class="contenu demi">
 		<h4>Événements connus</h4>
 		
-		<button class="nouvelEvenement new">Créer un nouvel événement</button>
-		
 		<ul class="listeDesEvenements">
+			<li class="evenement nouvelEvenement">
+				<strong>Créer un nouvel événement</strong>
+			</li>
 			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
 			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle evenement-<?php echo $event->get_infos('id'); ?>" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
 				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
 					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
-					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : Core::tpl_typeEvenement($event->get_infos('type')); ?></strong>
+					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : 'Événement sans titre'; ?></strong>
 					<ul class="infosAnnexes">
 						<li class="date"><?php echo date('d/m/Y', strtotime($event->get_infos('date'))); ?></li>
-						<?php if (!empty($event->get_infos('lieu'))) { ?><li class="lieu"><?php echo $event->get_infos('lieu'); ?></li><?php } ?>
 					</ul>
 				</li>
 			<?php if ($event->lien()) { ?></a><?php } ?>
-			<?php endforeach; else : ?>
-			<li class="evenement"><strong>Aucun événement connu</strong></li>
-			<?php endif; ?>
+			<?php endforeach; endif; ?>
 		</ul>
 	</section>
 	

@@ -73,6 +73,15 @@ class evenement
 			$evenements = $query->fetchAll();
 			$evenement = $evenements[0];
 			
+			// On commence par retraiter la date de l'événement pour l'avoir en format compréhensible
+			$evenement['historique_date_fr'] = date('d/m/Y', strtotime($evenement['historique_date']));
+			
+			// On retraite ensuite l'ID pour l'avoir au format MD5
+			$evenement['historique_md5'] = md5($evenement['historique_id']);
+				
+			// On retraite ensuite le type en clair
+			$evenement['historique_type_clair'] = Core::tpl_typeEvenement($evenement['historique_type']);
+			
 			// On retourne le tout dans la propriété privée evenement
 			$this->evenement = $evenement;
 			
@@ -104,6 +113,12 @@ class evenement
 				// On commence par retraiter la date de l'événement pour l'avoir en format compréhensible
 				$evenement = $evenements[0];
 				$evenement['historique_date_fr'] = date('d/m/Y', strtotime($evenement['historique_date']));
+			
+				// On retraite ensuite l'ID pour l'avoir au format MD5
+				$evenement['historique_md5'] = md5($evenement['historique_id']);
+				
+				// On retraite ensuite le type en clair
+				$evenement['historique_type_clair'] = Core::tpl_typeEvenement($evenement['historique_type']);
 				
 				// On retourne le tout dans la propriété evenement
 				$this->evenement = $evenement;

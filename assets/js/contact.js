@@ -149,7 +149,7 @@ var contact = function() {
 	
 	
 	// Action lors de l'ouverture d'un événement d'historique
-	$('.accesEvenement').click(function(){
+	$('.listeDesEvenements').on('click', '.accesEvenement', function(){
 		var identifiant = $(this).data('evenement');
 		
 		// On ferme tous les blocs de la colonne latérale
@@ -196,6 +196,27 @@ var contact = function() {
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
+			
+			// On ajoute l'événement à la liste des événements
+				// En commençant par déclarer le lien vers l'événement
+				$('li.nouvelEvenement').after('<a href="#" class="accesEvenement nostyle evenement-' + data.historique_id + '" data-evenement="' + data.historique_md5 + '"></a>');
+				
+				// À l'intérieur, on ajoute la puce
+				$('a.evenement-' + data.historique_id).append('<li class="evenement ' + data.historique_type + ' clic"></li>');
+				
+				// À l'intérieur de la puce, on ajoute les informations
+				$('a.evenement-' + data.historique_id + ' li').append('<small><span>' + data.historique_type_clair + '</span></small>');
+				
+				if (data.historique_objet.length >= 1)
+				{
+					$('a.evenement-' + data.historique_id + ' li').append('<strong>' + data.historique_objet + '</strong>');
+				}
+				else
+				{
+					$('a.evenement-' + data.historique_id + ' li').append('<strong>Événement sans titre</strong>');
+				}
+				
+				$('a.evenement-' + data.historique_id + ' li').append('<ul class="infosAnnexes"><li class="date">' + data.historique_date_fr + '</li></ul>');
 		});
 		
 		// On annule le clic sur le bouton
@@ -207,6 +228,38 @@ var contact = function() {
 	function savingForm( evenement , info , value )
 	{
 		$.post('ajax.php?script=evenement-update', { evenement: evenement , info: info,  value: value });
+		
+		if (info == 'historique_objet')
+		{
+			if (value.length >= 1)
+			{
+				$('a.evenement-' + evenement + ' strong').html(value);
+			}
+			else
+			{
+				$('a.evenement-' + evenement + ' strong').html('Événement');
+			}
+		}
+		else if (info == 'historique_type')
+		{
+			$('a.evenement-' + evenement + ' > li').removeClass().addClass('evenement').addClass(value);
+			$('a.evenement-' + evenement + ' > li small').remove();
+		}
+		else if (info == 'historique_lieu')
+		{
+			if (value.length >= 1)
+			{
+				$('a.evenement-' + evenement + ' li.lieu').html(value);
+			}
+			else
+			{
+				$('a.evenement-' + evenement + ' li.lieu').html('Lieu inconnu');
+			}
+		}
+		else if (info == 'historique_date')
+		{
+			$('a.evenement-' + evenement + ' li.date').html(value);
+		}
 	}
 	
 	$('#eventTitre').blur(function(){
