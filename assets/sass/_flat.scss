@@ -40,6 +40,18 @@ main.contact {
 	padding: 2em 1em 1em;
 	width: 1000px;
 	
+	input.formulaireCache
+	{
+		border: 0;
+		border-bottom: 1px solid $grisClair;
+		font-family: $flat;
+		font-size: 16.8px;
+		font-weight: 400;
+		height: 22px;
+		line-height: 20px;
+		padding: 0 1em 0 0;
+	}
+	
 	button,
 	input[type='submit'].flat {
 		display: block;
@@ -553,7 +565,7 @@ main.contact {
 				}
 				
 				&.non {
-					color: $grisMoyen;
+					color: $rouge;
 					&::before { content: '\e8b0'; }
 				}
 			}
@@ -617,6 +629,25 @@ main.contact {
 				}
 			}
 			
+			&.tag:hover
+			{
+				cursor: pointer;
+				-moz-user-select: -moz-none;
+				-moz-user-select: none;
+				-o-user-select: none;
+				-khtml-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				
+				&::before
+				{
+					color: $rouge;
+					content: '\e8b0';
+					cursor: default;
+				}
+			}
+			
 			&.ajout {
 				color: $grisMoyen;
 				cursor: pointer;
@@ -655,6 +686,11 @@ main.contact {
 				display: block;
 				border: 0;
 			}
+			
+			&.ajout.hide
+			{
+				display: none;
+			}	
 		}
 	}
 	
@@ -708,11 +744,13 @@ main.contact {
 			
 			&.nouvelEvenement
 			{
+				margin-bottom: 1.5em;
+				
 				&::before { opacity: 0; }
 				&::after
 				{
 					color: $bleu;
-					content: '\e8de';
+					content: '\e8b2';
 				}
 				
 				&:hover
@@ -721,18 +759,11 @@ main.contact {
 					
 					&::before
 					{
-						color: $vert;
+						color: $bleu;
 						opacity: 1;
 					}
 					
-					&::after { color: $blanc; }	
-									
-					strong { font-weight: 600; }
-				}
-				
-				strong
-				{
-					font-weight: 400;
+					&::after { color: $blanc; }
 				}
 			}
 			

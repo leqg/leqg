@@ -502,6 +502,57 @@ var contact = function() {
 			$('li.adresse').html(data);
 		});
 	});
+	
+	
+	// Script d'affichage du formulaire d'ajout de tag
+	$('.ajouterTag').click(function(){
+		$(this).hide();
+		$('.formulaireTag').fadeIn();
+		$('.formulaireTag input').focus();
+	});
+	
+	
+	// Script de retour en arrière
+	$('.formulaireTag input').blur(function(){
+		$('.formulaireTag').hide();
+		$('.ajouterTag').fadeIn();
+	});
+	
+	
+	// Script d'ajout du tag lors de l'appui sur Entrée
+	$('.formulaireTag input').keyup(function(e){
+		if (e.keyCode == 13)
+		{
+			// On récupère le tag entré
+			var tag = $('.formulaireTag input').val();
+			var contact = $('#nomContact').data('fiche');
+			
+			// On sauvegarde le tag entré
+			$.post('ajax.php?script=contact-tag-nouveau', { contact: contact , tag: tag }, function() {
+				// On ajoute le tag à la liste
+				$('.ajouterTag').before('<li class="tag" data-tag="' + tag + '">' + tag + '</li>');
+				
+				// On retire le formulaire
+				$('.formulaireTag').hide();
+				$('.formulaireTag input').val('');
+				$('.ajouterTag').fadeIn();
+			});
+		}
+	});
+	
+	
+	// Script de suppression d'un tag, par double clic
+	$('.listeDesTags').on('dblclick', '.tag', function() {
+		// On récupère les données
+		var tag = $(this).data('tag');
+		var contact = $('#nomContact').data('fiche');
+		
+		// On supprime le tag de la base
+		$.post('ajax.php?script=contact-tag-supprimer', { contact: contact , tag: tag }, function() {
+			// On supprime le tag de la liste
+			$('.tag[data-tag=' + tag + ']').remove();
+		});
+	});
 };
 
 $(document).ready(contact);
