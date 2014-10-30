@@ -483,6 +483,9 @@ var contact = function() {
 		var immeuble = $(this).data('immeuble');
 		var fiche = $('#nomContact').data('fiche');
 		
+		// On retire la carte Google Maps jusqu'au rechargement de la page pour éviter d'avoir une carte non à jour
+		$('#carte').addClass('invisible');
+
 		// On ferme les onglets qui doivent être invisibles
 		$('#colonneDroite section').fadeOut().delay(500);
 		$('#colonneDroite section:not(.invisible').fadeIn();
