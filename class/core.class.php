@@ -91,6 +91,9 @@ class core {
 	 */
 
 	public static function securisation_string($string, $charset = 'utf-8') {
+    	    // On évite les injections SQL
+    	        $string = mysql_real_escape_string($string);
+    	
 		// On transforme les caractères spéciaux en entités HTML
 			$string = htmlentities($string, ENT_QUOTES, $charset);
 		
