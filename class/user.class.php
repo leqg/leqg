@@ -12,6 +12,7 @@ class user extends core {
 	private $noyau; // Lien vers la base de données centrale du système
 	private $url; // le nom de domaine du serveur utilisé
 	public	$user; // Informations liées à l'utilisateur
+	private $link; // Lien vers la base de données (PDO)
 	
 	
 	// Définition des méthodes	
@@ -19,6 +20,14 @@ class user extends core {
 	// Méthode permettant de vérifier si un utilisateur est connecté ou non
 	
 	public	function __construct($db, $noyau, $url) {
+		// On commence par paramétrer les données PDO
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
+				';dbname=leqg';
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+
+		$this->link = new PDO($dsn, $user, $pass);
+
 		$this->db = $db;
 		$this->noyau = $noyau;
 		$this->url = $url;
@@ -27,9 +36,11 @@ class user extends core {
 	public	function statut_connexion() {
 		if (isset($_COOKIE['leqg-user'])) {
 			// La connexion existe, on construit les propriétés
-			$query = "SELECT * FROM `users` WHERE `user_auth` > 0 AND `user_id` = " . $_COOKIE['leqg-user'];
-			$sql = $this->noyau->query($query);
-			$donnees = $sql->fetch_assoc();
+			$query = $this->link->prepare('SELECT * FROM `users` WHERE `user_auth` > 0 AND `user_id` = :id');
+			$query->bindParam(':id', $_COOKIE['leqg-user'], PDO::PARAM_INT);
+			$query->execute();
+			$donnees = $query->fetchAll();
+			$donnees = $donnees[0];
 			
 			// On vérifie si une demande de réinitialisation de la connexion n'a pas été demandée
 			if ($_COOKIE['leqg-time'] >= strtotime($donnees['user_reinit'])) {
@@ -85,9 +96,11 @@ class user extends core {
 	// Méthode de vérification de l'exitence d'un login 
 	
 	private	function existence_login($login) {
-		$query = "SELECT user_email FROM users WHERE user_email = '" . $login . "' AND `user_auth` > 0";
-		$sql = $this->noyau->query($query);
-		$nb_login = $sql->num_rows;
+		$query = $this->link->prepare('SELECT `user_email` FROM `users` WHERE `user_email` = :login AND `user_auth` > 0');
+		$query->bindParam(':login', $login);
+		$query->execute();
+		$login = $query->fetchAll();
+		$nb_login = count($login);
 		
 		if ($nb_login == 1) : return true; else : return false; endif;
 	}
@@ -104,9 +117,11 @@ class user extends core {
 	
 	public	function verification_pass($pass, $login) {
 		// On recherche le mot de passe du compte demandé
-		$query = "SELECT user_password FROM users WHERE user_email = '" . $login . "'";
-		$sql = $this->noyau->query($query);
-		$donnees = $sql->fetch_assoc();
+		$query = $this->link->prepare('SELECT `user_password` FROM `users` WHERE `user_email` = :login');
+		$query->bindParam(':login', $login);
+		$query->execute();
+		$donnees = $query->fetchAll();
+		$donnees = $donnees[0];
 		
 		$pass_envoye = $this->encrypt_pass($pass);
 		
@@ -117,9 +132,11 @@ class user extends core {
 	// Méthode permettant de trouver l'ID d'un utilisateur à partir de son login
 	
 	public	function get_id_by_login($login) {
-		$query = "SELECT user_id FROM users WHERE user_email = '" . $login . "'";
-		$sql = $this->noyau->query($query);
-		$donnees = $sql->fetch_assoc();
+		$query = $this->link->prepare('SELECT `user_id` FROM `users` WHERE `user_email` = :login');
+		$query->bindParam(':login', $login);
+		$query->execute();
+		$donnees = $query->fetchAll();
+		$donnees = $donnees[0];
 		
 		return $donnees['user_id'];
 	}
@@ -128,9 +145,11 @@ class user extends core {
 	// Méthode permettant de trouver le login d'un utilisateur à partir de son ID
 	
 	public	function get_login_by_ID($id) {
-		$query = "SELECT * FROM users WHERE user_id = '" . $id . "'";
-		$sql = $this->noyau->query($query);
-		$donnees = $sql->fetch_assoc();
+		$query = $this->link->prepare('SELECT * FROM `users` WHERE `user_id` = :id');
+		$query->bindParam(':id', $id);
+		$query->execute();
+		$donnees = $query->fetchAll();
+		$donnees = $donnees[0];
 		
 		return $donnees['user_firstname'] . ' ' . $donnees['user_lastname'];
 	}
@@ -151,7 +170,12 @@ class user extends core {
 				setcookie('leqg-time', time(), $expire);
 				
 				// On défini le timestamp dans la base de données
-				$this->noyau->query('UPDATE users SET user_lasttime = NOW() WHERE user_id = ' . $id_user);
+				if (is_numeric($id_user))
+				{
+					$query = $this->link->prepare('UPDATE `users` SET `user_lasttime` = NOW() WHERE `user_id` = :id');
+					$query->bindParam(':id', $id_user, PDO::PARAM_INT);
+					$query->execute();
+				}
 				
 				// On enregistre la connexion dans la table d'historique des connexions
 				$client['ipv4'] = $_SERVER['REMOTE_ADDR'];
@@ -191,8 +215,9 @@ class user extends core {
 		if (!is_numeric($compte)) return false;
 		
 		// On lance une demande de réinitialisation à l'instant T
-		$query = 'UPDATE `users` SET `user_reinit` = NOW() WHERE `user_id` = ' . $compte;
-		$this->noyau->query($query);
+		$query = $this->link->prepare('UPDATE `users` SET `user_reinit` = NOW() WHERE `user_id` = :id');
+		$query->bindParam(':id', $compte, PDO::PARAM_INT);
+		$query->execute();
 		
 		$this->tpl_go_to(true);
 	}
@@ -202,14 +227,20 @@ class user extends core {
 	public	function client( $user = null ) {
 		if (is_null($user)) $user = $_COOKIE['leqg-user'];
 		
-		$query = 'SELECT * FROM users WHERE user_id = ' . $user;
-		$sql = $this->noyau->query($query);
-		$infos = $sql->fetch_assoc();
+		$query = $this->link->prepare('SELECT * FROM `users` WHERE `user_id` = :id');
+		$query->bindParam(':id', $user, PDO::PARAM_INT);
+		$query->execute();
+		$infos = $query->fetchAll();
+		$infos = $infos[0];
+		unset($query);
+
+		$query = $this->link->prepare('SELECT * FROM `clients` WHERE `client_id` = :client');
+		$query->bindParam(':client', $infos['client_id'], PDO::PARAM_INT);
+		$query->execute();
+		$donnees = $query->fetchAll();
+		$donnees = $donnees[0];
 		
-		$query = 'SELECT * FROM clients WHERE client_id = ' . $infos['client_id'];
-		$sql = $this->noyau->query($query);
-		
-		return $this->formatage_donnees($sql->fetch_assoc());
+		return $this->formatage_donnees($donnees);
 	}
 	
 	
