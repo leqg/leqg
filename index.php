@@ -15,8 +15,8 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	if (isset($_POST['login'], $_POST['pass'])) {
 	
 	    // On sécurise les informations envoyées par POST
-	    $login = mysql_real_escape_string($_POST['login']);
-	    $pass = mysql_real_escape_string($_POST['pass']);
+	    $login = $_POST['login'];
+	    $pass = $_POST['pass'];
 	
 		// On effectue la démarche de connexion
 		$user->connexion($_POST['login'], $_POST['pass']);
