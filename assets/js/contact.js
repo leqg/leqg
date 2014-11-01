@@ -158,6 +158,7 @@ var contact = function() {
 		
 		// On commence par vider la liste des fichiers
 		$('ul.listeDesFichiers li:not(.nouveauFichier)').remove();
+		$('ul.listeDesTaches li:not(.nouvelleTache)').remove();
 		
 		// On ferme tous les blocs de la colonne latérale
 		$('#colonneDroite section').fadeOut();
