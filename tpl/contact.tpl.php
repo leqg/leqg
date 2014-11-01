@@ -343,6 +343,30 @@
 			</li>
 		</ul>
 	</section>
+	
+	<section class="contenu demi invisible envoi-sms">
+    	    <a href="#" class="fermerColonne">&#xe813;</a>
+    	    
+    	    <h4>Envoi d'un SMS</h4>
+    	    
+    	    <ul class="formulaire">
+        	    <li>
+        	        <label class="small" for="choixNumero">Choix du numéro</label>
+        	        <select name="choixNumero" id="choixNumero">
+            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'mobile') : ?>
+            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php Core::tpl_phone($coordonnee['coordonnee_numero']); ?></option>
+            	        <?php endif; endforeach; ?>
+        	        </select>
+            </li>
+            <li>
+                <label class="small" for="messageSMS">Message à envoyer</label>
+                <span class="form-icon decalage sms"><textarea name="messageSMS" id="messageSMS" placeholder="SMS à envoyer"></textarea></span>
+            </li>
+            <li>
+                <button class="SMSsending">Envoi du SMS (<i>&#xe8cd;</i>)</button>
+            </li>
+    	    </ul>
+	</section>
 </div>
 
 
