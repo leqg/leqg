@@ -314,13 +314,27 @@ class evenement
 	
 	public function suppression()
 	{
+		$identifiant = $this->evenement['historique_id'];
+		
 		// On prépare la requête
 		$query = $this->link->prepare('DELETE FROM `historique` WHERE `historique_id` = :event');
 		
 		// On affecte les informations discriminantes à la requête
-		$query->bindParam(':event', $this->evenement['historique_id'], PDO::PARAM_INT);
+		$query->bindParam(':event', $identifiant, PDO::PARAM_INT);
 		
 		// On lance la requête
+		$query->execute();
+		
+		// On prépare maintenant la suppression des fichiers concernés par cet événement
+		unset($query);
+		$query = $this->link->prepare('DELETE FROM `fichiers` WHERE `interaction_id` = :event');
+		$query->bindParam(':event', $identifiant);
+		$query->execute();
+		
+		// On prépare la suppression des tâches liées à cet événement
+		unset($query);
+		$query = $this->link->prepare('DELETE FROM `taches` WHERE `historique_id` = :event');
+		$query->bindParam(':event', $identifiant);
 		$query->execute();
 	}
 	
