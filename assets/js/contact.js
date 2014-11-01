@@ -762,6 +762,41 @@ var contact = function() {
 			$('#colonneDroite section:not(.invisible)').fadeIn();	
     	    });
 	});
+	
+	
+	// Script d'affichage du module d'envoi de mail
+	$('.envoyerEmail').click(function() {
+    	    // On vide au cas où le formulaire d'envoi de SMS
+    	    $('#messageEmail').val('');
+    	    
+    	    // On affiche le formulaire
+    	    $('#colonneDroite section').hide();
+    	    $('.envoi-email').fadeIn();
+	});
+	
+	
+	// Script d'envoi du SMS entré
+	$('.EmailSending').click(function() {
+    	    // On récupère les paramètres entrés
+    	    var contact = $('#nomContact').data('fiche');
+    	    var adresse = $('#choixAdresse').val();
+    	    var objet = $('#objetEmail').val();
+    	    var message = $('#messageEmail').val();
+    	    
+    	    // On lance l'envoi du SMS
+    	    $.post('ajax.php?script=contact-email', { contact: contact, adresse: adresse, objet: objet, message: message }, function(){
+        	    // On ajoute le SMS à la liste des événements
+        	    $('.nouvelEvenement').after('<li class="evenement email"><strong>Envoi d\'un courrier électronique</strong><ul class="infosAnnexes"><li class="date">Maintenant</li></ul></li>');
+			
+			// On vide le formulaire
+			$('#objetEmail').val('');
+			$('#messageEmail').val('');
+			
+			// On ferme la colonne
+			$('#colonneDroite section').hide();
+			$('#colonneDroite section:not(.invisible)').fadeIn();	
+    	    });
+	});
 };
 
 $(document).ready(contact);
