@@ -797,6 +797,25 @@ var contact = function() {
 			$('#colonneDroite section:not(.invisible)').fadeIn();	
     	    });
 	});
+	
+	
+	// Script de suppression d'une adresse connue
+	$('.supprimerAdresse').click(function() {
+    	    // On récupère le numéro de la fiche
+    	    var fiche = $('#nomContact').data('fiche');
+    	    
+    	    // On lance la suppression de la fiche
+    	    $.post('ajax.php?script=contact-adresse-suppression', { fiche: fiche }, function() {
+        	    // On va retirer l'information affichée
+        	    $('.etatcivil .adresse').html('<span class="inconnu">Adresse inconnue</span>');
+        	    
+        	    // On ferme le volet
+        	    $('#colonneDroite section').hide();
+        	    $('#colonneDroite section:not(.invisible)').fadeIn();
+    	    });
+    	    
+    	    return false;
+	});
 };
 
 $(document).ready(contact);
