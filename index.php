@@ -115,10 +115,16 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$core->tpl_redirection('dossier', $dossier);
 		}
 		
-		else if ($_GET['page'] == 'dossier' && is_numeric($_GET['id'])) {
-			$core->tpl_header();
-			$core->tpl_load('dossier');
-			$core->tpl_footer();
+		else if ($_GET['page'] == 'dossier') {
+			if (isset($_GET['dossier']))
+			{
+				$core->tpl_load('dossier');
+			}
+			else
+			{
+				$core->tpl_load('dossiers');
+			}
+			
 		}
 		
 		else if ($_GET['page'] == 'dossier' && $_GET['action'] == 'ajout' && isset($_GET['id'])) {

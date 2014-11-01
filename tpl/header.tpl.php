@@ -18,7 +18,7 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<?php $flat = array('boite', 'porte', 'contact'); ?>
+<?php $flat = array('boite', 'porte', 'contact', 'dossier'); ?>
 <body<?php if (isset($_GET['page']) && in_array($_GET['page'], $flat)) { ?> class="flat"<?php } ?>>	
 	<!-- Contenu concret de la page -->
 	<header id="top">
@@ -34,7 +34,7 @@
 		<?php 
 			$menu = array(/*'utilisateur' => 'Mon compte',*/
 							'contacts' => 'Contacts',
-							'dossiers' => 'Dossiers',
+							'dossier' => 'Dossiers',
 							'carto' => 'Cartographie',
 							'sms' => 'SMS groupés',
 							'email' => 'Emails groupés',

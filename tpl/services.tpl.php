@@ -2,7 +2,7 @@
 	<?php if ($user->get_auth() >= 5) : ?>
 	<tr>
 		<td><a href="<?php $core->tpl_go_to('contacts'); ?>"><span>&#xe840;</span><p>Contacts</p></a></td>
-		<td><a href="<?php $core->tpl_go_to('dossiers'); ?>"><span>&#xe851;</span><p>Dossiers</p></a></td>
+		<td><a href="<?php $core->tpl_go_to('dossier'); ?>"><span>&#xe851;</span><p>Dossiers</p></a></td>
 		<td><a href="<?php $core->tpl_go_to('carto'); ?>"><span>&#xe845;</span><p>Cartographie</p></a></td>
 	</tr>
 	<tr>
