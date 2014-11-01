@@ -149,7 +149,6 @@ class user extends core {
 		$query->bindParam(':id', $id);
 		$query->execute();
 		$donnees = $query->fetchAll();
-		$donnees = $donnees[0];
 		
 		return $donnees['user_firstname'] . ' ' . $donnees['user_lastname'];
 	}
