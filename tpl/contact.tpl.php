@@ -363,7 +363,7 @@
                 <span class="form-icon decalage sms"><textarea name="messageSMS" id="messageSMS" placeholder="SMS à envoyer"></textarea></span>
             </li>
             <li>
-                <button class="SMSsending">Envoi du SMS (<i>&#xe8cd;</i>)</button>
+                <button class="SMSsending">Envoi du SMS ( <i>&#xe8cd;</i> <small>0,08&nbsp;&euro;</small> )</button>
             </li>
     	    </ul>
 	</section>
