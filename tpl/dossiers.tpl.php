@@ -1,9 +1,9 @@
-<?php
+<?php $core->tpl_header(); ?>
 	
-	// On charge les dernières interactions ayant eu lieu sur la page
-	$core->tpl_load('dossiers', 'liste');
-
-	// On charge le aside de la page contacts
-	$core->tpl_load('aside', 'contacts');
+	<h2>Dossiers en cours</h2>
 	
-?>
+	<section class="icone" id="aucunDossier">
+		<h3>Aucun dossier ouvert actuellement.<br>Démarrez un dossier à travers un événement existant.</h3>
+	</section>
+	
+<?php $core->tpl_footer(); ?>

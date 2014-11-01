@@ -71,4 +71,19 @@ section#contacts {
 			}
 		}
 	}
+	
+	ul.tags
+	{	
+		margin: 0;
+		padding-left: 0;
+		
+		.tag
+		{
+			border: none;
+			margin-right: 0;
+			padding-left: 0;
+			
+			&::before { color: $grisFonce; }
+		}
+	}
 }

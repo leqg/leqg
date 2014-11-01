@@ -31,7 +31,8 @@ body.flat {
 main.flat,
 main.boite,
 main.porte,
-main.contact {
+main.contact,
+main.dossier {
 	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
 	font-family: $flat;
 	height: auto;

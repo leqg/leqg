@@ -34,8 +34,7 @@ class contact extends carto
 	public function __construct($contact, $securite = false)
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-				';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 
@@ -45,20 +44,103 @@ class contact extends carto
 		$query = $this->link->prepare('SELECT * FROM `contacts` WHERE MD5(`contact_id`) = :contact');
 		$query->bindParam(':contact', $contact);
 		$query->execute();
-		$users = $query->fetchAll();
+		$contact = $query->fetch(PDO::FETCH_ASSOC);
 		
-		// Si on ne trouve pas d'utilisateur, on retourne vers la page d'accueil du module contact
-		if (!count($users) && $securite)
+		// On retraite simplement l'organisme ou la fonction qui pose problème
+		$contact['contact_organisme'] = utf8_encode($contact['contact_organisme']);
+		$contact['contact_fonction'] = utf8_encode($contact['contact_fonction']);
+		
+		// On transforme l'ID de la fiche en md5 pour faciliter sa réutilisation future
+		$contact['contact_md5'] = md5($contact['contact_id']);
+		
+		// On récupère la liste des tags
+		if (!empty($contact['contact_tags']))
 		{
-			Core::tpl_go_to('contacts', true);
+			$contact['tags'] = explode(',', $contact['contact_tags']);
 		}
-		// Sinon, on affecte les données aux propriétés de l'objet
 		else
 		{
-			$this->contact = $users[0];
+			$contact['tags'] = array();
 		}
+		
+		// On prépare le nom d'affichage
+		if (!empty($contact['contact_nom']) || !empty($contact['contact_nom_usage']))
+		{
+			$contact['nom_affichage'] = strtoupper($contact['contact_nom']) . ' ' . strtoupper($contact['contact_nom_usage']) . ' ' . ucfirst(strtolower($contact['contact_prenoms']));
+		}
+		else
+		{
+			$contact['nom_affichage'] = (!empty($contact['contact_organisme'])) ? $contact['contact_organisme'] : 'Fiche inconnue';
+		}
+		
+		// On recherche les coordonnées pour la fiche
+		unset($query);
+		$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero`, `coordonnee_email` FROM `coordonnees` WHERE `contact_id` = :id');
+		$query->bindParam(':id', $contact['contact_id']);
+		$query->execute();
+		$coordonnees = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On prépare les coordonnées
+		$contact['email'] = '';
+		$contact['mobile'] = '';
+		$contact['fixe'] = '';
+		
+		// Pour chaque coordonnées, on retraite dans le bon tableau
+		foreach ($coordonnees as $coordonnee)
+		{
+			if ($coordonnee['coordonnee_type'] == 'email')
+			{
+				$contact['email'] = $coordonnee['coordonnee_email'];
+			}
+			elseif ($coordonnee['coordonnee_type'] == 'mobile')
+			{
+				$contact['mobile'] = Core::get_tpl_phone($coordonnee['coordonnee_numero']);
+			}
+			else
+			{
+				$contact['fixe'] = Core::get_tpl_phone($coordonnee['coordonnee_numero']);
+			}
+		}
+		
+		// On entre les données en paramètre de la classe
+		$this->contact = $contact;
 	}
 	
+	
+	/**
+	 * Exporte les données connues en JSON
+	 *
+	 * Cette méthode permet d'obtenir un export JSON des données connues sur 
+	 * la fiche ouverte actuellement
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result	string		Données connues sous format JSON
+	 */
+	
+	public function json()
+	{
+		return json_encode($this->contact);
+	}
+	
+	
+	/**
+	 * Exporte les données connues sous forme de tableaux
+	 *
+	 * Cette méthode permet d'obtenir un export Array PHP des données connues sur 
+	 * la fiche ouverte actuellement
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result	string		Données connues sous format PHP
+	 */
+	
+	public function donnees()
+	{
+		return $this->contact;
+	}
 	
 	
 	/**
@@ -613,6 +695,9 @@ class contact extends carto
 		// On fabrique le champ texte à insérer dans la base de données
 		$tags = implode(',', $tags);
 		
+		// On supprime les premières et dernières virgules
+		$tags = trim($tags, ',');
+		
 		// On prépare la requête d'insertion dans la base de données
 		$query = $this->link->prepare('UPDATE `contacts` SET `contact_tags` = :tags WHERE `contact_id` = :id');
 		
@@ -657,6 +742,9 @@ class contact extends carto
 		
 		// On reformate sous forme de chaîne de caractère la liste
 		$tags = implode(',', $tags);
+		
+		// On supprime les virgules de début et de fin
+		$tags = trim($tags, ',');
 		
 		// On enregistre le tout dans la base de données
 		$query = $this->link->prepare('UPDATE `contacts` SET `contact_tags` = :tags WHERE `contact_id` = :id');
