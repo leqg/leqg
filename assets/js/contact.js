@@ -729,6 +729,39 @@ var contact = function() {
 			$('.modifier-' + type + ' input').val('');
 		});
 	});
+	
+	
+	// Script d'affichage du module d'envoi de SMS
+	$('.envoyerSMS').click(function() {
+    	    // On vide au cas où le formulaire d'envoi de SMS
+    	    $('#messageSMS').val('');
+    	    
+    	    // On affiche le formulaire
+    	    $('#colonneDroite section').hide();
+    	    $('.envoi-sms').fadeIn();
+	});
+	
+	
+	// Script d'envoi du SMS entré
+	$('.SMSsending').click(function() {
+    	    // On récupère les paramètres entrés
+    	    var contact = $('#nomContact').data('fiche');
+    	    var numero = $('#choixNumero').val();
+    	    var message = $('#messageSMS').val();
+    	    
+    	    // On lance l'envoi du SMS
+    	    $.post('ajax.php?script=contact-sms', { contact: contact, numero: numero, message: message }, function(){
+        	    // On ajoute le SMS à la liste des événements
+        	    $('.nouvelEvenement').after('<li class="evenement sms"><strong>Envoi d\'un SMS</strong><ul class="infosAnnexes"><li class="date">Maintenant</li></ul></li>');
+			
+			// On vide le formulaire
+			$('#messageSMS').val('');
+			
+			// On ferme la colonne
+			$('#colonneDroite section').hide();
+			$('#colonneDroite section:not(.invisible)').fadeIn();	
+    	    });
+	});
 };
 
 $(document).ready(contact);

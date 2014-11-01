@@ -40,6 +40,14 @@ main.contact {
 	padding: 2em 1em 1em;
 	width: 1000px;
 	
+	i
+	{
+    	    display: inline-block;
+    	    font-family: $icons;
+    	    font-size: .85em;
+    	    padding: 0 .15em 0 .10em;
+	}
+	
 	input.formulaireCache
 	{
 		border: 0;
@@ -312,7 +320,8 @@ main.contact {
 								(fonction '\e967') (ville '\e845') (rue '\e841') 
 								(immeuble '\e842') (titre '\e8c7') 
 								(description '\e8bd') (file '\e823') (tache '\e8c1')
-								(email '\e96d') (mobile '\e961') (telephone '\e854');
+								(email '\e96d') (mobile '\e961') (telephone '\e854')
+								(sms '\e8bf');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
@@ -584,6 +593,12 @@ main.contact {
 			&.email {
 				&.envoyerEmail { color: $bleu; }
 				&::before { content: '\e96d'; }
+			}
+			
+			&.envoyerEmail,
+			&.envoyerSMS
+			{
+    			    cursor: pointer;
 			}
 		}
 	}
