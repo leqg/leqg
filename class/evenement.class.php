@@ -82,6 +82,32 @@ class evenement
 			// On retraite ensuite le type en clair
 			$evenement['historique_type_clair'] = Core::tpl_typeEvenement($evenement['historique_type']);
 			
+			// On effectue une recherche des fichiers associés à l'événement
+			unset($query);
+			$query = $this->link->prepare('SELECT * FROM `fichiers` WHERE `interaction_id` = :evenement');
+			$query->bindParam(':evenement', $identifiant);
+			$query->execute();
+			$fichiers = $query->fetchAll();
+			
+			// On modifie la liste des fichiers pour la formater en JSON
+			$fichiers = json_encode($fichiers);
+			
+			// On ajoute la liste des fichiers associés à la liste des données connues
+			$evenement['fichiers'] = $fichiers;
+			
+			// On effectue une recherche des tâches associées à l'événement
+			unset($query);
+			$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :evenement');
+			$query->bindParam(':evenement', $identifiant);
+			$query->execute();
+			$taches = $query->fetchAll();
+						
+			// On modifie la liste des tâches pour la formater en JSON
+			$taches = json_encode($taches);
+			
+			// On ajoute la liste des tâches associées à la liste des données connues
+			$evenement['taches'] = $taches;
+			
 			// On retourne le tout dans la propriété privée evenement
 			$this->evenement = $evenement;
 			
@@ -119,6 +145,32 @@ class evenement
 				
 				// On retraite ensuite le type en clair
 				$evenement['historique_type_clair'] = Core::tpl_typeEvenement($evenement['historique_type']);
+			
+				// On effectue une recherche des fichiers associés à l'événement
+				unset($query);
+				$query = $this->link->prepare('SELECT * FROM `fichiers` WHERE `interaction_id` = :evenement');
+				$query->bindParam(':evenement', $evenement['historique_id']);
+				$query->execute();
+				$fichiers = $query->fetchAll();
+				
+				// On modifie la liste des fichiers pour la formater en JSON
+				$fichiers = json_encode($fichiers);
+				
+				// On ajoute la liste des fichiers associés à la liste des données connues
+				$evenement['fichiers'] = $fichiers;
+			
+				// On effectue une recherche des tâches associées à l'événement
+				unset($query);
+				$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :evenement');
+				$query->bindParam(':evenement', $evenement['historique_id']);
+				$query->execute();
+				$taches = $query->fetchAll();
+				
+				// On modifie la liste des tâches pour la formater en JSON
+				$taches = json_encode($taches);
+				
+				// On ajoute la liste des tâches associées à la liste des données connues
+				$evenement['taches'] = $taches;
 				
 				// On retourne le tout dans la propriété evenement
 				$this->evenement = $evenement;
@@ -269,6 +321,73 @@ class evenement
 		$query->bindParam(':event', $this->evenement['historique_id'], PDO::PARAM_INT);
 		
 		// On lance la requête
+		$query->execute();
+	}
+	
+	
+	/**
+	 * Ajoute une tâche
+	 *
+	 * Cette méthode ajoute une tâche à l'événement ouvert actuellement
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	int		$user		Utilisateur concerné par la tâche
+	 * @param	int		$task		Tâche à ajouter
+	 *
+	 * @result	array				Informations sur la tâche ajoutée
+	 */
+	
+	public function tache_ajout( $user, $task )
+	{
+		// On récupère l'ID de l'utilisateur
+		$compte = (isset($_COOKIE['leqg-user'])) ? $_COOKIE['leqg-user'] : 0;
+		
+		// On prépare la requête
+		$query = $this->link->prepare('INSERT INTO `taches` (`createur_id`, `compte_id`, `historique_id`, `tache_description`) VALUES (:createur, :compte, :evenement, :description)');
+		$query->bindParam(':createur', $compte);
+		$query->bindParam(':compte', $user);
+		$query->bindParam(':evenement', $this->evenement['historique_id']);
+		$query->bindParam(':description', $task);
+		
+		// On exécute la variable
+		$query->execute();
+		
+		// On récupère l'identifiant
+		$tache = $this->link->lastInsertId();
+		
+		// On récupère les informations connues sur cette tâche pour les renvoyer vers AJAX en JSON
+		unset($query);
+		$query = $this->link->prepare('SELECT * FROM `taches` WHERE `tache_id` = :tache');
+		$query->bindParam(':tache', $tache);
+		$query->execute();
+		$tache = $query->fetchAll();
+		
+		return $tache;
+	}
+	
+	
+	/**
+	 * Supprimer une tâche
+	 *
+	 * Cette méthode permet de supprimer une tâche de l'événement ouvert actuellement
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param	int		$task		Tâche à supprimer
+	 *
+	 * @result	void
+	 */
+	
+	public function tache_suppression( $task )
+	{
+		// On prépare la requête
+		$query = $this->link->prepare('DELETE FROM `taches` WHERE `tache_id` = :tache');
+		$query->bindParam(':tache', $task);
+		
+		// On exécute la requête
 		$query->execute();
 	}
 }

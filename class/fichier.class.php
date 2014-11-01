@@ -50,7 +50,7 @@ class fichier extends core {
 	 * @result	bool
 	 */
 
-	public	function upload( $index , $destination , $maxsize = false , $extensions = false ) {
+	public function upload( $index , $destination , $maxsize = false , $extensions = false ) {
 		// test1 : on vérifie que le fichier s'est uploadé correctement
 		if (!isset($_FILES[$index]) || $_FILES[$index]['error'] > 0) return false;
 		
@@ -77,7 +77,7 @@ class fichier extends core {
 	 * @result	int					ID du fichier enregistré
 	 */
 
-	public	function enregistrement( $url , $donnees ) {
+	public function enregistrement( $url , $donnees ) {
 		if (!isset($donnees['objet'])) $donnees['objet'] = 0;
 		if (!isset($donnees['dossier'])) $donnees['dossier'] = 0;
 		
@@ -118,7 +118,7 @@ class fichier extends core {
 	 * @result	string				Extension du fichier
 	 */
 
-	public	function retourExtension( $fichier ) {
+	public static function retourExtension( $fichier ) {
 		return substr(strrchr($fichier, '.'), 1);
 	}
 	
@@ -133,7 +133,7 @@ class fichier extends core {
 	 * @result	string				Chaîne retraitée
 	 */
 
-	public	function preparationNomFichier( $chaine ) {
+	public static function preparationNomFichier( $chaine ) {
 		$chaine = preg_replace("#[^a-z0-9]#", "", strtolower($chaine));
 		
 		return $chaine;
@@ -151,7 +151,7 @@ class fichier extends core {
 	 * @result	array				Tableau des fichiers associés trouvés
 	 */
 
-	public	function listeFichiers( $objet , $id ) {
+	public function listeFichiers( $objet , $id ) {
 		// On défini tout d'abord la liste des objets possibles
 			$objets = array('contact', 'interaction', 'dossier');
 		

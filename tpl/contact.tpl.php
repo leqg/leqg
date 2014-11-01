@@ -152,9 +152,58 @@
 				</span>
 			</li>
 			<li>
+				<label class="small">Tâches</label>
+				<ul class="listeDesTaches">
+					<li class="tache nouvelleTache">
+						<strong>Ajouter une nouvelle tâche</strong>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<label class="small">Fichiers</label>
+				<ul class="listeDesFichiers">
+					<li class="fichier nouveauFichier">
+						<strong>Ajouter un nouveau fichier</strong>
+					</li>
+				</ul>
+			</li>
+			<li>
 				<button class="supprimerEvenement long deleting">Supprimer l'événement</button>
 			</li>
 		</ul>
+	</section>
+	
+	<section class="contenu demi invisible ajoutFichier">
+		<a href="#" class="revenirEvenement">&#xe813;</a>
+		
+		<form id="envoiDeFichier" action="ajax.php?script=fichier-envoi" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="fiche" value="<?php echo $contact->contact['contact_id']; ?>">
+			<input type="hidden" name="evenement" id="formEvenement" value="">
+			<input type="hidden" name="MAX_FILE_SIZE" value="15728640">
+			<ul class="formulaire">
+				<li>
+					<label class="small" for="formFichier">Fichier</label>
+					<span class="form-icon decalage file">
+						<input type="file" id="formFichier" name="formFichier">
+					</span>
+				</li>
+				<li>
+					<label class="small" for="formFichierTitre">Titre du fichier</label>
+					<span class="form-icon decalage titre">
+						<input type="text" id="formFichierTitre" name="formFichierTitre">
+					</span>
+				</li>
+				<li>
+					<label class="small" for="formFichierDesc">Description</label>
+					<span class="form-icon decalage description">
+						<input type="text" id="formFichierDesc" name="formFichierDesc">
+					</span>
+				</li>
+				<li>
+					<button type="submit" class="envoiFichier">Envoyer le fichier</button>
+				</li>
+			</ul>
+		</form>
 	</section>
 
 	<section id="ChercherFicheALier" class="contenu demi invisible">
@@ -222,6 +271,28 @@
 		</ul>
 		
 		<ul class="form-liste invisible" id="listeImmeubles"></ul>
+	</section>	
+	
+	<section class="contenu demi invisible ajouterTache">
+		<a href="#" class="revenirEvenement">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="formAjoutTache">Tâche</label>
+				<span class="form-icon decalage tache"><input type="text" name="formAjoutTache" id="formAjoutTache" placeholder="Tâche à réaliser"></span>
+			</li>
+			<li>
+				<label class="small" for="formDestinataireTache">Destinataire</label>
+				<select id="formDestinataireTache" name="formDestinataireTache">
+					<?php $users = $user->liste(); foreach ($users as $user) : ?>
+					<option value="<?php echo $user['id']; ?>"><?php echo $user['firstname']; ?> <?php echo $user['lastname']; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</li>
+			<li>
+				<button class="validerTache">Ajouter la tâche</button>
+			</li>
+		</ul>
 	</section>
 </div>
 

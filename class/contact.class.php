@@ -668,6 +668,71 @@ class contact extends carto
 		// On exécute la requête
 		$query->execute();
 	}
+	
+	
+	/**
+	 * Enregistre l'upload d'un fichier
+	 *
+	 * Cette méthode permet d'enregistrer dans la base de données l'upload d'un
+	 * fichier pour la fiche ouverte
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	mixed	$file			Fichier à gérer
+	 * @param	array	$data			Données liées 
+	 * @param	array	$extensions		Extensions autorisées
+	 * @param	int		$maxsize		Taille maximale autorisée des fichiers
+	 *
+	 * @result	void
+	 */
+	
+	public function fichier_upload( $file , array $data , $extensions = false , $maxsize = false )
+	{
+		// On commence par déterminer le nom du fichier
+		$extension = substr(strrchr($file['name'], '.'), 1);
+		$nom = preg_replace("#[^a-z0-9]#", "-", strtolower($data['titre'])) . '-' . time() . '.' . $extension;
+		
+		// test1 : on vérifie que le fichier s'est uploadé correctement
+		if (!isset($file) || $file['error'] > 0) return false;
+		
+		// test2 : on vérifie si on ne dépasse pas la taille limite
+		if ($maxsize !== FALSE && $file['size'] > $maxsize) return false;
+		
+		// test3 : on vérifie si l'extension est autorisée
+		$extension = substr(strrchr($file['name'], '.'), 1);
+		if ($extensions !== FALSE && !in_array($extension, $extensions)) return false;
+		
+		// On détermine la destination
+		$destination = 'uploads/' . $nom;
+		
+		// Dans ce cas, on déplace le fichier à sa destination finale
+		if (move_uploaded_file($file['tmp_name'], $destination))
+		{
+			// On récupère l'ID de l'utilisateur
+			$utilisateur = (isset($_COOKIE['leqg-user'])) ? $_COOKIE['leqg-user'] : 0;
+			
+			// On enregistre le fichier dans la base de données
+			$query = $this->link->prepare('INSERT INTO `fichiers` (`contact_id`, `compte_id`, `interaction_id`, `fichier_nom`, `fichier_description`, `fichier_url`) VALUES ( :contact , :compte , :interaction , :nom , :description , :url )');
+			$query->bindParam(':contact', $this->contact['contact_id']);
+			$query->bindParam(':compte', $utilisateur);
+			$query->bindParam(':interaction', $data['evenement']);
+			$query->bindParam(':nom', $data['titre']);
+			$query->bindParam(':description', $data['description']);
+			$query->bindParam(':url', $nom);
+			
+			// On exécute l'ajout à la base de données
+			$query->execute();
+			
+			// On retourne que tout s'est bien passé
+			return true;
+		}
+		else
+		{
+			// On retourne l'erreur
+			return false;
+		}
+	}
 }
 
 ?>

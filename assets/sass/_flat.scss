@@ -306,7 +306,12 @@ main.contact {
 					top: .75em;
 				}
 				
-				$icon-names: (street '\e841') (search '\e8a2') (objet '\e827') (type '\e8dd') (lieu '\e842') (date '\e862') (notes '\e8bd') (naissance '\e85b') (organisme '\e968') (fonction '\e967') (ville '\e845') (rue '\e841') (immeuble '\e842');
+				$icon-names:    (street '\e841') (search '\e8a2') (objet '\e827') 
+								(type '\e8dd') (lieu '\e842') (date '\e862') 
+								(notes '\e8bd') (naissance '\e85b') (organisme '\e968') 
+								(fonction '\e967') (ville '\e845') (rue '\e841') 
+								(immeuble '\e842') (titre '\e8c7') 
+								(description '\e8bd') (file '\e823') (tache '\e8af');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
@@ -611,7 +616,7 @@ main.contact {
 				width: 40px;
 			}
 			
-			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (immeuble '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e968');
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (immeuble '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e968') (titre '\e8c7') (description '\e8bd') (tache '\e8af');
 			@each $icon-name in $icon-names {
 				&.#{nth($icon-name, 1)}::before {
 					content: nth($icon-name, 2);
@@ -694,13 +699,38 @@ main.contact {
 		}
 	}
 	
-	ul.listeDesEvenements
+	ul.listeDesEvenements,
+	ul.listeDesFichiers,
+	ul.listeDesTaches
 	{
 		list-style: none;
-		margin: 0 0 0;
+		margin: 0 0 2em 0;
 		padding: 0;
 		
-		li.evenement
+		a 
+		{
+			text-decoration: none;
+			
+			li:hover strong
+			{
+				color: $rouge;
+				text-decoration: underline;
+			}
+			
+			li:hover::before
+			{
+				color: $rouge;
+			}
+		}
+		
+		li.ajouterTache
+		{
+			display: none;
+		}
+		
+		li.evenement,
+		li.fichier,
+		li.tache
 		{
 			position: relative;
 			margin: 0 0 1em;
@@ -742,7 +772,9 @@ main.contact {
 						
 			&.clic:hover::before { color: $rouge; }
 			
-			&.nouvelEvenement
+			&.nouvelEvenement,
+			&.nouveauFichier,
+			&.nouvelleTache
 			{
 				margin-bottom: 1.5em;
 				
@@ -766,6 +798,10 @@ main.contact {
 					&::after { color: $blanc; }
 				}
 			}
+			
+			&.nouveauFichier { margin-top: 1em; }
+			
+			&.nouvelleTache { margin-top: 1em; }
 			
 			& > small
 			{
@@ -812,6 +848,14 @@ main.contact {
 				color: $bleu;
 				@include transition(all);
 			}
+			
+			& > em
+			{
+				display: block;
+				color: $grisFonce;
+				font-style: italic;
+			}
+			
 			&.clic:hover > strong 
 			{ 
 				color: $rouge; 
@@ -846,6 +890,17 @@ main.contact {
 					&.lieu::before { content: '\e8c5'; }
 				}
 			}
+		}
+		
+		li.tache:not(.nouvelleTache):hover
+		{
+			color: $rouge;
+			cursor: pointer;
+			text-decoration: underline;
+			
+			&::before { color: $rouge; }
+			&::after { content: '\e8b0'; }
+			strong { color: $rouge; }
 		}
 	}
 	
@@ -887,7 +942,8 @@ main.contact {
 		}
 	}
 	
-	.fermerColonne
+	.fermerColonne,
+	.revenirEvenement
 	{
 		position: absolute; top: .5em; right: .5em;
 		display: block;

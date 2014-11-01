@@ -156,11 +156,14 @@ var contact = function() {
 	$('.listeDesEvenements').on('click', '.accesEvenement', function(){
 		var identifiant = $(this).data('evenement');
 		
+		// On commence par vider la liste des fichiers
+		$('ul.listeDesFichiers li:not(.nouveauFichier)').remove();
+		
 		// On ferme tous les blocs de la colonne latérale
 		$('#colonneDroite section').fadeOut();
 		
 		// On recherche les informations sur l'événement
-		$.getJSON('ajax.php?script=evenement', {evenement: identifiant}, function(data) {
+		$.getJSON('ajax.php?script=evenement', { evenement: identifiant }, function(data) {
 			// On affecte les informations récupérées
 			$('#eventTitre').val(data.historique_objet);
 			$('#eventType').val(data.historique_type);
@@ -168,6 +171,29 @@ var contact = function() {
 			$('#eventLieu').val(data.historique_lieu);
 			$('#eventNotes').val(data.historique_notes);
 			$('#evenement').data('evenement', data.historique_id);
+			$('#formEvenement').val(data.historique_id);
+			
+			// On va formater la liste des fichiers pour l'ajouter à la fiche événement
+			var fichiers = $.parseJSON(data.fichiers);
+			
+			// On fait une boucle des fichiers à afficher
+			$.each(fichiers, function(key, val) {
+				// On créé d'abord une nouvelle puce à la fin de la liste
+				$('.nouveauFichier').after('<a href="uploads/' + val.fichier_url + '" class="fichier-' + val.fichier_id + '" target="_blank"><li class="fichier"><strong></strong><em></em></li></a>');
+				
+				// On ajoute les données importantes dans dans la puce
+				$('.fichier-' + val.fichier_id + ' li strong').html(val.fichier_nom);
+				$('.fichier-' + val.fichier_id + ' li em').html(val.fichier_description);
+			});
+			
+			// On va formater la liste des tâches pour l'ajouter à la fiche événement
+			var taches = $.parseJSON(data.taches);
+			
+			// On fait une boucle des tâches à afficher
+			$.each(taches, function(key, val) {
+				// On créé d'abord une nouvelle puce à la fin de la liste
+				$('.nouvelleTache').after('<li class="tache tache-' + val.tache_id + '" data-tache="' + val.tache_id + '"><strong>' + val.tache_description + '</strong></li>');
+			});
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
@@ -197,6 +223,8 @@ var contact = function() {
 			$('#eventDate').val(data.historique_date_fr);
 			$('#eventLieu').val(data.historique_lieu);
 			$('#eventNotes').val(data.historique_notes);
+			$('#evenement').data('evenement', data.historique_id);
+			$('#formEvenement').val(data.historique_id);
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
@@ -578,6 +606,87 @@ var contact = function() {
 		$.post('ajax.php?script=contact-tag-supprimer', { contact: contact , tag: tag }, function() {
 			// On supprime le tag de la liste
 			$('.tag[data-tag=' + tag + ']').remove();
+		});
+	});
+	
+	
+	// Script de chargement du formulaire d'ajout de fichier
+	$('.nouveauFichier').click(function() {
+		// On ferme l'événement ouvert
+		$('#evenement').hide();
+		
+		// On vide le formulaire d'ajout de fichier
+		$('#formFichier').val('');
+		$('#formFichierTitre').val('');
+		$('#formFichierDesc').val('');
+		
+		// On affiche le formulaire d'ajout de fichier
+		$('.ajoutFichier').fadeIn();
+	});
+	
+	
+	// Script de chargement du formulaire d'événement
+	$('.revenirEvenement').click(function() {
+		// On ferme l'ajout de fichier
+		$('.ajoutFichier').hide();
+		$('.ajouterTache').hide();
+		
+		// On vide le formulaire d'ajout de fichier
+		$('#formFichier').val('');
+		$('#formFichierTitre').val('');
+		$('#formFichierDesc').val('');
+		$('#formAjoutTache').val('');
+		
+		// On affiche la fiche événement
+		$('#evenement').fadeIn();
+	});
+	
+	
+	// Script d'affichage du formulaire d'ajout de tâche
+	$('.nouvelleTache').click(function() {
+		// On affiche le formulaire
+		$('#colonneDroite section').hide();
+		$('.ajouterTache').fadeIn();
+	});
+	
+	
+	// Script d'ajout SQL de la tâche
+	$('.validerTache').click(function() {
+		// On récupère les données des formulaires
+		var tache = $('#formAjoutTache').val();
+		var contact = $('#nomContact').data('fiche');
+		var user = $('#formDestinataireTache').val();
+		var evenement = $('#evenement').data('evenement');
+		
+		// On lance l'enregistrement
+		$.post('ajax.php?script=contact-tache-nouvelle', { contact: contact, tache: tache, user: user, evenement: evenement }, function(data) {
+			data = $.parseJSON(data);
+			
+			$.each(data, function(key, val) {
+				// On ajoute la tâche à la liste des tâches
+				$('.nouvelleTache').after('<li class="tache tache-' + val.tache_id + '" data-tache="' + val.tache_id + '"><strong>' + val.tache_description + '</strong><em>' + val.user + '</em></li>');
+			});
+			
+			// On revient en arrière pour revenir à l'événement
+			$('.ajouterTache').hide();
+			$('#formAjoutTache').val('');
+			$('#evenement').fadeIn();
+		});
+		
+		return false;
+	});
+	
+	
+	// Script de suppression d'une tâche
+	$('.listeDesTaches').on('dblclick', '.tache', function() {
+		// On récupère le numéro de la tâche
+		var evenement = $('#evenement').data('evenement');
+		var task = $(this).data('tache');
+		
+		// On lance la suppression de la tâche
+		$.post('ajax.php?script=contact-tache-suppression', { evenement: evenement, tache: task }, function() {
+			// On supprime la puce
+			$('.tache-' + task).remove();
 		});
 	});
 };
