@@ -47,8 +47,7 @@
 		<h4>Données de contact</h4>
 		<ul class="etatcivil coordonnees">
 			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : ?>
-			<li class="<?php echo $coordonnee['coordonnee_type']; ?>">
-				<?php 
+			<li class="<?php echo $coordonnee['coordonnee_type']; ?>" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
 				if ($coordonnee['coordonnee_type'] == 'email')
 				{
 					echo $coordonnee['coordonnee_email'];
@@ -57,8 +56,7 @@
 				{ 
 					Core::tpl_phone($coordonnee['coordonnee_numero']); 
 				} 
-				?>
-			</li>
+		  ?></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterCoordonnees">Ajouter une nouvelle information de contact</li>
 		</ul>
@@ -291,6 +289,57 @@
 			</li>
 			<li>
 				<button class="validerTache">Ajouter la tâche</button>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible modifier-email" data-id="">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="modifEmail">Modifier l'adresse email</label>
+				<span class="form-icon decalage email"><input type="text" name="modifEmail" id="modifEmail"></span>
+			</li>
+			<li>
+				<button class="validerChangement" data-type="email">Enregistrer le changement</button>
+			</li>
+			<li>
+				<button class="supprimerCoordonnee deleting" data-type="email">Supprimer cet email</button>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible modifier-fixe" data-id="">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="modifFixe">Modifier le numéro de téléphone fixe</label>
+				<span class="form-icon decalage fixe"><input type="text" name="modifFixe" id="modifFixe"></span>
+			</li>
+			<li>
+				<button class="validerChangement" data-type="fixe">Enregistrer le changement</button>
+			</li>
+			<li>
+				<button class="supprimerCoordonnee deleting" data-type="fixe">Supprimer ce numéro</button>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible modifier-mobile" data-id="">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="modifMobile">Modifier le numéro de téléphone mobile</label>
+				<span class="form-icon decalage mobile"><input type="text" name="modifMobile" id="modifMobile"></span>
+			</li>
+			<li>
+				<button class="validerChangement" data-type="mobile">Enregistrer le changement</button>
+			</li>
+			<li>
+				<button class="supprimerCoordonnee deleting" data-type="mobile">Supprimer ce numéro</button>
 			</li>
 		</ul>
 	</section>

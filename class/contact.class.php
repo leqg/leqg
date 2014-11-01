@@ -339,19 +339,19 @@ class contact extends carto
 		// On prépare les requêtes SQL
 		if ( $type == 'email' )
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_type` = "email" AND `coordonnee_email` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_email` ASC');
+			$query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_type` = "email" AND `coordonnee_email` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_email` ASC');
 		}
 		else if ( $type == 'fixe' )
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "fixe" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
+			$query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "fixe" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
 		}	
 		else if ( $type == 'mobile' )
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "mobile" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
+			$query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "mobile" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
 		}
 		else
 		{
-			$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` FROM `coordonnees` WHERE ( `coordonnee_numero` IS NOT NULL OR `coordonnee_email` IS NOT NULL ) AND `contact_id` = :contact ORDER BY `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` ASC');
+			$query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` FROM `coordonnees` WHERE ( `coordonnee_numero` IS NOT NULL OR `coordonnee_email` IS NOT NULL ) AND `contact_id` = :contact ORDER BY `coordonnee_type`, `coordonnee_email`, `coordonnee_numero` ASC');
 		}
 		
 		// On affecte au sein de la requête les données d'identification du contact et on exécute la requête

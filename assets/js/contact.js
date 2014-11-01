@@ -679,7 +679,7 @@ var contact = function() {
 	
 	
 	// Script de suppression d'une tâche
-	$('.listeDesTaches').on('dblclick', '.tache', function() {
+	$('.listeDesTaches').on('click', '.tache', function() {
 		// On récupère le numéro de la tâche
 		var evenement = $('#evenement').data('evenement');
 		var task = $(this).data('tache');
@@ -688,6 +688,45 @@ var contact = function() {
 		$.post('ajax.php?script=contact-tache-suppression', { evenement: evenement, tache: task }, function() {
 			// On supprime la puce
 			$('.tache-' + task).remove();
+		});
+	});
+	
+	
+	// Ouverture de la fenêtre de changement d'email
+	$('.coordonnees').on('click', 'li', function() {
+		// On récupère le type de coordonnée
+		var type = $(this).attr('class');
+		
+		// On récupère l'ID des coordonnées demandée et la valeur actuelle
+		var id = $(this).data('id');
+		var val = $(this).html();
+		
+		// On intégre ces valeurs dans le formulaire
+		$('.modifier-' + type).data('id', id);
+		$('.modifier-' + type + ' input').val(val);
+		
+		// On affiche le formulaire
+		$('#colonneDroite section').hide();
+		$('.modifier-' + type).fadeIn();
+	});
+	
+	
+	// Script de suppression d'une coordonnée
+	$('.supprimerCoordonnee').click(function() {
+		var type = $(this).data('type');
+		var id = $('.modifier-' + type).data('id');
+		
+		// On enregistre la suppression dans la base de données
+		$.post('ajax.php?script=contact-suppression-coord', { id: id }, function() {
+			// On supprime l'élément de la liste
+			$('#' + type + '-' + id).remove();
+			
+			// On ferme le volet latéral
+			$('#colonneDroite section').hide();
+			$('#colonneDroite section:not(.invisible)').fadeIn();
+			
+			// On vide le formulaire de modification
+			$('.modifier-' + type + ' input').val('');
 		});
 	});
 };

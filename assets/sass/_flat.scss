@@ -311,7 +311,8 @@ main.contact {
 								(notes '\e8bd') (naissance '\e85b') (organisme '\e968') 
 								(fonction '\e967') (ville '\e845') (rue '\e841') 
 								(immeuble '\e842') (titre '\e8c7') 
-								(description '\e8bd') (file '\e823') (tache '\e8af');
+								(description '\e8bd') (file '\e823') (tache '\e8c1')
+								(email '\e96d') (mobile '\e961') (telephone '\e854');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
@@ -616,7 +617,7 @@ main.contact {
 				width: 40px;
 			}
 			
-			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (immeuble '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e968') (titre '\e8c7') (description '\e8bd') (tache '\e8af');
+			$icon-names: (ajout '\e8b2') (naissance '\e8c1') (age '\e95d') (adresse '\e8c5') (immeuble '\e8c5') (bureau '\e8b3') (email '\e96d') (mobile '\e961') (fixe '\e854') (lien '\e822') (tag '\e8b7') (organisme '\e968') (titre '\e8c7') (description '\e8bd') (tache '\e8c1');
 			@each $icon-name in $icon-names {
 				&.#{nth($icon-name, 1)}::before {
 					content: nth($icon-name, 2);
@@ -670,6 +671,29 @@ main.contact {
 			}
 			
 			span.inconnu { color: $grisMoyen; }
+			
+			&.email,
+			&.mobile,
+			&.fixe
+			{
+				&:hover
+				{
+					cursor: pointer;
+					-moz-user-select: -moz-none;
+					-moz-user-select: none;
+					-o-user-select: none;
+					-khtml-user-select: none;
+					-webkit-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+					
+					&::before
+					{
+						color: $rouge;
+						content: '\e8bd';
+					}
+				}
+			}
 		}
 	}
 	
@@ -892,15 +916,27 @@ main.contact {
 			}
 		}
 		
-		li.tache:not(.nouvelleTache):hover
+		li.tache:not(.nouvelleTache)
 		{
-			color: $rouge;
-			cursor: pointer;
-			text-decoration: underline;
+			margin-bottom: 1.5em;
 			
-			&::before { color: $rouge; }
-			&::after { content: '\e8b0'; }
-			strong { color: $rouge; }
+			&:hover
+			{
+				color: $rouge;
+				cursor: pointer;
+				text-decoration: underline;
+				-moz-user-select: -moz-none;
+				-moz-user-select: none;
+				-o-user-select: none;
+				-khtml-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				
+				&::before { color: $rouge; }
+				&::after { content: '\e8af'; }
+				strong { color: $rouge; }
+			}
 		}
 	}
 	
