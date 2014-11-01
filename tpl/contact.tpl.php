@@ -254,7 +254,12 @@
 				<label class="small" for="rechercherRue">Rue</label>
 				<span class="form-icon decalage rue"><input type="text" name="rechercherRue" id="rechercherRue"></span>
 			</li>
-			<ul class="form-liste invisible" id="listeRues"></ul>
+			<li>
+        			<ul class="form-liste invisible" id="listeRues"></ul>
+			</li>
+			<li>
+			    <button class="deleting supprimerAdresse">Retirer l'adresse de la fiche</button>
+			</li>
 		</ul>
 	</section>
 
