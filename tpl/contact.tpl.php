@@ -367,6 +367,34 @@
             </li>
     	    </ul>
 	</section>
+	
+	<section class="contenu demi invisible envoi-email">
+    	    <a href="#" class="fermerColonne">&#xe813;</a>
+    	    
+    	    <h4>Envoi d'un courrier électronique</h4>
+    	    
+    	    <ul class="formulaire">
+        	    <li>
+        	        <label class="small" for="choixNumero">Choix de l'adresse</label>
+        	        <select name="choixAdresse" id="choixAdresse">
+            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'email') : ?>
+            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php echo $coordonnee['coordonnee_email']; ?></option>
+            	        <?php endif; endforeach; ?>
+        	        </select>
+            </li>
+            <li>
+                <label class="small" for="objetEmail">Objet du courrier électronique</label>
+                <span class="form-icon decalage objet"><input type="text" name="objetEmail" id="objetEmail" placeholder="Objet de l'email"></span>
+            </li>
+            <li>
+                <label class="small" for="messageEmail">Message à envoyer</label>
+                <span class="form-icon decalage email"><textarea name="messageEmail" id="messageEmail" placeholder="Email à envoyer"></textarea></span>
+            </li>
+            <li>
+                <button class="EmailSending">Envoi de l'email (<i>&#xe8cd;</i>)</button>
+            </li>
+    	    </ul>
+	</section>
 </div>
 
 
