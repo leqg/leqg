@@ -97,7 +97,7 @@ class evenement
 			
 			// On effectue une recherche des tâches associées à l'événement
 			unset($query);
-			$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :evenement');
+			$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :evenement AND `tache_terminee` = 0');
 			$query->bindParam(':evenement', $identifiant);
 			$query->execute();
 			$taches = $query->fetchAll();
@@ -161,7 +161,7 @@ class evenement
 			
 				// On effectue une recherche des tâches associées à l'événement
 				unset($query);
-				$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :evenement');
+				$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :evenement AND `tache_terminee` = 0');
 				$query->bindParam(':evenement', $evenement['historique_id']);
 				$query->execute();
 				$taches = $query->fetchAll();
@@ -398,7 +398,7 @@ class evenement
 	public function tache_suppression( $task )
 	{
 		// On prépare la requête
-		$query = $this->link->prepare('DELETE FROM `taches` WHERE `tache_id` = :tache');
+		$query = $this->link->prepare('UPDATE `taches` SET `tache_terminee` = 1 WHERE `tache_id` = :tache');
 		$query->bindParam(':tache', $task);
 		
 		// On exécute la requête
