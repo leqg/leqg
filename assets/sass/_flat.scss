@@ -18,13 +18,15 @@
 
 body.flat {
 	background-color: transparent;
+	padding-left: 95px;
 	
 	header#top {
-		position: fixed;
+		position: fixed; top: 0; left: 0;
 	}
 	
 	nav#principale {
 		position: fixed;
+		overflow: hidden;
 	}
 }
 
@@ -33,11 +35,12 @@ main.boite,
 main.porte,
 main.contact,
 main.dossier {
-	position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px);
+	//position: absolute; top: 70px; top: calc(60px + 1em); left: calc(50% - 500px + 45px);
+	position: relative;
 	font-family: $flat;
 	height: auto;
 	overflow: visible;
-	margin: 0 auto 1em;
+	margin: 75px auto 1em;
 	padding: 2em 1em 1em;
 	width: 1000px;
 	
