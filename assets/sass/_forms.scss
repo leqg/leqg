@@ -256,6 +256,58 @@ label.selectbox {
 	}
 }
 
+ 
+label.sbox {
+	position: relative;
+	@include border-radius(.33em);
+	height: 45px;
+	padding: 0 !important;
+	width: 100%;
+	
+	select
+	{
+		display: inline-block;
+		@include appearance(none);
+		background-color: $background;
+		border: 1px solid $gris;
+		@include border-radius(.33em);
+		font-family: $flat;
+		font-size: .85em;
+		font-weight: 400;
+		height: 45px;
+		padding: .33em 10px .33em 40px;
+		width: 100%;
+	}
+	
+	&::before
+	{
+		position: absolute; top: 0; right: 0;
+		background-color: lighten($gris, 5%);
+		@include border-radius(0 .33em .33em 0);
+		content: ' ';
+		height: 45px;
+		pointer-events: none;
+		width: 45px;
+		z-index: 100;
+	}
+	
+	&::after
+	{
+		position: absolute; top: 0; right: 0;
+		color: $blanc;
+		content: '\e874\a0\e875';
+		font-family: $icons;
+		height: 45px;
+		line-height: 45px;
+		pointer-events: none;
+		text-align: center;
+		width: 45px;
+		z-index: 150;
+		@include rotate(90deg);
+	}
+
+}
+
 
 
 /************************************

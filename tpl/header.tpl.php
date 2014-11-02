@@ -44,7 +44,7 @@
 							'rappels' => 'Rappels',
 							'administration' => 'Gestion');
 							
-			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'fiche') ? 'contacts' : $_GET['page'];
+			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
 							
 			$inactif = array();
 		

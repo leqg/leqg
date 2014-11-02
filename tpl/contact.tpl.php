@@ -147,13 +147,17 @@
 			</li>
 			<li>
 				<label class="small" for="eventType">Type</label>
-				<select name="type" id="eventType">
-					<option value="contact">Entrevue</option>
-					<option value="telephone">Contact téléphonique</option>
-					<option value="email">Courrier électronique</option>
-					<option value="courrier">Correspondance postale</option>
-					<option value="autre">Autre</option>
-				</select>
+				<span class="form-icon type">
+					<label class="sbox" for="eventType">
+						<select name="type" id="eventType">
+							<option value="contact">Entrevue</option>
+							<option value="telephone">Contact téléphonique</option>
+							<option value="email">Courrier électronique</option>
+							<option value="courrier">Correspondance postale</option>
+							<option value="autre">Autre</option>
+						</select>
+					</label>
+				</span>
 			</li>
 			<li>
 				<label class="small" for="eventLieu">Lieu</label>
@@ -375,11 +379,15 @@
 			</li>
 			<li>
 				<label class="small" for="formDestinataireTache">Destinataire</label>
-				<select id="formDestinataireTache" name="formDestinataireTache">
-					<?php $users = $user->liste(); foreach ($users as $user) : ?>
-					<option value="<?php echo $user['id']; ?>"><?php echo $user['firstname']; ?> <?php echo $user['lastname']; ?></option>
-					<?php endforeach; ?>
-				</select>
+				<span class="form-icon utilisateur">
+					<label class="sbox" for="formDestinataireTache">
+						<select id="formDestinataireTache" name="formDestinataireTache">
+							<?php $users = $user->liste(); foreach ($users as $user) : ?>
+							<option value="<?php echo $user['id']; ?>"><?php echo $user['firstname']; ?> <?php echo $user['lastname']; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
+				</span>
 			</li>
 			<li>
 				<button class="validerTache">Ajouter la tâche</button>
@@ -446,19 +454,23 @@
     	    <ul class="formulaire">
         	    <li>
         	        <label class="small" for="choixNumero">Choix du numéro</label>
-        	        <select name="choixNumero" id="choixNumero">
-            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'mobile') : ?>
-            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php Core::tpl_phone($coordonnee['coordonnee_numero']); ?></option>
-            	        <?php endif; endforeach; ?>
-        	        </select>
-            </li>
-            <li>
-                <label class="small" for="messageSMS">Message à envoyer</label>
-                <span class="form-icon decalage sms"><textarea name="messageSMS" id="messageSMS" placeholder="SMS à envoyer"></textarea></span>
-            </li>
-            <li>
-                <button class="SMSsending">Envoi du SMS ( <i>&#xe8cd;</i> <small>0,08&nbsp;&euro;</small> )</button>
-            </li>
+        	        <span class="form-icon sms">
+	        	        <label class="sbox" for="choixNumero">
+		        	        <select name="choixNumero" id="choixNumero">
+		            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'mobile') : ?>
+		            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php Core::tpl_phone($coordonnee['coordonnee_numero']); ?></option>
+		            	        <?php endif; endforeach; ?>
+		        	        </select>
+	        	        </label>
+        	        </span>
+	            </li>
+	            <li>
+	                <label class="small" for="messageSMS">Message à envoyer</label>
+	                <span class="form-icon decalage sms"><textarea name="messageSMS" id="messageSMS" placeholder="SMS à envoyer"></textarea></span>
+	            </li>
+	            <li>
+	                <button class="SMSsending">Envoi du SMS ( <i>&#xe8cd;</i> <small>0,08&nbsp;&euro;</small> )</button>
+	            </li>
     	    </ul>
 	</section>
 	
@@ -470,23 +482,27 @@
     	    <ul class="formulaire">
         	    <li>
         	        <label class="small" for="choixNumero">Choix de l'adresse</label>
-        	        <select name="choixAdresse" id="choixAdresse">
-            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'email') : ?>
-            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php echo $coordonnee['coordonnee_email']; ?></option>
-            	        <?php endif; endforeach; ?>
-        	        </select>
-            </li>
-            <li>
-                <label class="small" for="objetEmail">Objet du courrier électronique</label>
-                <span class="form-icon decalage objet"><input type="text" name="objetEmail" id="objetEmail" placeholder="Objet de l'email"></span>
-            </li>
-            <li>
-                <label class="small" for="messageEmail">Message à envoyer</label>
-                <span class="form-icon decalage email"><textarea name="messageEmail" id="messageEmail" placeholder="Email à envoyer"></textarea></span>
-            </li>
-            <li>
-                <button class="EmailSending">Envoi de l'email (<i>&#xe8cd;</i>)</button>
-            </li>
+        	        <span class="form-icon email">
+	        	        <label class="sbox" for="choixAdresse">
+		        	        <select name="choixAdresse" id="choixAdresse">
+		            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'email') : ?>
+		            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php echo $coordonnee['coordonnee_email']; ?></option>
+		            	        <?php endif; endforeach; ?>
+		        	        </select>
+	        	        </label>
+        	        </span>
+	            </li>
+	            <li>
+	                <label class="small" for="objetEmail">Objet du courrier électronique</label>
+	                <span class="form-icon decalage objet"><input type="text" name="objetEmail" id="objetEmail" placeholder="Objet de l'email"></span>
+	            </li>
+	            <li>
+	                <label class="small" for="messageEmail">Message à envoyer</label>
+	                <span class="form-icon decalage email"><textarea name="messageEmail" id="messageEmail" placeholder="Email à envoyer"></textarea></span>
+	            </li>
+	            <li>
+	                <button class="EmailSending">Envoi de l'email (<i>&#xe8cd;</i>)</button>
+	            </li>
     	    </ul>
 	</section>
 	
