@@ -556,6 +556,13 @@ main.dossier {
 			
 			&.sexe {
 				cursor: pointer;
+				-moz-user-select: -moz-none;
+				-moz-user-select: none;
+				-o-user-select: none;
+				-khtml-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
 				
 				&.homme {
 					color: $bleu;
@@ -743,7 +750,9 @@ main.dossier {
 	
 	ul.listeDesEvenements,
 	ul.listeDesFichiers,
-	ul.listeDesTaches
+	ul.listeDesTaches,
+	ul.affichageDossier,
+	ul.listeDesDossiers
 	{
 		list-style: none;
 		margin: 0 0 2em 0;
@@ -772,7 +781,8 @@ main.dossier {
 		
 		li.evenement,
 		li.fichier,
-		li.tache
+		li.tache,
+		li.dossier
 		{
 			position: relative;
 			margin: 0 0 1em;
@@ -816,7 +826,9 @@ main.dossier {
 			
 			&.nouvelEvenement,
 			&.nouveauFichier,
-			&.nouvelleTache
+			&.nouvelleTache,
+			&.lierDossier,
+			&.ajoutDossier
 			{
 				margin-bottom: 1.5em;
 				
@@ -841,9 +853,20 @@ main.dossier {
 				}
 			}
 			
-			&.nouveauFichier { margin-top: 1em; }
+			&.nouveauFichier,
+			&.nouvelleTache,
+			&.lierDossier,
+			&.ajoutDossier
+            {
+                margin-top: 1em; 
+			}
 			
-			&.nouvelleTache { margin-top: 1em; }
+			&.lierDossier::after
+			{
+    			    content: '\e822';
+			}
+			
+			&.ajoutDossier { margin-bottom: 1.5em; }
 			
 			& > small
 			{
@@ -934,6 +957,22 @@ main.dossier {
 			}
 		}
 		
+		li.dossier
+		{
+    		    cursor: pointer;
+    		    
+    		    &:hover
+    		    {
+        		    &::before { color: $rouge; }
+        		    
+        		    strong
+        		    {
+            		    color: $rouge;
+            		    text-decoration: underline;
+        		    }
+    		    }
+		}
+		
 		li.tache:not(.nouvelleTache)
 		{
 			margin-bottom: 1.5em;
@@ -956,6 +995,11 @@ main.dossier {
 				strong { color: $rouge; }
 			}
 		}
+	}
+	
+	ul.affichageDossier li.dossier
+	{
+    	    margin-top: 1em;
 	}
 	
 	.coteAcote {
@@ -997,7 +1041,8 @@ main.dossier {
 	}
 	
 	.fermerColonne,
-	.revenirEvenement
+	.revenirEvenement,
+	.revenirDossier
 	{
 		position: absolute; top: .5em; right: .5em;
 		display: block;

@@ -150,6 +150,20 @@
 				</span>
 			</li>
 			<li>
+			    <label class="small">Dossier</label>
+			    <ul class="affichageDossier">
+    			        <li class="dossier lierDossier">
+    			            <strong>Lier à un dossier</strong>
+    			        </li>
+    			        <a href="" class="transparent afficherInfosDossier" style="display: none;">
+        			        <li class="dossier">
+        			            <strong></strong>
+        			            <em></em>
+        			        </li>
+    			        </a>
+			    </ul>
+			</li>
+			<li>
 				<label class="small">Tâches</label>
 				<ul class="listeDesTaches">
 					<li class="tache nouvelleTache">
@@ -399,6 +413,44 @@
                 <button class="EmailSending">Envoi de l'email (<i>&#xe8cd;</i>)</button>
             </li>
     	    </ul>
+	</section>
+	
+	<section class="contenu demi invisible selectionDossier">
+		<a href="#" class="revenirEvenement">&#xe813;</a>
+		
+		<h4>Sélectionnez un dossier pour le lier</h4>
+		
+		<ul class="listeDesDossiers">
+    		    <li class="dossier ajoutDossier">
+    		        <strong>Créer un nouveau dossier</strong>
+    		    </li>
+    		    <?php $dossiers = $dossier->recherche(); foreach ($dossiers as $dossier) : ?>
+            <li class="dossier choixDossier dossier-<?php echo $dossier['id']; ?>" data-dossier="<?php echo $dossier['id']; ?>">
+                <strong><?php echo $dossier['nom']; ?></strong>
+                <em><?php echo $dossier['description']; ?></em>
+            </li>
+    		    <?php endforeach; ?>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible creationDossier">
+		<a href="#" class="revenirDossier">&#xe813;</a>
+		
+		<h4>Création d'un nouveau dossier</h4>
+		
+		<ul class="formulaire">
+    		    <li>
+    		        <label class="small">Nom du dossier</label>
+    		        <span class="form-icon objet"><input type="text" name="creationDossierNom" id="creationDossierNom"></span>
+    		    </li>
+    		    <li>
+    		        <label class="small">Description</label>
+    		        <span class="form-icon description"><textarea name="creationDossierDesc" id="creationDossierDesc"></textarea></span>
+    		    </li>
+    		    <li>
+    		        <button class="creerDossier">Créer ce dossier</button>
+    		    </li>
+		</ul>
 	</section>
 </div>
 

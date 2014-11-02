@@ -108,6 +108,21 @@ class evenement
 			// On ajoute la liste des tâches associées à la liste des données connues
 			$evenement['taches'] = $taches;
 			
+			// On cherche les données sur le dossier, si un dossier est lié
+			if ($evenement['dossier_id'] > 0)
+			{
+    			    unset($query);
+    			    $query = $this->link->prepare('SELECT * FROM `dossiers` WHERE `dossier_id` = :id');
+    			    $query->bindParam(':id', $evenement['dossier_id']);
+    			    $query->execute();
+    			    $dossier = $query->fetch(PDO::FETCH_ASSOC);
+    			    $dossier['dossier_md5'] = md5($dossier['dossier_id']);
+    			    $dossier = json_encode($dossier);
+    			    
+    			    // On ajoute les informations sur le dossier à la liste des données connues
+    			    $evenement['dossier'] = $dossier;
+			}
+			
 			// On retourne le tout dans la propriété privée evenement
 			$this->evenement = $evenement;
 			
@@ -171,6 +186,21 @@ class evenement
 				
 				// On ajoute la liste des tâches associées à la liste des données connues
 				$evenement['taches'] = $taches;
+			
+        			// On cherche les données sur le dossier, si un dossier est lié
+        			if ($evenement['dossier_id'] > 0)
+        			{
+        			    unset($query);
+        			    $query = $this->link->prepare('SELECT * FROM `dossiers` WHERE `dossier_id` = :id');
+        			    $query->bindParam(':id', $evenement['dossier_id']);
+        			    $query->execute();
+        			    $dossier = $query->fetch(PDO::FETCH_ASSOC);
+        			    $dossier['dossier_md5'] = md5($dossier['dossier_id']);
+        			    $dossier = json_encode($dossier);
+        			    
+        			    // On ajoute les informations sur le dossier à la liste des données connues
+        			    $evenement['dossier'] = $dossier;
+        			}
 				
 				// On retourne le tout dans la propriété evenement
 				$this->evenement = $evenement;
@@ -404,4 +434,24 @@ class evenement
 		// On exécute la requête
 		$query->execute();
 	}
+	
+	
+	/**
+    	 * Lie un dossier à l'événement
+    	 *
+    	 * Cette méthode permet de lier un dossier à l'événement actuellement ouvert
+    	 *
+    	 * @author  Damien Senger <mail@damiensenger.me>
+    	 * @version 1.0
+    	 * 
+    	 * @param   int   $dossier   Dossier à lier
+    	 * 
+    	 * @result  void
+    	 */
+    	 
+    public function lier_dossier( $dossier )
+    {
+        // On modifie l'information
+        $this->modification( 'dossier_id' , $dossier );
+    }
 }
