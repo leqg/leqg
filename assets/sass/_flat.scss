@@ -49,6 +49,13 @@ main.dossier {
     	    padding: 0 .15em 0 .10em;
 	}
 	
+	.clicable
+	{
+		cursor: pointer;
+		
+		&:hover { color: $rouge; }
+	}
+	
 	input.formulaireCache
 	{
 		border: 0;
@@ -124,8 +131,16 @@ main.dossier {
 			&:last-of-type { font-weight: 300; }
 		}
 		
-		&#nomContact {
-			font-size: 2.5em;
+		&.titre
+		{
+			cursor: pointer;
+			-moz-user-select: -moz-none;
+			-moz-user-select: none;
+			-o-user-select: none;
+			-khtml-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
 		}
 	}
 	
@@ -206,6 +221,13 @@ main.dossier {
 		&.droite { position: absolute; right: 1em; }
 		
 		&.invisible { display: none; }
+		
+		&.description p
+		{
+			font-size: 1.1em;
+			font-weight: 400;
+			line-height: 1.5em;
+		}
 		
 		&.icone {
 			padding-top: 200px;
@@ -445,7 +467,8 @@ main.dossier {
 		}
 	}
 	
-	ul.liste-missions {
+	ul.liste-missions,
+	ul.liste-dossiers {
 		list-style: none;
 		margin: 1em 1em 2.5em;
 		padding: 0;
@@ -453,17 +476,17 @@ main.dossier {
 		li {
 			position: relative;
 			min-height: 90px;
-			margin: 0 auto 1.5em;
+			margin: 0 auto 3em;
 			padding: 0 0 0 115px;
-			
+
 			&::before,
 			&::after {
 				position: absolute; top: 0; top: calc(50% - 45px); left: 0;
 				display: block;
 				background-color: $jaune;
 				@include border-radius(50%);
-				color: rgba($rouge, .5);
-				content: '\e843';
+				color: $rouge;
+				content: ' ';
 				font-family: $icons;
 				font-size: 50px;
 				height: 90px;
@@ -472,16 +495,8 @@ main.dossier {
 				width: 90px;
 			}
 			
-			&::before { line-height: 105px; }
-			
-			&::after {
-				left: 6px;
-				background-color: transparent;
-				color: $rouge;
-				content: '\e842';
-				line-height: 70px;
-			}
-			
+			&::after { background-color: transparent; }
+	
 			h4 {
 				color: $bleu;
 				font-size: 1.66em;
@@ -497,6 +512,36 @@ main.dossier {
 				padding: 0;
 			}
 		}
+	}
+	
+	ul.liste-missions li {
+		&::before,
+		&::after {
+			position: absolute; top: 0; top: calc(50% - 45px); left: 0;
+			display: block;
+			background-color: $jaune;
+			@include border-radius(50%);
+			color: rgba($rouge, .5);
+			font-family: $icons;
+			font-size: 50px;
+			height: 90px;
+			line-height: 90px;
+			text-align: center;
+			width: 90px;
+		}
+		
+		&::before { line-height: 105px; }
+		
+		&::after {
+			left: 6px;
+			background-color: transparent;
+			color: $rouge;
+			line-height: 70px;
+		}
+	}
+	
+	ul.liste-dossiers li {
+		&::before { content: '\e851'; }
 	}
 	
 	ul.statistiquesMission {
@@ -752,7 +797,8 @@ main.dossier {
 	ul.listeDesFichiers,
 	ul.listeDesTaches,
 	ul.affichageDossier,
-	ul.listeDesDossiers
+	ul.listeDesDossiers,
+	ul.listing
 	{
 		list-style: none;
 		margin: 0 0 2em 0;
@@ -782,7 +828,8 @@ main.dossier {
 		li.evenement,
 		li.fichier,
 		li.tache,
-		li.dossier
+		li.dossier,
+		li.objet
 		{
 			position: relative;
 			margin: 0 0 1em;
@@ -940,7 +987,7 @@ main.dossier {
 					font-weight: 400;
 					line-height: 1.5em;
 					margin: 0;
-					padding: 0 0 0 1.25em;					
+					padding: 0 0 0 1.5em;					
 					&::before
 					{
 						position: absolute; top: 0; left: 0;
@@ -953,6 +1000,14 @@ main.dossier {
 					
 					&.date::before { content: '\e8d5'; }
 					&.lieu::before { content: '\e8c5'; }
+					&.contact::before { content: '\e840'; }
+					
+					&.contact a
+					{
+						color: $bleu;
+						
+						&:hover { color: $rouge; }
+					}
 				}
 			}
 		}
@@ -1065,10 +1120,15 @@ main.dossier {
 	}
 }
 
-main.contact {
+main.contact,
+main.dossier {
 	padding: 1em 1em 0;
 	
-	h2 { margin-bottom: -2em; }
+	h2
+	{
+		font-size: 2.5em;
+		margin-bottom: -2em;
+	}
 	
 	.colonne { margin-top: 10px; }
 }

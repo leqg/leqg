@@ -8,7 +8,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class folder
+class Folder
 {
 	
 	/**
@@ -108,5 +108,95 @@ class folder
     {
         return $this->dossier[$info];
     }
+    
+    
+    /**
+	 * Modifie une information dans la base de données
+	 *
+	 * Cette méthode permet de modifier dans la base de données une information demandée
+	 * par une autre pour le dossier ouvert
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   string   $info   Information à modifier
+	 * @param   string   $valeur Nouvelle valeur de l'information
+	 * 
+	 * @return void
+	 */
+	
+	public function modifier( $info , $valeur )
+	{
+		// On prépare la requête de modification
+		$query = $this->link->prepare('UPDATE `dossiers` SET `' . $info . '` = :valeur WHERE `dossier_id` = :id');
+		$query->bindParam(':id', $this->dossier['dossier_id']);
+		$query->bindParam(':valeur', $valeur);
+		
+		// On exécute la modification
+		$query->execute();
+	}
+	
+	
+	/**
+	 * Liste les événements liés au dossier
+	 *
+	 * Cette méthode permet de lister tous les événements liés à un contact
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result  array  Liste des ID des événements
+	 */
+	
+	public function evenements( )
+	{
+		// On prépare la requête
+		$query = $this->link->prepare('SELECT `historique_id` FROM `historique` WHERE `dossier_id` = :id ORDER BY `historique_date` DESC');
+		$query->bindParam(':id', $this->dossier['dossier_id']);
+		
+		// On exécute la recherche
+		$query->execute();
+		
+		// On affecte la requête au tableau $evenements
+		$evenements = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On retourne le tableau
+		return $evenements;
+	}
+    
+    
+    /**
+	 * Retour une liste des dossiers
+	 *
+	 * Cette méthode statique permet de retourner une liste complète des dossiers
+	 * selon leur paramètre d'ouverture
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   bool   $statut   Statut des dossiers à récupérer
+	 *
+	 * @result  array            Tableau des dossiers trouvés
+	 */
+	 
+	public static function liste( $statut = 1)
+	{
+		// On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+		
+		// On prépare la requête
+		$query = $link->prepare('SELECT `dossier_id` FROM `dossiers` WHERE `dossier_statut` = :statut');
+		$query->bindParam(':statut', $statut, PDO::PARAM_INT);
+		
+		// On récupère les données
+		$query->execute();
+		$dossiers = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On retourne le tableau
+		return $dossiers;
+	}
 }
 ?>

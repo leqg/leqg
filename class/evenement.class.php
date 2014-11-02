@@ -287,6 +287,24 @@ class evenement
 	
 	
 	/**
+	 * Retourne une information connue sans préfixe
+	 *
+	 * Cette méthode permet de récupérer les informations connues sur l'événement
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	array	$infos	Information demandée
+	 * @return	mixed
+	 */
+	
+	public function get( $infos )
+	{
+		return $this->evenement[$infos];
+	}
+	
+	
+	/**
 	 * Modifie les données dans la base de données
 	 *
 	 * Cette méthode permet de mettre à jour les informations de la base de données
