@@ -573,9 +573,83 @@ var contact = function() {
 					$('#rue-' + val.rue_id).append('<span class="rue-ville">' + val.commune_nom + '</span>');
 				});
 				
+				// On ajoute une dernière puce, l'ajout d'une nouvelle rue
+				$('#listeRues').append('<li class="creerLaNouvelleRue"></li>');
+				$('.creerLaNouvelleRue').append('<button class="jaune creerNouvelleRue">Créer rue</button>');
+				$('.creerLaNouvelleRue').append('<span class="rue-nom">Créer une nouvelle rue</span>');
+				$('.creerLaNouvelleRue').append('<span class="rue-ville">et l\'affecter au contact</span>');
+				
 				$('#listeRues').show();
 			});
 		}
+	});
+	
+	
+	// Ouverture de la fenètre de création d'une nouvelle rue
+	$('#colonneDroite').on('click', '.creerNouvelleRue', function() {
+		$('#colonneDroite section').hide();
+		$('.creationNouvelleRueSelectionVille').fadeIn();
+	});
+	
+	
+	// On lance l'algorithme de recherche de la ville
+	$('#rechercherVille').keyup(function() {
+		var ville = $(this).val();
+		
+		if (ville.length >= 3)
+		{
+			$.getJSON('ajax.php?script=villes', { ville: ville }, function(data) {
+				// On commence par vider la liste des résultats avant d'y installer les nouveaux
+				$('#listeVilles').html('');
+				
+				$.each( data, function( key, val ) {
+				
+					// On créé d'abord une nouvelle puce
+					$('#listeVilles').append('<li id="ville-' + val.commune_id + '"></li>');
+					
+					// On ajoute après les différents span
+					$('#ville-' + val.commune_id).append('<button class="choisirLaVille" data-ville="' + val.commune_id + '" data-nom="' + val.commune_nom + '">Choisir</button>');
+					$('#ville-' + val.commune_id).append('<span class="ville-nom">' + val.commune_nom + '</span>');
+					$('#ville-' + val.commune_id).append('<span class="ville-ville" style="font-size: 0.1em; line-height: 0.1em;">&nbsp;</span>');
+				});
+				
+				$('#listeVilles').show();
+			});
+		}
+	});
+	
+	
+	// On lance la création de rue dans la ville choisie
+	$('#colonneDroite').on('click', '.choisirLaVille', function() {
+		$('#colonneDroite section').hide();
+		$('.creationNouvelleRue').fadeIn();
+		
+		// On affecte les variables
+		var ville = $(this).data('ville');
+		var nom = $(this).data('nom');
+		$('#villeNouvelleRue').val(ville);
+		$('#communeNouvelleRue').val(nom);
+	});
+	
+	
+	// On lance la création de la rue dans la base de données
+	$('.validerCreationRue').click(function() {
+		// Informations entrées sur la rue
+		var fiche = $('.titre').data('fiche');
+		var immeuble = $('#immeubleNouvelleRue').val();
+		var rue = $('#nomNouvelleRue').val();
+		var ville = $('#villeNouvelleRue').val();
+		var commune = $('#communeNouvelleRue').val();
+		
+		// On enregistre les informations dans la base de données
+		$.post('ajax.php?script=contact-ajout-adresse', { fiche: fiche, ville: ville, rue: rue, immeuble: immeuble }, function(data) {
+			// On change l'adresse et on vient en arrière
+			$('.adresse').html(data);
+			
+			// On revient à l'état initial des volets
+			$('#colonneDroite section').hide();
+			$('#colonneDroite section:not(.invisible)').fadeIn();
+		});
 	});
 	
 	
@@ -593,6 +667,12 @@ var contact = function() {
 		$.getJSON('ajax.php?script=immeubles', { rue: rue }, function(data) {
 			
 			$('#listeImmeubles').html('');
+				
+			// On ajoute une dernière puce, l'ajout d'un nouvel immeuble
+			$('#listeImmeubles').append('<li class="creerUnNouvelImmeuble"></li>');
+			$('.creerUnNouvelImmeuble').append('<button class="jaune creerNouvelImmeuble" data-rue="' + rue + '">Créer</button>');
+			$('.creerUnNouvelImmeuble').append('<span class="rue-immeuble">Créer un nouvel immeuble</span>');
+			$('.creerUnNouvelImmeuble').append('<span class="rue-ville">et l\'affecter au contact</span>');
 			
 			$.each( data , function( key , val ) {
 				// On créé d'abord une nouvelle puce
@@ -611,6 +691,38 @@ var contact = function() {
 		// On ferme le formulaire ouvert, pour ouvrir celui de sélection d'immeubles
 		$('#colonneDroite section').fadeOut().delay(500);
 		$('.choixImmeuble').fadeIn();
+	});
+	
+	
+	// On l'affichage du formulaire de création d'un nouvel immeuble
+	$('#colonneDroite').on('click', '.creerNouvelImmeuble', function() {
+		// On affiche le volet
+		$('#colonneDroite section').hide();
+		$('.formCreerNouvelImmeuble').fadeIn();
+		
+		// On récupère des informations
+		var rue = $(this).data('rue');
+		
+		// On efface le numéro de rue en mémoire
+		$('#nouvelImmeuble').data('rue', '');
+		
+		// On met à jour le numéro de la rue pour le garder en mémoire
+		$('#nouvelImmeuble').data('rue', rue);
+	});
+	
+	
+	// On fabrique le nouvel immeuble
+	$('.validerCreationImmeuble').click(function() {
+		var rue = $('#nouvelImmeuble').data('rue');
+		var immeuble = $('#nouvelImmeuble').val();
+		var fiche = $('.titre').data('fiche');
+		
+		// On enregistre ce nouvel immeuble
+		$.post('ajax.php?script=contact-immeuble', { fiche: fiche, rue: rue, immeuble: immeuble }, function(data) {
+			$('.adresse').html(data);
+			$('#colonneDroite section').hide();
+			$('#colonneDroite section:not(.invisible)').fadeIn();
+		});
 	});
 	
 	
