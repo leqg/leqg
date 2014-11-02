@@ -122,6 +122,9 @@ main.dossier {
 				color: $blanc;
 			}
 		}
+		
+		&.jaune { background-color: darken($orange, 15%); }
+		&.jaune:hover { background-color: $orange; }
 	}
 	
 	h2 {

@@ -293,7 +293,7 @@
 				<span class="form-icon decalage rue"><input type="text" name="rechercherRue" id="rechercherRue"></span>
 			</li>
 			<li>
-        			<ul class="form-liste invisible" id="listeRues"></ul>
+        		<ul class="form-liste invisible" id="listeRues"></ul>
 			</li>
 			<li>
 			    <button class="deleting supprimerAdresse">Retirer l'adresse de la fiche</button>
@@ -301,7 +301,7 @@
 		</ul>
 	</section>
 
-	<section class="demi droite invisible choixImmeuble">
+	<section class="demi contenu invisible choixImmeuble">
 		<a href="#" class="fermerColonne">&#xe813;</a>
 
 		<ul class="formulaire">
@@ -312,7 +312,58 @@
 		</ul>
 		
 		<ul class="form-liste invisible" id="listeImmeubles"></ul>
-	</section>	
+	</section>
+	
+	<section class="contenu demi invisible creationNouvelleRueSelectionVille">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="rechercherRue">Rechercher la ville</label>
+				<span class="form-icon decalage ville"><input type="text" name="rechercherVille" id="rechercherVille"></span>
+			</li>
+			<li>
+        		<ul class="form-liste invisible" id="listeVilles"></ul>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible creationNouvelleRue">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="immeubleNouvelleRue">Immeuble de la rue</label>
+				<span class="form-icon decalage immeuble"><input type="text" name="immeubleNouvelleRue" id="immeubleNouvelleRue"></span>
+			</li>
+			<li>
+				<label class="small" for="nomNouvelleRue">Nom de la rue</label>
+				<span class="form-icon decalage rue"><input type="text" name="nomNouvelleRue" id="nomNouvelleRue"></span>
+			</li>
+			<li>
+				<label class="small" for="communeNouvelleRue">Ville de la rue</label>
+				<span class="form-icon decalage ville"><input type="text" name="communeNouvelleRue" id="communeNouvelleRue" disabled></span>
+				<input type="hidden" name="villeNouvelleRue" id="villeNouvelleRue">
+			</li>
+			<li>
+				<button class="validerCreationRue">Créer cette nouvelle adresse</button>
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible formCreerNouvelImmeuble">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="nouvelImmeuble">Nouvel immeuble à créer</label>
+				<span class="form-icon decalage immeuble"><input type="text" name="nouvelImmeuble" id="nouvelImmeuble" data-rue=""></span>
+			</li>
+			<li>
+				<button class="validerCreationImmeuble">Créer ce nouvel immeuble</button>
+			</li>
+		</ul>
+	</section>
 	
 	<section class="contenu demi invisible ajouterTache">
 		<a href="#" class="revenirEvenement">&#xe813;</a>

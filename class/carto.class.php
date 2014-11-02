@@ -136,6 +136,30 @@ class carto extends core {
 	
 	
 	/**
+	 * Cette méthode permet de renvoyer une liste de toutes les villes de la base répondant à la recherche lancée au format JSON
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	string	$search		Ville à rechercher
+	 * @result	array				Tableau des informations concernant toutes les rues trouvées
+	 */
+	
+	public	function recherche_ville_json($search) {
+		// On sécurise la recherche
+		$search = $this->formatage_recherche($search);
+		
+		// On exécute la requête
+		$sql = $this->db->query('SELECT * FROM `communes` WHERE `commune_nom_propre` LIKE "%' . $search . '%" ORDER BY `commune_nom` ASC');
+		$villes = array();
+		while ($row = $sql->fetch_assoc()) $villes[] = $row;
+		$villes = json_encode($villes);
+		
+		return $villes;
+	}
+	
+	
+	/**
 	 * Cette méthode permet de renvoyer une liste de toutes les bureaux de la base répondant à la recherche lancée au format JSON
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
@@ -1076,9 +1100,10 @@ class carto extends core {
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
-	 * @param	int		$ville		ID de la ville dans laquelle se trouve la rue
-	 * @param	string 	$rue			Nom de la rue à ajouter dans la base de données
-	 * @return	int					ID de la rue ajoutée
+	 * @param	int		$ville      ID de la ville dans laquelle se trouve la rue
+	 * @param	string 	$rue        Nom de la rue à ajouter dans la base de données
+	 * @param   string  $immeuble   Numéro de l'immeuble à créer
+	 * @return	int	                ID de la rue ajoutée
 	 */
 
 	public	function ajoutRue( $ville , $rue ) {
@@ -1104,16 +1129,23 @@ class carto extends core {
 	 * @return	int					ID de l'immeuble ajouté
 	 */
 
-	public	function ajoutImmeuble( array $infos ) {
+	public	function ajoutImmeuble( $infos ) {
 		// On vérifie que l'entrée est bien un tableau
 		if (!is_array($infos)) return false;
-		
-		// On prépare la requête
-		$query = 'INSERT INTO immeubles (`rue_id`, `immeuble_numero`) VALUES (' . $infos['rue'] . ', "' . $infos['numero'] . '")';
-		
-		// On enregistre le tout dans la base de données puis on retourne l'ID de l'insertion
-		$this->db->query($query);
-		return $this->db->insert_id;
+
+		if (isset($infos['rue'], $infos['numero']))
+		{
+			// On prépare la requête
+			$query = 'INSERT INTO `immeubles` (`rue_id`, `immeuble_numero`) VALUES (' . $infos['rue'] . ', "' . $infos['numero'] . '")';
+			
+			// On enregistre le tout dans la base de données puis on retourne l'ID de l'insertion
+			$this->db->query($query);
+			return $this->db->insert_id;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	
