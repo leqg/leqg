@@ -72,7 +72,7 @@
 				</a>
 				<?php endforeach; else: ?>
 				<li class="vide">
-					<strong>Aucune tâche</strong>
+					<strong>Aucun fichier</strong>
 				</li>
 				<?php endif; ?>
 			</ul>
