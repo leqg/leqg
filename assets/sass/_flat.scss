@@ -52,6 +52,13 @@ main.dossier {
 	.clicable
 	{
 		cursor: pointer;
+		-moz-user-select: -moz-none;
+		-moz-user-select: none;
+		-o-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 		
 		&:hover { color: $rouge; }
 	}
@@ -829,7 +836,8 @@ main.dossier {
 		li.fichier,
 		li.tache,
 		li.dossier,
-		li.objet
+		li.objet,
+		li.vide
 		{
 			position: relative;
 			margin: 0 0 1em;
@@ -959,6 +967,13 @@ main.dossier {
 			{
 				color: $bleu;
 				@include transition(all);
+				
+				& > a { color: $bleu; }
+				& > a:hover
+				{
+					color: $rouge;
+					text-decoration: underline;
+				}
 			}
 			
 			& > em
@@ -1011,6 +1026,8 @@ main.dossier {
 				}
 			}
 		}
+		
+		li.vide::after { content: '\e952'; }
 		
 		li.dossier
 		{

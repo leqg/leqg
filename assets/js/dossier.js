@@ -41,7 +41,7 @@ var dossier = function() {
 
 
 	// Fonction d'affichage du formulaire de modification du titre
-	$('.titre').dblclick(function() {
+	$('.titre').click(function() {
 		// On ouvre le volet
 		$('.droite section').hide();
 		$('.modifTitre').fadeIn();

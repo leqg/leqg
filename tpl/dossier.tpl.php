@@ -24,7 +24,7 @@
 				<?php $evenements = $dossier->evenements(); foreach ($evenements as $evenement) : $e = new evenement(md5($evenement['historique_id'])); $c = new contact(md5($e->get('contact_id'))); ?>
 				<li class="objet <?php echo $e->get_infos('type'); ?>">
 					<small><span><?php echo Core::tpl_typeEvenement($e->get_infos('type')); ?></span></small>
-					<strong><?php echo $e->get_infos('objet'); ?></strong>
+					<strong><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($e->get('contact_id')), 'evenement' => md5($e->get('historique_id')))); ?>"><?php echo $e->get_infos('objet'); ?></a></strong>
 					<ul class="infosAnnexes">
 						<li class="date"><?php echo date('d/m/Y', strtotime($e->get_infos('date'))); ?></li>
 						<li class="contact"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($e->get('contact_id')))); ?>"><?php echo $c->noms(' '); ?></a></li>
@@ -36,6 +36,47 @@
 	</div>
 	
 	<div class="colonne demi droite">
+		
+		<section class="contenu demi">
+			<h4>Tâches liées à ce dossier</h4>
+			
+			<ul class="listeDesTaches">
+				<?php $taches = $dossier->taches(); if (count($taches)) : foreach ($taches as $tache) : $e = new evenement(md5($tache['historique_id'])); $c = new contact(md5($e->get('contact_id'))); ?>
+				<li class="tache">
+					<strong><?php echo $tache['tache_description']; ?></strong>
+					<ul class="infosAnnexes">
+						<li class="contact sansChanger"><?php echo $c->noms(' '); ?></li>
+					</ul>
+				</li>
+				<?php endforeach; else: ?>
+				<li class="vide">
+					<strong>Aucune tâche</strong>
+				</li>
+				<?php endif; ?>
+			</ul>
+		</section>
+		
+		<section class="contenu demi">
+			<h4>Fichiers liés à ce dossier</h4>
+			
+			<ul class="listeDesFichiers">
+				<?php $fichiers = $dossier->fichiers(); if (count($fichiers)) : foreach ($fichiers as $fichier) : $e = new evenement(md5($fichier['interaction_id'])); $c = new contact(md5($e->get('contact_id'))); ?>
+				<a href="uploads/<?php echo $fichier['fichier_url']; ?>" target="_blank">
+					<li class="fichier">
+						<strong><?php echo $fichier['fichier_nom']; ?></strong>
+						<em><?php echo $fichier['fichier_description']; ?></em>
+						<ul class="infosAnnexes">
+							<li class="contact sansChanger"><?php echo $c->noms(' '); ?></li>
+						</ul>
+					</li>
+				</a>
+				<?php endforeach; else: ?>
+				<li class="vide">
+					<strong>Aucune tâche</strong>
+				</li>
+				<?php endif; ?>
+			</ul>
+		</section>
 		
 		<section class="contenu demi invisible modifDescription">
     	    <a href="#" class="fermerColonne">&#xe813;</a>

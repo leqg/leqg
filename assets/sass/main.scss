@@ -585,7 +585,9 @@ ul.listeEncadree {
 		&.sms,
 		&.tache,
 		&.poste,
-		&.retour {
+		&.retour,
+		&.objet,
+		&.vide {
 			position: relative;
 			padding-left: 70px;
 			padding-top: .6em;

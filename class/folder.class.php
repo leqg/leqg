@@ -163,6 +163,97 @@ class Folder
 		// On retourne le tableau
 		return $evenements;
 	}
+	
+	
+	/**
+	 * Liste les tâches liées au dossier
+	 *
+	 * Cette méthode permet d'obtenir un tableau de toutes les tâches liées
+	 * à un événement lui-même lié au dossier ouvert actuellement
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   bool    $statut   Tâches terminées (1) ou non (0)
+	 *
+	 * @result  array   Liste des tâches avec leurs caractéristiques
+	 */
+	
+	public function taches( $statut = 0 )
+	{
+		// On prépare la liste des tâches
+		$taches = array();
+		
+		// On fait la liste des événements pour récupérer la liste des tâches
+		// correspondantes à chaque événement
+		$evenements = $this->evenements();
+		
+		// Pour chaque événement, on cherche les tâches
+		foreach ($evenements as $evenement)
+		{
+			// On prépare la requête
+			$query = $this->link->prepare('SELECT * FROM `taches` WHERE `historique_id` = :historique AND `tache_terminee` = :statut');
+			$query->bindParam(':historique', $evenement['historique_id']);
+			$query->bindParam(':statut', $statut);
+			
+			// On exécute la requête
+			$query->execute();
+			
+			// On ajoute les informations à la table
+			if ($query->rowCount())
+			{
+				$taches = array_merge($taches, $query->fetchAll(PDO::FETCH_ASSOC));
+			}
+		}
+		
+		// On retourne la liste des tâches
+		return $taches;
+	}
+	
+	
+	/**
+	 * Liste les fichiers liés au dossier
+	 *
+	 * Cette méthode permet d'obtenir un tableau de tous les fichiers liées
+	 * à un événement lui-même lié au dossier ouvert actuellement
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   bool    $statut   Tâches terminées (1) ou non (0)
+	 *
+	 * @result  array   Liste des tâches avec leurs caractéristiques
+	 */
+	
+	public function fichiers(  )
+	{
+		// On prépare la liste des tâches
+		$fichiers = array();
+		
+		// On fait la liste des événements pour récupérer la liste des tâches
+		// correspondantes à chaque événement
+		$evenements = $this->evenements();
+		
+		// Pour chaque événement, on cherche les tâches
+		foreach ($evenements as $evenement)
+		{
+			// On prépare la requête
+			$query = $this->link->prepare('SELECT * FROM `fichiers` WHERE `interaction_id` = :historique');
+			$query->bindParam(':historique', $evenement['historique_id']);
+			
+			// On exécute la requête
+			$query->execute();
+			
+			// On ajoute les informations à la table
+			if ($query->rowCount())
+			{
+				$fichiers = array_merge($fichiers, $query->fetchAll(PDO::FETCH_ASSOC));
+			}
+		}
+		
+		// On retourne la liste des tâches
+		return $fichiers;
+	}
     
     
     /**

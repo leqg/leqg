@@ -98,7 +98,7 @@
 				<strong>Créer un nouvel événement</strong>
 			</li>
 			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
-			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle evenement-<?php echo $event->get_infos('id'); ?>" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
+			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle evenement-<?php echo md5($event->get_infos('id')); ?> evenement-<?php echo $event->get_infos('id'); ?>" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
 				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
 					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
 					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : 'Événement sans titre'; ?></strong>

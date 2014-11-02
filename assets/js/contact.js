@@ -8,6 +8,25 @@ var contact = function() {
 	});
 	
 	
+	// Action au chargement de la page d'ouverture directe d'un événement
+	$.urlParam = function(name) {
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+    }
+	if ($.urlParam('evenement'))
+	{
+		var idEvenement = $.urlParam('evenement');
+		
+		// On simule le clic sur l'événement
+		chargementEvenement($('.evenement-' + idEvenement));
+	}
+	
+	
 	// Action de fermerture des colonnes latérales
 	$('.fermerColonne').click(function() {
 		// On ferme toute la colonne latérale
@@ -152,9 +171,10 @@ var contact = function() {
 	});
 	
 	
-	// Action lors de l'ouverture d'un événement d'historique
-	$('.listeDesEvenements').on('click', '.accesEvenement', function(){
-		var identifiant = $(this).data('evenement');
+	// Fonction de chargement de l'événement
+	function chargementEvenement(eConcerne)
+	{
+		var identifiant = eConcerne.data('evenement');
 		
 		// On commence par vider la liste des fichiers
 		$('ul.listeDesFichiers li:not(.nouveauFichier)').remove();
@@ -165,7 +185,7 @@ var contact = function() {
 		$('.lierDossier').show();
 		
 		// On ferme tous les blocs de la colonne latérale
-		$('#colonneDroite section').fadeOut();
+		$('#colonneDroite section').hide();
 		
 		// On recherche les informations sur l'événement
 		$.getJSON('ajax.php?script=evenement', { evenement: identifiant }, function(data) {
@@ -218,6 +238,15 @@ var contact = function() {
 			// On affiche le bloc
 			$('#evenement').fadeIn();
 		});
+	}
+	
+	
+	// Action lors de l'ouverture d'un événement d'historique
+	$('.listeDesEvenements').on('click', '.accesEvenement', function(){
+		var eventConcerne = $(this);
+		
+		// On déclenche l'action de chargement de l'événement
+		chargementEvenement(eventConcerne);
 		
 		// On annule le lien pour éviter le #
 		return false;
