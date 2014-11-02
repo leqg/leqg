@@ -555,6 +555,8 @@ main.dossier {
 			}
 			
 			&.sexe {
+				cursor: pointer;
+				
 				&.homme {
 					color: $bleu;
 					&::before { content: '\e8a6'; }

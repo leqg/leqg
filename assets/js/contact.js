@@ -816,6 +816,32 @@ var contact = function() {
     	    
     	    return false;
 	});
+	
+	
+	// Script de changement de sexe
+	$('.sexe').click(function() {
+		var fiche = $('#nomContact').data('fiche');
+		$.post('ajax.php?script=contact-sexe', { fiche: fiche });
+		
+		if ($(this).hasClass('homme'))
+		{
+			$(this).removeClass('homme');
+			$(this).addClass('femme');
+			$(this).html('Femme');
+		}
+		else if ($(this).hasClass('femme'))
+		{
+			$(this).removeClass('femme');
+			$(this).addClass('inconnu');
+			$(this).html('Sexe');
+		}
+		else
+		{
+			$(this).removeClass('inconnu');
+			$(this).addClass('homme');
+			$(this).html('Homme');
+		}
+	});
 };
 
 $(document).ready(contact);

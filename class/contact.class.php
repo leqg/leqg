@@ -821,6 +821,36 @@ class contact extends carto
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * Change le sexe de la fiche
+	 *
+	 * Cette méthode permet de changer le sexe de la fiche ouverte
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @return void
+	 */
+	
+	public function changement_sexe()
+	{
+		// On paramètre le tableau de changement de sexe
+		$tableau = array(
+			'M' => 'F',
+			'F' => 'i',
+			'i' => 'M'
+		);
+		
+		// On prépare la requête
+		$query = $this->link->prepare('UPDATE `contacts` SET `contact_sexe` = :sexe WHERE `contact_id` = :id');
+		$query->bindParam(':id', $this->contact['contact_id']);
+		$query->bindParam(':sexe', $tableau[$this->contact['contact_sexe']]);
+		
+		// On exécute la requête
+		$query->execute();
+	}
 }
 
 ?>
