@@ -851,6 +851,32 @@ class contact extends carto
 		// On exécute la requête
 		$query->execute();
 	}
+	
+	
+	/**
+	 * Modifie des informations
+	 *
+	 * Cette méthode permet de modifier des informations enregistrées
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   string   $info   Information à modifier
+	 * @param   string   $valeur Information à enregistrer
+	 *
+	 * @return  void
+	 */
+	
+	public function modification( $info , $valeur )
+	{
+		// On prépare la requête
+		$query = $this->link->prepare('UPDATE `contacts` SET `' . $info . '` = :valeur WHERE `contact_id` = :id');
+		$query->bindParam(':id', $this->contact['contact_id']);
+		$query->bindParam(':valeur', $valeur);
+		
+		// On exécute la variable
+		$query->execute();
+	}
 }
 
 ?>

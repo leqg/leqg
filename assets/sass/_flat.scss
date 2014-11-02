@@ -356,7 +356,7 @@ main.dossier {
 								(immeuble '\e842') (titre '\e8c7') 
 								(description '\e8bd') (file '\e823') (tache '\e8c1')
 								(email '\e96d') (mobile '\e961') (telephone '\e854')
-								(sms '\e8bf');
+								(sms '\e8bf') (nom '\e8b7');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
