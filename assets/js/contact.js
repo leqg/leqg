@@ -57,6 +57,41 @@ var contact = function() {
 	});
 	
 	
+	// Ouverture du volet de modification du nom
+	$('#nomContact').click(function() {
+		// On ferme toute la colonne latérale
+		$('#colonneDroite section').hide();
+		$('.changerNom').fadeIn();
+	});
+	
+	
+	// Modification du nom
+	$('.validerChangementNom').click(function() {
+		// On récupère les données
+		var fiche = $('.titre').data('fiche');
+		var nom = $('#changerNomFamille').val();
+		var nomUsage = $('#changerNomUsage').val();
+		var prenoms = $('#changerPrenoms').val();
+		
+		// On sauvegarde la modification
+		$.post('ajax.php?script=contact-nom', { fiche: fiche, nom: nom, nomUsage: nomUsage, prenoms: prenoms }, function() {
+			// On modifie les informations dans le haut de page
+			if (nomUsage == '')
+			{
+				$('.titre').html('<span>' + nom + '</span> <span>' + prenoms + '</span>');
+			}
+			else
+			{
+				$('.titre').html('<span>' + nom + '</span> <span>' + nomUsage + '</span> <span>' + prenoms + '</span>');
+			}
+			
+			// On ferme les données
+			$('#colonneDroite section').hide();
+			$('#colonneDroite section:not(.invisible)').fadeIn();
+		});
+	});
+	
+	
 	// Ajout des coordonnées entrées à la base de données
 	$('#ajoutDeCoordonnees').submit(function() {
 		// On récupère les données

@@ -6,7 +6,7 @@
 	$core->tpl_header();
 ?>
 
-<h2 id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php echo $contact->noms(); ?></h2>
+<h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php echo $contact->noms(); ?></h2>
 
 <div class="colonne demi gauche">
 	<section id="fiche-details" class="contenu demi">
@@ -76,7 +76,7 @@
 
 
 <div id="colonneDroite" class="colonne demi droite">
-	<section id="carte" class="contenu demi"></section>
+	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="carte" class="contenu demi"></section><?php } ?>
 	
 	<section id="TagsContact" class="contenu demi">
 		<h4>Tags liés au contact</h4>
@@ -108,6 +108,30 @@
 				</li>
 			<?php if ($event->lien()) { ?></a><?php } ?>
 			<?php endforeach; endif; ?>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible changerNom">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+
+		<h4>Modification du nom</h4>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small">Nom de famille</label>
+				<span class="form-icon decalage nom"><input type="text" name="changerNomFamille" id="changerNomFamille" value="<?php echo strtoupper($contact->contact['contact_nom']); ?>"></span>
+			</li>
+			<li>
+				<label class="small">Nom d'usage</label>
+				<span class="form-icon decalage nom"><input type="text" name="changerNomUsage" id="changerNomUsage" value="<?php echo strtoupper($contact->contact['contact_nom_usage']); ?>"></span>
+			</li>
+			<li>
+				<label class="small">Prénoms</label>
+				<span class="form-icon decalage nom"><input type="text" name="changerPrenoms" id="changerPrenoms" value="<?php echo ucwords(strtolower($contact->contact['contact_prenoms'])); ?>"></span>
+			</li>
+			<li>
+				<button class="validerChangementNom">Changer le nom</button>
+			</li>
 		</ul>
 	</section>
 	
@@ -146,7 +170,7 @@
 			<li>
 				<label class="small" for="eventNotes">Notes</label>
 				<span class="form-icon notes">
-					<textarea name="notes" id="eventNotes"></textarea>
+					<textarea name="notes" id="eventNotes" style="height: 10em;"></textarea>
 				</span>
 			</li>
 			<li>
