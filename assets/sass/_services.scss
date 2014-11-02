@@ -19,6 +19,13 @@ table#services {
 	height: 90%;
 	margin: 0 auto;
 	width: 75%;
+	-moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 	
 	@media all and (max-width: 1500px) {
 		font-size: .85em;
