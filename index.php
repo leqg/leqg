@@ -69,9 +69,19 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			$fiche->fermeture();
 		}
 		
-		else if ($_GET['page'] == 'contact' && isset($_GET['contact'])) { 
-			// On charge le template correspondant à la fiche contact
-			$core->tpl_load('contact');
+		else if ($_GET['page'] == 'contact') { 
+    		    if (isset($_GET['contact']))
+    		    {
+        		    $core->tpl_load('contact');
+    		    }
+    		    elseif (isset($_GET['operation']))
+    		    {
+        		    $core->tpl_load('contact', $_GET['operation']);
+    		    }
+    		    else
+    		    {
+        		    $core->tpl_go_to('contacts', true);
+    		    }
 		}
 		
 		else if ($_GET['page'] == 'fiche' && !empty($_GET['operation'])) {

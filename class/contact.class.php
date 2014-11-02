@@ -8,7 +8,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class contact extends carto
+class Contact
 {
 	
 	/**
@@ -877,6 +877,39 @@ class contact extends carto
 		// On exécute la variable
 		$query->execute();
 	}
+	
+	
+	/**
+    	 * Créé une nouvelle fiche
+    	 *
+    	 * Cette méthode publique statique permet de créer une nouvelle fiche vierge
+    	 *
+    	 * @author  Damien Senger <mail@damiensenger.me>
+    	 * @version 1.0
+    	 * 
+    	 * @result  int   Identifiant de la fiche créée
+    	 */
+    
+    public static function creation( )
+    {
+        // On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+
+        // On prépare la requête de création
+        $query = $link->prepare('INSERT INTO `contacts` (`contact_electeur`) VALUES (0)');
+        
+        // On exécute la requête
+        $query->execute();
+        
+        // On récupère l'identifiant
+        $id = $link->lastInsertId();
+        
+        // On retourne cet identifiant
+        return $id;
+    }
 }
 
 ?>
