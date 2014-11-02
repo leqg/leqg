@@ -33,28 +33,6 @@
 				<?php endforeach; ?>
 			</ul>
 		</section>
-	</div>
-	
-	<div class="colonne demi droite">
-		
-		<section class="contenu demi">
-			<h4>Tâches liées à ce dossier</h4>
-			
-			<ul class="listeDesTaches">
-				<?php $taches = $dossier->taches(); if (count($taches)) : foreach ($taches as $tache) : $e = new evenement(md5($tache['historique_id'])); $c = new contact(md5($e->get('contact_id'))); ?>
-				<li class="tache">
-					<strong><?php echo $tache['tache_description']; ?></strong>
-					<ul class="infosAnnexes">
-						<li class="contact sansChanger"><?php echo $c->noms(' '); ?></li>
-					</ul>
-				</li>
-				<?php endforeach; else: ?>
-				<li class="vide">
-					<strong>Aucune tâche</strong>
-				</li>
-				<?php endif; ?>
-			</ul>
-		</section>
 		
 		<section class="contenu demi">
 			<h4>Fichiers liés à ce dossier</h4>
@@ -73,6 +51,37 @@
 				<?php endforeach; else: ?>
 				<li class="vide">
 					<strong>Aucun fichier</strong>
+				</li>
+				<?php endif; ?>
+			</ul>
+		</section>
+	</div>
+	
+	<div class="colonne demi droite">
+		
+		<section class="contenu demi notes">
+			<h4>Notes</h4>
+			<ul class="formulaire">
+				<li>
+					<span class="form-icon decalage notes"><textarea class="postit" id="modifierNotes" name="modifierNotes" style="height: 10em;"><?php echo $dossier->get('dossier_notes'); ?></textarea></span>
+				</li>
+			</ul>
+		</section>
+		
+		<section class="contenu demi">
+			<h4>Tâches liées à ce dossier</h4>
+			
+			<ul class="listeDesTaches">
+				<?php $taches = $dossier->taches(); if (count($taches)) : foreach ($taches as $tache) : $e = new evenement(md5($tache['historique_id'])); $c = new contact(md5($e->get('contact_id'))); ?>
+				<li class="tache">
+					<strong><?php echo $tache['tache_description']; ?></strong>
+					<ul class="infosAnnexes">
+						<li class="contact sansChanger"><?php echo $c->noms(' '); ?></li>
+					</ul>
+				</li>
+				<?php endforeach; else: ?>
+				<li class="vide">
+					<strong>Aucune tâche</strong>
 				</li>
 				<?php endif; ?>
 			</ul>
