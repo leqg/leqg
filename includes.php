@@ -100,5 +100,6 @@ $api['mail']['reply']['nom'] = 'LeQG';
 // On inclut les classes non chargées
 include 'class/contact.class.php';
 include 'class/evenement.class.php';
+include 'class/folder.class.php';
 
 ?>

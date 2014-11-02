@@ -8,6 +8,25 @@ var contact = function() {
 	});
 	
 	
+	// Action au chargement de la page d'ouverture directe d'un événement
+	$.urlParam = function(name) {
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+    }
+	if ($.urlParam('evenement'))
+	{
+		var idEvenement = $.urlParam('evenement');
+		
+		// On simule le clic sur l'événement
+		chargementEvenement($('.evenement-' + idEvenement));
+	}
+	
+	
 	// Action de fermerture des colonnes latérales
 	$('.fermerColonne').click(function() {
 		// On ferme toute la colonne latérale
@@ -152,16 +171,21 @@ var contact = function() {
 	});
 	
 	
-	// Action lors de l'ouverture d'un événement d'historique
-	$('.listeDesEvenements').on('click', '.accesEvenement', function(){
-		var identifiant = $(this).data('evenement');
+	// Fonction de chargement de l'événement
+	function chargementEvenement(eConcerne)
+	{
+		var identifiant = eConcerne.data('evenement');
 		
 		// On commence par vider la liste des fichiers
 		$('ul.listeDesFichiers li:not(.nouveauFichier)').remove();
 		$('ul.listeDesTaches li:not(.nouvelleTache)').remove();
 		
+		// On commence par vider le dossier ouvert
+		$('.afficherInfosDossier').hide();
+		$('.lierDossier').show();
+		
 		// On ferme tous les blocs de la colonne latérale
-		$('#colonneDroite section').fadeOut();
+		$('#colonneDroite section').hide();
 		
 		// On recherche les informations sur l'événement
 		$.getJSON('ajax.php?script=evenement', { evenement: identifiant }, function(data) {
@@ -173,6 +197,21 @@ var contact = function() {
 			$('#eventNotes').val(data.historique_notes);
 			$('#evenement').data('evenement', data.historique_id);
 			$('#formEvenement').val(data.historique_id);
+			
+			// On regarde s'il y a un dossier et si oui, on l'affiche
+			if (data.dossier_id)
+			{
+    			    $('.lierDossier').hide();
+    			    
+    			    // On parse les informations du dossier
+    			    var infosDossier = $.parseJSON(data.dossier);
+    			    
+    			    // On affiche les informations du dossier
+    			    $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + infosDossier.dossier_md5);
+    			    $('.afficherInfosDossier li strong').html(infosDossier.dossier_nom);
+    			    $('.afficherInfosDossier li em').html(infosDossier.dossier_description);
+    			    $('.afficherInfosDossier').show();
+			}
 			
 			// On va formater la liste des fichiers pour l'ajouter à la fiche événement
 			var fichiers = $.parseJSON(data.fichiers);
@@ -199,6 +238,15 @@ var contact = function() {
 			// On affiche le bloc
 			$('#evenement').fadeIn();
 		});
+	}
+	
+	
+	// Action lors de l'ouverture d'un événement d'historique
+	$('.listeDesEvenements').on('click', '.accesEvenement', function(){
+		var eventConcerne = $(this);
+		
+		// On déclenche l'action de chargement de l'événement
+		chargementEvenement(eventConcerne);
 		
 		// On annule le lien pour éviter le #
 		return false;
@@ -226,6 +274,10 @@ var contact = function() {
 			$('#eventNotes').val(data.historique_notes);
 			$('#evenement').data('evenement', data.historique_id);
 			$('#formEvenement').val(data.historique_id);
+		
+        		// On commence par vider le dossier ouvert
+        		$('.afficherInfosDossier').hide();
+        		$('.lierDossier').show();
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
@@ -815,6 +867,117 @@ var contact = function() {
     	    });
     	    
     	    return false;
+	});
+	
+	
+	// Script de changement de sexe
+	$('.sexe').click(function() {
+		var fiche = $('#nomContact').data('fiche');
+		$.post('ajax.php?script=contact-sexe', { fiche: fiche });
+		
+		if ($(this).hasClass('homme'))
+		{
+			$(this).removeClass('homme');
+			$(this).addClass('femme');
+			$(this).html('Femme');
+		}
+		else if ($(this).hasClass('femme'))
+		{
+			$(this).removeClass('femme');
+			$(this).addClass('inconnu');
+			$(this).html('Sexe');
+		}
+		else
+		{
+			$(this).removeClass('inconnu');
+			$(this).addClass('homme');
+			$(this).html('Homme');
+		}
+	});
+	
+	
+	// Script d'affichage de la liaison de dossiers
+	$('.lierDossier').click(function() {
+    	    // On ferme les onglets
+    	    $('#colonneDroite section').hide();
+    	    $('.selectionDossier').fadeIn();
+	});
+	
+	
+	// Script d'affichage de l'ajout de dossier
+	$('.ajoutDossier').click(function() {
+    	    // On ferme les onglets
+    	    $('#colonneDroite section').hide();
+    	    $('.creationDossier').fadeIn();
+	});
+	
+	
+	// Script de retour au choix des dossiers
+	$('.revenirDossier').click(function() {
+    	    // On ferme les onglets
+    	    $('#colonneDroite section').hide();
+    	    $('.selectionDossier').fadeIn();
+	});
+	
+	
+	// Script de création du dossier
+	$('.creerDossier').click(function() {
+    	    // On récupère les informations
+    	    var nom = $('#creationDossierNom').val();
+    	    var desc = $('#creationDossierDesc').val();
+    	    var event = $('#evenement').data('evenement');
+    	    
+    	    // On enregistre le dossier
+    	    $.getJSON('ajax.php?script=dossier-creer', { nom: nom, desc: desc, event: event }, function(data) {
+        	    // On rajoute le dossier à la liste
+        	    $('.listeDesDossiers .ajoutDossier').after('<a href="index.php?page=dossier&dossier=' + data.dossier_md5 + '"><li class="dossier dossier-' + data.dossier_id + '" data-dossier="' + data.dossier_id + '"><strong></strong><em></em></li></a>');
+        	    $('dossier-' + data.dossier_id + ' strong').html(data.dossier_nom);
+        	    $('dossier-' + data.dossier_id + ' em').html(data.dossier_description);
+        	    
+        	    // On modifie le dossier dans la fiche evenement
+        	    $('.affichageDossier').html('<li class="dossier"><strong>' + data.dossier_nom + '</strong><em>' + data.dossier_description + '</em></li>');
+    	    
+            // On ferme la fenètre
+            $('.creationDossier').hide();
+            
+            // On vide le formulaire
+            $('#creationDossierNom').val('');
+            $('#creationDossierDesc').val('');
+            
+            // On revient à l'événement
+            $('#colonneDroite section').hide();
+            $('#evenement').fadeIn();
+    	    });
+    	    
+    	    return false;
+	});
+	
+	
+	// Script du au choix d'un dossier
+	$('.choixDossier').click(function() {
+    	    var dossier = $(this).data('dossier');
+    	    var evenement = $('#evenement').data('evenement');
+    	    
+    	    // On lie les deux éléments
+    	    $.getJSON('ajax.php?script=dossier-lier', { dossier: dossier, evenement: evenement }, function(data) {
+        	    // On rajoute le dossier à la liste
+        	    $('.listeDesDossiers .ajoutDossier').after('<a href="index.php?page=dossier&dossier=' + data.dossier_md5 + '"><li class="dossier dossier-' + data.dossier_id + '" data-dossier="' + data.dossier_id + '"><strong></strong><em></em></li></a>');
+        	    $('dossier-' + data.dossier_id + ' strong').html(data.dossier_nom);
+        	    $('dossier-' + data.dossier_id + ' em').html(data.dossier_description);
+        	    
+        	    // On modifie le dossier dans la fiche evenement
+        	    $('.lierDossier').hide();
+        	    $('.afficherInfosDossier').show();
+        	    $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + data.dossier_md5);
+        	    $('.afficherInfosDossier li').html('<strong>' + data.dossier_nom + '</strong><em>' + data.dossier_description + '</em>');
+    	    
+            // On ferme la fenètre
+            $('.creationDossier').hide();
+            
+            // On revient à l'événement
+            $('#colonneDroite section').hide();
+            $('#evenement').fadeIn();
+    	    });
 	});
 };
 
