@@ -76,7 +76,7 @@
 
 
 <div id="colonneDroite" class="colonne demi droite">
-	<section id="carte" class="contenu demi"></section>
+	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="carte" class="contenu demi"></section><?php } ?>
 	
 	<section id="TagsContact" class="contenu demi">
 		<h4>Tags liés au contact</h4>
