@@ -64,6 +64,16 @@ var dossier = function() {
 		
 		return false;
 	});
+	
+	
+	// Script de modification des notes
+	$('#modifierNotes').blur(function() {
+		var dossier = $('.titre').data('dossier');
+		var notes = $(this).val();
+		
+		// On enregistre le nouveau texte
+		$.post('ajax.php?script=dossier-notes', { dossier: dossier, notes: notes });
+	});
 
 };
 

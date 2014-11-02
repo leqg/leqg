@@ -314,6 +314,11 @@ main.dossier {
 				&:focus {
 					border-color: $vert;
 				}
+				
+				&.postit
+				{
+					background-color: rgba($orange, .15);
+				}
 			}
 			
 			textarea
