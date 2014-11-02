@@ -6,7 +6,7 @@
 	$core->tpl_header();
 ?>
 
-<h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php echo $contact->noms(); ?></h2>
+<h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php if (!empty($contact->contact['contact_nom']) || !empty($contact->contact['contact_nom_usage']) || !empty($contact->contact['contact_nom_usage'])) { ?><?php echo $contact->noms(); ?><?php } else { ?>Cliquez pour ajouter un nom<?php } ?></h2>
 
 <div class="colonne demi gauche">
 	<section id="fiche-details" class="contenu demi">

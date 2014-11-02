@@ -3,7 +3,7 @@
 		<h2>Votre fichier <strong>contacts</strong> consolidé</h2>
 		
 		<nav class="boutonsAction">
-			<a href="<?php echo $core->tpl_go_to('fiche', array('operation' => 'creation')); ?>">Nouveau contact</a>
+			<a href="<?php echo $core->tpl_go_to('contact', array('operation' => 'creation')); ?>">Nouveau contact</a>
 			<a href="<?php echo $core->tpl_go_to('fiche', array('operation' => 'fusion')); ?>">Fusion de fiches</a>
 			<a href="#" class="ouvertureOverlay" data-overlay="ajoutCritere">Ajouter un critère de tri</a>
 			<a href="#" class="exportation">Exporter la sélection</a>
