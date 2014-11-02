@@ -146,7 +146,7 @@
 			<li>
 				<label class="small" for="eventNotes">Notes</label>
 				<span class="form-icon notes">
-					<textarea name="notes" id="eventNotes"></textarea>
+					<textarea name="notes" id="eventNotes" style="height: 10em;"></textarea>
 				</span>
 			</li>
 			<li>
