@@ -63,7 +63,7 @@
 			<h4>Notes</h4>
 			<ul class="formulaire">
 				<li>
-					<span class="form-icon decalage notes"><textarea class="postit" id="modifierNotes" name="modifierNotes" style="height: 10em;"><?php echo $dossier->get('dossier_notes'); ?></textarea></span>
+					<span class="form-icon decalage notes"><textarea class="postit" id="modifierNotes" name="modifierNotes" style="height: 10em;" placeholder="Indiquez ici vos notes globales sur ce dossier"><?php if (!empty($dossier->get('dossier_notes'))) { echo $dossier->get('dossier_notes'); } ?></textarea></span>
 				</li>
 			</ul>
 		</section>
