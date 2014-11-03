@@ -27,6 +27,25 @@ var contact = function() {
 	}
 	
 	
+	// Action de suppression de la fiche
+	$('.supprimerFiche').click(function() {
+    	    // On vérifie cette suppression
+    	    if (confirm('Voulez-vous vraiment supprimer cette fiche ? Cette action est irréversible.'))
+    	    {
+        	    var fiche = $('.titre').data('fiche');
+        	    $.post('ajax.php?script=contact-suppression', { fiche: fiche }, function() {
+            	    var url = 'index.php?page=dossier';
+            	    document.location.href = url;
+        	    });
+        	    return false;
+    	    }
+    	    else
+    	    {
+        	    return false;
+    	    }
+	});
+	
+	
 	// Action de fermerture des colonnes latérales
 	$('.fermerColonne').click(function() {
 		// On ferme toute la colonne latérale

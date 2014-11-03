@@ -72,6 +72,10 @@
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>
 	</section>
+	
+	<section class="contenu demi">
+    	    <button class="deleting long supprimerFiche" style="margin: .25em auto .15em;">Suppression de la fiche</button>
+	</section>
 </div>
 
 
