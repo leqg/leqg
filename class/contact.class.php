@@ -910,11 +910,14 @@ class Contact
 	
 	public function destruction( )
 	{
-    	    // On prépare la requête
+    	    // On supprime la fiche contact
     	    $query = $this->link->prepare('DELETE FROM `contacts` WHERE `contact_id` = :id');
     	    $query->bindParam(':id', $this->contact['contact_id']);
+    	    $query->execute();
     	    
-    	    // On exécute la suppression
+    	    // On supprime tous les événements reliés à cette fiche
+    	    $query = $this->link->prepare('DELETE FROM `historique` WHERE `contact_id` = :id');
+    	    $query->bindParam(':id', $this->contact['contact_id']);
     	    $query->execute();
 	}
 	

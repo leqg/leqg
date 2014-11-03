@@ -556,12 +556,16 @@ main.dossier {
 			width: 90px;
 		}
 		
-		&::before { line-height: 105px; }
+		&::before {
+    		    content: '\e843';
+    		    line-height: 105px;
+        }
 		
 		&::after {
 			left: 6px;
 			background-color: transparent;
 			color: $rouge;
+			content: '\e842';
 			line-height: 70px;
 		}
 	}
@@ -1155,6 +1159,29 @@ main.dossier {
 			color: $blanc;
 		}
 	}
+	
+	section.mission-porte
+	{
+		h4 {
+			color: $bleu;
+			font-size: 1.66em;
+			font-weight: 600;
+			line-height: 1.5em;
+			margin: 1em 0 0;
+			padding: 0;
+		}
+		
+		h5 {
+			color: $bleu;
+			font-size: 1.4em;
+			font-weight: 600;
+			line-height: 1.5em;
+			margin: 1em 0 0;
+			padding: 0;
+			padding-left: 2em;
+			text-align: left;
+		}
+	}
 }
 
 main.contact,
@@ -1250,4 +1277,17 @@ main.flat {
         	    }
     	    }
 	}
+}
+
+table.reporting
+{
+    margin: 1em auto 2em;
+    
+    th.petit,
+    td.petit
+    {
+        text-align: center;
+        vertical-align: middle;
+        width: 100px;
+    }
 }

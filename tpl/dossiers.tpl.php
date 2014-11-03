@@ -43,6 +43,9 @@
                     	        <input type="text" name="rechercheThematique" id="rechercheThematique" placeholder="Tapez ici un tag à rechercher">
                 	        </span>
                 	    </li>
+                	    <li>
+                	        <button type="submit" style="margin: .33em auto .15em;">Lancer la recherche</button>
+                	    </li>
             	    </ul>
         	    </form>
     	    </section>

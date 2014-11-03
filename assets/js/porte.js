@@ -221,6 +221,18 @@ var porte = function() {
 		$('#toutSelect').click(function(){
 			$('.checkImmeuble').attr('checked', 'checked');
 		});
+
+    
+    // Action de reporting
+    $('.bouton-reporting').click(function() {
+        var contact = $(this).data('contact');
+        var statut = $(this).data('val');
+        var mission = $('.titre').data('mission');
+        console.log(contact);
+        $.post('ajax.php?script=porte-reporting-web', { mission: mission, contact: contact, statut: statut }, function() {
+            $('tr.ligne-electeur-' + contact).remove();
+        });
+    });
 	
 };
 

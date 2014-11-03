@@ -534,6 +534,10 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	
 					$core->tpl_load('porte', 'mission');
 				
+				} else if (isset($_GET['reporting'])) {
+    				
+    				    $core->tpl_load('porte', 'reporting');
+				
 				} else {
 					
 					$core->tpl_load('porte');
