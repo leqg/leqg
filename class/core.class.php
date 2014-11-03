@@ -10,7 +10,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class core {
+class Core {
 	
 	/**
 	 * @var	object	$db		Propriété concenant le lien vers la base de données de l'utilisateur
@@ -231,7 +231,7 @@ class core {
 	 * @return	void
 	 */
 
-	public	function tpl_load( $slug , $nom = null, $globale = null) {
+	public static function tpl_load( $slug , $nom = null, $globale = null) {
 		if (is_null($globale)) {
 			global $db, $base, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte;
 		} else {
@@ -256,7 +256,7 @@ class core {
 	 * @return	void
 	 */
 
-	public	function tpl_header( $nom = null ) { $this->tpl_load('header', $nom); }
+	public static function tpl_header( $nom = null ) { Core::tpl_load('header', $nom); }
 	
 	
 	/**
@@ -269,7 +269,7 @@ class core {
 	 * @return	void
 	 */
 
-	public	function tpl_footer( $nom = null ) { $this->tpl_load('footer', $nom); }
+	public static function tpl_footer( $nom = null ) { Core::tpl_load('footer', $nom); }
 	
 	
 	/**
@@ -282,7 +282,7 @@ class core {
 	 * @return	void
 	 */
 
-	public	function tpl_aside( $nom = null ) { $this->tpl_load('aside', $nom); }
+	public static function tpl_aside( $nom = null ) { $this->tpl_load('aside', $nom); }
 	
 	
 	/**

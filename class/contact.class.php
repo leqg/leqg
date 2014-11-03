@@ -144,6 +144,23 @@ class Contact
 	
 	
 	/**
+    	 * Récupère une information demandée
+    	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   string   $info    Nom de l'information demandée
+	 *
+	 * @result	string   Information demandée
+	 */
+
+    public function get( $info )
+    {
+        return $this->contact[ $info ]; 
+    }
+	
+	
+	/**
 	 * Cette méthode permet d'afficher les noms et prénoms du contact demandé
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
@@ -346,7 +363,8 @@ class Contact
 	
 	
 	/**
-	 * Cette méthode permet d'afficher les informations liées au bureau de vote d'inscription du conseiller municipal
+	 * Cette méthode permet d'afficher les informations liées au bureau de vote 
+	 * d'inscription du contact
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -909,6 +927,57 @@ class Contact
         
         // On retourne cet identifiant
         return $id;
+    }
+    
+    
+    /**
+     * Effectue une recherche thématique
+    	 *
+    	 * @author  Damien Senger <mail@damiensenger.me>
+    	 * @version 1.0
+    	 *
+    	 * @param   string  $terme   Terme de la recherche
+    	 * 
+    	 * @result  array   Tableau des résultats
+    	 */
+    
+    public static function rechercheThematique( $terme )
+    {
+        // On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+
+        // On prépare le tableau des contacts
+        $contacts = array();
+        
+        // On prépare le terme aux like
+        $termel = "%$terme%";
+        
+        // On effectue une première recherche sur les tags des fiches
+        $query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE `contact_tags` LIKE :terme ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+        $query->bindParam(':terme', $termel);
+        $query->execute();
+        $boucle = $query->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($boucle as $element) { $contacts[] = $element['contact_id']; }
+        unset($boucle);
+        unset($query);
+                
+        // On continue en vérifiant les objets d'événements
+        $query = $link->prepare('SELECT `contact_id` FROM `historique` WHERE `historique_objet` LIKE :terme OR `historique_notes` LIKE :terme ORDER BY `contact_id` ASC');
+        $query->bindParam(':terme', $termel);
+        $query->execute();
+        $boucle = $query->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($boucle as $element) { $contacts[] = $element['contact_id']; }
+        unset($boucle);
+        unset($query);
+        
+        // À la fin, on vérifie qu'il n'existe pas de doublons
+        $contacts = array_unique($contacts);
+        
+        // On retourne la liste des contacts concernés par cette recherche
+        return $contacts;
     }
 }
 

@@ -288,7 +288,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		else if ($_GET['page'] == 'recherche-tag') {
 			
 			// On regarde si le tag existe
-			$query = 'SELECT * FROM tags WHERE tag_nom LIKE "' . utf8_decode($_POST['tag']) . '"';
+			$query = 'SELECT * FROM tags WHERE tag_nom LIKE "' . utf8_decode($_POST['rechercheThematique']) . '"';
 			$sql = $db->query($query);
 			
 			if ($sql->num_rows >= 1) {
@@ -339,6 +339,11 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			} else {
 				$core->tpl_load('fiche', 'vide');
 			}
+		}
+		
+    		else if ($_GET['page'] == 'recherche-thematique')
+		{
+    		    $core->tpl_load('recherche', 'thematique');
 		}
 		
 		else if ($_GET['page'] == 'creerfiche' && isset($_GET['etape'])) {
@@ -605,17 +610,18 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 			else if ( $_GET['page'] == 'rappels' )
 			{
 				
-				// On charge d'abord le template de header
-				$core->tpl_header();
-				
 				// On charge les templates de page selon la demande
 				if ( isset($_GET['action']) )
 				{
-					
+    				    Core::tpl_load('rappels', $_GET['action']);
+				}
+				elseif ( isset($_GET['mission']) )
+				{
+    				    Core::tpl_load('rappels', 'mission');
 				}
 				else
 				{
-					$core->tpl_load('rappels');
+    				    Core::tpl_load('rappels');
 				}
 				
 			}

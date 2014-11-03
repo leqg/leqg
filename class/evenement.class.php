@@ -14,7 +14,7 @@
  * @version		0.1
  */
 
-class evenement
+class Evenement
 {
 	/**
 	 * @var	array	$evenement	Tableau des informations connues sur l'événement
@@ -471,5 +471,38 @@ class evenement
     {
         // On modifie l'information
         $this->modification( 'dossier_id' , $dossier );
+    }
+    
+    
+    /**
+     * Liste les dernières interactions
+     *
+     * Cette méthode statique permet de lister les x dernières interactions
+     *
+     * @author  Damien Senger <mail@damiensenger.me>
+     * @version 1.0
+     *
+     * @param   int    $nombre   Nombre d'interactions 
+     *
+     * @result  array            Liste des interactions
+     */
+     
+    public static function last( $nombre = 15 )
+    {
+		// On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+		
+		// On prépare la requête
+		$query = $link->prepare('SELECT `historique_id` FROM `historique` WHERE ( `historique_type` = "contact" OR `historique_type` = "telephone" OR `historique_type` = "email" OR `historique_type` = "courrier" OR `historique_type` = "autre" ) ORDER BY `historique_date` DESC LIMIT 0, ' . $nombre);
+		$query->execute();
+		
+		// On fait la liste des dernières interactions en question
+		$interactions = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On renvoit le tableau
+		return $interactions;
     }
 }
