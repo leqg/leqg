@@ -898,6 +898,28 @@ class Contact
 	
 	
 	/**
+    	 * Supprime la fiche courante
+    	 *
+    	 * Cette méthode permet la destruction totale de la fiche ouverte
+    	 *
+    	 * @author  Damien Senger <mail@damiensenger.me>
+    	 * @version 1.0
+    	 * 
+    	 * @result  void
+    	 */
+	
+	public function destruction( )
+	{
+    	    // On prépare la requête
+    	    $query = $this->link->prepare('DELETE FROM `contacts` WHERE `contact_id` = :id');
+    	    $query->bindParam(':id', $this->contact['contact_id']);
+    	    
+    	    // On exécute la suppression
+    	    $query->execute();
+	}
+	
+	
+	/**
     	 * Créé une nouvelle fiche
     	 *
     	 * Cette méthode publique statique permet de créer une nouvelle fiche vierge
