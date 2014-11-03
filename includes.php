@@ -101,5 +101,6 @@ $api['mail']['reply']['nom'] = 'LeQG';
 include 'class/contact.class.php';
 include 'class/evenement.class.php';
 include 'class/folder.class.php';
+include 'class/rappel.class.php';
 
 ?>
