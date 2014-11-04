@@ -530,13 +530,17 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 					// On charge enfin le template de footer
 					$core->tpl_footer();
 				
-				} else if ( isset($_GET['mission']) ) {
+				} else if ( isset($_GET['mission']) && !isset($_GET['rue'])) {
 	
 					$core->tpl_load('porte', 'mission');
 				
 				} else if (isset($_GET['reporting'])) {
     				
     				    $core->tpl_load('porte', 'reporting');
+				
+				} else if (isset($_GET['rue']) && isset($_GET['mission'])) {
+    				
+    				    $core->tpl_load('porte', 'reporting-rue');
 				
 				} else {
 					
@@ -567,9 +571,13 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 					// On charge enfin le template de footer
 					$core->tpl_footer();
 				
-				} else if ( isset($_GET['mission']) ) {
+				} else if ( isset($_GET['mission']) && !isset($_GET['rue']) ) {
 	
 					$core->tpl_load('boite', 'mission');
+					
+				} else if ( isset($_GET['rue']) && isset($_GET['mission']) ) {
+
+                    $core->tpl_load('boite', 'reporting-rue');
 				
 				} else {
 					
