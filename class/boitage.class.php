@@ -323,25 +323,29 @@ class boitage extends core {
 		$query = 'UPDATE `boitage` SET `boitage_statut` = ' . $statut . ', `boitage_date` = NOW(), `boitage_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '"';
 		$this->db->query($query);
 		
-		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
-		$query = 'SELECT * FROM `contacts` WHERE MD5(`immeuble_id`) = "' . $immeuble . '" OR MD5(`adresse_id`) = "' . $immeuble . '"';
-		$sql = $this->db->query($query);
-		$contacts = array();
-		while ($row = $sql->fetch_assoc()) $contacts[] = $row;
-		
-		// On fait la boucle de tous ces contacts pour ajouter l'élément d'histoire
-		foreach ($contacts as $contact) {
-			$query = 'INSERT INTO	`historique` (`contact_id`, 
-												  `compte_id`, 
-												  `historique_type`, 
-												  `historique_date`, 
-												  `historique_objet`)
-					  VALUES					 (' . $contact['contact_id'] . ',
-					  							  ' . $_COOKIE['leqg-user'] . ',
-					  							  "boite",
-					  							  NOW(),
-					  							  "' . $informations['mission_nom'] . '")';
-			$this->db->query($query);
+		// Si l'immeuble a été fait, on reporte le boitage pour tous les les contacts
+		if ($statut == 2)
+		{
+        		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
+        		$query = 'SELECT * FROM `contacts` WHERE MD5(`immeuble_id`) = "' . $immeuble . '" OR MD5(`adresse_id`) = "' . $immeuble . '"';
+        		$sql = $this->db->query($query);
+        		$contacts = array();
+        		while ($row = $sql->fetch_assoc()) $contacts[] = $row;
+            
+            // On fait la boucle de tous ces contacts pour ajouter l'élément d'histoire
+        		foreach ($contacts as $contact) {
+        			$query = 'INSERT INTO	`historique` (`contact_id`, 
+        												  `compte_id`, 
+        												  `historique_type`, 
+        												  `historique_date`, 
+        												  `historique_objet`)
+        					  VALUES					 (' . $contact['contact_id'] . ',
+        					  							  ' . $_COOKIE['leqg-user'] . ',
+        					  							  "boite",
+        					  							  NOW(),
+        					  							  "' . $informations['mission_nom'] . '")';
+        			$this->db->query($query);
+        		}
 		}
 	}
 }

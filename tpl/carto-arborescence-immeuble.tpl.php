@@ -61,7 +61,7 @@
 				<span class="label-information">Électeurs</span>
 				<ul class="listeEncadree" id="listeImmeubles">
 					<?php $electeurs = $carto->listeElecteurs($immeuble['id']); foreach ($electeurs as $electeur) : ?>
-					<a class="nostyle" href="<?php $core->tpl_go_to('fiche', array('id' => $electeur['id'])); ?>">
+					<a class="nostyle" href="<?php $core->tpl_go_to('contact', array('contact' => md5($electeur['id']))); ?>">
 						<li class="electeur <?php if ($fiche->coordonneesExistantes($electeur)) echo 'coordonnees'; ?>">
 							<?php $fiche->acces($electeur['id'], true); ?>
 							<strong><?php echo $fiche->affichage_nom(); ?> (<?php $fiche->age(); ?>)</strong>
