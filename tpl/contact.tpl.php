@@ -185,7 +185,7 @@
 			    <label class="small">Dossier</label>
 			    <ul class="affichageDossier">
     			        <li class="dossier lierDossier">
-    			            <strong>Lier à un dossier</strong>
+    			            <strong>Créer / Lier à un dossier</strong>
     			        </li>
     			        <a href="" class="transparent afficherInfosDossier" style="display: none;">
         			        <li class="dossier">

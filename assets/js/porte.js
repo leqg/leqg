@@ -132,6 +132,9 @@ var porte = function() {
 			if ($(this).html() == 'Consulter') {
 				$('.droite').fadeOut();
 				$('.voirRue').hide();
+				
+				// Si un bouton de reporting de la rue existe déjà, on le supprime
+				$('a.reporting-rue').remove();
 	
 				var mission = $('#titre-mission').data('mission');
 				var nom = $(this).data('nom');
@@ -145,9 +148,12 @@ var porte = function() {
 				$.getJSON('ajax.php?script=porte-liste-immeubles', { rue: rue, mission: mission }, function(data){
 					$.each( data , function( key , val ) {
 						// On commence par créer ce nouvel élement de liste
-						$('#listeImmeublesParRue ul.form-liste').append('<li class="detailImmeuble" id="detailImmeuble-' + val + '"><span>' + val + '</span> ' + nom + '</li>');
+						$('#listeImmeublesParRue ul.form-liste').append('<li class="detailImmeuble" id="detailImmeuble-' + val + '"><span class="voir-immeuble" data-immeuble="' + val + '" data-rue="' + rue + '">' + val + '</span> ' + nom + '</li>');
 					});
 				});
+				
+				// On rajoute l'accès à la feuille de reporting
+				$('#listeImmeublesParRue ul.form-liste').after('<a class="reporting-rue nostyle" href="index.php?page=porte&rue=' + rue + '&mission=' + mission + '"><button>Voir la mission dans cette rue</button></a>');
 				
 				// On affiche le bloc
 				$('#listeImmeublesParRue').fadeIn();

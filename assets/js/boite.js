@@ -136,6 +136,9 @@ var porte = function() {
 				var nom = $(this).data('nom');
 				var rue = $(this).data('rue');
 				
+				// Si un bouton de reporting de la rue existe déjà, on le supprime
+				$('a.reporting-rue').remove();
+				
 				// On met en place le nom de la rue
 				$('#listeImmeublesParRue .nomRue span').html(nom);
 				$('#listeImmeublesParRue ul.form-liste').html('');
@@ -147,6 +150,9 @@ var porte = function() {
 						$('#listeImmeublesParRue ul.form-liste').append('<li class="detailImmeuble" id="detailImmeuble-' + val + '"><span>' + val + '</span> ' + nom + '</li>');
 					});
 				});
+				
+				// On rajoute l'accès à la feuille de reporting
+				$('#listeImmeublesParRue ul.form-liste').after('<a class="reporting-rue nostyle" href="index.php?page=boite&rue=' + rue + '&mission=' + mission + '"><button>Voir la mission dans cette rue</button></a>');
 				
 				// On affiche le bloc
 				$('#listeImmeublesParRue').fadeIn();
@@ -217,6 +223,18 @@ var porte = function() {
 		$('#toutSelect').click(function(){
 			$('.checkImmeuble').attr('checked', 'checked');
 		});
+
+    
+    // Action de reporting
+    $('.bouton-reporting').click(function() {
+        var immeuble = $(this).data('contact');
+        var statut = $(this).data('val');
+        var mission = $('.titre').data('mission');
+        
+        $.post('ajax.php?script=boitage-reporting-web', { mission: mission, immeuble: immeuble, statut: statut }, function() {
+            $('tr.ligne-immeuble-' + immeuble).remove();
+        });
+    });
 	
 };
 
