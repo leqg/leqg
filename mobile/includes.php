@@ -13,8 +13,35 @@ header('Content-Type: text/html; charset=utf-8');
 // On récupère le fichier de configuration
 $config = parse_ini_file('../config.ini', true);
 
+// On lance la classe de configuration
+class Configuration
+{
+	static $confArray;
+	
+	public static function read($name)
+	{
+		return self::$confArray[$name];
+	}
+	
+	public static function write($name, $value)
+	{
+		self::$confArray[$name] = $value;
+	}
+}
+
+// On applique la configuration chargée
+Configuration::write('db.host', $config['BDD']['host']);
+Configuration::write('db.basename', 'strasbourg');
+Configuration::write('db.user', $config['BDD']['user']);
+Configuration::write('db.pass', $config['BDD']['pass']);
+
 // Appel de la classe MySQL du noyau
 $noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
+
+// Constructeur de classes
+function __autoload($class_name) {
+	include '../class/' . $class_name . '.class.php';
+}
 
 // On regarde les cookies
 if (isset($_COOKIE['leqg-user'])) {
@@ -26,27 +53,29 @@ if (isset($_COOKIE['leqg-user'])) {
 	$base = $row['client_bdd'];
 } else { $base = null; $cookie = null; }
 
+// On met à jour l'heure de dernière action pour le membre connecté
+if (isset($_COOKIE['leqg-user']))
+{
+	$noyau->query('UPDATE `users` SET `user_lastaction` = NOW() WHERE `user_id` = ' . $_COOKIE['leqg-user']);
+}
+
 // Appel de la classe MySQL du compte
 $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
 
-// Constructeur de classes
-function __autoload($class_name) {
-	include '../class/' . $class_name . '.class.php';
-}
-
 // On appelle l'ensemble des classes générales au site
-$core =			new core($db, $noyau, $config['SERVER']['url']);
-$csv =			new csv($db, $config['SERVER']['url']);
-$user =			new user($db, $noyau, $config['SERVER']['url']);
-$fiche =			new fiche($db, $cookie, $config['SERVER']['url']);
-$tache =			new tache($db, $cookie, $config['SERVER']['url']);
-$dossier =		new dossier($db, $cookie, $config['SERVER']['url']);
-$historique =	new historique($db, $cookie, $config['SERVER']['url']);
-$fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
-$carto =			new carto($db, $cookie, $config['SERVER']['url']);
-$mission =		new mission($db, $cookie, $config['SERVER']['url']);
-$boitage =		new boitage($db);
-$porte =		new porte($db);
+$core =         new core($db, $noyau, $config['SERVER']['url']);
+$csv =          new csv($db, $config['SERVER']['url']);
+$user =         new user($db, $noyau, $config['SERVER']['url']);
+$fiche =        new fiche($db, $cookie, $config['SERVER']['url']);
+$tache =        new tache($db, $cookie, $config['SERVER']['url']);
+$dossier =      new dossier($db, $cookie, $config['SERVER']['url']);
+$historique =   new historique($db, $cookie, $config['SERVER']['url']);
+$fichier =      new fichier($db, $cookie, $config['SERVER']['url']);
+$carto =        new carto($db, $cookie, $config['SERVER']['url']);
+$mission =      new mission($db, $cookie, $config['SERVER']['url']);
+$boitage =      new boitage($db);
+$porte =        new porte($db);
+$notification = new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
 global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $boitage, $porte;
@@ -67,5 +96,11 @@ $api['mail']['from']['email'] = 'no-reply@leqg.info';
 $api['mail']['from']['nom'] = 'Ne Pas Répondre';
 $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
+
+// On inclut les classes non chargées
+include '../class/contact.class.php';
+include '../class/evenement.class.php';
+include '../class/folder.class.php';
+include '../class/rappel.class.php';
 
 ?>
