@@ -271,6 +271,7 @@ label.sbox {
 		background-color: $background;
 		border: 1px solid $gris;
 		@include border-radius(.33em);
+		cursor: pointer;
 		font-family: $flat;
 		font-size: .85em;
 		font-weight: 400;
