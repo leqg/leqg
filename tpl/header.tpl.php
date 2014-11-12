@@ -18,8 +18,8 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<?php $flat = array('boite', 'porte', 'contact', 'dossier', 'rappels', 'recherche-thematique'); ?>
-<body<?php if (isset($_GET['page']) && in_array($_GET['page'], $flat)) { ?> class="flat"<?php } ?>>	
+<?php $flat = array('boite', 'porte', 'contacts', 'contact', 'dossier', 'rappels', 'recherche-thematique'); ?>
+<body<?php if ((isset($_GET['page']) && in_array($_GET['page'], $flat)) || empty($_GET['page'])) { ?> class="flat"<?php } ?>>	
 	<!-- Contenu concret de la page -->
 	<header id="top">
 		<h1><a class="nostyle" href="http://<?php echo $config['SERVER']['url']; ?>">LeQG</a></h1>
@@ -53,4 +53,4 @@
 		<?php endforeach; ?>
 	</nav><!--nav#principale-->
 	
-	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; } if (in_array($_GET['page'], $flat)) { echo ' flat'; } ?>">
+	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; if (in_array($_GET['page'], $flat)) { echo ' flat'; } } else { echo 'flat'; } ?>">
