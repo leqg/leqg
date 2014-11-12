@@ -396,6 +396,8 @@ main.dossier {
 			display: none;
 		}
 		
+		&.serre li { margin: 0 auto .85em auto; }
+		
 		li {
 			display: block;
 			margin: 0 auto 2em auto;
@@ -717,6 +719,7 @@ main.dossier {
 			padding: 35px 0 0 0;
 			text-transform: lowercase;
 			width: 70px;
+			@include transition(all);
 			
 			&::before {
 				position: absolute; top: 0; left: 30%; left: calc(50% - 15px);
@@ -791,6 +794,8 @@ main.dossier {
 				width: 150px;
 				
 				&::before { content: '\e80c'; }
+				
+				&:hover { color: $vert; }
 			}
 			
 			&.merge {
@@ -798,6 +803,8 @@ main.dossier {
 				width: 150px;
 				
 				&::before { content: '\e910'; }
+				
+				&:hover { color: $orange; }
 			}
 		}
 	}
@@ -1268,6 +1275,62 @@ main.dossier {
 	ul.affichageDossier li.dossier
 	{
     	    margin-top: 1em;
+	}
+	
+	ul.listeContacts {
+		list-style: none;
+		margin: 0 auto;
+		padding: 0 0 0 0;
+		
+		li.contact {
+			position: relative;
+			display: block;
+			border: 1px solid $gris;
+			@include border-radius(.33em);
+			color: $darkGrey;
+			font-family: $flat;
+			font-size: 1em;
+			line-height: 1.5em;
+			margin: 0 auto 1.5em auto;
+			padding: .85em 1em .85em 75px;
+			@include transition(all);
+			
+			&:hover {
+				border-color: $rouge;
+				
+				&::before { color: $rouge; }
+				strong { color: $rouge; }
+			}
+			
+			&::before {
+				position: absolute; top: 0; top: calc(50% - 25px); left: .425em;
+				color: $grisFonce;
+				font-family: $icons;
+				font-size: 30px;
+				height: 50px;
+				line-height: 50px;
+				text-align: center;
+				width: 50px;
+				@include transition(all);
+			}
+			
+			&.isexe::before { content: '\e8a8'; }
+			&.homme::before { content: '\e8a6'; }
+			&.femme::before { content: '\e8a7'; }
+			
+			p {
+				color: $grisFonce;
+				margin: 0;
+				padding: 0;
+			}
+			
+			strong {
+				color: $bleu;
+				font-size: 1.15em;
+				font-weight: 600;
+				@include transition(all);
+			}
+		}
 	}
 	
 	.coteAcote {

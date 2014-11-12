@@ -309,6 +309,53 @@ class Contact
 	
 	
 	/**
+	 * Retourne le nom de la ville de résidence ou la ville électorale le cas échéant
+	 *
+	 * Cette méthode permet de retourner prioritaire le nom de la ville de résidence
+	 * ou sinon le nom de la ville électorale, ou sinon l'absence de ville si aucune
+	 * des deux adresses n'est renseignée.
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result  string   Nom de la ville
+	 */
+	
+	public function ville( ) {
+		// On vérifie si une donnée géographique existe
+		if ($this->contact['adresse_id'] > 0 || $this->contact['immeuble_id'] > 0) {
+			// On récupère l'identifiant de l'adresse connue la plus intéressante
+			$adresse = ($this->contact['adresse_id'] > 0) ? $this->contact['adresse_id'] : $this->contact['immeuble_id'];
+			
+			// On prépare l'ensemble des requêtes nécessaires à la recherche
+			$immeuble = $this->link->prepare('SELECT `rue_id` FROM `immeubles` WHERE `immeuble_id` = :immeuble');
+			$rue = $this->link->prepare('SELECT `commune_id` FROM `rues` WHERE `rue_id` = :rue');
+			$ville = $this->link->prepare('SELECT `commune_nom` FROM `communes` WHERE `commune_id` = :ville');
+			
+			// On mets à jour progressivement les paramètres en exécutant les différentes requêtes
+			$immeuble->bindParam(':immeuble', $adresse, PDO::PARAM_INT);
+			$immeuble->execute();
+			$immeuble = $immeuble->fetch(PDO::FETCH_ASSOC);
+			
+			$rue->bindParam(':rue', $immeuble['rue_id'], PDO::PARAM_INT);
+			$rue->execute();
+			$rue = $rue->fetch(PDO::FETCH_ASSOC);
+			
+			$ville->bindParam(':ville', $rue['commune_id'], PDO::PARAM_INT);
+			$ville->execute();
+			$ville = $ville->fetch(PDO::FETCH_ASSOC);
+			$ville = $ville['commune_nom'];
+			
+			// On retourne le nom de la ville à afficher
+			return $ville;
+		} else {
+			// On affiche l'absence d'adresse
+			return 'Aucune adresse connue';
+		}
+	}
+	
+	
+	/**
 	 * Cette méthode permet de retourner une des adresses, au format postal, du contact
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
@@ -1004,6 +1051,51 @@ class Contact
         // On retourne la liste des contacts concernés par cette recherche
         return $contacts;
     }
+    
+    
+    /**
+	 * Liste les x dernières fiches créées
+	 *
+	 * Cette méthode permet de retourner un array PHP contenant les identifiants
+	 * des x dernières fiches créées dans le système d'après leur numéro d'identifiant
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   int    $nombre  Nombre de fiches à retourner
+	 * @result  array  Tableau des identifiants des fiches retournées
+	 */
+	
+	public static function last( $nombre = 10 ) {
+        // On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+		
+		// On prépare le tableau de résultat de la requête
+		$fiches = array();
+
+		// On prépare la requête
+		$query = $link->prepare('SELECT `contact_id` FROM `contacts` ORDER BY `contact_id` DESC LIMIT 0, ' . $nombre);
+		
+		// On exécute la requête
+		if ($query->execute()) {
+			
+			// On affecte les résultats au tableau des fiches
+			$ids = $query->fetchAll(PDO::FETCH_ASSOC);
+			
+			// On retraite les informations pour les ajouter au tableau $fiches
+			foreach ($ids as $id) $fiches[] = $id['contact_id'];
+			
+			// On retourne le tableau correspondant
+			return $fiches;
+		
+		} else {
+			// On retourne une erreur
+			return false;
+		}
+	}
 }
 
 ?>
