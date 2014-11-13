@@ -97,7 +97,7 @@
 				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($contact->get('contact_id')))); ?>" class="nostyle">
 					<li class="contact <?php if ($contact->get('contact_sexe') == 'M') { echo 'homme'; } elseif ($contact->get('contact_sexe') == 'F') { echo 'femme'; } else { echo 'isexe'; } ?>">
 						<strong><?php echo $contact->noms(' '); ?></strong>
-						<p><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->age(); } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?> - <?php echo $contact->ville(); ?></p>
+						<p><?php echo $contact->age(); ?> - <?php echo $contact->ville(); ?></p>
 					</li>
 				</a>
 				<?php endforeach; ?>

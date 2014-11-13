@@ -263,7 +263,7 @@ class Contact
 	 * Cette méthode permet d'afficher l'âge du contact
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version 1.0
+	 * @version 1.1
 	 *
 	 * @param	bool	$textuel	Activer le mode textuel
 	 *
@@ -272,46 +272,54 @@ class Contact
 	
 	public function age( $textuel = true )
 	{
-		// Récupération du timestamp de la date de naissance
-		$date = strtotime($this->contact['contact_naissance_date']);
-		
-		// Traitement de la date de naissance en blocs
-		$annee = date('Y', $date);
-		$mois = date('m', $date);
-		$jour = date('j', $date);
-		
-		// On commence par calculer simplement l'âge
-		$age = 2014 - $annee;
-		
-		// On ajuste par rapport au mois
-		if ($mois >= date('m'))
-		{
-			// On ajuste par rapport au jour
-			if ($jour > date('j'))
-			{
-				$age = $age - 1;
-			}
-		}
-		
-		// On regarde le mode d'affichage et on adapte le retour en conséquence
-		if ($textuel === true)
-		{
-			// On retourne l'âge accompagné du mot "an(s)"
-			$retour = $age . ' an';
+		if ($this->contact['contact_naissance_date'] == '0000-00-00') {
 			
-			// On regarde si le pluriel du mot doit être mis ou non
-			if ($age > 1)
+			return 'Âge inconnu';
+			
+		} else {
+			
+			// Récupération du timestamp de la date de naissance
+			$date = strtotime($this->contact['contact_naissance_date']);
+			
+			// Traitement de la date de naissance en blocs
+			$annee = date('Y', $date);
+			$mois = date('m', $date);
+			$jour = date('j', $date);
+			
+			// On commence par calculer simplement l'âge
+			$age = 2014 - $annee;
+			
+			// On ajuste par rapport au mois
+			if ($mois >= date('m'))
 			{
-				$retour.= 's';
+				// On ajuste par rapport au jour
+				if ($jour > date('j'))
+				{
+					$age = $age - 1;
+				}
 			}
 			
-			// On retourne l'âge
-			return $retour;
-		}
-		else
-		{
-			// On retourne l'âge
-			return $age;
+			// On regarde le mode d'affichage et on adapte le retour en conséquence
+			if ($textuel === true)
+			{
+				// On retourne l'âge accompagné du mot "an(s)"
+				$retour = $age . ' an';
+				
+				// On regarde si le pluriel du mot doit être mis ou non
+				if ($age > 1)
+				{
+					$retour.= 's';
+				}
+				
+				// On retourne l'âge
+				return $retour;
+			}
+			else
+			{
+				// On retourne l'âge
+				return $age;
+			}
+			
 		}
 	}
 	
