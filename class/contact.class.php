@@ -63,16 +63,6 @@ class Contact
 			$contact['tags'] = array();
 		}
 		
-		// On prépare le nom d'affichage
-		if (!empty($contact['contact_nom']) || !empty($contact['contact_nom_usage']))
-		{
-			$contact['nom_affichage'] = strtoupper($contact['contact_nom']) . ' ' . strtoupper($contact['contact_nom_usage']) . ' ' . ucfirst(strtolower($contact['contact_prenoms']));
-		}
-		else
-		{
-			$contact['nom_affichage'] = (!empty($contact['contact_organisme'])) ? $contact['contact_organisme'] : 'Fiche inconnue';
-		}
-		
 		// On recherche les coordonnées pour la fiche
 		unset($query);
 		$query = $this->link->prepare('SELECT `coordonnee_type`, `coordonnee_numero`, `coordonnee_email` FROM `coordonnees` WHERE `contact_id` = :id');
@@ -112,6 +102,10 @@ class Contact
 		// Une fois que c'est le cas, on rajoute la détermination de la ville du contact
 		$ville = $this->ville();
 		$this->contact['ville'] = $ville;
+		
+		// On prépare ensuite le nom d'affichage
+		$nom_affichage = $this->noms(' ');
+		$this->contact['nom_affichage'] = $nom_affichage;
 	}
 	
 	

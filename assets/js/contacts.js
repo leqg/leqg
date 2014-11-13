@@ -62,7 +62,19 @@ var contacts = function() {
 				$('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.contact_md5 + '" class="nostyle contact-' + val.contact_id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span> - <span class="ville"></span></p></li></a>');
 				
 				// On ajoute demande le nom de la fiche
-				$('.resultatTri .contact-' + val.contact_id + ' li strong').html(val.nom_affichage);
+				var nom;
+				if (val.nom_affichage.length == 0) {
+					if (val.contact_organisme.length == 0) {
+						nom = 'Contact sans nom';
+					} else {
+						nom = val.contact_organisme;
+					}
+				} else {
+					nom = val.nom_affichage;
+				}
+				
+				// On affecte les données aux balises HTML
+				$('.resultatTri .contact-' + val.contact_id + ' li strong').html(nom);
 				$('.resultatTri .contact-' + val.contact_id + ' li p .age').html(val.age);
 				$('.resultatTri .contact-' + val.contact_id + ' li p .ville').html(val.ville);
 			});

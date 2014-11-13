@@ -9,8 +9,39 @@ require_once('includes.php');
 
 
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système
-$link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename'), Configuration::read('db.user'), Configuration::read('db.pass'));
+$link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
 
+// On va retraiter toutes les données à "problème" présentes dans la BDD en commençant par les contacts
+$query = $link->prepare('SELECT * FROM `taches` WHERE `tache_description` LIKE :terme ORDER BY `tache_id` ASC');
+$terme = "%&%";
+$query->bindParam(':terme', $terme);
+$query->execute();
+
+$resultats = $query->fetchAll(PDO::FETCH_ASSOC);
+
+// Fonction de retraitement
+function retraitement($var) {
+	return html_entity_decode($var, ENT_QUOTES);
+}
+
+foreach ($resultats as $resultat)
+{
+	
+	// On retraite les données à problème
+	$resultat['tache_description'] = retraitement($resultat['tache_description']);
+	
+	// On prépare la requête de modification
+	$query = $link->prepare('UPDATE `taches` SET `tache_description` = :nom WHERE `tache_id` = :id');
+	$query->bindParam(':nom', $resultat['tache_description']);
+	$query->bindParam(':id', $resultat['tache_id']);
+	
+	$query->execute();
+	
+	echo $resultat['tache_id'] . '<br>';
+}
+
+
+/*
 // On lance un mécanisme de détection des numéros de téléphone ou emails existant pour chaque fiche
 $query = $link->prepare('SELECT * FROM `coordonnees`');
 $query->execute();
@@ -22,7 +53,7 @@ foreach ($coord as $c)
 	$query->bindParam(':id', $c['contact_id'], PDO::PARAM_INT);
 	$query->execute();
 }
-
+*/
 
 /*$query = $link->prepare('SELECT `contact_id`, `contact_email`, `contact_telephone`, `contact_mobile` FROM `contacts` WHERE `contact_email` IS NOT NULL OR `contact_telephone` IS NOT NULL OR `contact_mobile` IS NOT NULL');
 $query->execute();
