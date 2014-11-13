@@ -12,7 +12,7 @@ require_once('includes.php');
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
 
 // On va retraiter toutes les données à "problème" présentes dans la BDD en commençant par les contacts
-$query = $link->prepare('SELECT * FROM `contacts` WHERE `contact_nom` LIKE :terme OR `contact_nom_usage` LIKE :terme OR `contact_prenoms` LIKE :terme OR `contact_tags` LIKE :terme OR `contact_organisme` LIKE :terme OR `contact_fonction` LIKE :terme');
+$query = $link->prepare('SELECT * FROM `arrondissements` WHERE `arrondissement_nom` LIKE :terme ORDER BY `arrondissement_id` ASC');
 $terme = "%&%";
 $query->bindParam(':terme', $terme);
 $query->execute();
@@ -28,26 +28,16 @@ foreach ($resultats as $resultat)
 {
 	
 	// On retraite les données à problème
-	$resultat['contact_nom'] = mb_convert_case(retraitement($resultat['contact_nom']), MB_CASE_UPPER);
-	$resultat['contact_nom_usage'] = mb_convert_case(retraitement($resultat['contact_nom_usage']), MB_CASE_UPPER);
-	$resultat['contact_prenoms'] = mb_convert_case(retraitement($resultat['contact_prenoms']), MB_CASE_TITLE);
-	$resultat['contact_tags'] = mb_convert_case(retraitement($resultat['contact_tags']), MB_CASE_LOWER);
-	$resultat['contact_organisme'] = mb_convert_case(retraitement($resultat['contact_organisme']), MB_CASE_TITLE);
-	$resultat['contact_fonction'] = mb_convert_case(retraitement($resultat['contact_fonction']), MB_CASE_TITLE);
+	$resultat['arrondissement_nom'] = mb_convert_case(retraitement($resultat['arrondissement_nom']), MB_CASE_TITLE);
 	
 	// On prépare la requête de modification
-	$query = $link->prepare('UPDATE `contacts` SET `contact_nom` = :nom, `contact_nom_usage` = :nomusage, `contact_prenoms` = :prenoms, `contact_tags` = :tags, `contact_organisme` = :organisme, `contact_fonction` = :fonction WHERE `contact_id` = :id');
-	$query->bindParam(':nom', $resultat['contact_nom']);
-	$query->bindParam(':nomusage', $resultat['contact_nom_usage']);
-	$query->bindParam(':prenoms', $resultat['contact_prenoms']);
-	$query->bindParam(':tags', $resultat['contact_tags']);
-	$query->bindParam(':organisme', $resultat['contact_organisme']);
-	$query->bindParam(':fonction', $resultat['contact_fonction']);
-	$query->bindParam(':id', $resultat['contact_id']);
+	$query = $link->prepare('UPDATE `arrondissements` SET `arrondissement_nom` = :nom WHERE `arrondissement_id` = :id');
+	$query->bindParam(':nom', $resultat['arrondissement_nom']);
+	$query->bindParam(':id', $resultat['arrondissement_id']);
 	
 	$query->execute();
 	
-	echo $resultat['contact_id'] . '<br>';
+	echo $resultat['arrondissement_id'] . '<br>';
 }
 
 
