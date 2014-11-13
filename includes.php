@@ -35,6 +35,9 @@ Configuration::write('db.basename', 'strasbourg');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 
+// On fabrique la classe $link de liaison PDO
+$link = new PDO('mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename'), Configuration::read('db.user'), Configuration::read('db.pass'));	
+
 // Appel de la classe MySQL du noyau
 $noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
 
@@ -78,7 +81,7 @@ $porte =		new porte($db);
 $notification =	new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte;
+global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
