@@ -1085,7 +1085,7 @@ class Contact
 	 * @result  array   Liste des fiches correspondante au sein d'un tableau PHP
 	 */
 	
-	public static function listing( array $tri , $debut , $nombre = 15 )
+	public static function listing( array $tri , $debut , $nombre = 5 )
 	{
 		if (is_numeric($debut) && is_numeric($nombre) && is_array($tri)) {
 
@@ -1152,7 +1152,7 @@ class Contact
 	 * @result  array  Tableau des identifiants des fiches retournées
 	 */
 	
-	public static function last( $nombre = 10 ) {
+	public static function last( $nombre = 5 ) {
         // On prépare le lien vers la BDD
 		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
 		$user = Configuration::read('db.user');

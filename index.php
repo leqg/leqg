@@ -35,7 +35,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	if (empty($_GET['page'])) {
 		
 		// On charge l'affichage des services de la plateforme
-		$core->tpl_load('contacts');
+		$core->tpl_go_to('contacts', true);
 	
 	}
 	
@@ -687,7 +687,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services
-			$core->tpl_load('contacts');
+			$core->tpl_go_to('contacts', true);
 		}
 	}
 }
