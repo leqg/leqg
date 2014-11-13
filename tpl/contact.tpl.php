@@ -123,15 +123,15 @@
 		<ul class="formulaire">
 			<li>
 				<label class="small">Nom de famille</label>
-				<span class="form-icon decalage nom"><input type="text" name="changerNomFamille" id="changerNomFamille" value="<?php echo strtoupper($contact->contact['contact_nom']); ?>"></span>
+				<span class="form-icon decalage nom"><input type="text" name="changerNomFamille" id="changerNomFamille" value="<?php echo mb_convert_case($contact->contact['contact_nom'], MB_CASE_UPPER); ?>"></span>
 			</li>
 			<li>
 				<label class="small">Nom d'usage</label>
-				<span class="form-icon decalage nom"><input type="text" name="changerNomUsage" id="changerNomUsage" value="<?php echo strtoupper($contact->contact['contact_nom_usage']); ?>"></span>
+				<span class="form-icon decalage nom"><input type="text" name="changerNomUsage" id="changerNomUsage" value="<?php echo mb_convert_case($contact->contact['contact_nom_usage'], MB_CASE_UPPER); ?>"></span>
 			</li>
 			<li>
 				<label class="small">Prénoms</label>
-				<span class="form-icon decalage nom"><input type="text" name="changerPrenoms" id="changerPrenoms" value="<?php echo ucwords(strtolower($contact->contact['contact_prenoms'])); ?>"></span>
+				<span class="form-icon decalage nom"><input type="text" name="changerPrenoms" id="changerPrenoms" value="<?php echo mb_convert_case($contact->contact['contact_prenoms'], MB_CASE_TITLE); ?>"></span>
 			</li>
 			<li>
 				<button class="validerChangementNom">Changer le nom</button>
