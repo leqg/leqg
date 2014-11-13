@@ -11,7 +11,20 @@ require_once('includes.php');
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename'), Configuration::read('db.user'), Configuration::read('db.pass'));
 
-$query = $link->prepare('SELECT `contact_id`, `contact_email`, `contact_telephone`, `contact_mobile` FROM `contacts` WHERE `contact_email` IS NOT NULL OR `contact_telephone` IS NOT NULL OR `contact_mobile` IS NOT NULL');
+// On lance un mécanisme de détection des numéros de téléphone ou emails existant pour chaque fiche
+$query = $link->prepare('SELECT * FROM `coordonnees`');
+$query->execute();
+$coord = $query->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($coord as $c)
+{
+	$query = $link->prepare('UPDATE `contacts` SET `contact_' . $c['coordonnee_type'] . '` = 1 WHERE `contact_id` = :id');
+	$query->bindParam(':id', $c['contact_id'], PDO::PARAM_INT);
+	$query->execute();
+}
+
+
+/*$query = $link->prepare('SELECT `contact_id`, `contact_email`, `contact_telephone`, `contact_mobile` FROM `contacts` WHERE `contact_email` IS NOT NULL OR `contact_telephone` IS NOT NULL OR `contact_mobile` IS NOT NULL');
 $query->execute();
 $contacts = $query->fetchAll();
 
@@ -45,7 +58,7 @@ foreach ($contacts as $contact) {
 		$fixe->execute();
 		echo $contact['contact_id'] . ' : ' . $contact['contact_telephone'] . '<br>';
 	}
-}
+}*/
 
 
 // On teste la recherche

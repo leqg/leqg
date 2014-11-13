@@ -104,6 +104,14 @@ class Contact
 		
 		// On entre les données en paramètre de la classe
 		$this->contact = $contact;
+		
+		// Une fois que c'est le cas, on rajoute le calcul de l'âge pour les exports JSON
+		$age = $this->age();
+		$this->contact['age'] = $age;
+		
+		// Une fois que c'est le cas, on rajoute la détermination de la ville du contact
+		$ville = $this->ville();
+		$this->contact['ville'] = $ville;
 	}
 	
 	
@@ -1051,6 +1059,76 @@ class Contact
         // On retourne la liste des contacts concernés par cette recherche
         return $contacts;
     }
+    
+    
+    /**
+	 * Liste des fiches demandées selon des critères imposés
+	 *
+	 * Cette méthode permet de retourner un tableau PHP comprenant les fiches 
+	 * demandées d'après des méthodes de tri imposées.
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   string  $tri     Méthodes de tri demandées
+	 * @param   int     $debut   Ordre de la première occurence demandée
+	 * @param   int     $nombre  Nombre de fiches demandées selon la méthode
+	 *
+	 * @result  array   Liste des fiches correspondante au sein d'un tableau PHP
+	 */
+	
+	public static function listing( array $tri , $debut , $nombre = 15 )
+	{
+		if (is_numeric($debut) && is_numeric($nombre) && is_array($tri)) {
+
+	        // On prépare le lien vers la BDD
+			$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+			$user = Configuration::read('db.user');
+			$pass = Configuration::read('db.pass');
+			$link = new PDO($dsn, $user, $pass);
+			
+			// On commence par préparer le visage de la requête de recherche
+			$sql = 'SELECT `contact_id` FROM `contacts` ';
+
+			// On va chercher à y ajouter les différents critères, à travers un tableau $criteres
+			$criteres = array();
+			
+				// On retraite le critère "email" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['email']) { $criteres[] = '`contact_email` = ' . ($tri['email'] - 1); }
+			
+				// On retraite le critère "mobile" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['mobile']) { $criteres[] = '`contact_mobile` = ' . ($tri['mobile'] - 1); }
+			
+				// On retraite le critère "fixe" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['fixe']) { $criteres[] = '`contact_fixe` = ' . ($tri['fixe'] - 1); }
+			
+				// On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }
+			
+			
+			// On retraite les critères en conditions SQL
+			$sql.= ' WHERE ' . implode(' AND ', $criteres);
+			
+			// On ajoute les conditions de nombre et d'ordre
+			$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
+			
+			// On exécute la requête SQL
+			$query = $link->prepare($sql);
+			$query->execute();
+			
+			// On retraite la liste des identifiants pour en faire un tableau PHP $contacts
+			$ids = $query->fetchAll(PDO::FETCH_ASSOC);
+			$contacts = array();
+			foreach ($ids as $id) $contacts[] = $id['contact_id'];
+			
+			// On retourne la liste des ids de fiches concernées par la requête
+			return $contacts;
+			
+		} else {
+			// On retourne une erreur
+			return false;
+		}
+	}
     
     
     /**

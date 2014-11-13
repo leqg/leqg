@@ -38,8 +38,8 @@
 						<label class="sbox" for="coordonnees-email">
 							<select name="coordonnees-email" id="coordonnees-email" class="selectionTri">
 								<option value="2">Avec email uniquement</option>
-								<option value="0">Sans email uniquement</option>
-								<option value="1" selected>Indifférent</option>
+								<option value="1">Sans email uniquement</option>
+								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
 					</span>
@@ -50,8 +50,8 @@
 						<label class="sbox" for="coordonnees-mobile">
 							<select name="coordonnees-mobile" id="coordonnees-mobile" class="selectionTri">
 								<option value="2">Avec mobile uniquement</option>
-								<option value="0">Sans mobile uniquement</option>
-								<option value="1" selected>Indifférent</option>
+								<option value="1">Sans mobile uniquement</option>
+								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
 					</span>
@@ -62,8 +62,8 @@
 						<label class="sbox" for="coordonnees-fixe">
 							<select name="coordonnees-fixe" id="coordonnees-fixe" class="selectionTri">
 								<option value="2">Avec fixe uniquement</option>
-								<option value="0">Sans fixe uniquement</option>
-								<option value="1" selected>Indifférent</option>
+								<option value="1">Sans fixe uniquement</option>
+								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
 					</span>
@@ -74,8 +74,8 @@
 						<label class="sbox" for="coordonnees-electeur">
 							<select name="coordonnees-electeur" id="coordonnees-electeur" class="selectionTri">
 								<option value="2">Le contact est électeur</option>
-								<option value="0">Le contact n'est pas électeur</option>
-								<option value="1" selected>Indifférent</option>
+								<option value="1">Le contact n'est pas électeur</option>
+								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
 					</span>
@@ -85,11 +85,11 @@
 	</div>
 	
 	<div class="colonne demi droite">
-		<section class="contenu demi">
+		<section class="contenu demi absenceCriteres">
 			<h3 class="manqueCritere">Indiquez un critère pour lancer le tri</h3>
 		</section>
 		
-		<section class="contenu demi">
+		<section class="contenu demi lastEntries">
 			<h4>Dernières fiches ajoutées</h4>
 			
 			<ul class="listeContacts">
@@ -102,6 +102,21 @@
 				</a>
 				<?php endforeach; ?>
 			</ul>
+		</section>
+		
+		<section class="contenu demi invisible actionsFiches">
+			<ul class="iconesActions">
+				<li class="smsSelection">SMS groupé à la sélection</li>
+				<li class="emailSelection">Email groupé à la sélection</li>
+				<li class="exportSelection">Export de la sélection</li>
+			</ul>
+		</section>
+		
+		<section class="contenu demi invisible listeFiches">
+			<h4>Liste des fiches selon le tri</h4>
+			<input type="hidden" id="nombreFiches" value="0">
+			
+			<ul class="listeContacts resultatTri"></ul>
 		</section>
 	</div>
 

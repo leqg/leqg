@@ -789,22 +789,43 @@ main.dossier {
     			    cursor: pointer;
 			}
 			
-			&.new {
+			&.new,
+			&.merge {
 				color: $bleu;
 				width: 150px;
-				
+			}
+			
+			&.smsSelection,
+			&.emailSelection,
+			&.exportSelection {
+				color: $bleu;
+				cursor: pointer;
+				width: 100px;
+			}
+			
+			&.new {
 				&::before { content: '\e80c'; }
-				
 				&:hover { color: $vert; }
 			}
 			
 			&.merge {
-				color: $bleu;
-				width: 150px;
-				
 				&::before { content: '\e910'; }
-				
 				&:hover { color: $orange; }
+			}
+			
+			&.exportSelection {
+				&::before { content: '\e90b'; }
+				&:hover { color: $orange; }
+			}
+			
+			&.smsSelection {
+				&::before { content: '\e961'; }
+				&:hover { color: $vert; }
+			}
+			
+			&.emailSelection {
+				&::before { content: '\e8a3'; }
+				&:hover { color: $vert; }
 			}
 		}
 	}
@@ -1328,6 +1349,7 @@ main.dossier {
 				color: $bleu;
 				font-size: 1.15em;
 				font-weight: 600;
+				letter-spacing: .02em;
 				@include transition(all);
 			}
 		}
