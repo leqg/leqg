@@ -12,7 +12,7 @@ require_once('includes.php');
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
 
 // On va retraiter toutes les données à "problème" présentes dans la BDD en commençant par les contacts
-$query = $link->prepare('SELECT * FROM `cantons` WHERE `canton_nom` LIKE :terme ORDER BY `canton_id` ASC');
+$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_nom` LIKE :terme ORDER BY `commune_id` ASC');
 $terme = "%&%";
 $query->bindParam(':terme', $terme);
 $query->execute();
@@ -28,16 +28,16 @@ foreach ($resultats as $resultat)
 {
 	
 	// On retraite les données à problème
-	$resultat['canton_nom'] = mb_convert_case(retraitement($resultat['canton_nom']), MB_CASE_TITLE);
+	$resultat['commune_nom'] = mb_convert_case(retraitement($resultat['commune_nom']), MB_CASE_TITLE);
 	
 	// On prépare la requête de modification
-	$query = $link->prepare('UPDATE `cantons` SET `canton_nom` = :nom WHERE `canton_id` = :id');
-	$query->bindParam(':nom', $resultat['canton_nom']);
-	$query->bindParam(':id', $resultat['canton_id']);
+	$query = $link->prepare('UPDATE `communes` SET `commune_nom` = :nom WHERE `commune_id` = :id');
+	$query->bindParam(':nom', $resultat['commune_nom']);
+	$query->bindParam(':id', $resultat['commune_id']);
 	
 	$query->execute();
 	
-	echo $resultat['canton_id'] . '<br>';
+	echo $resultat['commune_id'] . '<br>';
 }
 
 
