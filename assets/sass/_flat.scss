@@ -1313,8 +1313,16 @@ main.dossier {
 			font-size: 1em;
 			line-height: 1.5em;
 			margin: 0 auto 1.5em auto;
+			overflow-x: hidden;
 			padding: .85em 1em .85em 75px;
 			@include transition(all);
+			
+			&.demi {
+				display: inline-block;
+				margin: 0 2.5% 1.5em;
+				vertical-align: top;
+				width: 45%;
+			}
 			
 			&:hover {
 				border-color: $rouge;
@@ -1325,7 +1333,7 @@ main.dossier {
 			
 			&::before {
 				position: absolute; top: 0; top: calc(50% - 25px); left: .425em;
-				color: $grisFonce;
+				color: $bleu;
 				font-family: $icons;
 				font-size: 30px;
 				height: 50px;
@@ -1351,6 +1359,8 @@ main.dossier {
 				font-weight: 600;
 				letter-spacing: .02em;
 				@include transition(all);
+				
+				span { white-space: nowrap; }
 			}
 		}
 	}

@@ -188,17 +188,17 @@ class Contact
 		// On ajoute le conteneur comprenant le nom, le nom d'usage et les prénoms
 		if (!empty($this->contact['contact_nom']))
 		{
-			$retour[] = $this->contenir(strtoupper($this->contact['contact_nom']), 'span');
+			$retour[] = $this->contenir(mb_convert_case($this->contact['contact_nom'], MB_CASE_UPPER), 'span');
 		}
 		
 		if (!empty($this->contact['contact_nom_usage']))
 		{
-			$retour[] = $this->contenir(strtoupper($this->contact['contact_nom_usage']), 'span');
+			$retour[] = $this->contenir(mb_convert_case($this->contact['contact_nom_usage'], MB_CASE_UPPER), 'span');
 		}
 		
 		if (!empty($this->contact['contact_prenoms']))
 		{
-			$retour[] = $this->contenir(ucwords(strtolower($this->contact['contact_prenoms'])), 'span');
+			$retour[] = $this->contenir(mb_convert_case($this->contact['contact_prenoms'], MB_CASE_TITLE), 'span');
 		}
 		
 		// On traite le tableau en intégrant le séparateur
@@ -1016,6 +1016,50 @@ class Contact
         // On retourne cet identifiant
         return $id;
     }
+    
+    
+    /**
+	 * Effectue une recherche de fiche
+	 *
+	 * Cette méthode permet d'effectuer la recherche d'une fiche contact selon
+	 * les termes envoyés
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   string   $recherche   Terme recherché par l'utilisateur
+	 * 
+	 * @result  array    ID des fiches répondant à la recherche
+	 */
+	
+	public static function recherche( $recherche ) {
+        // On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+
+		// On prépare la requête de récupération des résultats
+		$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE :terme ORDER BY `contact_nom` ASC, `contact_nom_usage` ASC, `contact_prenoms` ASC');
+		
+		// On prépare le terme à affecter à la recherche en remplaçant tous les espaces et caractères non alphabétiques par des jokers
+		$terme = trim($recherche); // On retire les espaces pouvant exister au début et à la fin de la recherche
+		$terme = preg_replace('#[^[:alpha:]]#u', '%', $terme); // On retire tous les caractères non alphabétiques et on les remplace par des jokers
+		$terme = "%$terme%"; // On rajoute des jokers en début et fin de recherche
+
+		// On affecte le terme à rechercher à la requête
+		$query->bindValue(':terme', $terme);
+		
+		// On exécute et on vérifie qu'il n'y a pas d'erreurs d'exécution
+		if (!$query->execute()) return false;
+		
+		// On retraite les données de la requête
+		$resultats = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On retourne les résultats
+		return $resultats;
+	}
+	
     
     
     /**

@@ -230,51 +230,8 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		
 		else if ($_GET['page'] == 'recherche') {
 
-			// On prépare les différents champs à la recherche (suppression des espaces et des caractères, remplacement par des jokers
-			$recherche = $core->formatage_recherche($_POST['recherche']);
+			$core->tpl_load('recherche');
 
-			// On fait la recherche
-			$query = 'SELECT contact_id FROM contacts WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE "%' . $recherche . '%" ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
-
-			if (!empty($query)) $sql = $db->query($query);
-			
-			// On regarde le nombre de résultats
-			$nb = $sql->num_rows;
-			
-			if ($nb == 1) {
-				// S'il n'y a qu'un seul résultat, on ouvre la fiche correspondante
-				$row = $sql->fetch_array();
-				
-				$core->tpl_go_to('contact', array('contact' => md5($row[0])), true);
-			} else if ($nb > 1) {
-				// On load le header de la page
-				$core->tpl_header();
-				
-				// On load les différentes fiches
-				echo '<section class="liste">';
-				
-				// On prépare le tableau des différentes fiches
-				$fiches = array();
-				
-				while ($row = $sql->fetch_array()) {
-				
-					$fiche->acces($row[0], true);
-					
-					// On charge le template de la fiche
-					$core->tpl_load('fiche', 'liste');
-					
-					// On ferme la fiche ouverte
-					$fiche->fermeture();
-				}
-				
-				echo '</section>';
-				
-				// On charge le footer
-				$core->tpl_footer();
-			} else {
-
-				$core->tpl_load('fiche', 'vide');
-			}
 		}
 		
 		else if ($_GET['page'] == 'recherche-tag') {
