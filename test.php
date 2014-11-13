@@ -28,7 +28,7 @@ foreach ($resultats as $resultat)
 {
 	
 	// On retraite les données à problème
-	$resultat['tache_description'] = mb_convert_case(retraitement($resultat['tache_description']), MB_CASE_TITLE);
+	$resultat['tache_description'] = retraitement($resultat['tache_description']);
 	
 	// On prépare la requête de modification
 	$query = $link->prepare('UPDATE `taches` SET `tache_description` = :nom WHERE `tache_id` = :id');
