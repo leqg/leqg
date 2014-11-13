@@ -22,7 +22,7 @@ class user extends core {
 	public	function __construct($db, $noyau, $url) {
 		// On commence par paramétrer les données PDO
 		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-				';dbname=leqg';
+				';dbname=leqg;charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 

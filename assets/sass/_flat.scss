@@ -44,6 +44,10 @@ main.dossier {
 	padding: 2em 1em 1em;
 	width: 1000px;
 	
+	@media screen and (min-width: 1480px) {
+		width: 1180px;
+	}
+	
 	i
 	{
     	    display: inline-block;
@@ -165,6 +169,25 @@ main.dossier {
 		font-weight: 400;
 		margin: 0.5em auto 1em;
 		text-align: center;
+		
+		&.manqueCritere {
+			position: relative;
+			padding-top: 185px;
+			
+			&::before {
+				position: absolute; top: 0; left: calc(50% - 75px);
+				background-color: $jaune;
+				@include border-radius(50%);
+				color: $rouge;
+				content: '\e917';
+				font-family: $icons;
+				font-size: 85px;
+				height: 150px;
+				line-height: 150px;
+				text-align: center;
+				width: 150px;
+			}
+		}
 	}
 	
 	h4 {
@@ -204,11 +227,87 @@ main.dossier {
 		
 		&.demi {
 			padding: 0;
-			width: 475px;
+			width: 47%;
 		}
 		
 		&.gauche { position: absolute; left: 1em; }
 		&.droite { position: absolute; right: 1em; }
+	}
+	
+	.rechercheGlobale {
+		position: relative;
+		margin: 3em auto 2em;
+		text-align: center;
+		width: 100%;
+		@include transition(all);
+		
+		.search-icon {
+			position: relative;
+			display: inline-block;
+		
+			input[type="search"] {
+				border: 1px solid $gris;
+				@include border-radius(.5em);
+				color: $grisMoyen;
+				font-family: $flat;
+				font-size: 1.5em;
+				height: 50px;
+				line-height: 48px;
+				padding: 0;
+				padding-left: calc(1em + 20px);
+				width: 600px;
+				@include transition(all);
+				
+				&:focus {
+					border: 1px solid $vert;
+					color: $darkGrey;
+				}
+			}
+			
+			.iconeRecherche {
+				position: absolute; top: 0; left: 0;
+				height: 50px;
+				pointer-events: none;
+				width: 50px;
+				@include transition(all);
+				
+				&::after {
+					position: absolute; top: 0; left: 0;
+					color: $grisMoyen;
+					content: '\e8a2';
+					font-family: $icons;
+					font-size: 20px;
+					height: 50px;
+					line-height: 50px;
+					pointer-events: none;
+					text-align: center;
+					width: 50px;
+					@include transition(all);
+				}
+			}
+			
+			.lancementRecherche {
+				position: absolute; top: 0; right: 0;
+				display: block;
+				background-color: $gris;
+				border: none;
+				@include border-radius(0 .5em .5em 0);
+				color: $blanc;
+				cursor: pointer;
+				font-family: $icons;
+				font-size: 1.5em;
+				height: 50px;
+				line-height: 50px;
+				margin: 0;
+				padding: 0;
+				text-align: center;
+				width: 50px;
+				@include transition(all);
+			}
+			
+			input[type="search"]:focus + .annexesRecherche .lancementRecherche { background-color: $vert; }
+			input[type="search"]:focus + .annexesRecherche .iconeRecherche::after { color: $darkGrey; }
+		}
 	}
 	
 	section{
@@ -227,7 +326,7 @@ main.dossier {
 		
 		&.demi {
 			padding: 1.5em 2em;
-			width: 475px;
+			width: 100%;
 		}
 		
 		&.gauche { position: absolute; left: 1em; }
@@ -296,6 +395,8 @@ main.dossier {
 		&.invisible {
 			display: none;
 		}
+		
+		&.serre li { margin: 0 auto .85em auto; }
 		
 		li {
 			display: block;
@@ -600,7 +701,8 @@ main.dossier {
 		}
 	}
 	
-	ul.icones-etatcivil {
+	ul.icones-etatcivil,
+	ul.iconesActions {
 		display: block;
 		list-style: none;
 		margin: 0 0 1.5em 0;
@@ -617,6 +719,7 @@ main.dossier {
 			padding: 35px 0 0 0;
 			text-transform: lowercase;
 			width: 70px;
+			@include transition(all);
 			
 			&::before {
 				position: absolute; top: 0; left: 30%; left: calc(50% - 15px);
@@ -685,7 +788,51 @@ main.dossier {
 			{
     			    cursor: pointer;
 			}
+			
+			&.new,
+			&.merge {
+				color: $bleu;
+				width: 150px;
+			}
+			
+			&.smsSelection,
+			&.emailSelection,
+			&.exportSelection {
+				color: $bleu;
+				cursor: pointer;
+				width: 100px;
+			}
+			
+			&.new {
+				&::before { content: '\e80c'; }
+				&:hover { color: $vert; }
+			}
+			
+			&.merge {
+				&::before { content: '\e910'; }
+				&:hover { color: $orange; }
+			}
+			
+			&.exportSelection {
+				&::before { content: '\e90b'; }
+				&:hover { color: $orange; }
+			}
+			
+			&.smsSelection {
+				&::before { content: '\e961'; }
+				&:hover { color: $vert; }
+			}
+			
+			&.emailSelection {
+				&::before { content: '\e8a3'; }
+				&:hover { color: $vert; }
+			}
 		}
+	}
+	
+	ul.iconesActions {
+		margin: 0;
+		padding: 0;
 	}
 	
 	ul.etatcivil,
@@ -735,22 +882,25 @@ main.dossier {
 				}
 			}
 			
-			&.tag:hover
+			&.tag
 			{
 				cursor: pointer;
-				-moz-user-select: -moz-none;
-				-moz-user-select: none;
-				-o-user-select: none;
-				-khtml-user-select: none;
-				-webkit-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
 				
-				&::before
-				{
-					color: $rouge;
-					content: '\e8b0';
-					cursor: default;
+				&:hover {
+					-moz-user-select: -moz-none;
+					-moz-user-select: none;
+					-o-user-select: none;
+					-khtml-user-select: none;
+					-webkit-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+					
+					&::before
+					{
+						color: $rouge;
+						content: '\e8b0';
+						cursor: default;
+					}
 				}
 			}
 			
@@ -820,6 +970,57 @@ main.dossier {
 			{
 				display: none;
 			}	
+		}
+	}
+	
+	ul.listeTris {
+		list-style: none;
+		margin: 0 0 0 1em;
+		padding: 0;
+		
+		li.tri {
+			position: relative;
+			color: $darkGrey;
+			font-size: 1.10em;
+			line-height: 1.5em;
+			margin: 0 0 1em;
+			padding: 0 0 0 30px;
+			@include transition(all);
+			
+			&::before {
+				position: absolute; left: 5px;
+				color: $darkGrey;
+				content: '\e8a2'; 
+				font-family: $icons;
+				line-height: 1.5em;
+				@include transition(all);
+			}
+			
+			&:not(.ajoutTri):hover {
+				cursor: pointer;
+				
+				&::before {
+					color: $rouge;
+					content: '\e8b0';
+				}
+			}
+		}
+		
+		li.ajoutTri {
+			padding: .75em 0 0 30px;
+			
+			&::before {
+				content: '\e8b2';
+			}
+			
+			&:hover {
+				cursor: pointer;
+				color: $vert;
+				
+				&::before {
+					color: $vert;
+				}
+			}
 		}
 	}
 	
@@ -1095,6 +1296,63 @@ main.dossier {
 	ul.affichageDossier li.dossier
 	{
     	    margin-top: 1em;
+	}
+	
+	ul.listeContacts {
+		list-style: none;
+		margin: 0 auto;
+		padding: 0 0 0 0;
+		
+		li.contact {
+			position: relative;
+			display: block;
+			border: 1px solid $gris;
+			@include border-radius(.33em);
+			color: $darkGrey;
+			font-family: $flat;
+			font-size: 1em;
+			line-height: 1.5em;
+			margin: 0 auto 1.5em auto;
+			padding: .85em 1em .85em 75px;
+			@include transition(all);
+			
+			&:hover {
+				border-color: $rouge;
+				
+				&::before { color: $rouge; }
+				strong { color: $rouge; }
+			}
+			
+			&::before {
+				position: absolute; top: 0; top: calc(50% - 25px); left: .425em;
+				color: $grisFonce;
+				font-family: $icons;
+				font-size: 30px;
+				height: 50px;
+				line-height: 50px;
+				text-align: center;
+				width: 50px;
+				@include transition(all);
+			}
+			
+			&.isexe::before { content: '\e8a8'; }
+			&.homme::before { content: '\e8a6'; }
+			&.femme::before { content: '\e8a7'; }
+			
+			p {
+				color: $grisFonce;
+				margin: 0;
+				padding: 0;
+			}
+			
+			strong {
+				color: $bleu;
+				font-size: 1.15em;
+				font-weight: 600;
+				letter-spacing: .02em;
+				@include transition(all);
+			}
+		}
 	}
 	
 	.coteAcote {

@@ -35,7 +35,7 @@ class Rappel
 	public function __construct( $mission )
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 
@@ -140,7 +140,7 @@ class Rappel
     public static function liste( $statut = 1 )
     {
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
@@ -173,7 +173,7 @@ class Rappel
     public static function creer( )
     {
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
@@ -210,7 +210,7 @@ class Rappel
     function estimation( array $args )
     {
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);

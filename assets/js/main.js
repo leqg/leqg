@@ -122,11 +122,11 @@ var main = function() {
 		$('#notifications').click(function(){
 			if ($(this).hasClass('actif')) {
 				$(this).toggleClass('actif');
-				$('#notificationCenter').css('right', '-350px');
+				$('#notificationCenter').css('display', 'none');
 			} else {
 				$(this).toggleClass('actif');
 				$('#notifications').html('');
-				$('#notificationCenter').css('right', 0);
+				$('#notificationCenter').css('display', 'table');
 			}
 		});
 		

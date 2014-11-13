@@ -34,7 +34,7 @@ class Contact
 	public function __construct($contact, $securite = false)
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 
@@ -104,6 +104,14 @@ class Contact
 		
 		// On entre les données en paramètre de la classe
 		$this->contact = $contact;
+		
+		// Une fois que c'est le cas, on rajoute le calcul de l'âge pour les exports JSON
+		$age = $this->age();
+		$this->contact['age'] = $age;
+		
+		// Une fois que c'est le cas, on rajoute la détermination de la ville du contact
+		$ville = $this->ville();
+		$this->contact['ville'] = $ville;
 	}
 	
 	
@@ -255,7 +263,7 @@ class Contact
 	 * Cette méthode permet d'afficher l'âge du contact
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version 1.0
+	 * @version 1.1
 	 *
 	 * @param	bool	$textuel	Activer le mode textuel
 	 *
@@ -264,46 +272,101 @@ class Contact
 	
 	public function age( $textuel = true )
 	{
-		// Récupération du timestamp de la date de naissance
-		$date = strtotime($this->contact['contact_naissance_date']);
-		
-		// Traitement de la date de naissance en blocs
-		$annee = date('Y', $date);
-		$mois = date('m', $date);
-		$jour = date('j', $date);
-		
-		// On commence par calculer simplement l'âge
-		$age = 2014 - $annee;
-		
-		// On ajuste par rapport au mois
-		if ($mois >= date('m'))
-		{
-			// On ajuste par rapport au jour
-			if ($jour > date('j'))
-			{
-				$age = $age - 1;
-			}
-		}
-		
-		// On regarde le mode d'affichage et on adapte le retour en conséquence
-		if ($textuel === true)
-		{
-			// On retourne l'âge accompagné du mot "an(s)"
-			$retour = $age . ' an';
+		if ($this->contact['contact_naissance_date'] == '0000-00-00') {
 			
-			// On regarde si le pluriel du mot doit être mis ou non
-			if ($age > 1)
+			return 'Âge inconnu';
+			
+		} else {
+			
+			// Récupération du timestamp de la date de naissance
+			$date = strtotime($this->contact['contact_naissance_date']);
+			
+			// Traitement de la date de naissance en blocs
+			$annee = date('Y', $date);
+			$mois = date('m', $date);
+			$jour = date('j', $date);
+			
+			// On commence par calculer simplement l'âge
+			$age = 2014 - $annee;
+			
+			// On ajuste par rapport au mois
+			if ($mois >= date('m'))
 			{
-				$retour.= 's';
+				// On ajuste par rapport au jour
+				if ($jour > date('j'))
+				{
+					$age = $age - 1;
+				}
 			}
 			
-			// On retourne l'âge
-			return $retour;
+			// On regarde le mode d'affichage et on adapte le retour en conséquence
+			if ($textuel === true)
+			{
+				// On retourne l'âge accompagné du mot "an(s)"
+				$retour = $age . ' an';
+				
+				// On regarde si le pluriel du mot doit être mis ou non
+				if ($age > 1)
+				{
+					$retour.= 's';
+				}
+				
+				// On retourne l'âge
+				return $retour;
+			}
+			else
+			{
+				// On retourne l'âge
+				return $age;
+			}
+			
 		}
-		else
-		{
-			// On retourne l'âge
-			return $age;
+	}
+	
+	
+	/**
+	 * Retourne le nom de la ville de résidence ou la ville électorale le cas échéant
+	 *
+	 * Cette méthode permet de retourner prioritaire le nom de la ville de résidence
+	 * ou sinon le nom de la ville électorale, ou sinon l'absence de ville si aucune
+	 * des deux adresses n'est renseignée.
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @result  string   Nom de la ville
+	 */
+	
+	public function ville( ) {
+		// On vérifie si une donnée géographique existe
+		if ($this->contact['adresse_id'] > 0 || $this->contact['immeuble_id'] > 0) {
+			// On récupère l'identifiant de l'adresse connue la plus intéressante
+			$adresse = ($this->contact['adresse_id'] > 0) ? $this->contact['adresse_id'] : $this->contact['immeuble_id'];
+			
+			// On prépare l'ensemble des requêtes nécessaires à la recherche
+			$immeuble = $this->link->prepare('SELECT `rue_id` FROM `immeubles` WHERE `immeuble_id` = :immeuble');
+			$rue = $this->link->prepare('SELECT `commune_id` FROM `rues` WHERE `rue_id` = :rue');
+			$ville = $this->link->prepare('SELECT `commune_nom` FROM `communes` WHERE `commune_id` = :ville');
+			
+			// On mets à jour progressivement les paramètres en exécutant les différentes requêtes
+			$immeuble->bindParam(':immeuble', $adresse, PDO::PARAM_INT);
+			$immeuble->execute();
+			$immeuble = $immeuble->fetch(PDO::FETCH_ASSOC);
+			
+			$rue->bindParam(':rue', $immeuble['rue_id'], PDO::PARAM_INT);
+			$rue->execute();
+			$rue = $rue->fetch(PDO::FETCH_ASSOC);
+			
+			$ville->bindParam(':ville', $rue['commune_id'], PDO::PARAM_INT);
+			$ville->execute();
+			$ville = $ville->fetch(PDO::FETCH_ASSOC);
+			$ville = $ville['commune_nom'];
+			
+			// On retourne le nom de la ville à afficher
+			return $ville;
+		} else {
+			// On affiche l'absence d'adresse
+			return 'Aucune adresse connue';
 		}
 	}
 	
@@ -936,7 +999,7 @@ class Contact
     public static function creation( )
     {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
@@ -969,7 +1032,7 @@ class Contact
     public static function rechercheThematique( $terme )
     {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
@@ -1004,6 +1067,121 @@ class Contact
         // On retourne la liste des contacts concernés par cette recherche
         return $contacts;
     }
+    
+    
+    /**
+	 * Liste des fiches demandées selon des critères imposés
+	 *
+	 * Cette méthode permet de retourner un tableau PHP comprenant les fiches 
+	 * demandées d'après des méthodes de tri imposées.
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   string  $tri     Méthodes de tri demandées
+	 * @param   int     $debut   Ordre de la première occurence demandée
+	 * @param   int     $nombre  Nombre de fiches demandées selon la méthode
+	 *
+	 * @result  array   Liste des fiches correspondante au sein d'un tableau PHP
+	 */
+	
+	public static function listing( array $tri , $debut , $nombre = 5 )
+	{
+		if (is_numeric($debut) && is_numeric($nombre) && is_array($tri)) {
+
+	        // On prépare le lien vers la BDD
+			$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
+			$user = Configuration::read('db.user');
+			$pass = Configuration::read('db.pass');
+			$link = new PDO($dsn, $user, $pass);
+			
+			// On commence par préparer le visage de la requête de recherche
+			$sql = 'SELECT `contact_id` FROM `contacts` ';
+
+			// On va chercher à y ajouter les différents critères, à travers un tableau $criteres
+			$criteres = array();
+			
+				// On retraite le critère "email" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['email']) { $criteres[] = '`contact_email` = ' . ($tri['email'] - 1); }
+			
+				// On retraite le critère "mobile" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['mobile']) { $criteres[] = '`contact_mobile` = ' . ($tri['mobile'] - 1); }
+			
+				// On retraite le critère "fixe" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['fixe']) { $criteres[] = '`contact_fixe` = ' . ($tri['fixe'] - 1); }
+			
+				// On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }
+			
+			
+			// On retraite les critères en conditions SQL
+			$sql.= ' WHERE ' . implode(' AND ', $criteres);
+			
+			// On ajoute les conditions de nombre et d'ordre
+			$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
+			
+			// On exécute la requête SQL
+			$query = $link->prepare($sql);
+			$query->execute();
+			
+			// On retraite la liste des identifiants pour en faire un tableau PHP $contacts
+			$ids = $query->fetchAll(PDO::FETCH_ASSOC);
+			$contacts = array();
+			foreach ($ids as $id) $contacts[] = $id['contact_id'];
+			
+			// On retourne la liste des ids de fiches concernées par la requête
+			return $contacts;
+			
+		} else {
+			// On retourne une erreur
+			return false;
+		}
+	}
+    
+    
+    /**
+	 * Liste les x dernières fiches créées
+	 *
+	 * Cette méthode permet de retourner un array PHP contenant les identifiants
+	 * des x dernières fiches créées dans le système d'après leur numéro d'identifiant
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   int    $nombre  Nombre de fiches à retourner
+	 * @result  array  Tableau des identifiants des fiches retournées
+	 */
+	
+	public static function last( $nombre = 5 ) {
+        // On prépare le lien vers la BDD
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
+		$user = Configuration::read('db.user');
+		$pass = Configuration::read('db.pass');
+		$link = new PDO($dsn, $user, $pass);
+		
+		// On prépare le tableau de résultat de la requête
+		$fiches = array();
+
+		// On prépare la requête
+		$query = $link->prepare('SELECT `contact_id` FROM `contacts` ORDER BY `contact_id` DESC LIMIT 0, ' . $nombre);
+		
+		// On exécute la requête
+		if ($query->execute()) {
+			
+			// On affecte les résultats au tableau des fiches
+			$ids = $query->fetchAll(PDO::FETCH_ASSOC);
+			
+			// On retraite les informations pour les ajouter au tableau $fiches
+			foreach ($ids as $id) $fiches[] = $id['contact_id'];
+			
+			// On retourne le tableau correspondant
+			return $fiches;
+		
+		} else {
+			// On retourne une erreur
+			return false;
+		}
+	}
 }
 
 ?>

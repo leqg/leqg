@@ -33,15 +33,9 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 	// On commence par appeler l'index.tpl si aucune page n'est appelée
 	
 	if (empty($_GET['page'])) {
-	
-		// On charge le header du site
-		$core->tpl_header();
 		
 		// On charge l'affichage des services de la plateforme
-		$core->tpl_load('services');
-		
-		// On charge le footer du site
-		$core->tpl_footer();
+		$core->tpl_go_to('contacts', true);
 	
 	}
 	
@@ -221,9 +215,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		else if ($_GET['page'] == 'contacts') {
 			
 			// On charge le header, la page d'accueil du module contact et le footer
-			$core->tpl_header();
 			$core->tpl_load('contacts');
-			$core->tpl_footer();
 			
 		}
 		
@@ -695,9 +687,7 @@ if (!$user->statut_connexion() || (isset($_GET['page']) && $_GET['page'] == 'log
 		
 		else {
 			// On redirige temporairement vers la page de présentation des services
-			$core->tpl_header();
-			$core->tpl_load('services');
-			$core->tpl_footer();
+			$core->tpl_go_to('contacts', true);
 		}
 	}
 }

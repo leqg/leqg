@@ -271,12 +271,14 @@ label.sbox {
 		background-color: $background;
 		border: 1px solid $gris;
 		@include border-radius(.33em);
+		cursor: pointer;
 		font-family: $flat;
 		font-size: .85em;
 		font-weight: 400;
 		height: 45px;
 		padding: .33em 10px .33em 40px;
 		width: 100%;
+		@include transition(all);
 	}
 	
 	&::before
@@ -289,6 +291,7 @@ label.sbox {
 		pointer-events: none;
 		width: 45px;
 		z-index: 100;
+		@include transition(all);
 	}
 	
 	&::after
@@ -304,6 +307,13 @@ label.sbox {
 		width: 45px;
 		z-index: 150;
 		@include rotate(90deg);
+		@include transition(all);
+	}
+	
+	&:hover {
+		&::before { background-color: $vert; }
+		
+		select { border-color: $vert; }
 	}
 
 }
