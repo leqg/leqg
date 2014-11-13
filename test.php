@@ -12,7 +12,7 @@ require_once('includes.php');
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
 
 // On va retraiter toutes les données à "problème" présentes dans la BDD en commençant par les contacts
-$query = $link->prepare('SELECT * FROM `rues` WHERE `rue_nom` LIKE :terme ORDER BY `rue_id` ASC');
+$query = $link->prepare('SELECT * FROM `taches` WHERE `tache_description` LIKE :terme ORDER BY `tache_id` ASC');
 $terme = "%&%";
 $query->bindParam(':terme', $terme);
 $query->execute();
@@ -28,16 +28,16 @@ foreach ($resultats as $resultat)
 {
 	
 	// On retraite les données à problème
-	$resultat['rue_nom'] = mb_convert_case(retraitement($resultat['rue_nom']), MB_CASE_TITLE);
+	$resultat['tache_description'] = mb_convert_case(retraitement($resultat['tache_description']), MB_CASE_TITLE);
 	
 	// On prépare la requête de modification
-	$query = $link->prepare('UPDATE `rues` SET `rue_nom` = :nom WHERE `rue_id` = :id');
-	$query->bindParam(':nom', $resultat['rue_nom']);
-	$query->bindParam(':id', $resultat['rue_id']);
+	$query = $link->prepare('UPDATE `taches` SET `tache_description` = :nom WHERE `tache_id` = :id');
+	$query->bindParam(':nom', $resultat['tache_description']);
+	$query->bindParam(':id', $resultat['tache_id']);
 	
 	$query->execute();
 	
-	echo $resultat['rue_id'] . '<br>';
+	echo $resultat['tache_id'] . '<br>';
 }
 
 
