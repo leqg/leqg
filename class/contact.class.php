@@ -34,7 +34,7 @@ class Contact
 	public function __construct($contact, $securite = false)
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 
@@ -999,7 +999,7 @@ class Contact
     public static function creation( )
     {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
@@ -1032,7 +1032,7 @@ class Contact
     public static function rechercheThematique( $terme )
     {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
@@ -1090,7 +1090,7 @@ class Contact
 		if (is_numeric($debut) && is_numeric($nombre) && is_array($tri)) {
 
 	        // On prépare le lien vers la BDD
-			$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+			$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 			$user = Configuration::read('db.user');
 			$pass = Configuration::read('db.pass');
 			$link = new PDO($dsn, $user, $pass);
@@ -1154,7 +1154,7 @@ class Contact
 	
 	public static function last( $nombre = 5 ) {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);

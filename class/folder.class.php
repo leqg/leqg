@@ -36,7 +36,7 @@ class Folder
 	public function __construct($dossier, $creation = false)
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 
@@ -273,7 +273,7 @@ class Folder
 	public static function liste( $statut = 1)
 	{
 		// On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);

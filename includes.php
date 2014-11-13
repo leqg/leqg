@@ -36,7 +36,7 @@ Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 
 // On fabrique la classe $link de liaison PDO
-$link = new PDO('mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename'), Configuration::read('db.user'), Configuration::read('db.pass'));	
+$link = new PDO('mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8', Configuration::read('db.user'), Configuration::read('db.pass'));	
 
 // Appel de la classe MySQL du noyau
 $noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');

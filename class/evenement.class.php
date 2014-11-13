@@ -45,7 +45,7 @@ class Evenement
 	{
 		// On commence par paramétrer les données PDO
 		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-				';dbname=' . Configuration::read('db.basename');
+				';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 
@@ -490,7 +490,7 @@ class Evenement
     public static function last( $nombre = 15 )
     {
 		// On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename');
+		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 		$user = Configuration::read('db.user');
 		$pass = Configuration::read('db.pass');
 		$link = new PDO($dsn, $user, $pass);
