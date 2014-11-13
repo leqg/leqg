@@ -12,7 +12,7 @@ require_once('includes.php');
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
 
 // On va retraiter toutes les données à "problème" présentes dans la BDD en commençant par les contacts
-$query = $link->prepare('SELECT * FROM `historique` WHERE `historique_lieu` LIKE :terme OR `historique_objet` LIKE :terme OR `historique_notes` LIKE :terme ORDER BY `historique_id` ASC');
+$query = $link->prepare('SELECT * FROM `mission` WHERE `mission_nom` LIKE :terme ORDER BY `mission_id` ASC');
 $terme = "%&%";
 $query->bindParam(':terme', $terme);
 $query->execute();
@@ -28,20 +28,16 @@ foreach ($resultats as $resultat)
 {
 	
 	// On retraite les données à problème
-	$resultat['historique_lieu'] = retraitement($resultat['historique_lieu']);
-	$resultat['historique_objet'] = retraitement($resultat['historique_objet']);
-	$resultat['historique_notes'] = retraitement($resultat['historique_notes']);
+	$resultat['mission_nom'] = retraitement($resultat['mission_nom']);
 	
 	// On prépare la requête de modification
-	$query = $link->prepare('UPDATE `historique` SET `historique_lieu` = :lieu, `historique_objet` = :objet, `historique_notes` = :notes WHERE `historique_id` = :id');
-	$query->bindParam(':lieu', $resultat['historique_lieu']);
-	$query->bindParam(':objet', $resultat['historique_objet']);
-	$query->bindParam(':notes', $resultat['historique_notes']);
-	$query->bindParam(':id', $resultat['historique_id']);
+	$query = $link->prepare('UPDATE `mission` SET `mission_nom` = :nom WHERE `mission_id` = :id');
+	$query->bindParam(':nom', $resultat['mission_nom']);
+	$query->bindParam(':id', $resultat['mission_id']);
 	
 	$query->execute();
 	
-	echo $resultat['historique_id'] . '<br>';
+	echo $resultat['mission_id'] . '<br>';
 }
 
 
