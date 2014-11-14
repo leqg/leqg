@@ -46,10 +46,6 @@ class Contact
 		$query->execute();
 		$contact = $query->fetch(PDO::FETCH_ASSOC);
 		
-		// On retraite simplement l'organisme ou la fonction qui pose problème
-		$contact['contact_organisme'] = utf8_encode($contact['contact_organisme']);
-		$contact['contact_fonction'] = utf8_encode($contact['contact_fonction']);
-		
 		// On transforme l'ID de la fiche en md5 pour faciliter sa réutilisation future
 		$contact['contact_md5'] = md5($contact['contact_id']);
 		

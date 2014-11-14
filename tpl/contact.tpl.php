@@ -6,7 +6,7 @@
 	$core->tpl_header();
 ?>
 
-<h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php if (!empty($contact->contact['contact_nom']) || !empty($contact->contact['contact_nom_usage']) || !empty($contact->contact['contact_nom_usage'])) { ?><?php echo $contact->noms(); ?><?php } else { ?>Cliquez pour ajouter un nom<?php } ?></h2>
+<h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php if (!empty($contact->contact['contact_nom']) || !empty($contact->contact['contact_nom_usage']) || !empty($contact->contact['contact_prenoms'])) { echo $contact->noms(); } else { echo 'Cliquez pour ajouter un nom'; } ?></h2>
 
 <div class="colonne demi gauche">
 	<section id="fiche-details" class="contenu demi">
@@ -579,7 +579,7 @@
 </div>
 
 
-
+<?php if ($contact->get('adresse_id') || $contact->get('immeuble_id')) : ?>
 <script>
 	function initialize() {
 		geocoder = new google.maps.Geocoder();
@@ -597,7 +597,7 @@
 		
 		// On marque les différents bâtiments
 		// L'adresse à rechercher
-		var GeocoderOptions = { 'address': "<?php if ($contact->contact['adresse_id'] == 0) { echo $contact->adresse('electorale', ' '); } else { echo $contact->adresse('declaree', ' '); } ?>", 'region': 'FR' };
+		var GeocoderOptions = { 'address': "<?php if ($contact->get('adresse_id')) { echo $contact->adresse('declaree', ' '); } else if (!$contact->get('adresse_id') && $contact->get('immeuble_id')) { echo $contact->adresse('electorale', ' '); } else { echo ''; } ?>", 'region': 'FR' };
 		// La function qui va traiter le résultat
 		function GeocodingResult(results, status) {
 			// Si la recherche a fonctionnée
@@ -617,5 +617,6 @@
 	}
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
+<?php endif; ?>
 
 <?php $core->tpl_footer(); ?>

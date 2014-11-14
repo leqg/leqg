@@ -241,6 +241,14 @@ pre {
 	white-space: normal;
 	width: auto;
 	
+	&:hover {
+		position: fixed; top: 10%; left: 10%;
+		height: 80%;
+		overflow: scroll;
+		width: 80%;
+		z-index: 2000;
+	}
+	
 	&.nowrap {
 		white-space: pre;
 	}
