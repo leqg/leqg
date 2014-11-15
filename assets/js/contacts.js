@@ -5,7 +5,15 @@ var contacts = function() {
 		var data = [];
 		
 		// On commence par supprimer un possible bouton d'affichage de la suite pour éviter les interférences
-		$('.afficherSuite').remove();
+		if (action == 'debut') {
+			$('.afficherSuite').remove();
+		} else {
+			$('.afficherSuite').html('chargement…');
+			$('.afficherSuite').attr('disabled', 'disabled');
+			$('.afficherSuite').css('background-color', '#E6E5E4');
+			$('.afficherSuite').css('cursor', 'default');
+			$('.afficherSuite').css('pointer-event', 'none');
+		}
 		
 		// On récupère les données de formulaire
 		data["email"] = $('#coordonnees-email').val();
@@ -39,6 +47,11 @@ var contacts = function() {
 			{
 				// On commence par vider la liste des résultats affichés
 				$('.resultatTri').html('');	
+			}
+			else
+			{
+				// On supprime maintenant le bouton
+				$('.afficherSuite').remove();
 			}
 			
 			// On retire de l'affichage toutes les sections ouvertes à droite, pour afficher uniquement celle qui nous intéresse

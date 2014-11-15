@@ -103,6 +103,17 @@ main.dossier {
 		
 		&.long { width: 100%; }
 		
+		&.clair {
+			background-color: $grisClair;
+			color: $grisFonce;
+			font-weight: 600;
+			
+			&:hover {
+				background-color: $vert;
+				color: $blanc;
+			}
+		}
+		
 		&.deleting
 		{
 			background-color: $grisClair;
@@ -110,8 +121,7 @@ main.dossier {
 			font-weight: 600;
 			margin-top: 3em;
 			
-			&:hover
-			{
+			&:hover {
 				background-color: $rouge;
 				color: $blanc;
 			}
