@@ -7,7 +7,9 @@
 
 require_once('includes.php');
 
+echo 'test';
 
+/*
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
 
@@ -39,7 +41,7 @@ foreach ($resultats as $resultat)
 	
 	echo $resultat['tache_id'] . '<br>';
 }
-
+*/
 
 /*
 // On lance un mécanisme de détection des numéros de téléphone ou emails existant pour chaque fiche
