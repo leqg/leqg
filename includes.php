@@ -10,9 +10,6 @@ setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr');
 // On détermine le charset du fichier retourné par le serveur
 header('Content-Type: text/html; charset=utf-8');
 
-// On récupère le fichier de configuration
-$config = parse_ini_file('config.ini', true);
-
 // On lance la classe de configuration
 class Configuration
 {
@@ -29,11 +26,15 @@ class Configuration
 	}
 }
 
+// On récupère le fichier de configuration
+$config = parse_ini_file('config.ini', true);
+
 // On applique la configuration chargée
 Configuration::write('db.host', $config['BDD']['host']);
 Configuration::write('db.basename', 'leqg');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
+Configuration::write('ini', $config);
 
 // On fabrique la classe $noyau de connexion au noyau central
 $host = '217.70.189.234';
