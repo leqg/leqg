@@ -473,9 +473,8 @@ class User extends core {
 		
 		// Sinon, on supprime au cas où ce cookie et on redirige
 		else {
-			setcookie('leqg', '', time()-1);
-			setcookie('time', '', time()-1);
-			Core::debug($_COOKIE);
+			setcookie('leqg', null, time(), '/', 'leqg.info');
+			setcookie('time', null, time(), '/', 'leqg.info');
 			header('Location: http://auth.leqg.info');
 		}	
 	}
