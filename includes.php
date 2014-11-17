@@ -65,11 +65,10 @@ $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD'][
 $cookie = $_COOKIE['leqg'];
 
 // On appelle l'ensemble des classes générales au site
-$user =			new user($db, $noyau, $config['SERVER']['url']);
-$tache =		new tache($db, $cookie, $config['SERVER']['url']);
+$user =	new user($db, $noyau, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $user, $tache;
+global $user;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
