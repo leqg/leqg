@@ -272,7 +272,7 @@ class Dossier
 		$link = Configuration::read('db.link');
 		
 		// On prépare la requête
-		$query = $link->prepare('SELECT `dossier_id` FROM `dossiers` WHERE `dossier_statut` = :statut');
+		$query = $link->prepare('SELECT `dossier_id` FROM `dossiers` WHERE `dossier_statut` = :statut ORDER BY `dossier_nom` ASC');
 		$query->bindParam(':statut', $statut, PDO::PARAM_INT);
 		
 		// On récupère les données

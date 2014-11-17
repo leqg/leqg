@@ -3,7 +3,7 @@
     $evenement = (isset($_GET['evenement'])) ? $_GET['evenement'] : '';
     
     // On va tout d'abord ouvrir le dossier
-    $dossier = new folder(md5($dossier));
+    $dossier = new dossier(md5($dossier));
     
     // On récupère les données en JSON
     $dossier_json = $dossier->json();
