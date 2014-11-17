@@ -392,7 +392,8 @@ main.dossier {
 			padding: 0;
 		}
 		
-		&#mapbox-carto {
+		&#mapbox-carto,
+		&#mapbox-contact {
 			height: 350px;
 			padding: 0;
 			
@@ -401,6 +402,10 @@ main.dossier {
 				
 				&.mapbox-improve-map { display: none; }
 			}
+		}
+		
+		&#mapbox-contact {
+			height: 250px;
 		}
 	}
 	

@@ -481,7 +481,7 @@ class Carto {
 		$ville = self::ville($id);
 		
 		// On retourne le résultat demandé
-		if ($return) : return $ville['nom']; else : echo $ville['nom']; endif;
+		if ($return) : return $ville['commune_nom']; else : echo $ville['commune_nom']; endif;
 	}
 	
 	
@@ -501,7 +501,7 @@ class Carto {
 		$rue = self::rue($id);
 		
 		// On retourne le résultat demandé
-		if ($return) : return $rue['nom']; else : echo $rue['nom']; endif;
+		if ($return) : return $rue['rue_nom']; else : echo $rue['rue_nom']; endif;
 	}
 	
 	
