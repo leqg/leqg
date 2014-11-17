@@ -630,7 +630,7 @@ class Carto {
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
-	 * @param	int		$rue		ID de la rue demandée
+	 * @param	int		$rue	ID de la rue demandée
 	 * @return	array			La liste des immeubles dans la rue demandée
 	 */
 
@@ -639,7 +639,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 			
 		// On exécute la requête de récupération des immeubles correspondant
-		$query = $link->prepare('SELET * FROM `immeubles` WHERE `rue_id` = :rue ORDER BY `immeuble_numero` ASC');
+		$query = $link->prepare('SELECT *, `immeuble_id` AS `id`, `immeuble_numero` AS `numero` FROM `immeubles` WHERE `rue_id` = :rue ORDER BY `immeuble_numero` ASC');
 		$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 		$query->execute();
 		

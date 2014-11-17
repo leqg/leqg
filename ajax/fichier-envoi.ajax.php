@@ -22,7 +22,7 @@
 		$contact->fichier_upload($fichier, $data);
 		
 		// On réoriente l'utilisateur
-		Core::tpl_go_to('contact', array('contact' => $fiche), true);
+		Core::tpl_go_to('contact', array('contact' => $fiche, 'evenement' => md5($evenement)), true);
 	}
 	else
 	{

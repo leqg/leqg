@@ -897,7 +897,7 @@ var contact = function() {
 	
 	
 	// Script de suppression d'une tâche
-	$('.listeDesTaches').on('click', '.tache', function() {
+	$('.listeDesTaches').on('click', '.tache:not(.nouvelleTache)', function() {
 		// On récupère le numéro de la tâche
 		var evenement = $('#evenement').data('evenement');
 		var task = $(this).data('tache');

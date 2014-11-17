@@ -282,5 +282,35 @@ class Dossier
 		// On retourne le tableau
 		return $dossiers;
 	}
+	
+	
+	/**
+	 * Liste l'intégralité des dossiers
+	 *
+	 * Cette méthode permet de récupérer un tableau des dossiers ouverts ou non (au choix)
+	 * avec l'ensemble des informations associées
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   bool   $tous   True pour tous les dossiers, false pour une uniquement les dossiers ouverts
+	 * 
+	 * @result  array          Tableau de tous les dossiers
+	 */
+	
+	public static function liste_complete($tous = false) {
+		// On prépare le lien vers la BDD
+		$link = Configuration::read('db.link');
+		
+		// On lance la recherche des dossiers selon le critère choisi
+		if ($tous) {
+			$query = $link->query('SELECT * FROM `dossiers` ORDER BY `dossier_nom` ASC');
+		} else {
+			$query = $link->query('SELECT * FROM `dossiers` WHERE `dossier_date_fermeture` IS NULL ORDER BY `dossier_nom` ASC');
+		}
+		
+		// On retourne les informations
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+	}
 }
 ?>

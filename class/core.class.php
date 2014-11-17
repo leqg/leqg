@@ -546,6 +546,29 @@ class Core {
 
 		return $affichage;
 	}
+	
+	
+	/**
+	 * Retraite une chaîne de caractère pour l'intégrer au sein d'une recherche
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   string   $chaine   Chaine à transformer
+	 *
+	 * @result  string             Chaîne transformée
+	 */
+	
+	public static function searchFormat($chaine) {
+		// On supprime tout ce qui n'est pas A-Za-z pour le remplacer par un joker
+		$chaine = preg_replace('#[^A-Za-z]#', '%', $chaine);
+		
+		// On rajoute les jokers de début et de fin de chaîne
+		$chaine = '%'.$chaine.'%';
+		
+		// On retourne la chaîne
+		return $chaine;
+	}
 }
 
 ?>
