@@ -415,7 +415,7 @@ class User extends core {
 		$link = Configuration::read('db.core');
 		Core::debug($_COOKIE);
 		// On regarde si un cookie existe
-		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
+		if (isset($_COOKIE['leqg'], $_COOKIE['time']) && !empty($_COOKIE['time']) && !empty($_COOKIE['leqg'])) {
 			
 			// On recherche l'existence du compte
 			$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
