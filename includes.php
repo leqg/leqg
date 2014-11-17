@@ -70,7 +70,6 @@ $csv =			new csv();
 $user =			new user($db, $noyau, $config['SERVER']['url']);
 $fiche =		new fiche($db, $cookie, $config['SERVER']['url']);
 $tache =		new tache($db, $cookie, $config['SERVER']['url']);
-$dossier =		new dossier($db, $cookie, $config['SERVER']['url']);
 $historique =	new historique($db, $cookie, $config['SERVER']['url']);
 $fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
 $carto =		new carto($db, $noyau, $config['SERVER']['url']);
@@ -80,7 +79,7 @@ $porte =		new porte($db);
 $notification =	new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link;
+global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
