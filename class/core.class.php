@@ -230,7 +230,7 @@ class Core {
 	 */
 
 	public static function tpl_load( $slug , $nom = null, $globale = null) {
-		global $csv, $user, $tache, $historique, $fichier, $mission, $notification, $porte;
+		global $csv, $user, $tache, $historique, $mission, $notification, $porte;
 	
 		if (empty($nom)) :
 			require 'tpl/' . $slug . '.tpl.php';
