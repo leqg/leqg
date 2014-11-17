@@ -477,6 +477,44 @@ class User extends core {
 			header('Location: http://auth.leqg.info');
 		}	
 	}
+	
+	
+	/**
+	 * Détermine le niveau d'accréditation du compte connecté
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @return  int   Niveau d'accréditation du compte connecté
+	 */
+	
+	public static function auth_level() {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		
+		// On vérifie s'il existe un cookie
+		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
+			
+			// On effectue la recherche du niveau d'accréditation
+			$query = $link->prepare('SELECT `auth_level` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+			$query->bindParam(':cookie', $_COOKIE['leqg']);
+			$query->execute();
+			
+			// On vérifie qu'il n'y a qu'un compte qui correspond au cookie
+			if ($query->rowCount() == 1) {
+				// On retourne le niveau d'accréditation
+				$accreditation = $query->fetch(PDO::FETCH_NUM);
+				return $accreditation[0];
+			}
+			
+			// Sinon, le niveau d'accréditation est nul
+			else { return 0; }
+			
+		}
+		
+		// Sinon le niveau d'accréditation est nul
+		else { return 0; }
+	}
 }
 
 ?>

@@ -11,8 +11,15 @@ require_once('includes.php');
 
 if (empty($_GET['page'])) {
 	
-	// On charge l'affichage des services de la plateforme
-	Core::tpl_load('services');
+	// Redirection si l'utilisateur à une accréditation inférieure au niveau 5
+	if (User::auth_level() < 5) {
+		Core::tpl_load('services');
+	}
+	
+	// Redirection si l'utilisateur à une accréditation égale ou supérieure au niveau 5
+	else {
+		Core::tpl_go_to('contacts', true);
+	}
 
 }
 
