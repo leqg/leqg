@@ -348,17 +348,32 @@ class Carto {
 	 * @return	array
 	 */
 
-	public static function ville( $id ) {
+	public static function ville_secure( $id ) {
 		// On lance la connexion à la base de données
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de recherche des informations
-		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_id` = :id');
-		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query = $link->prepare('SELECT * FROM `communes` WHERE SHA2(`commune_id`, 256) = :id');
+		$query->bindParam(':id', $id);
 		$query->execute();
 		
 		// On retourne les résultats
 		return $query->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à une ville demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de la ville demandée
+	 * @return	array
+	 */
+
+	public static function ville( $id ) {
+		return self::ville_secure(hash('sha256', $id));
 	}
 	
 	

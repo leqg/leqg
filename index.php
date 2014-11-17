@@ -89,62 +89,17 @@ else {
 	
 	// Si on demande le module cartographique
 	else if ($_GET['page'] == 'carto') {
-		// On charge d'abord le header
-		Core::tpl_header();
 		
-			// On regarde quel module est demandé
-			if (isset($_GET['module'])) {
-			
-				// Si on demande le module de l'arborescence
-				if ($_GET['module'] == 'arborescence') {
-				
-					// On charge les sous-modules demandés (branches)
-					
-					if (isset($_GET['branche'])) {
-						
-						// On appelle la branche
-						Core::tpl_load('carto', 'arborescence-' . $_GET['branche']);
-						
-					} else {
-						
-						// On charge le sommaire du module
-						Core::tpl_load('carto', 'arborescence');
-						
-					}
-					
-				} else if ($_GET['module'] == 'bureaux') {
-				
-					// On charge les templates demandés dans ce module
-					
-					if (isset($_GET['bureau']) && is_numeric($_GET['bureau'])) {
-						
-						// Si on demande un bureau de vote directement, on charge le module correspondant
-						Core::tpl_load('carto', 'bureau');
-						
-					} else {
-						
-						// On charge le sommaire du module
-						Core::tpl_load('carto', 'bureaux');
-						
-					} 
-					
-				} else {
-				
-					// On charge le module 
-					Core::tpl_load('carto', $_GET['module']);
-					
-				}
-				
-				
-			} else {
-				
-				// On charge la page d'accueil du module cartographique si aucun module spécifique n'est demandé
-				Core::tpl_load('carto');
-				
-			}
+		// Si un niveau d'exploration a été demandé
+		if (isset($_GET['niveau'], $_GET['code'])) {
+			Core::tpl_load('carto', $_GET['niveau']);
+		}
 		
-		// On charge ensuite le footer
-		Core::tpl_footer();
+		// Sinon, on charge la page d'accueil du module
+		else {
+			Core::tpl_load('carto');
+		}
+		
 	}
 	
 	
