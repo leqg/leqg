@@ -99,8 +99,8 @@ include 'class/contact.class.php';
 include 'class/core.class.php';
 include 'class/csv.class.php';
 include 'class/evenement.class.php';
-
 include 'class/folder.class.php';
+
 include 'class/rappel.class.php';
 
 ?>
