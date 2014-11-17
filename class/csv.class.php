@@ -24,7 +24,7 @@ class csv {
 	 * @return	array				Tableau contenant le contenu du fichier CSV
 	 */
 	 
-	public	function lectureFichier( $fichier , $separateur = ';' ) {
+	public static function lectureFichier( $fichier , $separateur = ';' ) {
 		
 		// On défini les données de démarrage
 		$row = 0;

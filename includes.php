@@ -65,7 +65,6 @@ $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD'][
 $cookie = $_COOKIE['leqg'];
 
 // On appelle l'ensemble des classes générales au site
-$csv =			new csv();
 $user =			new user($db, $noyau, $config['SERVER']['url']);
 $fiche =		new fiche($db, $cookie, $config['SERVER']['url']);
 $tache =		new tache($db, $cookie, $config['SERVER']['url']);
@@ -76,7 +75,7 @@ $porte =		new porte($db);
 $notification =	new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $csv, $user, $fiche, $tache, $historique, $fichier, $mission, $notification, $porte;
+global $user, $fiche, $tache, $historique, $fichier, $mission, $notification, $porte;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
@@ -96,12 +95,14 @@ $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
 // On inclut les classes non chargées
-include 'class/core.class.php';
+include 'class/boitage.class.php';
 include 'class/carto.class.php';
 include 'class/contact.class.php';
+include 'class/core.class.php';
+include 'class/csv.class.php';
+
 include 'class/folder.class.php';
 include 'class/evenement.class.php';
-include 'class/boitage.class.php';
 include 'class/rappel.class.php';
 
 ?>
