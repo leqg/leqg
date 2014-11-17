@@ -20,14 +20,7 @@ class user extends core {
 	// Méthode permettant de vérifier si un utilisateur est connecté ou non
 	
 	public	function __construct($db, $noyau, $url) {
-		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-				';dbname=leqg;charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-
-		$this->link = new PDO($dsn, $user, $pass);
-
+		$this->link = Configuration::read('db.core');
 		$this->db = $db;
 		$this->noyau = $noyau;
 		$this->url = $url;
@@ -36,14 +29,14 @@ class user extends core {
 	public	function statut_connexion() {
 		if (isset($_COOKIE['leqg-user'])) {
 			// La connexion existe, on construit les propriétés
-			$query = $this->link->prepare('SELECT * FROM `users` WHERE `user_auth` > 0 AND `user_id` = :id');
-			$query->bindParam(':id', $_COOKIE['leqg-user'], PDO::PARAM_INT);
+			$query = $this->link->prepare('SELECT * FROM `compte` WHERE `auth_level` > 0 AND SHA2(`id`, 256) = :id');
+			$query->bindParam(':id', $_COOKIE['leqg'], PDO::PARAM_INT);
 			$query->execute();
 			$donnees = $query->fetchAll();
 			$donnees = $donnees[0];
 			
 			// On vérifie si une demande de réinitialisation de la connexion n'a pas été demandée
-			if ($_COOKIE['leqg-time'] >= strtotime($donnees['user_reinit'])) {
+			if ($_COOKIE['leqg-time'] >= strtotime($donnees['last_reinit'])) {
 				
 				// On prépare le tableau des informations
 				$user = $this->formatage_donnees($donnees);

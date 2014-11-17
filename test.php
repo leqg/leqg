@@ -5,9 +5,19 @@
 
 // L'idée, c'est de tester PDO
 
-require_once('includes.php');
+//require_once('includes.php');
 
-echo 'test';
+// On tente une connexion au service d'authentification et de gestion des comptes clients
+$host = '2001:4b98:dc0:41:216:3eff:fe6d:e95';
+$port = 3306;
+$dbname = 'leqg-core';
+$charset = 'utf8';
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
+$user = 'leqg-remote';
+$pass = 'pbNND3JY2cfrDUuZ';
+$link = new PDO($dsn, $user, $pass);
+
+print_r($link);
 
 /*
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système
