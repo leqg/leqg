@@ -7,7 +7,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class boitage extends core {
+class Boitage {
 	
 	/**
 	 * @var	object  $db   Propriété contenant le lien vers la base de données de l'utilisateur
