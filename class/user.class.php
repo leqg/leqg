@@ -413,7 +413,7 @@ class User extends core {
 	public static function protection($auth = 1) {
 		// On prépare la connexion à la BDD
 		$link = Configuration::read('db.core');
-		Core::debug($_COOKIE);
+		
 		// On regarde si un cookie existe
 		if (isset($_COOKIE['leqg'], $_COOKIE['time']) && !empty($_COOKIE['time']) && !empty($_COOKIE['leqg'])) {
 			
@@ -475,6 +475,7 @@ class User extends core {
 		else {
 			setcookie('leqg', '', time()-1);
 			setcookie('time', '', time()-1);
+			Core::debug($_COOKIE);
 			header('Location: http://auth.leqg.info');
 		}	
 	}
