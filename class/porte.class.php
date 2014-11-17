@@ -7,28 +7,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class porte extends core {
-	
-	/**
-	 * @var	object	$db			Propriété concenant le lien vers la base de données de l'utilisateur
-	 */
-	private $db;
-	
-
-	/**
-	 * Cette méthode permet la construction de la classe porte-à-porte
-	 *
-	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version	1.0
-	 *
-	 * @param	object	$db			Lien vers la base de données de l'utilisateur
-	 * @return	void
-	 */
-	 
-	public	function __construct($db) {
-		$this->db = $db;
-	}
-
+class Porte {
 	
 	/**
 	 * Cette méthode permet de calculer le nombre de missions disponible actuellement
@@ -39,18 +18,16 @@ class porte extends core {
 	 * @return	int		Nombre de missions disponibles
 	 */
 	 
-	public	function nombre() {
-		// On prépare la requête
-		$query = 'SELECT	*
-				  FROM		`mission`
-				  WHERE		`mission_statut` = 1
-				  AND		`mission_type` = "porte"
-				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
-				  
-		// On effectue la requête et on retourne le nombre de lignes trouvées
-		$sql = $this->db->query($query);
+	public static function nombre() {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		return $sql->num_rows;
+		// On exécute la requête de calcul du nombre de missions
+		$query = $link->query('SELECT COUNT(*) FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "porte" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
+		$data = $query->fetch(PDO::FETCH_NUM);
+		
+		// On retourne le nombre retrouvé
+		return $data[0];
 	}
 	
 	
@@ -63,22 +40,15 @@ class porte extends core {
 	 * @return	int		Tableau des missions disponibles
 	 */
 	 
-	public	function missions() {
-		// On prépare la requête
-		$query = 'SELECT	*
-				  FROM		`mission`
-				  WHERE		`mission_statut` = 1
-				  AND		`mission_type` = "porte"
-				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )
-				  ORDER BY	`mission_deadline` ASC';
-				  
-		// On effectue la requête et on retourne le nombre de lignes trouvées
-		$sql = $this->db->query($query);
+	public static function missions() {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		$missions = array();
-		while($row = $sql->fetch_assoc()) $missions[] = $row;
+		// On exécute la requête de récupération des missions
+		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "porte" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW()) ORDER BY `mission_deadline` ASC');
 		
-		return $missions;
+		// On retourne le tableau récupéré
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -92,20 +62,25 @@ class porte extends core {
 	 * @return	int					Identifiant SQL de la nouvelle mission créée
 	 */
 	 
-	public	function creation( array $infos ) {
+	public static function creation( array $infos ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On retraite la date entrée
 		$date = explode('/', $infos['date']);
 		ksort($date);
 		$date = implode('-', $date);
 	
-		// On prépare la requête d'insertion dans la base de données
-		$query = 'INSERT INTO `mission` ( `createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type` )
-				  VALUES ( ' . $_COOKIE['leqg-user'] . ', ' . $infos['responsable'] . ', "' . date('Y-m-d', strtotime($date)) . '", "' . $this->securisation_string($infos['nom']) . '", "porte" )';
+		// On exécute la requête d'insertion dans la base de données
+		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:cookie, :responsable, :deadline, :nom, "porte"');
+		$query->bindParam(':cookie', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
+		$query->bindParam(':deadline', $date);
+		$query->bindParam(':nom', $infos['nom']);
+		$query->execute();
 		
-		// On lance la requête et on retourne l'identifiant de la nouvelle mission
-		$this->db->query($query);
-		
-		return $this->db->insert_id;
+		// On affiche l'identifiant de la nouvelle mission
+		return $link->lastInsertId();
 	}
 	
 	
@@ -119,16 +94,16 @@ class porte extends core {
 	 * @return	bool
 	 */
 	
-	public	function verification( $mission ) {
-		// On exécute la requête de vérification
-		$sql = $this->db->query('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = "' . $mission . '" AND `mission_type` = "porte"');
+	public static function verification( $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// S'il existe un résultat, on valide la vérification, sinon non
-		if ($sql->num_rows == 1) {
-			return true;
-		} else {
-			return false;
-		}
+		// On exécute la requête de vérification
+		$query = $this->prepare('SELECT `mission_id` FROM `mission` WHERE MD5( `mission_id` ) = :id AND `mission_type` = "porte"');
+		$query->bindParam(':id', $mission);
+		$query->execute();
+		
+		return ($query->rowCount()) ? true : false;
 	}
 	
 	
@@ -142,12 +117,17 @@ class porte extends core {
 	 * @return	array				Tableau contenant l'ensemble des informations concernant la mission demandée
 	 */
 	
-	public	function informations($mission) {
+	public static function informations($mission) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On exécute la requête de recherche des informations
-		$sql = $this->db->query('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = "' . $mission . '"');
-
+		$query = $link->prepare('SELECT * FROM `mission` WHERE MD5(`mission_id`) = :id');
+		$query->bindParam(':id', $mission);
+		$query->execute();
+		
 		// On retourne les informations sous forme d'un tableau
-		return $sql->fetch_assoc();
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -162,17 +142,22 @@ class porte extends core {
 	 * @result	int					Nombre d'immeubles correspondant à la recherche
 	 */
 	
-	public	function nombreVisites( $mission , $type = 0 ) {
-		// On prépare la requête
-		$query = 'SELECT * FROM `porte` WHERE `mission_id` = ' . $mission;
-		if ($type == 1) { $query .= ' AND `porte_statut` > 0'; }
-		if ($type == 0) { $query .= ' AND `porte_statut` = 0'; }
-
+	public static function nombreVisites( $mission , $type = 0 ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On exécute la requête
-		$sql = $this->db->query($query);
+		if ($type) {
+			$query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` > 0');
+		} else {
+			$query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = 0');
+		}
+		$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
 		// On retourne le nombre de visites trouvés
-		return $sql->num_rows;
+		return $data[0];
 	}
 	
 	
@@ -187,23 +172,31 @@ class porte extends core {
 	 * @return	bool
 	 */
 	 
-	public	function ajoutRue( $rue , $mission ) {
+	public static function ajoutRue( $rue , $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$immeubles = array();
-		$query = 'SELECT * FROM `immeubles` WHERE `rue_id` = ' . $rue;
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
+		$query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
+		$query->bindParam(':id', $rue, PDO::PARAM_INT);
+		$query->execute();
+		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
 		
 		// Pour chaque immeuble, on cherche tous les électeurs de l'immeuble
 		foreach ($immeubles as $immeuble) {
-			$contacts = array();
-			$query = 'SELECT * FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
-			$sql = $this->db->query($query);
-			while($row = $sql->fetch_assoc()) $contacts[] = $row;
+			$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble OR `adresse_id` = :immeuble');
+			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+			$query->execute();
+			$contacts = $query->fetchAll(PDO::FETCH_NUM);
 			
+			// Pour chaque électeur, on créé une porte à frapper
 			foreach ($contacts as $contact) {
-				$query = 'INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (' . $mission . ', ' . $rue . ', ' . $immeuble['immeuble_id'] . ', ' . $contact['contact_id'] .')';
-				$this->db->query($query);
+				$query = $link->prepare('INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
+				$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+				$query->bindParam(':rue', $rue, PDO::PARAM_INT);
+				$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+				$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+				$query->execute();
 			}
 		}
 	}
@@ -220,23 +213,31 @@ class porte extends core {
 	 * @return	bool
 	 */
 	 
-	public	function ajoutBureau( $bureau , $mission ) {
+	public static function ajoutBureau( $bureau , $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$immeubles = array();
-		$query = 'SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
-
+		$query = $link->query('SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = :id');
+		$query->bindParam(':id', $bureau, PDO::PARAM_INT);
+		$query->execute();
+		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
+		
 		// Pour chaque immeuble, on cherche tous les contacts pour ajouter pour chacun une entrée dans la base porte à frapper
 		foreach ($immeubles as $immeuble) {
-			$contacts = array();
-			$query = 'SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = ' . $immeuble['immeuble_id'] . ' OR `adresse_id` = ' . $immeuble['immeuble_id'];
-			$sql = $this->db->query($query);
-			while($row = $sql->fetch_assoc()) $contacts[] = $row;
-
+			$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble OR `adresse_id` = :immeuble');
+			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+			$query->execute();
+			$contacts = $query->fetchAll(PDO::FETCH_NUM);
+			
+			// Pour chaque électeur, on créé une porte à frapper
 			foreach ($contacts as $contact) {
-				$query = 'INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (' . $mission . ', ' . $immeuble['rue_id'] . ', ' . $immeuble['immeuble_id'] . ', ' . $contact['contact_id'] .')';
-				$this->db->query($query);
+				$query = $link->prepare('INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
+				$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+				$query->bindParam(':rue', $immeuble[1], PDO::PARAM_INT);
+				$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+				$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+				$query->execute();
 			}
 		}
 	}
@@ -253,26 +254,29 @@ class porte extends core {
 	 * @return	array				Tableau contenant par rue l'ensemble des immeubles à couvrir
 	 */
 	 
-	public	function liste( $mission , $statut = 0 ) {
-		$contacts = array();
-		$rues = array();
-		$immeubles = array();
+	public static function liste( $mission , $statut = 0 ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On récupère tous les immeubles 
-		$query = 'SELECT * FROM `porte` WHERE `mission_id` = ' . $mission;
-		if ($statut == 0) $query .= ' AND `porte_statut` = 0';
-		if ($statut == 1) $query .= ' AND `porte_statut > 0';
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) { $portes[] = $row; }
-
+		// On récupère la liste de toutes les portes
+		$query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `porte` WHERE `mission_id` = :id');
+		$query->bindParam(':id', $mission, PDO::PARAM_INT);
+		$query->execute();
+		$portes = $query->fetchAll(PDO::FETCH_NUM);
+		
 		// On lance le tri par immeuble des portes à frapper
+		$immeubles = array();
 		foreach ($portes as $porte) {
-			if (!array_key_exists($porte['immeuble_id'], $immeubles)) {
-				$immeubles[$porte['immeuble_id']] = array('immeuble_id' => $porte['immeuble_id'], 'rue_id' => $porte['rue_id']);
+			if (!array_key_exists($porte[0], $immeubles)) {
+				$immeubles[$porte[0]] = array(
+					'immeuble_id' => $porte[0],
+					'rue_id' => $porte[1]
+				);
 			}
 		}
-
+		
 		// On lance le tri par rues des immeubles
+		$rues = array();
 		foreach ($immeubles as $immeuble) {
 			$rues[$immeuble['rue_id']][] = $immeuble['immeuble_id'];
 		}
@@ -294,26 +298,32 @@ class porte extends core {
 	 * @return	array					Tableau des électeurs de l'immeuble demandé
 	 */
 	
-	public	function electeurs( $mission , $immeuble ) {
-		// On prépare le tableau des électeurs
-		$electeurs = array();
+	public static function electeurs( $mission , $immeuble ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
 	
 		// On récupère la liste des portes à frapper dans l'immeuble demandé
-		$query = 'SELECT * FROM `porte` WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '" AND `porte_statut` = 0';
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) $electeurs[] = $row;
+		$query = $link->prepare('SELECT * FROM `porte` WHERE MD5(`mission_id`) = :mission AND MD5(`immeuble_id`) = :immeuble AND `porte_statut` = 0');
+		$query->bindParam(':mission', $mission);
+		$query->bindParam(':immeuble', $immeuble);
+		$query->execute();
+		$portes = $query->fetchAll(PDO::FETCH_ASSOC);
 		
-		foreach ($electeurs as $key => $electeur) {
-			$query = 'SELECT * FROM `contacts` WHERE `contact_id` = ' . $electeur['contact_id'];
-			$sql = $this->db->query($query);
-			$contact = $sql->fetch_assoc();
+		// Pour chaque porte, on cherche les informations du contact
+		foreach ($portes as $key => $porte) {
+			$query = $link->prepare('SELECT * FROM `contacts` WHERE `contact_id` = :contact');
+			$query->bindParam(':contact', $porte['contact_id']);
+			$query->execute();
+			$contact = $query->fetch(PDO::FETCH_ASSOC);
 			
-			$electeurs[$key] = array_merge($electeurs[$key], $contact);
+			$portes[$key] = array_merge($portes[$key], $contact);
 		}
 		
-		// On retourne le tableau des électeurs triés par nom
-		$this->triParColonne($electeurs, 'contact_nom', SORT_ASC);
-		return $electeurs;
+		// On trie le tableau des électeurs par nom
+		Core::triMultidimentionnel($portes, 'contact_nom', SORT_ASC);
+		
+		// On retourne le tableau trié
+		return $portes;
 	}
 	
 	
@@ -329,18 +339,22 @@ class porte extends core {
 	 * @return	int					Nombre d'électeur estimé
 	 */
 	
-	public	function estimation( $mission , $type = 0 ) {
+	public static function estimation( $mission , $type = 0 ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+	
 		// On prépare la requête de recherche des immeubles concernés par le comptage
-		$query = 'SELECT 	*
-				  FROM		`porte`
-				  WHERE		`mission_id` = ' . $mission;
+		if ($type) {
+			$query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` > 0');
+		} else {
+			$query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = 0');
+		}
+		$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
-		if ($type == 1) { $query .= ' AND `porte_statut` > 0'; }
-		if ($type == 0) { $query .= ' AND `porte_statut` = 0'; }
-
-		$sql = $this->db->query($query);
-		
-		return $sql->num_rows;
+		// On retourne le nombre de portes cherchées
+		return $data[0];
 	}
 	
 	
@@ -356,30 +370,33 @@ class porte extends core {
 	 * @result	void
 	 */
 	
-	public	function reporting( $mission , $electeur , $statut ) {
+	public static function reporting( $mission , $electeur , $statut ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+	
 		// On récupère les informations sur la mission
-		$informations = $this->informations($mission);
+		$informations = self::informations($mission);
 		
 		// On prépare et exécute la requête
-		$query = 'UPDATE `porte` SET `porte_statut` = ' . $statut . ', `porte_date` = NOW(), `porte_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`contact_id`) = "' . $electeur . '"';
-		$this->db->query($query);
+		$query = $link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = : militant WHERE MD5(`mission_id`) = :mission AND MD5(`contact_id`) = :contact');
+		$query->bindParam(':statut', $statut);
+		$query->bindParam(':militant', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':mission', $mission);
+		$query->bindParam(':contact', $electeur);
+		$query->execute();
 		
-		$query = 'SELECT `contact_id` FROM `contacts` WHERE MD5( `contact_id` ) = "' . $electeur . '"';
-		$sql = $this->db->query($query);
-		$contact = $sql->fetch_assoc();
-
+		// On recherche l'identifiant en clair du contact vu
+		$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`contact_id`) = :contact');
+		$query->bindParam(':contact', $electeur);
+		$query->execute();
+		$contact = $query->fetch(PDO::FETCH_NUM);
+		
 		// On rajoute une entrée d'historique pour le contact en question
-		$query = 'INSERT INTO	`historique` (`contact_id`, 
-											  `compte_id`, 
-											  `historique_type`, 
-											  `historique_date`, 
-											  `historique_objet`)
-				  VALUES					 (' . $contact['contact_id'] . ',
-				  							  ' . $_COOKIE['leqg-user'] . ',
-				  							  "porte",
-				  							  NOW(),
-				  							  "' . $informations['mission_nom'] . '")';
-		$this->db->query($query);
+		$query = $link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`) VALUES (:contact, :compte, "porte", NOW(), :nom)');
+		$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+		$query->bindParam(':compte', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':nom', $informations['mission_nom']);
+		$query->execute();
 	}
 }
 ?>

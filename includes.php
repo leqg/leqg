@@ -67,10 +67,9 @@ $cookie = $_COOKIE['leqg'];
 // On appelle l'ensemble des classes générales au site
 $user =			new user($db, $noyau, $config['SERVER']['url']);
 $tache =		new tache($db, $cookie, $config['SERVER']['url']);
-$porte =		new porte($db);
 
 // On transforme ces classes générales en variables globales
-global $user, $tache, $porte;
+global $user, $tache;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
@@ -97,6 +96,7 @@ include 'class/core.class.php';
 include 'class/csv.class.php';
 include 'class/evenement.class.php';
 include 'class/folder.class.php';
+include 'class/porte.class.php';
 
 include 'class/rappel.class.php';
 
