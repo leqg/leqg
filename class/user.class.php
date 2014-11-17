@@ -440,14 +440,10 @@ class User extends core {
 					
 					// Sinon on redirige vers l'interface de connexion en supprimant les cookies
 					else {
-						setcookie('leqg', null, 0);
-						setcookie('time', null, 0);
+						setcookie('leqg', '', time()-1);
+						setcookie('time', '', time()-1);
 						
-						if ($_SERVER['SERVER_ADDR'] = '::1' || $_SERVER['SERVER_ADDR'] == '127.0.0.1') {
-							header('Location: http://localhost/auth');
-						} else {
-							header('Location: http://auth.leqg.info');
-						}
+						header('Location: http://auth.leqg.info');
 					}
 				}
 				
@@ -466,8 +462,8 @@ class User extends core {
 		
 		// Si aucun compte n'existe, on détruit le cookie et on redirige vers le login
 		else {
-			setcookie('leqg', null, 0);
-			setcookie('time', null, 0);
+			setcookie('leqg', '', time()-1);
+			setcookie('time', '', time()-1);
 			header('Location: http://auth.leqg.info');
 		}
 	}
