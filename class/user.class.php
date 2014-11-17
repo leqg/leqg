@@ -432,7 +432,7 @@ class User extends core {
 				if ($infos['auth_level'] >= $auth) {
 					
 					// On vérifie maintenant que la personne n'a pas demandé la réinitialisation de son cookie dernièrement
-					if ($_COOKIE['time'] < strtotime($infos['last_reinit'])) {
+					if ($_COOKIE['time'] >= strtotime($infos['last_reinit'])) {
 						
 						// On indique alors que tout va bien
 						return true;
