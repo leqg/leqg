@@ -353,7 +353,8 @@ $page = (isset($_GET['page'])) ? $_GET['page'] : '';
 
 // On enregistre le temps de chargement de la page à des fins statistiques
 $query = $core->prepare('INSERT INTO `chargements` (`compte`, `page`, `plateforme`, `temps`) VALUES (:compte, :page, "desktop", :temps)');
-$query->bindParam(':compte', User::ID());
+$utilisateur = User::ID();
+$query->bindParam(':compte', $utilisateur);
 $query->bindParam(':page', $page);
 $query->bindParam(':temps', $loading['time-sql']);
 $query->execute();
