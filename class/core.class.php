@@ -221,17 +221,14 @@ class Core {
 	 * Cette méthode permet de charger un fichier de template
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version	1.0
+	 * @version	1.1
 	 *
 	 * @param	string $slug Nom du module appelé
 	 * @param	string $nom Nom du fichier au sein du module demandé
-	 * @param	string $globale Ajout d'une variable globale
 	 * @return	void
 	 */
 
-	public static function tpl_load( $slug , $nom = null, $globale = null) {
-		global $csv, $user;
-	
+	public static function tpl_load( $slug , $nom = null) {
 		if (empty($nom)) :
 			require 'tpl/' . $slug . '.tpl.php';
 		else :
