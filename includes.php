@@ -74,12 +74,11 @@ $historique =	new historique($db, $cookie, $config['SERVER']['url']);
 $fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
 $carto =		new carto($db, $noyau, $config['SERVER']['url']);
 $mission =		new mission($db, $cookie, $config['SERVER']['url']);
-$boitage =		new boitage($db);
 $porte =		new porte($db);
 $notification =	new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link;
+global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $historique, $fichier, $carto, $mission, $notification, $porte, $link;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
@@ -100,8 +99,9 @@ $api['mail']['reply']['nom'] = 'LeQG';
 
 // On inclut les classes non chargées
 include 'class/contact.class.php';
-include 'class/evenement.class.php';
 include 'class/folder.class.php';
+include 'class/evenement.class.php';
+include 'class/boitage.class.php';
 include 'class/rappel.class.php';
 
 ?>

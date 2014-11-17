@@ -515,6 +515,44 @@ class User extends core {
 		// Sinon le niveau d'accréditation est nul
 		else { return 0; }
 	}
+	
+	
+	/**
+	 * Récupère l'ID en clair de la personne connectée
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @return  int   ID de la personne connectée
+	 */
+	
+	public static function ID() {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		
+		// On vérifie s'il existe un cookie
+		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
+			
+			// On effectue la recherche de l'ID en clair
+			$query = $link->prepare('SELECT `id` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+			$query->bindParam(':cookie', $_COOKIE['leqg']);
+			$query->execute();
+			
+			// On vérifie qu'il n'y a qu'un compte qui correspond au cookie
+			if ($query->rowCount() == 1) {
+				// On retourne l'ID en clair
+				$id = $query->fetch(PDO::FETCH_NUM);
+				return $id[0];
+			}
+			
+			// Sinon, l'ID est nul
+			else { return 0; }
+			
+		}
+		
+		// Sinon l'ID est nul
+		else { return 0; }
+	}
 }
 
 ?>
