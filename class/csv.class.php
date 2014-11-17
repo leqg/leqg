@@ -7,8 +7,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class csv {
-	
+class Csv {
 	
 	/**
 	 * Cette méthode permet la lecture et le traitement d'un fichier CSV
@@ -24,7 +23,7 @@ class csv {
 	 * @return	array				Tableau contenant le contenu du fichier CSV
 	 */
 	 
-	public	function lectureFichier( $fichier , $separateur = ';' ) {
+	public static function lectureFichier( $fichier , $separateur = ';' ) {
 		
 		// On défini les données de démarrage
 		$row = 0;

@@ -44,12 +44,7 @@ class Evenement
 	public function __construct( $evenement, $securite = true, $creation = false )
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-				';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-
-		$this->link = new PDO($dsn, $user, $pass);
+		$this->link = Configuration::read('db.link');
 		
 		// On regarde si on doit créer un nouvel événement, ou s'il s'agit d'un événement à ouvrir
 		if ($creation === true)
@@ -490,10 +485,7 @@ class Evenement
     public static function last( $nombre = 15 )
     {
 		// On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 		
 		// On prépare la requête
 		$query = $link->prepare('SELECT `historique_id` FROM `historique` WHERE ( `historique_type` = "contact" OR `historique_type` = "telephone" OR `historique_type` = "email" OR `historique_type` = "courrier" OR `historique_type` = "autre" ) ORDER BY `historique_date` DESC LIMIT 0, ' . $nombre);

@@ -44,9 +44,4 @@
 
 	require_once('ajax/admin/' . $script . '.ajax.php');
 	
-	
-// On lance la purge
-	
-	require_once 'purge.php';
-
 ?>

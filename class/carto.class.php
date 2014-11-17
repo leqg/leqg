@@ -10,34 +10,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class carto extends core {
-	
-	/**
-	 * @var	object	$db		Propriété concenant le lien vers la base de données de l'utilisateur
-	 * @var	object	$noyau	Propriété contenant le lien vers la base de données globale LeQG
-	 * @var	string	$url		Propriété contenant l'URL du serveur
-	 */
-	private $db, $noyau, $url;
-	
-
-	/**
-	 * Cette méthode permet la construction de la classe carto
-	 *
-	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version	1.0
-	 *
-	 * @param	object $db Lien vers la base de données de l'utilisateur
-	 * @param	object $noyau Lien vers la base de données globale LeQG
-	 * @param	object $base Lien vers la base de données de l'utilisateur (mode PDO)
-	 * @param	string $url URL du serveur
-	 */
-	 
-	public	function __construct($db, $noyau, $url) {
-		$this->db = $db;
-		$this->noyau = $noyau;
-		$this->url = $url;
-	}
-	
+class Carto {	
 	
 	/**
 	 * Cette méthode permet de renvoyer une liste de toutes les villes répondant à la recherche lancée
@@ -49,27 +22,23 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function recherche_ville( $search ) {
+	public static function recherche_ville( $search ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On sécurise la recherche
-			$search = $this->formatage_recherche($search);
+		$search = "%$search%";
 			
 		// On prépare le tableau de destination finale des résultats
-			$villes = array();
+		$villes = array();
 			
-		// On prépare la requête de recherche approximative (mais en excluant les correspondances exactes trouvées plus haut
-			$query = 'SELECT		*
-					  FROM		communes
-					  WHERE		commune_nom_propre LIKE "%' . $search . '%"
-					  ORDER BY	commune_nom ASC
-					  LIMIT		0, 25';
+		// On lance la requête de recherche approximative (mais en excluant les correspondances exactes trouvées plus haut
+		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_nom_propre` LIKE :search ORDER BY `commune_nom` ASC LIMIT 0, 25');
+		$query->bindParam(':search', $search);
+		$query->execute();
 		
-		// On lance la requête et on tri les résultats dans un tableau $villes
-			$sql = $this->db->query($query);
-			
-			while ($row = $sql->fetch_assoc()) { $villes[] = $this->formatage_donnees($row); }
-
-		// On retourne le tableau
-			return $villes;
+		// On retourne le tableau des résultats
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -84,30 +53,24 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function recherche_rue( $ville , $search = '' ) {
+	public static function recherche_rue( $ville , $search = '' ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On sécurise la recherche
-			$search = $this->formatage_recherche($search);
+		$search = '%'.$search.'%';
 		
 		// On vérifie que la ville entrée est bien un champ numérique
-			if (!is_numeric($ville)) return false;
+		if (!is_numeric($ville)) return false;
 		
-		// On prépare le tableau de destination finale des résultats
-			$rues = array();
+		// On lance la requête de recherche approximatinve (mais en excluant les correspondances exactes trouvées plus haut
+		$query = $link->prepare('SELECT * FROM `rues` WHERE `commune_id` = :ville AND `rue_nom` LIKE :search ORDER BY `rue_nom` ASC LIMIT 0, 30');
+		$query->bindParam(':ville', $ville, PDO::PARAM_INT);
+		$query->bindParam(':search', $search, PDO::PARAM_STR);
+		$query->execute();
 		
-		// On prépare la requête de recherche approximatinve (mais en excluant les correspondances exactes trouvées plus haut
-			$query = 'SELECT		*
-					  FROM		rues
-					  WHERE		commune_id = ' . $ville . '
-					  AND		rue_nom LIKE "%' . $search . '%"
-					  ORDER BY	rue_nom ASC';
-		
-		// On lance la requête et on tri les résultats dans le tableau $rues
-			$sql = $this->db->query($query);
-			
-			while ($row = $sql->fetch_assoc()) $rues[] = $this->formatage_donnees($row);
-			
-		// On retourne le tableau
-			return $rues;
+		// On retourne le tableau des résultats
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -121,17 +84,23 @@ class carto extends core {
 	 * @result	array				Tableau des informations concernant toutes les rues trouvées
 	 */
 	
-	public	function recherche_rue_json($search) {
+	public static function recherche_rue_json($search) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On sécurise la recherche
-		$search = $this->formatage_recherche($search);
+		$search = '%'.$search.'%';
 		
-		// On exécute la requête
-		$sql = $this->db->query('SELECT * FROM `rues` LEFT JOIN `communes` ON `communes`.`commune_id` = `rues`.`commune_id` WHERE rue_nom LIKE "%' . $search . '%" ORDER BY rue_nom ASC');
-		$rues = array();
-		while ($row = $sql->fetch_assoc()) $rues[] = $row;
-		$rues = json_encode($rues);
+		// On exécute la requête de recherche
+		$query = $link->prepare('SELECT * FROM `rues` LEFT JOIN `communes` ON `communes`.`commune_id` = `rues`.`commune_id` WHERE `rue_nom` LIKE :search ORDER BY `rue_nom` ASC LIMIT 0, 30');
+		$query->bindParam(':search', $search, PDO::PARAM_STR);
+		$query->execute();
 		
-		return $rues;
+		// On récupère les résultats
+		$rues = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On retourne les résultats au format JSON
+		return json_encode($rues);
 	}
 	
 	
@@ -145,17 +114,21 @@ class carto extends core {
 	 * @result	array				Tableau des informations concernant toutes les rues trouvées
 	 */
 	
-	public	function recherche_ville_json($search) {
+	public static function recherche_ville_json($search) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On sécurise la recherche
-		$search = $this->formatage_recherche($search);
+		$search = '%'.$search.'%';
 		
-		// On exécute la requête
-		$sql = $this->db->query('SELECT * FROM `communes` WHERE `commune_nom_propre` LIKE "%' . $search . '%" ORDER BY `commune_nom` ASC');
-		$villes = array();
-		while ($row = $sql->fetch_assoc()) $villes[] = $row;
-		$villes = json_encode($villes);
+		// On exécute la requête de recherche
+		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_nom_propre` LIKE :search ORDER BY `commune_nom` ASC');
+		$query->bindParam(':search', $search, PDO::PARAM_STR);
+		$query->execute();
 		
-		return $villes;
+		// On retourne le tableau des résultats sous format JSON
+		$villes = $query->fetchAll(PDO::FETCH_ASSOC);
+		return json_encode($villes);
 	}
 	
 	
@@ -169,35 +142,52 @@ class carto extends core {
 	 * @result	array				Tableau des informations concernant tous les bureaux trouvés
 	 */
 	
-	public	function recherche_bureau_json($search) {
-		// On sécurise la recherche
-		$search = $this->formatage_recherche($search);
+	public static function recherche_bureau_json($search) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On exécute la requête
-		$sql = $this->db->query('SELECT * FROM `bureaux` WHERE `bureau_numero` LIKE "%' . $search . '%" OR `bureau_nom` LIKE "%' . $search . '%" ORDER BY bureau_numero, bureau_nom ASC');
-		$bureaux = array();
-		while ($row = $sql->fetch_assoc()) $bureaux[] = $row;
-		$communes = array();
+		// On sécurise la recherche
+		$search = '%'.$search.'%';
+		
+		// On exécute la requête de recherche
+		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_numero` LIKE :search OR `bureau_nom` LIKE :search ORDER BY `bureau_numero`, `bureau_nom` ASC');
+		$query->bindParam(':search', $search, PDO::PARAM_STR);
+		$query->execute();
+		
+		// On récupère la liste des bureaux correspondants à la recherche
+		$bureaux = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On prépare la liste des informations connues sur les communes pour éviter des recherches redondantes inutiles
+		$communes_vues = array();
 		$communes_donnees = array();
 		
-		// On recherche les communes de chaque bureau
+		// Pour chaque bureau, on cherche les informations sur la commune
 		foreach ($bureaux as $key => $bureau) {
-			if (in_array($bureau['commune_id'], $communes)) {
+			// On vérifie d'abord si on possède déjà des informations sur une commune
+			if (in_array($bureau['commune_id'], $communes_vues)) {
 				$bureaux[$key] = array_merge($bureau, $communes_donnees[$bureau['commune_id']]);
-			} else {
-				$sql = $this->db->query('SELECT * FROM `communes` WHERE `commune_id` = ' . $bureau['commune_id']);
-				$i = $sql->fetch_assoc();
+			}
+			
+			// Sinon, on recherche les données
+			else {
+				$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_id` = :commune');
+				$query->bindParam(':commune', $bureau['commune_id'], PDO::PARAM_INT);
+				$query->execute();
 				
-				$communes[] = $i['commune_id'];
-				$communes_donnees[$i['commune_id']] = $i;
+				// On récupère les informations sur la commune du bureau de vote pour les enregistrer en supprimant les informations des anciennes recherches
+				unset($infos);
+				$infos = $query->fetch(PDO::FETCH_ASSOC);
 				
-				$bureaux[$key] = array_merge($bureau, $i);
+				// On affecte ces informations aux tableaux pour les retrouver
+				$communes_vues[] = $infos['commune_id'];
+				$communes_donnees[$infos['commune_id']] = $infos;
+				
+				$bureaux[$key] = array_merge($bureau, $infos);
 			}
 		}
 		
-		$bureaux = json_encode($bureaux);
-		
-		return $bureaux;
+		// On encode les informations trouvées en JSON et on les retourne au script
+		return json_encode($bureaux);
 	}
 	
 	
@@ -211,27 +201,20 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function recherche_canton( $search = '' ) {
+	public static function recherche_canton( $search = '' ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
 		// On sécurise la recherche
-		$search = $this->formatage_recherche($search);
+		$search = '%'.$search.'%';
 		
-		// On prépare le tableau des résultats
-		$cantons = array();
-		
-		// On prépare la requête de recherche
-		$query = 'SELECT	*
-				  FROM		cantons
-				  WHERE		canton_nom LIKE "%' . $search . '%"
-				  ORDER BY	canton_nom ASC';
-		
-		// On exécute la recherche
-		$sql = $this->db->query($query);
-		
-		// On affecte les résultats au tableau
-		while ($row = $sql->fetch_assoc()) $cantons[] = $this->formatage_donnees($row);
+		// On exécute la requête de recherche
+		$query = $link->prepare('SELECT * FROM `cantons` WHERE `canton_nom` LIKE :search ORDER BY `canton_nom` ASC');
+		$query->bindParam(':search', $search, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne le tableau
-		return $cantons;
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -245,23 +228,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function region( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
+	public static function region( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT	*
-					  FROM		regions
-					  WHERE		region_id = ' . $id;
-		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `regions` WHERE `region_id` = :region');
+		$query->bindParam(':region', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -275,23 +252,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function departement( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
+	public static function departement( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT	*
-					  FROM		departements
-					  WHERE		departement_id = ' . $id;
-		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `departements` WHERE `departement_id` = :departement');
+		$query->bindParam(':departement', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -305,23 +276,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function arrondissement( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
+	public static function arrondissement( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT	*
-					  FROM		arrondissements
-					  WHERE		arrondissement_id = ' . $id;
-		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `arrondissements` WHERE `arrondissement_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -335,23 +300,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function canton( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
+	public static function canton( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT	*
-					  FROM		cantons
-					  WHERE		canton_id = ' . $id;
-		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `cantons` WHERE `canton_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -365,23 +324,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function bureau( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
+	public static function bureau( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT		*
-					  FROM		bureaux
-					  WHERE		bureau_id = ' . $id;
-		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -395,23 +348,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function ville( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
+	public static function ville( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT		*
-					  FROM		communes
-					  WHERE		commune_id = ' . $id;
-		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -425,23 +372,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function rue( $id ) {
-		// On sécurise la recherche
-			$id = $this->securisation_string($id);
-			
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT		*
-					  FROM		rues
-					  WHERE		rue_id = ' . $id;
+	public static function rue( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-			
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
-			
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -455,23 +396,17 @@ class carto extends core {
 	 * @return	array
 	 */
 
-	public	function immeuble( $id ) {
-		// on sécurise la recherche
-			$id = $this->securisation_string($id);
-			
-		// On prépare la requête de recherche des informations
-			$query = 'SELECT		*
-					  FROM		immeubles
-					  WHERE		immeuble_id = ' . $id;
+	public static function immeuble( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On effectue la requête
-			$sql = $this->db->query($query);
-		
-		// On traite les résultats
-			$result = $this->formatage_donnees($sql->fetch_assoc());
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `immeubles` WHERE `immeuble_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les résultats
-			return $result;
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -486,12 +421,12 @@ class carto extends core {
 	 * @return	string|void			Le nom de l'arrondissement ou rien en fonction de $return
 	 */
 
-	public	function afficherArrondissement( $id , $return = false ) {
+	public static function afficherArrondissement( $id , $return = false ) {
 		// On lance la recherche d'informations
-			$arrondissement = $this->arrondissement($id);
+		$arrondissement = self::arrondissement($id);
 		
 		// On retourne le résultat demandé
-			if ($return) : return $arrondissement['nom']; else : echo $arrondissement['nom']; endif;
+		if ($return) : return $arrondissement['nom']; else : echo $arrondissement['nom']; endif;
 	}
 	
 	
@@ -506,12 +441,12 @@ class carto extends core {
 	 * @return	string|void			Le nom du canton ou rien en fonction de $return
 	 */
 
-	public	function afficherCanton( $id , $return = false ) {
+	public static function afficherCanton( $id , $return = false ) {
 		// On lance la recherche d'informations
-			$canton = $this->canton($id);
+		$canton = self::canton($id);
 		
 		// On retourne le résultat demandé
-			if ($return) : return $canton['nom']; else : echo $canton['nom']; endif;
+		if ($return) : return $canton['nom']; else : echo $canton['nom']; endif;
 	}
 	
 	
@@ -526,12 +461,12 @@ class carto extends core {
 	 * @return	string|void			Le nom de la ville ou rien en fonction de $return
 	 */
 
-	public function afficherVille( $id , $return = false ) {
+	public static function afficherVille( $id , $return = false ) {
 		// On lance la recherche d'informations
-			$ville = $this->ville($id);
+		$ville = self::ville($id);
 		
 		// On retourne le résultat demandé
-			if ($return) : return $ville['nom']; else : echo $ville['nom']; endif;
+		if ($return) : return $ville['nom']; else : echo $ville['nom']; endif;
 	}
 	
 	
@@ -546,12 +481,12 @@ class carto extends core {
 	 * @return	string|void			Le nom de la rue ou rien en fonction de $return
 	 */
 
-	public	function afficherRue( $id , $return = false ) {
+	public static function afficherRue( $id , $return = false ) {
 		// On lance la recherche d'informations
-			$rue = $this->rue($id);
+		$rue = self::rue($id);
 		
 		// On retourne le résultat demandé
-			if ($return) : return $rue['nom']; else : echo $rue['nom']; endif;
+		if ($return) : return $rue['nom']; else : echo $rue['nom']; endif;
 	}
 	
 	
@@ -567,10 +502,8 @@ class carto extends core {
 	 */
 
 	public static function afficherDepartement( $id , $return = false ) {
-		// On lance la recherche dans la base de données pour retrouver le département
-		$query = 'SELECT * FROM departements WHERE departement_id = ' . $id;
-		$sql = $this->db->query($query);
-		$data = $sql->fetch_assoc();
+		// On lance la recherche d'informations
+		$rue = self::departement($id);
 		
 		// On retourne l'information
 		if (!$return) echo $data['departement_nom'];
@@ -590,11 +523,9 @@ class carto extends core {
 	 * @return	string|void			Le nom de la région ou rien en fonction de $return
 	 */
 
-	public	function afficherRegion( $id , $return = false ) {
-		// On lance la recherche dans la base de données pour retrouver la région
-		$query = 'SELECT * FROM regions WHERE region_id = ' . $id;
-		$sql = $this->db->query($query);
-		$data = $sql->fetch_assoc();
+	public static function afficherRegion( $id , $return = false ) {
+		// On lance la recherche d'informations
+		$rue = self::region($id);
 		
 		// On retourne l'information
 		if (!$return) echo $data['region_nom'];
@@ -614,9 +545,9 @@ class carto extends core {
 	 * @return	string|void			Le numéro de l'immeuble ou rien en fonction de $return
 	 */
 
-	public	function afficherImmeuble( $id , $return = false ) {
+	public static function afficherImmeuble( $id , $return = false ) {
 		// On lance la recherche d'informations
-			$immeuble = $this->immeuble($id);
+			$immeuble = self::immeuble($id);
 			
 		// On retourne le résultat demandé
 			if ($return) : return $immeuble['numero']; else : echo $immeuble['numero']; endif;
@@ -633,25 +564,17 @@ class carto extends core {
 	 * @return	array				La liste des bureaux de vote dans la ville demandée
 	 */
 
-	public	function listeBureaux( $ville ) {
-		// On vérifie que les arguments sont bien des éléments numériques
-			if (!is_numeric($ville)) return false;
+	public static function listeBureaux( $ville ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 			
-		// On prépare la requête de récupération des immeubles correspondant
-			$query = 'SELECT	*
-					  FROM		bureaux
-					  WHERE		commune_id = ' . $ville . '
-					  ORDER BY	bureau_numero ASC';
-		
-		// On prépare le tableau qui permettra de renvoyer les données
-			$bureaux = array();
-		
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $bureaux
-			$sql = $this->db->query($query);
-			while ($row = $sql->fetch_assoc()) $bureaux[] = $this->formatage_donnees($row);
+		// On exécute la requête de récupération des immeubles correspondant
+		$query = $link->prepare('SELET * FROM `bureaux` WHERE `commune_id` = :ville ORDER BY `bureau_numero`, `bureau_nom` ASC');
+		$query->bindParam(':ville', $ville, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les données
-			return $bureaux;
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -664,21 +587,16 @@ class carto extends core {
 	 * @return	array	La liste des bureaux de vote connus
 	 */
 
-	public	function listeTousBureaux( ) {
-		// On prépare la requête de récupération des immeubles correspondant
-			$query = 'SELECT	*
-					  FROM		`bureaux`
-					  ORDER BY	`bureau_numero` ASC';
-		
-		// On prépare le tableau chargé d'accueillir les résultats
-			$bureaux = array();
+	public static function listeTousBureaux( ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 			
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $bureaux
-			$sql = $this->db->query($query);
-			while ($row = $sql->fetch_assoc()) $bureaux[] = $this->formatage_donnees($row);
-			
+		// On exécute la requête de récupération des immeubles correspondant
+		$query = $link->prepare('SELET * FROM `bureaux` ORDER `bureau_numero`, `bureau_nom` ASC');
+		$query->execute();
+
 		// On retourne les résultats
-			return $bureaux;
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -692,25 +610,17 @@ class carto extends core {
 	 * @return	array				La liste des rues dans la ville demandée
 	 */
 
-	public	function listeRues( $ville ) {
-		// On vérifie que les arguments sont bien des éléments numériques
-			if (!is_numeric($ville)) return false;
+	public static function listeRues( $ville ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 			
-		// On prépare la requête de récupération des immeubles correspondant
-			$query = 'SELECT	*
-					  FROM		rues
-					  WHERE		commune_id = ' . $ville . '
-					  ORDER BY	rue_nom ASC';
-		
-		// On prépare le tableau qui permettra de renvoyer les données
-			$rues = array();
-		
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $immeubles
-			$sql = $this->db->query($query);
-			while ($row = $sql->fetch_assoc()) $rues[] = $this->formatage_donnees($row);
+		// On exécute la requête de récupération des immeubles correspondant
+		$query = $link->prepare('SELET * FROM `rues` WHERE `commune_id` = :ville ORDER BY `rue_nom` ASC');
+		$query->bindParam(':ville', $ville, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les données
-			return $rues;
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -724,40 +634,29 @@ class carto extends core {
 	 * @return	array			La liste des immeubles dans la rue demandée
 	 */
 
-	public	function listeImmeubles( $rue ) {
-		// On vérifie que les arguments sont bien des éléments numériques
-			if (!is_numeric($rue)) return false;
+	public static function listeImmeubles( $rue ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+			
+		// On exécute la requête de récupération des immeubles correspondant
+		$query = $link->prepare('SELET * FROM `immeubles` WHERE `rue_id` = :rue ORDER BY `immeuble_numero` ASC');
+		$query->bindParam(':rue', $rue, PDO::PARAM_INT);
+		$query->execute();
 		
-		// On prépare la requête de récupération des immeubles correspondant
-			$query = 'SELECT	*
-					  FROM		immeubles
-					  WHERE		rue_id = ' . $rue . '
-					  ORDER BY	immeuble_numero ASC';
-		
-		// On prépare le tableau qui permettra de renvoyer les données
-			$immeubles = array();
-		
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $immeubles
-			$sql = $this->db->query($query);
-			while ($row = $sql->fetch_assoc()) $immeubles[] = $this->formatage_donnees($row);
+		// On récupère le résultat
+		$immeubles = $query->fetchAll(PDO::FETCH_ASSOC);
 		
 		// Pour le tri, on retire toutes les lettres de la colonne numéro
-			foreach ($immeubles as $key => $immeuble) {
-				// On copie la colonne numéro
-				$immeuble['numero_safe'] = $immeuble['numero'];
-				
-				// On retire ce qui n'est pas un chiffre
-				$immeuble['numero_safe'] = preg_replace('#[^0-9]#', '', $immeuble['numero_safe']);
-				
-				// On enregistre ce numéro safe
-				$immeubles[$key]['numero_safe'] = $immeuble['numero_safe'];
-			}
-
-		// On trie le tableau pour des résultats dans l'ordre logique
-			$this->triParColonne($immeubles, 'numero_safe');
+		foreach ($immeubles as $key => $immeuble) {
+			// On enregistre le numéro en retirant tout ce qui n'est pas un chiffre
+			$immeubles[$key]['numero_safe'] = preg_replace('#[^0-9]#', '', $immeuble['numero']);
+		}
 		
-		// On retourne les données
-			return $immeubles;
+		// On trie le tableau pour des résultats dans un ordre logique
+		Core::triMultidimentionnel($immeubles, 'numero_safe');
+		
+		// On retourne le tableau trié
+		return $immeubles;
 	}
 	
 	
@@ -771,24 +670,17 @@ class carto extends core {
 	 * @return	array					La liste des électeurs dans l'immeuble demandé
 	 */
 
-	public	function listeElecteurs( $immeuble ) {
-		// On vérifie que les arguments sont bien des élements numériques
-			if (!is_numeric($immeuble)) return false;
-		
-		// On prépare la requête de récupération des électeurs correspondant
-			$query = 'SELECT	*
-					  FROM		contacts
-					  WHERE		immeuble_id = ' . $immeuble . '
-					  AND		contact_electeur  = 1
-					  ORDER BY	contact_nom, contact_nom_usage, contact_prenoms ASC';
-		
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $electeurs
-			$electeurs = array();
-			$sql = $this->db->query($query);
-			while ($row = $sql->fetch_assoc()) $electeurs[] = $this->formatage_donnees($row);
+	public static function listeElecteurs( $immeuble ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+
+		// On exécute la requête de récupération des électeurs correspondant
+		$query = $link->prepare('SELECT * FROM `contacts` WHERE `immeuble_id` = :immeuble AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
+		$query->execute();
 		
 		// On retourne les données
-			return $electeurs;
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -802,11 +694,20 @@ class carto extends core {
 	 * @return	int					Le nombre d'électeur dans l'immeuble demandé
 	 */
 
-	public	function nombreElecteursParImmeuble( $immeuble ) {		
-		// On retourne les données
-			$electeurs = $this->listeElecteurs($immeuble);
+	public static function nombreElecteursParImmeuble( $immeuble ) {	
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+
+		// On exécute la requête de récupération des électeurs correspondant
+		$query = $link->prepare('SELECT COUNT(*) AS `nombre FROM `contacts` WHERE `immeuble_id` = :immeuble AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
+		$query->execute();
 		
-			return count($electeurs);
+		// On récupère le nombre d'électeurs
+		$nombre = $query->fetch(PDO::FETCH_NUM);
+		
+		// On retourne le nombre d'électeur
+		return $nombre[0];
 	}
 	
 	
@@ -822,37 +723,21 @@ class carto extends core {
 	 * @return	int						Le nombre d'électeur dans le bureau de vote demandé
 	 */
 
-	public	function listeElecteursParBureau( $bureau , $coordonnees = false ) {
-		// On vérifie que les arguments sont bien des élements numériques
-			if (!is_numeric($bureau)) return false;
-		
-		// On prépare la requête de récupération des électeurs correspondant
-			$query = 'SELECT	*
-					  FROM		contacts
-					  LEFT JOIN	immeubles
-					  ON		immeubles.immeuble_id = contacts.immeuble_id
-					  LEFT JOIN	bureaux
-					  ON		bureaux.bureau_id = immeubles.bureau_id
-					  WHERE		bureaux.bureau_id = ' . $bureau;
-					  
-		// On rajoute la condition 'coordonnees' si demandé
+	public static function listeElecteursParBureau( $bureau , $coordonnees = false ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+
+		// On exécute la requête de récupération des électeurs correspondant
 		if ($coordonnees) {
-			
-			$query .= ' AND	( ( contact_email IS NOT NULL AND contact_optout_email = 0 ) OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 ) OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 ) )';
-			$query .= ' AND contact_optout_global = 0';
-			
+			$query = $link->prepare('SELECT * FROM `contacts` WHERE `bureau_id` = :bureau AND ( ( contact_email IS NOT NULL AND contact_optout_email = 0 ) OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 ) OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 ) ) AND contact_optout_global = 0 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+		} else {
+			$query = $link->prepare('SELECT * FROM `contacts` WHERE `bureau_id` = :bureau ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
 		}
-		
-		// On rajoute l'ordre nécessaire aux résultats
-			$query .= ' ORDER BY	contact_nom, contact_nom_usage, contact_prenoms ASC';
-		
-		// On effectue la requête BDD et on affiche les résultats dans un tableau $electeurs
-			$electeurs = array();
-			$sql = $this->db->query($query);
-			while ($row = $sql->fetch_assoc()) $electeurs[] = $this->formatage_donnees($row);
+		$query->bindParam(':bureau', $bureau);
+		$query->execute();
 		
 		// On retourne les données
-			return $electeurs;
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -866,17 +751,19 @@ class carto extends core {
 	 * @return	int					ID du bureau de vote relatif à l'immeuble demandé
 	 */
 
-	public	function bureauParImmeuble( $immeuble ) {
-		// On vérifie que l'argument est bien un ID
-		if (!is_numeric($immeuble)) return false;
-		
+	public static function bureauParImmeuble( $immeuble ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+
 		// On cherche l'information dans la base de données
-		$query = 'SELECT * FROM immeubles WHERE immeuble_id = ' . $immeuble;
-		$sql = $this->db->query($query);
-		$infos = $sql->fetch_assoc();
+		$query = $link->prepare('SELECT `bureau_id` FROM `immeubles` WHERE `immeuble_id` = :immeuble');
+		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
+		$query->execute();
 		
-		// On retourne l'id du bureau
-		return $infos['bureau_id'];
+		$data = $query->fetch(PDO::FETCH_NUM);
+		
+		// On retourne l'ID du bureau
+		return $data[0];
 	}
 	
 	
@@ -890,17 +777,24 @@ class carto extends core {
 	 * @return	int					ID de la ville trouvée pour l'immeuble
 	 */
 
-	public	function villeParImmeuble( $immeuble ) {
-		// On vérifie que l'argument est bien un ID
-		if (!is_numeric($immeuble)) return false;
-		
+	public static function villeParImmeuble( $immeuble ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+
 		// On cherche l'information dans la base de données
-		$query = 'SELECT * FROM immeubles LEFT JOIN rues ON rues.rue_id = immeubles.rue_id WHERE immeuble_id = ' . $immeuble;
-		$sql = $this->db->query($query);
-		$infos = $sql->fetch_assoc();
+		$query = $link->prepare('SELECT `rue_id` FROM `immeuble` WHERE `immeuble_id` = :immeuble');
+		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
+		$query->execute();
+		$immeuble = $query->fetch(PDO::FETCH_NUM);
 		
-		// On retourne l'id du bureau
-		return $infos['commune_id'];
+		// On cherche l'information concernant la ville
+		$query = $link->prepare('SELECT `commune_id` FROM `rues` WHERE `rue_id` = :rue');
+		$query->bindParam(':rue', $immeuble[0], PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
+		
+		// On retourne l'ID de la ville
+		return $data[0];
 	}
 	
 	
@@ -914,17 +808,18 @@ class carto extends core {
 	 * @return	int					ID de la ville trouvée pour l'immeuble
 	 */
 
-	public	function villeParRue( $rue ) {
-		// On vérifie que l'argument est bien un ID
-		if (!is_numeric($rue)) return false;
+	public static function villeParRue( $rue ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
 		// On cherche l'information dans la base de données
-		$query = 'SELECT * FROM rues WHERE rue_id = ' . $rue;
-		$sql = $this->db->query($query);
-		$infos = $sql->fetch_assoc();
+		$query = $link->prepare('SELECT `commune_id` FROM `rues` WHERE `rue_id` = :rue');
+		$query->bindParam(':rue', $rue, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
-		// On retourne l'id du bureau
-		return $infos['commune_id'];
+		// On retourne l'id de la ville
+		return $data[0];
 	}
 	
 	
@@ -939,16 +834,17 @@ class carto extends core {
 	 */
 
 	public static function departementParVille( $ville ) {
-		// On vérifie que l'argument est bien un ID
-		if (!is_numeric($rue)) return false;
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
 		// On cherche l'information dans la base de données
-		$query = 'SELECT * FROM `communes` WHERE `commune_id` = ' . $ville;
-		$sql = $this->db->query($query);
-		$infos = $sql->fetch_assoc();
+		$query = $link->prepare('SELECT `departement_id` FROM `communes` WHERE `commune_id` = :id');
+		$query->bindParam(':id', $ville, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
-		// On retourne l'id du bureau
-		return $infos['departement_id'];
+		// On retourne l'id du département
+		return $data[0];
 	}
 	
 	
@@ -962,17 +858,18 @@ class carto extends core {
 	 * @return	int					ID du canton trouvé pour l'immeuble
 	 */
 
-	public	function cantonParImmeuble( $immeuble ) {
-		// On vérifie que l'argument est bien un ID
-		if (!is_numeric($immeuble)) return false;
+	public static function cantonParImmeuble( $immeuble ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
 		// On cherche l'information dans la base de données
-		$query = 'SELECT * FROM immeubles WHERE immeuble_id = ' . $immeuble;
-		$sql = $this->db->query($query);
-		$infos = $sql->fetch_assoc();
+		$query = $link->prepare('SELECT `canton_id` FROM `immeubles` WHERE `immeuble_id` = :id');
+		$query->bindParam(':id', $immeuble, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
 		// On retourne l'id du canton
-		return $infos['canton_id'];
+		return $data[0];
 	}
 	
 	
@@ -987,29 +884,66 @@ class carto extends core {
 	 * @return	array				Données géographiques trouvées
 	 */
 
-	public	function detailAdresse( $immeuble ) {
-		// On vérifie le format de l'id de l'immeuble pour continuer
-		if (!is_numeric($immeuble)) return false;
+	public static function detailAdresse( $immeuble ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête de récupération de toutes les informations disponibles
-		$query = 'SELECT		*
-				  FROM		immeubles
-				  LEFT JOIN rues				ON	rues.rue_id = immeubles.rue_id
-				  LEFT JOIN	communes			ON	communes.commune_id = rues.commune_id
-				  LEFT JOIN codes_postaux	ON	codes_postaux.commune_id = communes.commune_id
-				  LEFT JOIN	bureaux			ON	bureaux.bureau_id = immeubles.bureau_id
-				  LEFT JOIN	cantons			ON	cantons.canton_id = bureaux.canton_id
-				  LEFT JOIN arrondissements	ON	arrondissements.arrondissement_id = cantons.arrondissement_id
-				  LEFT JOIN	departements		ON	departements.departement_id = arrondissements.departement_id
-				  LEFT JOIN	regions			ON	regions.region_id = departements.region_id
-				  WHERE		immeubles.immeuble_id = ' . $immeuble;
-
-		// On lance la requête BDD MySQL et on prépare le tableau de rendu des résultats
-		$sql = $this->db->query($query);
-		$row = $sql->fetch_assoc();
+		// On récupère les données sur l'immeuble
+		$query = $link->prepare('SELECT * FROM `immeubles` WHERE `immeuble_id` = :id');
+		$query->bindParam(':id', $immeuble, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_ASSOC);
+		
+		// On récupère les données sur la rue
+		$query = $link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :id');
+		$query->bindParam(':id', $data['rue_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur la ville
+		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_id` = :id');
+		$query->bindParam(':id', $data['commune_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur le code postal
+		$query = $link->prepare('SELECT * FROM `codes_postaux` WHERE `commune_id` = :id');
+		$query->bindParam(':id', $data['commune_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur le bureau de vote
+		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_id` = :id');
+		$query->bindParam(':id', $data['bureau_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur le canton
+		$query = $link->prepare('SELECT * FROM `cantons` WHERE `canton_id` = :id');
+		$query->bindParam(':id', $data['canton_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur l'arrondissement
+		$query = $link->prepare('SELECT * FROM `arrondissements` WHERE `arrondissement_id` = :id');
+		$query->bindParam(':id', $data['arrondissement_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur le département
+		$query = $link->prepare('SELECT * FROM `departements` WHERE `departement_id` = :id');
+		$query->bindParam(':id', $data['departement_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
+		
+		// On récupère les données sur la région
+		$query = $link->prepare('SELECT * FROM `regions` WHERE `region_id` = :id');
+		$query->bindParam(':id', $data['region_id'], PDO::PARAM_INT);
+		$query->execute();
+		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
 		
 		// On retourne le tableau complet
-		return $row;
+		return $data;
 	}
 	
 	
@@ -1025,18 +959,15 @@ class carto extends core {
 	 * @return	string|void			Affiche ou retourne l'adresse postale selon $return
 	 */
 
-	public	function adressePostale( $immeuble , $separateur = '<br>' , $return = false ) {
-		// On vérifie le format de l'id de l'immeuble pour continuer
-		if (!is_numeric($immeuble)) return false;
-
+	public static function adressePostale( $immeuble , $separateur = '<br>' , $return = false ) {
 		// On récupère les informations liées à l'adresse de l'immeuble demandée
-		$informations = $this->detailAdresse( $immeuble );
+		$informations = self::detailAdresse( $immeuble );
 
 		// On formate les composants de l'adresse correctement
 		$adresse['numero'] = $informations['immeuble_numero'];
-		$adresse['rue'] = mb_convert_case($informations['rue_nom'], MB_CASE_LOWER, 'utf-8');
+		$adresse['rue'] = mb_convert_case($informations['rue_nom'], MB_CASE_TITLE);
 		$adresse['cp'] = $informations['code_postal'];
-		$adresse['ville'] = mb_convert_case($informations['commune_nom'], MB_CASE_UPPER, 'utf-8');
+		$adresse['ville'] = mb_convert_case($informations['commune_nom'], MB_CASE_UPPER);
 		
 		// On prépare la variable d'affichage du rendu
 		$affichage = $adresse['numero'] . ' ';
@@ -1047,7 +978,7 @@ class carto extends core {
 		if (!empty($adresse['ville'])) $affichage .= $adresse['ville'] . $separateur;
 
 		// On remet en forme l'affichage
-		$affichage = $this->tpl_transform_texte($affichage);
+		$affichage = Core::tpl_transform_texte($affichage);
 		
 		// On retourne les informations demandées
 		if (!$return) echo $affichage;
@@ -1067,17 +998,14 @@ class carto extends core {
 	 * @return	string|void			Affiche ou retourne l'adresse postale selon $return
 	 */
 
-	public	function bureauDeVote( $immeuble , $return = false , $mini = false ) {
-		// On vérifie le format de l'id de l'immeuble pour continuer
-		if (!is_numeric($immeuble)) return false;
-		
+	public static function bureauDeVote( $immeuble , $return = false , $mini = false ) {
 		// On récupère toutes les informations nécessaires par rapport à cet immeuble et donc son bureau de vote
-		$informations = $this->detailAdresse( $immeuble );
+		$informations = self::detailAdresse( $immeuble );
 
 		// On retraite les informations
 		$bureau['numero'] = $informations['bureau_numero'];
-		$bureau['nom'] = mb_convert_case($informations['bureau_nom'], MB_CASE_TITLE, 'utf-8');
-		$bureau['ville'] = $this->tpl_transform_texte($informations['commune_nom']);
+		$bureau['nom'] = mb_convert_case($informations['bureau_nom'], MB_CASE_TITLE);
+		$bureau['ville'] = mb_convert_case($informations['commune_nom'], MB_CASE_UPPER);
 		
 		// On prépare le rendu 
 		if ($mini) {
@@ -1106,16 +1034,18 @@ class carto extends core {
 	 * @return	int	                ID de la rue ajoutée
 	 */
 
-	public	function ajoutRue( $ville , $rue ) {
-		// On protège les informations pour la BDD
-		$rue = $this->securisation_string($rue);
-
-		// On prépare la requête SQL
-		$query = 'INSERT INTO rues ( commune_id , rue_nom ) VALUES ( ' . $ville . ' , "' . $rue . '" )';
+	public static function ajoutRue( $ville , $rue ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On exécute la requête et on retourne l'ID de l'entrée
-		$this->db->query($query);
-		return $this->db->insert_id;
+		// On exécute la requête SQL
+		$query = $link->prepare('INSERT INTO `rues` (`commune_id`, `rue_nom`) VALUES (:ville, :rue)');
+		$query->bindParam(':ville', $ville, PDO::PARAM_INT);
+		$query->bindParam(':rue', $rue, PDO::PARAM_STR);
+		$query->execute();
+		
+		// On retourne l'identifiant des informations insérées
+		return $link->lastInsertId();
 	}
 	
 	
@@ -1129,23 +1059,23 @@ class carto extends core {
 	 * @return	int					ID de l'immeuble ajouté
 	 */
 
-	public	function ajoutImmeuble( $infos ) {
-		// On vérifie que l'entrée est bien un tableau
-		if (!is_array($infos)) return false;
-
-		if (isset($infos['rue'], $infos['numero']))
-		{
-			// On prépare la requête
-			$query = 'INSERT INTO `immeubles` (`rue_id`, `immeuble_numero`) VALUES (' . $infos['rue'] . ', "' . $infos['numero'] . '")';
+	public static function ajoutImmeuble( $infos ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
+		if (isset($infos['rue'], $infos['numero'])) {
 			
-			// On enregistre le tout dans la base de données puis on retourne l'ID de l'insertion
-			$this->db->query($query);
-			return $this->db->insert_id;
+			// On exécute la requête
+			$query = $link->prepare('INSERT INTO `immeubles` (`rue_id`, `immeuble_numero`) VALUES (:rue, :numero)');
+			$query->bindParam(':rue', $infos['rue'], PDO::PARAM_INT);
+			$query->bindParam(':numero', $infos['numero'], PDO::PARAM_STR);
+			$query->execute();
+			
+			// On retourne le numéro de l'entrée insérée
+			return $link->lastInsertId();
+			
 		}
-		else
-		{
-			return false;
-		}
+		else { return false; }
 	}
 	
 	
@@ -1155,56 +1085,68 @@ class carto extends core {
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
-	 * @param	string	$branche			Découpage géographique concerné par l'estimation
+	 * @param	string	$branche		Découpage géographique concerné par l'estimation
 	 * @param	int	 	$id				ID du découpage géographique concerné par l'estimation
 	 * @param	string	$coordonnees 	Permet de restreindre l'estimation aux électeurs dont 
 	 *									certaines coordonnées sont connues
 	 * @return	int						Nombre d'électeur trouvé
 	 */
 
-	public	function nombreElecteurs( $branche , $id , $coordonnees = null ) {
-		if (!is_string($branche) || !is_numeric($id)) return false;
+	public static function nombreElecteurs( $branche , $id , $coordonnees = null ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		if (isset($branche)) {
-			// On prépare la requête de calcul du nombre d'électeur dans la commune
-			$query = 'SELECT	COUNT(*)
-					  AS		nombre
-					  FROM		contacts
-					  LEFT JOIN immeubles
-					  ON		immeubles.immeuble_id = contacts.immeuble_id
-					  LEFT JOIN	rues
-					  ON		rues.rue_id = immeubles.rue_id
-					  LEFT JOIN	communes
-					  ON		communes.commune_id = rues.commune_id
-					  LEFT JOIN	bureaux
-					  ON		bureaux.bureau_id = immeubles.bureau_id
-					  LEFT JOIN	cantons
-					  ON		cantons.canton_id = bureaux.canton_id ';
-					  
-			if ($branche == 'bureau') {
-				$query .= 'WHERE ' . $branche . 'x.' . $branche . '_id = ' . $id;
+		// On recherche tous les immeubles si la branche est un bureau
+		if ($branche == 'bureau') {
+			if (!is_null($coordonnees)) {
+				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0 ) AND `bureau_id` = :id');
 			} else {
-				$query .= 'WHERE ' . $branche . 's.' . $branche . '_id = ' . $id;
+				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `bureau_id` = :id');
 			}
-		}
+			$query->bindParam(':id', $id, PDO::PARAM_INT);
+			$query->execute();
+			$data = $query->fetch(PDO::FETCH_NUM);
+			$nombre = $data[0];
+		} 
 		
-		// On regarde si on demandait seulement ceux ayant des coordonnées
-		if (!is_null($coordonnees) && !empty($query)) {
-			$query .= ' AND contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0';
-		} else if (is_null($coordonnees) && !empty($query)) {
-			$query .= '  AND contacts.contact_electeur = 1';
-		}
-		
-		
-		// On vérifie qu'il y a bien une requête de préparée, si oui on l'exécute et on imprime le résultat
-		if (!empty($query)) {
-			$sql = $this->db->query($query);
-			$nombre = $sql->fetch_assoc();
+		// On recherche tous les immeubles si la branche est une ville
+		else {
+			// On exécute la requête de recherche de toutes les rues de la commune
+			$query = $link->prepare('SELECT `rue_id` FROM `rues` WHERE `commune_id` = :id');
+			$query->bindParam(':id', $id, PDO::PARAM_INT);
+			$query->execute();
+			$rues = $query->fetchAll(PDO::FETCH_NUM);
 			
-			return number_format($nombre['nombre'], 0, ',', '&nbsp;');
+			// On formate la liste des rues pour l'insérer dans la recherche SQL des immeubles
+			$ids = array(); // Liste des ids des rues de la commune
+			foreach ($rues as $rue) { $ids[] = $rue[0]; }
+			$rues = implode(',', $ids);
+
+			// On recherche tous les immeubles de chaque rue de cette commune
+			$query = $link->query('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` IN (' . $rues . ')');
+			$immeubles = $query->fetchAll(PDO::FETCH_NUM);
+
+			// On formate la liste des rues pour l'insérer dans la recherche SQL des électeurs
+			$ids = array(); // Liste des ids des rues de la commune
+			foreach ($immeubles as $immeuble) { $ids[] = $immeuble[0]; }
+			$immeubles = implode(',', $ids);
+
+			// On recherche le nombre de contacts, électeurs, dans les immeubles en question
+			if (!is_null($coordonnees)) {
+				$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0 ) AND `immeuble_id` IN (' . $immeubles . ')');
+			} else {
+				$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `immeuble_id` IN (' . $immeubles . ')');
+			}
+			$data = $query->fetch(PDO::FETCH_NUM);
+			$nombre = $data[0];
 		}
 		
-		return false;
+		// On retourne le résultat
+		if ($nombre) {
+			return $nombre;
+		} else {
+			return 0;
+		}
 	}
 	
 	
@@ -1219,29 +1161,18 @@ class carto extends core {
 	 * @return	int				Nombre de fiches trouvées
 	 */
 
-	public	function coordonneesDansImmeuble( $immeuble ) {
-		// on vérifie le format des arguments
-		if (!is_numeric($immeuble)) return false;
+	public static function coordonneesDansImmeuble( $immeuble ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête
-		$query = 'SELECT	contact_id
-				  FROM		contacts
-				  WHERE		immeuble_id = ' . $immeuble . '
-				  AND		( 
-					  				( contact_email IS NOT NULL AND contact_optout_email = 0 )
-					  			 OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 )
-					  			 OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 )
-				  			 )
-				  AND		contact_optout_global = 0';
-				  
-		// On effectue la requête
-		$sql = $this->db->query($query);
-		
-		// On récupère le résultat
-		$resultat = $sql->num_rows;
+		// On recherche le nombre de contacts recueillis dans l'immeuble
+		$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( (`contact_email` IS NOT NULL AND `contact_optout_email` = 0) OR (`contact_telephone` IS NOT NULL AND `contact_optout_telephone` = 0) OR (`contact_mobile` IS NOT NULL AND `contact_optout_mobile` = 0) ) AND `contact_optout_global` = 0 AND `immeuble_id` = :id');
+		$query->bindParam(':id', $immeuble, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
 		// On retourne le résultat
-		return $resultat;
+		return $data[0];
 	}
 	
 	
@@ -1256,33 +1187,18 @@ class carto extends core {
 	 * @return	int				Nombre de fiches trouvées
 	 */
 
-	public	function coordonneesDansBureau( $bureau ) {
-		// on vérifie le format des arguments
-		if (!is_numeric($bureau)) return false;
+	public static function coordonneesDansBureau( $bureau ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
 		
-		// On prépare la requête
-		$query = 'SELECT	contact_id
-				  FROM		contacts
-				  LEFT JOIN	immeubles
-				  ON		immeubles.immeuble_id = contacts.immeuble_id
-				  LEFT JOIN	bureaux
-				  ON		bureaux.bureau_id = immeubles.bureau_id
-				  WHERE		bureaux.bureau_id = ' . $bureau . '
-				  AND		( 
-					  				( contact_email IS NOT NULL AND contact_optout_email = 0 )
-					  			 OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 )
-					  			 OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 )
-				  			 )
-				  AND		contact_optout_global = 0';
-				  
-		// On effectue la requête
-		$sql = $this->db->query($query);
-		
-		// On récupère le résultat
-		$resultat = $sql->num_rows;
+		// On recherche le nombre de contacts recueillis dans l'immeuble
+		$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( (`contact_email` IS NOT NULL AND `contact_optout_email` = 0) OR (`contact_telephone` IS NOT NULL AND `contact_optout_telephone` = 0) OR (`contact_mobile` IS NOT NULL AND `contact_optout_mobile` = 0) ) AND `contact_optout_global` = 0 AND `bureau_id` = :id');
+		$query->bindParam(':id', $bureau, PDO::PARAM_INT);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
 		
 		// On retourne le résultat
-		return $resultat;
+		return $data[0];
 	}
 }
 ?>

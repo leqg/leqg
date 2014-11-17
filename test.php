@@ -6,7 +6,7 @@
 // L'idée, c'est de tester PDO
 
 //require_once('includes.php');
-
+/*
 // On tente une connexion au service d'authentification et de gestion des comptes clients
 $host = '2001:4b98:dc0:41:216:3eff:fe6d:e95';
 $port = 3306;
@@ -18,6 +18,13 @@ $pass = 'pbNND3JY2cfrDUuZ';
 $link = new PDO($dsn, $user, $pass);
 
 print_r($link);
+*/
+
+//echo 'test';
+
+// Création d'un cookie pour avoir la paix
+setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', 'localhost');
+setcookie('time', time(), time()+3600*24*7, '/', 'localhost');
 
 /*
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système

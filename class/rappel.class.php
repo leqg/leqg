@@ -35,11 +35,7 @@ class Rappel
 	public function __construct( $mission )
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-
-		$this->link = new PDO($dsn, $user, $pass);
+		$this->link = Configuration::read('db.link');
 		
 		// On cherche toutes les informations concernant la mission en cours 
 		// pour les ajouter à la propriété $mission
@@ -140,10 +136,7 @@ class Rappel
     public static function liste( $statut = 1 )
     {
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 		
         // On prépare la requête
         $query = $link->prepare('SELECT `id` FROM `rappels` WHERE `statut` = :statut ORDER BY `deadline` ASC, `creation` DESC');
@@ -173,10 +166,7 @@ class Rappel
     public static function creer( )
     {
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 
         // On prépare la requête
         $query = $link->prepare('INSERT INTO `rappels` (`creation`) VALUES (NOW())');
@@ -207,13 +197,10 @@ class Rappel
      * @result  int    Identifiant de la mission de rappels créée
      */
      
-    function estimation( array $args )
+    public static function estimation( array $args )
     {
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 
         // On prépare la requête de récupération de tous les numéros de téléphone
         // connus par le système

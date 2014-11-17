@@ -61,27 +61,6 @@ function __autoload($class_name) {
 // Appel de la classe MySQL du compte
 $db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
 
-// Temporaire, à des fins de comptabilité
-$cookie = $_COOKIE['leqg'];
-
-// On appelle l'ensemble des classes générales au site
-$core =			new core($db, $noyau, $config['SERVER']['url']);
-$csv =			new csv();
-$user =			new user($db, $noyau, $config['SERVER']['url']);
-$fiche =		new fiche($db, $cookie, $config['SERVER']['url']);
-$tache =		new tache($db, $cookie, $config['SERVER']['url']);
-$dossier =		new dossier($db, $cookie, $config['SERVER']['url']);
-$historique =	new historique($db, $cookie, $config['SERVER']['url']);
-$fichier =		new fichier($db, $cookie, $config['SERVER']['url']);
-$carto =		new carto($db, $noyau, $config['SERVER']['url']);
-$mission =		new mission($db, $cookie, $config['SERVER']['url']);
-$boitage =		new boitage($db);
-$porte =		new porte($db);
-$notification =	new notification($db, $cookie, $config['SERVER']['url']);
-
-// On transforme ces classes générales en variables globales
-global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link;
-
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
 require_once 'api/phpmailer/class.phpmailer.php';
@@ -100,9 +79,15 @@ $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
 // On inclut les classes non chargées
-include 'class/contact.class.php';
-include 'class/evenement.class.php';
-include 'class/folder.class.php';
-include 'class/rappel.class.php';
+require_once 'class/boite.class.php';
+require_once 'class/carto.class.php';
+require_once 'class/contact.class.php';
+require_once 'class/core.class.php';
+require_once 'class/csv.class.php';
+require_once 'class/evenement.class.php';
+require_once 'class/folder.class.php';
+require_once 'class/porte.class.php';
+require_once 'class/rappel.class.php';
+require_once 'class/user.class.php';
 
 ?>

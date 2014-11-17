@@ -13,32 +13,6 @@
 class Core {
 	
 	/**
-	 * @var	object	$db		Propriété concenant le lien vers la base de données de l'utilisateur
-	 * @var	object	$noyau	Propriété contenant le lien vers la base de données globale LeQG
-	 * @var	string	$url		Propriété contenant l'URL du serveur
-	 */
-	private $db, $noyau, $url;
-	
-
-	/**
-	 * Cette méthode permet la construction de la classe core
-	 *
-	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version	1.0
-	 *
-	 * @param	object $db Lien vers la base de données de l'utilisateur
-	 * @param	object $noyau Lien vers la base de données globale LeQG
-	 * @param	string $url URL du serveur
-	 */
-	 
-	public	function __construct($db, $noyau, $url) {
-		$this->db = $db;
-		$this->noyau = $noyau;
-		$this->url = $url;
-	}
-	
-	
-	/**
 	 * Cette méthode permet le débogage des scripts de la plateforme en affichant le contenu d'un objet PHP
 	 * 
 	 * Cette fonction permet d'afficher par l'intermédiaire d'un print_r() le contenu d'un objet permettant
@@ -198,6 +172,30 @@ class Core {
 		// On effectue le tri multidimensionnel
 			array_multisort($sort_col, $dir, $arr);
 	}
+	
+	
+	/**
+	 * Cette méthode permet de trier des tableaux multidimentionnels d'après une clé demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param	array $arr Tableau à trier
+	 * @param	string $col Colonne à utiliser pour le tri
+	 * @param	string $dir	Sens du tri (SORT_ASC ou SORT_DESC)
+	 * @return	array
+	 */
+
+	public static function triMultidimentionnel( &$arr , $col , $dir = SORT_ASC ) {
+		// On prépare le tableau de tri
+			$sort_col = array();
+			
+		// On effectue une sélection des colonnes à trier
+			foreach ($arr as $key => $row) $sort_col[$key] = $row[$col];
+		
+		// On effectue le tri multidimensionnel
+			array_multisort($sort_col, $dir, $arr);
+	}
 		
 	
 	/**
@@ -223,21 +221,14 @@ class Core {
 	 * Cette méthode permet de charger un fichier de template
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
-	 * @version	1.0
+	 * @version	1.1
 	 *
 	 * @param	string $slug Nom du module appelé
 	 * @param	string $nom Nom du fichier au sein du module demandé
-	 * @param	string $globale Ajout d'une variable globale
 	 * @return	void
 	 */
 
-	public static function tpl_load( $slug , $nom = null, $globale = null) {
-		if (is_null($globale)) {
-			global $db, $base, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link;
-		} else {
-			global $db, $base, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $notification, $boitage, $porte, $link, $globale;
-		}
-	
+	public static function tpl_load( $slug , $nom = null) {
 		if (empty($nom)) :
 			require 'tpl/' . $slug . '.tpl.php';
 		else :
@@ -512,7 +503,7 @@ class Core {
 	 * @return	string
 	 */
 
-	public	function tpl_transform_texte($affichage) {
+	public static function tpl_transform_texte($affichage) {
 	
 		$affichage = strtolower($affichage);
 				

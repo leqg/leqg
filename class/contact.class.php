@@ -34,11 +34,7 @@ class Contact
 	public function __construct($contact, $securite = false)
 	{
 		// On commence par paramétrer les données PDO
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-
-		$this->link = new PDO($dsn, $user, $pass);
+		$this->link = Configuration::read('db.link');
 				
 		// On cherche maintenant à savoir s'il existe un contact ayant pour identifiant celui demandé
 		$query = $this->link->prepare('SELECT * FROM `contacts` WHERE MD5(`contact_id`) = :contact');
@@ -989,10 +985,7 @@ class Contact
     public static function creation( )
     {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 
         // On prépare la requête de création
         $query = $link->prepare('INSERT INTO `contacts` (`contact_electeur`) VALUES (0)');
@@ -1024,10 +1017,7 @@ class Contact
 	
 	public static function recherche( $recherche ) {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 
 		// On prépare la requête de récupération des résultats
 		$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE CONCAT_WS(" ", contact_prenoms, contact_nom, contact_nom_usage, contact_nom, contact_prenoms) LIKE :terme ORDER BY `contact_nom` ASC, `contact_nom_usage` ASC, `contact_prenoms` ASC');
@@ -1066,10 +1056,7 @@ class Contact
     public static function rechercheThematique( $terme )
     {
         // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		$link = Configuration::read('db.link');
 
         // On prépare le tableau des contacts
         $contacts = array();
@@ -1124,10 +1111,7 @@ class Contact
 		if (is_numeric($debut) && is_numeric($nombre) && is_array($tri)) {
 
 	        // On prépare le lien vers la BDD
-			$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-			$user = Configuration::read('db.user');
-			$pass = Configuration::read('db.pass');
-			$link = new PDO($dsn, $user, $pass);
+			$link = Configuration::read('db.link');
 			
 			// On commence par préparer le visage de la requête de recherche
 			$sql = 'SELECT `contact_id` FROM `contacts` ';
@@ -1187,11 +1171,8 @@ class Contact
 	 */
 	
 	public static function last( $nombre = 5 ) {
-        // On prépare le lien vers la BDD
-		$dsn =  'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-		$user = Configuration::read('db.user');
-		$pass = Configuration::read('db.pass');
-		$link = new PDO($dsn, $user, $pass);
+		// On commence par paramétrer les données PDO
+		$link = Configuration::read('db.link');
 		
 		// On prépare le tableau de résultat de la requête
 		$fiches = array();

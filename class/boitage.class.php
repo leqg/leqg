@@ -7,12 +7,12 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class boitage extends core {
+class Boite {
 	
 	/**
-	 * @var	object	$db			Propriété concenant le lien vers la base de données de l'utilisateur
+	 * @var	object  $db   Propriété contenant le lien vers la base de données de l'utilisateur
 	 */
-	private $db;
+	private $link;
 	
 
 	/**
@@ -26,8 +26,8 @@ class boitage extends core {
 	 * @return	void
 	 */
 	 
-	public	function __construct($db) {
-		$this->db = $db;
+	public	function __construct() {
+		$this->link = Configuration::read('db.link');
 	}
 
 	
@@ -40,18 +40,15 @@ class boitage extends core {
 	 * @return	int		Nombre de missions disponibles
 	 */
 	 
-	public	function nombre() {
-		// On prépare la requête
-		$query = 'SELECT	*
-				  FROM		`mission`
-				  WHERE		`mission_statut` = 1
-				  AND		`mission_type` = "boitage"
-				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
-				  
-		// On effectue la requête et on retourne le nombre de lignes trouvées
-		$sql = $this->db->query($query);
+	public static function nombre() {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
 		
-		return $sql->num_rows;
+		// On exécute la requête
+		$query = $link->query('SELECT COUNT(*) FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
+		$data = $query->fetch(PDO::FETCH_NUM);
+		
+		return $data[0];
 	}
 	
 	
@@ -64,21 +61,15 @@ class boitage extends core {
 	 * @return	int		Tableau des missions disponibles
 	 */
 	 
-	public	function missions() {
-		// On prépare la requête
-		$query = 'SELECT	*
-				  FROM		`mission`
-				  WHERE		`mission_statut` = 1
-				  AND		`mission_type` = "boitage"
-				  AND		( `mission_deadline` IS NULL OR `mission_deadline` >= NOW() )';
-				  
-		// On effectue la requête et on retourne le nombre de lignes trouvées
-		$sql = $this->db->query($query);
+	public static function missions() {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
 		
-		$missions = array();
-		while($row = $sql->fetch_assoc()) $missions[] = $row;
+		// On exécute la requête
+		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
 		
-		return $missions;
+		// On retourne le résultat
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -92,20 +83,25 @@ class boitage extends core {
 	 * @return	int					Identifiant SQL de la nouvelle mission créée
 	 */
 	 
-	public	function creation( array $infos ) {
+	public static function creation( array $infos ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
+		
 		// On retraite la date entrée
 		$date = explode('/', $infos['date']);
 		ksort($date);
 		$date = implode('-', $date);
 	
-		// On prépare la requête d'insertion dans la base de données
-		$query = 'INSERT INTO `mission` ( `createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type` )
-				  VALUES ( ' . $_COOKIE['leqg-user'] . ', ' . $infos['responsable'] . ', "' . date('Y-m-d', strtotime($date)) . '", "' . $this->securisation_string($infos['nom']) . '", "boitage" )';
+		// On exécute la requête d'insertion dans la base de données
+		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:createur, :responsable, :deadline, :nom, "boitage")');
+		$query->bindParam(':createur', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
+		$query->bindParam(':deadline', $date);
+		$query->bindParam(':nom', $infos['nom']);
+		$query->execute();
 		
-		// On lance la requête et on retourne l'identifiant de la nouvelle mission
-		$this->db->query($query);
-		
-		return $this->db->insert_id;
+		// On retourne l'ID de la mission créée
+		return $link->lastInsertId();
 	}
 	
 	
@@ -119,12 +115,17 @@ class boitage extends core {
 	 * @return	bool
 	 */
 	
-	public	function verification( $mission ) {
-		// On exécute la requête de vérification
-		$sql = $this->db->query('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = "' . $mission . '" AND `mission_type` = "boitage"');
+	public static function verification( $mission ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
 		
-		// S'il existe un résultat, on valide la vérification, sinon non
-		if ($sql->num_rows == 1) {
+		// On exécute la requête de vérification
+		$query = $link->prepare('SELECT `mission_id` FROM `mission` WHERE MD5(`mission_id`) = :id AND `mission_type` = "boitage"');
+		$query->bindParam(':id', $mission);
+		$query->execute();
+		
+		// Si on trouve une entrée, c'est bon, sinon non
+		if ($query->rowCount() == 1) {
 			return true;
 		} else {
 			return false;
@@ -142,12 +143,17 @@ class boitage extends core {
 	 * @return	array				Tableau contenant l'ensemble des informations concernant la mission demandée
 	 */
 	
-	public	function informations($mission) {
+	public static function informations($mission) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
+		
 		// On exécute la requête de recherche des informations
-		$sql = $this->db->query('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = "' . $mission . '"');
+		$query = $link->prepare('SELECT * FROM `mission` WHERE MD5( `mission_id` ) = :id');
+		$query->bindParam(':id', $mission);
+		$query->execute();
 
 		// On retourne les informations sous forme d'un tableau
-		return $sql->fetch_assoc();
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -162,17 +168,22 @@ class boitage extends core {
 	 * @result	int					Nombre d'immeubles correspondant à la recherche
 	 */
 	
-	public	function nombreImmeubles( $mission , $type = 0 ) {
-		// On prépare la requête
-		$query = 'SELECT * FROM `boitage` WHERE `mission_id` = ' . $mission;
-		if ($type == 1) { $query .= ' AND `boitage_statut` > 0'; }
-		if ($type == 0) { $query .= ' AND `boitage_statut` = 0'; }
-
-		// On exécute la requête
-		$sql = $this->db->query($query);
+	public static function nombreImmeubles( $mission , $type = 0 ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
 		
+		// On exécute la requête
+		if ($type) {
+			$query = $link->prepare('SELECT COUNT(*) FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut > 0');
+		} else {
+			$query = $link->prepare('SELECT COUNT(*) FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut = 0');
+		}
+		$query->bindParam(':id', $mission);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_NUM);
+
 		// On retourne le nombre d'immeubles trouvés
-		return $sql->num_rows;
+		return $data[0];
 	}
 	
 	
@@ -187,17 +198,23 @@ class boitage extends core {
 	 * @return	bool
 	 */
 	 
-	public	function ajoutRue( $rue , $mission ) {
+	public static function ajoutRue( $rue , $mission ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
+		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$immeubles = array();
-		$query = 'SELECT * FROM `immeubles` WHERE `rue_id` = ' . $rue;
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
+		$query = $link->prepera('SELECT `immeuble_id` FROM `immeubles WHERE `rue_id` = :id');
+		$query->bindParam(':id', $rue, PDO::PARAM_INT);
+		$query->execute();
+		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
 		
 		// Pour chaque immeuble, on créé une insertion dans la base de données
 		foreach ($immeubles as $immeuble) {
-			$query = 'INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (' . $mission . ', ' . $rue . ', ' . $immeuble['immeuble_id'] . ')';
-			$this->db->query($query);
+			$query = $this->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+			$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+			$query->bindParam(':rue', $rue, PDO::PARAM_INT);
+			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+			$query->execute();
 		}
 	}
 	
@@ -213,17 +230,23 @@ class boitage extends core {
 	 * @return	bool
 	 */
 	 
-	public	function ajoutBureau( $bureau , $mission ) {
+	public static function ajoutBureau( $bureau , $mission ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
+		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$immeubles = array();
-		$query = 'SELECT * FROM `immeubles` WHERE `bureau_id` = ' . $bureau;
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) $immeubles[] = $row;
+		$query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = :id');
+		$query->bindParam(':id', $bureau, PDO::PARAM_INT);
+		$query->execute();
+		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
 		
 		// Pour chaque immeuble, on créé une insertion dans la base de données
 		foreach ($immeubles as $immeuble) {
-			$query = 'INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (' . $mission . ', ' . $immeuble['rue_id'] . ', ' . $immeuble['immeuble_id'] . ')';
-			$this->db->query($query);
+			$query = $this->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+			$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+			$query->bindParam(':rue', $immeuble[1], PDO::PARAM_INT);
+			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+			$query->execute();
 		}
 	}
 	
@@ -239,23 +262,25 @@ class boitage extends core {
 	 * @return	array				Tableau contenant par rue l'ensemble des immeubles à couvrir
 	 */
 	 
-	public	function liste( $mission , $statut = 0 ) {
-		$rues = array();
-		$immeubles = array();
+	public static function liste( $mission , $statut = 0 ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
 		
-		// On récupère tous les immeubles 
-		$query = 'SELECT * FROM `boitage` WHERE `mission_id` = ' . $mission;
-		if ($statut == 0) $query .= ' AND `boitage_statut` = 0';
-		if ($statut == 1) $query .= ' AND `boitage_statut > 0';
-		$sql = $this->db->query($query);
-		while ($row = $sql->fetch_assoc()) { $immeubles[] = $row; }
-		
-		// On lance le tri par rues des immeubles
-		foreach ($immeubles as $immeuble) {
-			$rues[$immeuble['rue_id']][] = $immeuble['immeuble_id'];
+		// On récupère tous les immeubles
+		if ($statut) {
+			$query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` > 0');
+		} else {
+			$query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` = 0');
 		}
+		$query->bindParam(':id', $mission, PDO::PARAM_INT);
+		$query->execute();
+		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
 		
-		// On retourne le tableau trié
+		// On lance un tri par rue des immeubles
+		$rues = array();
+		foreach ($immeubles as $immeuble) { $rues[$immeuble[1]][] = $immeuble[0]; }
+		
+		// On retourne le tableau trié par rues
 		return $rues;
 	}
 	
@@ -272,34 +297,31 @@ class boitage extends core {
 	 * @return	int					Nombre d'électeur estimé
 	 */
 	
-	public	function estimation( $mission , $type = 0 ) {
-		// On prépare la requête de recherche des immeubles concernés par le comptage
-		$query = 'SELECT 	*
-				  FROM		`boitage`
-				  WHERE		`mission_id` = ' . $mission;
+	public static function estimation( $mission , $type = 0 ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
 		
-		if ($type == 1) { $query .= ' AND `boitage_statut` > 0'; }
-		if ($type == 0) { $query .= ' AND `boitage_statut` = 0'; }
-
-		$sql = $this->db->query($query);
-		$immeubles = array();
-		while ($row = $sql->fetch_assoc()) $immeubles[] = $row['immeuble_id'];
-
-		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
-		$query = 'SELECT 	COUNT(*) AS `nombre`
-				  FROM		`contacts`
-				  WHERE		`immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles);
-		$sql = $this->db->query($query);
-		
-		if ($sql) {
-			$sql = $sql->fetch_assoc();
-			
-			// On retourne l'estimation
-			return $sql['nombre'];
+		// On exécute la requête de recherche des immeubles concernés par le comptage
+		if ($type) {
+			$query = $link->prepare('SELECT `immeuble_id` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` > 0');
 		} else {
-			// On retourne zéro
-			return 0;
+			$query = $link->prepare('SELECT `immeuble_id` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` = 0');
 		}
+		$query->bindParam(':id', $mission, PDO::PARAM_INT);
+		$query->execute();
+		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
+		
+		// On retraite la liste des immeubles pour l'importer dans la requête SQL
+		$ids = array();
+		foreach ($immeubles as $immeuble) { $ids[] = $immeuble[0]; }
+		$immeubles = implode(',', $ids);
+		
+		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
+		$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `immeuble_id` IN (' . $immeubles . ')');
+		$data = $query->fetch(PDO::FETCH_NUM);
+		
+		// On retourne le nombre d'électeurs
+		return $data[0];
 	}
 	
 	
@@ -315,37 +337,38 @@ class boitage extends core {
 	 * @result	void
 	 */
 	
-	public	function reporting( $mission , $immeuble , $statut ) {
+	public static function reporting( $mission , $immeuble , $statut ) {
+		// On met en place le lien vers la base de données
+		$link = Configuration::read('db.link');
+		
 		// On récupère les informations sur la mission
-		$informations = $this->informations($mission);
+		$informations = self::informations($mission);
 		
 		// On prépare et exécute la requête
-		$query = 'UPDATE `boitage` SET `boitage_statut` = ' . $statut . ', `boitage_date` = NOW(), `boitage_militant` = "' . $_COOKIE['leqg-user'] . '" WHERE MD5(`mission_id`) = "' . $mission . '" AND MD5(`immeuble_id`) = "' . $immeuble . '"';
-		$this->db->query($query);
-		
+		$query = $link->prepare('UPDATE `boitage` SET `boitage_statut` = :statut, `boitage_date` = NOW(), `boitage_militant` = :cookie WHERE MD5(`mission_id`) = :mission AND MD5(`immeuble_id`) = :immeuble');
+		$query->bindParam(':statut', $statut);
+		$query->bindParam(':cookie', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':mission', $mission);
+		$query->bindParam(':immeuble', $immeuble);
+		$query->execute();
+				
 		// Si l'immeuble a été fait, on reporte le boitage pour tous les les contacts
 		if ($statut == 2)
 		{
-        		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
-        		$query = 'SELECT * FROM `contacts` WHERE MD5(`immeuble_id`) = "' . $immeuble . '" OR MD5(`adresse_id`) = "' . $immeuble . '"';
-        		$sql = $this->db->query($query);
-        		$contacts = array();
-        		while ($row = $sql->fetch_assoc()) $contacts[] = $row;
-            
-            // On fait la boucle de tous ces contacts pour ajouter l'élément d'histoire
-        		foreach ($contacts as $contact) {
-        			$query = 'INSERT INTO	`historique` (`contact_id`, 
-        												  `compte_id`, 
-        												  `historique_type`, 
-        												  `historique_date`, 
-        												  `historique_objet`)
-        					  VALUES					 (' . $contact['contact_id'] . ',
-        					  							  ' . $_COOKIE['leqg-user'] . ',
-        					  							  "boite",
-        					  							  NOW(),
-        					  							  "' . $informations['mission_nom'] . '")';
-        			$this->db->query($query);
-        		}
+    		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
+    		$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`immeuble_id`) = :immeuble OR MD5(`adresse_id`) = :immeuble');
+    		$query->bindParam(':immeuble', $immeuble);
+    		$query->execute();
+    		$contacts = $query->fetchAll(PDO::FETCH_NUM);
+    		
+    		// On fait la boucle de tous ces contacts pour leur ajouter l'élément d'historique
+    		foreach ($contacts as $contact) {
+	    		$query = $link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`) VALUES (:contact, :compte, "boite", NOW(), :mission)');
+	    		$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+	    		$query->bindParam(':compte', User::ID(), PDO::PARAM_INT);
+	    		$query->bindParam(':mission', $informations['mission_nom']);
+	    		$query->execute();
+    		}
 		}
 	}
 }
