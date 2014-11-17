@@ -1,3 +1,0 @@
-	</main><!--#central-->
-</body>
-</html>
