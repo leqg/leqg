@@ -43,23 +43,15 @@ $user = 'leqg-remote';
 $pass = 'pbNND3JY2cfrDUuZ';
 $charset = 'utf8';
 $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
-$noyau = new PDO($dsn, $user, $pass);
+$core = new PDO($dsn, $user, $pass);
 
 // On fabrique la classe $link de liaison PDO
 $dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 $link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
 
 // On enregistre les liaisons SQL
-Configuration::write('db.core', $noyau);
+Configuration::write('db.core', $core);
 Configuration::write('db.link', $link);
-
-// Constructeur de classes
-function __autoload($class_name) {
-	include 'class/'.$class_name.'.class.php';
-}
-
-// Appel de la classe MySQL du compte
-$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
