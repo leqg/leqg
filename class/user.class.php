@@ -413,7 +413,7 @@ class User extends core {
 	public static function protection($auth = 1) {
 		// On prépare la connexion à la BDD
 		$link = Configuration::read('db.core');
-		
+		Core::debug($_COOKIE);
 		// On regarde si un cookie existe
 		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
 			
