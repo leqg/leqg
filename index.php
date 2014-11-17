@@ -83,7 +83,7 @@ else {
 	// Si on demande l'affichage d'une recherche d'utilisateur ou de tag
 	else if ($_GET['page'] == 'recherche') { Core::tpl_load('recherche'); }
 	
-	else if ($_GET['page'] == 'recherche-tag') { Core::tpl_load('recherche', 'tags'); }
+	else if ($_GET['page'] == 'recherche-thematique') { Core::tpl_load('recherche', 'thematique'); }
 	
 	
 	

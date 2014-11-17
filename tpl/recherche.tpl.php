@@ -1,4 +1,7 @@
 <?php
+	// On protège la page
+	User::protection(5);
+	
 	// On commence par vérifier qu'une recherche a été lancée
 	if (!isset($_POST['recherche']) || empty($_POST['recherche'])) Core::tpl_go_to('contacts', true);
 	

@@ -1058,29 +1058,41 @@ class Contact
         // On prépare le lien vers la BDD
 		$link = Configuration::read('db.link');
 
-        // On prépare le tableau des contacts
+        // On prépare le tableau global des contacts résultant de chaque recherche
         $contacts = array();
         
         // On prépare le terme aux like
-        $termel = "%$terme%";
+        $terme = "%$terme%";
         
         // On effectue une première recherche sur les tags des fiches
         $query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE `contact_tags` LIKE :terme ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
-        $query->bindParam(':terme', $termel);
+        $query->bindParam(':terme', $terme);
         $query->execute();
-        $boucle = $query->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($boucle as $element) { $contacts[] = $element['contact_id']; }
-        unset($boucle);
-        unset($query);
+        if ($query->rowCount() >= 1) {
+	        $resultats = $query->fetchAll(PDO::FETCH_NUM);
+	        foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+	        unset($resultats);
+	    }
                 
         // On continue en vérifiant les objets d'événements
         $query = $link->prepare('SELECT `contact_id` FROM `historique` WHERE `historique_objet` LIKE :terme OR `historique_notes` LIKE :terme ORDER BY `contact_id` ASC');
-        $query->bindParam(':terme', $termel);
+        $query->bindParam(':terme', $terme);
         $query->execute();
-        $boucle = $query->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($boucle as $element) { $contacts[] = $element['contact_id']; }
-        unset($boucle);
-        unset($query);
+        if ($query->rowCount() >= 1) {
+	        $resultats = $query->fetchAll(PDO::FETCH_NUM);
+	        foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+	        unset($resultats);
+	    }
+        
+        // On continue en vérifiant les fichiers
+        $query = $link->prepare('SELECT `contact_id` FROM `fichiers` WHERE `fichier_nom` LIKE :terme OR `fichier_description` LIKE :terme ORDER BY `contact_id` ASC');
+        $query->bindParam(':terme', $terme);
+        $query->execute();
+        if ($query->rowCount() >= 1) {
+	        $resultats = $query->fetchAll(PDO::FETCH_NUM);
+	        foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+	        unset($resultats);
+	    }
         
         // À la fin, on vérifie qu'il n'existe pas de doublons
         $contacts = array_unique($contacts);
