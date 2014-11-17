@@ -12,7 +12,7 @@ require_once('includes.php');
 if (empty($_GET['page'])) {
 	
 	// On charge l'affichage des services de la plateforme
-	$core->tpl_go_to('contacts', true);
+	Core::tpl_load('services');
 
 }
 
