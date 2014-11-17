@@ -20,6 +20,8 @@ $link = new PDO($dsn, $user, $pass);
 print_r($link);
 */
 
+//echo 'test';
+
 // Création d'un cookie pour avoir la paix
 setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', 'localhost');
 setcookie('time', time(), time()+3600*24*7, '/', 'localhost');
