@@ -432,7 +432,7 @@ class User extends core {
 				if ($infos['auth_level'] >= $auth) {
 					
 					// On vérifie maintenant que la personne n'a pas demandé la réinitialisation de son cookie dernièrement
-					if ($_COOKIE['time'] >= strtotime($infos['last_reinit'])) {
+					if (isset($_COOKIE['time']) && $_COOKIE['time'] >= strtotime($infos['last_reinit'])) {
 						
 						// On indique alors que tout va bien
 						return true;
@@ -442,7 +442,12 @@ class User extends core {
 					else {
 						setcookie('leqg', null, 0);
 						setcookie('time', null, 0);
-						header('Location: http://auth.leqg.info');
+						
+						if ($_SERVER['SERVER_ADDR'] = '::1' || $_SERVER['SERVER_ADDR'] == '127.0.0.1') {
+							header('Location: http://localhost/auth');
+						} else {
+							header('Location: http://auth.leqg.info');
+						}
 					}
 				}
 				
