@@ -414,58 +414,69 @@ class User extends core {
 		// On prépare la connexion à la BDD
 		$link = Configuration::read('db.core');
 		
-		// On recherche l'existence du compte
-		$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
-		$query->bindParam(':cookie', $_COOKIE['leqg']);
-		$query->execute();
-		
-		// Si un compte existe
-		if ($query->rowCount() == 1)
-		{
-			// On récupère les informations liées au cookie
-			$infos = $query->fetch(PDO::FETCH_ASSOC);
+		// On regarde si un cookie existe
+		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
 			
-			// On vérifie si l'utilisateur est sur le bon serveur
-			if ($_SERVER['SERVER_NAME'] == $infos['client'] . '.leqg.info' || ($_SERVER['SERVER_ADDR'] == '::1' || $_SERVER['SERVER_ADDR'] == '127.0.0.1')) {
+			// On recherche l'existence du compte
+			$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+			$query->bindParam(':cookie', $_COOKIE['leqg']);
+			$query->execute();
 			
-				// On vérifie que l'utilisateur dispose des droits suffisant pour cette page
-				if ($infos['auth_level'] >= $auth) {
-					
-					// On vérifie maintenant que la personne n'a pas demandé la réinitialisation de son cookie dernièrement
-					if (isset($_COOKIE['time']) && $_COOKIE['time'] >= strtotime($infos['last_reinit'])) {
+			// Si un compte existe
+			if ($query->rowCount() == 1)
+			{
+				// On récupère les informations liées au cookie
+				$infos = $query->fetch(PDO::FETCH_ASSOC);
+				
+				// On vérifie si l'utilisateur est sur le bon serveur
+				if ($_SERVER['SERVER_NAME'] == $infos['client'] . '.leqg.info' || ($_SERVER['SERVER_ADDR'] == '::1' || $_SERVER['SERVER_ADDR'] == '127.0.0.1')) {
+				
+					// On vérifie que l'utilisateur dispose des droits suffisant pour cette page
+					if ($infos['auth_level'] >= $auth) {
 						
-						// On indique alors que tout va bien
-						return true;
+						// On vérifie maintenant que la personne n'a pas demandé la réinitialisation de son cookie dernièrement
+						if (isset($_COOKIE['time']) && $_COOKIE['time'] >= strtotime($infos['last_reinit'])) {
+							
+							// On indique alors que tout va bien
+							return true;
+						}
+						
+						// Sinon on redirige vers l'interface de connexion en supprimant les cookies
+						else {
+							setcookie('leqg', '', time()-1);
+							setcookie('time', '', time()-1);
+							
+							header('Location: http://auth.leqg.info');
+						}
 					}
 					
-					// Sinon on redirige vers l'interface de connexion en supprimant les cookies
+					// Sinon, on redirige vers l'accueil de son compte
 					else {
-						setcookie('leqg', '', time()-1);
-						setcookie('time', '', time()-1);
-						
-						header('Location: http://auth.leqg.info');
+						header('Location: http://' . $infos['client'] . '.leqg.info');
 					}
+					
 				}
 				
-				// Sinon, on redirige vers l'accueil de son compte
+				// Sinon, on redirige vers son serveur
 				else {
-					header('Location: http://' . $infos['client'] . '.leqg.info');
+					header('Location: http://' . $infos['client'] . '.leqg.info' . $_SERVER['PHP_SELF']);
 				}
-				
 			}
 			
-			// Sinon, on redirige vers son serveur
+			// Si aucun compte n'existe, on détruit le cookie et on redirige vers le login
 			else {
-				header('Location: http://' . $infos['client'] . '.leqg.info' . $_SERVER['PHP_SELF']);
+				setcookie('leqg', '', time()-1);
+				setcookie('time', '', time()-1);
+				header('Location: http://auth.leqg.info');
 			}
 		}
 		
-		// Si aucun compte n'existe, on détruit le cookie et on redirige vers le login
+		// Sinon, on supprime au cas où ce cookie et on redirige
 		else {
 			setcookie('leqg', '', time()-1);
 			setcookie('time', '', time()-1);
 			header('Location: http://auth.leqg.info');
-		}
+		}	
 	}
 }
 
