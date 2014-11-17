@@ -1,3 +1,7 @@
+<?php 
+	User::protection();
+	Core::tpl_header();
+?>
 <table id="services">
 	<?php if ($user->get_auth() >= 5) : ?>
 	<tr>
@@ -23,3 +27,4 @@
 	</tr>
 	<?php endif; ?>
 </table>
+<?php Core::tpl_footer(); ?>

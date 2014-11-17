@@ -31,39 +31,38 @@ class Configuration
 
 // On applique la configuration chargée
 Configuration::write('db.host', $config['BDD']['host']);
-Configuration::write('db.basename', 'strasbourg');
+Configuration::write('db.basename', 'leqg');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 
-// On fabrique la classe $link de liaison PDO
-$link = new PDO('mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8', Configuration::read('db.user'), Configuration::read('db.pass'));	
+// On fabrique la classe $noyau de connexion au noyau central
+$host = '217.70.189.234';
+$port = 3306;
+$dbname = 'leqg-core';
+$user = 'leqg-remote';
+$pass = 'pbNND3JY2cfrDUuZ';
+$charset = 'utf8';
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
+$noyau = new PDO($dsn, $user, $pass);
 
-// Appel de la classe MySQL du noyau
-$noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
+// On fabrique la classe $link de liaison PDO
+$dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
+$link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
+
+// On enregistre les liaisons SQL
+Configuration::write('db.core', $noyau);
+Configuration::write('db.link', $link);
 
 // Constructeur de classes
 function __autoload($class_name) {
 	include 'class/'.$class_name.'.class.php';
 }
 
-// On regarde les cookies
-if (isset($_COOKIE['leqg-user'])) {
-	$query = 'SELECT * FROM users LEFT JOIN clients ON users.client_id = clients.client_id WHERE user_id = ' . $_COOKIE['leqg-user'];
-	$sql = $noyau->query($query);
-	$row = $sql->fetch_assoc();
-	
-	$cookie = $_COOKIE['leqg-user'];
-	$base = $row['client_bdd'];
-} else { $base = null; $cookie = null; }
-
-// On met à jour l'heure de dernière action pour le membre connecté
-if (isset($_COOKIE['leqg-user']))
-{
-	$noyau->query('UPDATE `users` SET `user_lastaction` = NOW() WHERE `user_id` = ' . $_COOKIE['leqg-user']);
-}
-
 // Appel de la classe MySQL du compte
-$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
+$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
+
+// Temporaire, à des fins de comptabilité
+$cookie = $_COOKIE['leqg'];
 
 // On appelle l'ensemble des classes générales au site
 $core =			new core($db, $noyau, $config['SERVER']['url']);
