@@ -443,9 +443,8 @@ class User extends core {
 						
 						// Sinon on redirige vers l'interface de connexion en supprimant les cookies
 						else {
-							setcookie('leqg', '', time()-1);
-							setcookie('time', '', time()-1);
-							
+							setcookie('leqg', null, time(), '/', 'leqg.info');
+							setcookie('time', null, time(), '/', 'leqg.info');
 							header('Location: http://auth.leqg.info');
 						}
 					}
@@ -465,8 +464,8 @@ class User extends core {
 			
 			// Si aucun compte n'existe, on détruit le cookie et on redirige vers le login
 			else {
-				setcookie('leqg', '', time()-1);
-				setcookie('time', '', time()-1);
+				setcookie('leqg', null, time(), '/', 'leqg.info');
+				setcookie('time', null, time(), '/', 'leqg.info');
 				header('Location: http://auth.leqg.info');
 			}
 		}
