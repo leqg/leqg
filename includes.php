@@ -67,12 +67,11 @@ $cookie = $_COOKIE['leqg'];
 // On appelle l'ensemble des classes générales au site
 $user =			new user($db, $noyau, $config['SERVER']['url']);
 $tache =		new tache($db, $cookie, $config['SERVER']['url']);
-$mission =		new mission($db, $cookie, $config['SERVER']['url']);
 $porte =		new porte($db);
 $notification =	new notification($db, $cookie, $config['SERVER']['url']);
 
 // On transforme ces classes générales en variables globales
-global $user, $tache, $mission, $notification, $porte;
+global $user, $tache, $notification, $porte;
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
