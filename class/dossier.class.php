@@ -1,14 +1,14 @@
 <?php
 
 /**
- * La classe contact permet de créer un objet folder contenant toutes les opérations liées au dossier ouvert
+ * La classe Dossier permet de créer un objet Dossier contenant toutes les opérations liées au dossier ouvert
  * 
  * @package		leQG
  * @author		Damien Senger <mail@damiensenger.me>
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class Folder
+class Dossier
 {
 	
 	/**
@@ -20,7 +20,7 @@ class Folder
 	
 	
 	/**
-	 * Constructeur de la classe Folder
+	 * Constructeur de la classe Dossier
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
