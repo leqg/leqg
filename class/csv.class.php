@@ -7,8 +7,7 @@
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class csv {
-	
+class Csv {
 	
 	/**
 	 * Cette méthode permet la lecture et le traitement d'un fichier CSV

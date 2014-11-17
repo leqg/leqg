@@ -79,7 +79,7 @@ $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
 // On inclut les classes non chargées
-require_once 'class/boitage.class.php';
+require_once 'class/boite.class.php';
 require_once 'class/carto.class.php';
 require_once 'class/contact.class.php';
 require_once 'class/core.class.php';
