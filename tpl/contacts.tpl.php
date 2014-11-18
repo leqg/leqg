@@ -24,10 +24,12 @@
 		</section>
 		
 		<section class="contenu demi">
-			<h4>Critères géographiques de tri</h4>
+			<h4>Critères complexes de tri</h4>
 			
 			<ul class="listeTris">
-				<li class="tri ajoutTri">Ajout d'un critère de tri</li>
+				<li class="tri ajoutTri premierAjoutTri" data-critere="bureau">Ajout d'un bureau de vote</li>
+				<li class="tri ajoutTri" data-critere="rue">Ajout des électeurs d'une rue</li>
+				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
 			</ul>
 		</section>
 		
@@ -122,8 +124,55 @@
 		<section class="contenu demi invisible listeFiches">
 			<h4>Liste des fiches selon le tri</h4>
 			<input type="hidden" id="nombreFiches" value="0">
+			<input type="hidden" id="listeCriteresTri" value="">
 			
 			<ul class="listeContacts resultatTri"></ul>
+		</section>
+		
+		<section class="contenu demi selectionCritere-thema invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection d'un critère thématique</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label for="choixCritereThema" class="small">Tag à rechercher</label>
+					<span class="form-icon decalage"><input type="text" name="choixCritereThema" id="choixCritereThema" placeholder="Thématique à filter"></span>
+				</li>
+				<li>
+					<button class="validerChoixCritereThema">Ajouter le critère de tri</button>
+				</li>
+			</ul>
+		</section>
+		
+		<section class="contenu demi selectionCritere-bureau invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection d'un bureau de vote</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label for="rechercheBureauVote" class="small">Recherche du bureau de vote</label>
+					<span class="form-icon decalage search"><input type="text" name="rechercheBureauVote" id="rechercheBureauVote" placeholder="Numéro du bureau ou nom si configuré"></span>
+				</li>
+			</ul>
+			
+			<ul class="listeDesBureaux form-liste"></ul>
+		</section>
+		
+		<section class="contenu demi selectionCritere-rue invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection d'une rue</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label for="rechercheRue" class="small">Recherche d'une rue</label>
+					<span class="form-icon decalage search"><input type="text" name="rechercheRue" id="rechercheRue" placeholder="Nom de la rue, toute ville confondue"></span>
+				</li>
+			</ul>
+			
+			<ul class="listeDesRues form-liste"></ul>
 		</section>
 	</div>
 
