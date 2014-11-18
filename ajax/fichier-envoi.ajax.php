@@ -16,7 +16,7 @@
 		);
 		
 		// On ouvre la fiche contact
-		$contact = new contact($fiche);
+		$contact = new Contact($fiche);
 		
 		// On lance la gestion du fichier envoyé
 		$contact->fichier_upload($fichier, $data);

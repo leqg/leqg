@@ -2,8 +2,8 @@
 	if (isset($_POST['fiche'], $_POST['ville'], $_POST['rue'], $_POST['immeuble']))
 	{
 		// On créé le bordel
-		$rue = $carto->ajoutRue($_POST['ville'], $_POST['rue'], $_POST['immeuble']);
-		$immeuble = $carto->ajoutImmeuble(array('rue' => $rue, 'numero' => $_POST['immeuble']));
+		$rue = Carto::ajoutRue($_POST['ville'], $_POST['rue'], $_POST['immeuble']);
+		$immeuble = Carto::ajoutImmeuble(array('rue' => $rue, 'numero' => $_POST['immeuble']));
 		
 		// On ouvre le contact
 		$contact = new contact(md5($_POST['fiche']));
