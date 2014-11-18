@@ -7,7 +7,7 @@
 		$description = $_POST['description'];
 		
 		// On ouvre le dossier concerné
-		$dossier = new Folder(md5($dossier));
+		$dossier = new Dossier(md5($dossier));
 		
 		// On modifie la description
 		$dossier->modifier('dossier_description', $description);

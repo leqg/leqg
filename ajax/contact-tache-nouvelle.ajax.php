@@ -9,7 +9,7 @@
 	if (isset($tache[0]['compte_id']))
 	{
 		// On récupère le nom de la fiche qui est concernée par cette tâche
-		$nickname = $user->get_login_by_ID($tache['compte_id']);
+		$nickname = User::get_login_by_ID($tache[0]['compte_id']);
 	}
 	else
 	{

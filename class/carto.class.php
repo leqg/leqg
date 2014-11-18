@@ -348,17 +348,32 @@ class Carto {
 	 * @return	array
 	 */
 
-	public static function ville( $id ) {
+	public static function ville_secure( $id ) {
 		// On lance la connexion à la base de données
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de recherche des informations
-		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_id` = :id');
-		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query = $link->prepare('SELECT * FROM `communes` WHERE SHA2(`commune_id`, 256) = :id');
+		$query->bindParam(':id', $id);
 		$query->execute();
 		
 		// On retourne les résultats
 		return $query->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à une ville demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de la ville demandée
+	 * @return	array
+	 */
+
+	public static function ville( $id ) {
+		return self::ville_secure(hash('sha256', $id));
 	}
 	
 	
@@ -466,7 +481,7 @@ class Carto {
 		$ville = self::ville($id);
 		
 		// On retourne le résultat demandé
-		if ($return) : return $ville['nom']; else : echo $ville['nom']; endif;
+		if ($return) : return $ville['commune_nom']; else : echo $ville['commune_nom']; endif;
 	}
 	
 	
@@ -486,7 +501,7 @@ class Carto {
 		$rue = self::rue($id);
 		
 		// On retourne le résultat demandé
-		if ($return) : return $rue['nom']; else : echo $rue['nom']; endif;
+		if ($return) : return $rue['rue_nom']; else : echo $rue['rue_nom']; endif;
 	}
 	
 	
@@ -630,7 +645,7 @@ class Carto {
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
 	 *
-	 * @param	int		$rue		ID de la rue demandée
+	 * @param	int		$rue	ID de la rue demandée
 	 * @return	array			La liste des immeubles dans la rue demandée
 	 */
 
@@ -639,7 +654,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 			
 		// On exécute la requête de récupération des immeubles correspondant
-		$query = $link->prepare('SELET * FROM `immeubles` WHERE `rue_id` = :rue ORDER BY `immeuble_numero` ASC');
+		$query = $link->prepare('SELECT *, `immeuble_id` AS `id`, `immeuble_numero` AS `numero` FROM `immeubles` WHERE `rue_id` = :rue ORDER BY `immeuble_numero` ASC');
 		$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 		$query->execute();
 		

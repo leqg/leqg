@@ -8,6 +8,6 @@
         $contact->destruction();
         
         // On redirige vers les dossiers
-        Core::tpl_go_to('dossier', true);
+        Core::tpl_go_to('contacts', true);
     }
 ?>

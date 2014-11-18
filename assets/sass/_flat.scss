@@ -391,6 +391,22 @@ main.dossier {
 			height: 200px;
 			padding: 0;
 		}
+		
+		&#mapbox-carto,
+		&#mapbox-contact {
+			height: 350px;
+			padding: 0;
+			
+			a {
+				font-size: .66em;
+				
+				&.mapbox-improve-map { display: none; }
+			}
+		}
+		
+		&#mapbox-contact {
+			height: 250px;
+		}
 	}
 	
 	strong {
@@ -1308,12 +1324,14 @@ main.dossier {
     	    margin-top: 1em;
 	}
 	
-	ul.listeContacts {
+	ul.listeContacts,
+	ul.listeCommunes {
 		list-style: none;
 		margin: 0 auto;
 		padding: 0 0 0 0;
 		
-		li.contact {
+		li.contact,
+		li.commune {
 			position: relative;
 			display: block;
 			border: 1px solid $gris;
@@ -1356,6 +1374,7 @@ main.dossier {
 			&.isexe::before { content: '\e8a8'; }
 			&.homme::before { content: '\e8a6'; }
 			&.femme::before { content: '\e8a7'; }
+			&.ville::before { content: '\e841'; }
 			
 			p {
 				color: $grisFonce;

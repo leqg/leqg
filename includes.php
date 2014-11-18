@@ -10,9 +10,6 @@ setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr');
 // On détermine le charset du fichier retourné par le serveur
 header('Content-Type: text/html; charset=utf-8');
 
-// On récupère le fichier de configuration
-$config = parse_ini_file('config.ini', true);
-
 // On lance la classe de configuration
 class Configuration
 {
@@ -29,11 +26,15 @@ class Configuration
 	}
 }
 
+// On récupère le fichier de configuration
+$config = parse_ini_file('config.ini', true);
+
 // On applique la configuration chargée
 Configuration::write('db.host', $config['BDD']['host']);
 Configuration::write('db.basename', 'leqg');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
+Configuration::write('ini', $config);
 
 // On fabrique la classe $noyau de connexion au noyau central
 $host = '217.70.189.234';
@@ -43,23 +44,15 @@ $user = 'leqg-remote';
 $pass = 'pbNND3JY2cfrDUuZ';
 $charset = 'utf8';
 $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
-$noyau = new PDO($dsn, $user, $pass);
+$core = new PDO($dsn, $user, $pass);
 
 // On fabrique la classe $link de liaison PDO
 $dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 $link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
 
 // On enregistre les liaisons SQL
-Configuration::write('db.core', $noyau);
+Configuration::write('db.core', $core);
 Configuration::write('db.link', $link);
-
-// Constructeur de classes
-function __autoload($class_name) {
-	include 'class/'.$class_name.'.class.php';
-}
-
-// Appel de la classe MySQL du compte
-$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
 
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
@@ -84,8 +77,9 @@ require_once 'class/carto.class.php';
 require_once 'class/contact.class.php';
 require_once 'class/core.class.php';
 require_once 'class/csv.class.php';
+require_once 'class/dossier.class.php';
 require_once 'class/evenement.class.php';
-require_once 'class/folder.class.php';
+require_once 'class/map.class.php';
 require_once 'class/porte.class.php';
 require_once 'class/rappel.class.php';
 require_once 'class/user.class.php';

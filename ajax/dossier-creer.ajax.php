@@ -10,7 +10,7 @@
     );
     
     // On va tout d'abord créer le dossier
-    $dossier = new folder($args, true);
+    $dossier = new dossier($args, true);
     $dossier_json = $dossier->json();
     
     // On ouvre l'événement

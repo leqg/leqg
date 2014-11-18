@@ -1,9 +1,12 @@
 <?php
+	// On protège l'accès
+	User::protection(5);
+	
 	// On vérifie l'existance d'un élément dossier
 	if (!isset($_GET['dossier'])) Core::tpl_go_to('dossier', true);
 	
 	// On ouvre l'objet dossier
-	$dossier = new Folder($_GET['dossier']);
+	$dossier = new Dossier($_GET['dossier']);
 
 	// On affiche l'entête
 	Core::tpl_header();

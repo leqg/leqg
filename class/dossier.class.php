@@ -1,14 +1,14 @@
 <?php
 
 /**
- * La classe contact permet de créer un objet folder contenant toutes les opérations liées au dossier ouvert
+ * La classe Dossier permet de créer un objet Dossier contenant toutes les opérations liées au dossier ouvert
  * 
  * @package		leQG
  * @author		Damien Senger <mail@damiensenger.me>
  * @copyright	2014 MSG SAS – LeQG
  */
 
-class Folder
+class Dossier
 {
 	
 	/**
@@ -20,7 +20,7 @@ class Folder
 	
 	
 	/**
-	 * Constructeur de la classe Folder
+	 * Constructeur de la classe Dossier
 	 *
 	 * @author	Damien Senger <mail@damiensenger.me>
 	 * @version	1.0
@@ -272,7 +272,7 @@ class Folder
 		$link = Configuration::read('db.link');
 		
 		// On prépare la requête
-		$query = $link->prepare('SELECT `dossier_id` FROM `dossiers` WHERE `dossier_statut` = :statut');
+		$query = $link->prepare('SELECT `dossier_id` FROM `dossiers` WHERE `dossier_statut` = :statut ORDER BY `dossier_nom` ASC');
 		$query->bindParam(':statut', $statut, PDO::PARAM_INT);
 		
 		// On récupère les données
@@ -281,6 +281,36 @@ class Folder
 		
 		// On retourne le tableau
 		return $dossiers;
+	}
+	
+	
+	/**
+	 * Liste l'intégralité des dossiers
+	 *
+	 * Cette méthode permet de récupérer un tableau des dossiers ouverts ou non (au choix)
+	 * avec l'ensemble des informations associées
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   bool   $tous   True pour tous les dossiers, false pour une uniquement les dossiers ouverts
+	 * 
+	 * @result  array          Tableau de tous les dossiers
+	 */
+	
+	public static function liste_complete($tous = false) {
+		// On prépare le lien vers la BDD
+		$link = Configuration::read('db.link');
+		
+		// On lance la recherche des dossiers selon le critère choisi
+		if ($tous) {
+			$query = $link->query('SELECT * FROM `dossiers` ORDER BY `dossier_nom` ASC');
+		} else {
+			$query = $link->query('SELECT * FROM `dossiers` WHERE `dossier_date_fermeture` IS NULL ORDER BY `dossier_nom` ASC');
+		}
+		
+		// On retourne les informations
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 	}
 }
 ?>

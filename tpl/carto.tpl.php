@@ -1,8 +1,23 @@
-<table id="services">
-	<tr>
-		<td><a href="<?php $core->tpl_go_to('carto', array('module' => 'arborescence')); ?>"><span>&#xe910;</span><p>Arborescence</p></a></td>
-		<!--<td><a href="<?php $core->tpl_go_to('carto', array('module' => 'bureaux')); ?>"><span>&#xe852;</span><p>Bureaux de vote</p></a></td>-->
-		<!--<td><a href="<?php $core->tpl_go_to('carto', array('module' => 'export')); ?>"><span>&#xe90b;</span><p>Export</p></a></td>-->
-		<!--<td><a href="<?php $core->tpl_go_to('carto'); ?>"><span>&#xe856;</span><p>Gestion</p></a></td>-->
-	</tr>
-</table>
+<?php 
+	User::protection(5);
+	Core::tpl_header();
+?>
+
+	<h2>Module d'exploration cartographique</h2>
+	
+	<form class="rechercheGlobale rechercheVille" action="#" method="post">
+		<span class="search-icon">
+			<input type="search" name="recherche" id="rechercheVille" placeholder="Commencez l'exploration en cherchant une ville">
+			<span class="annexesRecherche">
+				<span class="iconeRecherche"></span>
+			</span>
+		</span>
+	</form>
+	
+	<section class="resultats invisible">
+		<h4>Sélectionnez la ville à explorer</h4>
+		
+		<ul class="listeCommunes"></ul>
+	</section>
+	
+<?php Core::tpl_footer(); ?>

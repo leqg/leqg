@@ -4,6 +4,9 @@
 	$infos = $_POST;
 	
 	// On exécute la requête
-	$db->query('INSERT INTO `liaisons` (`ficheA`, `ficheB`) VALUES (' . $infos['ficheA'] . ', ' . $infos['ficheB'] . ')');
+	$query = $link->prepare('INSERT INTO `liaisons` (`ficheA`, `ficheB`) VALUES (:ficheA, :ficheB)');
+	$query->bindParam(':ficheA', $infos['ficheA']);
+	$query->bindParam(':ficheB', $infos['ficheB']);
+	$query->execute();
 
 ?>

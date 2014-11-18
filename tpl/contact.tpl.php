@@ -1,9 +1,12 @@
-<?php 
+<?php
+	// On protège le module
+	User::protection(5);
+	
 	// Chargement de l'objet contact
 	$contact = new contact($_GET['contact']);
 
 	// Chargement de l'entête
-	$core->tpl_header();
+	Core::tpl_header();
 ?>
 
 <h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php if (!empty($contact->contact['contact_nom']) || !empty($contact->contact['contact_nom_usage']) || !empty($contact->contact['contact_prenoms'])) { echo $contact->noms(); } else { echo 'Cliquez pour ajouter un nom'; } ?></h2>
@@ -66,8 +69,8 @@
 		<h4>Fiches liées</h4>
 		
 		<ul class="etatcivil">
-			<?php $fiches = $contact->fichesLiees(); foreach ($fiches as $identifiant => $fiche) : ?>
-			<li class="lien"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($identifiant))); ?>"><?php echo strtoupper($fiche['contact_nom']); ?> <?php echo strtoupper($fiche['contact_nom_usage']); ?> <?php echo ucwords(strtolower($fiche['contact_prenoms'])); ?></a></li>
+			<?php $fiches = $contact->fichesLiees(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact(md5($identifiant)); ?>
+			<li class="lien"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($ficheLiee->get('contact_id')))); ?>"><?php echo $ficheLiee->noms(); ?></a></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>
@@ -386,7 +389,7 @@
 				<span class="form-icon utilisateur">
 					<label class="sbox" for="formDestinataireTache">
 						<select id="formDestinataireTache" name="formDestinataireTache">
-							<?php $users = $user->liste(); foreach ($users as $user) : ?>
+							<?php $users = User::liste(); foreach ($users as $user) : ?>
 							<option value="<?php echo $user['id']; ?>"><?php echo $user['firstname']; ?> <?php echo $user['lastname']; ?></option>
 							<?php endforeach; ?>
 						</select>
@@ -519,11 +522,11 @@
     		    <li class="dossier ajoutDossier">
     		        <strong>Créer un nouveau dossier</strong>
     		    </li>
-    		    <?php $dossiers = $dossier->recherche(); foreach ($dossiers as $dossier) : ?>
-            <li class="dossier choixDossier dossier-<?php echo $dossier['id']; ?>" data-dossier="<?php echo $dossier['id']; ?>">
-                <strong><?php echo $dossier['nom']; ?></strong>
-                <em><?php echo $dossier['description']; ?></em>
-            </li>
+    		    <?php $dossiers = Dossier::liste_complete(); foreach ($dossiers as $dossier) : ?>
+	            <li class="dossier choixDossier dossier-<?php echo $dossier['dossier_id']; ?>" data-dossier="<?php echo $dossier['dossier_id']; ?>">
+	                <strong><?php echo $dossier['dossier_nom']; ?></strong>
+	                <em><?php echo $dossier['dossier_description']; ?></em>
+	            </li>
     		    <?php endforeach; ?>
 		</ul>
 	</section>
@@ -619,4 +622,4 @@
 </script>
 <?php endif; ?>
 
-<?php $core->tpl_footer(); ?>
+<?php Core::tpl_footer(); ?>

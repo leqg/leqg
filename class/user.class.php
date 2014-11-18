@@ -163,6 +163,62 @@ class User {
 		// Sinon l'ID est nul
 		else { return 0; }
 	}
+	
+	
+	/**
+	 * Liste les comptes associé au client
+	 *
+	 * @author  Damien Senger
+	 * @version 1.0
+	 * 
+	 * @param   int     $auth_level     Niveau d'accréditation minimal des personnes recherchées
+	 * 
+	 * @return  array   tableau comprenant les informations sur les différents comptes du client
+	 */
+	
+	public static function liste( $auth_level = 5 ) {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		$client = Configuration::read('ini')['LEQG']['compte'];
+		
+		// On effectue la recherche
+		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `auth_level` >= :authlevel');
+		$query->bindParam(':client', $client);
+		$query->bindParam(':authlevel', $auth_level, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On retourne la tableau contenant les informations
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+	}
+	
+	
+	/**
+	 * Récupère le login d'un compte selon son ID
+	 *
+	 * @author  Damien Senger
+	 * @version 1.0
+	 * 
+	 * @param   int     $id     Identifiant du compte dont nous souhaitons récupérer le nom
+	 * 
+	 * @return  string          Nom du compte
+	 */
+	 
+	public static function get_login_by_ID( $id ) {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		$client = Configuration::read('ini')['LEQG']['compte'];
+		
+		// On effectue la recherche
+		$query = $link->prepare('SELECT `firstname`, `lastname` FROM `compte` WHERE `client` = :client AND `id` = :id');
+		$query->bindParam(':client', $client);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On récupère les résultats et on affiche le nom et le prénom
+		$data = $query->fetch(PDO::FETCH_NUM);
+		return mb_convert_case($data[0], MB_CASE_TITLE) . ' ' . mb_convert_case($data[1], MB_CASE_UPPER);
+	}
+	
 }
 
 ?>

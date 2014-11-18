@@ -5,24 +5,29 @@ var carto = function() {
 	$('#affichage-envoi').hide();
 	
 	// Script concernant la recherche d'une ville dans l'arborescence
-	$("#recherche").keyup(function(){
+	$("#rechercheVille").keyup(function(){
 		var recherche = $(this).val();
-		console.log(recherche);
 		
 		if (recherche.length > 3) {
-			$.ajax({
-				type: 'POST',
-				url: 'ajax.php?script=arborescence-recherche-ville',
-				data: { 'recherche': recherche },
-				dataType: 'html'
-			}).done(function(data){
-				$("#listeVilles").show();
-				$("#listeVilles").html(data);
-			}).error(function(){
-				console.log('Ajax: erreur');
+			$.getJSON('ajax.php?script=villes', { 'ville': recherche }, function(data) {
+				// On cache la liste
+				$('.resultats').hide();
+				$('.listeCommunes').html('');
+				
+				// On fait une boucle des différents résultats
+				$.each(data, function(key, val) {
+					// On créé la puce
+					$('.listeCommunes').append('<a class="nostyle ville-' + val.commune_id + '" href=""><li class="demi contact ville"><strong></strong><p></p></li></a>');
+					$('.ville-' + val.commune_id).attr('href', 'index.php?page=carto&niveau=communes&code=' + val.md5);
+					$('.ville-' + val.commune_id + ' li strong').html(val.commune_nom);
+					$('.ville-' + val.commune_id + ' li p').html(val.departement_nom);
+				});
+				
+				// On affiche la liste finale
+				$('.resultats').fadeIn();
 			});
 		} else {
-			$("#listeVilles").hide();
+			$('.resultats').hide();
 		}
 	});
 	
