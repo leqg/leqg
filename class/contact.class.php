@@ -526,28 +526,8 @@ class Contact
 	
 	public function possede( $type )
 	{
-		// On prépare la requête de vérification selon le type
-		if ($type == 'email')
-		{
-			$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `coordonnees` WHERE `coordonnee_email` IS NOT NULL AND `coordonnee_type` = "email" AND `contact_id` = :contact');
-		}
-		else if ($type == 'mobile')
-		{
-			$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `coordonnees` WHERE `coordonnee_numero` IS NOT NULL AND `coordonnee_type` = "mobile" AND `contact_id` = :contact');
-		}
-		else
-		{
-			$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `coordonnees` WHERE `coordonnee_numero` IS NOT NULL AND `coordonnee_type` = "fixe" AND `contact_id` = :contact');
-		}
-		
-		// On affecte au sein de la requête les données d'identification du contact et on exécute la requête
-		$query->bindParam(':contact', $this->contact['contact_id']);
-		$query->execute();
-		$coordonnees = $query->fetch(PDO::FETCH_ASSOC);
-		unset($query);
-		
 		// On retourne un booléen selon le nombre de données trouvées
-		if ($coordonnees['nombre'])
+		if ($this->get('contact_' . $type))
 		{
 			return true;
 		}
@@ -619,6 +599,11 @@ class Contact
 		$query->bindParam(':coordonnees', $coordonnees);
 		
 		// On exécute la requête
+		$query->execute();
+		
+		// On incrémente le nombre de coordonnées dans la fiche pour le type correspondant
+		$query = $this->link->prepare('UPDATE `contacts` SET `contact_' . $type . '` = `contact_' . $type . '` + 1 WHERE `contact_id` = :id');
+		$query->bindParam(':id', $this->contact['contact_id']);
 		$query->execute();
 	}
 	
@@ -1132,13 +1117,28 @@ class Contact
 			$criteres = array();
 			
 				// On retraite le critère "email" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-				if ($tri['email']) { $criteres[] = '`contact_email` = ' . ($tri['email'] - 1); }
+				if ($tri['email']) {
+					// Si le tri demandé concerne les fiches avec l'information
+					if ($tri['email'] == 2) { $criteres[] = '`contact_email` > 0'; }
+					// Sinon, s'il concerne les fiches sans l'information
+					else { $criteres[] = '`contact_email` = 0'; }
+				}
 			
 				// On retraite le critère "mobile" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-				if ($tri['mobile']) { $criteres[] = '`contact_mobile` = ' . ($tri['mobile'] - 1); }
+				if ($tri['mobile']) {
+					// Si le tri demandé concerne les fiches avec l'information
+					if ($tri['mobile'] == 2) { $criteres[] = '`contact_mobile` > 0'; }
+					// Sinon, s'il concerne les fiches sans l'information
+					else { $criteres[] = '`contact_mobile` = 0'; }
+				}
 			
 				// On retraite le critère "fixe" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-				if ($tri['fixe']) { $criteres[] = '`contact_fixe` = ' . ($tri['fixe'] - 1); }
+				if ($tri['fixe']) {
+					// Si le tri demandé concerne les fiches avec l'information
+					if ($tri['fixe'] == 2) { $criteres[] = '`contact_fixe` > 0'; }
+					// Sinon, s'il concerne les fiches sans l'information
+					else { $criteres[] = '`contact_fixe` = 0'; }
+				}
 			
 				// On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
 				if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }
