@@ -29,6 +29,7 @@
 			<ul class="listeTris">
 				<li class="tri ajoutTri premierAjoutTri" data-critere="bureau">Ajout d'un bureau de vote</li>
 				<li class="tri ajoutTri" data-critere="rue">Ajout des électeurs d'une rue</li>
+				<li class="tri ajoutTri" data-critere="ville">Ajout des électeurs d'une ville</li>
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
 			</ul>
 		</section>
@@ -173,6 +174,21 @@
 			</ul>
 			
 			<ul class="listeDesRues form-liste"></ul>
+		</section>
+		
+		<section class="contenu demi selectionCritere-ville invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection d'une ville</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label for="rechercheVille" class="small">Recherche d'une ville</label>
+					<span class="form-icon decalage search"><input type="text" name="rechercheVille" id="rechercheVille" placeholder="Nom de la ville"></span>
+				</li>
+			</ul>
+			
+			<ul class="listeDesVilles form-liste"></ul>
 		</section>
 	</div>
 

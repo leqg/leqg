@@ -199,6 +199,33 @@ var contacts = function() {
 	});
 	
 	
+	// Script de recherche des rues
+	$('#rechercheVille').keyup(function() {
+		// On récupère les informations tapées
+		var recherche = $(this).val();
+		
+		// S'il y a plus de trois caractères entrés
+		if (recherche.length >= 3)
+		{
+			// On effectue une recherche AJAX pour trouver la rue
+			$.getJSON('ajax.php?script=villes', { ville: recherche }, function(data) {
+				// On vide la liste des rues affichés précédemment
+				$('.listeDesVilles').html('');
+				
+				// On fait la boucle de tous les éléments trouvés et on les affiche
+				$.each(data, function(key, val) {
+					// Pour chaque rue, on créé une puce
+					$('.listeDesVilles').append('<li class="ville-' + val.commune_id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.commune_id + '" data-nom="' + val.commune_nom + '">Choisir</button></li>');
+					$('.ville-' + val.commune_id + ' .ville-nom').html(val.commune_nom);
+					$('.ville-' + val.commune_id + ' .ville-dept').html(val.departement_nom);
+				});
+			});
+		} else {
+			$('.listeDesVilles').html('');
+		}
+	});
+	
+	
 	// Script à la validation d'un nouveau bureau
 	$('.listeDesBureaux').on('click', '.choisirBureau', function() {
 		// On récupère le critère demandé
@@ -246,6 +273,34 @@ var contacts = function() {
 		
 		// On ajoute le critère à la liste dans la colonne de gauche
 		$('.premierAjoutTri').before('<li class="tri rue" data-critere="rue" data-valeur="' + rue + '">' + nom + '</li>');
+		
+		// On met à zéro le nombre de fiches déjà affichées
+		$('#nombreFiches').val(0);
+		
+		// On met à jour le listing
+		majListing('debut');
+	});
+	
+	
+	// Script à la validation d'une nouvelle rue
+	$('.listeDesVilles').on('click', '.choisirVille', function() {
+		// On récupère le critère demandé
+		var ville = $(this).data('ville');
+		var nom = $(this).data('nom');
+		
+		// On efface le formulaire et la liste des résultats
+		$('#rechercheVille').val('');
+		$('.listeDesVilles').html('');
+		
+		// On ajoute ce critère à la liste des critères
+		var criteres = $('#listeCriteresTri').val();
+		var newCriteres = criteres + 'ville:' + ville + ';';
+		
+		// On met à jour la liste des critères
+		$('#listeCriteresTri').val(newCriteres);
+		
+		// On ajoute le critère à la liste dans la colonne de gauche
+		$('.premierAjoutTri').before('<li class="tri ville" data-critere="ville" data-valeur="' + ville + '">' + nom + '</li>');
 		
 		// On met à zéro le nombre de fiches déjà affichées
 		$('#nombreFiches').val(0);
