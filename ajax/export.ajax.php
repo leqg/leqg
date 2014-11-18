@@ -84,7 +84,7 @@
 			$data['email'],
 			$data['mobile'],
 			$data['fixe'],
-			($data['electeur_id']) ? 'oui' : 'non',
+			($data['contact_electeur']) ? 'oui' : 'non',
 			$bureau['bureau_numero'],
 			$immeuble['immeuble_numero'] . ' ' . mb_convert_case($immeuble['rue_nom'], MB_CASE_TITLE),
 			$immeuble['code_postal'],
