@@ -33,146 +33,37 @@ var carto = function() {
 	
 	
 	// Script concernant la recherche d'une rue dans l'arborescence
-	$("#rechercheRue").keyup(function(){
+	$(".rechercheRue").keyup(function(){
 		var recherche = $(this).val();
 		var ville = $(this).data('ville');
 		
-		$.ajax({
-			type: 'POST',
-			url: 'ajax.php?script=arborescence-recherche-rue',
-			data: { 'recherche': recherche, 'ville': ville },
-			dataType: 'html'
-		}).done(function(data){
-			$("#listeRues").show();
-			$("#listeRues").html(data);
-		}).error(function(){
-			console.log('Ajax: erreur');
-		});
-	});
-	
-	
-	// Données relative au système d'export
-	
-		// On commence par cacher le moteur de calcul
-		$('#calcul').hide();
-		$('#fichier').hide();	
-		$('#boutonExportation').hide();
-		$('#affichage-envoi').hide();
-		
-		// On prépare ce qu'il se passe quand on clique sur l'estimation du nombre de fiches du formulaire
-		$("#export").on('submit', function() {
-			// On lance le script AJAX
-			var donnees = $(this).serialize();
-			
-			// On lance le moteur de calcul
-			$('#calcul').show();
-			
-			$.ajax({
-				url: $(this).attr('action'),
-				type: $(this).attr('method'),
-				data: $(this).serialize(),
-				dataType: 'html'
-			}).done(function(data){
-				$('#affichage-envoi').hide();
-				$("#affichageEstimation").html(data);
-				$('#boutonExportation').show();
-				$('#fichier').hide();
-				$('#calcul').hide();
-			});
-			
-			// On retourne une erreur pour ne pas rediriger vers la page du formulaire
-			return false;
-		});
-		
-		
-		// On envoi les données pour l'exportation
-		$("#exportation").on('click', function() {
-			
-			// On commence par enlever le bouton d'export pour afficher le calcul en cours et puis le bouton vers le fichier
-			$('#calcul').show();
-			$('#boutonExportation').hide();
-			$('#affichage-envoi').show();
-			$('#calcul').hide();
-			
-			$.ajax({
-				url: $(this).attr('href'),
-				type: 'POST',
-				data: $('#export').serialize(),
-				dataType: 'html'
-			}).done(function(data){
-				//$('#affichage-envoi').html(data);
-			});
-			
-			// On annule le clique sur le lien
-			return false;
-		});
-		
-		
-	// Données relatives à la recherche d'un nouveau canton
-		$('#rechercheCanton').keyup(function(){
-			// On commence par récupérer le contenu du formulaire
-			var canton = $(this).val();
-			var bureau = $(this).data('bureau');
-			
-			// On vérifie qu'il possède au moins trois caractères
-			if (canton.length >= 3) {
-			
-				// On lance la recherche de cantons
-				$.ajax({
-					type: 'POST',
-					url: 'ajax.php?script=recherche-canton',
-					data: { 'canton': canton, 'bureau': bureau },
-					dataType: 'html'
-				}).done(function(data){
-					$('#listeCantons').html(data);
-					$('#resultatsCantons').show();
-				}).error(function(){
-					$('#resultatsCantons').hide();
-				})
+		// On vérifie qu'il y a assez de caractères pour lancer la recherche
+		if (recherche.length >= 3) {
+			$.getJSON('ajax.php?script=rues', { rue: recherche, ville: ville }, function(data) {
+				// On vide la liste des rues affichées
+				$('.listeDesRues').html('');
 				
-			} else {
-				$('#resultatsCantons').hide();
-			}
-		});
-		
-	
-	// Scripts relative au système de critère géographique de l'export
-	
-		$('#ville-recherche').keyup(function(){
-			var value = $(this).val();
-			
-			if (value.length >= 3) {
-				$.ajax({
-					type: 'POST',
-					url: 'ajax.php?script=export-ville',
-					data: { 'ville': value },
-					dataType: 'html'
-				}).done(function(data){
-					$('#ville-resultats').html(data).show();
+				// On fait une boucle des rues pour les afficher
+				$.each(data, function(key, val) {
+					// On rajoute une nouvelle puce dans la liste
+					$('.listeDesRues').append('<li class="rue rue-' + val.rue_code + '"><span class="rue-nom"></span><a href=""><button>Explorer</button></a></li>');
+					
+					// On ajoute les informations à la puce
+					$('.listeDesRues .rue-' + val.rue_code + ' span.rue-nom').html(val.rue_nom);
+					$('.listeDesRues .rue-' + val.rue_code + ' a').attr('href', 'index.php?page=carto&niveau=rues&code=' + val.rue_code);
 				});
-			} else {
-				$('#ville-resultats').hide().html('');
-			}
-		});
-	
-		$('#rue-recherche').keyup(function(){
-			var value = $(this).val();
-			var ville = $(this).data('ville');
+				
+				// On affiche le bloc des résultats
+				$('.resultatsRues').fadeIn();
+			});
+		} else {
+			// On cache le bloc des résultats
+			$('.resultatsRues').hide();
 			
-			if (value.length >= 3) {
-				$.ajax({
-					type: 'POST',
-					url: 'ajax.php?script=export-rue',
-					data: { 'ville': ville, 'rue': value },
-					dataType: 'html'
-				}).done(function(data){
-					$('#rue-resultats').html(data).show();
-				}).error(function(){
-				});
-			} else {
-				$('#rue-resultats').hide().html('');
-			}
-		});
+			// On vide la liste des rues affichées
+			$('.listeDesRues').html('');
+		}
+	});
 }
 
 

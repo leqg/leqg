@@ -16,6 +16,16 @@
  *									*
  ************************************/
 
+$icon-names:    (street '\e841') (search '\e8a2') (objet '\e827') 
+				(type '\e8dd') (lieu '\e842') (date '\e862') 
+				(notes '\e8bd') (naissance '\e85b') (organisme '\e968') 
+				(fonction '\e967') (ville '\e845') (rue '\e841') 
+				(immeuble '\e842') (titre '\e8c7') 
+				(description '\e8bd') (file '\e823') (tache '\e8c1')
+				(email '\e96d') (mobile '\e961') (telephone '\e854')
+				(sms '\e8bf') (nom '\e8b7') (utilisateur '\e80a')
+				(electeur '\e840') (region '\e845') (code '\e90f') (fixe '\e854');
+
 body.flat {
 	background-color: transparent;
 	padding-left: 95px;
@@ -413,6 +423,56 @@ main.dossier {
 		font-weight: 600;
 	}
 	
+	ul.informations {
+		list-style: none;
+		margin: 0 1em;
+		padding: 0;
+		
+		li {
+			position: relative;
+			font-size: 1.15em;
+			line-height: 1.15em;
+			margin: 0 auto .5em;
+			padding: 0 0 0 50px;
+			
+			span:first-of-type {
+				display: block;
+				color: $grisMoyen;
+				font-size: .75em;
+				font-weight: 400;
+				text-transform: uppercase;
+			}
+			
+			span:last-of-type {
+				display: block;
+				
+				strong {
+					color: $bleu;
+					font-weight: 600;
+				}
+			}
+			
+			&::before {
+				position: absolute; top: calc(50% - 13px); left: 0;
+				display: block;
+				color: $mediumGrey;
+				font-family: $icons;
+				font-size: 25px;
+				font-weight: 300;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				width: 30px;
+			}
+						
+			@each $icon-name in $icon-names {
+				&.#{nth($icon-name, 1)}::before {
+					content: nth($icon-name, 2);
+				}
+			}
+		}
+	}
+	
 	ul.formulaire {
 		list-style: none;
 		margin: 0;
@@ -490,14 +550,6 @@ main.dossier {
 					top: .75em;
 				}
 				
-				$icon-names:    (street '\e841') (search '\e8a2') (objet '\e827') 
-								(type '\e8dd') (lieu '\e842') (date '\e862') 
-								(notes '\e8bd') (naissance '\e85b') (organisme '\e968') 
-								(fonction '\e967') (ville '\e845') (rue '\e841') 
-								(immeuble '\e842') (titre '\e8c7') 
-								(description '\e8bd') (file '\e823') (tache '\e8c1')
-								(email '\e96d') (mobile '\e961') (telephone '\e854')
-								(sms '\e8bf') (nom '\e8b7') (utilisateur '\e80a');
 				@each $icon-name in $icon-names {
 					&.#{nth($icon-name, 1)}::after {
 						content: nth($icon-name, 2);
