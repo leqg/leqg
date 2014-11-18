@@ -908,13 +908,13 @@ class Carto {
 		$query->bindParam(':id', $immeuble, PDO::PARAM_INT);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_ASSOC);
-		
+
 		// On récupère les données sur la rue
 		$query = $link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :id');
 		$query->bindParam(':id', $data['rue_id'], PDO::PARAM_INT);
 		$query->execute();
 		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
-		
+
 		// On récupère les données sur la ville
 		$query = $link->prepare('SELECT * FROM `communes` WHERE `commune_id` = :id');
 		$query->bindParam(':id', $data['commune_id'], PDO::PARAM_INT);
@@ -926,25 +926,7 @@ class Carto {
 		$query->bindParam(':id', $data['commune_id'], PDO::PARAM_INT);
 		$query->execute();
 		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
-		
-		// On récupère les données sur le bureau de vote
-		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_id` = :id');
-		$query->bindParam(':id', $data['bureau_id'], PDO::PARAM_INT);
-		$query->execute();
-		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
-		
-		// On récupère les données sur le canton
-		$query = $link->prepare('SELECT * FROM `cantons` WHERE `canton_id` = :id');
-		$query->bindParam(':id', $data['canton_id'], PDO::PARAM_INT);
-		$query->execute();
-		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
-		
-		// On récupère les données sur l'arrondissement
-		$query = $link->prepare('SELECT * FROM `arrondissements` WHERE `arrondissement_id` = :id');
-		$query->bindParam(':id', $data['arrondissement_id'], PDO::PARAM_INT);
-		$query->execute();
-		$data = array_merge($data, $query->fetch(PDO::FETCH_ASSOC));
-		
+
 		// On récupère les données sur le département
 		$query = $link->prepare('SELECT * FROM `departements` WHERE `departement_id` = :id');
 		$query->bindParam(':id', $data['departement_id'], PDO::PARAM_INT);

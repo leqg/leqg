@@ -135,6 +135,7 @@ var contact = function() {
 		// On ajoute les informations à l'affichage actuel de la page, et si c'est un numéro de téléphone on le retraite pour l'affichage
 		if (type != 'email')
 		{
+			coordonnees = coordonnees.replace(/\D/g,'');
 			coordonnees = coordonnees.replace(/(.{2})/g, "$1 ");
 		}
 		var puce = '<li class="' + type + '">' + coordonnees + '</li>';
