@@ -1,12 +1,6 @@
 <?php
 	// On créé le lien vers la BDD
-	$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-			';dbname=' . Configuration::read('db.basename');
-	$user = Configuration::read('db.user');
-	$pass = Configuration::read('db.pass');
-	
-	$link = new PDO($dsn, $user, $pass);
-
+	$link = Configuration::read('db.link');
 
 	if (isset($_POST['id'], $_POST['info'], $_POST['type']))
 	{
