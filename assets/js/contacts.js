@@ -361,6 +361,24 @@ var contacts = function() {
 		// On met à jour le listing
 		majListing('debut');
 	});
+	
+	
+	// Lancement d'un export
+	$('.exportSelection').click(function() {
+		// On récupère les données
+		var data = {
+			'email': $('#coordonnees-email').val(),
+			'mobile': $('#coordonnees-mobile').val(),
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'criteres': ';' + $('#listeCriteresTri').val()
+		};
+		
+		// On lance l'export en AJAX
+		$.get('ajax.php?script=export', data);
+		
+		// On affiche que l'export est en cours et qu'un email sera envoyé
+	});
 };
 
 $(document).ready(contacts);

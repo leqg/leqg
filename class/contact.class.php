@@ -1105,8 +1105,8 @@ class Contact
 	
 	public static function listing( array $tri , $debut , $nombre = 5 )
 	{
-		if (is_numeric($debut) && is_numeric($nombre) && is_array($tri)) {
-
+		if (is_numeric($debut) && ( is_numeric($nombre) || is_bool($nombre) ) && is_array($tri)) {
+			
 	        // On prépare le lien vers la BDD
 			$link = Configuration::read('db.link');
 			
@@ -1213,7 +1213,11 @@ class Contact
 			}
 			
 			// On ajoute les conditions de nombre et d'ordre
-			$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
+			if ($nombre) {
+				$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
+			} else {
+				$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC';
+			}
 
 			// On exécute la requête SQL
 			$query = $link->prepare($sql);
