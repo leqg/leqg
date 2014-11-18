@@ -3,10 +3,10 @@
 	if (isset($_GET['bureau'])) :
 	
 		// On formate le contenu pour la recherche
-		$recherche = $core->formatage_recherche($_GET['bureau']);
+		$recherche = preg_replace('#[^[:alnum:]]#', '%', $_GET['bureau']);
 		
 		// On effectue une recherche pour récuperer les données au format JSON
-		$bureaux = $carto->recherche_bureau_json($recherche);
+		$bureaux = Carto::recherche_bureau_json($recherche);
 	
 		echo $bureaux;
 	

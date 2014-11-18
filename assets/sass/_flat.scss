@@ -1001,26 +1001,33 @@ main.dossier {
 	
 	ul.listeTris {
 		list-style: none;
-		margin: 0 0 0 1em;
+		margin: 0 0 .5em 1em;
 		padding: 0;
 		
 		li.tri {
 			position: relative;
+			display: inline-block;
 			color: $darkGrey;
 			font-size: 1.10em;
 			line-height: 1.5em;
-			margin: 0 0 1em;
-			padding: 0 0 0 30px;
+			padding: 0 20px 10px 40px;
 			@include transition(all);
 			
 			&::before {
 				position: absolute; left: 5px;
+				display: block;
 				color: $darkGrey;
-				content: '\e8a2'; 
 				font-family: $icons;
 				line-height: 1.5em;
+				text-align: center;
+				width: 30px;
 				@include transition(all);
 			}
+			
+			&.rue::before { content: '\e841'; }
+			&.ville::before { content: '\e845'; }
+			&.bureau::before { content: '\e8b3'; }
+			&.thema::before { content: '\e8b7'; }
 			
 			&:not(.ajoutTri):hover {
 				cursor: pointer;
@@ -1033,7 +1040,8 @@ main.dossier {
 		}
 		
 		li.ajoutTri {
-			padding: .75em 0 0 30px;
+			display: block;
+			padding: .75em 0 0 40px;
 			
 			&::before {
 				content: '\e8b2';

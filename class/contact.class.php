@@ -1142,14 +1142,79 @@ class Contact
 			
 				// On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
 				if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }
+				
+				// Si des critères plus complexes sont demandés, on s'en occupe ici
+				if (!empty($tri['criteres'])) {
+					$criteria = explode(';', $tri['criteres']);
+					
+					
+					// On prépare les tableaux avec les différents critères
+					$themas = array();
+					$bureaux = array();
+					$rues = array();
+					
+					
+					// On sépare les critères de leurs type
+					foreach ($criteria as $key => $val) {
+						$crit = explode(':', $val);
+						
+						if ($crit[0] == 'thema') { $themas[] = $crit[1]; }
+						else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; }
+						else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
+					}
+					
+					
+					// On va analyser les critères thématiques pour les ajouter à la condition SQL
+					if (count($themas)) {
+						// On va ajouter chaque condition thématique à la recherche
+						foreach ($themas as $thema) { 
+							$thema = preg_replace('#[^A-Za-z]#', '%', $thema);
+							$criteres[] = '`contact_tags` LIKE "%' . $thema . '%"';
+						}
+					}
+					
+					
+					// On va analyser les bureaux de votes demandés pour extraire tous les électeurs au sein de ceux-ci
+					if (count($bureaux)) {
+						// On prépare la liste des bureaux de vote pour l'insérer dans la requête
+						$ids = implode(',', $bureaux);
+						
+						// On prépare la condition SQL
+						$criteres[] = '`bureau_id` IN (' . $ids . ')';
+					}
+					
+					
+					// On va analyser toutes les rues demandées pour récupérer tous les ID d'immeubles concernées par ces rues et les électeurs qui y sont
+					if (count($rues)) {
+						// Pour chaque rue, on cherche les immeubles concernés
+						$immeubles = array();
+						foreach ($rues as $rue) {
+							$query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
+							$query->bindParam(':id', $rue);
+							$query->execute();
+							$ids = $query->fetchAll(PDO::FETCH_NUM);
+							
+							// Pour chaque immeuble trouvé, on le rajoute dans le tableau $immeubles
+							foreach ($ids as $id) { $immeubles[] = $id[0]; }
+						}
+						
+						// On transforme cette liste d'immeuble pour l'intégrer dans la requête SQL
+						$ids = implode(',', $immeubles);
+						
+						// On rajoute la requête aux conditions SQL
+						$criteres[] = '`immeuble_id` IN (' . $ids . ')';
+					}
+				}
 			
 			
 			// On retraite les critères en conditions SQL
-			$sql.= ' WHERE ' . implode(' AND ', $criteres);
+			if ($criteres) {
+				$sql.= ' WHERE ' . implode(' AND ', $criteres);
+			}
 			
 			// On ajoute les conditions de nombre et d'ordre
 			$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
-			
+
 			// On exécute la requête SQL
 			$query = $link->prepare($sql);
 			$query->execute();

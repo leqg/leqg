@@ -6,7 +6,8 @@
 			'email' => $_GET['email'],
 			'mobile' => $_GET['mobile'],
 			'fixe' => $_GET['fixe'],
-			'electeur' => $_GET['electeur']
+			'electeur' => $_GET['electeur'],
+			'criteres' => trim($_GET['criteres'], ';')
 		);
 		
 		// On charge les fiches correspondantes
