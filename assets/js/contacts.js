@@ -378,6 +378,11 @@ var contacts = function() {
 		$.get('ajax.php?script=export', data);
 		
 		// On affiche que l'export est en cours et qu'un email sera envoyé
+		swal({
+			title: 'Export réussi !',
+			text: 'Vous allez recevoir rapidement le fichier demandé sur votre adresse email',
+			type: 'success'
+		});
 	});
 };
 
