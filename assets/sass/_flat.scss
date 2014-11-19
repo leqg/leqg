@@ -446,6 +446,11 @@ main.dossier {
 			span:last-of-type {
 				display: block;
 				
+				em {
+					font-style: normal;
+					font-weight: 300;
+				}
+				
 				strong {
 					color: $bleu;
 					font-weight: 600;
