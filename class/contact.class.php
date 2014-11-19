@@ -1202,7 +1202,7 @@ class Contact
 						$ids = implode(',', $immeubles);
 						
 						// On rajoute la requête aux conditions SQL
-						$criteres[] = '`immeuble_id` IN (' . $ids . ')';
+						$criteres[] = '( `immeuble_id` IN (' . $ids . ') OR `adresse_id` IN (' . $ids . ') )';
 					}
 				}
 			
