@@ -7,7 +7,7 @@
 	
 	<form class="rechercheGlobale" action="index.php?page=recherche" method="post">
 		<span class="search-icon">
-			<input type="search" name="recherche" placeholder="Recherche de fiche">
+			<input type="search" name="recherche" placeholder="Recherche d'un contact">
 			<span class="annexesRecherche">
 				<span class="iconeRecherche"></span>
 				<input type="submit" class="lancementRecherche" value="&#xe8af;">
