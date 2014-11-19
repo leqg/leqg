@@ -190,6 +190,31 @@
 			
 			<ul class="listeDesVilles form-liste"></ul>
 		</section>
+		
+		<section class="contenu demi invisible smsEnvoiCampagne">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+			<input type="hidden" name="smsCriteresComplets" id="smsCriteresComplets" value="">
+			
+			<h4>Envoi d'une nouvelle campagne SMS</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label class="small" for="smsTitreCampagne">Titre de la campagne</label>
+					<span class="form-icon decalage titre"><input type="text" name="smsTitreCampagne" class="smsTitreCampagne" id="smsTitreCampagne" placeholder="Titre de la campagne"></span>
+				</li>
+				<li>
+					<label class="small" for="smsNombreDestinataire">Nombre de destinataire</label>
+					<span class="form-icon decalage nombre"><input type="text" name="smsNombreDestinataire" class="smsNombreDestinataire" id="smsNombreDestinataire" disabled></span>
+				</li>
+				<li>
+					<label class="small" for="smsMessageCampagne">Message à envoyer</label>
+					<span class="form-icon decalage sms"><textarea name="smsMessageCampagne" class="smsMessageCampagne" id="smsMessageCampagne" placeholder="Message envoyé aux contacts sélectionnés"></textarea></span>
+				</li>
+				<li>
+					<button class="smsValidationCampagne"><span>Envoi de la campagne ( <i>&#xe8cd;</i> <small class="smsEstimation">0&nbsp;&euro;</small> )</span></button>
+				</li>
+			</ul>
+		</section>
 	</div>
 
 <?php Core::tpl_footer(); ?>
