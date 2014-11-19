@@ -11,9 +11,10 @@ class Campagne {
 	
 	/**
 	 * @var	object  $link       Propriété contenant le lien vers la base de données de l'utilisateur
+	 * @var	object  $core       Propriété contenant le lien vers la base de données générale
 	 * @var	array   $campagne   Tableau contenant les informations sur la campagne
 	 */
-	private $link, $campagne;
+	private $link, $core, $campagne;
 	
 
 	/**
@@ -32,12 +33,35 @@ class Campagne {
 		$this->link = Configuration::read('db.link');
 		
 		// On récupère les informations sur la campagne
-		$query = $this->link->prepare('SELECT * FROM `campagne` WHERE MD5(`campagne_id`) = :id');
+		$query = $this->link->prepare('SELECT *, MD5(`campagne_id`) AS `code` FROM `campagne` WHERE MD5(`campagne_id`) = :id');
 		$query->bindParam(':id', $campagne);
 		$query->execute();
 		
 		// On récupère les informations
 		$this->campagne = $query->fetch(PDO::FETCH_ASSOC);
+		
+		// On récupère le nombre d'envois réalisés
+		$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `historique` WHERE MD5(`campagne_id`) = :id');
+		$query->bindParam(':id', $campagne);
+		$query->execute();
+		$nombre = $query->fetch(PDO::FETCH_NUM);
+		$this->campagne['nombre'] = $nombre[0];
+	}
+	
+	
+	/**
+	 * Récupère une information
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param   string   $info   Information demandée
+	 *
+	 * @return	string           Information trouvée
+	 */
+	
+	public function get( $info ) {
+		return $this->campagne[ $info ];
 	}
 	
 	
@@ -70,6 +94,35 @@ class Campagne {
 		
 		// On retourne l'identifiant de la campagne
 		return $link->lastInsertId();
+	}
+	
+	
+	/**
+	 * Liste les campagnes existantes
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param   string   $type   Type de campagne à créer
+	 *
+	 * @return	void
+	 */
+	
+	public static function liste($type) {
+		// On récupère le lien vers la base de données
+		$link = Configuration::read('db.link');
+		
+		// On cherche la liste des campagnes du type demandé
+		$query = $link->prepare('SELECT MD5(`campagne_id`) AS `code` FROM `campagne` WHERE `campagne_type` = :type ORDER BY `campagne_date` DESC');
+		$query->bindParam(':type', $type);
+		$query->execute();
+		
+		// On retourne la liste
+		if ($query->rowCount()) {
+			return $query->fetchAll(PDO::FETCH_ASSOC);
+		} else {
+			return array();
+		}
 	}
 }
 ?>

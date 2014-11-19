@@ -106,22 +106,15 @@ else {
 	
 	// Si on demande le module SMS
 	else if ($_GET['page'] == 'sms') {
-		// On charge d'abord le template de header
-		Core::tpl_header(); 
-		
-		// On charge les templates de page selon la demande
-		if ( isset($_GET['action'])) {
-			if ( $_GET['action'] == 'nouveau' ) : Core::tpl_load('sms', 'nouveau');
-			elseif ( $_GET['action'] == 'historique' ) : Core::tpl_load('sms', 'historique');
-			elseif ( $_GET['action'] == 'campagne' ) : Core::tpl_load('sms', 'campagne');
-			elseif ( $_GET['action'] == 'reglages' ) : Core::tpl_load('sms', 'reglages');
-			else : Core::tpl_load('sms'); endif;
-		} else {
-			Core::tpl_load('sms');
+		// On regarde si une page en particulier est demandée
+		if (isset($_GET[''])) {
+			
 		}
 		
-		// On charge enfin le template de footer
-		Core::tpl_footer();
+		// Sinon, on appelle la page principale du module
+		else {
+			Core::tpl_load('sms');
+		}
 	}
 	
 	
