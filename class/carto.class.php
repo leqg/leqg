@@ -800,11 +800,11 @@ class Carto {
 		$query = $link->prepare('SELECT `rue_id` FROM `immeuble` WHERE `immeuble_id` = :immeuble');
 		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
 		$query->execute();
-		$immeuble = $query->fetch(PDO::FETCH_NUM);
+		$rue = $query->fetch(PDO::FETCH_NUM);
 		
 		// On cherche l'information concernant la ville
 		$query = $link->prepare('SELECT `commune_id` FROM `rues` WHERE `rue_id` = :rue');
-		$query->bindParam(':rue', $immeuble[0], PDO::PARAM_INT);
+		$query->bindParam(':rue', $rue[0], PDO::PARAM_INT);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_NUM);
 		

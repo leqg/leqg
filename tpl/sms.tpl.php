@@ -9,7 +9,7 @@
 	Core::tpl_header(); 
 ?>
 	
-	<h2>Campagnes de SMS groupés</h2>
+	<h2 class="titreCampagne" data-page="campagnes">Campagnes de SMS groupés</h2>
 	<?php if (count($liste)) : ?>
 		<section id="missions">
 			<ul class="liste-missions">

@@ -46,6 +46,11 @@ class Campagne {
 		$query->execute();
 		$nombre = $query->fetch(PDO::FETCH_NUM);
 		$this->campagne['nombre'] = $nombre[0];
+		
+		// On calcule le prix
+		$prix['sms'] = 0.08;
+		$cout = $prix[$this->campagne['campagne_type']] * $this->campagne['nombre'];
+		$this->campagne['prix'] = $cout;
 	}
 	
 	
@@ -62,6 +67,62 @@ class Campagne {
 	
 	public function get( $info ) {
 		return $this->campagne[ $info ];
+	}
+	
+	
+	/**
+	 * Récupère des informations sur les contacts concernés
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @return	array           Contacts concernés
+	 */
+	 
+	public function contacts() {
+		// On liste les éléments d'historique concernés
+		$query = $this->link->prepare('SELECT * FROM `historique` WHERE `campagne_id` = :id');
+		$campagne = $this->get('campagne_id');
+		$query->bindParam(':id', $campagne);
+		$query->execute();
+		$historique = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		// On fait le tableau des différents contacts concernés
+		$contacts = array();
+		foreach ($historique as $h) {
+			$contacts[] = $h['contact_id'];
+		}
+		
+		// On retraite le tableau des ids
+		$ids = implode(',', $contacts);
+		
+		// On cherche tous les contacts concernés par l'envoi
+		$query = $this->link->query('SELECT *, MD5(`contact_id`) AS `contact_md5` FROM `contacts` WHERE `contact_id` IN (' . $ids . ')');
+		
+		if ($query->rowCount()) {
+			$contacts = $query->fetchAll(PDO::FETCH_ASSOC);
+			
+			// Pour chaque contact, on rajoute le nom de la ville et on traite le nom d'affichage
+			foreach ($contacts as $key => $contact) {
+				if ($contact['adresse_id']) {
+					$ville = Carto::villeParImmeuble($contact['adresse_id']);
+				}
+				elseif ($contact['immeuble_id']) {
+					$ville = Carto::villeParImmeuble($contact['immeuble_id']);
+				}
+				else {
+					$ville = 'Ville inconnue';
+				}
+				
+				$contacts[$key]['ville'] = $ville;
+				
+				$contacts[$key]['nom_affichage'] = mb_convert_case($contact['contact_nom'], MB_CASE_UPPER) . ' ' . mb_convert_case($contact['contact_nom_usage'], MB_CASE_UPPER) . ' ' . mb_convert_case($contact['contact_prenoms'], MB_CASE_TITLE);
+			}
+		} else {
+			$contacts = array();
+		}
+		
+		return $contacts;
 	}
 	
 	

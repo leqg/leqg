@@ -107,8 +107,8 @@ else {
 	// Si on demande le module SMS
 	else if ($_GET['page'] == 'sms') {
 		// On regarde si une page en particulier est demandée
-		if (isset($_GET[''])) {
-			
+		if (isset($_GET['campagne'])) {
+			Core::tpl_load('sms', 'campagne');
 		}
 		
 		// Sinon, on appelle la page principale du module
