@@ -1175,12 +1175,11 @@ class Contact
 						else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
 					}
 					
-					
 					// On va analyser les critères thématiques pour les ajouter à la condition SQL
 					if (count($themas)) {
 						// On va ajouter chaque condition thématique à la recherche
 						foreach ($themas as $thema) { 
-							$thema = preg_replace('#[^A-Za-z]#', '%', $thema);
+							$thema = preg_replace('#[^[:alnum:]]#u', '%', $thema);
 							$criteres[] = '`contact_tags` LIKE "%' . $thema . '%"';
 						}
 					}
