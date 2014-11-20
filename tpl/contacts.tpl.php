@@ -116,9 +116,10 @@
 		
 		<section class="contenu demi invisible actionsFiches">
 			<ul class="iconesActions">
-				<li class="smsSelection">SMS groupé à la sélection</li>
-				<li class="emailSelection">Email groupé à la sélection</li>
-				<li class="exportSelection">Export de la sélection</li>
+				<li class="smsSelection">SMS groupé</li><!--
+			 --><li class="emailSelection">Emailing</li><!--
+			 --><li class="publiSelection">Publipostage</li><!--
+			 --><li class="exportSelection">Export</li>
 			</ul>
 		</section>
 		
@@ -237,6 +238,31 @@
 				</li>
 				<li>
 					<button class="emailValidationCampagne"><span>Envoi de la campagne ( <i>&#xe8cd;</i> )</span></button>
+				</li>
+			</ul>
+		</section>
+		
+		<section class="contenu demi invisible publiEnvoiCampagne">
+			<a href="#" class="fermerColonneListe">&#xe813;</a>
+			<input type="hidden" name="publiCriteresComplets" id="publiCriteresComplets" value="">
+			
+			<h4>Préparation d'un nouveau publipostage</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label class="small" for="publiTitreCampagne">Titre de la campagne</label>
+					<span class="form-icon decalage titre"><input type="text" name="publiTitreCampagne" class="publiTitreCampagne" id="publiTitreCampagne" placeholder="Titre de la campagne"></span>
+				</li>
+				<li>
+					<label class="small" for="publiNombreDestinataire">Nombre de destinataire</label>
+					<span class="form-icon decalage nombre"><input type="text" name="publiNombreDestinataire" class="publiNombreDestinataire" id="publiNombreDestinataire" disabled></span>
+				</li>
+				<li>
+					<label class="small" for="publiDescriptionCampagne">Description de la campagne</label>
+					<span class="form-icon decalage publi"><textarea name="publiDescriptionCampagne" class="publiDescriptionCampagne" id="publiDescriptionCampagne" placeholder="Description de la campagne envoyée"></textarea></span>
+				</li>
+				<li>
+					<button class="publiValidationCampagne"><span>Préparation de la campagne</span></button>
 				</li>
 			</ul>
 		</section>

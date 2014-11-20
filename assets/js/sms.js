@@ -11,10 +11,19 @@ var sms = function() {
 			
 			// On fait une boucle des informations
 			$.each(data, function(key, val) {
-				// On ajoute une puce
-				var sexe;
-				if (val.contact_sexe = 'M') { sexe = 'homme'; } else if (val.contact_sexe = 'F') { sexe = 'femme'; } else { sexe = 'isexe'; }
-				$('.listeContacts').append('<a href="" class="nostyle contact-' + val.contact_md5 + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="ville"></span></p></li></a>');
+				// On créé la puce
+				$('.listeContacts').append('<a href="" class="nostyle contact-' + val.contact_md5 + '"><li class="contact"><strong></strong><p><span class="ville"></span></p></li></a>');
+				
+				// On y applique un sexe
+				if (val.contact_sexe == 'M') {
+					$('.listeContacts a.contact-' + val.contact_md5 + ' li').addClass('homme');
+				} 
+				else if (val.contact_sexe == 'F') { 
+					$('.listeContacts a.contact-' + val.contact_md5 + ' li').addClass('femme');
+				} 
+				else { 
+					$('.listeContacts a.contact-' + val.contact_md5 + ' li').addClass('isexe');
+				}
 				
 				// On ajoute demande le nom de la fiche
 				var nom;

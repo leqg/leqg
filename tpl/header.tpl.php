@@ -21,8 +21,8 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<?php $flat = array('boite', 'porte', 'contacts', 'contact', 'dossier', 'rappels', 'recherche-thematique', 'recherche', 'carto', 'sms', 'email'); ?>
-<body<?php if ((isset($_GET['page']) && in_array($_GET['page'], $flat)) || empty($_GET['page'])) { ?> class="flat"<?php } ?>>	
+
+<body class="flat">	
 	<!-- Contenu concret de la page -->
 	<header id="top">
 		<h1><a class="nostyle" href="http://<?php echo Configuration::read('ini')['SERVER']['url']; ?>">LeQG</a></h1>
@@ -41,7 +41,7 @@
 							'carto' => 'Cartographie',
 							'sms' => 'SMS groupés',
 							'email' => 'Emails groupés',
-							'poste' => 'Publipostage',
+							'publi' => 'Publipostage',
 							'porte' => 'Porte-à-porte',
 							'boite' => 'Boîtage',
 							'rappels' => 'Rappels',

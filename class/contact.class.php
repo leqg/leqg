@@ -1128,6 +1128,13 @@ class Contact
 					// Sinon, s'il concerne les fiches sans l'information
 					else { $criteres[] = '`contact_email` = 0'; }
 				}
+				
+				if ($tri['adresse']) {
+					// Si le tri demandé concerne les fiches avec forcément une adresse
+					if ($tri['adresse'] == 2) { $criteres[] = '(`adresse_id` != 0 OR `immeuble_id` != 0)'; }
+					// Sinon s'il concerne les fiches sans l'information adresse
+					else { $criteres[] = '(`adresse_id` = 0 AND `immeuble_id` = 0)'; }
+				}
 			
 				// On retraite le critère "mobile" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
 				if ($tri['mobile']) {

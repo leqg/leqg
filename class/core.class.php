@@ -478,7 +478,7 @@ class Core {
 						'courrier'	=> 'Correspondance',
 						'sms'		=> 'Envoi SMS',
 						'courriel'	=> 'Envoi d\'un email',
-						'poste'		=> 'Publipostage',
+						'publi'		=> 'Publipostage',
 						'porte'		=> 'Porte-à-porte',
 						'boite'		=> 'Boîtage',
 						'rappel'	=> 'Rappel',
