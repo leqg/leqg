@@ -756,7 +756,7 @@ main.dossier {
 		}
 	}
 	
-	ul.liste-dossiers li ::before { content: '\e851'; }
+	ul.liste-dossiers li::before { content: '\e851'; }
 	
 	ul.liste-campagnes li::before { content: '\e8ef'; }
 	
