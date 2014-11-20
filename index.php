@@ -121,22 +121,15 @@ else {
 	
 	// Si on demande le module Email
 	else if ($_GET['page'] == 'email') {
-		// On charge d'abord le template de header
-		Core::tpl_header(); 
-		
-		// On charge les templates de page selon la demande
-		if ( isset($_GET['action'])) {
-			if ( $_GET['action'] == 'nouveau' ) : Core::tpl_load('email', 'nouveau');
-			elseif ( $_GET['action'] == 'historique' ) : Core::tpl_load('email', 'historique');
-			elseif ( $_GET['action'] == 'campagne' ) : Core::tpl_load('email', 'campagne');
-			elseif ( $_GET['action'] == 'reglages' ) : Core::tpl_load('email', 'reglages');
-			else : Core::tpl_load('email'); endif;
-		} else {
-			Core::tpl_load('email');
+		// On regarde si une page en particulier est demandée
+		if (isset($_GET['campagne'])) {
+			Core::tpl_load('email', 'campagne');
 		}
 		
-		// On charge enfin le template de footer
-		Core::tpl_footer();
+		// Sinon, on appelle la page principale du module
+		else {
+			Core::tpl_load('email');
+		}
 	}
 	
 	

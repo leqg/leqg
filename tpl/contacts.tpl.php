@@ -215,6 +215,31 @@
 				</li>
 			</ul>
 		</section>
+		
+		<section class="contenu demi invisible emailEnvoiCampagne">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+			<input type="hidden" name="emailCriteresComplets" id="emailCriteresComplets" value="">
+			
+			<h4>Envoi d'une nouvelle campagne Email</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label class="small" for="emailTitreCampagne">Objet de la campagne</label>
+					<span class="form-icon decalage titre"><input type="text" name="emailTitreCampagne" class="emailTitreCampagne" id="emailTitreCampagne" placeholder="Objet des emails de la campagne"></span>
+				</li>
+				<li>
+					<label class="small" for="emailNombreDestinataire">Nombre de destinataire</label>
+					<span class="form-icon decalage nombre"><input type="text" name="emailNombreDestinataire" class="emailNombreDestinataire" id="emailNombreDestinataire" disabled></span>
+				</li>
+				<li>
+					<label class="small" for="emailMessageCampagne">Message à envoyer</label>
+					<span class="form-icon decalage email"><textarea name="emailMessageCampagne" class="emailMessageCampagne long" id="emailMessageCampagne" placeholder="Message envoyé aux contacts sélectionnés"></textarea></span>
+				</li>
+				<li>
+					<button class="emailValidationCampagne"><span>Envoi de la campagne ( <i>&#xe8cd;</i> )</span></button>
+				</li>
+			</ul>
+		</section>
 	</div>
 
 <?php Core::tpl_footer(); ?>

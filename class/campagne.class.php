@@ -49,6 +49,7 @@ class Campagne {
 		
 		// On calcule le prix
 		$prix['sms'] = 0.08;
+		$prix['email'] = 0;
 		$cout = $prix[$this->campagne['campagne_type']] * $this->campagne['nombre'];
 		$this->campagne['prix'] = $cout;
 	}

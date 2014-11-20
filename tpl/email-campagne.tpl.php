@@ -13,9 +13,9 @@
 	
 	<div class="colonne demi gauche">
 		<section class="contenu demi">
-				<h4>SMS envoyé</h4>
+			<h4>Email envoyé</h4>
 			
-			<p><em><?php echo $campagne->get('campagne_message'); ?></em></p>
+			<p><?php echo nl2br($campagne->get('campagne_message')); ?></p>
 		</section>
 		
 		<section class="contenu demi">
@@ -30,9 +30,9 @@
 					<span>Utilisateur à l'origine de la campagne</span>
 					<span><?php echo User::get_login_by_id($campagne->get('campagne_createur')); ?></span>
 				</li>
-				<li class="prix">
-					<span>Coût de la campagne</span>
-					<span><strong><?php echo number_format($campagne->get('prix'), 2, ',', ' '); ?>&nbsp;&euro;</strong> pour <?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?> envoi<?php if ($campagne->get('nombre') > 1) { ?>s<?php } ?></span>
+				<li class="email">
+					<span>Nombre d'envois</span>
+					<span><strong><?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?></strong> envoi<?php if ($campagne->get('nombre') > 1) { ?>s<?php } ?></span>
 				</li>
 			</ul>
 		</section>

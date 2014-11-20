@@ -22,7 +22,7 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<?php $flat = array('boite', 'porte', 'contacts', 'contact', 'dossier', 'rappels', 'recherche-thematique', 'recherche', 'carto', 'sms'); ?>
+<?php $flat = array('boite', 'porte', 'contacts', 'contact', 'dossier', 'rappels', 'recherche-thematique', 'recherche', 'carto', 'sms', 'email'); ?>
 <body<?php if ((isset($_GET['page']) && in_array($_GET['page'], $flat)) || empty($_GET['page'])) { ?> class="flat"<?php } ?>>	
 	<!-- Contenu concret de la page -->
 	<header id="top">
