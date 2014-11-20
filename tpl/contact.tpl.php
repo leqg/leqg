@@ -105,7 +105,16 @@
 				<strong>Créer un nouvel événement</strong>
 			</li>
 			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
-			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle evenement-<?php echo md5($event->get_infos('id')); ?> evenement-<?php echo $event->get_infos('id'); ?>" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
+			<?php
+				// on regarde si on peut ouvrir l'événement
+				if ($event->lien() == 2) {
+					echo '<a href="#" class="accesEvenement nostyle evenement-' . md5($event->get_infos('id')) . ' evenement-' . $event->get_infos('id') . '" data-evenement="' . $event->get_infos('id') . '">';
+				}
+				// on regarde si on peut rediriger vers la campagne
+				elseif ($event->lien() == 1) {
+					echo '<a href="'; Core::tpl_go_to($event->get_infos('type'), array('campagne' => md5($event->get('campagne_id')))); echo '" class="nostyle">';
+				}
+			?>
 				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
 					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
 					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : 'Événement sans titre'; ?></strong>
@@ -159,7 +168,7 @@
 						<select name="type" id="eventType">
 							<option value="contact">Entrevue</option>
 							<option value="telephone">Contact téléphonique</option>
-							<option value="email">Courrier électronique</option>
+							<option value="courriel">Courrier électronique</option>
 							<option value="courrier">Correspondance postale</option>
 							<option value="autre">Autre</option>
 						</select>

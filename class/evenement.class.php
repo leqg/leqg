@@ -246,16 +246,23 @@ class Evenement
 	 * @return bool
 	 */
 	
-	public function lien(  )
+	public function lien( )
 	{
 		// On détermine la liste des types possédant une fiche détaillée
-		$type = array('contact', 'telephone', 'email', 'courrier', 'autre');
+		$ouvert = array('contact', 'telephone', 'email', 'courrier', 'autre');
+		$campagne = array('sms', 'email', 'publi');
 		
-		// On renvoit un booléen selon la présence ou non dans le tableau des types ouvrables
-		if (in_array($this->get_infos('type'), $type))
-		{
-			return true;
+		// On regarde si l'événement fait l'objet d'une fiche événement
+		if (in_array($this->get_infos('type'), $ouvert)) {
+			return 2;
 		}
+		
+		// On regarde si l'événement fait partie d'une campagne
+		elseif (in_array($this->get_infos('type'), $campagne)) {
+			return 1;
+		}
+		
+		// Sinon, on informe qu'il s'agit d'un simple événement d'information
 		else
 		{
 			return false;
