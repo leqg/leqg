@@ -83,7 +83,7 @@
 
 
 <div id="colonneDroite" class="colonne demi droite">
-	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="carte" class="contenu demi"></section><?php } ?>
+	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="mapbox-contact" class="contenu demi"></section><?php } ?>
 	
 	<section id="TagsContact" class="contenu demi">
 		<h4>Tags liés au contact</h4>
@@ -582,43 +582,55 @@
 </div>
 
 
-<?php if ($contact->get('adresse_id') || $contact->get('immeuble_id')) : ?>
-<script>
-	function initialize() {
-		geocoder = new google.maps.Geocoder();
-		var latlng = new google.maps.LatLng(48.58476, 7.750576);
-		var mapOptions = {
-			//center: latlng,
-			disableDefaultUI: true,
-			draggable: true,
-			rotateControl: false,
-			scrollwheel: false,
-			zoomControl: true,
-			zoom: 16
-		};
-		var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
-		
-		// On marque les différents bâtiments
-		// L'adresse à rechercher
-		var GeocoderOptions = { 'address': "<?php if ($contact->get('adresse_id')) { echo $contact->adresse('declaree', ' '); } else if (!$contact->get('adresse_id') && $contact->get('immeuble_id')) { echo $contact->adresse('electorale', ' '); } else { echo ''; } ?>", 'region': 'FR' };
-		// La function qui va traiter le résultat
-		function GeocodingResult(results, status) {
-			// Si la recherche a fonctionnée
-			if (status == google.maps.GeocoderStatus.OK) {
-				// On créé un nouveau marker sur la map
-				markerAdresse = new google.maps.Marker({
-				position: results[0].geometry.location,
-				map: map,
-				title: "<?php echo $contact->noms(' ', ' '); ?>"
-				});
-				// On centre sur ce marker
-				map.setCenter(results[0].geometry.location);
-			}
-		}
-		// On lance la recherche de l'adresse
-		geocoder.geocode(GeocoderOptions, GeocodingResult);
+<?php 
+	if ($contact->get('adresse_id') > 0 || $contact->get('immeuble_id') > 0) : 
+	
+	if ($contact->get('adresse_id') > 0) { 
+		$immeuble = Carto::immeuble($contact->get('adresse_id'));
+		$rue = Carto::rue($immeuble['rue_id']);
+		$ville = Carto::ville($rue['commune_id']);
+	} else {
+		$immeuble = Carto::immeuble($contact->get('immeuble_id'));
+		$rue = Carto::rue($immeuble['rue_id']);
+		$ville = Carto::ville($rue['commune_id']);
 	}
-	google.maps.event.addDomListener(window, 'load', initialize);
+?>
+<script>
+	// Token public d'accès à Mapbox
+	L.mapbox.accessToken = 'pk.eyJ1IjoiaGl3ZWxvIiwiYSI6Imc3M3EzbmsifQ.t1k5I2FxgVdFfl6QNBA_Ew';
+	
+	// On met en place la map
+	var geocoder = L.mapbox.geocoder('mapbox.places-v1'),
+	    map = L.mapbox.map('mapbox-contact', 'hiwelo.k8fnkd96').setView([48.867, 2.3265], 4);
+
+	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
+	var data = {
+		format: 'json',
+		email: 'tech@leqg.info',
+		country: 'France',
+		city: "<?php echo $ville['commune_nom']; ?>",
+		street: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim($rue['rue_nom']); ?>"
+	}
+	
+	// On récupère le JSON contenant les coordonnées de la rue
+	$.getJSON('https://nominatim.openstreetmap.org', data, function(data) {
+		// On récupère uniquement les données du premier résultat
+		data = data[0];
+		console.log(data);
+		// On prépare la boundingbox
+		var loc1 = new L.LatLng(data.boundingbox[0], data.boundingbox[2]);
+		var loc2 = new L.LatLng(data.boundingbox[1], data.boundingbox[3]);
+		var bounds = new L.LatLngBounds(loc1, loc2);
+		
+		// On fabrique une vue qui contient l'ensemble du secteur demandé
+		map.fitBounds(bounds, { maxZoom: 17 });
+		
+		// On ajoute un marker au milieu de la rue
+		L.marker([data.lat, data.lon], {
+			clicable: false,
+			title: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim(mb_convert_case($rue['rue_nom'], MB_CASE_TITLE)); ?>"
+		}).addTo(map);
+	});
 </script>
 <?php endif; ?>
 

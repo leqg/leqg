@@ -451,7 +451,7 @@ class Carto {
 	 */
 
 	public static function immeuble( $id ) {
-		self::immeuble_secure(hash('sha256', $id));
+		return self::immeuble_secure(hash('sha256', $id));
 	}
 	
 	
