@@ -474,10 +474,10 @@ class Core {
 		// On prépare le tableau de traduction
 		$types = array(	'contact'	=> 'Entrevue',
 						'telephone'	=> 'Entretien téléphonique',
-						'email'		=> 'Échange électronique',
+						'courriel'	=> 'Échange électronique',
 						'courrier'	=> 'Correspondance',
 						'sms'		=> 'Envoi SMS',
-						'courriel'	=> 'Envoi d\'un email',
+						'email'		=> 'Envoi d\'un email',
 						'publi'		=> 'Publipostage',
 						'porte'		=> 'Porte-à-porte',
 						'boite'		=> 'Boîtage',
