@@ -11,8 +11,8 @@
 	
 	<h2 class="titreCampagne" data-page="campagnes">Campagnes de SMS groupés</h2>
 	<?php if (count($liste)) : ?>
-		<section id="missions">
-			<ul class="liste-missions">
+		<section id="campagnes">
+			<ul class="liste-campagnes">
 				<?php foreach ($liste as $element) : $campagne = new Campagne($element['code']); ?>
 				<li>
 					<a href="<?php Core::tpl_go_to('sms', array('campagne' => $element['code'])); ?>" class="nostyle"><h4><?php echo $campagne->get('campagne_titre'); ?></h4></a>

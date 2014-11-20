@@ -679,7 +679,8 @@ main.dossier {
 	}
 	
 	ul.liste-missions,
-	ul.liste-dossiers {
+	ul.liste-dossiers,
+	ul.liste-campagnes {
 		list-style: none;
 		margin: 1em 1em 2.5em;
 		padding: 0;
@@ -755,9 +756,9 @@ main.dossier {
 		}
 	}
 	
-	ul.liste-dossiers li {
-		&::before { content: '\e851'; }
-	}
+	ul.liste-dossiers li ::before { content: '\e851'; }
+	
+	ul.liste-campagnes li::before { content: '\e8ef'; }
 	
 	ul.statistiquesMission {
 		font-size: 1.2em;
