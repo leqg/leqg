@@ -495,7 +495,7 @@ class Evenement
 		$link = Configuration::read('db.link');
 		
 		// On prépare la requête
-		$query = $link->prepare('SELECT `historique_id` FROM `historique` WHERE ( `historique_type` = "contact" OR `historique_type` = "telephone" OR `historique_type` = "email" OR `historique_type` = "courrier" OR `historique_type` = "autre" ) ORDER BY `historique_date` DESC LIMIT 0, ' . $nombre);
+		$query = $link->prepare('SELECT `historique_id` FROM `historique` WHERE ( `historique_type` = "contact" OR `historique_type` = "telephone" OR `historique_type` = "courriel" OR `historique_type` = "courrier" OR `historique_type` = "autre" ) ORDER BY `historique_date` DESC LIMIT 0, ' . $nombre);
 		$query->execute();
 		
 		// On fait la liste des dernières interactions en question

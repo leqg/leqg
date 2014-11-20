@@ -108,7 +108,7 @@
 			<?php
 				// on regarde si on peut ouvrir l'événement
 				if ($event->lien() == 2) {
-					echo '<a href="#" class="accesEvenement nostyle evenement-' . md5($event->get_infos('id')) . ' evenement-' . $event->get_infos('id') . '" data-evenement="' . $event->get_infos('id') . '">';
+					echo '<a href="#" class="accesEvenement nostyle evenement-' . md5($event->get_infos('id')) . ' evenement-' . $event->get_infos('id') . '" data-evenement="' . md5($event->get_infos('id')) . '">';
 				}
 				// on regarde si on peut rediriger vers la campagne
 				elseif ($event->lien() == 1) {
@@ -625,7 +625,7 @@
 	$.getJSON('https://nominatim.openstreetmap.org', data, function(data) {
 		// On récupère uniquement les données du premier résultat
 		data = data[0];
-		console.log(data);
+		
 		// On prépare la boundingbox
 		var loc1 = new L.LatLng(data.boundingbox[0], data.boundingbox[2]);
 		var loc2 = new L.LatLng(data.boundingbox[1], data.boundingbox[3]);
