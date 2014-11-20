@@ -206,11 +206,9 @@ class User {
 	public static function get_login_by_ID( $id ) {
 		// On prépare le lien à la base de données centrale
 		$link = Configuration::read('db.core');
-		$client = Configuration::read('ini')['LEQG']['compte'];
 		
 		// On effectue la recherche
-		$query = $link->prepare('SELECT `firstname`, `lastname` FROM `compte` WHERE `client` = :client AND `id` = :id');
-		$query->bindParam(':client', $client);
+		$query = $link->prepare('SELECT `firstname`, `lastname` FROM `compte` WHERE `id` = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
 		

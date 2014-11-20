@@ -4,6 +4,14 @@
 	
 	// On récupère les données génériques sur la ville
 	$ville = Carto::ville_secure($_GET['code']);
+	$departement = Carto::departement($ville['departement_id']);
+	$region = Carto::region($departement['region_id']);
+	
+	// On récupère les statistiques
+	$electeurs = Carto::nombreElecteurs('commune', $ville['commune_id']);
+	$emails = Carto::nombreElecteurs('commune', $ville['commune_id'], 'email');
+	$mobiles = Carto::nombreElecteurs('commune', $ville['commune_id'], 'mobile');
+	$fixes = Carto::nombreElecteurs('commune', $ville['commune_id'], 'fixe');
 	
 	// Chargement du template
 	Core::tpl_header();
@@ -14,11 +22,37 @@
 <div class="colonne demi gauche">
 	<section class="contenu">
 		<h4>Informations générales</h4>
+		<ul class="informations">
+			<li class="code"><span>Code INSEE</span><span><?php echo $ville['commune_id']; ?></span></li>
+			<li class="region"><span>Département</span><span><?php echo $departement['departement_nom']; ?> (<?php echo $region['region_nom']; ?>)</span></li>
+			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php } ?> importé<?php if ($electeurs > 1) { ?>s<?php } ?></em></span></li>
+			<li class="email"><span>Emails recueillis</span><span><strong><?php echo number_format($emails, 0, ',', ' '); ?></strong> <em>contact<?php if ($emails > 1) { ?>s<?php } ?></em></span></li>
+			<li class="mobile"><span>Mobiles recueillis</span><span><strong><?php echo number_format($mobiles, 0, ',', ' '); ?></strong> <em>contact<?php if ($mobiles > 1) { ?>s<?php } ?></em></span></li>
+			<li class="fixe"><span>Fixes recueillis</span><span><strong><?php echo number_format($fixes, 0, ',', ' '); ?></strong> <em>contact<?php if ($fixes > 1) { ?>s<?php } ?></em></span></li>
+		</ul>
 	</section>
+	
+	<section id="mapbox-carto" class="contenu demi grande"></section>
 </div>
 
 <div class="colonne demi droite">
-	<section id="mapbox-carto" class="contenu demi grande"></section>
+	
+	<section class="contenu demi">
+		<h4>Recherchez une rue dans cette commune</h4>
+		
+		<ul class="formulaire">
+			<li>
+				<label for="rechercheRue" class="small">Rue à chercher</label>
+				<span class="form-icon decalage rue"><input type="text" name="rechercheRue" id="rechercheRue" class="rechercheRue" placeholder="rue du Marché, par exemple" data-ville="<?php echo $ville['commune_id']; ?>">
+			</li>
+		</ul>
+	</section>
+	
+	<section class="contenu demi invisible resultatsRues">
+		<h4>Rues correspondant à la recherche</h4>
+		
+		<ul class="listeDesRues form-liste"></ul>
+	</section>
 </div>
 
 <script>

@@ -7,7 +7,7 @@
 	
 	<form class="rechercheGlobale" action="index.php?page=recherche" method="post">
 		<span class="search-icon">
-			<input type="search" name="recherche" placeholder="Recherche de fiche">
+			<input type="search" name="recherche" placeholder="Recherche d'un contact">
 			<span class="annexesRecherche">
 				<span class="iconeRecherche"></span>
 				<input type="submit" class="lancementRecherche" value="&#xe8af;">
@@ -189,6 +189,56 @@
 			</ul>
 			
 			<ul class="listeDesVilles form-liste"></ul>
+		</section>
+		
+		<section class="contenu demi invisible smsEnvoiCampagne">
+			<a href="#" class="fermerColonneListe">&#xe813;</a>
+			<input type="hidden" name="smsCriteresComplets" id="smsCriteresComplets" value="">
+			
+			<h4>Envoi d'une nouvelle campagne SMS</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label class="small" for="smsTitreCampagne">Titre de la campagne</label>
+					<span class="form-icon decalage titre"><input type="text" name="smsTitreCampagne" class="smsTitreCampagne" id="smsTitreCampagne" placeholder="Titre de la campagne"></span>
+				</li>
+				<li>
+					<label class="small" for="smsNombreDestinataire">Nombre de destinataire</label>
+					<span class="form-icon decalage nombre"><input type="text" name="smsNombreDestinataire" class="smsNombreDestinataire" id="smsNombreDestinataire" disabled></span>
+				</li>
+				<li>
+					<label class="small" for="smsMessageCampagne">Message à envoyer</label>
+					<span class="form-icon decalage sms"><textarea name="smsMessageCampagne" class="smsMessageCampagne" id="smsMessageCampagne" placeholder="Message envoyé aux contacts sélectionnés"></textarea></span>
+				</li>
+				<li>
+					<button class="smsValidationCampagne"><span>Envoi de la campagne ( <i>&#xe8cd;</i> <small class="smsEstimation">0&nbsp;&euro;</small> )</span></button>
+				</li>
+			</ul>
+		</section>
+		
+		<section class="contenu demi invisible emailEnvoiCampagne">
+			<a href="#" class="fermerColonneListe">&#xe813;</a>
+			<input type="hidden" name="emailCriteresComplets" id="emailCriteresComplets" value="">
+			
+			<h4>Envoi d'une nouvelle campagne Email</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label class="small" for="emailTitreCampagne">Objet de la campagne</label>
+					<span class="form-icon decalage titre"><input type="text" name="emailTitreCampagne" class="emailTitreCampagne" id="emailTitreCampagne" placeholder="Objet des emails de la campagne"></span>
+				</li>
+				<li>
+					<label class="small" for="emailNombreDestinataire">Nombre de destinataire</label>
+					<span class="form-icon decalage nombre"><input type="text" name="emailNombreDestinataire" class="emailNombreDestinataire" id="emailNombreDestinataire" disabled></span>
+				</li>
+				<li>
+					<label class="small" for="emailMessageCampagne">Message à envoyer</label>
+					<span class="form-icon decalage email"><textarea name="emailMessageCampagne" class="emailMessageCampagne long" id="emailMessageCampagne" placeholder="Message envoyé aux contacts sélectionnés"></textarea></span>
+				</li>
+				<li>
+					<button class="emailValidationCampagne"><span>Envoi de la campagne ( <i>&#xe8cd;</i> )</span></button>
+				</li>
+			</ul>
 		</section>
 	</div>
 

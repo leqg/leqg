@@ -140,6 +140,15 @@ var contacts = function() {
 	});
 	
 	
+	// Script de fermeture de la colonne de droite
+	$('.fermerColonneListe').click(function() {
+		$('.droite section').hide();
+		$('.droite .listeFiches').fadeIn();
+		
+		return false;
+	});
+	
+	
 	// Affichage du formulaire de sélection d'un critère de tri
 	$('.ajoutTri').click(function() {
 		// On récupère le type de critère choisi
@@ -384,6 +393,167 @@ var contacts = function() {
 			type: 'success'
 		});
 	});
+	
+	
+	// Lancement d'une campagne SMS
+	$('.smsSelection').click(function() {
+		// On récupère les données
+		var data = {
+			'email': $('#coordonnees-email').val(),
+			'mobile': 2,
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'criteres': ';' + $('#listeCriteresTri').val()
+		};
+		
+		// On ferme la colonne
+		$('.droite section').hide();
+		
+		// On effectue l'estimation du nombre de fiches
+		$.get('ajax.php?script=contacts-estimation', data, function(nombre) {
+			// On affiche ce nombre dans le formulaire
+			$('.smsNombreDestinataire').val('');
+
+			if (nombre > 1) {
+				$('.smsNombreDestinataire').val(nombre + ' contacts');
+			} else {
+				$('.smsNombreDestinataire').val(nombre + ' contact');
+			}
+		});
+		
+		// On ouvre ce formulaire
+		$('.smsEnvoiCampagne').fadeIn();
+	});
+	
+	
+	// Script de calcul du coût de l'opération
+	$('.smsMessageCampagne').keyup(function() {
+		// On calcule le nombre de caractères
+		var message = $('.smsMessageCampagne').val();
+		var nombre = message.length;
+		var cout = parseInt(8);
+		var nombreMax = parseInt(160);
+		var personnes = parseInt($('.smsNombreDestinataire').val());
+		
+		// On effectue le calcul du nombre de messages
+		var messages = Math.ceil(nombre / nombreMax);
+		
+		// On calcule le prix du message en centimes pour tout l'envoi
+		var prix = messages * cout * personnes;
+		
+		// On calcule le prix du message en euros
+		var euros = prix / 100;
+		
+		// On affiche ce prix
+		$('.smsEstimation').html(euros + '&nbsp;&euro;');
+	});
+	
+	
+	// Script d'envoi en masse d'une campagne SMS
+	$('.smsValidationCampagne').click(function() {
+		// On récupère les données
+		var data = {
+			'email': $('#coordonnees-email').val(),
+			'mobile': 2,
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'criteres': ';' + $('#listeCriteresTri').val(),
+			'titre': $('#smsTitreCampagne').val(),
+			'message': $('#smsMessageCampagne').val()
+		};
+		
+		$.get('ajax.php?script=sms-campagne', data, function() {
+			// On affiche une alertbox pour prévenir que la mission a été créée
+			swal({
+				title: 'Envoi réussi !',
+				text: 'Vous pouvez retrouver cette campagne dans le module SMS',
+				type: 'success'
+			});
+			
+			// On revient à la situation initiale en vidant le formulaire
+			$('.droite').hide();
+			$('#smsTitreCampagne').val('');
+			$('#smsNombreDestinataire').val('');
+			$('#smsMessageCampagne').val('');
+			$('.droite section:not(.invisible)').fadeIn();
+		});
+	});
+	
+	
+	// Lancement d'une campagne Email
+	$('.emailSelection').click(function() {
+		// On récupère les données
+		var data = {
+			'email': 2,
+			'mobile': $('#coordonnees-mobile').val(),
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'criteres': ';' + $('#listeCriteresTri').val()
+		};
+		
+		// On ferme la colonne
+		$('.droite section').hide();
+		
+		// On effectue l'estimation du nombre de fiches
+		$.get('ajax.php?script=contacts-estimation', data, function(nombre) {
+			// On affiche ce nombre dans le formulaire
+			$('.emailNombreDestinataire').val('');
+
+			if (nombre > 1) {
+				$('.emailNombreDestinataire').val(nombre + ' contacts');
+			} else {
+				$('.emailNombreDestinataire').val(nombre + ' contact');
+			}
+		});
+		
+		// On ouvre ce formulaire
+		$('.emailEnvoiCampagne').fadeIn();
+	});
+	
+	
+	// Script d'envoi en masse d'une campagne SMS
+	$('.emailValidationCampagne').click(function() {
+		// On récupère les données
+		var data = {
+			'email': 2,
+			'mobile': $('#coordonnees-mobile').val(),
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'criteres': ';' + $('#listeCriteresTri').val(),
+			'titre': $('#emailTitreCampagne').val(),
+			'message': $('#emailMessageCampagne').val()
+		};
+		
+		$.get('ajax.php?script=email-campagne', data, function() {
+			// On affiche une alertbox pour prévenir que la mission a été créée
+			swal({
+				title: 'Envoi réussi !',
+				text: 'Vous pouvez retrouver cette campagne dans le module Emailing',
+				type: 'success'
+			});
+			
+			// On revient à la situation initiale en vidant le formulaire
+			$('.droite').hide();
+			$('#emailTitreCampagne').val('');
+			$('#emailNombreDestinataire').val('');
+			$('#emailMessageCampagne').val('');
+			$('.droite section:not(.invisible)').fadeIn();
+		});
+	});
 };
 
 $(document).ready(contacts);
+
+
+
+
+
+
+
+
+
+
+
+
+
+

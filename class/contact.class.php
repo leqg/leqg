@@ -1097,7 +1097,7 @@ class Contact
 	 * @version 1.0
 	 *
 	 * @param   string  $tri     Méthodes de tri demandées
-	 * @param   int     $debut   Ordre de la première occurence demandée
+	 * @param   int     $debut   Ordre de la première occurence demandée (ou si true on estime simplement le nombre)
 	 * @param   int     $nombre  Nombre de fiches demandées selon la méthode
 	 *
 	 * @result  array   Liste des fiches correspondante au sein d'un tableau PHP
@@ -1105,13 +1105,18 @@ class Contact
 	
 	public static function listing( array $tri , $debut , $nombre = 5 )
 	{
-		if (is_numeric($debut) && ( is_numeric($nombre) || is_bool($nombre) ) && is_array($tri)) {
+		if (( is_numeric($debut) || is_bool($debut) ) && ( is_numeric($nombre) || is_bool($nombre) ) && is_array($tri)) {
 			
 	        // On prépare le lien vers la BDD
 			$link = Configuration::read('db.link');
 			
-			// On commence par préparer le visage de la requête de recherche
-			$sql = 'SELECT `contact_id` FROM `contacts` ';
+			if (is_bool($debut) && $debut === true) {
+				// On commence par préparer le visage de la requête de recherche
+				$sql = 'SELECT COUNT(`contact_id`) AS `nombre` FROM `contacts` ';
+			} else {
+				// On commence par préparer le visage de la requête de recherche
+				$sql = 'SELECT `contact_id` FROM `contacts` ';
+			}
 
 			// On va chercher à y ajouter les différents critères, à travers un tableau $criteres
 			$criteres = array();
@@ -1202,7 +1207,7 @@ class Contact
 						$ids = implode(',', $immeubles);
 						
 						// On rajoute la requête aux conditions SQL
-						$criteres[] = '`immeuble_id` IN (' . $ids . ')';
+						$criteres[] = '( `immeuble_id` IN (' . $ids . ') OR `adresse_id` IN (' . $ids . ') )';
 					}
 				}
 			
@@ -1213,7 +1218,7 @@ class Contact
 			}
 			
 			// On ajoute les conditions de nombre et d'ordre
-			if ($nombre) {
+			if ($nombre && !is_bool($debut)) {
 				$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
 			} else {
 				$sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC';
@@ -1223,14 +1228,22 @@ class Contact
 			$query = $link->prepare($sql);
 			$query->execute();
 			
-			// On retraite la liste des identifiants pour en faire un tableau PHP $contacts
-			$ids = $query->fetchAll(PDO::FETCH_ASSOC);
-			$contacts = array();
-			foreach ($ids as $id) $contacts[] = $id['contact_id'];
-			
-			// On retourne la liste des ids de fiches concernées par la requête
-			return $contacts;
-			
+			// Si on souhaite uniquement une estimation, on retourne le nombre
+			if (is_bool($debut) && $debut === true) {
+				$nombre = $query->fetch(PDO::FETCH_NUM);
+				return $nombre[0];
+			}
+
+			// Sinon, on retourne la liste des identifiants
+			else {
+				// On retraite la liste des identifiants pour en faire un tableau PHP $contacts
+				$ids = $query->fetchAll(PDO::FETCH_NUM);
+				$contacts = array();
+				foreach ($ids as $id) $contacts[] = $id[0];
+				
+				// On retourne la liste des ids de fiches concernées par la requête
+				return $contacts;
+			}			
 		} else {
 			// On retourne une erreur
 			return false;

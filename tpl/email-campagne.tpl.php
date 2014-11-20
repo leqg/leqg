@@ -1,51 +1,49 @@
 <?php
-	$query = 'SELECT * FROM envois WHERE envoi_id = ' . $_GET['campagne'];
-	$sql = $db->query($query);
-	$campagne = $core->formatage_donnees($sql->fetch_assoc());
+	// On met en place la protection
+	User::protection(5);
 	
-	$contacts = explode(',', $campagne['destinataire']);
-	$nombre = count($contacts);
-	$cout = $nombre * 0.1;
-?>
-<section id="fiche">
-	<header class="email">
-		<h2>
-			<span>Campagne Email</span>
-			<span><?php echo $campagne['titre']; ?></span>
-		</h2>
-	</header>
-	
-	<ul class="deuxColonnes">
-		<li>
-			<span class="label-information">Message</span>
-			<p><?php echo html_entity_decode($campagne['texte']); ?></p>
-		</li>
-		<li>
-			<span class="label-information">Heure d'envoi</span>
-			<p><?php echo date('d/m/Y H:i', strtotime($campagne['time'])); ?></p>
-		</li>
-		<li>
-			<span class="label-information">Coût de l'envoi</span>
-			<p><?php echo number_format($cout, 2, ',', ' '); ?> &euro;</p>
-		</li>
-		<li>
-			<span class="label-information">Destinataires</span>
-			<ul class="listeEncadree">
-				<?php foreach ($contacts as $contact) : ?>
-				<a href="<?php $core->tpl_go_to('fiche', array('id' => $contact)); ?>">
-					<li class="electeur">
-						<strong><?php $fiche->affichageNomByID($contact); ?></strong>
-						<p><?php $fiche->contact('email', false, false, $contact); ?></p>
-					</li>
-				</a>
-				<?php endforeach; ?>
-			</ul>
-		</li>
-	</ul>
-</section>
+	// On récupère les informations sur la campagne demandée
+	$campagne = new Campagne($_GET['campagne']);
 
-<aside>
-	<nav class="navigationFiches">
-		<a class="retour" href="<?php $core->tpl_go_to('email', array('action' => 'historique')); ?>">Retour à l'historique</a>
-	</nav>
-</aside>
+	// On charge le template
+	Core::tpl_header(); 
+?>
+	
+	<h2 class="titreCampagne" data-campagne="<?php echo $campagne->get('code'); ?>" data-page="campagne"><?php echo $campagne->get('campagne_titre');?></h2>
+	
+	<div class="colonne demi gauche">
+		<section class="contenu demi">
+			<h4>Email envoyé</h4>
+			
+			<p><?php echo nl2br($campagne->get('campagne_message')); ?></p>
+		</section>
+		
+		<section class="contenu demi">
+			<h4>Informations annexes</h4>
+			
+			<ul class="informations">
+				<li class="date">
+					<span>Date d'envoi</span>
+					<span><strong><?php echo strftime('%d %B %Y', strtotime($campagne->get('campagne_date'))); ?></strong></span>
+				</li>
+				<li class="utilisateur">
+					<span>Utilisateur à l'origine de la campagne</span>
+					<span><?php echo User::get_login_by_id($campagne->get('campagne_createur')); ?></span>
+				</li>
+				<li class="email">
+					<span>Nombre d'envois</span>
+					<span><strong><?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?></strong> envoi<?php if ($campagne->get('nombre') > 1) { ?>s<?php } ?></span>
+				</li>
+			</ul>
+		</section>
+	</div>
+	
+	<div class="colonne demi droite">
+		<section class="contenu demi">
+			<h4>Liste des contacts concernés</h4>
+			
+			<ul class="listeContacts"></ul>
+		</section>
+	</div>
+
+<?php Core::tpl_footer(); ?>

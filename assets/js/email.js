@@ -1,110 +1,42 @@
 var email = function() {
-		
-	// Données relative au système d'export
 	
-		// On commence par cacher le moteur de calcul
-		$('#calcul').hide();
-		$('#fichier').hide();	
-		$('#boutonExportation').hide();
-		$('#affichage-envoi').hide();
-		$('#estimationCout').hide();
+	// On récupère la liste des contacts au chargement de la page 
+	function liste( ) {
+		var campagne = $('.titreCampagne').data('campagne');
 		
-		// On prépare ce qu'il se passe quand on clique sur l'estimation du nombre de fiches du formulaire
-		$("#export").on('submit', function() {
-			// On lance le script AJAX
-			var donnees = $(this).serialize();
+		// On récupère la liste des contacts
+		$.getJSON('ajax.php?script=campagne-liste', { campagne: campagne }, function(data) {
+			// On vide la liste
+			$('.listeContacts').html('');
 			
-			// On lance le moteur de calcul
-			$('#calcul').show();
+			// On fait une boucle des informations
+			$.each(data, function(key, val) {
+				// On ajoute une puce
+				var sexe;
+				if (val.contact_sexe = 'M') { sexe = 'homme'; } else if (val.contact_sexe = 'F') { sexe = 'femme'; } else { sexe = 'isexe'; }
+				$('.listeContacts').append('<a href="" class="nostyle contact-' + val.contact_md5 + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="ville"></span></p></li></a>');
+				
+				// On ajoute demande le nom de la fiche
+				var nom;
+				if (val.nom_affichage.length == 0) {
+					if (val.contact_organisme.length == 0) {
+						nom = 'Contact sans nom';
+					} else {
+						nom = val.contact_organisme;
+					}
+				} else {
+					nom = val.nom_affichage;
+				}
 			
-			$.ajax({
-				url: $(this).attr('action'),
-				type: $(this).attr('method'),
-				data: $(this).serialize(),
-				dataType: 'html'
-			}).done(function(data){
-				var cout = data * 0.1;
-				var cout = Math.round(cout * 100) / 100;
-			
-				$('#affichage-envoi').hide();
-				$("#affichageEstimation").html(data);
-				$("#estimationCout").show();
-				$("#affichageCout").html(cout);
-				$('#boutonExportation').show();
-				$('#fichier').hide();
-				$('#calcul').hide();
+				// On rempli les informations
+				$('.listeContacts a.contact-' + val.contact_md5).attr('href', 'index.php?page=contact&contact=' + val.contact_md5);
+				$('.listeContacts a.contact-' + val.contact_md5 + ' li strong').html(nom);
+				$('.listeContacts a.contact-' + val.contact_md5 + ' li p .ville').html(val.ville);
 			});
-			
-			// On retourne une erreur pour ne pas rediriger vers la page du formulaire
-			return false;
 		});
-		
-		
-		// On envoi les données pour l'exportation
-		$("#exportation").on('click', function() {
-			
-			// On commence par enlever le bouton d'export pour afficher le calcul en cours et puis le bouton vers le fichier
-			$('#calcul').show();
-			$('#boutonExportation').hide();
-			$('#affichage-envoi').show();
-			$('#calcul').hide();
-			
-			$.ajax({
-				url: $(this).attr('href'),
-				type: 'POST',
-				data: $('#export').serialize(),
-				dataType: 'html'
-			});
-			
-			var campagneId = $('#campagne-id').val();
-			var destination = 'index.php?page=email&action=historique&campagne=' + campagneId;
-			$(location).attr('href', destination);
-			
-			// On annule le clique sur le lien
-			return false;
-		});
-		
-		
-		
-	// Scripts relative au système de critère géographique de l'export
+	}
 	
-		$('#ville-recherche').keyup(function(){
-			var value = $(this).val();
-			var ciblage = $(this).data('ciblage');
-			
-			if (value.length >= 3) {
-				$.ajax({
-					type: 'POST',
-					url: 'ajax.php?script=email-export-ville',
-					data: { 'ville': value, 'ciblage': ciblage },
-					dataType: 'html'
-				}).done(function(data){
-					$('#ville-resultats').html(data).show();
-				});
-			} else {
-				$('#ville-resultats').hide().html('');
-			}
-		});
-	
-		$('#rue-recherche').keyup(function(){
-			var value = $(this).val();
-			var ville = $(this).data('ville');
-			var ciblage = $(this).data('ciblage');
-			
-			if (value.length >= 3) {
-				$.ajax({
-					type: 'POST',
-					url: 'ajax.php?script=email-export-rue',
-					data: { 'ville': ville, 'rue': value, 'ciblage': ciblage },
-					dataType: 'html'
-				}).done(function(data){
-					$('#rue-resultats').html(data).show();
-				}).error(function(){
-				});
-			} else {
-				$('#rue-resultats').hide().html('');
-			}
-		});
+	if ($('.titreCampagne').data('page') == 'campagne') { liste(); }
 	
 };
 
