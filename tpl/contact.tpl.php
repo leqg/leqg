@@ -70,7 +70,7 @@
 		
 		<ul class="etatcivil">
 			<?php $fiches = $contact->fichesLiees(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact(md5($identifiant)); ?>
-			<li class="lien"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($ficheLiee->get('contact_id')))); ?>"><?php echo $ficheLiee->noms(); ?></a></li>
+			<li class="lien fiche-liee-<?php echo $ficheLiee->get('contact_id'); ?>"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($ficheLiee->get('contact_id')))); ?>"><?php echo $ficheLiee->noms(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('contact_id'); ?>"><small>&#xe8b0;</small></a></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>

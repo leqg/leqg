@@ -1079,6 +1079,19 @@ main.dossier {
 					}
 				}
 			}
+			
+			a.retraitLiaison {
+				display: inline-block;
+				margin-left: 10px;
+				text-decoration: none;
+				
+				small {
+					color: $grisMoyen;
+					font-family: $icons;
+				}
+				
+				&:hover small { color: $rouge; }
+			}
 		}
 	}
 	

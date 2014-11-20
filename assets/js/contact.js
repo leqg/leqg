@@ -226,6 +226,20 @@ var contact = function() {
 	});
 	
 	
+	// Action à la demande de suppression d'un lien entre deux fiches
+	$('.retraitLiaison').click(function() {
+		// On récupère l'identifiant de la liaison
+		var ficheA = $('.titre').data('fiche');
+		var ficheB = $(this).data('fiche');
+		
+		$.post('ajax.php?script=contact-delier', { ficheA: ficheA, ficheB: ficheB }, function() {
+			$('.fiche-liee-' + ficheB).remove();
+		});
+		
+		return false;
+	});
+	
+	
 	// Fonction de chargement de l'événement
 	function chargementEvenement(eConcerne)
 	{
