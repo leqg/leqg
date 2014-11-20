@@ -16,16 +16,49 @@
  *									*
  ************************************/
 
-$icon-names:    (street '\e841') (search '\e8a2') (objet '\e827') 
-				(type '\e8dd') (lieu '\e842') (date '\e862') 
-				(notes '\e8bd') (naissance '\e85b') (organisme '\e968') 
-				(fonction '\e967') (ville '\e845') (rue '\e841') 
-				(immeuble '\e842') (titre '\e8c7') 
-				(description '\e8bd') (file '\e823') (tache '\e8c1')
-				(email '\e96d') (mobile '\e961') (telephone '\e854')
-				(sms '\e8bf') (nom '\e8b7') (utilisateur '\e80a')
-				(electeur '\e840') (region '\e845') (code '\e90f') 
-				(fixe '\e854') (nombre '\e80b') (prix '\e96c');
+$icon-names:    (ajout '\e8b2')
+				(autre '\e858')
+				(boite '\e8c9')
+				(code '\e90f')
+				(contact '\e80a')
+				(courriel '\e96d')
+				(courrier '\e8a3')
+				(date '\e862')
+				(description '\e8bd')
+				(dossier '\e850')
+				(electeur '\e840')
+				(email '\e96d')
+				(fichier '\e823')
+				(file '\e823')
+				(fixe '\e854')
+				(fonction '\e967')
+				(immeuble '\e842')
+				(lieu '\e842')
+				(mobile '\e961')
+				(naissance '\e85b')
+				(nom '\e8b7')
+				(nombre '\e80b')
+				(notes '\e8bd')
+				(objet '\e827')
+				(organisme '\e968')
+				(porte '\e821')
+				(publi '\e8a3')
+				(prix '\e96c')
+				(publi '\e8c9')
+				(rappel '\e854')
+				(region '\e8e9')
+				(rue '\e841')
+				(search '\e8a2')
+				(sms '\e8bf')
+				(street '\e841')
+				(tache '\e8c1')
+				(telephone '\e854')
+				(titre '\e8c7')
+				(type '\e8dd')
+				(utilisateur '\e80a')
+				(ville '\e845');
+
+
 
 body.flat {
 	background-color: transparent;
@@ -634,6 +667,17 @@ main.dossier {
 				&:first-of-type {
 					font-size: 1.2em;
 					font-weight: 600;
+					
+					strong.immeuble {
+						display: inline-block;
+						background-color: $bleu;
+						@include border-radius(.33em);
+						color: $blanc;
+						margin: 0 .5em 0 0;
+						min-width: 2.5em;
+						padding: .15em .5em;
+						text-align: center;
+					}
 				}
 				
 				&:last-of-type {
@@ -882,10 +926,11 @@ main.dossier {
 			
 			&.smsSelection,
 			&.emailSelection,
+			&.publiSelection,
 			&.exportSelection {
 				color: $bleu;
 				cursor: pointer;
-				width: 100px;
+				width: 80px;
 			}
 			
 			&.new {
@@ -910,6 +955,11 @@ main.dossier {
 			
 			&.emailSelection {
 				&::before { content: '\e8a3'; }
+				&:hover { color: $vert; }
+			}
+			
+			&.publiSelection {
+				&::before { content: '\e8ef'; }
 				&:hover { color: $vert; }
 			}
 		}
@@ -1028,6 +1078,19 @@ main.dossier {
 						content: '\e8bd';
 					}
 				}
+			}
+			
+			a.retraitLiaison {
+				display: inline-block;
+				margin-left: 10px;
+				text-decoration: none;
+				
+				small {
+					color: $grisMoyen;
+					font-family: $icons;
+				}
+				
+				&:hover small { color: $rouge; }
 			}
 		}
 	}
@@ -1189,7 +1252,7 @@ main.dossier {
 				@include transition(all);
 			}
 			
-			@each $typeEvent in $typesEvent
+			@each $typeEvent in $icon-names
 			{
 				&.#{nth($typeEvent, 1)}::after { content: nth($typeEvent, 2); }
 			}
@@ -1500,6 +1563,7 @@ main.dossier {
 	}
 	
 	.fermerColonne,
+	.fermerColonneListe,
 	.revenirEvenement,
 	.revenirDossier,
 	.revenirArriere

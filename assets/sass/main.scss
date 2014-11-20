@@ -50,9 +50,6 @@ $grey:       rgba(130, 134, 135, 1);
 $darkerGrey: rgba( 67,  77,  84, 1);
 $darkGrey:   rgba( 42,  52,  58, 1);
 
-// Liste d'icones pour IcoFonts
-$typesEvent: (contact '\e80a') (telephone '\e854') (email '\e96d') (courrier '\e8a3') (autre '\e858') (sms '\e8e4') (courriel '\e96d') (porte '\e821') (boite '\e8c9') (rappel '\e854') (poste '\e8a3') (fichier '\e823') (tache '\e8c1') (ajout '\e8b2') (dossier '\e850');
-
 
 
 /********************************
@@ -810,35 +807,11 @@ ul.listeEncadree {
 // Style dédié à la navigation
 @import "nav.scss";
 
-// Style dédié au formulaire de login
-@import "login.scss";
-
-// Style dédié aux fiches contacts
-@import "fiches.scss";
-
 // Style dédié aux formulaires
 @import "forms.scss";
 
-// Style dédié aux listes (de fiches, de tags, etc.)
-@import "listes.scss";
-
 // Style dédié à l'affichage des services de la plateforme
 @import "services.scss";
-
-// Style dédié au système d'export de la plateforme
-@import "export.scss";
-
-// Style dédié au système de recherche de la plateforme
-@import "recherche.scss";
-
-// Style dédié au système d'administration de la plateforme
-@import "admin.scss";
-
-// Style dédié aux timelines sur la plateforme
-@import "timeline.scss";
-
-// Style dédié au module contacts sur la plateforme
-@import "contacts.scss";
 
 // Feuille dédiée au nouveau style Flat de la plateforme
 @import "flat.scss";

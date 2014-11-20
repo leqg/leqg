@@ -246,16 +246,23 @@ class Evenement
 	 * @return bool
 	 */
 	
-	public function lien(  )
+	public function lien( )
 	{
 		// On détermine la liste des types possédant une fiche détaillée
-		$type = array('contact', 'telephone', 'email', 'courrier', 'autre');
+		$ouvert = array('contact', 'telephone', 'email', 'courrier', 'autre');
+		$campagne = array('sms', 'email', 'publi');
 		
-		// On renvoit un booléen selon la présence ou non dans le tableau des types ouvrables
-		if (in_array($this->get_infos('type'), $type))
-		{
-			return true;
+		// On regarde si l'événement fait l'objet d'une fiche événement
+		if (in_array($this->get_infos('type'), $ouvert)) {
+			return 2;
 		}
+		
+		// On regarde si l'événement fait partie d'une campagne
+		elseif (in_array($this->get_infos('type'), $campagne)) {
+			return 1;
+		}
+		
+		// Sinon, on informe qu'il s'agit d'un simple événement d'information
 		else
 		{
 			return false;
@@ -488,7 +495,7 @@ class Evenement
 		$link = Configuration::read('db.link');
 		
 		// On prépare la requête
-		$query = $link->prepare('SELECT `historique_id` FROM `historique` WHERE ( `historique_type` = "contact" OR `historique_type` = "telephone" OR `historique_type` = "email" OR `historique_type` = "courrier" OR `historique_type` = "autre" ) ORDER BY `historique_date` DESC LIMIT 0, ' . $nombre);
+		$query = $link->prepare('SELECT `historique_id` FROM `historique` WHERE ( `historique_type` = "contact" OR `historique_type` = "telephone" OR `historique_type` = "courriel" OR `historique_type` = "courrier" OR `historique_type` = "autre" ) ORDER BY `historique_date` DESC LIMIT 0, ' . $nombre);
 		$query->execute();
 		
 		// On fait la liste des dernières interactions en question

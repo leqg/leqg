@@ -16,6 +16,7 @@ var contacts = function() {
 		data["mobile"] = $('#coordonnees-mobile').val();
 		data["fixe"] = $('#coordonnees-fixe').val();
 		data["electeur"] = $('#coordonnees-electeur').val();
+		data["adresse"] = 0;
 		data["criteres"] = $('#listeCriteresTri').val();
 		
 		// Nombre de fiches déjà affichée
@@ -35,6 +36,7 @@ var contacts = function() {
 			mobile: data["mobile"],
 			fixe: data["fixe"],
 			electeur: data["electeur"],
+			adresse: data["adresse"],
 			criteres: data["criteres"],
 			debut: nombre
 		};
@@ -380,6 +382,7 @@ var contacts = function() {
 			'mobile': $('#coordonnees-mobile').val(),
 			'fixe': $('#coordonnees-fixe').val(),
 			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 0,
 			'criteres': ';' + $('#listeCriteresTri').val()
 		};
 		
@@ -403,6 +406,7 @@ var contacts = function() {
 			'mobile': 2,
 			'fixe': $('#coordonnees-fixe').val(),
 			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 0,
 			'criteres': ';' + $('#listeCriteresTri').val()
 		};
 		
@@ -457,6 +461,7 @@ var contacts = function() {
 			'mobile': 2,
 			'fixe': $('#coordonnees-fixe').val(),
 			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 0,
 			'criteres': ';' + $('#listeCriteresTri').val(),
 			'titre': $('#smsTitreCampagne').val(),
 			'message': $('#smsMessageCampagne').val()
@@ -471,7 +476,7 @@ var contacts = function() {
 			});
 			
 			// On revient à la situation initiale en vidant le formulaire
-			$('.droite').hide();
+			$('.droite section').hide();
 			$('#smsTitreCampagne').val('');
 			$('#smsNombreDestinataire').val('');
 			$('#smsMessageCampagne').val('');
@@ -488,6 +493,7 @@ var contacts = function() {
 			'mobile': $('#coordonnees-mobile').val(),
 			'fixe': $('#coordonnees-fixe').val(),
 			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 0,
 			'criteres': ';' + $('#listeCriteresTri').val()
 		};
 		
@@ -511,7 +517,7 @@ var contacts = function() {
 	});
 	
 	
-	// Script d'envoi en masse d'une campagne SMS
+	// Script d'envoi en masse d'une campagne Email
 	$('.emailValidationCampagne').click(function() {
 		// On récupère les données
 		var data = {
@@ -519,6 +525,7 @@ var contacts = function() {
 			'mobile': $('#coordonnees-mobile').val(),
 			'fixe': $('#coordonnees-fixe').val(),
 			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 0,
 			'criteres': ';' + $('#listeCriteresTri').val(),
 			'titre': $('#emailTitreCampagne').val(),
 			'message': $('#emailMessageCampagne').val()
@@ -533,10 +540,74 @@ var contacts = function() {
 			});
 			
 			// On revient à la situation initiale en vidant le formulaire
-			$('.droite').hide();
+			$('.droite section').hide();
 			$('#emailTitreCampagne').val('');
 			$('#emailNombreDestinataire').val('');
 			$('#emailMessageCampagne').val('');
+			$('.droite section:not(.invisible)').fadeIn();
+		});
+	});
+	
+	
+	// Lancement d'une campagne de Publipostage
+	$('.publiSelection').click(function() {
+		// On récupère les données
+		var data = {
+			'email': $('#coordonnees-email').val(),
+			'mobile': $('#coordonnees-mobile').val(),
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 2,
+			'criteres': ';' + $('#listeCriteresTri').val()
+		};
+		
+		// On ferme la colonne
+		$('.droite section').hide();
+		
+		// On effectue l'estimation du nombre de fiches
+		$.get('ajax.php?script=contacts-estimation', data, function(nombre) {
+			// On affiche ce nombre dans le formulaire
+			$('.publiNombreDestinataire').val('');
+
+			if (nombre > 1) {
+				$('.publiNombreDestinataire').val(nombre + ' contacts');
+			} else {
+				$('.publiNombreDestinataire').val(nombre + ' contact');
+			}
+		});
+		
+		// On ouvre ce formulaire
+		$('.publiEnvoiCampagne').fadeIn();
+	});
+	
+	
+	// Script d'envoi en masse d'une campagne Email
+	$('.publiValidationCampagne').click(function() {
+		// On récupère les données
+		var data = {
+			'email': $('#coordonnees-email').val(),
+			'mobile': $('#coordonnees-mobile').val(),
+			'fixe': $('#coordonnees-fixe').val(),
+			'electeur': $('#coordonnees-electeur').val(),
+			'adresse': 2,
+			'criteres': ';' + $('#listeCriteresTri').val(),
+			'titre': $('#publiTitreCampagne').val(),
+			'message': $('#publiDescriptionCampagne').val()
+		};
+		
+		$.get('ajax.php?script=publi-campagne', data, function() {
+			// On affiche une alertbox pour prévenir que la mission a été créée
+			swal({
+				title: 'Préparation réussie !',
+				text: 'Vous pouvez retrouver cette campagne dans le module Publipostage',
+				type: 'success'
+			});
+			
+			// On revient à la situation initiale en vidant le formulaire
+			$('.droite section').hide();
+			$('#publiTitreCampagne').val('');
+			$('#publiNombreDestinataire').val('');
+			$('#publiDescriptionCampagne').val('');
 			$('.droite section:not(.invisible)').fadeIn();
 		});
 	});

@@ -1,4 +1,4 @@
-var email = function() {
+var publi = function() {
 	
 	// On récupère la liste des contacts au chargement de la page 
 	function liste( ) {
@@ -49,4 +49,4 @@ var email = function() {
 	
 };
 
-$(document).ready(email);
+$(document).ready(publi);

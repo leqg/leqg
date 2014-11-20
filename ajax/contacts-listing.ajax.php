@@ -7,6 +7,7 @@
 			'mobile' => $_GET['mobile'],
 			'fixe' => $_GET['fixe'],
 			'electeur' => $_GET['electeur'],
+			'adresse' => $_GET['adresse'],
 			'criteres' => trim($_GET['criteres'], ';')
 		);
 		

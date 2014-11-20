@@ -17,13 +17,12 @@
 	<!--[if lt IE 9]><script src="assets/js/html5shiv.min.js"></script><![endif]-->
 	<script src="assets/js/jquery-2.1.1.min.js"></script>
 	<script src="https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSkeqzB0suNWsj8fU3If9tA0spIl_xN2A&sensor=false"></script>
 	<script src="assets/js/sweet-alert.min.js"></script>
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 </head>
-<?php $flat = array('boite', 'porte', 'contacts', 'contact', 'dossier', 'rappels', 'recherche-thematique', 'recherche', 'carto', 'sms', 'email'); ?>
-<body<?php if ((isset($_GET['page']) && in_array($_GET['page'], $flat)) || empty($_GET['page'])) { ?> class="flat"<?php } ?>>	
+
+<body class="flat">	
 	<!-- Contenu concret de la page -->
 	<header id="top">
 		<h1><a class="nostyle" href="http://<?php echo Configuration::read('ini')['SERVER']['url']; ?>">LeQG</a></h1>
@@ -36,25 +35,28 @@
 	<!-- Navigation principale -->
 	<nav id="principale">
 		<?php 
-			$menu = array(/*'utilisateur' => 'Mon compte',*/
-							'contacts' => 'Contacts',
+			$menu = array(  'contacts' => 'Contacts',
 							'dossier' => 'Dossiers',
 							'carto' => 'Cartographie',
 							'sms' => 'SMS groupés',
 							'email' => 'Emails groupés',
-							'poste' => 'Publipostage',
+							'publi' => 'Publipostage',
 							'porte' => 'Porte-à-porte',
 							'boite' => 'Boîtage',
 							'rappels' => 'Rappels',
 							'administration' => 'Gestion');
 							
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
-							
-			$inactif = array('rappels');
+
+			if (Configuration::read('ini')['LEQG']['compte'] == 'dev') {
+				$inactif = array('rappels');
+			} else {
+				$inactif = array('porte', 'boite', 'rappels', 'administration');
+			}
 		
 			foreach ($menu as $key => $element) : ?>
 		<a href="<?php Core::tpl_go_to($key); ?>" <?php if (isset($_GET['page']) && $actuel == $key) echo 'class="actif"'; if (in_array($key, $inactif)) echo 'class="inactif"'; ?> id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
 		<?php endforeach; ?>
 	</nav><!--nav#principale-->
 	
-	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; if (in_array($_GET['page'], $flat)) { echo ' flat'; } } else { echo 'flat'; } ?>">
+	<main id="central" class="flat">

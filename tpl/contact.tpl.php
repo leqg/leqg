@@ -70,7 +70,7 @@
 		
 		<ul class="etatcivil">
 			<?php $fiches = $contact->fichesLiees(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact(md5($identifiant)); ?>
-			<li class="lien"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($ficheLiee->get('contact_id')))); ?>"><?php echo $ficheLiee->noms(); ?></a></li>
+			<li class="lien fiche-liee-<?php echo $ficheLiee->get('contact_id'); ?>"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($ficheLiee->get('contact_id')))); ?>"><?php echo $ficheLiee->noms(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('contact_id'); ?>"><small>&#xe8b0;</small></a></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>
@@ -83,7 +83,7 @@
 
 
 <div id="colonneDroite" class="colonne demi droite">
-	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="carte" class="contenu demi"></section><?php } ?>
+	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="mapbox-contact" class="contenu demi"></section><?php } ?>
 	
 	<section id="TagsContact" class="contenu demi">
 		<h4>Tags liés au contact</h4>
@@ -105,7 +105,16 @@
 				<strong>Créer un nouvel événement</strong>
 			</li>
 			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
-			<?php if ($event->lien()) { ?><a href="#" class="accesEvenement nostyle evenement-<?php echo md5($event->get_infos('id')); ?> evenement-<?php echo $event->get_infos('id'); ?>" data-evenement="<?php echo md5($event->get_infos('id')); ?>"><?php } ?>
+			<?php
+				// on regarde si on peut ouvrir l'événement
+				if ($event->lien() == 2) {
+					echo '<a href="#" class="accesEvenement nostyle evenement-' . md5($event->get_infos('id')) . ' evenement-' . $event->get_infos('id') . '" data-evenement="' . md5($event->get_infos('id')) . '">';
+				}
+				// on regarde si on peut rediriger vers la campagne
+				elseif ($event->lien() == 1) {
+					echo '<a href="'; Core::tpl_go_to($event->get_infos('type'), array('campagne' => md5($event->get('campagne_id')))); echo '" class="nostyle">';
+				}
+			?>
 				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
 					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
 					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : 'Événement sans titre'; ?></strong>
@@ -159,7 +168,7 @@
 						<select name="type" id="eventType">
 							<option value="contact">Entrevue</option>
 							<option value="telephone">Contact téléphonique</option>
-							<option value="email">Courrier électronique</option>
+							<option value="courriel">Courrier électronique</option>
 							<option value="courrier">Correspondance postale</option>
 							<option value="autre">Autre</option>
 						</select>
@@ -582,43 +591,55 @@
 </div>
 
 
-<?php if ($contact->get('adresse_id') || $contact->get('immeuble_id')) : ?>
-<script>
-	function initialize() {
-		geocoder = new google.maps.Geocoder();
-		var latlng = new google.maps.LatLng(48.58476, 7.750576);
-		var mapOptions = {
-			//center: latlng,
-			disableDefaultUI: true,
-			draggable: true,
-			rotateControl: false,
-			scrollwheel: false,
-			zoomControl: true,
-			zoom: 16
-		};
-		var map = new google.maps.Map(document.getElementById("carte"), mapOptions);
-		
-		// On marque les différents bâtiments
-		// L'adresse à rechercher
-		var GeocoderOptions = { 'address': "<?php if ($contact->get('adresse_id')) { echo $contact->adresse('declaree', ' '); } else if (!$contact->get('adresse_id') && $contact->get('immeuble_id')) { echo $contact->adresse('electorale', ' '); } else { echo ''; } ?>", 'region': 'FR' };
-		// La function qui va traiter le résultat
-		function GeocodingResult(results, status) {
-			// Si la recherche a fonctionnée
-			if (status == google.maps.GeocoderStatus.OK) {
-				// On créé un nouveau marker sur la map
-				markerAdresse = new google.maps.Marker({
-				position: results[0].geometry.location,
-				map: map,
-				title: "<?php echo $contact->noms(' ', ' '); ?>"
-				});
-				// On centre sur ce marker
-				map.setCenter(results[0].geometry.location);
-			}
-		}
-		// On lance la recherche de l'adresse
-		geocoder.geocode(GeocoderOptions, GeocodingResult);
+<?php 
+	if ($contact->get('adresse_id') > 0 || $contact->get('immeuble_id') > 0) : 
+	
+	if ($contact->get('adresse_id') > 0) { 
+		$immeuble = Carto::immeuble($contact->get('adresse_id'));
+		$rue = Carto::rue($immeuble['rue_id']);
+		$ville = Carto::ville($rue['commune_id']);
+	} else {
+		$immeuble = Carto::immeuble($contact->get('immeuble_id'));
+		$rue = Carto::rue($immeuble['rue_id']);
+		$ville = Carto::ville($rue['commune_id']);
 	}
-	google.maps.event.addDomListener(window, 'load', initialize);
+?>
+<script>
+	// Token public d'accès à Mapbox
+	L.mapbox.accessToken = 'pk.eyJ1IjoiaGl3ZWxvIiwiYSI6Imc3M3EzbmsifQ.t1k5I2FxgVdFfl6QNBA_Ew';
+	
+	// On met en place la map
+	var geocoder = L.mapbox.geocoder('mapbox.places-v1'),
+	    map = L.mapbox.map('mapbox-contact', 'hiwelo.k8fnkd96').setView([48.867, 2.3265], 4);
+
+	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
+	var data = {
+		format: 'json',
+		email: 'tech@leqg.info',
+		country: 'France',
+		city: "<?php echo $ville['commune_nom']; ?>",
+		street: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim($rue['rue_nom']); ?>"
+	}
+	
+	// On récupère le JSON contenant les coordonnées de la rue
+	$.getJSON('https://nominatim.openstreetmap.org', data, function(data) {
+		// On récupère uniquement les données du premier résultat
+		data = data[0];
+		
+		// On prépare la boundingbox
+		var loc1 = new L.LatLng(data.boundingbox[0], data.boundingbox[2]);
+		var loc2 = new L.LatLng(data.boundingbox[1], data.boundingbox[3]);
+		var bounds = new L.LatLngBounds(loc1, loc2);
+		
+		// On fabrique une vue qui contient l'ensemble du secteur demandé
+		map.fitBounds(bounds, { maxZoom: 17 });
+		
+		// On ajoute un marker au milieu de la rue
+		L.marker([data.lat, data.lon], {
+			clicable: false,
+			title: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim(mb_convert_case($rue['rue_nom'], MB_CASE_TITLE)); ?>"
+		}).addTo(map);
+	});
 </script>
 <?php endif; ?>
 
