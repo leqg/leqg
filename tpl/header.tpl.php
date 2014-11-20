@@ -56,4 +56,4 @@
 		<?php endforeach; ?>
 	</nav><!--nav#principale-->
 	
-	<main id="central" class="<?php if (isset($_GET['page'])) { echo $_GET['page']; if (in_array($_GET['page'], $flat)) { echo ' flat'; } } else { echo 'flat'; } ?>">
+	<main id="central" class="flat">
