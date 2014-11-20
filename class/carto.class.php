@@ -387,12 +387,51 @@ class Carto {
 	 * @return	array
 	 */
 
-	public static function rue( $id ) {
+	public static function rue_secure( $id ) {
 		// On lance la connexion à la base de données
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de recherche des informations
-		$query = $link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :id');
+		$query = $link->prepare('SELECT * FROM `rues` WHERE SHA2(`rue_id`, 256) = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On retourne les résultats
+		return $query->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à une rue demandée
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de la rue demandée
+	 * @return	array
+	 */
+
+	public static function rue( $id ) {
+		return self::rue_secure(hash('sha256', $id));
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un immeuble demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID de l'immeuble demandé
+	 * @return	array
+	 */
+
+	public static function immeuble_secure( $id ) {
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `immeubles` WHERE SHA2(`immeuble_id`, 256) = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -412,16 +451,7 @@ class Carto {
 	 */
 
 	public static function immeuble( $id ) {
-		// On lance la connexion à la base de données
-		$link = Configuration::read('db.link');
-		
-		// On exécute la requête de recherche des informations
-		$query = $link->prepare('SELECT * FROM `immeubles` WHERE `immeuble_id` = :id');
-		$query->bindParam(':id', $id, PDO::PARAM_INT);
-		$query->execute();
-		
-		// On retourne les résultats
-		return $query->fetch(PDO::FETCH_ASSOC);
+		self::immeuble_secure(hash('sha256', $id));
 	}
 	
 	
@@ -690,7 +720,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 
 		// On exécute la requête de récupération des électeurs correspondant
-		$query = $link->prepare('SELECT * FROM `contacts` WHERE `immeuble_id` = :immeuble AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+		$query = $link->prepare('SELECT `contact_nom`, `contact_nom_usage`, `contact_prenoms`, `contact_sexe`, `contact_organisme`, MD5(`contact_id`) AS `code` FROM `contacts` WHERE (`immeuble_id` = :immeuble) AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
 		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -1106,6 +1136,53 @@ class Carto {
 			$nombre = $data[0];
 		} 
 		
+		// On recherche tous les immeubles si la branche est un immeuble
+		else if ($branche == 'immeuble') {
+			// On recherche le nombre de contacts, électeurs, dans les immeubles en question
+			if (!is_null($coordonnees)) {
+				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' > 0 AND contact_optout_' . $coordonnees . ' = 0 ) AND (`immeuble_id` = :id OR `adresse_id` = :id)');
+			} else {
+				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `immeuble_id` = :id');
+			}
+			$query->bindParam(':id', $id, PDO::PARAM_INT);
+			$query->execute();
+			$data = $query->fetch(PDO::FETCH_NUM);
+			$nombre = $data[0];
+		}
+		
+		// On recherche tous les immeubles si la branche est une rue
+		else if ($branche == 'rue') {
+			// On recherche tous les immeubles de chaque rue de cette commune
+			$query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
+			$query->bindParam(':id', $id, PDO::PARAM_INT);
+			$query->execute();
+			
+			if ($query->rowCount()) {
+				$immeubles = $query->fetchAll(PDO::FETCH_NUM);
+				
+				// On formate la liste des rues pour l'insérer dans la recherche SQL des électeurs
+				$ids = array(); // Liste des ids des rues de la commune
+				foreach ($immeubles as $immeuble) { $ids[] = $immeuble[0]; }
+				$immeubles = implode(',', $ids);
+				
+				// On vérifie qu'il existe bien des immeubles, sinon il n'y a pas d'électeur
+				if ($query->rowCount()) {
+					// On recherche le nombre de contacts, électeurs, dans les immeubles en question
+					if (!is_null($coordonnees)) {
+						$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' > 0 AND contact_optout_' . $coordonnees . ' = 0 ) AND (`immeuble_id` IN (' . $immeubles . ') OR `adresse_id` IN (' . $immeubles . '))');
+					} else {
+						$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `immeuble_id` IN (' . $immeubles . ')');
+					}
+					$data = $query->fetch(PDO::FETCH_NUM);
+					$nombre = $data[0];
+				} else {
+					$nombre = 0;
+				}
+			} else {
+				$nombre = 0;
+			}
+		}
+		
 		// On recherche tous les immeubles si la branche est une ville
 		else {
 			// On exécute la requête de recherche de toutes les rues de la commune
@@ -1134,7 +1211,7 @@ class Carto {
 				if ($query->rowCount()) {
 					// On recherche le nombre de contacts, électeurs, dans les immeubles en question
 					if (!is_null($coordonnees)) {
-						$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' > 0 AND contact_optout_' . $coordonnees . ' = 0 ) AND `immeuble_id` IN (' . $immeubles . ')');
+						$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' > 0 AND contact_optout_' . $coordonnees . ' = 0 ) AND (`immeuble_id` IN (' . $immeubles . ') OR `adresse_id` IN (' . $immeubles . '))');
 					} else {
 						$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `immeuble_id` IN (' . $immeubles . ')');
 					}

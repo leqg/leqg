@@ -24,7 +24,7 @@ $icon-names:    (street '\e841') (search '\e8a2') (objet '\e827')
 				(description '\e8bd') (file '\e823') (tache '\e8c1')
 				(email '\e96d') (mobile '\e961') (telephone '\e854')
 				(sms '\e8bf') (nom '\e8b7') (utilisateur '\e80a')
-				(electeur '\e840') (region '\e845') (code '\e90f') 
+				(electeur '\e840') (region '\e8e9') (code '\e90f') 
 				(fixe '\e854') (nombre '\e80b') (prix '\e96c');
 
 body.flat {
@@ -634,6 +634,17 @@ main.dossier {
 				&:first-of-type {
 					font-size: 1.2em;
 					font-weight: 600;
+					
+					strong.immeuble {
+						display: inline-block;
+						background-color: $bleu;
+						@include border-radius(.33em);
+						color: $blanc;
+						margin: 0 .5em 0 0;
+						min-width: 2.5em;
+						padding: .15em .5em;
+						text-align: center;
+					}
 				}
 				
 				&:last-of-type {
