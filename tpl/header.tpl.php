@@ -35,8 +35,7 @@
 	<!-- Navigation principale -->
 	<nav id="principale">
 		<?php 
-			$menu = array(/*'utilisateur' => 'Mon compte',*/
-							'contacts' => 'Contacts',
+			$menu = array(  'contacts' => 'Contacts',
 							'dossier' => 'Dossiers',
 							'carto' => 'Cartographie',
 							'sms' => 'SMS groupés',
@@ -48,8 +47,12 @@
 							'administration' => 'Gestion');
 							
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
-							
-			$inactif = array('rappels');
+
+			if (Configuration::read('ini')['LEQG']['compte'] == 'dev') {
+				$inactif = array('rappels');
+			} else {
+				$inactif = array('porte', 'boite', 'rappels', 'administration');
+			}
 		
 			foreach ($menu as $key => $element) : ?>
 		<a href="<?php Core::tpl_go_to($key); ?>" <?php if (isset($_GET['page']) && $actuel == $key) echo 'class="actif"'; if (in_array($key, $inactif)) echo 'class="inactif"'; ?> id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
