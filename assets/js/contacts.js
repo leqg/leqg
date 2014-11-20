@@ -140,6 +140,15 @@ var contacts = function() {
 	});
 	
 	
+	// Script de fermeture de la colonne de droite
+	$('.fermerColonneListe').click(function() {
+		$('.droite section').hide();
+		$('.droite .listeFiches').fadeIn();
+		
+		return false;
+	});
+	
+	
 	// Affichage du formulaire de sélection d'un critère de tri
 	$('.ajoutTri').click(function() {
 		// On récupère le type de critère choisi

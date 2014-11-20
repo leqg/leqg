@@ -192,7 +192,7 @@
 		</section>
 		
 		<section class="contenu demi invisible smsEnvoiCampagne">
-			<a href="#" class="fermerColonne">&#xe813;</a>
+			<a href="#" class="fermerColonneListe">&#xe813;</a>
 			<input type="hidden" name="smsCriteresComplets" id="smsCriteresComplets" value="">
 			
 			<h4>Envoi d'une nouvelle campagne SMS</h4>
@@ -217,7 +217,7 @@
 		</section>
 		
 		<section class="contenu demi invisible emailEnvoiCampagne">
-			<a href="#" class="fermerColonne">&#xe813;</a>
+			<a href="#" class="fermerColonneListe">&#xe813;</a>
 			<input type="hidden" name="emailCriteresComplets" id="emailCriteresComplets" value="">
 			
 			<h4>Envoi d'une nouvelle campagne Email</h4>
