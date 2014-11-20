@@ -807,35 +807,11 @@ ul.listeEncadree {
 // Style dédié à la navigation
 @import "nav.scss";
 
-// Style dédié au formulaire de login
-@import "login.scss";
-
-// Style dédié aux fiches contacts
-@import "fiches.scss";
-
 // Style dédié aux formulaires
 @import "forms.scss";
 
-// Style dédié aux listes (de fiches, de tags, etc.)
-@import "listes.scss";
-
 // Style dédié à l'affichage des services de la plateforme
 @import "services.scss";
-
-// Style dédié au système d'export de la plateforme
-@import "export.scss";
-
-// Style dédié au système de recherche de la plateforme
-@import "recherche.scss";
-
-// Style dédié au système d'administration de la plateforme
-@import "admin.scss";
-
-// Style dédié aux timelines sur la plateforme
-@import "timeline.scss";
-
-// Style dédié au module contacts sur la plateforme
-@import "contacts.scss";
 
 // Feuille dédiée au nouveau style Flat de la plateforme
 @import "flat.scss";
