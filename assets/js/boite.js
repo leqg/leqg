@@ -19,14 +19,14 @@ var porte = function() {
 	
 	// Bouton d'ajout d'une rue à une mission
 		$('.ajouterRue').click(function(){
-			$('.droite').fadeOut();
+			$('.droite section').fadeOut();
 			$('#ajoutRue').fadeIn();
 		});
 		
 	
 	// Bouton d'ajout d'une rue à une mission
 		$('.ajouterBureau').click(function(){
-			$('.droite').fadeOut();
+			$('.droite section').fadeOut();
 			$('#ajoutBureau').fadeIn();
 		});
 	
@@ -129,7 +129,7 @@ var porte = function() {
 	// Script permettant de voir les immeubles concernés au sein d'une rue
 		$('#listeDesRues').on('click', '.voirRue', function(){
 			if ($(this).html() == 'Consulter') {
-				$('.droite').fadeOut();
+				$('.droite section').fadeOut();
 				$('.voirRue').hide();
 	
 				var mission = $('#titre-mission').data('mission');
@@ -159,7 +159,7 @@ var porte = function() {
 				$(this).show();
 				$(this).html('Fermer');
 			} else {
-				$('.droite').fadeOut();
+				$('.droite section').fadeOut();
 				$('#boitage-statistiques').fadeIn();
 				$(this).html('Consulter');
 				$('.voirRue').show();

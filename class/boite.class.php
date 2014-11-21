@@ -45,10 +45,9 @@ class Boite {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête
-		$query = $link->query('SELECT COUNT(*) FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
-		$data = $query->fetch(PDO::FETCH_NUM);
-		
-		return $data[0];
+		$query = $link->query('SELECT COUNT(*) AS `nombre` FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW() OR `mission_deadline` = "0000-00-00")');
+    	$data = $query->fetch(PDO::FETCH_NUM);
+    	return $data[0];
 	}
 	
 	
@@ -66,7 +65,7 @@ class Boite {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête
-		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
+		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW() OR `mission_deadline` = "0000-00-00")');
 		
 		// On retourne le résultat
 		return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -86,6 +85,7 @@ class Boite {
 	public static function creation( array $infos ) {
 		// On met en place le lien vers la base de données
 		$link = Configuration::read('db.link');
+		$user = User::ID();
 		
 		// On retraite la date entrée
 		$date = explode('/', $infos['date']);
@@ -94,7 +94,7 @@ class Boite {
 	
 		// On exécute la requête d'insertion dans la base de données
 		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:createur, :responsable, :deadline, :nom, "boitage")');
-		$query->bindParam(':createur', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':createur', $user, PDO::PARAM_INT);
 		$query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
 		$query->bindParam(':deadline', $date);
 		$query->bindParam(':nom', $infos['nom']);
@@ -316,12 +316,20 @@ class Boite {
 		foreach ($immeubles as $immeuble) { $ids[] = $immeuble[0]; }
 		$immeubles = implode(',', $ids);
 		
-		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
-		$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `immeuble_id` IN (' . $immeubles . ')');
-		$data = $query->fetch(PDO::FETCH_NUM);
-		
-		// On retourne le nombre d'électeurs
-		return $data[0];
+		if (count($ids)) {
+    		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
+    		$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `immeuble_id` IN (' . $immeubles . ')');
+    		
+    		if ($query->rowCount()) {
+        		$data = $query->fetch(PDO::FETCH_NUM);
+        		// On retourne le nombre d'électeurs
+        		return $data[0];
+    		} else {
+        		return 0;
+    		}
+        } else {
+            return 0;
+        }
 	}
 	
 	
