@@ -1,4 +1,6 @@
 <?php
+	// On lance la connexion à la BDD
+	$link = Configuration::read('db.link');
 
 	// Je récupère les informations
 	$infos = $_POST;
@@ -16,7 +18,7 @@
 	if (count($modifs) > 0) :
 		$args = implode(', ', $modifs);
 		
-		$query = 'UPDATE contacts SET ' . $args . ' WHERE contact_id = ' . $infos['fiche'];
+		$query = 'UPDATE `contacts` SET ' . $args . ' WHERE contact_id = ' . $infos['fiche'];
 		$sql = $db->query($query);
 	endif;
 	
