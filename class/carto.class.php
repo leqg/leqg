@@ -595,7 +595,7 @@ class Carto {
 			$immeuble = self::immeuble($id);
 			
 		// On retourne le résultat demandé
-			if ($return) : return $immeuble['numero']; else : echo $immeuble['numero']; endif;
+			if ($return) : return $immeuble['immeuble_numero']; else : echo $immeuble['immeuble_numero']; endif;
 	}
 	
 	

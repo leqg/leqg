@@ -65,15 +65,20 @@ class Porte {
 	public static function creation( array $infos ) {
 		// On récupère la connexion à la base de données
 		$link = Configuration::read('db.link');
+		$userId = User::ID();
 		
 		// On retraite la date entrée
-		$date = explode('/', $infos['date']);
-		ksort($date);
-		$date = implode('-', $date);
+		if (!empty($infos['date'])) {
+			$date = explode('/', $infos['date']);
+			ksort($date);
+			$date = implode('-', $date);
+		} else {
+			$date = null;
+		}
 	
 		// On exécute la requête d'insertion dans la base de données
-		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:cookie, :responsable, :deadline, :nom, "porte"');
-		$query->bindParam(':cookie', User::ID(), PDO::PARAM_INT);
+		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:cookie, :responsable, :deadline, :nom, "porte")');
+		$query->bindParam(':cookie', $userId, PDO::PARAM_INT);
 		$query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
 		$query->bindParam(':deadline', $date);
 		$query->bindParam(':nom', $infos['nom']);
@@ -99,7 +104,7 @@ class Porte {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de vérification
-		$query = $this->prepare('SELECT `mission_id` FROM `mission` WHERE MD5( `mission_id` ) = :id AND `mission_type` = "porte"');
+		$query = $link->prepare('SELECT `mission_id` FROM `mission` WHERE MD5( `mission_id` ) = :id AND `mission_type` = "porte"');
 		$query->bindParam(':id', $mission);
 		$query->execute();
 		
@@ -218,7 +223,7 @@ class Porte {
 		$link = Configuration::read('db.link');
 		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$query = $link->query('SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = :id');
+		$query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = :id');
 		$query->bindParam(':id', $bureau, PDO::PARAM_INT);
 		$query->execute();
 		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
@@ -373,14 +378,15 @@ class Porte {
 	public static function reporting( $mission , $electeur , $statut ) {
 		// On récupère la connexion à la base de données
 		$link = Configuration::read('db.link');
+		$userId = User::ID();
 	
 		// On récupère les informations sur la mission
 		$informations = self::informations($mission);
 		
 		// On prépare et exécute la requête
-		$query = $link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = : militant WHERE MD5(`mission_id`) = :mission AND MD5(`contact_id`) = :contact');
+		$query = $link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = :militant WHERE MD5(`mission_id`) = :mission AND MD5(`contact_id`) = :contact');
 		$query->bindParam(':statut', $statut);
-		$query->bindParam(':militant', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':militant', $userId, PDO::PARAM_INT);
 		$query->bindParam(':mission', $mission);
 		$query->bindParam(':contact', $electeur);
 		$query->execute();
@@ -394,7 +400,7 @@ class Porte {
 		// On rajoute une entrée d'historique pour le contact en question
 		$query = $link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`) VALUES (:contact, :compte, "porte", NOW(), :nom)');
 		$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
-		$query->bindParam(':compte', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':compte', $userId, PDO::PARAM_INT);
 		$query->bindParam(':nom', $informations['mission_nom']);
 		$query->execute();
 	}
