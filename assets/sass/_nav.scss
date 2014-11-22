@@ -62,6 +62,7 @@ nav#principale {
 		&#lien-boite::after { content: '\e84d'; }
 		&#lien-rappels::after { content: '\e854'; }
 		&#lien-administration::after { content: '\e855'; }
+		&#lien-logout::after { content: '\e85d'; }
 		
 		&.actif {
 			color: $bleu;
