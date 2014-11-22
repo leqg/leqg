@@ -45,17 +45,16 @@
 								'porte' => 'Porte-à-porte',
 								'boite' => 'Boîtage',
 								'rappels' => 'Rappels'  );
-			else :
-				$menu = array(  'porte' => 'Porte-à-porte',
-								'boite' => 'Boîtage',
-								'rappels' => 'Rappels'  );
-			endif; 
 					
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
 		
 			foreach ($menu as $key => $element) : ?>
 		<a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
-		<?php endforeach; ?>
+		<?php endforeach; else: ?>
+		<a href="<?php Core::tpl_go_to('porte', array('action' => 'missions')); ?>" id="lien-porte">Porte-à-porte</a>
+		<a href="<?php Core::tpl_go_to('boite', array('action' => 'missions')); ?>" id="lien-boite">Boîtage</a>
+		<a href="<?php Core::tpl_go_to('rappels', array('action' => 'appel')); ?>" id="lien-rappels">Rappels</a>
+		<?php endif; ?>
 	</nav><!--nav#principale-->
 	
 	<main id="central" class="flat">

@@ -1,4 +1,7 @@
-<?php Core::tpl_header(); ?>
+<?php
+	User::protection(5);
+	Core::tpl_header();
+?>
 	
 	<h2>Porte à porte</h2>
 	<?php if (Porte::nombre() > 0) : ?>
