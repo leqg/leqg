@@ -235,6 +235,18 @@ var porte = function() {
             $('tr.ligne-immeuble-' + immeuble).remove();
         });
     });
+    
+    
+    // Action d'inscription
+    $('.inscription').click(function() {
+	    var mission = $(this).data('mission');
+	    
+	    // On lance l'inscription
+	    $.post('ajax.php?script=boite-inscription', { mission: mission }, function() {
+			var destination = 'index.php?page=boite&action=missions';
+			$(location).attr('href', destination);
+	    });
+    });
 	
 };
 

@@ -177,18 +177,7 @@ else {
 		// On charge les templates de page selon la demande
 		if ( isset($_GET['action'])) {
 
-			// On charge d'abord le template de header
-			Core::tpl_header(); 
-			
-			if ( $_GET['action'] == 'nouveau' ) : Core::tpl_load('boite', 'nouveau');
-			elseif ( $_GET['action'] == 'missions' ) : Core::tpl_load('boite', 'missions');
-			elseif ( $_GET['action'] == 'mission' ) : Core::tpl_load('boite', 'mission');
-			elseif ( $_GET['action'] == 'reporting' ) : Core::tpl_load('boite', 'reporting');
-			elseif ( $_GET['action'] == 'reglages' ) : Core::tpl_load('boite', 'reglages');
-			else : Core::tpl_load('boite'); endif;
-			
-			// On charge enfin le template de footer
-			Core::tpl_footer();
+			Core::tpl_load('boite', $_GET['action']);
 		
 		} else if ( isset($_GET['mission']) && !isset($_GET['rue']) ) {
 			Core::tpl_load('boite', 'mission');

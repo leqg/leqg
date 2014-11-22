@@ -29,7 +29,38 @@ class Boite {
 	public	function __construct() {
 		$this->link = Configuration::read('db.link');
 	}
-
+	
+	
+	/**
+	 * Vérifie si l'utilisateur est inscrit ou non dans une mission
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param   int    $mission   ID de la mission
+	 *
+	 * @return	bool
+	 */
+	 
+	public static function estInscrit( $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		$userId = User::ID();
+		
+		// On exécute la requête de calcul du nombre de missions
+		$query = $link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission AND `user_id` = :user');
+		$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+		$query->bindParam(':user', $userId, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On affiche un booléen
+		if ($query->rowCount()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * Cette méthode permet de calculer le nombre de missions disponible actuellement

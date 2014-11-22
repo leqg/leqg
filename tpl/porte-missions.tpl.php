@@ -1,7 +1,6 @@
 <?php
 	Core::tpl_header();
 ?>
-	
 	<h2 class="titre" data-user="<?php echo User::ID(); ?>">Porte à porte</h2>
 	<?php if (Porte::nombre() > 0) : ?>
 		<section id="missions">

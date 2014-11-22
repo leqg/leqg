@@ -40,7 +40,11 @@
         Aucun immeuble à visiter dans cette mission
         <?php endif; ?>
         
+        <?php if (User::auth_level() > 5) : ?>
         <a href="<?php Core::tpl_go_to('boite', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <?php else : ?>
+        <a href="<?php Core::tpl_go_to('boite', array('action' => 'voir', 'mission' => $mission['mission_id'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <?php endif; ?>
     </section>
     
 <?php Core::tpl_footer(); ?>
