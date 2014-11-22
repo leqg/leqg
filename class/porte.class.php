@@ -435,5 +435,19 @@ class Porte {
 		$query->bindParam(':nom', $informations['mission_nom']);
 		$query->execute();
 	}
+	
+	
+	public static function inscriptions( $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		$userId = User::ID();
+		
+		$query = $link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission AND `user_id` = :user');
+		$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+		$query->bindParam('user', $userId, PDO::PARAM_INT);
+		$query->execute();
+		
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+	}
 }
 ?>

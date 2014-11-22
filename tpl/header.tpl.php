@@ -44,8 +44,7 @@
 								'publi' => 'Publipostage',
 								'porte' => 'Porte-à-porte',
 								'boite' => 'Boîtage',
-								'rappels' => 'Rappels',
-								'logout' => 'Déconnexion'  );
+								'rappels' => 'Rappels'  );
 					
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
 		

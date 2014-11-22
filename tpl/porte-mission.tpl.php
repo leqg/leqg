@@ -96,6 +96,18 @@
 		</section>
 	<?php } ?>
 	
+	<section class="contenu demi">
+		<h4>Militants inscrits à cette mission</h4>
+		
+		<ul class="listeContacts">
+			<?php $comptes = Porte::inscriptions($mission['mission_id']); if (count($comptes)) : foreach($comptes as $compte) : ?>
+			<li class="contact homme"><?php echo User::get_login_by_ID($compte['user_id']); ?></li>
+			<?php endforeach; else : ?>
+			<li class="contact homme">Aucune inscription actuellement.</li>
+			<?php endif; ?>
+		</ul>
+	</section>
+	
 	<section id="ajoutRue" class="contenu demi invisible">
 		<ul class="formulaire">
 			<li>
