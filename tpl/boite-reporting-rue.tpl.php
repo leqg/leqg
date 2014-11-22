@@ -1,11 +1,11 @@
-<?php Core::tpl_header(); $mission = $boitage->informations($_GET['mission']); ?>
+<?php Core::tpl_header(); $mission = Boite::informations($_GET['mission'])[0]; ?>
 
     <h2 class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
     <section class="mission-porte">        
-    		<?php if ($boitage->nombreImmeubles($mission['mission_id'])) : ?>
-    		    <?php $rues = $boitage->liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
-    		    <h4><?php $nomRue = $carto->afficherRue($rue, true); echo $nomRue; ?></h4>
+    		<?php if (Boite::nombreImmeubles($mission['mission_id'])) : ?>
+    		    <?php $rues = Boite::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
+    		    <h4><?php $nomRue = Carto::afficherRue($rue, true); echo $nomRue; ?></h4>
                 
                 <table class="reporting">
         		        <thead>
@@ -20,7 +20,7 @@
             		        <?php
                 		        $idImmeubles = array();
                         		foreach ($immeubles as $key => $immeuble) {
-                        			$immeubles[$key] = $carto->afficherImmeuble($immeuble, true);
+                        			$immeubles[$key] = Carto::afficherImmeuble($immeuble, true);
                         			$idImmeubles[$immeubles[$key]] = $immeuble;
                         		}
                         		natsort($immeubles);
@@ -40,7 +40,7 @@
         Aucun immeuble à visiter dans cette mission
         <?php endif; ?>
         
-        <a href="<?php Core::tpl_go_to('porte', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <a href="<?php Core::tpl_go_to('boite', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
     </section>
     
 <?php Core::tpl_footer(); ?>

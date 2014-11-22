@@ -61,11 +61,11 @@
     			
     			$nombreTotal = Boite::nombreImmeubles($mission['mission_id'], -1);
     			$nombreFait = Boite::nombreImmeubles($mission['mission_id'], 1);
-    			$nombreRestant = $nombreTotal - $nombreFait;
+    			$nombreRestant = $electeursTotal - $electeursFait;
     		
     			// On fabrique les pourcentages
-    			$fait = ($nombreFait * 100) / $nombreTotal;
-    			$afaire = ($nombreRestant * 100) / $nombreTotal;
+    			$fait = ($nombreFait * 100) / $electeursTotal;
+    			$afaire = 100 - $fait;
     		?>
     		<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
     		

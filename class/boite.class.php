@@ -85,7 +85,7 @@ class Boite {
 	public static function creation( array $infos ) {
 		// On met en place le lien vers la base de données
 		$link = Configuration::read('db.link');
-		$user = User::ID();
+		$userID = User::ID();
 		
 		// On retraite la date entrée
 		$date = explode('/', $infos['date']);
@@ -94,7 +94,7 @@ class Boite {
 	
 		// On exécute la requête d'insertion dans la base de données
 		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:createur, :responsable, :deadline, :nom, "boitage")');
-		$query->bindParam(':createur', $user, PDO::PARAM_INT);
+		$query->bindParam(':createur', $userID, PDO::PARAM_INT);
 		$query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
 		$query->bindParam(':deadline', $date);
 		$query->bindParam(':nom', $infos['nom']);
@@ -174,11 +174,11 @@ class Boite {
 		
 		// On exécute la requête
 		if ($type) {
-			$query = $link->prepare('SELECT COUNT(*) FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut > 0');
+			$query = $link->prepare('SELECT COUNT(*) AS `nombre` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` > 0');
 		} else {
-			$query = $link->prepare('SELECT COUNT(*) FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut = 0');
+			$query = $link->prepare('SELECT COUNT(*) AS `nombre` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` = 0');
 		}
-		$query->bindParam(':id', $mission);
+		$query->bindParam(':id', $mission, PDO::PARAM_INT);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_NUM);
 
@@ -203,14 +203,14 @@ class Boite {
 		$link = Configuration::read('db.link');
 		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$query = $link->prepera('SELECT `immeuble_id` FROM `immeubles WHERE `rue_id` = :id');
+		$query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
 		$query->bindParam(':id', $rue, PDO::PARAM_INT);
 		$query->execute();
 		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
 		
 		// Pour chaque immeuble, on créé une insertion dans la base de données
 		foreach ($immeubles as $immeuble) {
-			$query = $this->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+			$query = $link->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
 			$query->bindParam(':mission', $mission, PDO::PARAM_INT);
 			$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -242,7 +242,7 @@ class Boite {
 		
 		// Pour chaque immeuble, on créé une insertion dans la base de données
 		foreach ($immeubles as $immeuble) {
-			$query = $this->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+			$query = $link->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
 			$query->bindParam(':mission', $mission, PDO::PARAM_INT);
 			$query->bindParam(':rue', $immeuble[1], PDO::PARAM_INT);
 			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);

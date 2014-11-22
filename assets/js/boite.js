@@ -99,7 +99,7 @@ var porte = function() {
 			var bureauNom = $(this).data('nom');
 			var bureauVille = $(this).data('ville');
 			var mission = $('#titre-mission').data('mission');
-			console.log(mission);
+	
 			$.post('ajax.php?script=boitage-ajout-bureau', { bureau: bureau, mission: mission }, function(){
 				var destination = 'index.php?page=boite&mission=' + mission;
 				$(location).attr('href', destination);
