@@ -49,7 +49,7 @@
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
 
 			if (Configuration::read('ini')['LEQG']['compte'] == 'dev') {
-				$inactif = array('rappels');
+				$inactif = array();
 			} else {
 				$inactif = array('porte', 'boite', 'rappels', 'administration');
 			}

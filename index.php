@@ -222,11 +222,13 @@ else {
 			    Core::tpl_load('rappels', $_GET['action']);
 		}
 		
+		// Si c'est une page d'argumentaire, on charge l'argumentaire
 		elseif ( isset($_GET['mission']) )
 		{
 			    Core::tpl_load('rappels', 'mission');
 		}
 		
+		// Sinon, c'est la page d'accueil du module rappels
 		else
 		{
 			    Core::tpl_load('rappels');

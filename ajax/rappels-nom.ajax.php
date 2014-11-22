@@ -6,7 +6,7 @@
         $mission = new Rappel($_POST['mission']);
         
         // On modifie les données dans la base de données
-        $mission->modification('nom', $_POST['nom']);
+        $mission->modification('argumentaire_nom', $_POST['nom']);
     }
     else
     {
