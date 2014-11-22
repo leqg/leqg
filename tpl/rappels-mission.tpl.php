@@ -56,6 +56,8 @@
  
  			<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
  			<p>Cette mission a été réalisée à <?php echo ceil($fait); ?>&nbsp;%</p>
+ 			
+ 			<a href="<?php Core::tpl_go_to('rappels', array('action' => 'appel')); ?>" class="nostyle"><button class="vert" style="margin-bottom: .5em;">Passer un appel</button></a>
        </section>
         
         <section class="contenu demi">

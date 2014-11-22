@@ -128,20 +128,20 @@ function fichesMission() {
 		$.each(data, function(key, val) {
 			// On vérifie le nom
 			if (val.nom_affichage != '') {
-				var nomAffichage = val.nom_affichage;
-			} elseif (val.contact_organisme != '') {
-				var nomAffichage = val.contact_organisme;
+				nomAffichage = val.nom_affichage;
+			} else if (val.contact_organisme != '') {
+				nomAffichage = val.contact_organisme;
 			} else {
-				var nomAffichage = 'Fiche sans nom';
+				nomAffichage = 'Fiche sans nom';
 			}
 			
 			// On regarde le sexe
 			if (val.contact_sexe == 'M') {
-				var sexe = 'homme';
-			} elseif (val.contact_sexe == 'F') {
-				var sexe = 'femme';
+				sexe = 'homme';
+			} else if (val.contact_sexe == 'F') {
+				sexe = 'femme';
 			} else {
-				var sexe = 'isexe';
+				sexe = 'isexe';
 			}
 			
 			// On rajoute pour une puce pour chaque contact
@@ -559,6 +559,30 @@ var rappels = function() {
 		// On lance l'export en AJAX
 		$.get('ajax.php?script=rappels-ajout', data, function() {
 			var destination = 'index.php?page=rappels&mission=' + $('.titre').data('mission');
+			$(location).attr('href', destination);
+		});
+	});
+	
+	
+	// On sauvegarde le reporting lancé
+	$('#reporting').blur(function() {
+		var contact = $('.titre').data('contact');
+		var argumentaire = $('.titre').data('argumentaire');
+		var notes = $(this).val();
+		
+		// On sauvegarde
+		$.get('ajax.php?script=rappels-reporting', { contact: contact, argumentaire: argumentaire, notes: notes });
+	});
+	
+	
+	// On passe à l'appel suivant
+	$('.appelSuivant').click(function() {
+		var contact = $('.titre').data('contact');
+		var argumentaire = $('.titre').data('argumentaire');
+		
+		// On passe à l'appel suivant
+		$.get('ajax.php?script=rappels-suivant', { contact: contact, argumentaire: argumentaire }, function() {
+			var destination = 'index.php?page=rappels&action=appel';
 			$(location).attr('href', destination);
 		});
 	});

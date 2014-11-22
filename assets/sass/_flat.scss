@@ -743,7 +743,7 @@ main.dossier {
 				position: absolute; top: 0; top: calc(50% - 45px); left: 0;
 				display: block;
 				background-color: $jaune;
-				@include border-radius(50%);
+				@include border-radius(.66em);
 				color: $rouge;
 				content: ' ';
 				font-family: $icons;
@@ -779,7 +779,7 @@ main.dossier {
 			position: absolute; top: 0; top: calc(50% - 45px); left: 0;
 			display: block;
 			background-color: $jaune;
-			@include border-radius(50%);
+			@include border-radius(.66em);
 			color: rgba($rouge, .5);
 			font-family: $icons;
 			font-size: 50px;
