@@ -239,6 +239,18 @@ var porte = function() {
             $('tr.ligne-electeur-' + contact).remove();
         });
     });
+    
+    
+    // Action d'inscription
+    $('.inscription').click(function() {
+	    var mission = $(this).data('mission');
+	    
+	    // On lance l'inscription
+	    $.post('ajax.php?script=porte-inscription', { mission: mission }, function() {
+			var destination = 'index.php?page=porte&action=missions';
+			$(location).attr('href', destination);
+	    });
+    });
 	
 };
 

@@ -23,11 +23,42 @@ class Porte {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de calcul du nombre de missions
-		$query = $link->query('SELECT COUNT(*) FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "porte" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
+		$query = $link->query('SELECT COUNT(*) AS nombre FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "porte" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
 		$data = $query->fetch(PDO::FETCH_NUM);
 		
 		// On retourne le nombre retrouvé
 		return $data[0];
+	}
+	
+	
+	/**
+	 * Vérifie si l'utilisateur est inscrit ou non dans une mission
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param   int    $mission   ID de la mission
+	 *
+	 * @return	bool
+	 */
+	 
+	public static function estInscrit( $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		$userId = User::ID();
+		
+		// On exécute la requête de calcul du nombre de missions
+		$query = $link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission AND `user_id` = :user');
+		$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+		$query->bindParam(':user', $userId, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On affiche un booléen
+		if ($query->rowCount()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	
