@@ -35,28 +35,29 @@
 	<!-- Navigation principale -->
 	<nav id="principale">
 		<?php 
-			$menu = array(  'contacts' => 'Contacts',
-							'dossier' => 'Dossiers',
-							'carto' => 'Cartographie',
-							'sms' => 'SMS groupés',
-							'email' => 'Emails groupés',
-							'publi' => 'Publipostage',
-							'porte' => 'Porte-à-porte',
-							'boite' => 'Boîtage',
-							'rappels' => 'Rappels',
-							'administration' => 'Gestion');
-							
+			if (User::auth_level() >= 5) :
+				$menu = array(  'contacts' => 'Contacts',
+								'dossier' => 'Dossiers',
+								'carto' => 'Cartographie',
+								'sms' => 'SMS groupés',
+								'email' => 'Emails groupés',
+								'publi' => 'Publipostage',
+								'porte' => 'Porte-à-porte',
+								'boite' => 'Boîtage',
+								'rappels' => 'Rappels'  );
+					
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
-
-			if (Configuration::read('ini')['LEQG']['compte'] == 'dev') {
-				$inactif = array('rappels');
-			} else {
-				$inactif = array('porte', 'boite', 'rappels', 'administration');
-			}
 		
 			foreach ($menu as $key => $element) : ?>
-		<a href="<?php Core::tpl_go_to($key); ?>" <?php if (isset($_GET['page']) && $actuel == $key) echo 'class="actif"'; if (in_array($key, $inactif)) echo 'class="inactif"'; ?> id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
+		<a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
 		<?php endforeach; ?>
+		<a href="http://auth.leqg.info/deconnexion.php" id="lien-logout">Déconnexion</a>
+		<?php else: ?>
+		<a href="<?php Core::tpl_go_to('porte', array('action' => 'missions')); ?>" id="lien-porte">Porte-à-porte</a>
+		<a href="<?php Core::tpl_go_to('boite', array('action' => 'missions')); ?>" id="lien-boite">Boîtage</a>
+		<a href="<?php Core::tpl_go_to('rappels', array('action' => 'appel')); ?>" id="lien-rappels">Rappels</a>
+		<a href="http://auth.leqg.info/deconnexion.php" id="lien-logout">Déconnexion</a>
+		<?php endif; ?>
 	</nav><!--nav#principale-->
 	
 	<main id="central" class="flat">

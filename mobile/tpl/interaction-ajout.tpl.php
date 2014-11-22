@@ -1,3 +1,8 @@
+<?php
+	User::protection(5);
+	$contact = new Contact(md5($_GET['fiche']));
+	Core::tpl_header();
+?>
 <h2>Ajout d'une interaction</h2>
 
 <form action="ajax.php?script=interaction-ajout" method="post">
@@ -5,17 +10,17 @@
 	<ul class="formulaire">
 		<li>
 			<label for="form-fiche">Fiche concernée</label>
-			<input type="text" name="form-fiche" id="form-fiche" value="<?php $fiche->nomByID($_GET['fiche']); ?>" disabled>
+			<input type="text" name="form-fiche" id="form-fiche" value="<?php echo mb_convert_case($contact->get('contact_nom'), MB_CASE_UPPER); ?> <?php echo mb_convert_case($contact->get('contact_nom_usage'), MB_CASE_UPPER); ?> <?php echo mb_convert_case($contact->get('contact_prenoms'), MB_CASE_TITLE); ?>" disabled>
 		</li>
 		<li>
 			<label for="form-type">Type</label>
 			<label class="selectbox" for="form-type">
 				<select name="type" id="form-type">
-					<option value="contact"><?php $historique->returnType('contact'); ?></option>
-					<option value="telephone"><?php $historique->returnType('telephone'); ?></option>
-					<option value="email"><?php $historique->returnType('email'); ?></option>
-					<option value="courrier"><?php $historique->returnType('courrier'); ?></option>
-					<option value="autre"><?php $historique->returnType('autre'); ?></option>
+					<option value="contact"><?php echo Core::tpl_typeEvenement('contact'); ?></option>
+					<option value="telephone"><?php echo Core::tpl_typeEvenement('telephone'); ?></option>
+					<option value="email"><?php echo Core::tpl_typeEvenement('email'); ?></option>
+					<option value="courrier"><?php echo Core::tpl_typeEvenement('courrier'); ?></option>
+					<option value="autre"><?php echo Core::tpl_typeEvenement('autre'); ?></option>
 				</select>
 			</label>
 		</li>
@@ -39,3 +44,4 @@
 			<input type="submit" value="Sauvegarder">
 		</li>
 	</ul>
+<?php Core::tpl_footer(); ?>

@@ -20,14 +20,14 @@ var porte = function() {
 	
 	// Bouton d'ajout d'une rue à une mission
 		$('.ajouterRue').click(function(){
-			$('.droite').fadeOut();
+			$('.droite section').fadeOut();
 			$('#ajoutRue').fadeIn();
 		});
 		
 	
 	// Bouton d'ajout d'une rue à une mission
 		$('.ajouterBureau').click(function(){
-			$('.droite').fadeOut();
+			$('.droite section').fadeOut();
 			$('#ajoutBureau').fadeIn();
 		});
 	
@@ -130,7 +130,7 @@ var porte = function() {
 	// Script permettant de voir les immeubles concernés au sein d'une rue
 		$('#listeDesRues').on('click', '.voirRue', function(){
 			if ($(this).html() == 'Consulter') {
-				$('.droite').fadeOut();
+				$('.droite section').fadeOut();
 				$('.voirRue').hide();
 				
 				// Si un bouton de reporting de la rue existe déjà, on le supprime
@@ -160,7 +160,7 @@ var porte = function() {
 				$(this).show();
 				$(this).html('Fermer');
 			} else {
-				$('.droite').fadeOut();
+				$('.droite section').fadeOut();
 				$('#porte-statistiques').fadeIn();
 				$(this).html('Consulter');
 				$('.voirRue').show();
@@ -238,6 +238,18 @@ var porte = function() {
         $.post('ajax.php?script=porte-reporting-web', { mission: mission, contact: contact, statut: statut }, function() {
             $('tr.ligne-electeur-' + contact).remove();
         });
+    });
+    
+    
+    // Action d'inscription
+    $('.inscription').click(function() {
+	    var mission = $(this).data('mission');
+	    
+	    // On lance l'inscription
+	    $.post('ajax.php?script=porte-inscription', { mission: mission }, function() {
+			var destination = 'index.php?page=porte&action=missions';
+			$(location).attr('href', destination);
+	    });
     });
 	
 };

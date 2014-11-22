@@ -29,7 +29,38 @@ class Boite {
 	public	function __construct() {
 		$this->link = Configuration::read('db.link');
 	}
-
+	
+	
+	/**
+	 * Vérifie si l'utilisateur est inscrit ou non dans une mission
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param   int    $mission   ID de la mission
+	 *
+	 * @return	bool
+	 */
+	 
+	public static function estInscrit( $mission ) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		$userId = User::ID();
+		
+		// On exécute la requête de calcul du nombre de missions
+		$query = $link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission AND `user_id` = :user');
+		$query->bindParam(':mission', $mission, PDO::PARAM_INT);
+		$query->bindParam(':user', $userId, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On affiche un booléen
+		if ($query->rowCount()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * Cette méthode permet de calculer le nombre de missions disponible actuellement
@@ -45,10 +76,9 @@ class Boite {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête
-		$query = $link->query('SELECT COUNT(*) FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
-		$data = $query->fetch(PDO::FETCH_NUM);
-		
-		return $data[0];
+		$query = $link->query('SELECT COUNT(*) AS `nombre` FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW() OR `mission_deadline` = "0000-00-00")');
+    	$data = $query->fetch(PDO::FETCH_NUM);
+    	return $data[0];
 	}
 	
 	
@@ -66,7 +96,7 @@ class Boite {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête
-		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
+		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "boitage" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW() OR `mission_deadline` = "0000-00-00")');
 		
 		// On retourne le résultat
 		return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -86,6 +116,7 @@ class Boite {
 	public static function creation( array $infos ) {
 		// On met en place le lien vers la base de données
 		$link = Configuration::read('db.link');
+		$userID = User::ID();
 		
 		// On retraite la date entrée
 		$date = explode('/', $infos['date']);
@@ -94,7 +125,7 @@ class Boite {
 	
 		// On exécute la requête d'insertion dans la base de données
 		$query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:createur, :responsable, :deadline, :nom, "boitage")');
-		$query->bindParam(':createur', User::ID(), PDO::PARAM_INT);
+		$query->bindParam(':createur', $userID, PDO::PARAM_INT);
 		$query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
 		$query->bindParam(':deadline', $date);
 		$query->bindParam(':nom', $infos['nom']);
@@ -174,11 +205,11 @@ class Boite {
 		
 		// On exécute la requête
 		if ($type) {
-			$query = $link->prepare('SELECT COUNT(*) FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut > 0');
+			$query = $link->prepare('SELECT COUNT(*) AS `nombre` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` > 0');
 		} else {
-			$query = $link->prepare('SELECT COUNT(*) FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut = 0');
+			$query = $link->prepare('SELECT COUNT(*) AS `nombre` FROM `boitage` WHERE `mission_id` = :id AND `boitage_statut` = 0');
 		}
-		$query->bindParam(':id', $mission);
+		$query->bindParam(':id', $mission, PDO::PARAM_INT);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_NUM);
 
@@ -203,14 +234,14 @@ class Boite {
 		$link = Configuration::read('db.link');
 		
 		// On effectue une recherche de tous les immeubles contenus dans la rue
-		$query = $link->prepera('SELECT `immeuble_id` FROM `immeubles WHERE `rue_id` = :id');
+		$query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
 		$query->bindParam(':id', $rue, PDO::PARAM_INT);
 		$query->execute();
 		$immeubles = $query->fetchAll(PDO::FETCH_NUM);
 		
 		// Pour chaque immeuble, on créé une insertion dans la base de données
 		foreach ($immeubles as $immeuble) {
-			$query = $this->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+			$query = $link->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
 			$query->bindParam(':mission', $mission, PDO::PARAM_INT);
 			$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -242,7 +273,7 @@ class Boite {
 		
 		// Pour chaque immeuble, on créé une insertion dans la base de données
 		foreach ($immeubles as $immeuble) {
-			$query = $this->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+			$query = $link->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
 			$query->bindParam(':mission', $mission, PDO::PARAM_INT);
 			$query->bindParam(':rue', $immeuble[1], PDO::PARAM_INT);
 			$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -316,12 +347,20 @@ class Boite {
 		foreach ($immeubles as $immeuble) { $ids[] = $immeuble[0]; }
 		$immeubles = implode(',', $ids);
 		
-		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
-		$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `immeuble_id` IN (' . $immeubles . ')');
-		$data = $query->fetch(PDO::FETCH_NUM);
-		
-		// On retourne le nombre d'électeurs
-		return $data[0];
+		if (count($ids)) {
+    		// On fait la recherche du nombre d'électeurs pour tous les immeubles demandés
+    		$query = $link->query('SELECT COUNT(*) FROM `contacts` WHERE `immeuble_id` IN (' . $immeubles . ')');
+    		
+    		if ($query->rowCount()) {
+        		$data = $query->fetch(PDO::FETCH_NUM);
+        		// On retourne le nombre d'électeurs
+        		return $data[0];
+    		} else {
+        		return 0;
+    		}
+        } else {
+            return 0;
+        }
 	}
 	
 	

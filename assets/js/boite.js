@@ -19,14 +19,14 @@ var porte = function() {
 	
 	// Bouton d'ajout d'une rue à une mission
 		$('.ajouterRue').click(function(){
-			$('.droite').fadeOut();
+			$('.droite section').fadeOut();
 			$('#ajoutRue').fadeIn();
 		});
 		
 	
 	// Bouton d'ajout d'une rue à une mission
 		$('.ajouterBureau').click(function(){
-			$('.droite').fadeOut();
+			$('.droite section').fadeOut();
 			$('#ajoutBureau').fadeIn();
 		});
 	
@@ -99,7 +99,7 @@ var porte = function() {
 			var bureauNom = $(this).data('nom');
 			var bureauVille = $(this).data('ville');
 			var mission = $('#titre-mission').data('mission');
-			console.log(mission);
+	
 			$.post('ajax.php?script=boitage-ajout-bureau', { bureau: bureau, mission: mission }, function(){
 				var destination = 'index.php?page=boite&mission=' + mission;
 				$(location).attr('href', destination);
@@ -129,7 +129,7 @@ var porte = function() {
 	// Script permettant de voir les immeubles concernés au sein d'une rue
 		$('#listeDesRues').on('click', '.voirRue', function(){
 			if ($(this).html() == 'Consulter') {
-				$('.droite').fadeOut();
+				$('.droite section').fadeOut();
 				$('.voirRue').hide();
 	
 				var mission = $('#titre-mission').data('mission');
@@ -159,7 +159,7 @@ var porte = function() {
 				$(this).show();
 				$(this).html('Fermer');
 			} else {
-				$('.droite').fadeOut();
+				$('.droite section').fadeOut();
 				$('#boitage-statistiques').fadeIn();
 				$(this).html('Consulter');
 				$('.voirRue').show();
@@ -234,6 +234,18 @@ var porte = function() {
         $.post('ajax.php?script=boitage-reporting-web', { mission: mission, immeuble: immeuble, statut: statut }, function() {
             $('tr.ligne-immeuble-' + immeuble).remove();
         });
+    });
+    
+    
+    // Action d'inscription
+    $('.inscription').click(function() {
+	    var mission = $(this).data('mission');
+	    
+	    // On lance l'inscription
+	    $.post('ajax.php?script=boite-inscription', { mission: mission }, function() {
+			var destination = 'index.php?page=boite&action=missions';
+			$(location).attr('href', destination);
+	    });
     });
 	
 };

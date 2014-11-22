@@ -1151,6 +1151,12 @@ class Contact
 					// Sinon, s'il concerne les fiches sans l'information
 					else { $criteres[] = '`contact_fixe` = 0'; }
 				}
+				
+				// On retraite le critère "phone" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
+				if ($tri['phone']) {
+					// Si le tri demandé concerne les fiches avec l'information
+					if ($tri['phone'] == 2) { $criteres[] = '( `contact_fixe` > 0 OR `contact_mobile` > 0 )'; }
+				}
 			
 				// On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
 				if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }

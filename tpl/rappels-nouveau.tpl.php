@@ -3,4 +3,5 @@
     $identifiant = Rappel::creer();
     
     // On redirige vers la mission créée
-    Core::tpl_go_to('rappels', array('mission' => md5($identifiant)), true);
+    Core::tpl_go_to('rappels', array('mission' => $identifiant), true);
+?>

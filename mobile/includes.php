@@ -10,9 +10,6 @@ setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr');
 // On détermine le charset du fichier retourné par le serveur
 header('Content-Type: text/html; charset=utf-8');
 
-// On récupère le fichier de configuration
-$config = parse_ini_file('../config.ini', true);
-
 // On lance la classe de configuration
 class Configuration
 {
@@ -29,56 +26,33 @@ class Configuration
 	}
 }
 
+// On récupère le fichier de configuration
+$config = parse_ini_file('../config.ini', true);
+
 // On applique la configuration chargée
 Configuration::write('db.host', $config['BDD']['host']);
-Configuration::write('db.basename', 'strasbourg');
+Configuration::write('db.basename', 'leqg');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
+Configuration::write('ini', $config);
 
-// Appel de la classe MySQL du noyau
-$noyau = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], 'leqg');
+// On fabrique la classe $noyau de connexion au noyau central
+$host = '217.70.189.234';
+$port = 3306;
+$dbname = 'leqg-core';
+$user = 'leqg-remote';
+$pass = 'pbNND3JY2cfrDUuZ';
+$charset = 'utf8';
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
+$core = new PDO($dsn, $user, $pass);
 
-// Constructeur de classes
-function __autoload($class_name) {
-	include '../class/' . $class_name . '.class.php';
-}
+// On fabrique la classe $link de liaison PDO
+$dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
+$link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
 
-// On regarde les cookies
-if (isset($_COOKIE['leqg-user'])) {
-	$query = 'SELECT * FROM users LEFT JOIN clients ON users.client_id = clients.client_id WHERE user_id = ' . $_COOKIE['leqg-user'];
-	$sql = $noyau->query($query);
-	$row = $sql->fetch_assoc();
-	
-	$cookie = $_COOKIE['leqg-user'];
-	$base = $row['client_bdd'];
-} else { $base = null; $cookie = null; }
-
-// On met à jour l'heure de dernière action pour le membre connecté
-if (isset($_COOKIE['leqg-user']))
-{
-	$noyau->query('UPDATE `users` SET `user_lastaction` = NOW() WHERE `user_id` = ' . $_COOKIE['leqg-user']);
-}
-
-// Appel de la classe MySQL du compte
-$db = new mysqli($config['BDD']['host'], $config['BDD']['user'], $config['BDD']['pass'], $base);
-
-// On appelle l'ensemble des classes générales au site
-$core =         new core($db, $noyau, $config['SERVER']['url']);
-$csv =          new csv($db, $config['SERVER']['url']);
-$user =         new user($db, $noyau, $config['SERVER']['url']);
-$fiche =        new fiche($db, $cookie, $config['SERVER']['url']);
-$tache =        new tache($db, $cookie, $config['SERVER']['url']);
-$dossier =      new dossier($db, $cookie, $config['SERVER']['url']);
-$historique =   new historique($db, $cookie, $config['SERVER']['url']);
-$fichier =      new fichier($db, $cookie, $config['SERVER']['url']);
-$carto =        new carto($db, $cookie, $config['SERVER']['url']);
-$mission =      new mission($db, $cookie, $config['SERVER']['url']);
-$boitage =      new boitage($db);
-$porte =        new porte($db);
-$notification = new notification($db, $cookie, $config['SERVER']['url']);
-
-// On transforme ces classes générales en variables globales
-global $db, $noyau, $config, $core, $csv, $user, $fiche, $tache, $dossier, $historique, $fichier, $carto, $mission, $boitage, $porte;
+// On enregistre les liaisons SQL
+Configuration::write('db.core', $core);
+Configuration::write('db.link', $link);
 
 // On charge les API extérieures
 require_once '../api/esendex/autoload.php';
@@ -98,9 +72,17 @@ $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
 // On inclut les classes non chargées
-include '../class/contact.class.php';
-include '../class/evenement.class.php';
-include '../class/folder.class.php';
-include '../class/rappel.class.php';
+require_once '../class/boite.class.php';
+require_once '../class/campagne.class.php';
+require_once '../class/carto.class.php';
+require_once '../class/contact.class.php';
+require_once '../class/core.class.php';
+require_once '../class/csv.class.php';
+require_once '../class/dossier.class.php';
+require_once '../class/evenement.class.php';
+require_once '../class/map.class.php';
+require_once '../class/porte.class.php';
+require_once '../class/rappel.class.php';
+require_once '../class/user.class.php';
 
 ?>

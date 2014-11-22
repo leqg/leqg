@@ -1,4 +1,4 @@
-<?php $core->tpl_header(); ?>
+<?php Core::tpl_header(); $boitage = new Boite(); ?>
 	<h2>Missions de boîtage</h2>
 	
 	<ul class="listeMissions">
@@ -17,4 +17,4 @@
 		</li>
 		<?php endif; ?>
 	</ul>
-<?php $core->tpl_footer(); ?>
+<?php Core::tpl_footer(); ?>

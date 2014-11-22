@@ -217,6 +217,23 @@ class User {
 		return mb_convert_case($data[0], MB_CASE_TITLE) . ' ' . mb_convert_case($data[1], MB_CASE_UPPER);
 	}
 	
+	
+	/**
+	 * Déconnecte l'utilisateur actuel
+	 *
+	 * @author  Damien Senger
+	 * @version 1.0
+	 * 
+	 * @return  string          Nom du compte
+	 */
+	
+	public static function logout() {
+		setcookie('leqg', 0, time());
+		setcookie('time', 0, time());
+		
+		header('Location: http://auth.leqg.info/');
+	}
+	
 }
 
 ?>

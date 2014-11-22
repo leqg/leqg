@@ -1,20 +1,21 @@
-<?php Core::tpl_header(); $mission = $porte->informations($_GET['mission']); ?>
+<?php Core::tpl_header(); $mission = Porte::informations($_GET['mission'])[0]; ?>
 
     <h2 class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
     <section class="mission-porte">        
-    		<?php if ($porte->nombreVisites($mission['mission_id'])) : ?>
-    		    <?php $rues = $porte->liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
-    		    <h4><?php $nomRue = $carto->afficherRue($rue, true); echo $nomRue; ?></h4>
+    		<?php if (Porte::nombreVisites($mission['mission_id'])) : ?>
+    		    <?php $rues = Porte::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
+    		    <h4><?php $nomRue = Carto::afficherRue($rue, true); echo $nomRue; ?></h4>
 
         		    <?php
             		    // On va tenter de retrier les immeubles dans le bon ordre
+            		    $link = Configuration::read('db.link');
             		    $query = 'SELECT `immeuble_id`, `immeuble_numero` FROM `immeubles` WHERE `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ORDER BY `immeuble_numero` ASC';
-            		    $sql = $db->query($query);
+            		    $sql = $link->query($query);
             		    $buildings = array();
-            		    while ($d = $sql->fetch_assoc()) { $buildings[] = $d; }
+            		    while ($d = $sql->fetch(PDO::FETCH_ASSOC)) { $buildings[] = $d; }
             		    
-            		    $core->triParColonne($buildings, 'immeuble_numero');
+            		    Core::triMultidimentionnel($buildings, 'immeuble_numero');
             		    
             		    $immeubles = array();
             		    foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; }
@@ -22,7 +23,7 @@
                     foreach ($immeubles as $immeuble) :
                 ?>
         		    
-        		        <h5><?php $carto->afficherImmeuble($immeuble); echo $nomRue; ?></h5>
+        		        <h5><?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?></h5>
         		        
         		        <table class="reporting">
             		        <thead>
@@ -35,9 +36,9 @@
                 		        </tr>
             		        </thead>
             		        <tbody>
-             		        <?php $electeurs = $porte->electeurs(md5($mission['mission_id']), md5($immeuble)); foreach ($electeurs as $electeur) : ?>
+             		        <?php $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble)); foreach ($electeurs as $electeur) : ?>
                		        <tr class="ligne-electeur-<?php echo md5($electeur['contact_id']); ?>">
-                    		        <td><?php echo strtoupper($electeur['contact_nom']) . ' ' . strtoupper($electeur['contact_nom_usage']) . ' ' . ucwords(strtolower($electeur['contact_prenoms'])); ?></td>
+                    		        <td><?php echo mb_convert_case($electeur['contact_nom'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_nom_usage'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_prenoms'], MB_CASE_TITLE); ?></td>
                     		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="1"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-a" name="electeur-<?php echo $electeur['contact_id']; ?>" value="0"><label for="electeur-<?php echo $electeur['contact_id']; ?>-a"><span><span></span></span></label></div></td>
                     		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="2"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="2" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-o" name="electeur-<?php echo $electeur['contact_id']; ?>" value="1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-o"><span><span></span></span></label></div></td>
                     		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="2"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="2" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-c" name="electeur-<?php echo $electeur['contact_id']; ?>" value="2"><label for="electeur-<?php echo $electeur['contact_id']; ?>-c"><span><span></span></span></label></div></td>
@@ -54,7 +55,11 @@
         Aucun immeuble à visiter dans cette mission
         <?php endif; ?>
         
+        <?php if (User::auth_level() > 5) : ?>
         <a href="<?php Core::tpl_go_to('porte', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <?php else : ?>
+        <a href="<?php Core::tpl_go_to('porte', array('action' => 'voir', 'mission' => $mission['mission_id'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <?php endif; ?>
     </section>
     
 <?php Core::tpl_footer(); ?>

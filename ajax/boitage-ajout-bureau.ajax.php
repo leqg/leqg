@@ -4,9 +4,9 @@
 	$infos = $_POST;
 	
 	// On récupère des informations sur la mission
-	$mission = $boitage->informations($infos['mission']);
+	$mission = Boite::informations($infos['mission'])[0];
 	
 	// On effectue l'ajout de la rue à la mission
-	$boitage->ajoutBureau($infos['bureau'], $mission['mission_id']);
+	Boite::ajoutBureau($infos['bureau'], $mission['mission_id']);
 	
 ?>

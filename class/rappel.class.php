@@ -39,23 +39,28 @@ class Rappel
 		
 		// On cherche toutes les informations concernant la mission en cours 
 		// pour les ajouter à la propriété $mission
-		$query = $this->link->prepare('SELECT * FROM rappels WHERE MD5(`id`) = :id');
+		$query = $this->link->prepare('SELECT * FROM argumentaires WHERE `argumentaire_id` = :id');
 		$query->bindParam(':id', $mission);
 		
 		// On exécute la recherche puis on l'affecte à la variable $mission
 		$query->execute();
 		$mission = $query->fetch(PDO::FETCH_ASSOC);
 		
-		// On ajoute le hashage MD5 dans le tableau
-		$mission['md5'] = md5($mission['id']);
-		
 		// On recherche le nombre de numéros à appeler au sein de cette mission
 		unset($query);
-		$query = $this->link->prepare('SELECT COUNT(*) AS nombre FROM `rappel` WHERE `mission` = :mission');
-		$query->bindParam(':mission', $mission['id']);
+		$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `rappels` WHERE `argumentaire_id` = :argumentaire');
+		$query->bindParam(':argumentaire', $mission['argumentaire_id']);
 		$query->execute();
 		$rappels = $query->fetch(PDO::FETCH_ASSOC);
 		$mission['nombre'] = $rappels['nombre'];
+		
+		// On recherche le nombre de numéros déjà appelés au sein de cette mission
+		unset($query); unset($rappels);
+		$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `rappels` WHERE `argumentaire_id` = :argumentaire AND `rappel_statut` = 2');
+		$query->bindParam(':argumentaire', $mission['argumentaire_id']);
+		$query->execute();
+		$rappels = $query->fetch(PDO::FETCH_ASSOC);
+		$mission['fait'] = $rappels['nombre'];
 		
 		// On affecte le contenu de $mission à la propriété $mission
 		$this->mission = $mission;
@@ -100,27 +105,17 @@ class Rappel
     public function modification( $info , $valeur )
     {
         // On prépare la requête de modification
-        $query = $this->link->prepare('UPDATE `rappels` SET `' . $info . '` = :valeur WHERE `id` = :id');
-        $query->bindParam(':id', $this->mission['id']);
+        $query = $this->link->prepare('UPDATE `argumentaires` SET `' . $info . '` = :valeur WHERE `argumentaire_id` = :id');
+        $query->bindParam(':id', $this->mission['argumentaire_id'], PDO::PARAM_INT);
         $query->bindParam(':valeur', $valeur);
+        $query->execute();
         
-        // On exécute la modification
-        if ($query->execute())
-        {
-            // On enregistre cette modification dans la propriété
-            $this->mission[ $info ] = $valeur;
-            
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $this->mission[ $info ] = $valeur;
     }
     
     
     /**
-     * Récupère une liste de toutes les missions créées
+     * Récupère une liste de toutes les missions créées de rappels
      *
      * Cette méthode permet de récupérer une liste complète de toutes les missions
      * créées selon leur statut (en cours ou terminées)
@@ -139,7 +134,7 @@ class Rappel
 		$link = Configuration::read('db.link');
 		
         // On prépare la requête
-        $query = $link->prepare('SELECT `id` FROM `rappels` WHERE `statut` = :statut ORDER BY `deadline` ASC, `creation` DESC');
+        $query = $link->prepare('SELECT `argumentaire_id` FROM `argumentaires` WHERE `argumentaire_statut` = :statut ORDER BY `argumentaire_deadline` ASC, `argumentaire_creation` DESC');
         $query->bindParam(':statut', $statut);
 
         // On exécute la requête et on récupère les données
@@ -167,9 +162,11 @@ class Rappel
     {
 		// On commence par paramétrer les données PDO
 		$link = Configuration::read('db.link');
+		$userId = User::ID();
 
         // On prépare la requête
-        $query = $link->prepare('INSERT INTO `rappels` (`creation`) VALUES (NOW())');
+        $query = $link->prepare('INSERT INTO `argumentaires` (`createur_id`) VALUES (:id)');
+        $query->bindParam(':id', $userId);
         
         // On exécute la requête
         $query->execute();

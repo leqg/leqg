@@ -34,6 +34,7 @@ $icon-names:    (ajout '\e8b2')
 				(fonction '\e967')
 				(immeuble '\e842')
 				(lieu '\e842')
+				(logout '\e85d')
 				(mobile '\e961')
 				(naissance '\e85b')
 				(nom '\e8b7')
@@ -549,6 +550,8 @@ main.dossier {
 				
 				&.long { height: 15em; }
 				
+				&.tlong { height: 20em; }
+				
 				.boutonGo
 				{
     				    position: absolute; top: 0; right: 0;
@@ -724,7 +727,8 @@ main.dossier {
 	
 	ul.liste-missions,
 	ul.liste-dossiers,
-	ul.liste-campagnes {
+	ul.liste-campagnes,
+	ul.liste-rappels {
 		list-style: none;
 		margin: 1em 1em 2.5em;
 		padding: 0;
@@ -740,7 +744,7 @@ main.dossier {
 				position: absolute; top: 0; top: calc(50% - 45px); left: 0;
 				display: block;
 				background-color: $jaune;
-				@include border-radius(50%);
+				@include border-radius(.66em);
 				color: $rouge;
 				content: ' ';
 				font-family: $icons;
@@ -776,7 +780,7 @@ main.dossier {
 			position: absolute; top: 0; top: calc(50% - 45px); left: 0;
 			display: block;
 			background-color: $jaune;
-			@include border-radius(50%);
+			@include border-radius(.66em);
 			color: rgba($rouge, .5);
 			font-family: $icons;
 			font-size: 50px;
@@ -803,6 +807,8 @@ main.dossier {
 	ul.liste-dossiers li::before { content: '\e851'; }
 	
 	ul.liste-campagnes li::before { content: '\e8ef'; }
+	
+	ul.liste-rappels li::before { content: '\e854'; }
 	
 	ul.statistiquesMission {
 		font-size: 1.2em;
