@@ -61,12 +61,11 @@
 </div>
 
 <script>
-	// Token public d'accès à Mapbox
-	L.mapbox.accessToken = 'pk.eyJ1IjoiaGl3ZWxvIiwiYSI6Imc3M3EzbmsifQ.t1k5I2FxgVdFfl6QNBA_Ew';
+	// Mise en place de la map
+	var map = L.map('mapbox-carto');
 	
-	// On met en place la map
-	var geocoder = L.mapbox.geocoder('mapbox.places-v1'),
-	    map = L.mapbox.map('mapbox-carto', 'hiwelo.k8fnkd96').setView([48.867, 2.3265], 4);
+	// Sélection du tile layer OSM
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
 	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
 	var data = {
@@ -74,7 +73,7 @@
 		email: 'tech@leqg.info',
 		country: 'France',
 		city: "<?php echo $ville['commune_nom']; ?>",
-		street: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim($rue['rue_nom']); ?>"
+		street: "<?php echo $immeuble['immeuble_numero'] . ' ' . $rue['rue_nom']; ?>"
 	}
 	
 	// On récupère le JSON contenant les coordonnées de la rue
@@ -93,7 +92,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim(mb_convert_case($rue['rue_nom'], MB_CASE_TITLE)); ?>"
+			title: "<?php echo mb_convert_case($immeuble['immeuble_numero'] . ' ' . $rue['rue_nom'], MB_CASE_TITLE); ?>"
 		}).addTo(map);
 	});
 </script>
