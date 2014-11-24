@@ -77,7 +77,7 @@
 			<h4>Données de contact</h4>
 			<ul class="etatcivil coordonnees">
 				<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] != 'email') : ?>
-				<li class="<?php echo $coordonnee['coordonnee_type']; ?>" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
+				<li class="<?php echo $coordonnee['coordonnee_type']; ?> noUpdate" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
 					Core::tpl_phone($coordonnee['coordonnee_numero']); 
 			  ?></li>
 				<?php endif; endforeach; ?>
@@ -96,6 +96,7 @@
 			</ul>
 			
 			<button class="appelSuivant" style="margin-bottom: .5em;">Aller à l'appel suivant</button>
+			<button class="appelSansReponse deleting" style="margin-top: 2em; margin-bottom: .5em;">Appel sans réponse</button>
 		</section>
 	</div>
 	
@@ -104,7 +105,7 @@
 			<h4>Argumentaire – fil conducteur de l'appel</h4>
 			
 			<?php if (!empty($argumentaire['argumentaire_texte'])) : ?>
-			<p><?php echo $argumentaire['argumentaire_texte']; ?></p>
+			<p><?php echo nl2br($argumentaire['argumentaire_texte']); ?></p>
 			<?php else : ?>
 			<p><em>Aucun argumentaire ajouté par l'équipe.</em></p>
 			<?php endif; ?>

@@ -1,3 +1,7 @@
+<?php
+	User::protection(5);
+	Core::tpl_header();
+?>
 <h2>Nouvelle mission de porte-à-porte</h2>
 
 <form action="ajax.php?script=porte-creation" method="post">
@@ -36,3 +40,4 @@
 		</section>
 	</div>
 </form>
+<?php Core::tpl_footer(); ?>

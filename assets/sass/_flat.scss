@@ -438,7 +438,8 @@ main.dossier {
 		}
 		
 		&#mapbox-carto,
-		&#mapbox-contact {
+		&#mapbox-contact,
+		&#mapbox-mission {
 			height: 350px;
 			padding: 0;
 			
@@ -450,6 +451,10 @@ main.dossier {
 		}
 		
 		&#mapbox-contact {
+			height: 250px;
+		}
+		
+		&#maxbox-mission {
 			height: 250px;
 		}
 	}
@@ -1067,7 +1072,7 @@ main.dossier {
 			&.mobile,
 			&.fixe
 			{
-				&:hover
+				&:not(.noUpdate):hover
 				{
 					cursor: pointer;
 					-moz-user-select: -moz-none;

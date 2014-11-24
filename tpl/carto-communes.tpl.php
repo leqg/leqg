@@ -56,26 +56,39 @@
 </div>
 
 <script>
-	// Token public d'accès à Mapbox
-	L.mapbox.accessToken = 'pk.eyJ1IjoiaGl3ZWxvIiwiYSI6Imc3M3EzbmsifQ.t1k5I2FxgVdFfl6QNBA_Ew';
+	// Mise en place de la map
+	var map = L.map('mapbox-carto');
 	
-	// On met en place la map
-	var geocoder = L.mapbox.geocoder('mapbox.places-v1'),
-	    map = L.mapbox.map('mapbox-carto', 'hiwelo.k8fnkd96');
-	
-	// On recherche la ville en question pour l'afficher avec la fonction showMap
-	geocoder.query('<?php echo $ville['commune_nom']; ?>', showMap);
-	
-	function showMap(err, data) {
-		// The geocoder can return an area, like a city, or a
-		// point, like an address. Here we handle both cases,
-		// by fitting the map bounds to an area or zooming to a point.
-		if (data.lbounds) {
-			map.fitBounds(data.lbounds);
-		} else if (data.latlng) {
-			map.setView([data.latlng[0], data.latlng[1]], 13);
-		}
+	// Sélection du tile layer OSM
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
+	var data = {
+		format: 'json',
+		email: 'tech@leqg.info',
+		country: 'France',
+		city: "<?php echo $ville['commune_nom']; ?>"
 	}
+	
+	// On récupère le JSON contenant les coordonnées de la rue
+	$.getJSON('https://nominatim.openstreetmap.org', data, function(data) {
+		// On récupère uniquement les données du premier résultat
+		data = data[0];
+		
+		// On prépare la boundingbox
+		var loc1 = new L.LatLng(data.boundingbox[0], data.boundingbox[2]);
+		var loc2 = new L.LatLng(data.boundingbox[1], data.boundingbox[3]);
+		var bounds = new L.LatLngBounds(loc1, loc2);
+		
+		// On fabrique une vue qui contient l'ensemble du secteur demandé
+		map.fitBounds(bounds, { maxZoom: 17 });
+		
+		// On ajoute un marker au milieu de la rue
+		L.marker([data.lat, data.lon], {
+			clicable: false,
+			title: "<?php echo mb_convert_case($ville['commune_nom'], MB_CASE_TITLE); ?>"
+		}).addTo(map);
+	});
 </script>
 
 <?php Core::tpl_footer(); ?>

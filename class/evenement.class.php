@@ -249,7 +249,7 @@ class Evenement
 	public function lien( )
 	{
 		// On détermine la liste des types possédant une fiche détaillée
-		$ouvert = array('contact', 'telephone', 'email', 'courrier', 'autre');
+		$ouvert = array('contact', 'telephone', 'email', 'courrier', 'autre', 'rappel');
 		$campagne = array('sms', 'email', 'publi');
 		
 		// On regarde si l'événement fait l'objet d'une fiche événement
