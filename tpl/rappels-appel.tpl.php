@@ -104,7 +104,7 @@
 			<h4>Argumentaire – fil conducteur de l'appel</h4>
 			
 			<?php if (!empty($argumentaire['argumentaire_texte'])) : ?>
-			<p><?php echo $argumentaire['argumentaire_texte']; ?></p>
+			<p><?php echo nl2br($argumentaire['argumentaire_texte']); ?></p>
 			<?php else : ?>
 			<p><em>Aucun argumentaire ajouté par l'équipe.</em></p>
 			<?php endif; ?>
