@@ -586,6 +586,19 @@ var rappels = function() {
 			$(location).attr('href', destination);
 		});
 	});
+	
+	
+	// On passe à l'appel suivant si le courant est sans réponse
+	$('.appelSansReponse').click(function() {
+		var contact = $('.titre').data('contact');
+		var argumentaire = $('.titre').data('argumentaire');
+		
+		// On passe à l'appel suivant
+		$.get('ajax.php?script=rappels-sansreponse', { contact: contact, argumentaire: argumentaire }, function() {
+			var destination = 'index.php?page=rappels&action=appel';
+			$(location).attr('href', destination);
+		});
+	});
 };
 
 // On déclenche les fonctions JS/jQuery au chargement de la page

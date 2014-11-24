@@ -96,6 +96,7 @@
 			</ul>
 			
 			<button class="appelSuivant" style="margin-bottom: .5em;">Aller à l'appel suivant</button>
+			<button class="appelSansReponse deleting" style="margin-top: 2em; margin-bottom: .5em;">Appel sans réponse</button>
 		</section>
 	</div>
 	
