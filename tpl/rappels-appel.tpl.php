@@ -77,7 +77,7 @@
 			<h4>Données de contact</h4>
 			<ul class="etatcivil coordonnees">
 				<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] != 'email') : ?>
-				<li class="<?php echo $coordonnee['coordonnee_type']; ?>" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
+				<li class="<?php echo $coordonnee['coordonnee_type']; ?> noUpdate" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
 					Core::tpl_phone($coordonnee['coordonnee_numero']); 
 			  ?></li>
 				<?php endif; endforeach; ?>

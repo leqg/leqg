@@ -1067,7 +1067,7 @@ main.dossier {
 			&.mobile,
 			&.fixe
 			{
-				&:hover
+				&:not(.noUpdate):hover
 				{
 					cursor: pointer;
 					-moz-user-select: -moz-none;
