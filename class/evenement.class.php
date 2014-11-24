@@ -249,8 +249,8 @@ class Evenement
 	public function lien( )
 	{
 		// On détermine la liste des types possédant une fiche détaillée
-		$ouvert = array('contact', 'telephone', 'email', 'courrier', 'autre');
-		$campagne = array('sms', 'email', 'publi', 'rappel');
+		$ouvert = array('contact', 'telephone', 'email', 'courrier', 'autre', 'rappel');
+		$campagne = array('sms', 'email', 'publi');
 		
 		// On regarde si l'événement fait l'objet d'une fiche événement
 		if (in_array($this->get_infos('type'), $ouvert)) {
