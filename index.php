@@ -154,17 +154,16 @@ else {
 	else if ($_GET['page'] == 'porte') {
 		// On charge les templates de page selon la demande
 		if (isset($_GET['action'])) {
-
 			Core::tpl_load('porte', $_GET['action']);
 		
 		} else if (isset($_GET['mission']) && !isset($_GET['rue'])) {
 			Core::tpl_load('porte', 'mission');
 		
 		} else if (isset($_GET['reporting'])) {
-			    Core::tpl_load('porte', 'reporting');
+			Core::tpl_load('porte', 'reporting');
 		
 		} else if (isset($_GET['rue']) && isset($_GET['mission'])) {
-			    Core::tpl_load('porte', 'reporting-rue');
+			Core::tpl_load('porte', 'reporting-rue');
 		
 		} else {
 			Core::tpl_load('porte');
