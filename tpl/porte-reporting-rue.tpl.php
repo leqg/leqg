@@ -2,9 +2,7 @@
 
     <h2 class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
-	<section id="mapbox-mission">
-		
-	</section>
+	<section id="mapbox-mission"></section>
 
     <section class="mission-porte">        
     		<?php if (Porte::nombreVisites($mission['mission_id'])) : ?>
