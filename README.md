@@ -11,7 +11,7 @@ La __version 1.0.0__ a été mise en production, comprenant les modules suivant 
 * Communiquer (emailing, sms, publipostage)
 
 
-## Travail en cours
+## Travaux en cours
 
 Le travail en cours porte prioritairement sur deux chantiers :
 * La correction des manques et des possibles problèmes de la mise en production ( _v1.0.1_ )
