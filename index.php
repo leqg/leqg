@@ -1,4 +1,5 @@
 <?php
+// Fichier d'aiguillage des requêtes du site
 
 // On lance le système de statistique des temps de chargement
 $loading['begin'] = microtime();
@@ -187,6 +188,23 @@ else {
 		
 		} else {
 			Core::tpl_load('boite');
+		}
+	}
+	
+	
+	
+	// Redirection vers la campagne de rappels depuis les fiches contact
+	else if ($_GET['page'] == 'rappel') {
+		// On vérifie qu'une campagne est bien demandée
+		if (isset($_GET['campagne'])) {
+			// On récupère le numéro de l'argumentaire correspondant
+			$query = $link->prepare('SELECT `argumentaire_id` FROM `argumentaires` WHERE MD5(`argumentaire_id`) = :id');
+			$query->bindParam(':id', $_GET['campagne']);
+			$query->execute();
+			$data = $query->fetch(PDO::FETCH_NUM);
+			
+			// On redirige vers la vraie URL
+			Core::tpl_go_to('rappels', array('mission' => $data[0]), true);
 		}
 	}
 	
