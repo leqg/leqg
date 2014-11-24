@@ -83,7 +83,7 @@
 				<li>Il reste <strong><?php echo number_format($electeursRestant, 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
 			</ul>
 			
-			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Retrouver la mission</button></a>
+			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Retrouver l'intégralité de cette mission</button></a>
 		</section>
 	<?php } else { ?>
 		<section id="porte-statistiques" class="icone fusee contenu demi">
@@ -92,7 +92,7 @@
 				<h5>Il existe <span><?php echo number_format(Porte::estimation($mission['mission_id']), 0, ',', ' '); ?></span> électeurs à visiter.</h5>
 			<?php } ?>
 			
-			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Retrouver la mission</button></a>
+			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Retrouver l'intégralité de cette mission</button></a>
 		</section>
 	<?php } ?>
 	
