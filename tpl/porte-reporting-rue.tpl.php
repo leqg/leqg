@@ -2,9 +2,13 @@
 
     <h2 class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
+	<section id="mapbox-mission">
+		
+	</section>
+
     <section class="mission-porte">        
     		<?php if (Porte::nombreVisites($mission['mission_id'])) : ?>
-    		    <?php $rues = Porte::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
+    		    <?php $rues = Porte::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : $ville = Carto::ville(Carto::villeParRue($rue)); ?>
     		    <h4><?php $nomRue = Carto::afficherRue($rue, true); echo $nomRue; ?></h4>
 
         		    <?php
@@ -62,4 +66,73 @@
         <?php endif; ?>
     </section>
     
+<?php
+	if (Porte::nombreVisites($mission['mission_id'])) :
+	
+		$rues = Porte::liste($mission['mission_id']);
+		
+		foreach ($rues as $rue => $immeubles) :
+		
+			if (count($immeubles)) :
+			
+				if ($rue == $_GET['rue']) :
+				
+					$ville = Carto::ville(Carto::villeParRue($rue));
+					
+				    // On va tenter de retrier les immeubles dans le bon ordre
+				    $link = Configuration::read('db.link');
+				    $query = 'SELECT `immeuble_id`, `immeuble_numero` FROM `immeubles` WHERE `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ORDER BY `immeuble_numero` ASC';
+				    $sql = $link->query($query);
+				    $buildings = array();
+				    while ($d = $sql->fetch(PDO::FETCH_ASSOC)) { $buildings[] = $d; }
+    
+				    Core::triMultidimentionnel($buildings, 'immeuble_numero');
+				    
+				    $immeubles = array();
+				    foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; }
+?>
+<script>
+	// Mise en place de la map
+	var map = L.map('mapbox-mission');
+	
+	// Sélection du tile layer OSM
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+	<?php foreach ($immeubles as $immeuble) : ?>
+	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
+	var data = {
+		format: 'json',
+		email: 'tech@leqg.info',
+		country: 'France',
+		city: "<?php echo $ville['commune_nom']; ?>",
+		street: "<?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?>"
+	}
+	
+	// On récupère le JSON contenant les coordonnées de la rue
+	$.getJSON('https://nominatim.openstreetmap.org', data, function(data) {
+		// On récupère uniquement les données du premier résultat
+		data = data[0];
+		
+		// On prépare la boundingbox
+		var loc1 = new L.LatLng(data.boundingbox[0], data.boundingbox[2]);
+		var loc2 = new L.LatLng(data.boundingbox[1], data.boundingbox[3]);
+		var bounds = new L.LatLngBounds(loc1, loc2);
+		
+		// On fabrique une vue qui contient l'ensemble du secteur demandé
+		map.fitBounds(bounds, { maxZoom: 17 });
+		
+		// On ajoute un marker au milieu de la rue
+		L.marker([data.lat, data.lon], {
+			clicable: false,
+			title: "<?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?>"
+		}).addTo(map);
+	});
+	<?php endforeach; ?>
+</script>    
+<?php
+				endif;
+			endif;
+		endforeach;
+	endif;
+?>
 <?php Core::tpl_footer(); ?>
