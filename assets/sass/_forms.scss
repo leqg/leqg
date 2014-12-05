@@ -125,6 +125,10 @@ input[type='file'] {
 	display: none;
 }
 
+input[type='search'] {
+	-webkit-appearance: none;
+}
+
 textarea {
 	height: calc(1.5em * 7 + .66em);
 	resize: none;
