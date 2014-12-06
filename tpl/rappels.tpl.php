@@ -23,6 +23,8 @@
             </li>
         <?php endforeach; ?>
         </ul>
+		
+		<a class="nostyle" href="<?php Core::tpl_go_to('rappels', array('action' => 'nouveau')); ?>"><button>Créer un argumentaire et sa mission</button></a>
     </section>
     <?php else : ?>
 	<section class="icone" id="aucuneMission">

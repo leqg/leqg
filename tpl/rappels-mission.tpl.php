@@ -11,7 +11,12 @@
     // On cherche à voir le nombre de numéros fait
     $appelsFait = $mission->get('fait');
     $total = $mission->get('nombre');
-    $fait = ($appelsFait * 100) / $total;
+    
+    if ($total) {
+	    $fait = ($appelsFait * 100) / $total;
+    } else {
+	    $fait = 0;
+    }
     
     
     // On charge le header du template
