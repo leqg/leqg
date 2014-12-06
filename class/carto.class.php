@@ -324,17 +324,32 @@ class Carto {
 	 * @return	array
 	 */
 
-	public static function bureau( $id ) {
+	public static function bureau_secure( $id ) {
 		// On lance la connexion à la base de données
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de recherche des informations
-		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_id` = :id');
+		$query = $link->prepare('SELECT * FROM `bureaux` WHERE SHA2(`bureau_id`, 256) = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
 		
 		// On retourne les résultats
 		return $query->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un bureau de vote demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID du bureau de vote demandé
+	 * @return	array
+	 */
+
+	public static function bureau( $id ) {
+		return self::bureau_secure(hash('sha256', $id));
 	}
 	
 	
@@ -1126,7 +1141,7 @@ class Carto {
 		// On recherche tous les immeubles si la branche est un bureau
 		if ($branche == 'bureau') {
 			if (!is_null($coordonnees)) {
-				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0 ) AND `bureau_id` = :id');
+				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' > 0 AND contact_optout_' . $coordonnees . ' = 0 ) AND `bureau_id` = :id');
 			} else {
 				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `bureau_id` = :id');
 			}

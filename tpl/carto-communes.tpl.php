@@ -59,8 +59,8 @@
 	// Mise en place de la map
 	var map = L.map('mapbox-carto');
 	
-	// Sélection du tile layer OSM
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+	// Sélection du tile layer OSM   
+	L.tileLayer('http://otile3.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png').addTo(map);
 
 	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
 	var data = {
