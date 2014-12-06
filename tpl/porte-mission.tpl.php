@@ -16,15 +16,15 @@
 	<section id="porte-vide" class="icone rue contenu demi <?php if (Porte::nombreVisites($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
 		<h3>Aucun immeuble à visiter actuellement.</h3>
 		<div class="coteAcote">
-			<button class="ajouterRue">Ajouter une rue</button>
-			<button class="ajouterBureau">Ajouter un bureau</button>
+			<button class="ajouterRue">Ajouter rue</button>
+			<button class="ajouterBureau">Ajouter bureau</button>
 		</div>
 	</section>
 	
 	<section id="porte-afaire" class="contenu demi <?php if (!Porte::nombreVisites($mission['mission_id'], 0)) { echo 'invisible'; } ?>">
 		<div class="coteAcote haut">
-			<button class="ajouterRue">Ajouter une rue</button>
-			<button class="ajouterBureau">Ajouter un bureau</button>
+			<button class="ajouterRue">Ajouter rue</button>
+			<button class="ajouterBureau">Ajouter bureau</button>
 		</div>
 	
 		<h4>Rues au sein de cette mission</h4>
@@ -49,8 +49,8 @@
 	
 		<?php if (count($indexRues) >= 20) { ?>
 			<div class="coteAcote">
-				<button class="ajouterRue">Ajouter une rue</button>
-				<button class="ajouterBureau">Ajouter un bureau</button>
+				<button class="ajouterRue">Ajouter rue</button>
+				<button class="ajouterBureau">Ajouter bureau</button>
 			</div>
 		<?php } ?>
 	</section>
@@ -83,7 +83,7 @@
 				<li>Il reste <strong><?php echo number_format($electeursRestant, 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
 			</ul>
 			
-			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Retrouver l'intégralité de cette mission</button></a>
+			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
 		</section>
 	<?php } else { ?>
 		<section id="porte-statistiques" class="icone fusee contenu demi">
@@ -92,7 +92,7 @@
 				<h5>Il existe <span><?php echo number_format(Porte::estimation($mission['mission_id']), 0, ',', ' '); ?></span> électeurs à visiter.</h5>
 			<?php } ?>
 			
-			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Retrouver l'intégralité de cette mission</button></a>
+			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
 		</section>
 	<?php } ?>
 	
