@@ -48,10 +48,27 @@
 		</ul>
 	</section>
 	
+	<section class="contenu demi">
+		<h4>Recherchez un bureau dans cette commune</h4>
+		
+		<ul class="formulaire">
+			<li>
+				<label for="rechercheBureau" class="small">Bureau à chercher</label>
+				<span class="form-icon decalage bureau"><input type="text" name="rechercheBureau" id="rechercheBureau" class="rechercheBureau" placeholder="103 par exemple" data-ville="<?php echo $ville['commune_id']; ?>">
+			</li>
+		</ul>
+	</section>
+	
 	<section class="contenu demi invisible resultatsRues">
 		<h4>Rues correspondant à la recherche</h4>
 		
 		<ul class="listeDesRues form-liste"></ul>
+	</section>
+	
+	<section class="contenu demi invisible resultatsBureaux">
+		<h4>Bureaux correspondant à la recherche</h4>
+		
+		<ul class="listeDesBureaux form-liste"></ul>
 	</section>
 </div>
 
