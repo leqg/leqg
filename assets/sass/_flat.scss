@@ -93,6 +93,10 @@ main.dossier {
 		width: 1180px;
 	}
 	
+	@media screen and (max-width: 1100px) {
+		width: 95%;
+	}
+	
 	i
 	{
     	    display: inline-block;
@@ -860,6 +864,10 @@ main.dossier {
 			text-transform: lowercase;
 			width: 70px;
 			@include transition(all);
+			
+			@media all and (max-width: 1100px) {
+				margin-top: 15px;
+			}
 			
 			&::before {
 				position: absolute; top: 0; left: 30%; left: calc(50% - 15px);
