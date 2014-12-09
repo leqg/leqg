@@ -252,6 +252,25 @@ var porte = function() {
 	    });
     });
 	
+	
+	// Action de suppression de la mission
+	$('.supprimerMission').click(function() {
+	    // On vérifie cette suppression
+	    if (confirm('Voulez-vous vraiment supprimer cette mission ? Cette action est irréversible.'))
+	    {
+    	    var fiche = $('.titre').data('mission');
+    	    $.post('ajax.php?script=porte-suppression', { mission: fiche }, function() {
+        	    var url = 'index.php?page=porte';
+        	    document.location.href = url;
+    	    });
+    	    return false;
+	    }
+	    else
+	    {
+    	    return false;
+	    }
+	});
+	
 };
 
 $(document).ready(porte);
