@@ -735,7 +735,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 
 		// On exécute la requête de récupération des électeurs correspondant
-		$query = $link->prepare('SELECT `contact_nom`, `contact_nom_usage`, `contact_prenoms`, `contact_sexe`, `contact_organisme`, MD5(`contact_id`) AS `code` FROM `contacts` WHERE (`immeuble_id` = :immeuble) AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+		$query = $link->prepare('SELECT `contact_nom`, `contact_nom_usage`, `contact_prenoms`, `contact_sexe`, `contact_organisme`, `contact_email`, `contact_fixe`, `contact_mobile`, MD5(`contact_id`) AS `code` FROM `contacts` WHERE (`immeuble_id` = :immeuble) AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
 		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -1265,7 +1265,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 		
 		// On recherche le nombre de contacts recueillis dans l'immeuble
-		$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( (`contact_email` IS NOT NULL AND `contact_optout_email` = 0) OR (`contact_telephone` IS NOT NULL AND `contact_optout_telephone` = 0) OR (`contact_mobile` IS NOT NULL AND `contact_optout_mobile` = 0) ) AND `contact_optout_global` = 0 AND `immeuble_id` = :id');
+		$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( (`contact_email` > 0 AND `contact_optout_email` = 0) OR (`contact_fixe` > 0 AND `contact_optout_fixe` = 0) OR (`contact_mobile` > 0 AND `contact_optout_mobile` = 0) ) AND `contact_optout_global` = 0 AND `immeuble_id` = :id');
 		$query->bindParam(':id', $immeuble, PDO::PARAM_INT);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_NUM);

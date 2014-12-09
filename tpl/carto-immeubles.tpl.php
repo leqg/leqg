@@ -46,7 +46,7 @@
 		<ul class="listeContacts">
 			<?php $contacts = Carto::listeElecteurs($immeuble['immeuble_id']); foreach ($contacts as $contact) : $classSexe = array('M' => 'homme', 'F' => 'femme', 'i' => 'isexe'); ?>
 			<a href="<?php Core::tpl_go_to('contact', array('contact' => $contact['code'])); ?>" class="nostyle">
-				<li class="contact <?php echo $classSexe[$contact['contact_sexe']]; ?>">
+				<li class="contact <?php echo $classSexe[$contact['contact_sexe']]; ?> <?php if ($contact['contact_email'] == 0 && $contact['contact_fixe'] == 0 && $contact['contact_mobile'] == 0) echo 'icoclair'; ?>">
 					<?php if (!empty($contact['contact_nom']) || !empty($contact['contact_nom_usage']) || !empty($contact['contact_prenoms'])) : ?>
 					<strong><?php echo mb_convert_case($contact['contact_nom'], MB_CASE_UPPER); ?> <?php echo mb_convert_case($contact['contact_nom_usage'], MB_CASE_UPPER); ?> <?php echo mb_convert_case($contact['contact_prenoms'], MB_CASE_TITLE); ?></strong>
 					<?php elseif (!empty($contact['contact_organisme'])) : ?>
