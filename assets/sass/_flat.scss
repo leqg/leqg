@@ -1161,6 +1161,7 @@ main.dossier {
 			&.ville::before { content: '\e845'; }
 			&.bureau::before { content: '\e8b3'; }
 			&.thema::before { content: '\e8b7'; }
+			&.birth::before { content: '\e862'; }
 			
 			&:not(.ajoutTri):hover {
 				cursor: pointer;

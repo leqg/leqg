@@ -1168,6 +1168,7 @@ class Contact
 					
 					// On prépare les tableaux avec les différents critères
 					$themas = array();
+					$birth = array();
 					$bureaux = array();
 					$rues = array();
 					
@@ -1177,6 +1178,7 @@ class Contact
 						$crit = explode(':', $val);
 						
 						if ($crit[0] == 'thema') { $themas[] = $crit[1]; }
+						else if ($crit[0] == 'birth') { $birth[] = $crit[1]; }
 						else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; }
 						else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
 					}
@@ -1190,6 +1192,24 @@ class Contact
 						}
 					}
 					
+					// On va analyser les critères de naissance pour les ajouter à la condition SQL
+					if (count($birth)) {
+						// On va ajouter chaque condition de naissance à la recherche $dates en retraitant son format
+						$dates = array();
+						
+						foreach ($birth as $date) {
+							$date = explode('/', $date);
+							krsort($date);
+							$date = implode('-', $date);
+							$dates[] = '`contact_naissance_date` = "' . $date . '"';
+						}
+						
+						if (count($dates) == 1) {
+							$criteres[] = $dates[0];
+						} else {
+							$criteres[] = '(`contact_naissance_date` = "' . implode('" OR `contact_naissance_date` = "') . '")';
+						}
+					}
 					
 					// On va analyser les bureaux de votes demandés pour extraire tous les électeurs au sein de ceux-ci
 					if (count($bureaux)) {

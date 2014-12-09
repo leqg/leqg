@@ -24,13 +24,14 @@
 		</section>
 		
 		<section class="contenu demi">
-			<h4>Critères complexes de tri</h4>
+			<h4>Critères multiples de tri</h4>
 			
 			<ul class="listeTris">
 				<li class="tri ajoutTri premierAjoutTri" data-critere="bureau">Ajout d'un bureau de vote</li>
 				<li class="tri ajoutTri" data-critere="rue">Ajout des électeurs d'une rue</li>
 				<li class="tri ajoutTri" data-critere="ville">Ajout des électeurs d'une ville</li>
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
+				<li class="tri ajoutTri" data-critere="birth">Ajout d'une date de naissance</li>
 			</ul>
 		</section>
 		
@@ -143,6 +144,22 @@
 				</li>
 				<li>
 					<button class="validerChoixCritereThema">Ajouter le critère de tri</button>
+				</li>
+			</ul>
+		</section>
+		
+		<section class="contenu demi selectionCritere-birth invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection d'une date de naissance</h4>
+			
+			<ul class="formulaire">
+				<li>
+					<label for="choixCritereBirth" class="small">Date à rechercher</label>
+					<span class="form-icon decalage"><input type="text" name="choixCritereBirth" id="choixCritereBirth" placeholder="format jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
+				</li>
+				<li>
+					<button class="validerChoixCritereBirth">Ajouter le critère de tri</button>
 				</li>
 			</ul>
 		</section>
