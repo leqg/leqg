@@ -48,6 +48,10 @@
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
 			</ul>
 		</section>
+	
+		<section class="contenu demi">
+	    	<button class="deleting long supprimerMission" style="margin: .25em auto .15em;">Suppression de la mission</button>
+		</section>
     </div>
     
     <div class="colonne demi droite">
