@@ -49,7 +49,7 @@
 			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
 		
 			foreach ($menu as $key => $element) : ?>
-		<a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>"><?php echo $element; ?></a>
+		<a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>" <?php if ($actuel == $key) echo 'class="actif"'; ?>><?php echo $element; ?></a>
 		<?php endforeach; ?>
 		<a href="http://auth.leqg.info/deconnexion.php" id="lien-logout">Déconnexion</a>
 		<?php else: ?>
