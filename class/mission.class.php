@@ -145,14 +145,14 @@ class Mission {
 		
 		// On prépare et on exécute déjà l'enregistrement du reporting de la porte
 		if ($type == 'porte') {
-			$query = $this->link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = :militant WHERE `mission_id` = :mission AND MD5(`contact_id`) = :contact');
+			$query = $this->link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = :militant WHERE `mission_id` = :mission AND MD5(`contact_id`) = :element');
 		} elseif ($type == 'boitage') {
-			$query = $this->link->prepare('UPDATE `boitage` SET `boitage_statut` = :statut, `boitage_date` = NOW(), `boitage_militant` = :militant WHERE `mission_id` = :mission AND MD5(`immeuble_id`) = :immeuble');
+			$query = $this->link->prepare('UPDATE `boitage` SET `boitage_statut` = :statut, `boitage_date` = NOW(), `boitage_militant` = :militant WHERE `mission_id` = :mission AND MD5(`immeuble_id`) = :element');
 		}
 		$query->bindParam(':statut', $statut);
 		$query->bindParam(':militant', $userId, PDO::PARAM_INT);
 		$query->bindParam(':mission', $mission['mission_id']);
-		$query->bindParam(':immeuble', $electeur);
+		$query->bindParam(':element', $electeur);
 		$query->execute();
 		
 		// S'il s'agit un porte à porte, on ajoute un événement pour le contact
