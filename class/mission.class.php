@@ -180,10 +180,9 @@ class Mission {
 			$objet_historique = $type_historique[$type] . ' – ' . $event_historique[$statut];
 			
 			// On rajoute une entrée d'historique pour le contact en question
-			$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`, `campagne_id`) VALUES (:contact, :compte, :type, NOW(), :objet, :campagne)');
+			$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`, `campagne_id`) VALUES (:contact, :compte, "porte", NOW(), :objet, :campagne)');
 			$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
 			$query->bindParam(':compte', $userId, PDO::PARAM_INT);
-			$query->bindParam(':type', $type);
 			$query->bindParam(':objet', $objet_historique);
 			$query->bindParam(':campagne', $mission['mission_id'], PDO::PARAM_INT);
 			$query->execute();
@@ -192,17 +191,18 @@ class Mission {
 		// s'il s'agit d'un boîtage et que l'immeuble a été fait, on fait un élément d'historique pour tous les habitants électeurs déclarés dans l'immeuble concerné
 		elseif ($type == 'boitage' && $statut == 2) {
     		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
-    		$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`immeuble_id`) = :immeuble OR MD5(`adresse_id`) = :immeuble');
+    		$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`immeuble_id`) = :immeuble OR MD5(`adresse_id`) = :immeuble');
     		$query->bindParam(':immeuble', $electeur);
     		$query->execute();
     		$contacts = $query->fetchAll(PDO::FETCH_NUM);
     		
     		// On fait la boucle de tous ces contacts pour leur ajouter l'élément d'historique
-    		$query = $link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`) VALUES (:contact, :compte, "boite", NOW(), :mission)');
-    		$query->bindParam(':compte', $userId, PDO::PARAM_INT);
-    		$query->bindParam(':mission', $this->data['mission_nom']);
     		foreach ($contacts as $contact) {
+	    		$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`, `campagne_id`) VALUES (:contact, :compte, "boite", NOW(), :mission, :campagne)');
 	    		$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+	    		$query->bindParam(':compte', $userId, PDO::PARAM_INT);
+	    		$query->bindParam(':mission', $this->data['mission_nom']);
+				$query->bindParam(':campagne', $mission['mission_id'], PDO::PARAM_INT);
 	    		$query->execute();
     		}
 		}

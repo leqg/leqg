@@ -226,12 +226,12 @@ var porte = function() {
 
     
     // Action de reporting
-    $('.bouton-reporting').click(function() {
-        var immeuble = $(this).data('contact');
+    $('.bouton-reporting').on('click', 'label', function() {
+        var immeuble = $(this).data('immeuble');
         var statut = $(this).data('val');
         var mission = $('.titre').data('mission');
         
-        $.post('ajax.php?script=boitage-reporting-web', { mission: mission, immeuble: immeuble, statut: statut }, function() {
+        $.get('ajax.php?script=boitage-reporting-web', { mission: mission, immeuble: immeuble, statut: statut }, function() {
             $('tr.ligne-immeuble-' + immeuble).remove();
         });
     });
