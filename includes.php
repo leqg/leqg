@@ -81,6 +81,7 @@ require_once 'class/csv.class.php';
 require_once 'class/dossier.class.php';
 require_once 'class/evenement.class.php';
 require_once 'class/map.class.php';
+require_once 'class/mission.class.php';
 require_once 'class/porte.class.php';
 require_once 'class/rappel.class.php';
 require_once 'class/user.class.php';

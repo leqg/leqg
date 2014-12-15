@@ -1566,19 +1566,55 @@ main.dossier {
 		color: $grisMoyen;
 		height: 1.5em;
 		margin: .33em 0 3em;
-		overflow: hidden;
 		padding: 0;
 		width: 95%;
 		
 		& > div {
+			position: relative;
 			display: inline-block;
 			background-color: $vert;
-			@include border-radius(.33em);
+			border-radius: 0;
 			color: $blanc;
 			height: 100%;
 			line-height: 1.5em;
-			overflow: hidden;
 			text-align: center;
+			
+			&:first-of-type { border-radius: .33em 0 0 .33em; }
+			&:last-of-type { border-radius: 0 .33em .33em 0; }
+			
+			&.fait { border-radius: .33em; }
+			
+			&.absent { background-color: $grisClair; }
+			&.ouvert { background-color: $vert; }
+			&.procuration { background-color: $orange; }
+			&.contact { background-color: $rouge; }
+			&.npai { background-color: $grisFonce; }
+			
+			&:hover span { display: block; }
+			
+			& > span {
+				position: absolute; bottom: calc(-1.5em - 15px); left: 0;
+				display: none;
+				background-color: $grisFonce;
+				border-radius: .33em;
+				color: $blanc;
+				font-size: .9em;
+				line-height: 1.5em;
+				padding: 5px .5em 2px;
+				text-align: left;
+				
+				&::before {
+					position: absolute; top: -5px; left: 10px;
+					display: block;
+					background-color: $grisFonce;
+					content: ' ';
+					height: 10px;
+					-webkit-transform: rotate(45deg);
+					transform: rotate(45deg);
+					white-space: nowrap;
+					width: 10px;
+				}
+			}
 		}
 	}
 	

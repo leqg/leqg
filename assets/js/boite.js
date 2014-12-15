@@ -255,7 +255,7 @@ var porte = function() {
 	    if (confirm('Voulez-vous vraiment supprimer cette mission ? Cette action est irréversible.'))
 	    {
     	    var fiche = $('.titre').data('mission');
-    	    $.post('ajax.php?script=boite-suppression', { mission: fiche }, function() {
+    	    $.get('ajax.php?script=mission-suppression', { mission: fiche }, function() {
         	    var url = 'index.php?page=boite';
         	    document.location.href = url;
     	    });

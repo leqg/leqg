@@ -1,5 +1,8 @@
 <?php
+	// On protège l'accès aux administrateurs uniquement
 	User::protection(5);
+	
+	// On charge le template de header
 	Core::tpl_header();
 ?>
 <h2>Nouvelle mission de porte-à-porte</h2>

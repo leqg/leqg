@@ -4,7 +4,7 @@
 	$info = $_POST;
 	
 	// On lance la création de la mission avec les informations récupérées
-	$mission = Porte::creation($info);
+	$mission = Mission::creation('porte', $info);
 	
 	// On redirige vers la page de la mission
 	Core::tpl_go_to('porte', array('mission' => md5($mission)), true);

@@ -1,13 +1,23 @@
 <?php
+	// On protège l'accès aux administrateurs uniquement
 	User::protection(5);
+	
+	// On défini le type de la mission demandée
+	$type = 'porte';
+	
+	// On récupère la liste des missions
+	$missions = Mission::missions($type);
+	
+	// On charge le template de header
 	Core::tpl_header();
 ?>
 	
 	<h2>Porte à porte</h2>
-	<?php if (Porte::nombre() > 0) : ?>
+	
+	<?php if ($missions) : ?>
 		<section id="missions">
 			<ul class="liste-missions">
-				<?php $missions = Porte::missions(); foreach ($missions as $mission) : ?>
+				<?php foreach ($missions as $mission) : ?>
 				<li>
 					<a href="<?php Core::tpl_go_to('porte', array('mission' => md5($mission['mission_id']))); ?>" class="nostyle"><h4><?php echo $mission['mission_nom']; ?></h4></a>
 					<p>

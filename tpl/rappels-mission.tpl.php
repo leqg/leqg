@@ -95,7 +95,7 @@
 			?>
 				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
-						<strong><?php echo $nomAffichage; ?>
+						<strong><?php echo $nomAffichage; ?></strong>
 					</li>
 				</a>
 			<?php } ?>

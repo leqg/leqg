@@ -1,15 +1,21 @@
 <?php
+	// On protège la page
 	User::protection(5);
+	
 	// On commence par vérifier qu'il existe bien une mission, et si oui on l'affiche
 	if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
 		$mission = Porte::informations($_GET['mission'])[0];
+		
+		// On ouvre la mission
+		$data = new Mission($_GET['mission']);
+		
 		Core::tpl_header();
 	} else {
 		Core::tpl_go_to('porte', true);
 	}
 ?>
 
-<h2 id="titre-mission" data-mission="<?php echo md5($mission['mission_id']); ?>">Porte-à-porte &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
+<h2 id="titre-mission" class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Porte-à-porte &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
 <!-- Blocs de mission vide -->
 <div class="colonne demi gauche">
@@ -56,6 +62,18 @@
 	</section>
 	
 	<section class="contenu demi">
+		<h4>Militants inscrits à cette mission</h4>
+		
+		<ul class="listeContacts">
+			<?php $comptes = Porte::inscriptions($mission['mission_id']); if (count($comptes)) : foreach($comptes as $compte) : ?>
+			<li class="contact homme"><?php echo User::get_login_by_ID($compte['user_id']); ?></li>
+			<?php endforeach; else : ?>
+			<li class="contact homme">Aucune inscription actuellement.</li>
+			<?php endif; ?>
+		</ul>
+	</section>
+	
+	<section class="contenu demi">
     	<button class="deleting long supprimerMission" style="margin: .25em auto .15em;">Suppression de la mission</button>
 	</section>
 </div>
@@ -63,28 +81,42 @@
 <div class="colonne demi droite">
 	<?php if (Porte::nombreVisites($mission['mission_id'], 1)) { ?>
 		<section id="porte-statistiques" class="contenu demi">
-			<h4>Avancement de la mission</h4>
 			<?php
-				// On réalise les calculs en nombre d'électeurs
-				$electeursFait = Porte::estimation($mission['mission_id'], 1);
-				$electeursRestant = Porte::estimation($mission['mission_id'], 0);
-				$electeursTotal = $electeursFait + $electeursRestant;
+				$nombre['attente']     = $data->nombre_contacts(0);
+				$nombre['absent']      = $data->nombre_contacts(1);
+				$nombre['ouvert']      = $data->nombre_contacts(2);
+				$nombre['procuration'] = $data->nombre_contacts(3);
+				$nombre['contact']     = $data->nombre_contacts(4);
+				$nombre['npai']        = $data->nombre_contacts(-1);
+				$nombre['total']       = array_sum($nombre);
+				$nombre['fait']        = $nombre['total'] - $nombre['attente'];
 				
-				$nombreTotal = Porte::nombreVisites($mission['mission_id'], -1);
-				$nombreFait = Porte::nombreVisites($mission['mission_id'], 1);
-				$nombreRestant = $nombreTotal - $nombreFait;
-			
-				// On fabrique les pourcentages
-				$fait = ($nombreFait * 100) / $electeursTotal;
-				$afaire = 100 - $fait;
+				function pourcentage( $actu , $total ) {
+					$pourcentage = $actu * 100 / $total;
+					$pourcentage = str_replace(',', '.', $pourcentage);
+					return $pourcentage;
+				}
 			?>
-			<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
+			
+			<h4>Avancement de la mission</h4>
+			<div id="avancementMission"><!--
+			 --><div class="fait" style="width: <?php echo pourcentage($nombre['fait'], $nombre['total']); ?>%;"><span>Portion&nbsp;réalisée&nbsp;de&nbsp;la&nbsp;mission</span></div><!--
+		 --></div>
+			
+			<h4>Détail des portes frappées</h4>
+			<div id="avancementMission"><!--
+			 --><div class="ouvert" style="width: <?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>%;"><span>Portes&nbsp;ouvertes</span></div><!--
+			 --><div class="procuration" style="width: <?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>%;"><span>Procurations&nbsp;demandées</span></div><!--
+			 --><div class="contact" style="width: <?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>%;"><span>Contact&nbsp;souhaité</span></div><!--
+			 --><div class="absent" style="width: <?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>%;"><span>Contact&nbsp;absent</span></div><!--
+			 --><div class="npai" style="width: <?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>%;"><span>Adresse&nbsp;erronée</span></div><!--
+		 --></div>
 			
 			<h4>Statistiques</h4>
 			<ul class="statistiquesMission">
-				<li>Mission réalisée à <strong><?php echo ceil($fait); ?></strong>&nbsp;%</li>
-				<li><strong><?php echo number_format($electeursTotal, 0, ',', ' '); ?></strong>&nbsp;électeurs concernés par cette mission</li>
-				<li>Il reste <strong><?php echo number_format($electeursRestant, 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
+				<li>Mission réalisée à <strong><?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?></strong>&nbsp;%</li>
+				<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;électeurs concernés par cette mission</li>
+				<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
 			</ul>
 			
 			<a href="<?php echo Core::tpl_go_to('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
@@ -100,17 +132,65 @@
 		</section>
 	<?php } ?>
 	
-	<section class="contenu demi">
-		<h4>Militants inscrits à cette mission</h4>
+	<?php if ($data->nombre_procurations()) : ?>
+	<section id="procurations" class="contenu demi">
+		<h4>Électeurs demandant une procuration</h4>
 		
 		<ul class="listeContacts">
-			<?php $comptes = Porte::inscriptions($mission['mission_id']); if (count($comptes)) : foreach($comptes as $compte) : ?>
-			<li class="contact homme"><?php echo User::get_login_by_ID($compte['user_id']); ?></li>
-			<?php endforeach; else : ?>
-			<li class="contact homme">Aucune inscription actuellement.</li>
-			<?php endif; ?>
+			<?php
+				// On fait la liste des contacts concernés
+				$contacts = $data->liste_contacts(3);
+				foreach ($contacts as $contact) :
+					// On ouvre la fiche du contact concerné
+					$fiche = new Contact(md5($contact[0]));
+					
+					if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
+					elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+					else { $sexe = 'isexe'; }
+					
+					if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
+					elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+					else { $nomAffichage = 'Fiche sans nom'; }
+			?>
+			<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+				<li class="contact <?php echo $sexe; ?>">
+					<strong><?php echo $nomAffichage; ?></strong>
+				</li>
+			</a>
+			<?php endforeach; ?>
 		</ul>
 	</section>
+	<?php endif; ?>
+	
+	<?php if ($data->nombre_recontacts()) : ?>
+	<section id="procurations" class="contenu demi">
+		<h4>Électeurs souhaitant être recontactés</h4>
+		
+		<ul class="listeContacts">
+			<?php
+				// On fait la liste des contacts concernés
+				$contacts = $data->liste_contacts(4);
+				foreach ($contacts as $contact) :
+					// On ouvre la fiche du contact concerné
+					$fiche = new Contact(md5($contact[0]));
+					
+					if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
+					elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+					else { $sexe = 'isexe'; }
+					
+					if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
+					elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+					else { $nomAffichage = 'Fiche sans nom'; }
+			?>
+			<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+				<li class="contact <?php echo $sexe; ?>">
+					<strong><?php echo $nomAffichage; ?></strong>
+				</li>
+			</a>
+			<?php endforeach; ?>
+		</ul>
+	</section>
+	<?php endif; ?>
 	
 	<section id="ajoutRue" class="contenu demi invisible">
 		<ul class="formulaire">
