@@ -17,16 +17,23 @@
 	<?php if ($missions) : ?>
 		<section id="missions">
 			<ul class="liste-missions">
-				<?php foreach ($missions as $mission) : ?>
+				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('porte', array('mission' => md5($mission['mission_id']))); ?>" class="nostyle"><h4><?php echo $mission['mission_nom']; ?></h4></a>
+					<a href="<?php Core::tpl_go_to('porte', array('mission' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
-						Cette mission de porte-à-porte concerne encore <strong><?php echo Porte::estimation($mission['mission_id']); ?></strong> électeurs.<br>
-						<?php if (is_null($mission['mission_deadline'])) { ?>
-						Cette mission n'a pas de date limite connue.
-						<?php } else { ?>
-						Cette mission doit être terminée pour le <strong><?php echo date('d/m/Y', strtotime($mission['mission_deadline'])); ?></strong>.
-						<?php } ?>
+						<?php if (!$mission->nombre_contacts(0)) : ?>
+							Cette mission de porte-à-porte est aujourd'hui terminée.<br>
+							Il n'y a plus d'électeurs à visiter.
+						<?php else : ?>
+							Cette mission comporte encore <strong><?php echo $mission->nombre_contacts(0); ?></strong> électeurs à visiter.<br>
+						<?php endif; ?>
+					</p>
+					<p>
+						<?php if ($mission->nombre_contacts(0) && is_null($mission->get('mission_deadline'))) : ?>
+							Cette mission n'a pas de deadline connue.
+						<?php elseif ($mission->nombre_contacts(0)) : ?>
+							Cette mission doit être terminée pour le <strong><?php echo date('d/m/Y', strtotime($mission->get('mission_deadline'))); ?></strong>.
+						<?php endif; ?>
 					</p>
 				</li>
 				<?php endforeach; ?>
