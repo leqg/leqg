@@ -35,7 +35,7 @@ class Mission {
 		$this->link = Configuration::read('db.link');
 		
 		// On cherche à récupérer les informations liées à cette mission
-		$query = $this->link->prepare('SELECT * FROM `mission` WHERE MD5(`mission_id`) = :mission');
+		$query = $this->link->prepare('SELECT *, MD5(`mission_id`) AS `mission_hash` FROM `mission` WHERE MD5(`mission_id`) = :mission');
 		$query->bindParam(':mission', $id);
 		$query->execute();
 		
@@ -144,43 +144,68 @@ class Mission {
 		$type = $mission['mission_type'];
 		
 		// On prépare et on exécute déjà l'enregistrement du reporting de la porte
-		$query = $this->link->prepare('UPDATE `' . $type . '` SET `' . $type . '_statut` = :statut, `' . $type . '_date` = NOW(), `' . $type . '_militant` = :militant WHERE `mission_id` = :mission AND MD5(`contact_id`) = :contact');
+		if ($type == 'porte') {
+			$query = $this->link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = :militant WHERE `mission_id` = :mission AND MD5(`contact_id`) = :contact');
+		} elseif ($type == 'boitage') {
+			$query = $this->link->prepare('UPDATE `boitage` SET `boitage_statut` = :statut, `boitage_date` = NOW(), `boitage_militant` = :militant WHERE `mission_id` = :mission AND MD5(`immeuble_id`) = :immeuble');
+		}
 		$query->bindParam(':statut', $statut);
 		$query->bindParam(':militant', $userId, PDO::PARAM_INT);
 		$query->bindParam(':mission', $mission['mission_id']);
-		$query->bindParam(':contact', $electeur);
+		$query->bindParam(':immeuble', $electeur);
 		$query->execute();
 		
-		// On recherche l'identifiant en clair du contact vu
-		$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`contact_id`) = :contact');
-		$query->bindParam(':contact', $electeur);
-		$query->execute();
-		$contact = $query->fetch(PDO::FETCH_NUM);
+		// S'il s'agit un porte à porte, on ajoute un événement pour le contact
+		if ($type == 'porte') {
+			// On recherche l'identifiant en clair du contact vu
+			$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`contact_id`) = :contact');
+			$query->bindParam(':contact', $electeur);
+			$query->execute();
+			$contact = $query->fetch(PDO::FETCH_NUM);
+			
+			// On prépare l'objet de l'historique
+			$type_historique = array(
+				'porte'   => 'Porte à porte',
+				'boitage' => 'Boîtage'
+			);
+			
+			$event_historique = array(
+				 1 => 'Électeur absent',
+				 2 => 'Électeur rencontré',
+				 3 => 'Demande de procuration',
+				 4 => 'Électeur à contacter',
+			    -1 => 'Adresse incorrecte'
+			);
+			
+			$objet_historique = $type_historique[$type] . ' – ' . $event_historique[$statut];
+			
+			// On rajoute une entrée d'historique pour le contact en question
+			$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`, `campagne_id`) VALUES (:contact, :compte, :type, NOW(), :objet, :campagne)');
+			$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+			$query->bindParam(':compte', $userId, PDO::PARAM_INT);
+			$query->bindParam(':type', $type);
+			$query->bindParam(':objet', $objet_historique);
+			$query->bindParam(':campagne', $mission['mission_id'], PDO::PARAM_INT);
+			$query->execute();
+		}
 		
-		// On prépare l'objet de l'historique
-		$type_historique = array(
-			'porte'   => 'Porte à porte',
-			'boitage' => 'Boîtage'
-		);
-		
-		$event_historique = array(
-			 1 => 'Électeur absent',
-			 2 => 'Électeur rencontré',
-			 3 => 'Demande de procuration',
-			 4 => 'Électeur à contacter',
-		    -1 => 'Adresse incorrecte'
-		);
-		
-		$objet_historique = $type_historique[$type] . ' – ' . $event_historique[$statut];
-		
-		// On rajoute une entrée d'historique pour le contact en question
-		$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`, `campagne_id`) VALUES (:contact, :compte, :type, NOW(), :objet, :campagne)');
-		$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
-		$query->bindParam(':compte', $userId, PDO::PARAM_INT);
-		$query->bindParam(':type', $type);
-		$query->bindParam(':objet', $objet_historique);
-		$query->bindParam(':campagne', $mission['mission_id'], PDO::PARAM_INT);
-		$query->execute();
+		// s'il s'agit d'un boîtage et que l'immeuble a été fait, on fait un élément d'historique pour tous les habitants électeurs déclarés dans l'immeuble concerné
+		elseif ($type == 'boitage' && $statut == 2) {
+    		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
+    		$query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`immeuble_id`) = :immeuble OR MD5(`adresse_id`) = :immeuble');
+    		$query->bindParam(':immeuble', $electeur);
+    		$query->execute();
+    		$contacts = $query->fetchAll(PDO::FETCH_NUM);
+    		
+    		// On fait la boucle de tous ces contacts pour leur ajouter l'élément d'historique
+    		$query = $link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`) VALUES (:contact, :compte, "boite", NOW(), :mission)');
+    		$query->bindParam(':compte', $userId, PDO::PARAM_INT);
+    		$query->bindParam(':mission', $this->data['mission_nom']);
+    		foreach ($contacts as $contact) {
+	    		$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+	    		$query->execute();
+    		}
+		}
 	}
 	
 	
@@ -259,6 +284,28 @@ class Mission {
 	public function nombre_contacts( $statut ) {
 		// On réalise le tri
 		$query = $this->link->prepare('SELECT `contact_id` FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = :statut ORDER BY `porte_date` DESC');
+		$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
+		$query->bindParam(':statut', $statut, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On retourne le tableau des identifiants
+		return $query->rowCount();
+	}
+	
+	
+	/**
+	 * Calcule les immeubles selon le statut demandé pour la mission ouverte (pour le boitage)
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   int    $statut    Statut demandé pour la recherche
+	 * @result  array             Identifiants des contacts concernés
+	 */
+	
+	public function nombre_immeubles( $statut ) {
+		// On réalise le tri
+		$query = $this->link->prepare('SELECT `boitage_id` FROM `boitage` WHERE `mission_id` = :mission AND `boitage_statut` = :statut ORDER BY `boitage_date` DESC');
 		$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 		$query->bindParam(':statut', $statut, PDO::PARAM_INT);
 		$query->execute();

@@ -1,3 +1,10 @@
+<?php
+	// On protège l'accès aux administrateurs uniquement
+	User::protection(5);
+	
+	// On charge le template de header
+	Core::tpl_header();
+?>
 <h2>Nouvelle mission de boîtage</h2>
 
 <form action="ajax.php?script=boite-creation" method="post">
@@ -36,3 +43,4 @@
     	</section>
 	</div>
 </form>
+<?php Core::tpl_footer(); ?>

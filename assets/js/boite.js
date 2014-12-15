@@ -119,7 +119,7 @@ var porte = function() {
 			var rue = $(this).data('rue');
 			var mission = $(this).data('mission');
 						
-			$.post('ajax.php?script=boitage-ajout-rue', { rue: rue, mission: mission }, function(){
+			$.get('ajax.php?script=mission-ajout-rue', { rue: rue, mission: mission }, function(){
 				var destination = 'index.php?page=boite&mission=' + mission;
 				$(location).attr('href', destination);
 			});

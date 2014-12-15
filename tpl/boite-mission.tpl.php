@@ -1,15 +1,21 @@
 <?php
-    // On protège le répertoire
-    User::protection(5);
-    
-    // On charge les informations sur la mission
-    $mission = Boite::informations($_GET['mission'])[0];
-    
-    // On charge le template
-    Core::tpl_header();
+	// On protège la page
+	User::protection(5);
+	
+	// On commence par vérifier qu'il existe bien une mission, et si oui on l'affiche
+	if (isset($_GET['mission']) && Boite::verification($_GET['mission'])) {
+		$mission = Boite::informations($_GET['mission'])[0];
+		
+		// On ouvre la mission
+		$data = new Mission($_GET['mission']);
+		
+		Core::tpl_header();
+	} else {
+		Core::tpl_go_to('boite', true);
+	}
 ?>
 
-<h2 id="titre-mission" data-mission="<?php echo md5($mission['mission_id']); ?>">Boîtage &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
+<h2 id="titre-mission" class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Boîtage &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
 <!-- Blocs de mission vide -->
 <div class="colonne demi gauche">
@@ -56,28 +62,31 @@
 <div class="colonne demi droite">
     <?php if (Boite::nombreImmeubles($mission['mission_id'], 1)) { ?>
     	<section id="boitage-statistiques" class="contenu demi">
-    		<h4>Avancement de la mission</h4>
-    		<?php
-    			// On réalise les calculs en nombre d'électeurs
-    			$electeursFait = Boite::estimation($mission['mission_id'], 1);
-    			$electeursRestant = Boite::estimation($mission['mission_id'], 0);
-    			$electeursTotal = $electeursFait + $electeursRestant;
-    			
-    			$nombreTotal = Boite::nombreImmeubles($mission['mission_id'], -1);
-    			$nombreFait = Boite::nombreImmeubles($mission['mission_id'], 1);
-    			$nombreRestant = $electeursTotal - $electeursFait;
-    		
-    			// On fabrique les pourcentages
-    			$fait = ($nombreFait * 100) / $electeursTotal;
-    			$afaire = 100 - $fait;
-    		?>
-    		<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
+			<?php
+				$nombre['attente']     = $data->nombre_immeubles(0);
+				$nombre['impossible']  = $data->nombre_immeubles(1);
+				$nombre['realise']     = $data->nombre_immeubles(2);
+				$nombre['total']       = array_sum($nombre);
+				$nombre['fait']        = $nombre['total'] - $nombre['attente'];
+				
+				function pourcentage( $actu , $total ) {
+					$pourcentage = $actu * 100 / $total;
+					$pourcentage = str_replace(',', '.', $pourcentage);
+					return $pourcentage;
+				}
+			?>
+			
+			<h4>Avancement de la mission</h4>
+			<div id="avancementMission"><!--
+			 --><div class="ouvert" style="width: <?php echo pourcentage($nombre['realise'], $nombre['total']); ?>%;"><span>Boîtage&nbsp;réalisé</span></div><!--
+			 --><div class="npai" style="width: <?php echo pourcentage($nombre['impossible'], $nombre['total']); ?>%;"><span>Boîtage&nbsp;impossible</span></div><!--
+		 --></div>
     		
     		<h4>Statistiques</h4>
     		<ul class="statistiquesMission">
-    			<li>Mission réalisée à <strong><?php echo ceil($fait); ?></strong>&nbsp;%</li>
-    			<li><strong><?php echo number_format($electeursTotal, 0, ',', ' '); ?></strong>&nbsp;électeurs concernés par cette mission</li>
-    			<li>Il reste <strong><?php echo number_format($electeursRestant, 0, ',', ' '); ?></strong>&nbsp;électeurs à boiter.</li>
+    			<li>Mission réalisée à <strong><?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?></strong>&nbsp;%</li>
+    			<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;immeubles concernés par cette mission</li>
+    			<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;immeubles à boiter.</li>
     		</ul>
     	</section>
     <?php } else { ?>
