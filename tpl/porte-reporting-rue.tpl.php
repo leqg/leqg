@@ -21,9 +21,11 @@
             		    
             		    $immeubles = array();
             		    foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; }
-            		    
-                    foreach ($immeubles as $immeuble) :
-                ?>
+	            		    
+	                    foreach ($immeubles as $immeuble) :
+		                    $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble));
+		                    if ($electeurs) :
+	                ?>
         		    
         		        <h5><?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?></h5>
         		        
@@ -39,7 +41,7 @@
                 		        </tr>
             		        </thead>
             		        <tbody>
-             		        <?php $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble)); foreach ($electeurs as $electeur) : ?>
+             		        <?php foreach ($electeurs as $electeur) : ?>
                		        <tr class="ligne-electeur-<?php echo md5($electeur['contact_id']); ?>">
                     		        <td><?php echo mb_convert_case($electeur['contact_nom'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_nom_usage'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_prenoms'], MB_CASE_TITLE); ?></td>
                     		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-a" name="electeur-<?php echo $electeur['contact_id']; ?>" value="1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-a" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="1"><span><span></span></span></label></div></td>
@@ -52,7 +54,7 @@
             		        </tbody>
         		        </table>
 
-        		    <?php endforeach; ?>
+        		    <?php endif; endforeach; ?>
 
     		    <?php endif; endif; endforeach; ?>
         <?php else : ?>
