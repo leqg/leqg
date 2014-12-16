@@ -25,6 +25,56 @@ aside#notificationCenter {
 	width: 350px;
 	@include transition(all);
 	
+	h4 {
+		color: $grisFonce;
+		font-size: 1.33em;
+		margin: 1em 1.5em;
+		padding: 0;
+	}
+	
+	ul.tachesPersonnelles {
+		margin: 0;
+		padding: 0;
+		
+		li {
+			position: relative;
+			list-style: none;
+			margin: 1em .66em 1em 50px;
+			padding: 0;
+			
+			&::before {
+				position: absolute; top: 0; left: -40px;
+				color: $grisFonce;
+				content: '\e8c1';
+				font-family: $icons;
+				font-size: 1.15em;
+				line-height: 1.5em;
+				text-align: center;
+				width: 40px;
+			}
+			
+			strong {
+				display: block;
+				color: $grisFonce;
+				font-size: 1.15em;
+				font-weight: 600;
+				line-height: 1.5em;
+			}
+			
+			a {
+				display: block;
+				color: $grisMedplu;
+				font-size: 1.05em;
+				line-height: 1.5em;
+				text-decoration: underline;
+				
+				&:hover {
+					color: $rouge;
+				}
+			}
+		}
+	}
+	
 	#vide {
 		display: table-cell;
 		color: $grisMoyen;

@@ -27,7 +27,7 @@
 	<header id="top">
 		<h1><a class="nostyle" href="http://<?php echo Configuration::read('ini')['SERVER']['url']; ?>">LeQG</a></h1>
 		<a class="nostyle" id="menu" href="#" title="Afficher le menu"></a>
-		<a class="nostyle" id="notifications" href="#" title="Afficher les notifications"><!--<span></span>--></a>
+		<a class="nostyle" id="notifications" href="#" title="Afficher les notifications"><?php $nb_taches = Evenement::taches_personnelles(); if ($nb_taches) : ?><span></span><?php endif; ?></a>
 		<a class="nostyle" id="rechercheRapide" href="#" title="Rechercher une fiche"></a>
 		<form method="post" action="<?php Core::tpl_go_to('recherche'); ?>"><input type="search" id="searchForm" name="recherche" pattern=".{3,}" placeholder="Michel Dupont" autocomplete="off"><input type="submit" value="&#xe803;" id="searchSubmit"></form>
 	</header><!--header#top-->
