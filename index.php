@@ -93,7 +93,7 @@ else {
 	
 	// Si on demande le module cartographique
 	else if ($_GET['page'] == 'carto') {
-		Core::debug('dans carto');
+    	
 		// Si un niveau d'exploration a été demandé
 		if (isset($_GET['niveau'], $_GET['code'])) {
 			Core::tpl_load('carto', $_GET['niveau']);

@@ -1,4 +1,5 @@
 <?php 
+    Core::debug('test');
 	User::protection(5);
 	Core::tpl_header();
 ?>
