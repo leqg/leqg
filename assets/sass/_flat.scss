@@ -1466,6 +1466,8 @@ main.dossier {
 				&::after { content: '\e8af'; }
 				strong { color: $rouge; }
 			}
+			
+			&.loupeOver:hover::after { content: '\e8a2'; }
 		}
 	}
 	

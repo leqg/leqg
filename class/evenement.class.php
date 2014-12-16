@@ -515,4 +515,36 @@ class Evenement
 		// On renvoit le tableau
 		return $interactions;
     }
+    
+    
+    /**
+	 * Liste les prochaines tâches à réaliser, par deadline
+	 * 
+	 * Cette méthode permet d'obtenir une liste des tâches à réaliser par deadline
+	 * avec les informations sur l'utilisateur concerné et la deadline
+	 * 
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   int    $nombre   Nombre de tâches à retourner
+	 * 
+	 * @result  array            Liste des prochaines tâches à réaliser
+	 */
+	
+	public static function taches( $nombre = 5 ) {
+		// On prépare le lien vers la BDD
+		$link = Configuration::read('db.link');
+		
+		// On prépare la requête
+		$query = $link->prepare('SELECT `tache_id`, `compte_id`, `historique_id`, `tache_description`, `tache_deadline` FROM `taches` WHERE `tache_terminee` = 0 ORDER BY `tache_deadline` DESC LIMIT 0,' . $nombre);
+		$query->execute();
+		
+		if ($query->rowCount()) {
+			return $query->fetchAll(PDO::FETCH_ASSOC);
+		}
+		
+		else {
+			return false;
+		}
+	}
 }
