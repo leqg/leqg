@@ -9,7 +9,7 @@ require_once('includes.php');
 
 // On vérifie juste qu'un cookie existe auquel cas, on redirige vers l'auth system
 //if (!isset($_COOKIE['leqg'])) header('Location: http://auth.leqg.info');
-Core::debug($_GET['page']);
+Core::debug($_GET['page'], false);
 
 /** ON RÉALISE LE TRAITEMENT AUTOMATISÉ DE CHARGEMENT DES TEMPLATES SELON LES PAGES APPELÉES **/
 
@@ -30,7 +30,7 @@ if (empty($_GET['page'])) {
 
 // Si une page a été appelée, on calcule et on affiche son contenu
 else {
-	
+	Core::debug($_GET['page']);
 	// Si on demande l'affichage du module contacts
 	if ($_GET['page'] == 'contacts') {
 		Core::tpl_load('contacts');
