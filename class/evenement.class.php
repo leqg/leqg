@@ -547,4 +547,38 @@ class Evenement
 			return false;
 		}
 	}
+    
+    
+    /**
+	 * Liste les prochaines tâches à réaliser, par deadline
+	 * 
+	 * Cette méthode permet d'obtenir une liste des tâches à réaliser par deadline
+	 * avec les informations sur l'utilisateur concerné et la deadline
+	 * 
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   int    $nombre   Nombre de tâches à retourner
+	 * 
+	 * @result  array            Liste des prochaines tâches à réaliser
+	 */
+	
+	public static function taches_personnelles() {
+		// On prépare le lien vers la BDD
+		$link = Configuration::read('db.link');
+		$userId = User::ID();
+		
+		// On prépare la requête
+		$query = $link->prepare('SELECT `tache_id`, `compte_id`, `historique_id`, `tache_description`, `tache_deadline` FROM `taches` WHERE `tache_terminee` = 0 AND `compte_id` = :compte ORDER BY `tache_deadline` DESC');
+		$query->bindParam(':compte', $userId, PDO::PARAM_INT);
+		$query->execute();
+		
+		if ($query->rowCount()) {
+			return $query->fetchAll(PDO::FETCH_ASSOC);
+		}
+		
+		else {
+			return false;
+		}
+	}
 }
