@@ -42,8 +42,8 @@
 		<h4>Immeubles connus dans cette rue</h4>
 
 		<ul class="listeDesImmeubles form-liste">
-			<?php $immeubles = Carto::listeImmeubles($rue['rue_id']); foreach ($immeubles as $immeuble) : ?>
-			<li>
+			<?php $immeubles = Carto::listeImmeubles($rue['rue_id']); foreach ($immeubles as $immeuble) : $contactsDansImmeuble = Carto::coordonneesDansImmeuble($immeuble['immeuble_id']); ?>
+			<li <?php if ($contactsDansImmeuble) echo 'class="presenceContacts"'; ?>>
 				<span><strong class="immeuble"><?php echo $immeuble['numero']; ?></strong> <?php echo mb_convert_case($rue['rue_nom'], MB_CASE_TITLE); ?></span>
 				<a href="<?php Core::tpl_go_to('carto', array('niveau' => 'immeubles', 'code' => hash('sha256', $immeuble['immeuble_id']))); ?>" class="nostyle">
 					<button>Explorer</button>
@@ -59,7 +59,7 @@
 	var map = L.map('mapbox-carto');
 	
 	// Sélection du tile layer OSM
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+	L.tileLayer('http://otile3.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png').addTo(map);
 
 	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
 	var data = {

@@ -120,7 +120,7 @@ class Boite {
 		
 		// On retraite la date entrée
 		$date = explode('/', $infos['date']);
-		ksort($date);
+		krsort($date);
 		$date = implode('-', $date);
 	
 		// On exécute la requête d'insertion dans la base de données

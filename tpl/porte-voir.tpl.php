@@ -1,5 +1,9 @@
 <?php
 	$mission = Porte::informations(md5($_GET['mission']))[0];
+	
+	// On ouvre la mission
+	$data = new Mission(md5($_GET['mission']));
+	
 	Core::tpl_header();
 ?>
 
@@ -46,20 +50,26 @@
 		<section id="porte-statistiques" class="contenu demi">
 			<h4>Avancement de la mission</h4>
 			<?php
-				// On réalise les calculs en nombre d'électeurs
-				$electeursFait = Porte::estimation($mission['mission_id'], 1);
-				$electeursRestant = Porte::estimation($mission['mission_id'], 0);
-				$electeursTotal = $electeursFait + $electeursRestant;
+				$nombre['attente']     = $data->nombre_contacts(0);
+				$nombre['absent']      = $data->nombre_contacts(1);
+				$nombre['ouvert']      = $data->nombre_contacts(2);
+				$nombre['procuration'] = $data->nombre_contacts(3);
+				$nombre['contact']     = $data->nombre_contacts(4);
+				$nombre['npai']        = $data->nombre_contacts(-1);
+				$nombre['total']       = array_sum($nombre);
+				$nombre['fait']        = $nombre['total'] - $nombre['attente'];
 				
-				$nombreTotal = Porte::nombreVisites($mission['mission_id'], -1);
-				$nombreFait = Porte::nombreVisites($mission['mission_id'], 1);
-				$nombreRestant = $nombreTotal - $nombreFait;
-			
-				// On fabrique les pourcentages
-				$fait = ($nombreFait * 100) / $electeursTotal;
-				$afaire = 100 - $fait;
+				function pourcentage( $actu , $total ) {
+					$pourcentage = $actu * 100 / $total;
+					$pourcentage = str_replace(',', '.', $pourcentage);
+					return $pourcentage;
+				}
 			?>
-			<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
+			
+			<h4>Avancement de la mission</h4>
+			<div id="avancementMission"><!--
+			 --><div class="fait" style="width: <?php echo pourcentage($nombre['fait'], $nombre['total']); ?>%;"><span>Portion&nbsp;réalisée&nbsp;de&nbsp;la&nbsp;mission&nbsp;(<?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?>&nbsp;%)</span></div><!--
+		 --></div>
 		</section>
 	<?php } else { ?>
 		<section id="porte-statistiques" class="icone fusee contenu demi">

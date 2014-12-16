@@ -77,7 +77,7 @@
 	</section>
 	
 	<section class="contenu demi">
-    	    <button class="deleting long supprimerFiche" style="margin: .25em auto .15em;">Suppression de la fiche</button>
+    	<button class="deleting long supprimerFiche" style="margin: .25em auto .15em;">Suppression de la fiche</button>
 	</section>
 </div>
 
@@ -394,6 +394,10 @@
 				<span class="form-icon decalage tache"><input type="text" name="formAjoutTache" id="formAjoutTache" placeholder="Tâche à réaliser"></span>
 			</li>
 			<li>
+				<label class="small" for="formDeadlineTache">Date limite</label>
+				<span class="form-icon decalage date"><input type="text" name="formDeadlineTache" id="formDeadlineTache" placeholder="jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
+			</li>
+			<li>
 				<label class="small" for="formDestinataireTache">Destinataire</label>
 				<span class="form-icon utilisateur">
 					<label class="sbox" for="formDestinataireTache">
@@ -609,7 +613,7 @@
 	var map = L.map('mapbox-contact');
 	
 	// Sélection du tile layer OSM
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+	L.tileLayer('http://otile3.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png').addTo(map);
 
 	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
 	var data = {

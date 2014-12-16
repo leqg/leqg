@@ -101,7 +101,7 @@ class Porte {
 		// On retraite la date entrée
 		if (!empty($infos['date'])) {
 			$date = explode('/', $infos['date']);
-			ksort($date);
+			krsort($date);
 			$date = implode('-', $date);
 		} else {
 			$date = null;

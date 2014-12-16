@@ -888,12 +888,13 @@ var contact = function() {
 	$('.validerTache').click(function() {
 		// On récupère les données des formulaires
 		var tache = $('#formAjoutTache').val();
+		var deadline = $('#formDeadlineTache').val();
 		var contact = $('#nomContact').data('fiche');
 		var user = $('#formDestinataireTache').val();
 		var evenement = $('#evenement').data('evenement');
 		
 		// On lance l'enregistrement
-		$.post('ajax.php?script=contact-tache-nouvelle', { contact: contact, tache: tache, user: user, evenement: evenement }, function(data) {
+		$.post('ajax.php?script=contact-tache-nouvelle', { contact: contact, deadline: deadline, tache: tache, user: user, evenement: evenement }, function(data) {
 			data = $.parseJSON(data);
 			
 			$.each(data, function(key, val) {

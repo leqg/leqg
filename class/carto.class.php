@@ -150,7 +150,7 @@ class Carto {
 		$search = '%'.$search.'%';
 		
 		// On exécute la requête de recherche
-		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_numero` LIKE :search OR `bureau_nom` LIKE :search ORDER BY `bureau_numero`, `bureau_nom` ASC');
+		$query = $link->prepare('SELECT *, SHA2(`bureau_id`, 256) AS `bureau_code` FROM `bureaux` WHERE `bureau_numero` LIKE :search OR `bureau_nom` LIKE :search ORDER BY `bureau_numero`, `bureau_nom` ASC');
 		$query->bindParam(':search', $search, PDO::PARAM_STR);
 		$query->execute();
 		
@@ -324,17 +324,32 @@ class Carto {
 	 * @return	array
 	 */
 
-	public static function bureau( $id ) {
+	public static function bureau_secure( $id ) {
 		// On lance la connexion à la base de données
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de recherche des informations
-		$query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_id` = :id');
+		$query = $link->prepare('SELECT * FROM `bureaux` WHERE SHA2(`bureau_id`, 256) = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
 		
 		// On retourne les résultats
 		return $query->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	
+	/**
+	 * Cette méthode permet de renvoyer les informations relatives à un bureau de vote demandé
+	 * 
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version	1.0
+	 *
+	 * @param	int		$id		ID du bureau de vote demandé
+	 * @return	array
+	 */
+
+	public static function bureau( $id ) {
+		return self::bureau_secure(hash('sha256', $id));
 	}
 	
 	
@@ -720,7 +735,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 
 		// On exécute la requête de récupération des électeurs correspondant
-		$query = $link->prepare('SELECT `contact_nom`, `contact_nom_usage`, `contact_prenoms`, `contact_sexe`, `contact_organisme`, MD5(`contact_id`) AS `code` FROM `contacts` WHERE (`immeuble_id` = :immeuble) AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+		$query = $link->prepare('SELECT `contact_nom`, `contact_nom_usage`, `contact_prenoms`, `contact_sexe`, `contact_organisme`, `contact_email`, `contact_fixe`, `contact_mobile`, MD5(`contact_id`) AS `code` FROM `contacts` WHERE (`immeuble_id` = :immeuble) AND `contact_electeur` = 1 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
 		$query->bindParam(':immeuble', $immeuble, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -774,9 +789,9 @@ class Carto {
 
 		// On exécute la requête de récupération des électeurs correspondant
 		if ($coordonnees) {
-			$query = $link->prepare('SELECT * FROM `contacts` WHERE `bureau_id` = :bureau AND ( ( contact_email IS NOT NULL AND contact_optout_email = 0 ) OR	( contact_telephone IS NOT NULL AND contact_optout_telephone = 0 ) OR ( contact_mobile IS NOT NULL AND contact_optout_mobile = 0 ) ) AND contact_optout_global = 0 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+			$query = $link->prepare('SELECT *, MD5(`contact_id`) AS `code` FROM `contacts` WHERE `bureau_id` = :bureau AND ( ( contact_email > 0 AND contact_optout_email = 0 ) OR	( contact_fixe > 0 AND contact_optout_fixe = 0 ) OR ( contact_mobile > 0 AND contact_optout_mobile = 0 ) ) AND contact_optout_global = 0 ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
 		} else {
-			$query = $link->prepare('SELECT * FROM `contacts` WHERE `bureau_id` = :bureau ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
+			$query = $link->prepare('SELECT *, MD5(`contact_id`) AS `code` FROM `contacts` WHERE `bureau_id` = :bureau ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC');
 		}
 		$query->bindParam(':bureau', $bureau);
 		$query->execute();
@@ -1126,7 +1141,7 @@ class Carto {
 		// On recherche tous les immeubles si la branche est un bureau
 		if ($branche == 'bureau') {
 			if (!is_null($coordonnees)) {
-				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' IS NOT NULL AND contact_optout_' . $coordonnees . ' = 0 ) AND `bureau_id` = :id');
+				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( contacts.contact_' . $coordonnees . ' > 0 AND contact_optout_' . $coordonnees . ' = 0 ) AND `bureau_id` = :id');
 			} else {
 				$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE `contact_electeur` = 1 AND `bureau_id` = :id');
 			}
@@ -1250,7 +1265,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 		
 		// On recherche le nombre de contacts recueillis dans l'immeuble
-		$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( (`contact_email` IS NOT NULL AND `contact_optout_email` = 0) OR (`contact_telephone` IS NOT NULL AND `contact_optout_telephone` = 0) OR (`contact_mobile` IS NOT NULL AND `contact_optout_mobile` = 0) ) AND `contact_optout_global` = 0 AND `immeuble_id` = :id');
+		$query = $link->prepare('SELECT COUNT(*) FROM `contacts` WHERE ( (`contact_email` > 0 AND `contact_optout_email` = 0) OR (`contact_fixe` > 0 AND `contact_optout_fixe` = 0) OR (`contact_mobile` > 0 AND `contact_optout_mobile` = 0) ) AND `contact_optout_global` = 0 AND `immeuble_id` = :id');
 		$query->bindParam(':id', $immeuble, PDO::PARAM_INT);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_NUM);

@@ -7,6 +7,9 @@ $loading['begin'] = microtime();
 // On appelle le fichier d'inclusion du cœur du système
 require_once('includes.php');
 
+// On vérifie juste qu'un cookie existe auquel cas, on redirige vers l'auth system
+if (!isset($_COOKIE['leqg'])) header('Location: http://auth.leqg.info');
+
 
 /** ON RÉALISE LE TRAITEMENT AUTOMATISÉ DE CHARGEMENT DES TEMPLATES SELON LES PAGES APPELÉES **/
 

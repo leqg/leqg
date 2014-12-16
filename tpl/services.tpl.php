@@ -20,8 +20,8 @@
 	</tr>
 	<?php else : ?>
 	<tr>
-		<td><a href="<?php Core::tpl_go_to('porte'); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('boite'); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
+		<td><a href="<?php Core::tpl_go_to('porte', array('action' => 'missions')); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
+		<td><a href="<?php Core::tpl_go_to('boite', array('action' => 'missions')); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
 		<td><a href="<?php Core::tpl_go_to('rappels', array('action' => 'appel')); ?>"><span>&#xe854;</span><p>Rappels</p></a></td>
 	</tr>
 	<?php endif; ?>

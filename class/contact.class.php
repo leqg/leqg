@@ -426,7 +426,7 @@ class Contact
 	public function bureau( $adresse = false )
 	{
 		// On récupère les informations sur le bureau de vote
-		$query = $this->link->prepare('SELECT `bureau_numero`, `bureau_nom`, `bureau_adresse`, `bureau_cp`, `commune_id` FROM `bureaux` WHERE `bureau_id` = :bureau');
+		$query = $this->link->prepare('SELECT `bureau_id`, `bureau_numero`, `bureau_nom`, `bureau_adresse`, `bureau_cp`, `commune_id` FROM `bureaux` WHERE `bureau_id` = :bureau');
 		$query->bindParam(':bureau', $this->contact['bureau_id']);
 		$query->execute();
 		$bureau = $query->fetch(PDO::FETCH_ASSOC);
@@ -443,7 +443,7 @@ class Contact
 		$retour = array();
 		
 		// On prépare le nom du bureau de vote et de son numéro dans la variable $ligne
-		$ligne = 'Bureau ' . $bureau['bureau_numero'] . ' &ndash; ' . $ville['commune_nom'];
+		$ligne = 'Bureau <a href="index.php?page=carto&niveau=bureau&code=' . hash('sha256', $bureau['bureau_id']) . '">' . $bureau['bureau_numero'] . '</a> &ndash; ' . $ville['commune_nom'];
 		if (!empty($bureau['bureau_nom']))
 		{
 			$ligne.= '<br>' . $bureau['bureau_nom'];
@@ -1168,6 +1168,7 @@ class Contact
 					
 					// On prépare les tableaux avec les différents critères
 					$themas = array();
+					$birth = array();
 					$bureaux = array();
 					$rues = array();
 					
@@ -1177,6 +1178,7 @@ class Contact
 						$crit = explode(':', $val);
 						
 						if ($crit[0] == 'thema') { $themas[] = $crit[1]; }
+						else if ($crit[0] == 'birth') { $birth[] = $crit[1]; }
 						else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; }
 						else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
 					}
@@ -1190,6 +1192,24 @@ class Contact
 						}
 					}
 					
+					// On va analyser les critères de naissance pour les ajouter à la condition SQL
+					if (count($birth)) {
+						// On va ajouter chaque condition de naissance à la recherche $dates en retraitant son format
+						$dates = array();
+						
+						foreach ($birth as $date) {
+							$date = explode('/', $date);
+							krsort($date);
+							$date = implode('-', $date);
+							$dates[] = '`contact_naissance_date` = "' . $date . '"';
+						}
+						
+						if (count($dates) == 1) {
+							$criteres[] = $dates[0];
+						} else {
+							$criteres[] = '(`contact_naissance_date` = "' . implode('" OR `contact_naissance_date` = "') . '")';
+						}
+					}
 					
 					// On va analyser les bureaux de votes demandés pour extraire tous les électeurs au sein de ceux-ci
 					if (count($bureaux)) {

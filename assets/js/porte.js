@@ -100,8 +100,8 @@ var porte = function() {
 			var bureauNom = $(this).data('nom');
 			var bureauVille = $(this).data('ville');
 			var mission = $('#titre-mission').data('mission');
-			console.log(mission);
-			$.post('ajax.php?script=porte-ajout-bureau', { bureau: bureau, mission: mission }, function(){
+			
+			$.get('ajax.php?script=porte-ajout-bureau', { bureau: bureau, mission: mission }, function() {
 				var destination = 'index.php?page=porte&mission=' + mission;
 				$(location).attr('href', destination);
 			});
@@ -119,8 +119,8 @@ var porte = function() {
 		$('#rueEntiere').click(function(){
 			var rue = $(this).data('rue');
 			var mission = $(this).data('mission');
-						
-			$.post('ajax.php?script=porte-ajout-rue', { rue: rue, mission: mission }, function(){
+			
+			$.get('ajax.php?script=mission-ajout-rue', { rue: rue, mission: mission }, function() {
 				var destination = 'index.php?page=porte&mission=' + mission;
 				$(location).attr('href', destination);
 			});
@@ -230,12 +230,12 @@ var porte = function() {
 
     
     // Action de reporting
-    $('.bouton-reporting').click(function() {
+    $('.bouton-reporting').on('click', 'label', function() {
         var contact = $(this).data('contact');
         var statut = $(this).data('val');
         var mission = $('.titre').data('mission');
-        console.log(contact);
-        $.post('ajax.php?script=porte-reporting-web', { mission: mission, contact: contact, statut: statut }, function() {
+        
+        $.get('ajax.php?script=porte-reporting-web', { mission: mission, contact: contact, statut: statut }, function() {
             $('tr.ligne-electeur-' + contact).remove();
         });
     });
@@ -251,6 +251,25 @@ var porte = function() {
 			$(location).attr('href', destination);
 	    });
     });
+	
+	
+	// Action de suppression de la mission
+	$('.supprimerMission').click(function() {
+	    // On vérifie cette suppression
+	    if (confirm('Voulez-vous vraiment supprimer cette mission ? Cette action est irréversible.'))
+	    {
+    	    var fiche = $('.titre').data('mission');
+    	    $.get('ajax.php?script=mission-suppression', { mission: fiche }, function() {
+        	    var url = 'index.php?page=porte';
+        	    document.location.href = url;
+    	    });
+    	    return false;
+	    }
+	    else
+	    {
+    	    return false;
+	    }
+	});
 	
 };
 

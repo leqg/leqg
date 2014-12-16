@@ -21,9 +21,11 @@
             		    
             		    $immeubles = array();
             		    foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; }
-            		    
-                    foreach ($immeubles as $immeuble) :
-                ?>
+	            		    
+	                    foreach ($immeubles as $immeuble) :
+		                    $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble));
+		                    if ($electeurs) :
+	                ?>
         		    
         		        <h5><?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?></h5>
         		        
@@ -33,24 +35,26 @@
                     		        <th>Électeur</th>
                     		        <th class="petit">Absent</th>
                     		        <th class="petit">Ouvert</th>
+                    		        <th class="petit">Procuration</th>
                     		        <th class="petit">À contacter</th>
                     		        <th class="petit">NPAI</th>
                 		        </tr>
             		        </thead>
             		        <tbody>
-             		        <?php $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble)); foreach ($electeurs as $electeur) : ?>
+             		        <?php foreach ($electeurs as $electeur) : ?>
                		        <tr class="ligne-electeur-<?php echo md5($electeur['contact_id']); ?>">
                     		        <td><?php echo mb_convert_case($electeur['contact_nom'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_nom_usage'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_prenoms'], MB_CASE_TITLE); ?></td>
-                    		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="1"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-a" name="electeur-<?php echo $electeur['contact_id']; ?>" value="0"><label for="electeur-<?php echo $electeur['contact_id']; ?>-a"><span><span></span></span></label></div></td>
-                    		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="2"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="2" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-o" name="electeur-<?php echo $electeur['contact_id']; ?>" value="1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-o"><span><span></span></span></label></div></td>
-                    		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="2"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="2" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-c" name="electeur-<?php echo $electeur['contact_id']; ?>" value="2"><label for="electeur-<?php echo $electeur['contact_id']; ?>-c"><span><span></span></span></label></div></td>
-                    		        <td class="petit"><div class="radio bouton-reporting" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="1"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-n" name="electeur-<?php echo $electeur['contact_id']; ?>" value="-1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-n"><span><span></span></span></label></div></td>
+                    		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-a" name="electeur-<?php echo $electeur['contact_id']; ?>" value="1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-a" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="1"><span><span></span></span></label></div></td>
+                    		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="2" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-o" name="electeur-<?php echo $electeur['contact_id']; ?>" value="2"><label for="electeur-<?php echo $electeur['contact_id']; ?>-o" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="2"><span><span></span></span></label></div></td>
+                    		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="3" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-p" name="electeur-<?php echo $electeur['contact_id']; ?>" value="3"><label for="electeur-<?php echo $electeur['contact_id']; ?>-p" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="3"><span><span></span></span></label></div></td>
+                    		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="4" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-c" name="electeur-<?php echo $electeur['contact_id']; ?>" value="4"><label for="electeur-<?php echo $electeur['contact_id']; ?>-c" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="4"><span><span></span></span></label></div></td>
+                    		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="-1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-n" name="electeur-<?php echo $electeur['contact_id']; ?>" value="-1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-n" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="-1"><span><span></span></span></label></div></td>
                 		        </tr>
                 		        <?php endforeach; ?>
             		        </tbody>
         		        </table>
 
-        		    <?php endforeach; ?>
+        		    <?php endif; endforeach; ?>
 
     		    <?php endif; endif; endforeach; ?>
         <?php else : ?>

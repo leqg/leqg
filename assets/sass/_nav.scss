@@ -41,6 +41,17 @@ nav#principale {
 		text-decoration: none;
 		width: 100%;
 		
+		@media (max-height: 800px) {
+			height: 50px;
+			line-height: 50px;
+		}
+		
+		@media (max-height: 600px) {
+			font-size: 15px;
+			height: 35px;
+			line-height: 35px;
+		}
+		
 		&::after {
 			position: absolute; top: 0; right: 15px; /* 65 + 15 + 15 = 95*/
 			display: block;
@@ -50,6 +61,17 @@ nav#principale {
 			line-height: 65px;
 			text-align: center;
 			width: 65px;
+		
+			@media (max-height: 800px) {
+				height: 50px;
+				line-height: 50px;
+			}
+		
+			@media (max-height: 600px) {
+				font-size: 20px;
+				height: 35px;
+				line-height: 35px;
+			}
 		}
 		
 		&#lien-contacts::after { content: '\e840'; }
@@ -79,10 +101,18 @@ nav#principale {
 				text-align: center;
 				width: 65px;
 				@include transition(all);
+		
+				@media (max-height: 800px) {
+					content: '';
+				}
 			}
 			
 			&::after {
 				color: $lightGrey;
+		
+				@media (max-height: 800px) {
+					color: $rouge;
+				}
 			}
 		}
 		

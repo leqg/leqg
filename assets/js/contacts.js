@@ -347,6 +347,32 @@ var contacts = function() {
 	});
 	
 	
+	// Script à la validation d'un nouveau critère de naissance
+	$('.validerChoixCritereBirth').click(function() {
+		// On récupère le critère demandé
+		var thema = $('#choixCritereBirth').val();
+		
+		// On efface ce formulaire
+		$('#choixCritereBirth').val('');
+		
+		// On ajoute ce critère à la liste des critères
+		var criteres = $('#listeCriteresTri').val();
+		var newCriteres = criteres + 'birth:' + thema + ';';
+		
+		// On met à jour la liste des critères
+		$('#listeCriteresTri').val(newCriteres);
+		
+		// On ajoute le critère à la liste dans la colonne de gauche
+		$('.premierAjoutTri').before('<li class="tri birth" data-critere="birth" data-valeur="' + thema + '">' + thema + '</li>');
+		
+		// On met à zéro le nombre de fiches déjà affichées
+		$('#nombreFiches').val(0);
+		
+		// On met à jour le listing
+		majListing('debut');
+	});
+	
+	
 	// Script de suppression d'un critère
 	$('.listeTris').on('dblclick', '.tri:not(.ajoutTri)', function() {
 		// On récupère le type
@@ -595,6 +621,10 @@ var contacts = function() {
 			'message': $('#publiDescriptionCampagne').val()
 		};
 		
+		// On désactive le bouton
+		$('.publiValidationCampagne').attr('disabled', true);
+		$('.publiValidationCampagne span').html('Création en cours');
+		
 		$.get('ajax.php?script=publi-campagne', data, function() {
 			// On affiche une alertbox pour prévenir que la mission a été créée
 			swal({
@@ -609,6 +639,8 @@ var contacts = function() {
 			$('#publiNombreDestinataire').val('');
 			$('#publiDescriptionCampagne').val('');
 			$('.droite section:not(.invisible)').fadeIn();
+			$('.publiValidationCampagne').attr('disabled', false);
+			$('.publiValidationCampagne span').html('Préparation de la campagne');
 		});
 	});
 };
