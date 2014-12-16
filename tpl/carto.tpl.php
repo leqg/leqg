@@ -20,4 +20,4 @@
 		<ul class="listeCommunes"></ul>
 	</section>
 	
-<?php Core::tpl_footer(); Core::debug('test5'); ?>
+<?php Core::tpl_footer();'); ?>

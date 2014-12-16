@@ -3,8 +3,8 @@
 	<!-- Volet de notification -->
 	<aside id="notificationCenter">
 		<?php
-			$taches = Evenement::taches_personnelles();
-			
+			//$taches = Evenement::taches_personnelles();
+			$taches = false;
 			if ($taches) :
 		?>
 		<h4>Tâches à réaliser</h4>
