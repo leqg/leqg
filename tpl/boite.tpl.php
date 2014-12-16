@@ -29,7 +29,7 @@
 						<?php endif; ?>
 					</p>
 					<p>
-						<?php if ($mission->nombre_immeubles(0) && is_null($mission['mission_deadline'])) : ?>
+						<?php if ($mission->nombre_immeubles(0) && is_null($mission->get('mission_deadline'))) : ?>
 							Cette mission n'a pas de deadline connue.
 						<?php elseif ($mission->nombre_immeubles(0)) : ?>
 							Cette mission doit être terminée pour le <strong><?php echo date('d/m/Y', strtotime($mission->get('mission_deadline'))); ?></strong>.

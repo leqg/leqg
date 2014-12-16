@@ -1,6 +1,9 @@
 <?php
     // On charge les informations sur la mission
     $mission = Boite::informations(md5($_GET['mission']))[0];
+		
+	// On ouvre la mission
+	$data = new Mission(md5($_GET['mission']));
     
     // On charge le template
     Core::tpl_header();
@@ -40,22 +43,25 @@
 <div class="colonne demi droite">
     <?php if (Boite::nombreImmeubles($mission['mission_id'], 1)) { ?>
     	<section id="boitage-statistiques" class="contenu demi">
-    		<h4>Avancement de la mission</h4>
-    		<?php
-    			// On réalise les calculs en nombre d'électeurs
-    			$electeursFait = Boite::estimation($mission['mission_id'], 1);
-    			$electeursRestant = Boite::estimation($mission['mission_id'], 0);
-    			$electeursTotal = $electeursFait + $electeursRestant;
-    			
-    			$nombreTotal = Boite::nombreImmeubles($mission['mission_id'], -1);
-    			$nombreFait = Boite::nombreImmeubles($mission['mission_id'], 1);
-    			$nombreRestant = $electeursTotal - $electeursFait;
-    		
-    			// On fabrique les pourcentages
-    			$fait = ($nombreFait * 100) / $electeursTotal;
-    			$afaire = 100 - $fait;
-    		?>
-    		<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
+			<?php
+				$nombre['attente']     = $data->nombre_immeubles(0);
+				$nombre['impossible']  = $data->nombre_immeubles(1);
+				$nombre['realise']     = $data->nombre_immeubles(2);
+				$nombre['total']       = array_sum($nombre);
+				$nombre['fait']        = $nombre['total'] - $nombre['attente'];
+				
+				function pourcentage( $actu , $total ) {
+					$pourcentage = $actu * 100 / $total;
+					$pourcentage = str_replace(',', '.', $pourcentage);
+					return $pourcentage;
+				}
+			?>
+			
+			<h4>Avancement de la mission</h4>
+			<div id="avancementMission"><!--
+			 --><div class="ouvert" style="width: <?php echo pourcentage($nombre['realise'], $nombre['total']); ?>%;"><span>Boîtage&nbsp;réalisé</span></div><!--
+			 --><div class="npai" style="width: <?php echo pourcentage($nombre['impossible'], $nombre['total']); ?>%;"><span>Boîtage&nbsp;impossible</span></div><!--
+		 --></div>
     	</section>
     <?php } else { ?>
     	<section id="boitage-statistiques" class="contenu demi icone fusee">
