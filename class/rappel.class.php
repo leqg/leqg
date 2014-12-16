@@ -115,6 +115,30 @@ class Rappel
     
     
     /**
+	 * Récupère les commentaires liés aux appels de cet argumentaire
+	 * 
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @result  Tableau des commentaires avec les informations connues
+	 */
+	
+	public function commentaires() {
+		// On recherche tous les appels de l'argumentaire avec reporting
+		$query = $this->link->prepare('SELECT `contact_id`, `rappel_reporting` FROM `rappels` WHERE `rappel_statut` = 2 AND `argumentaire_id` = :argumentaire');
+		$query->bindParam(':argumentaire', $this->mission['argumentaire_id'], PDO::PARAM_INT);
+		$query->execute();
+		
+		// On regarde s'il existe des lignes à afficher
+		if ($query->rowCount()) {
+			return $query->fetchAll(PDO::FETCH_ASSOC);
+		} else {
+			return false;
+		}
+	}
+    
+    
+    /**
      * Récupère une liste de toutes les missions créées de rappels
      *
      * Cette méthode permet de récupérer une liste complète de toutes les missions

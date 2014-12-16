@@ -48,6 +48,39 @@
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
 			</ul>
 		</section>
+		
+		<?php
+			// On récupère les commentaires
+			$commentaires = $mission->commentaires();
+			
+			// S'il en existe, on affiche le bloc
+			if ($commentaires) :
+		?>
+		<section class="contenu demi">
+			<h4>Commentaires reportés</h4>
+			
+			<ul class="listeContacts">
+				<?php
+					foreach ($commentaires as $commentaire) :
+						$fiche = new Contact(md5($commentaire['contact_id']));
+						if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
+						elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+						else { $sexe = 'isexe'; }
+						
+						if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
+						elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+						else { $nomAffichage = 'Fiche sans nom'; }
+				?>
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+					<li class="contact <?php echo $sexe; ?>">
+						<strong><?php echo $nomAffichage; ?></strong>
+						<p><?php echo nl2br($commentaire['rappel_reporting']); ?></p>
+					</li>
+				</a>
+				<?php endforeach; ?>
+			</ul>
+		</section>
+		<?php endif; ?>
 	
 		<section class="contenu demi">
 	    	<button class="deleting long supprimerMission" style="margin: .25em auto .15em;">Suppression de la mission</button>
@@ -72,7 +105,7 @@
         <section class="contenu demi">
 	        <h4>Fiches concernées par cette mission</h4>
 			
-			<ul class="listeContacts">
+			<ul class="listeContacts fichesConcernees">
 			<?php
 				// On récupère la liste des rappels fait ou à effectuer
 				$query = $link->prepare('SELECT `contact_id` FROM `rappels` WHERE `argumentaire_id` = :mission');

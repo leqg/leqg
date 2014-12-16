@@ -122,7 +122,7 @@ function fichesMission() {
 	
 	$.getJSON('ajax.php?script=rappels-fiches', { mission: argumentaire }, function(data) {
 		// On vide la liste des contacts
-		$('.listeContacts').html('');
+		$('.fichesConcernees').html('');
 		
 		// On fait la bouche, des fiches
 		$.each(data, function(key, val) {
@@ -145,7 +145,7 @@ function fichesMission() {
 			}
 			
 			// On rajoute pour une puce pour chaque contact
-			$('.listeContacts').append('<a href="" class="nostyle contact-' + val.contact_id + '"><li class="contact ' + sexe + '"><strong></strong></li></a>');
+			$('.fichesConcernees').append('<a href="" class="nostyle contact-' + val.contact_id + '"><li class="contact ' + sexe + '"><strong></strong></li></a>');
 			$('.contact-' + val.contact_id).attr('href', 'index.php?page=contact&contact=' + val.contact_md5);
 			$('.contact-' + val.contact_id + ' strong').html(nomAffichage);
 		});
