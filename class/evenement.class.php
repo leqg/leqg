@@ -398,22 +398,33 @@ class Evenement
 	 * @version 1.0
 	 *
 	 * @param	int		$user		Utilisateur concerné par la tâche
-	 * @param	int		$task		Tâche à ajouter
+	 * @param	string  $task		Tâche à ajouter
+	 * @param   string  $deadline   Deadline demandée
 	 *
 	 * @result	array				Informations sur la tâche ajoutée
 	 */
 	
-	public function tache_ajout( $user, $task )
+	public function tache_ajout( $user , $task , $deadline )
 	{
+		// On retraite la deadline
+		if (!empty($deadline)) {
+			$deadline = explode('/', $deadline);
+			krsort($deadline);
+			$deadline = implode('-', $deadline);
+		} else {
+			$deadline = '0000-00-00';
+		}
+		
 		// On récupère l'ID de l'utilisateur
 		$compte = (isset($_COOKIE['leqg-user'])) ? $_COOKIE['leqg-user'] : 0;
 		
 		// On prépare la requête
-		$query = $this->link->prepare('INSERT INTO `taches` (`createur_id`, `compte_id`, `historique_id`, `tache_description`) VALUES (:createur, :compte, :evenement, :description)');
+		$query = $this->link->prepare('INSERT INTO `taches` (`createur_id`, `compte_id`, `historique_id`, `tache_description`, `tache_deadline`) VALUES (:createur, :compte, :evenement, :description, :deadline)');
 		$query->bindParam(':createur', $compte);
 		$query->bindParam(':compte', $user);
 		$query->bindParam(':evenement', $this->evenement['historique_id']);
 		$query->bindParam(':description', $task);
+		$query->bindParam(':deadline', $deadline);
 		
 		// On exécute la variable
 		$query->execute();

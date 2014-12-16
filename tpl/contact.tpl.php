@@ -394,6 +394,10 @@
 				<span class="form-icon decalage tache"><input type="text" name="formAjoutTache" id="formAjoutTache" placeholder="Tâche à réaliser"></span>
 			</li>
 			<li>
+				<label class="small" for="formDeadlineTache">Date limite</label>
+				<span class="form-icon decalage date"><input type="text" name="formDeadlineTache" id="formDeadlineTache" placeholder="jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
+			</li>
+			<li>
 				<label class="small" for="formDestinataireTache">Destinataire</label>
 				<span class="form-icon utilisateur">
 					<label class="sbox" for="formDestinataireTache">

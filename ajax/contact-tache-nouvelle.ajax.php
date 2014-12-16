@@ -4,7 +4,7 @@
 	$evenement = new evenement($evenement);
 	
 	// On ajoute le tag
-	$tache = $evenement->tache_ajout($_POST['user'], $_POST['tache']);
+	$tache = $evenement->tache_ajout($_POST['user'], $_POST['tache'], $_POST['deadline']);
 	
 	if (isset($tache[0]['compte_id']))
 	{
