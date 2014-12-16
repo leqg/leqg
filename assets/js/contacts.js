@@ -621,6 +621,10 @@ var contacts = function() {
 			'message': $('#publiDescriptionCampagne').val()
 		};
 		
+		// On désactive le bouton
+		$('.publiValidationCampagne').attr('disabled', true);
+		$('.publiValidationCampagne span').html('Création en cours');
+		
 		$.get('ajax.php?script=publi-campagne', data, function() {
 			// On affiche une alertbox pour prévenir que la mission a été créée
 			swal({
@@ -635,6 +639,8 @@ var contacts = function() {
 			$('#publiNombreDestinataire').val('');
 			$('#publiDescriptionCampagne').val('');
 			$('.droite section:not(.invisible)').fadeIn();
+			$('.publiValidationCampagne').attr('disabled', false);
+			$('.publiValidationCampagne span').html('Préparation de la campagne');
 		});
 	});
 };
