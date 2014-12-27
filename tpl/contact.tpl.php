@@ -15,7 +15,7 @@
 	<section id="fiche-details" class="contenu demi">
 		<ul class="icones-etatcivil">
 			<li class="sexe <?php if ($contact->contact['contact_sexe'] == 'M') { echo 'homme'; } else if ($contact->contact['contact_sexe'] == 'F') { echo 'femme'; } else { echo 'inconnu'; } ?>"><?php if ($contact->contact['contact_sexe'] == 'M') { echo 'Homme'; } else if ($contact->contact['contact_sexe'] == 'F') { echo 'Femme'; } else { echo 'Sexe'; } ?></li>
-			<li class="electeur <?php if ($contact->contact['contact_electeur']) { echo 'oui'; } else { echo 'non'; } ?>">Électeur</li>
+			<li class="electeur <?php if ($contact->contact['contact_electeur'] && $contact->contact['contact_electeur_europeen']) { echo 'eur'; } elseif ($contact->contact['contact_electeur'] && !$contact->contact['contact_electeur_europeen']) { echo 'oui'; } else { echo 'non'; } ?>"><?php if ($contact->contact['contact_electeur_europeen']) { ?><span title="Électeur européen">Européen</span><?php } else { ?>Électeur<?php } ?></li>
 			<li class="sms <?php if ($contact->possede('mobile')) { ?>envoyerSMS<?php } ?>">SMS</li>
 			<li class="email <?php if ($contact->possede('email')) { ?>envoyerEmail<?php } ?>">Email</li>
 		</ul>

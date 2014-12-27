@@ -910,6 +910,11 @@ main.dossier {
 			}
 			
 			&.electeur {
+    			&.eur {
+        			color: $bleu;
+        			&::before { content: '\e809'; }
+    			}
+    			
 				&.oui {
 					color: $bleu;
 					&::before { content: '\e8af'; }
