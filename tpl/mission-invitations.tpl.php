@@ -16,12 +16,15 @@
 	
 	// On récupère la liste des membres inscrits sur le site, à l'exception de ceux déjà ajoutés
 	$users = User::sauf($comptes);
+	
+	// typologie
+	$typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';
 
     // On charge le header
 	Core::tpl_header();
 ?>
-
-<h2 id="titre-mission" class="titre" data-mission="<?php echo $data->get('mission_hash'); ?>">Porte-à-porte &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
+<a href="<?php Core::tpl_go_to($typologie); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Revenir à la liste</button></a>	
+<h2 id="titre-mission" class="titre" data-mission="<?php echo $data->get('mission_hash'); ?>">Mission &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
 
 <nav class="onglets">
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'))); ?>">Supervision</a>

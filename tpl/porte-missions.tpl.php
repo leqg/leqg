@@ -8,7 +8,7 @@
     // On charge le header
 	Core::tpl_header();
 ?>
-	<a href="<?php Core::tpl_go_to('porte'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a>
+	<?php if (User::auth_lvl() >= 5) : ?><a href="<?php Core::tpl_go_to('porte'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a><?php endif; ?>
 	<h2 class="titre" data-user="<?php echo User::ID(); ?>">Porte à porte</h2>
 	
 	<section id="missions">

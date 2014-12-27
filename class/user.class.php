@@ -259,6 +259,22 @@ class User {
 		// On retourne la tableau contenant les informations
 		return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    
+    public static function auth_lvl() {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		$client = Configuration::read('ini')['LEQG']['compte'];
+		$user = $_COOKIE['leqg'];
+
+		// On recherche l'existence du compte
+		$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+		$query->bindParam(':cookie', $user);
+		$query->execute();
+        $compte = $query->fetch(PDO::FETCH_ASSOC);
+        
+        return $compte['auth_level'];
+    }
 
 }
 
