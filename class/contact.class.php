@@ -426,7 +426,7 @@ class Contact
 	public function bureau( $adresse = false )
 	{
 		// On récupère les informations sur le bureau de vote
-		$query = $this->link->prepare('SELECT `bureau_id`, `bureau_numero`, `bureau_nom`, `bureau_adresse`, `bureau_cp`, `commune_id` FROM `bureaux` WHERE `bureau_id` = :bureau');
+		$query = $this->link->prepare('SELECT `bureau_id`, `bureau_code`, `bureau_nom`, `bureau_adresse`, `bureau_cp` FROM `bureaux` WHERE `bureau_id` = :bureau');
 		$query->bindParam(':bureau', $this->contact['bureau_id']);
 		$query->execute();
 		$bureau = $query->fetch(PDO::FETCH_ASSOC);
@@ -443,7 +443,7 @@ class Contact
 		$retour = array();
 		
 		// On prépare le nom du bureau de vote et de son numéro dans la variable $ligne
-		$ligne = 'Bureau <a href="index.php?page=carto&niveau=bureau&code=' . hash('sha256', $bureau['bureau_id']) . '">' . $bureau['bureau_numero'] . '</a> &ndash; ' . $ville['commune_nom'];
+		$ligne = 'Bureau <a href="index.php?page=carto&niveau=bureau&code=' . hash('sha256', $bureau['bureau_id']) . '">' . $bureau['bureau_code'] . '</a> &ndash; ' . $ville['commune_nom'];
 		if (!empty($bureau['bureau_nom']))
 		{
 			$ligne.= '<br>' . $bureau['bureau_nom'];
