@@ -22,7 +22,7 @@
         
         
         // On retraite la date de naissance
-        $date = DateTime::createFromFormat('m/d/Y', $fiche['import_naissance_date']);
+        $date = DateTime::createFromFormat('d/m/Y', $fiche['import_naissance_date']);
         $fiche['import_naissance_date'] = $date->format('Y-m-d');
         
         
@@ -51,40 +51,10 @@
         // On formate l'adresse, notamment le nom de la rue
         $fiche['import_adresse_rue_format'] = '%'.preg_replace('#[^A-Za-z]#', '%', $fiche['import_adresse_rue']).'%';
         $fiche['import_adresse_commune_format'] = preg_replace('#[^A-Za-z]#', '%', $fiche['import_adresse_commune']);
-        
-        
-        // On regarde si le canton est déjà enregistré ou non
-        $departement = $fiche['import_adresse_code_postal']{0} . $fiche['import_adresse_code_postal']{1};
-        $query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_code` = :bureau AND `canton_id` = :canton AND `circonscription_id` = :circonscription AND `departement_id` = :departement');
-        $query->bindParam(':bureau', $fiche['import_bureau_numero']);
-        $query->bindParam(':canton', $fiche['import_bureau_canton']);
-        $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
-        $query->bindParam(':departement', $departement);
-        $query->execute();
-        
-        // S'il est déjà enregistré, on récupère le numéro du bureau
-        if ($query->rowCount()) {
-            $bureau = $query->fetch(PDO::FETCH_ASSOC);
-            $fiche['import_bureau_id'] = $bureau['bureau_id'];
-        }
-        
-        // Sinon, on lance la création du bureau de vote
-        else {
-            $query = $link->prepare('INSERT INTO `bureaux` (`bureau_code`, `canton_id`, `circonscription_id`, `departement_id`, `bureau_nom`, `bureau_cp`)
-                                     VALUES                (:bureau,     :canton,     :circonscription,     :departement,     :nom,         :codepostal)');
-            $query->bindParam(':bureau', $fiche['import_bureau_numero']);
-            $query->bindParam(':canton', $fiche['import_bureau_canton']);
-            $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
-            $query->bindParam(':departement', $departement);
-            $query->bindParam(':nom', $fiche['import_bureau_nom']);
-            $query->bindParam(':codepostal', $fiche['import_adresse_code_postal']);
-            $query->execute();
-            
-            $fiche['import_bureau_id'] = $link->lastInsertId();
-        }
-        
-        
+
+
         // On essaye de récupérer l'ID de la commune
+        $departement = $fiche['import_adresse_code_postal']{0} . $fiche['import_adresse_code_postal']{1};
         $query = $link->prepare('SELECT * FROM `communes` WHERE `commune_nom_propre` LIKE :commune AND `departement_id` = :departement');
         $query->bindParam(':commune', $fiche['import_adresse_commune_format']);
         $query->bindParam(':departement', $departement);
@@ -96,12 +66,45 @@
             $fiche['commune_nom_propre'] = $commune['commune_nom_propre'];
             $fiche['departement_id'] = $commune['departement_id'];
         } else {
-            $query = $link->prepare('INSERT INTO `communes` (`departement_id`, `commune_nom`, `commune_nom_propre`) VALUES (:dep, :commune, :commune)');
+            $query = $link->prepare('INSERT INTO `communes` (`departement_id`, `commune_nom`, `commune_nom_propre`) VALUES (:dep, :commune, :communepropre)');
             $query->bindParam(':dep', $departement);
             $query->bindParam(':commune', $fiche['import_adresse_commune']);
+            $query->bindParam(':communepropre', $fiche['import_adresse_commune']);
             $query->execute();
             
             $fiche['commune_id'] = $link->lastInsertId();
+        }
+        
+        
+        // On regarde si le canton est déjà enregistré ou non
+        $query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_code` = :bureau AND `canton_id` = :canton AND `circonscription_id` = :circonscription AND `departement_id` = :departement AND `commune_id` = :commune');
+        $query->bindParam(':bureau', $fiche['import_bureau_numero']);
+        $query->bindParam(':canton', $fiche['import_bureau_canton']);
+        $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
+        $query->bindParam(':departement', $departement);
+        $query->bindParam(':commune', $fiche['commune_id']);
+        $query->execute();
+        
+        // S'il est déjà enregistré, on récupère le numéro du bureau
+        if ($query->rowCount()) {
+            $bureau = $query->fetch(PDO::FETCH_ASSOC);
+            $fiche['import_bureau_id'] = $bureau['bureau_id'];
+        }
+        
+        // Sinon, on lance la création du bureau de vote
+        else {
+            $query = $link->prepare('INSERT INTO `bureaux` (`bureau_code`, `canton_id`, `commune_id`, `circonscription_id`, `departement_id`, `bureau_nom`, `bureau_cp`)
+                                     VALUES                (:bureau,       :canton,     :commune,     :circonscription,     :departement,     :nom,         :codepostal)');
+            $query->bindParam(':bureau', $fiche['import_bureau_numero']);
+            $query->bindParam(':canton', $fiche['import_bureau_canton']);
+            $query->bindParam(':commune', $fiche['commune_id']);
+            $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
+            $query->bindParam(':departement', $departement);
+            $query->bindParam(':nom', $fiche['import_bureau_nom']);
+            $query->bindParam(':codepostal', $fiche['import_adresse_code_postal']);
+            $query->execute();
+            
+            $fiche['import_bureau_id'] = $link->lastInsertId();
         }
         
         
@@ -115,9 +118,10 @@
             $rue = $query->fetch(PDO::FETCH_ASSOC);
             $fiche['rue_id'] = $rue['rue_id'];
         } else {
+            $rue = mb_convert_case($fiche['import_adresse_rue'], MB_CASE_TITLE);
             $query = $link->prepare('INSERT INTO `rues` (`commune_id`, `rue_nom`) VALUES (:commune, :rue)');
             $query->bindParam(':commune', $fiche['commune_id']);
-            $query->bindParam(':rue', $fiche['import_adresse_rue']);
+            $query->bindParam(':rue', $rue);
             $query->execute();
             $fiche['rue_id'] = $link->lastInsertId();
         }
@@ -178,10 +182,6 @@
             $nominatim = json_decode( $json );
             $lat = ($nominatim) ? $nominatim[0]->lat : 0;
             $lon = ($nominatim) ? $nominatim[0]->lon : 0;
-            
-            // On rajoute l'adresse au sein de BANO
-            $query = $link->prepare('INSERT INTO `bano` (`adresse_id`, `adresse_numero`, `adresse_rue`, `adresse_code_postal`, `adresse_commune`, `adresse_source`, `adresse_lat`, `adresse_lon`)
-                                     VALUES             ("0",          :numero,          :rue,          :codepostal,           :commune,          "fichier",        :lat,          :lon)');
             
             // On retraite les informations pour les enregistrer
             $rue = mb_convert_case($fiche['import_adresse_rue'], MB_CASE_TITLE);
@@ -253,35 +253,43 @@
             foreach ($fiche['coordonnees'] as $coordonnee) {
                 // On regarde s'il s'agit d'un email ou non 
                 if (filter_var($coordonnee, FILTER_VALIDATE_EMAIL)) {
-                    $type = 'email';
-        			$query = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_email`) VALUES (:contact, :type, :coordonnees)');
-                	$query->bindParam(':contact', $contact);
-            		$query->bindParam(':type', $type);
+                    $query = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, "email", :coordonnees)');
+            		$query->bindParam(':contact', $contact);
             		$query->bindParam(':coordonnees', $coordonnee);
                     $query->execute();
-                }
+             		
+            		// On incrémente le nombre de coordonnées dans la fiche pour le type correspondant
+            		$query = $link->prepare('UPDATE `contacts` SET `contact_email` = `contact_email` + 1 WHERE `contact_id` = :id');
+            		$query->bindParam(':id', $contact);
+            		$query->execute();
+               }
                 
                 else {
                     // On regarde s'il s'agit d'un mobile
                     $premiersNums = $coordonnee{0}.$coordonnee{1};
-                    $query = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, :type, :coordonnees)');
-            		$query->bindParam(':contact', $contact);
-            		$query->bindParam(':coordonnees', $coordonnee);
                     
-                    if ($premiersNums == '06' || $premiersNums = '07') {
-                        $type = 'mobile';
+                    if ($premiersNums == '06' || $premiersNums == '07') {
+                        $query = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, "mobile", :coordonnees)');
+                		$query->bindParam(':contact', $contact);
+                		$query->bindParam(':coordonnees', $coordonnee);
+                        $query->execute();
+               		
+                		// On incrémente le nombre de coordonnées dans la fiche pour le type correspondant
+                		$query = $link->prepare('UPDATE `contacts` SET `contact_mobile` = `contact_mobile` + 1 WHERE `contact_id` = :id');
+                		$query->bindParam(':id', $contact);
+                		$query->execute();
                     } else {
-                        $type = 'fixe';
+                        $query = $link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_numero`) VALUES (:contact, "fixe", :coordonnees)');
+                		$query->bindParam(':contact', $contact);
+                		$query->bindParam(':coordonnees', $coordonnee);
+                        $query->execute();
+                		
+                		// On incrémente le nombre de coordonnées dans la fiche pour le type correspondant
+                		$query = $link->prepare('UPDATE `contacts` SET `contact_fixe` = `contact_fixe` + 1 WHERE `contact_id` = :id');
+                		$query->bindParam(':id', $contact);
+                		$query->execute();
                     }
-                    
-            		$query->bindParam(':type', $type);
-                    $query->execute();
                }
-        		
-        		// On incrémente le nombre de coordonnées dans la fiche pour le type correspondant
-        		$query = $link->prepare('UPDATE `contacts` SET `contact_' . $type . '` = `contact_' . $type . '` + 1 WHERE `contact_id` = :id');
-        		$query->bindParam(':id', $contact);
-        		$query->execute();
             }
         }
         
@@ -303,8 +311,6 @@
         $query = $link->prepare('UPDATE `imports` SET `import_statut` = 1 WHERE `import_id` = :import');
         $query->bindParam(':import', $fiche['import_id']);
         $query->execute();
-        
-        Core::debug($fiche);
     }
     
 ?>
