@@ -153,6 +153,21 @@ else {
 	
 	
 	
+	// Si on demande le module d'administration d'une mission (porte à porte + boitage)
+	else if ($_GET['page'] == 'mission') {
+    	// On charge les panneaux d'administration
+    	if (isset($_GET['admin'])) {
+        	Core::tpl_load('mission', $_GET['admin']);
+    	}
+    	
+    	// On charge le template d'administration générale de la page
+    	else {
+        	Core::tpl_load('mission');
+    	}
+	}
+	
+	
+	
 	// Si on demande le module de porte à porte
 	else if ($_GET['page'] == 'porte') {
 		// On charge les templates de page selon la demande

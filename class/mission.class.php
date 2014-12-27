@@ -15,9 +15,12 @@ class Mission {
 	/**
 	 * @val     array    $data          Informations stockées sur la mission
 	 * @val     object   $link          Informations d'accès à la base de données
+	 * @val     string   $err           Erreurs stockées au sein de la classe
+	 * @val     string   $err_msg       Message de la dernière erreur stockée
 	 */
 	
 	private $data, $link;
+	public  $err, $err_msg;
 	
 	
 	/**
@@ -39,7 +42,10 @@ class Mission {
 		$query->bindParam(':mission', $id);
 		$query->execute();
 		
-		if (!$query->rowCount()) exit;
+		if (!$query->rowCount()) {
+    		$this->err = true;
+    		$this->err_msg = 'Mission inexistante';
+        }
 		
 		// On récupère les informations
 		$mission = $query->fetch(PDO::FETCH_ASSOC);
@@ -63,6 +69,233 @@ class Mission {
 		return $this->data[ $information ];
 	}
 	
+	
+	/**
+	 * Modifie une information sur la mission
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   string   $information   Information à modifier
+	 * @param   string   $value         Valeur à enregistrer
+	 * @result  bool                    Réussite ou non de l'opération
+	 */
+	
+	public function set($information, $value) {
+    	$mission = $this->get('mission_id');
+		$query = $this->link->prepare('UPDATE `mission` SET `' . $information . '` = :valeur WHERE `mission_id` = :mission');
+		$query->bindParam(':valeur', $value);
+		$query->bindParam(':mission', $mission);
+		
+		// On retourne un résultat selon la réussite ou non de l'opération
+		if ($query->execute()) {
+    		return true;
+		}
+		else {
+    		return false;
+		}
+	}
+	
+	
+	/**
+     * Récupère les statistiques sur les militants inscrits à la mission
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @result  array                   Statistiques disponibles
+     */
+    
+    public function statistiques_militant() {
+        // On récupère les variables
+        $mission = $this->get('mission_id');
+        
+        // On récupère la liste des militants inscrits à la mission quelque soit leur statut
+        $query = $this->link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission');
+        $query->bindParam(':mission', $mission, PDO::PARAM_INT);
+        $query->execute();
+        
+        // On vérifie qu'il existe des militants
+        if ($query->rowCount()) {
+            // On récupère la liste de ces militants
+            $militants = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            // On prépare le tableau des statistiques
+            $statut = array(
+                -1 => 'refus',
+                 0 => 'invitation',
+                 1 => 'inscrit'
+            );
+            
+            // On lance une boucle de calcul du statut des militants
+            $stats = array(
+                'refus' => 0,
+                'invitation' => 0,
+                'inscrit' => 0
+            );
+            
+            foreach ($militants as $militant) {
+                $stats[$statut[$militant['inscription_statut']]]++;
+            }
+            
+            // On cherche la liste de tous les reportings pour récupérer les statistiques par militants
+            $query = $this->link->prepare('SELECT `' . $this->get('mission_type') . '_militant` AS `militant` FROM `' . $this->get('mission_type') . '` WHERE `mission_id` = :mission');
+            $query->bindParam(':mission', $mission, PDO::PARAM_INT);
+            $query->execute();
+            
+            // On regarde s'il existe du reporting
+            if ($query->rowCount()) {
+                // On enregistre le nombre de reportings
+                $stats['reporting'] = $query->rowCount();
+                
+                // On fait une boucle de tous les reportings pour compter l'activité par utilisateur
+                foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $reporting) {
+                    // On incrémente le nombre de reportings du militant
+                    $stats['militants'][$reporting['militant']]++;
+                }
+				
+				// On tri le tableau des statistiques selon leur participation
+                asort($stats['militants']);
+                
+                // On récupère le militant le plus actif
+                $militants_actifs = array_keys($stats['militants']);
+                $stats['actif'] = $militants_actifs[0];
+            }
+            
+            // Sinon, on ne retourne aucun reporting
+            else {
+                $stats['reporting'] = 0;
+            }
+            
+            // On retourne les informations récupérées
+            return $stats;
+        }
+        
+        // Sinon on ne retourne aucune statistiques
+        else {
+            return false;
+        }
+    }
+    
+    
+    /**
+     * Récupération des membres inscrits à la mission selon leur statut
+     *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @param   string      $statut     Statut demandé
+     * @result  array                   Liste des membres inscrits
+     */
+    
+    public function liste_inscrits($statut = null) {
+        // On récupère la liste des inscrits pour le statut demandé
+        $mission = $this->get('mission_id');
+        if (is_null($statut)) {
+            $query = $this->link->prepare('SELECT `user_id` FROM `inscriptions` WHERE `mission_id` = :mission');
+            $query->bindParam(':mission', $mission, PDO::PARAM_INT);
+            $query->execute();
+            
+            // On vérifie qu'il existe des inscrits
+            if ($query->rowCount()) {
+                // On retourne le tableau
+                $users = $query->fetchAll(PDO::FETCH_ASSOC);
+                $militants = array();
+                
+                foreach ($users as $user) $militants[] = $user['user_id'];
+                
+                return $militants;
+            }
+            
+            // Sinon, on retourne un false
+            else {
+                return false;
+            }
+        }
+        else {
+            $query = $this->link->prepare('SELECT `user_id` FROM `inscriptions` WHERE `inscription_statut` = :statut AND `mission_id` = :mission');
+            $query->bindParam(':statut', $statut);
+            $query->bindParam(':mission', $mission, PDO::PARAM_INT);
+            $query->execute();
+            
+            // On vérifie qu'il existe des inscrits
+            if ($query->rowCount()) {
+                // On retourne le tableau
+                return $query->fetchAll(PDO::FETCH_ASSOC);
+            }
+            
+            // Sinon, on retourne un false
+            else {
+                return false;
+            }
+        }
+    }
+    
+    
+    /**
+     * Invitation d'un nouveau membre
+     *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @param   string      $user       Utilisateur invité
+     * @result  bool                    Résultat
+     */
+    
+    public function invitation($user) {
+        $mission = $this->get('mission_id');
+        $query = $this->link->prepare('INSERT INTO `inscriptions` (`mission_id`, `user_id`) VALUES (:mission, :user)');
+        $query->bindParam(':mission', $mission);
+        $query->bindParam(':user', $user);
+        
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
+    /**
+     * Réponse à une invitation
+     *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @param   int         $reponse    Réponse à l'invitation
+     * @param   string      $user       Utilisateur concerné
+     * @result  bool                    Résultat
+     */
+    
+    public function reponse($reponse, $user) {
+        $mission = $this->get('mission_id');
+        $query = $this->link->prepare('UPDATE `inscriptions` SET `inscription_statut` = :reponse WHERE MD5(`user_id`) = :user AND `mission_id` = :mission');
+        $query->bindParam(':reponse', $reponse);
+        $query->bindParam(':mission', $mission);
+        $query->bindParam(':user', $user);
+        
+        if ($query->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+	
+	
+	/**
+	 * Récupère les statistiques sur les éléments à parcourir
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @result  array                   Statistiques disponibles
+     */
+    
+    public function statistiques_parcours() {
+        
+    }
+    
 	
 	/**
 	 * Ajoute une rue à couvrir à la mission
@@ -316,6 +549,44 @@ class Mission {
 	
 	
 	/**
+     * Rend public une mission
+	 * 
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @return  void
+	 */
+	
+	public function ouvrir() {
+    	// On enregistre l'ouverture
+    	if ($this->set('mission_statut', 1)) {
+        	return true;
+    	} else {
+        	return false;
+    	}
+	}
+	
+	
+	/**
+     * Rend privée une mission
+	 * 
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @return  void
+	 */
+	
+	public function fermer() {
+    	// On enregistre l'ouverture
+    	if ($this->set('mission_statut', 0)) {
+        	return true;
+    	} else {
+        	return false;
+    	}
+	}
+	
+	
+	/**
 	 * Cloture une mission ouverte
 	 * 
 	 * @author  Damien Senger <mail@damiensenger.me>
@@ -349,7 +620,7 @@ class Mission {
 		$link = Configuration::read('db.link');
 		
 		// On exécute la requête de récupération des missions
-		$query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "' . $type . '" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW()) ORDER BY `mission_deadline` ASC');
+		$query = $link->query('SELECT * FROM `mission` WHERE `mission_type` = "' . $type . '" ORDER BY `mission_deadline` ASC');
 		
 		// On retourne la liste des missions s'il en existe
 		if ($query->rowCount()) {
@@ -398,6 +669,96 @@ class Mission {
 		// On affiche l'identifiant de la nouvelle mission
 		return $link->lastInsertId();
 	}
+	
+	
+	/**
+	 * Récupère les invitations d'un membre
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   string      $type       Type de missions demandées
+	 * @param   string      $id         ID du membre
+	 * @return	array                   Invitations
+	 */
+
+    public static function invitations($type, $user) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
+        // On récupère les invitations liées à l'utilisateur
+        $query = $link->prepare('SELECT * FROM `inscriptions` WHERE `user_id` = :user AND `inscription_statut` = 0');
+        $query->bindParam(':user', $user);
+        $query->execute();
+        
+        // On regarde s'il existe des invitations
+        if ($query->rowCount()) {
+            $missions = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            // On vérifie que les missions sont bien du bon type et ouvertes
+            $missions_ouvertes = array();
+            foreach ($missions as $mission) {
+                $query = $link->prepare('SELECT * FROM `mission` WHERE `mission_type` = :type AND `mission_statut` = 1 AND `mission_id` = :mission');
+                $query->bindParam(':type', $type);
+                $query->bindParam(':mission', $mission['mission_id']);
+                $query->execute();
+                
+                if ($query->rowCount()) {
+                    $infos = $query->fetch(PDO::FETCH_ASSOC);
+                    $missions_ouvertes[] = $infos['mission_id'];
+                }
+            }
+            
+            return $missions_ouvertes;
+        } else {
+            return false;
+        }
+    }
+	
+	
+	/**
+	 * Récupère les missions ouvertes d'un membre
+	 *
+	 * @author	Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 *
+	 * @param   string      $type       Type de missions demandées
+	 * @param   string      $id         ID du membre
+	 * @return	array                   Missions ouvertes
+	 */
+
+    public static function missions_ouvertes($type, $user) {
+		// On récupère la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
+        // On récupère les invitations liées à l'utilisateur
+        $query = $link->prepare('SELECT * FROM `inscriptions` WHERE `user_id` = :user AND `inscription_statut` = 1');
+        $query->bindParam(':user', $user);
+        $query->execute();
+        
+        // On regarde s'il existe des invitations
+        if ($query->rowCount()) {
+            $missions = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            // On vérifie que les missions sont bien du bon type et ouvertes
+            $missions_ouvertes = array();
+            foreach ($missions as $mission) {
+                $query = $link->prepare('SELECT * FROM `mission` WHERE `mission_type` = :type AND `mission_statut` = 1 AND `mission_id` = :mission');
+                $query->bindParam(':type', $type);
+                $query->bindParam(':mission', $mission['mission_id']);
+                $query->execute();
+                
+                if ($query->rowCount()) {
+                    $infos = $query->fetch(PDO::FETCH_ASSOC);
+                    $missions_ouvertes[] = $infos['mission_id'];
+                }
+            }
+            
+            return $missions_ouvertes;
+        } else {
+            return false;
+        }
+    }
 	
 }
 ?>

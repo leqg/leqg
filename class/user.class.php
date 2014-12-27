@@ -234,6 +234,32 @@ class User {
 		header('Location: http://auth.leqg.info/');
 	}
 	
+	
+	/**
+     * Charge la liste des comptes du client sauf ceux listés
+	 *
+	 * @author  Damien Senger
+	 * @version 1.0
+	 * 
+	 * @param   array           Liste des personnes à ne pas récupérer
+	 * @return  array           Liste des personnes demandées
+	 */
+    
+    public static function sauf( $sauf ) {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		$client = Configuration::read('ini')['LEQG']['compte'];
+		$notUsers = implode(',', $sauf);
+		
+		// On effectue la recherche
+		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `id` NOT IN (' . $notUsers . ')');
+		$query->bindParam(':client', $client);
+		$query->execute();
+		
+		// On retourne la tableau contenant les informations
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>

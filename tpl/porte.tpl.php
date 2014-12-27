@@ -11,7 +11,7 @@
 	// On charge le template de header
 	Core::tpl_header();
 ?>
-	
+	<a href="<?php Core::tpl_go_to('porte', array('action' => 'missions')); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Interface militant</button></a>	
 	<h2>Porte à porte</h2>
 	
 	<?php if ($missions) : ?>
@@ -19,10 +19,9 @@
 			<ul class="liste-missions">
 				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('porte', array('mission' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
+					<a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
 						<?php if (!$mission->nombre_contacts(0)) : ?>
-							Cette mission de porte-à-porte est aujourd'hui terminée.<br>
 							Il n'y a plus d'électeurs à visiter.
 						<?php else : ?>
 							Cette mission comporte encore <strong><?php echo $mission->nombre_contacts(0); ?></strong> électeurs à visiter.<br>
