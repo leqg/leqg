@@ -419,7 +419,7 @@ class Contact
 	public function bureau( $adresse = false )
 	{
 		// On récupère les informations sur le bureau de vote
-		$query = $this->link->prepare('SELECT `bureau_id`, `bureau_code`, `bureau_nom`, `bureau_adresse`, `bureau_cp` FROM `bureaux` WHERE `bureau_id` = :bureau');
+		$query = $this->link->prepare('SELECT `bureau_id`, `bureau_code`, `commune_id`, `bureau_nom`, `bureau_adresse`, `bureau_cp` FROM `bureaux` WHERE `bureau_id` = :bureau');
 		$query->bindParam(':bureau', $this->contact['bureau_id']);
 		$query->execute();
 		$bureau = $query->fetch(PDO::FETCH_ASSOC);
