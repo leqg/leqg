@@ -376,7 +376,7 @@ class Contact
 		$immeuble = $this->contact[ $type[ $adresse ] . '_id' ];
 	
 		// On récupère les informations liées à l'adresse dans la base de données en commençant par l'immeuble
-		$query = $this->link->prepare('SELECT `immeuble_numero`, `rue_id` FROM `immeubles` WHERE `immeuble_id` = :immeuble');
+		$query = $this->link->prepare('SELECT `immeuble_numero`, `rue_id`, `immeuble_cp` FROM `immeubles` WHERE `immeuble_id` = :immeuble');
 		$query->bindParam(':immeuble', $immeuble);
 		$query->execute();
 		$immeuble = $query->fetch(PDO::FETCH_ASSOC);
@@ -396,15 +396,8 @@ class Contact
 		$ville = $query->fetch(PDO::FETCH_ASSOC);
 		unset($query);
 		
-		// On récupère les informations léies au code postal
-		$query = $this->link->prepare('SELECT `code_postal` FROM `codes_postaux` WHERE `commune_id` = :commune');
-		$query->bindParam(':commune', $rue['commune_id']);
-		$query->execute();
-		$codepostal = $query->fetch(PDO::FETCH_ASSOC);
-		unset($query);
-		
 		// On prépare la mise en forme retournée dans la tableau $retour
-		$retour = $immeuble['immeuble_numero'] . ' ' . $rue['rue_nom'] . $separateur . $codepostal['code_postal'] . ' ' . $ville['commune_nom'];
+		$retour = $immeuble['immeuble_numero'] . ' ' . $rue['rue_nom'] . $separateur . $immeuble['immeuble_cp'] . ' ' . $ville['commune_nom'];
 		
 		// On retourne le texte
 		return $retour;
