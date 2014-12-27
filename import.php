@@ -50,10 +50,100 @@
         
         // On formate l'adresse, notamment le nom de la rue
         $fiche['import_adresse_rue_format'] = '%'.preg_replace('#[^A-Za-z]#', '%', $fiche['import_adresse_rue']).'%';
-        $fiche['import_adresse_commune_format'] = '%'.preg_replace('#[^A-Za-z]#', '%', $fiche['import_adresse_commune']).'%';
+        $fiche['import_adresse_commune_format'] = preg_replace('#[^A-Za-z]#', '%', $fiche['import_adresse_commune']);
         
         
-        // On essaye de récupérer l'identifiant de l'adresse où habite l'électeur
+        // On regarde si le canton est déjà enregistré ou non
+        $departement = $fiche['import_adresse_code_postal']{0} . $fiche['import_adresse_code_postal']{1};
+        $query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_code` = :bureau AND `canton_id` = :canton AND `circonscription_id` = :circonscription AND `departement_id` = :departement');
+        $query->bindParam(':bureau', $fiche['import_bureau_numero']);
+        $query->bindParam(':canton', $fiche['import_bureau_canton']);
+        $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
+        $query->bindParam(':departement', $departement);
+        $query->execute();
+        
+        // S'il est déjà enregistré, on récupère le numéro du bureau
+        if ($query->rowCount()) {
+            $bureau = $query->fetch(PDO::FETCH_ASSOC);
+            $fiche['import_bureau_id'] = $bureau['bureau_id'];
+        }
+        
+        // Sinon, on lance la création du bureau de vote
+        else {
+            $query = $link->prepare('INSERT INTO `bureaux` (`bureau_code`, `canton_id`, `circonscription_id`, `departement_id`, `bureau_nom`, `bureau_cp`)
+                                     VALUES                (:bureau,     :canton,     :circonscription,     :departement,     :nom,         :codepostal)');
+            $query->bindParam(':bureau', $fiche['import_bureau_numero']);
+            $query->bindParam(':canton', $fiche['import_bureau_canton']);
+            $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
+            $query->bindParam(':departement', $departement);
+            $query->bindParam(':nom', $fiche['import_bureau_nom']);
+            $query->bindParam(':codepostal', $fiche['import_adresse_code_postal']);
+            $query->execute();
+            
+            $fiche['import_bureau_id'] = $link->lastInsertId();
+        }
+        
+        
+        // On essaye de récupérer l'ID de la commune
+        $query = $link->prepare('SELECT * FROM `communes` WHERE `commune_nom_propre` LIKE :commune AND `departement_id` = :departement');
+        $query->bindParam(':commune', $fiche['import_adresse_commune_format']);
+        $query->bindParam(':departement', $departement);
+        $query->execute();
+        
+        if ($query->rowCount()) {
+            $commune = $query->fetch(PDO::FETCH_ASSOC);
+            $fiche['commune_id'] = $commune['commune_id'];
+            $fiche['commune_nom_propre'] = $commune['commune_nom_propre'];
+            $fiche['departement_id'] = $commune['departement_id'];
+        } else {
+            $query = $link->prepare('INSERT INTO `communes` (`departement_id`, `commune_nom`, `commune_nom_propre`) VALUES (:dep, :commune, :commune)');
+            $query->bindParam(':dep', $departement);
+            $query->bindParam(':commune', $fiche['import_adresse_commune']);
+            $query->execute();
+            
+            $fiche['commune_id'] = $link->lastInsertId();
+        }
+        
+        
+        // On essaye de récupérer la rue dans cette ville
+        $query = $link->prepare('SELECT * FROM `rues` WHERE `commune_id` = :commune AND `rue_nom` LIKE :rue');
+        $query->bindParam(':commune', $fiche['commune_id']);
+        $query->bindParam(':rue', $fiche['import_adresse_rue_format']);
+        $query->execute();
+        
+        if ($query->rowCount()) {
+            $rue = $query->fetch(PDO::FETCH_ASSOC);
+            $fiche['rue_id'] = $rue['rue_id'];
+        } else {
+            $query = $link->prepare('INSERT INTO `rues` (`commune_id`, `rue_nom`) VALUES (:commune, :rue)');
+            $query->bindParam(':commune', $fiche['commune_id']);
+            $query->bindParam(':rue', $fiche['import_adresse_rue']);
+            $query->execute();
+            $fiche['rue_id'] = $link->lastInsertId();
+        }
+        
+        
+        // On essaye de récupérer l'immeuble dans cette rue
+        $query = $link->prepare('SELECT * FROM `immeubles` WHERE `rue_id` = :rue AND `immeuble_numero` LIKE :numero');
+        $query->bindParam(':rue', $fiche['rue_id']);
+        $query->bindParam(':numero', $fiche['import_adresse_numero']);
+        $query->execute();
+        
+        if ($query->rowCount()) {
+            $rue = $query->fetch(PDO::FETCH_ASSOC);
+            $fiche['immeuble_id'] = $rue['immeuble_id'];
+        } else {
+            $query = $link->prepare('INSERT INTO `immeubles` (`rue_id`, `immeuble_numero`, `bureau_id`, `immeuble_cp`) VALUES (:rue, :numero, :bureau, :cp)');
+            $query->bindParam(':rue', $fiche['rue_id']);
+            $query->bindParam(':numero', $fiche['import_adresse_numero']);
+            $query->bindParam(':bureau', $fiche['import_bureau_id']);
+            $query->bindParam(':cp', $fiche['import_adresse_code_postal']);
+            $query->execute();
+            $fiche['immeuble_id'] = $link->lastInsertId();
+        }
+        
+        
+        // On essaye de récupérer la latitude et la longitude du bâtiment
         $query = $link->prepare('SELECT `adresse_code` FROM `bano` WHERE `adresse_numero` = :numero AND `adresse_rue` LIKE :rue AND `adresse_code_postal` = :codepostal AND `adresse_commune` LIKE :commune');
         $query->bindParam(':numero', $fiche['import_adresse_numero']);
         $query->bindParam(':rue', $fiche['import_adresse_rue_format']);
@@ -64,9 +154,14 @@
         
         // On regarde si une réponse a été trouvée
         if ($query->rowCount()) {
-            // On récupère les informations
+            // On récupère les informations LAT LON
             $adresse = $query->fetch(PDO::FETCH_ASSOC);
-            $fiche['import_adresse_id'] = $adresse['adresse_code'];
+            
+            $query = $link->prepare('UPDATE `immeubles` SET `immeuble_lat` = :lat, `immeuble_lon` = :lon WHERE `immeuble_id` = :id');
+            $query->bindParam(':lat', $adresse['bano_lat']);
+            $query->bindParam(':lon', $adresse['bano_lon']);
+            $query->bindParam(':id', $fiche['immeuble_id']);
+            $query->execute();
         }
         
         
@@ -92,19 +187,11 @@
             $rue = mb_convert_case($fiche['import_adresse_rue'], MB_CASE_TITLE);
             $ville = mb_convert_case($fiche['import_adresse_commune'], MB_CASE_TITLE);
             
-            // On met en place les données
-            $query->bindParam(':numero', $fiche['import_adresse_numero']);
-            $query->bindParam(':rue', $rue);
-            $query->bindParam(':codepostal', $fiche['import_adresse_code_postal']);
-            $query->bindParam(':commune', $ville);
+            $query = $link->prepare('UPDATE `immeubles` SET `immeuble_lat` = :lat, `immeuble_lon` = :lon WHERE `immeuble_id` = :id');
             $query->bindParam(':lat', $lat);
             $query->bindParam(':lon', $lon);
-            
-            // On registre les informations
+            $query->bindParam(':id', $fiche['immeuble_id']);
             $query->execute();
-            
-            // On récupère l'identifiant de l'adresse
-            $fiche['import_adresse_id'] = $link->lastInsertId();
         }
         
         
@@ -140,41 +227,10 @@
         }
         
         
-        // On regarde si le canton est déjà enregistré ou non
-        $departement = $fiche['import_adresse_code_postal']{0} . $fiche['import_adresse_code_postal']{1};
-        $query = $link->prepare('SELECT * FROM `bureaux` WHERE `bureau_id` = :bureau AND `canton_id` = :canton AND `circonscription_id` = :circonscription AND `departement_id` = :departement');
-        $query->bindParam(':bureau', $fiche['import_bureau_numero']);
-        $query->bindParam(':canton', $fiche['import_bureau_canton']);
-        $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
-        $query->bindParam(':departement', $departement);
-        $query->execute();
-        
-        // S'il est déjà enregistré, on récupère le numéro du bureau
-        if ($query->rowCount()) {
-            $bureau = $query->fetch(PDO::FETCH_ASSOC);
-            $fiche['import_bureau_id'] = $bureau['bureau_code'];
-        }
-        
-        // Sinon, on lance la création du bureau de vote
-        else {
-            $query = $link->prepare('INSERT INTO `bureaux` (`bureau_id`, `canton_id`, `circonscription_id`, `departement_id`, `bureau_nom`, `bureau_cp`)
-                                     VALUES                (:bureau,     :canton,     :circonscription,     :departement,     :nom,         :codepostal)');
-            $query->bindParam(':bureau', $fiche['import_bureau_numero']);
-            $query->bindParam(':canton', $fiche['import_bureau_canton']);
-            $query->bindParam(':circonscription', $fiche['import_bureau_circo']);
-            $query->bindParam(':departement', $departement);
-            $query->bindParam(':nom', $fiche['import_bureau_nom']);
-            $query->bindParam(':codepostal', $fiche['import_adresse_code_postal']);
-            $query->execute();
-            
-            $fiche['import_bureau_id'] = $link->lastInsertId();
-        }
-        
-        
         // On lance la création de la fiche
         $query = $link->prepare('INSERT INTO `contacts` (`immeuble_id`, `bureau_id`, `contact_nom`, `contact_nom_usage`, `contact_prenoms`, `contact_naissance_date`, `contact_naissance_commune_id`, `contact_sexe`, `contact_electeur`, `contact_electeur_europeen`, `contact_electeur_numero`) 
                                  VALUES                 (:immeuble,     :bureau,     :nom,          :nomusage,           :prenoms,          :date,                    :lieu,                          :sexe,          :electeur,          :europe,                     :numero)');
-        $query->bindParam(':immeuble', $fiche['import_adresse_id']);
+        $query->bindParam(':immeuble', $fiche['immeuble_id']);
         $query->bindParam(':bureau', $fiche['import_bureau_id']);
         $query->bindParam(':nom', $fiche['import_nom']);
         $query->bindParam(':nomusage', $fiche['import_nom_usage']);
@@ -247,6 +303,8 @@
         $query = $link->prepare('UPDATE `imports` SET `import_statut` = 1 WHERE `import_id` = :import');
         $query->bindParam(':import', $fiche['import_id']);
         $query->execute();
+        
+        Core::debug($fiche);
     }
     
 ?>
