@@ -47,13 +47,21 @@
                 </li>
             </ul>
     	</section>
+    	
+    	<?php if(User::ID() != $_GET['compte']) : ?>
+    	<section class="contenu demi">
+        	<a href="ajax.php?script=admin-suppression&compte=<?php echo $_GET['compte']; ?>" class="nostyle"><button class="deleting long" style="margin: 0 auto">Supprimer ce compte</button></a>
+    	</section>
+    	<?php endif; ?>
 	</div>
     
     <div class="colonne demi droite">
+    	<?php if(User::ID() != $_GET['compte']) : ?>
         <section class="contenu demi">
             <h4>Attribuer de nouveaux droits</h4>
             
             <a href="ajax.php?script=admin-auth&compte=<?php echo $user['id']; ?>&lvl=8" class="nostyle"><button class="jaune long">Administrateur</button></a>
             <a href="ajax.php?script=admin-auth&compte=<?php echo $user['id']; ?>&lvl=3" class="nostyle"><button class="vert long">Militant</button></a>
         </section>
+    	<?php endif; ?>
     </div>

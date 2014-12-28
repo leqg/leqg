@@ -275,7 +275,11 @@ else {
 		if (isset($_GET['compte'])) {
 			// On charge le template d'historique
 			Core::tpl_load('admin', 'user');
-		}	
+		}
+		
+		elseif (isset($_GET['action']) && $_GET['action'] == 'nouveau') {
+    		Core::tpl_load('admin', 'new');
+		}
 			
 		// Sinon, on charge la page de gestion des utilisateurs	
 		else {

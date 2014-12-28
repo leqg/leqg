@@ -1,7 +1,6 @@
 <?php 
-    if (isset($_GET['compte'], $_GET['lvl']) || isset($_POST['compte'], $_POST['lvl'])) {
+    if (isset($_GET['compte']) || isset($_POST['compte'])) {
         $compte = (isset($_GET['compte'])) ? $_GET['compte'] : $_POST['compte'];
-        $lvl = (isset($_GET['lvl'])) ? $_GET['lvl'] : $_POST['lvl'];
         
         // On essaye de récupérer des informations
         $infos = User::infos($compte);
@@ -10,13 +9,12 @@
     		$link = Configuration::read('db.core');
             $client = Configuration::read('ini')['LEQG']['compte'];
 
-    		$query = $link->prepare('UPDATE `compte` SET `auth_level` = :auth WHERE `id` = :id AND `client` = :client');
-    		$query->bindParam(':auth', $lvl);
+    		$query = $link->prepare('DELETE FROM `compte` WHERE `id` = :id AND `client` = :client');
     		$query->bindParam(':client', $client);
     		$query->bindParam(':id', $compte);
     		$query->execute();
 
-    		Core::tpl_go_to('administration', array('compte' => $compte), true);
+    		Core::tpl_go_to('administration', true);
         } else {
             http_response_code(418);
         }
