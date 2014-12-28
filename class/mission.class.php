@@ -139,7 +139,7 @@ class Mission {
             }
             
             // On cherche la liste de tous les reportings pour récupérer les statistiques par militants
-            $query = $this->link->prepare('SELECT `' . $this->get('mission_type') . '_militant` AS `militant` FROM `' . $this->get('mission_type') . '` WHERE `mission_id` = :mission');
+            $query = $this->link->prepare('SELECT `item_reporting_user` FROM `items` WHERE `mission_id` = :mission AND `item_statut` != 0');
             $query->bindParam(':mission', $mission, PDO::PARAM_INT);
             $query->execute();
             
@@ -147,15 +147,21 @@ class Mission {
             if ($query->rowCount()) {
                 // On enregistre le nombre de reportings
                 $stats['reporting'] = $query->rowCount();
+                $stats['militants'] = array();
                 
                 // On fait une boucle de tous les reportings pour compter l'activité par utilisateur
                 foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $reporting) {
-                    // On incrémente le nombre de reportings du militant
-                    $stats['militants'][$reporting['militant']]++;
+                    if (isset($stats['militants'][$reporting['item_reporting_user']])) {
+                        // On incrémente le nombre de reportings du militant
+                        $stats['militants'][$reporting['item_reporting_user']]++;
+                    } else {
+                        // On initialise le nombre de reportings du militant
+                        $stats['militants'][$reporting['item_reporting_user']] = 1;
+                    }
                 }
-				
+                
 				// On tri le tableau des statistiques selon leur participation
-                asort($stats['militants']);
+                arsort($stats['militants']);
                 
                 // On récupère le militant le plus actif
                 $militants_actifs = array_keys($stats['militants']);
@@ -423,10 +429,9 @@ class Mission {
                     $stats['fait']++;
                 }
             }
-            
             // On calcule la réalisation
             $stats['total'] = array_sum($stats);
-            $stats['proportion'] = ceil($stats['fait'] / $stats['total']);
+            $stats['proportion'] = ceil($stats['fait'] * 100 / $stats['total']);
             
             return $stats;
         }
@@ -505,7 +510,7 @@ class Mission {
 	 * @author  Damien Senger <mail@damiensenger.me>
 	 * @version 1.0
 	 *
-	 * @param   int     $electeur       Identifiant de l'électeur concerné par le reporting (MD5)
+	 * @param   int     $electeur       Identifiant de l'électeur concerné par le reporting
 	 * @param   int     $statut         Statut du reporting
 	 * @result  void
 	 */
@@ -518,9 +523,9 @@ class Mission {
 		
 		// On prépare et on exécute déjà l'enregistrement du reporting de la porte
 		if ($type == 'porte') {
-			$query = $this->link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = :militant WHERE `mission_id` = :mission AND MD5(`contact_id`) = :element');
+			$query = $this->link->prepare('UPDATE `items` SET `item_statut` = :statut, `item_reporting_date` = NOW(), `item_reporting_user` = :militant WHERE `mission_id` = :mission AND `contact_id` = :element');
 		} elseif ($type == 'boitage') {
-			$query = $this->link->prepare('UPDATE `boitage` SET `boitage_statut` = :statut, `boitage_date` = NOW(), `boitage_militant` = :militant WHERE `mission_id` = :mission AND MD5(`immeuble_id`) = :element');
+			$query = $this->link->prepare('UPDATE `items` SET `item_statut` = :statut, `item_reporting_date` = NOW(), `item_reporting_user` = :militant WHERE `mission_id` = :mission AND `immeuble_id` = :element');
 		}
 		$query->bindParam(':statut', $statut);
 		$query->bindParam(':militant', $userId, PDO::PARAM_INT);
@@ -530,12 +535,6 @@ class Mission {
 		
 		// S'il s'agit un porte à porte, on ajoute un événement pour le contact
 		if ($type == 'porte') {
-			// On recherche l'identifiant en clair du contact vu
-			$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`contact_id`) = :contact');
-			$query->bindParam(':contact', $electeur);
-			$query->execute();
-			$contact = $query->fetch(PDO::FETCH_NUM);
-			
 			// On prépare l'objet de l'historique
 			$type_historique = array(
 				'porte'   => 'Porte à porte',
@@ -554,7 +553,7 @@ class Mission {
 			
 			// On rajoute une entrée d'historique pour le contact en question
 			$query = $this->link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`, `campagne_id`) VALUES (:contact, :compte, "porte", NOW(), :objet, :campagne)');
-			$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+			$query->bindParam(':contact', $electeur, PDO::PARAM_INT);
 			$query->bindParam(':compte', $userId, PDO::PARAM_INT);
 			$query->bindParam(':objet', $objet_historique);
 			$query->bindParam(':campagne', $mission['mission_id'], PDO::PARAM_INT);
@@ -564,7 +563,7 @@ class Mission {
 		// s'il s'agit d'un boîtage et que l'immeuble a été fait, on fait un élément d'historique pour tous les habitants électeurs déclarés dans l'immeuble concerné
 		elseif ($type == 'boitage' && $statut == 2) {
     		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
-    		$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`immeuble_id`) = :immeuble OR MD5(`adresse_id`) = :immeuble');
+    		$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble OR `adresse_id` = :immeuble');
     		$query->bindParam(':immeuble', $electeur);
     		$query->execute();
     		$contacts = $query->fetchAll(PDO::FETCH_NUM);
@@ -642,6 +641,54 @@ class Mission {
 		// On retourne le tableau des identifiants
 		return $query->fetchAll(PDO::FETCH_NUM);
 	}
+	
+	
+	/**
+	 * Récupère tous les items à visiter d'une rue, par immeubles
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   int    $rue       Identifiant de la rue demandée
+	 * @result  array             Liste des items à voir
+	 */
+
+    public function items($rue) {
+        // On récupère l'identifiant de la mission
+        $mission = $this->get('mission_id');
+        
+        // On récupère la liste des items
+        $query = $this->link->prepare('SELECT `item_id`, `immeuble_id`, `contact_id` FROM `items` WHERE `mission_id` = :mission AND `rue_id` = :rue AND `item_statut` = 0');
+        $query->bindParam(':mission', $mission);
+        $query->bindParam(':rue', $rue);
+        $query->execute();
+        
+        // S'il existe des items à visiter
+        if ($query->rowCount()) {
+            $items = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            // S'il s'agit d'un porte à porte, on tri les informations par immeubles
+            if ($this->get('mission_type') == 'porte') {
+                $immeubles = array();
+                
+                // On fabrique le tableau des immeubles
+                foreach ($items as $item) {
+                    $immeubles[$item['immeuble_id']][] = $item['contact_id'];
+                }
+                
+                return $immeubles;
+            }
+            
+            else {
+                return $items;
+            }
+        }
+        
+        // S'il n'existe pas d'items à visiter
+        else {
+            return false;
+        }
+    }
 	
 	
 	/**
