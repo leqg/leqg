@@ -271,13 +271,10 @@ else {
 	
 	// Si on demande le module d'administration
 	else if ($_GET['page'] == 'administration') {
-		// On charge d'abord le template de header
-		Core::tpl_header();
-		
 		// On regarde si une action spécifique est demandée
-		if (isset($_GET['historique'])) {
+		if (isset($_GET['compte'])) {
 			// On charge le template d'historique
-			Core::tpl_load('admin', 'historique');
+			Core::tpl_load('admin', 'user');
 		}	
 			
 		// Sinon, on charge la page de gestion des utilisateurs	
@@ -285,9 +282,6 @@ else {
 			// Template de gestion des comptes utilisateurs
 			Core::tpl_load('admin', 'users');
 		}
-		
-		// On termine en chargeant le template de footer
-		Core::tpl_footer();
 	}
 	
 	

@@ -182,7 +182,7 @@ class User {
 		$client = Configuration::read('ini')['LEQG']['compte'];
 		
 		// On effectue la recherche
-		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `auth_level` >= :authlevel');
+		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `auth_level` >= :authlevel ORDER BY `firstname`, `lastname` ASC');
 		$query->bindParam(':client', $client);
 		$query->bindParam(':authlevel', $auth_level, PDO::PARAM_INT);
 		$query->execute();
@@ -215,6 +215,37 @@ class User {
 		// On récupère les résultats et on affiche le nom et le prénom
 		$data = $query->fetch(PDO::FETCH_NUM);
 		return mb_convert_case($data[0], MB_CASE_TITLE) . ' ' . mb_convert_case($data[1], MB_CASE_UPPER);
+	}
+	
+	
+	/**
+	 * Récupère les infos selon un ID
+	 *
+	 * @author  Damien Senger
+	 * @version 1.0
+	 * 
+	 * @param   int     $id     Identifiant du compte dont nous souhaitons récupérer les infos
+	 * 
+	 * @return  array           Informations
+	 */
+	 
+	public static function infos( $id ) {
+		// On prépare le lien à la base de données centrale
+		$link = Configuration::read('db.core');
+		$client = Configuration::read('ini')['LEQG']['compte'];
+		
+		// On effectue la recherche
+		$query = $link->prepare('SELECT * FROM `compte` WHERE `id` = :id AND `client` = :client');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->bindParam(':client', $client);
+		$query->execute();
+		
+		// On récupère les résultats et on affiche le nom et le prénom
+		if ($query->rowCount()) {
+    		return $query->fetch(PDO::FETCH_ASSOC);
+		} else {
+    		return false;
+		}
 	}
 	
 	
