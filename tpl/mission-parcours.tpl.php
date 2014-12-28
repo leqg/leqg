@@ -24,7 +24,7 @@
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'))); ?>">Supervision</a>
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'militant')); ?>">Militants</a>
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'parcours')); ?>">Parcours</a>
-    <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'options')); ?>">Administration</a>
+    <?php if ($data->get('mission_type') == 'porte') { ?><a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'retours')); ?>">Demandes</a><?php } ?>
 </nav>
 
 <div class="colonne demi gauche">

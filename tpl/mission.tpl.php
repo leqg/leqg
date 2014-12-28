@@ -27,7 +27,7 @@
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'))); ?>">Supervision</a>
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'militant')); ?>">Militants</a>
     <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'parcours')); ?>">Parcours</a>
-    <a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'options')); ?>">Administration</a>
+    <?php if ($data->get('mission_type') == 'porte') { ?><a href="<?php Core::tpl_go_to('mission', array('code' => $data->get('mission_hash'), 'admin' => 'retours')); ?>">Demandes</a><?php } ?>
 </nav>
 
 <div class="colonne demi gauche">
@@ -97,19 +97,31 @@
 				return $pourcentage;
 			}
 		?>
-		<div id="avancementMission"><!--
-		 --><div class="fait" style="width: <?php echo pourcentage($nombre['fait'], $nombre['total']); ?>%;"><span>Portion&nbsp;réalisée&nbsp;de&nbsp;la&nbsp;mission&nbsp;:&nbsp;<?php echo pourcentage($nombre['fait'], $nombre['total']); ?>&nbsp;%</span>&nbsp;&nbsp;&nbsp;<?php echo $parcours['proportion']; ?>&nbsp;%</div><!--
-	 --></div>
-	 
-	    <?php if($data->get('mission_type') == 'porte' && $nombre['fait']) : ?>
-		<h4>Détail des portes frappées</h4>
-		<div id="avancementMission"><!--
-		 --><div class="ouvert" style="width: <?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>%;"><span>Portes&nbsp;ouvertes&nbsp;:&nbsp;<?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>&nbsp;%</span></div><!--
-		 --><div class="procuration" style="width: <?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>%;"><span>Procurations&nbsp;demandées&nbsp;:&nbsp;<?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>&nbsp;%</span></div><!--
-		 --><div class="contact" style="width: <?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>%;"><span>Contact&nbsp;souhaité&nbsp;:&nbsp;<?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>&nbsp;%</span></div><!--
-		 --><div class="absent" style="width: <?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>%;"><span>Contact&nbsp;absent&nbsp;:&nbsp;<?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>&nbsp;%</span></div><!--
-		 --><div class="npai" style="width: <?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>%;"><span>Adresse&nbsp;erronée&nbsp;:&nbsp;<?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>&nbsp;%</span></div><!--
-	 --></div>
+		<?php if ($nombre['total']) : ?>
+    		<div id="avancementMission"><!--
+    		 --><div class="fait" style="width: <?php echo pourcentage($nombre['fait'], $nombre['total']); ?>%;"><span>Portion&nbsp;réalisée&nbsp;de&nbsp;la&nbsp;mission&nbsp;:&nbsp;<?php echo pourcentage($nombre['fait'], $nombre['total']); ?>&nbsp;%</span>&nbsp;&nbsp;&nbsp;<?php echo $parcours['proportion']; ?>&nbsp;%</div><!--
+    	 --></div>
+    	 
+    	    <?php if ($data->get('mission_type') == 'porte' && $nombre['fait']) : ?>
+    		<h4>Détail des portes frappées</h4>
+    		<div id="avancementMission"><!--
+    		 --><div class="ouvert" style="width: <?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>%;"><span>Portes&nbsp;ouvertes&nbsp;:&nbsp;<?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+    		 --><div class="procuration" style="width: <?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>%;"><span>Procurations&nbsp;demandées&nbsp;:&nbsp;<?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+    		 --><div class="contact" style="width: <?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>%;"><span>Contact&nbsp;souhaité&nbsp;:&nbsp;<?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+    		 --><div class="absent" style="width: <?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>%;"><span>Contact&nbsp;absent&nbsp;:&nbsp;<?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+    		 --><div class="npai" style="width: <?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>%;"><span>Adresse&nbsp;erronée&nbsp;:&nbsp;<?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+    	 --></div>
+    	    <?php endif; ?>
+    	    
+    		<h4>Statistiques</h4>
+    		
+    		<ul class="statistiquesMission">
+    			<li>Mission réalisée à <strong><?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?></strong>&nbsp;%</li>
+    			<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;électeurs concernés par cette mission</li>
+    			<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
+    		</ul>
+	    <?php else : ?>
+    	    <p>Cette mission n'a pas encore de parcours.</p>
 	    <?php endif; ?>
     </section>
 </div>

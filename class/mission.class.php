@@ -593,7 +593,7 @@ class Mission {
 	
 	public function nombre_procurations() {
 		// On calcule le nombre de procurations demandées
-		$query = $this->link->prepare('SELECT `porte_id` FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = 3');
+		$query = $this->link->prepare('SELECT `item_id` FROM `items` WHERE `mission_id` = :mission AND `item_statut` = 3');
 		$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 		$query->execute();
 		
@@ -613,7 +613,7 @@ class Mission {
 	
 	public function nombre_recontacts() {
 		// On calcule le nombre de recontacs demandés
-		$query = $this->link->prepare('SELECT `porte_id` FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = 4');
+		$query = $this->link->prepare('SELECT `item_id` FROM `items` WHERE `mission_id` = :mission AND `item_statut` = 4');
 		$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 		$query->execute();
 		
@@ -634,7 +634,7 @@ class Mission {
 	
 	public function liste_contacts( $statut ) {
 		// On réalise le tri
-		$query = $this->link->prepare('SELECT `contact_id` FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = :statut ORDER BY `porte_date` DESC');
+		$query = $this->link->prepare('SELECT `contact_id` FROM `items` WHERE `mission_id` = :mission AND `item_statut` = :statut ORDER BY `item_reporting_date` DESC');
 		$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 		$query->bindParam(':statut', $statut, PDO::PARAM_INT);
 		$query->execute();

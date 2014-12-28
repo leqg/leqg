@@ -410,7 +410,7 @@ class Carto {
 		$query = $link->prepare('SELECT * FROM `rues` WHERE SHA2(`rue_id`, 256) = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
-		Core::debug($query);
+		
 		// On retourne les résultats
 		return $query->fetch(PDO::FETCH_ASSOC);
 	}
