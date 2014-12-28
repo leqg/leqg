@@ -692,6 +692,38 @@ class Mission {
 	
 	
 	/**
+	 * Récupère tous les items à visiter d'un immeuble
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+	 * 
+	 * @param   int    $immeuble  Identifiant de la rue demandée
+	 * @result  array             Liste des items à voir
+	 */
+
+    public function items_immeuble($immeuble) {
+        // On récupère l'identifiant de la mission
+        $mission = $this->get('mission_id');
+        
+        // On récupère la liste des items
+        $query = $this->link->prepare('SELECT `item_id`, `immeuble_id`, `contact_id` FROM `items` WHERE `mission_id` = :mission AND `immeuble_id` = :immeuble AND `item_statut` = 0');
+        $query->bindParam(':mission', $mission);
+        $query->bindParam(':immeuble', $immeuble);
+        $query->execute();
+        
+        // S'il existe des items à visiter
+        if ($query->rowCount()) {
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
+        // S'il n'existe pas d'items à visiter
+        else {
+            return false;
+        }
+    }
+	
+	
+	/**
 	 * Calcule les contacts selon le statut demandé pour la mission ouverte (pour le porte à porte)
 	 *
 	 * @author  Damien Senger <mail@damiensenger.me>

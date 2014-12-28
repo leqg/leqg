@@ -72,6 +72,17 @@ a {
 			text-decoration: none;
 		}
 	}
+	
+	&.bouton {
+    	display: block;
+    	border: 1px solid $gris;
+    	border-radius: .33em;
+    	line-height: 2em;
+    	margin: 1.5em auto;
+    	padding: .33em 1em .1em;
+    	text-align: center;
+    	width: 200px;
+	}
 }
 
 input,
@@ -317,38 +328,6 @@ ul.listeImmeubles {
 			margin: 0 .25em;
 			padding: 0 .5em;
 			text-align: center;
-		}
-		
-		& > button.choix {
-			position: absolute; top: 0; top: calc(50% - 20px); right: 0;
-			background-color: $grisClair;
-			border: none;
-			@include border-radius(50%);
-			color: $grisMoyen;
-			font-family: $icons;
-			font-size: 25px;
-			height: 40px;
-			line-height: 40px;
-			width: 40px;
-		}
-		
-		& > button.report {
-			position: absolute; top: 0; top: calc(50% - 20px); right: 0;
-			display: none;
-			background-color: $vert;
-			border: none;
-			@include border-radius(50%);
-			color: $blanc;
-			font-family: $icons;
-			font-size: 20px;
-			height: 40px;
-			line-height: 40px;
-			width: 40px;
-			
-			&:last-of-type {
-				right: 50px;
-				background-color: $rouge;
-			}
 		}
 	}	
 }

@@ -1,20 +1,30 @@
-<?php Core::tpl_header(); ?>
+<?php
+    // On charge la liste des missions ouvertes où la personne est inscrite
+    $missions_ouvertes = Mission::missions_ouvertes('porte', User::ID());
+    
+    // On charge le header
+	Core::tpl_header();
+?>
 	<h2>Missions de porte-à-porte</h2>
 
 	<ul class="listeMissions">
-		<?php if (Porte::nombre() > 0) : ?>
-		<?php $missions = Porte::missions(); foreach ($missions as $mission) : ?>
-		<a href="<?php Core::tpl_go_to('porte', array('mission' => md5($mission['mission_id']))); ?>" class="nostyle">
-			<li>
-				<h4><?php echo $mission['mission_nom']; ?></h4>
-				<?php if (!is_null($mission['mission_deadline'])) : ?><p><span>Deadline :</span> <strong><?php echo date('d/m/Y', strtotime($mission['mission_deadline'])); ?></strong></p><?php endif; ?>
-			</li>
-		</a>
-		<?php endforeach; ?>
-		<?php else : ?>
+		<?php 
+    		if ($missions_ouvertes) :
+        		foreach ($missions_ouvertes as $mission_ouverte) : $mission = new Mission(md5($mission_ouverte)); $deadline = DateTime::createFromFormat('Y-m-d', $mission->get('mission_deadline'));
+        ?>
+		<li>
+		    <a href="<?php Core::tpl_go_to('mission', array('code' => $mission->get('mission_hash'))); ?>" class="nostyle">
+    		    <h4><?php echo $mission->get('mission_nom'); ?></h4>
+				<?php if ($mission->get('mission_deadline')) : ?><p><span>Deadline :</span> <strong><?php echo $deadline->format('d/m/Y'); ?></strong></p><?php endif; ?>
+		    </a>
+		</li>
+		<?php 
+    		    endforeach;
+            else :
+        ?>
 		<li class="vide">
 			<p>Aucune mission actuellement</p>
 		</li>
-		<?php endif; ?>
+        <?php endif; ?>
 	</ul>
 <?php Core::tpl_footer(); ?>

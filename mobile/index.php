@@ -6,6 +6,10 @@ $loading['begin'] = microtime();
 // On appelle le fichier d'inclusion du coeur du système
 require_once('includes.php');
 
+// On vérifie juste qu'un cookie existe auquel cas, on redirige vers l'auth system
+//if (!isset($_COOKIE['leqg'])) header('Location: http://auth.leqg.info');
+//Core::debug($_GET['page'], false);
+
 
 /** ON RÉALISE LE TRAITEMENT AUTOMATISÉ DE CHARGEMENT DES TEMPLATES SELON LES PAGES APPELÉES **/
 
@@ -36,6 +40,40 @@ if (isset($_GET['page'])) :
 		Core::tpl_load('resultats');
 	
 		
+	elseif ($_GET['page'] == 'mission') :
+	
+	    if (isset($_GET['rue'], $_GET['immeuble'], $_GET['electeur'])) :
+	    
+	        Core::tpl_load('mission', 'electeur');
+	
+	    elseif (isset($_GET['rue'], $_GET['immeuble'])) :
+	    
+	        Core::tpl_load('mission', 'immeuble');
+	
+	    elseif (isset($_GET['rue'])) :
+	    
+	        Core::tpl_load('mission', 'rue');
+	       
+	    else :
+	    
+	        Core::tpl_load('mission');
+	       
+        endif;
+    
+    
+    elseif ($_GET['page'] == 'report') :
+    
+        if (isset($_GET['action'])) :
+        
+            Core::tpl_load('report', 'coord');
+        
+        else : 
+        
+            Core::tpl_load('report');
+        
+        endif;
+	
+	
 	// S'il s'agit du module contact
 	elseif ($_GET['page'] == 'contacts') :
 		
@@ -141,7 +179,7 @@ $query = 'INSERT INTO	`chargements` (`user_id`,
 									   `chargement_page`,
 									   `chargement_plateforme`,
 									   `chargement_temps`)
-							VALUES	  (' . $_COOKIE['leqg-user'] . ',
+							VALUES	  (' . $_COOKIE['leqg'] . ',
 									   "' . $page . '",
 									   "mobile",
 									   "' . $loading['time-sql'] . '")';
