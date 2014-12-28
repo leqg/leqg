@@ -249,10 +249,16 @@ class User {
 		// On prépare le lien à la base de données centrale
 		$link = Configuration::read('db.core');
 		$client = Configuration::read('ini')['LEQG']['compte'];
-		$notUsers = implode(',', $sauf);
 		
-		// On effectue la recherche
-		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `id` NOT IN (' . $notUsers . ')');
+		if (empty($sauf)) {
+    		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client');
+		}
+		
+		else {
+    		$notUsers = implode(',', $sauf);
+    		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `id` NOT IN (' . $notUsers . ')');
+		}
+		
 		$query->bindParam(':client', $client);
 		$query->execute();
 		

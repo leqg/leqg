@@ -488,7 +488,7 @@ class Mission {
 			// Si la mission est un boîtage, on enregistre les immeubles
 			else {
 				foreach ($immeubles as $immeuble) {
-					$query = $this->link->prepare('INSERT INTO `boitage` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+					$query = $this->link->prepare('INSERT INTO `items` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
 					$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 					$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 					$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);

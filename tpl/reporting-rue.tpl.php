@@ -10,6 +10,8 @@
 	$ville = Carto::ville(Carto::villeParRue($_GET['rue']));
 	$items = $data->items($_GET['rue']);
 	
+	if (!$items) Core::tpl_go_to('reporting', array('mission' => $_GET['mission']), true);
+	
 	// typologie
 	$typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';
 
@@ -28,9 +30,11 @@
             if ($data->get('mission_type') == 'porte') :
                 // Pour chaque immeuble trouvé, on regarde quel est son réel numéro
                 $numeros = array();
+                $numeros_sauv = array();
                 foreach ($items as $immeuble => $electeurs) {
                     $infos = Carto::immeuble($immeuble);
-                    $numeros[$immeuble] = $infos['immeuble_numero'];
+                    $numeros[$immeuble] = preg_replace('#[^0-9]+#', '', $infos['immeuble_numero']);
+                    $numeros_sauv[$immeuble] = $infos['immeuble_numero'];
                 }
                 
                 // On tri les immeubles
@@ -72,8 +76,41 @@
             
             // Affichage s'il s'agit d'un boîtage
             else :
+                // Pour chaque immeuble trouvé, on regarde quel est son réel numéro
+                $numeros = array();
+                $numeros_sauv = array();
+                foreach ($items as $immeuble) {
+                    $infos = Carto::immeuble($immeuble['immeuble_id']);
+                    $numeros[$immeuble['immeuble_id']] = preg_replace('#[^0-9]+#', '', $infos['immeuble_numero']);
+                    $numeros_sauv[$immeuble['immeuble_id']] = $infos['immeuble_numero'];
+                }
+                
+                // On tri les immeubles
+                asort($numeros);
+                
+                // On fait la boucle des immeubles
         ?>
             <h4>Reporting de la mission de boîtage</h4>
+            		        
+            <table class="reporting">
+    	        <thead>
+    		        <tr>
+        		        <th style="font-size: .95em;">Électeur</th>
+        		        <th class="petit" style="font-size: .95em;">Non&nbsp;boîté</th>
+        		        <th class="petit" style="font-size: .95em;">Boîté</th>
+    		        </tr>
+    	        </thead>
+    	        <tbody>
+    		        <?php foreach ($numeros as $immeuble => $numero) : ?>
+    		        <tr class="ligne-electeur-<?php echo $immeuble; ?>">
+        		        <td><?php echo $numeros_sauv[$immeuble]; ?> <?php echo $rue['rue_nom']; ?></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input  type="radio" id="electeur-<?php echo $immeuble; ?>-a" name="electeur-<?php echo $immeuble; ?>" value="1"><label for="electeur-<?php echo $immeuble; ?>-a" data-contact="<?php echo md5($immeuble); ?>" data-val="1"><span><span></span></span></label></div></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input  type="radio" id="electeur-<?php echo $immeuble; ?>-o" name="electeur-<?php echo $immeuble; ?>" value="2"><label for="electeur-<?php echo $immeuble; ?>-o" data-contact="<?php echo md5($immeuble); ?>" data-val="2"><span><span></span></span></label></div></td>
+    		        </tr>
+    		        <?php endforeach; ?>
+    	        </tbody>
+            </table>
+            <button type="submit" style="font-size: 1em;">Enregistrer les modifications</button>
         <?php endif; ?>
     </section>
 </form>
@@ -92,7 +129,7 @@
 		email: 'tech@leqg.info',
 		country: 'France',
 		city: "<?php echo $ville['commune_nom']; ?>",
-		street: "<?php echo $numero . ' ' . $rue['rue_nom']; ?>"
+		street: "<?php echo $numeros_sauv[$immeuble] . ' ' . $rue['rue_nom']; ?>"
 	}
 	
 	// On récupère le JSON contenant les coordonnées de la rue
@@ -111,7 +148,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo $numero . ' ' . $rue['rue_nom']; ?>"
+			title: "<?php echo $numeros_sauv[$immeuble] . ' ' . $rue['rue_nom']; ?>"
 		}).addTo(map);
 	});
 	<?php endforeach; ?>

@@ -11,8 +11,8 @@
 	<?php if (User::auth_lvl() >= 5) : ?><a href="<?php Core::tpl_go_to('porte'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a><?php endif; ?>
 	<h2 class="titre" data-user="<?php echo User::ID(); ?>">Porte à porte</h2>
 	
+	<?php if ($invitations) : ?>
 	<section id="missions">
-		<?php if ($invitations) : ?>
 		<h3 class="titrebloc">Invitations en cours</h3>
 		
 		<ul class="liste-missions">
@@ -25,9 +25,11 @@
     		</li>
     		<?php endforeach; ?>
 		</ul>
-		<?php endif; ?>
+	</section>
+	<?php endif; ?>
 		
-		<?php if ($missions_ouvertes) : ?>
+	<?php if ($missions_ouvertes) : ?>
+	<section id="missions">
 		<h3 class="titrebloc">Missions ouvertes auxquelles vous participez</h3>
 		
 		<ul class="liste-missions">
@@ -43,7 +45,13 @@
     		</li>
     		<?php endforeach; ?>
 		</ul>
-		<?php endif; ?>
 	</section>
+	<?php endif; ?>
+			
+	<?php if (!$invitations && !$missions_ouvertes) : ?>
+	<section class="icone" id="aucuneMission">
+		<h3>Aucune mission lancée actuellement !</h3>
+	</section>
+	<?php endif; ?>
 	
 <?php Core::tpl_footer(); ?>

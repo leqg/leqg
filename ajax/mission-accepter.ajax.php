@@ -7,10 +7,11 @@
         
         // On ouvre la mission
         $mission = new Mission($code);
+        $type = ($mission->get('mission_type') == 'porte') ? 'porte' : 'boite';
         
         // On change le statut de la mission comme ouvert et on redirige
         if ($mission->reponse(1, $user)) {
-            Core::tpl_go_to('porte', array('action' => 'missions'), true);
+            Core::tpl_go_to($type, array('action' => 'missions'), true);
         }
         
         // En cas d'erreur, on affiche un code d'erreur

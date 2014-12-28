@@ -117,8 +117,8 @@
     		
     		<ul class="statistiquesMission">
     			<li>Mission réalisée à <strong><?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?></strong>&nbsp;%</li>
-    			<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;électeurs concernés par cette mission</li>
-    			<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
+    			<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;<?php echo ($data->get('mission_type') == 'porte') ? 'électeurs' : 'immeubles'; ?> concernés par cette mission</li>
+    			<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;<?php echo ($data->get('mission_type') == 'porte') ? 'électeurs' : 'immeubles'; ?> à visiter.</li>
     		</ul>
 	    <?php else : ?>
     	    <p>Cette mission n'a pas encore de parcours.</p>

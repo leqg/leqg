@@ -8,31 +8,57 @@
     // On récupère les données du formulaire
     $reporting = $_POST;
     
-    // On transforme les données pour avoir un tableau electeur => statut
-    $coordonnees = array();
-    foreach ($reporting as $report => $statut) {
-        // On récupère l'identifiant de l'électeur
-        $electeur = explode('-', $report);
-        
-        // On retraite l'enregistrement
-        $reporting[$electeur[1]] = $statut;
-        
-        // On supprime l'ancien enregistrement
-        unset($reporting[$report]);
-        
-        // Si c'est une demande de recontact, on le laisse dans un tableau de côté pour récupérer les coordonnées
-        if ($statut == 4) {
-            $coordonnees[] = $electeur[1];
+    // S'il s'agit d'un porte à porte
+    if ($data->get('mission_type') == 'porte') {
+        // On transforme les données pour avoir un tableau electeur => statut
+        $coordonnees = array();
+        foreach ($reporting as $report => $statut) {
+            // On récupère l'identifiant de l'électeur
+            $electeur = explode('-', $report);
+            
+            // On retraite l'enregistrement
+            $reporting[$electeur[1]] = $statut;
+            
+            // On supprime l'ancien enregistrement
+            unset($reporting[$report]);
+            
+            // Si c'est une demande de recontact, on le laisse dans un tableau de côté pour récupérer les coordonnées
+            if ($statut == 4) {
+                $coordonnees[] = $electeur[1];
+            }
         }
+        
+        // Pour chaque report, on l'enregistre dans la base de données
+        foreach ($reporting as $report => $statut) {
+            $data->reporting($report, $statut);
+        }
+        
+        // S'il n'y a pas de coordonnées à récupérer, on redirige
+        if (!count($coordonnees)) Core::tpl_go_to('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
     }
     
-    // Pour chaque report, on l'enregistre dans la base de données
-    foreach ($reporting as $report => $statut) {
-        $data->reporting($report, $statut);
+    // S'il s'agit d'un boîtage
+    else {
+        // On transforme les données pour avoir un tableau electeur => statut
+        foreach ($reporting as $report => $statut) {
+            // On récupère l'identifiant de l'électeur
+            $electeur = explode('-', $report);
+            
+            // On retraite l'enregistrement
+            $reporting[$electeur[1]] = $statut;
+            
+            // On supprime l'ancien enregistrement
+            unset($reporting[$report]);
+        }
+        
+        // Pour chaque report, on l'enregistre dans la base de données
+        foreach ($reporting as $report => $statut) {
+            $data->reporting($report, $statut);
+        }
+        
+        Core::tpl_go_to('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
     }
     
-    // S'il n'y a pas de coordonnées à récupérer, on redirige
-    if (!count($coordonnees)) Core::tpl_go_to('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
 
     // On charge le header
 	Core::tpl_header();

@@ -11,21 +11,21 @@
 	// On charge le template de header
 	Core::tpl_header();
 ?>
-		
+	<a href="<?php Core::tpl_go_to('boite', array('action' => 'missions')); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Interface militant</button></a>	
 	<h2>Campagnes de boîtage</h2>
 	
 	<?php if ($missions) : ?>
 		<section id="missions">
 			<ul class="liste-missions">
-				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); ?>
+				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); $parcours = $mission->statistiques_parcours(); ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('boite', array('mission' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
+    	    	    <a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
+					<a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
 						<?php if (!$mission->nombre_immeubles(0)) : ?>
-							Cette mission de boîtage est aujourd'hui terminée.<br>
 							Il n'y a plus d'immeuble à visiter.
 						<?php else : ?>
-							Cette mission comporte encore <strong><?php echo $mission->nombre_immeubles(0); ?></strong> immeubles à boîter.<br>
+							Cette mission comporte encore <strong><?php echo number_format($parcours['attente'], 0, ',', ' '); ?></strong> immeubles à boîter.<br>
 						<?php endif; ?>
 					</p>
 					<p>

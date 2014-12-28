@@ -19,6 +19,7 @@
 			<ul class="liste-missions">
 				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); ?>
 				<li>
+    	    	    <a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
 					<a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
 						<?php if (!$mission->nombre_contacts(0)) : ?>
