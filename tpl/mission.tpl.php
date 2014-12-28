@@ -79,6 +79,37 @@
 
 <div class="colonne demi droite">
     <section class="contenu demi">
-        <h4>Supervision du parcours</h4>
+        <h4>Supervision de la mission</h4>
+    
+		<?php
+			$nombre['attente']     = $parcours['attente'];
+			$nombre['absent']      = $parcours['absent'];
+			$nombre['ouvert']      = $parcours['ouvert'];
+			$nombre['procuration'] = $parcours['procuration'];
+			$nombre['contact']     = $parcours['contact'];
+			$nombre['npai']        = $parcours['npai'];
+			$nombre['total']       = $parcours['total'];
+			$nombre['fait']        = $parcours['fait'];
+			
+			function pourcentage( $actu , $total ) {
+				$pourcentage = $actu * 100 / $total;
+				$pourcentage = str_replace(',', '.', $pourcentage);
+				return $pourcentage;
+			}
+		?>
+		<div id="avancementMission"><!--
+		 --><div class="fait" style="width: <?php echo pourcentage($nombre['fait'], $nombre['total']); ?>%;"><span>Portion&nbsp;réalisée&nbsp;de&nbsp;la&nbsp;mission&nbsp;:&nbsp;<?php echo pourcentage($nombre['fait'], $nombre['total']); ?>&nbsp;%</span>&nbsp;&nbsp;&nbsp;<?php echo $parcours['proportion']; ?>&nbsp;%</div><!--
+	 --></div>
+	 
+	    <?php if($data->get('mission_type') == 'porte' && $nombre['fait']) : ?>
+		<h4>Détail des portes frappées</h4>
+		<div id="avancementMission"><!--
+		 --><div class="ouvert" style="width: <?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>%;"><span>Portes&nbsp;ouvertes&nbsp;:&nbsp;<?php echo pourcentage($nombre['ouvert'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+		 --><div class="procuration" style="width: <?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>%;"><span>Procurations&nbsp;demandées&nbsp;:&nbsp;<?php echo pourcentage($nombre['procuration'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+		 --><div class="contact" style="width: <?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>%;"><span>Contact&nbsp;souhaité&nbsp;:&nbsp;<?php echo pourcentage($nombre['contact'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+		 --><div class="absent" style="width: <?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>%;"><span>Contact&nbsp;absent&nbsp;:&nbsp;<?php echo pourcentage($nombre['absent'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+		 --><div class="npai" style="width: <?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>%;"><span>Adresse&nbsp;erronée&nbsp;:&nbsp;<?php echo pourcentage($nombre['npai'], $nombre['fait']); ?>&nbsp;%</span></div><!--
+	 --></div>
+	    <?php endif; ?>
     </section>
 </div>

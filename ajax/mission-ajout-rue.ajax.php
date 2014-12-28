@@ -1,19 +1,19 @@
 <?php
 
 	// On récupère les informations
-	if (isset($_POST['rue'], $_POST['mission']) || isset($_GET['rue'], $_GET['mission'])) {
+	if (isset($_POST['rue'], $_POST['code']) || isset($_GET['rue'], $_GET['code'])) {
 		// On récupère les données
 		$rue = (isset($_POST['rue'])) ? $_POST['rue'] : $_GET['rue'];
-		$mission = (isset($_POST['mission'])) ? $_POST['mission'] : $_GET['mission'];
+		$code = (isset($_POST['code'])) ? $_POST['code'] : $_GET['code'];
 		
 		// On ouvre la mission
-		$mission = new Mission($mission);
+		$mission = new Mission($code);
 		
 		// On ajoute la rue
 		$mission->ajoutRue($rue);
 		
 		// On retourne un code de réussite
-		http_response_code(200);
+		Core::tpl_go_to('mission', array('code' => $code, 'admin' => 'parcours'), true);
 	}
 	
 	else {

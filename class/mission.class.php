@@ -293,7 +293,147 @@ class Mission {
      */
     
     public function statistiques_parcours() {
+        // On récupère l'identifiant de la mission
+        $mission = $this->get('mission_id');
         
+        // On récupère tous les items à visiter dans la rue
+        $query = $this->link->prepare('SELECT * FROM `items` WHERE `mission_id` = :mission');
+        $query->bindParam(':mission', $mission);
+        $query->execute();
+        
+        if ($query->rowCount()) {
+            $items = $query->fetchAll(PDO::FETCH_ASSOC);
+            $stats = array(
+                'attente' => 0,
+                'absent' => 0,
+                'ouvert' => 0,
+                'procuration' => 0,
+                'contact' => 0,
+                'npai' => 0
+            );
+            
+            foreach ($items as $item) {
+                // On regarde si ce n'est pas encore fait
+                if ($item['item_statut'] == 0) {
+                    $stats['attente']++;
+                }
+                
+                else {
+                    if ($item['item_statut'] ==  1) $stats['absent']++;
+                    if ($item['item_statut'] ==  2) $stats['ouvert']++;
+                    if ($item['item_statut'] ==  3) $stats['procuration']++;
+                    if ($item['item_statut'] ==  4) $stats['contact']++;
+                    if ($item['item_statut'] == -1) $stats['npai']++;
+                }
+            }
+            
+            // On calcule la réalisation
+            $stats['total'] = array_sum($stats);
+            $stats['fait'] = $stats['total'] - $stats['attente'];
+            $stats['proportion'] = ceil($stats['fait'] * 100 / $stats['total']);
+            
+            return $stats;
+        }
+        
+        else {
+            return false;
+        }
+    }
+    
+	
+	
+	/**
+	 * Récupère la liste des rues à parcourir dans la mission
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @result  array                   Liste des rues à parcourir
+     */
+    
+    public function rues() {
+        $mission = $this->get('mission_id');
+        
+        // On effectue une récupération de toutes les rues de la mission
+        $query = $this->link->prepare('SELECT DISTINCT `rue_id` FROM `items` WHERE `mission_id` = :mission');
+        $query->bindParam(':mission', $mission);
+        $query->execute();
+        
+        // On vérifie s'il existe des rues à parcourir
+        if ($query->rowCount()) {
+            $rues = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($rues as $key => $rue) {
+                $query = $this->link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :rue');
+                $query->bindParam(':rue', $rue['rue_id']);
+                $query->execute();
+                $street = $query->fetch(PDO::FETCH_ASSOC);
+                
+                $rues[$key] = $street;
+            }
+            
+            // On tri le tableau selon rue_nom
+            Core::triMultidimentionnel($rues, 'rue_nom');
+            
+            return $rues;
+        }
+        
+        // Sinon, on ne retourne rien
+        else {
+            return false;
+        }
+    }
+    
+	
+	
+	/**
+	 * Récupère les statistiques de réalisation de la rue
+	 *
+	 * @author  Damien Senger <mail@damiensenger.me>
+	 * @version 1.0
+     * 
+     * @param   int          $id        Identifiant de la rue
+     * @result  array                   Liste des rues à parcourir
+     */
+    
+    public function statistique_rue($id) {
+        // On récupère l'identifiant de la mission
+        $mission = $this->get('mission_id');
+        
+        // On récupère tous les items à visiter dans la rue
+        $query = $this->link->prepare('SELECT * FROM `items` WHERE `mission_id` = :mission AND `rue_id` = :rue');
+        $query->bindParam(':mission', $mission);
+        $query->bindParam(':rue', $id);
+        $query->execute();
+        
+        if ($query->rowCount()) {
+            $items = $query->fetchAll(PDO::FETCH_ASSOC);
+            $stats = array(
+                'fait' => 0,
+                'attente' => 0
+            );
+            
+            foreach ($items as $item) {
+                // On regarde si ce n'est pas encore fait
+                if ($item['item_statut'] == 0) {
+                    $stats['attente']++;
+                }
+                
+                else {
+                    $stats['fait']++;
+                }
+            }
+            
+            // On calcule la réalisation
+            $stats['total'] = array_sum($stats);
+            $stats['proportion'] = ceil($stats['fait'] / $stats['total']);
+            
+            return $stats;
+        }
+        
+        else {
+            return false;
+        }
     }
     
 	
@@ -330,7 +470,7 @@ class Mission {
 					
 					// Pour chaque électeur, on créé une porte à frapper
 					foreach ($contacts as $contact) {
-						$query = $this->link->prepare('INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
+						$query = $this->link->prepare('INSERT INTO `items` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
 						$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 						$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 						$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);

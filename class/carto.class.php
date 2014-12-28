@@ -150,7 +150,7 @@ class Carto {
 		$search = '%'.$search.'%';
 		
 		// On exécute la requête de recherche
-		$query = $link->prepare('SELECT *, SHA2(`bureau_id`, 256) AS `bureau_code` FROM `bureaux` WHERE `bureau_numero` LIKE :search OR `bureau_nom` LIKE :search ORDER BY `bureau_numero`, `bureau_nom` ASC');
+		$query = $link->prepare('SELECT *, SHA2(`bureau_id`, 256) AS `bureau_hash` FROM `bureaux` WHERE `bureau_code` LIKE :search OR `bureau_nom` LIKE :search ORDER BY `bureau_code`, `bureau_nom` ASC');
 		$query->bindParam(':search', $search, PDO::PARAM_STR);
 		$query->execute();
 		
@@ -410,7 +410,7 @@ class Carto {
 		$query = $link->prepare('SELECT * FROM `rues` WHERE SHA2(`rue_id`, 256) = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
-		
+		Core::debug($query);
 		// On retourne les résultats
 		return $query->fetch(PDO::FETCH_ASSOC);
 	}
@@ -427,7 +427,16 @@ class Carto {
 	 */
 
 	public static function rue( $id ) {
-		return self::rue_secure(hash('sha256', $id));
+		// On lance la connexion à la base de données
+		$link = Configuration::read('db.link');
+		
+		// On exécute la requête de recherche des informations
+		$query = $link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :id');
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		
+		// On retourne les résultats
+		return $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -629,7 +638,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 			
 		// On exécute la requête de récupération des immeubles correspondant
-		$query = $link->prepare('SELET * FROM `bureaux` WHERE `commune_id` = :ville ORDER BY `bureau_numero`, `bureau_nom` ASC');
+		$query = $link->prepare('SELET * FROM `bureaux` WHERE `commune_id` = :ville ORDER BY `bureau_code`, `bureau_nom` ASC');
 		$query->bindParam(':ville', $ville, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -652,7 +661,7 @@ class Carto {
 		$link = Configuration::read('db.link');
 			
 		// On exécute la requête de récupération des immeubles correspondant
-		$query = $link->prepare('SELET * FROM `bureaux` ORDER `bureau_numero`, `bureau_nom` ASC');
+		$query = $link->prepare('SELET * FROM `bureaux` ORDER `bureau_code`, `bureau_nom` ASC');
 		$query->execute();
 
 		// On retourne les résultats
@@ -1045,7 +1054,7 @@ class Carto {
 		$informations = self::detailAdresse( $immeuble );
 
 		// On retraite les informations
-		$bureau['numero'] = $informations['bureau_numero'];
+		$bureau['numero'] = $informations['bureau_code'];
 		$bureau['nom'] = mb_convert_case($informations['bureau_nom'], MB_CASE_TITLE);
 		$bureau['ville'] = mb_convert_case($informations['commune_nom'], MB_CASE_UPPER);
 		
