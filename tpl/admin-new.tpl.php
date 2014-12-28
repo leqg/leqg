@@ -8,7 +8,7 @@
 
 <h2>Création d'un nouveau compte</h2>
 
-<form action="" method="post">
+<form action="<?php Core::tpl_go_to('administration', array('action' => 'creation')); ?>" method="post">
 	
 	<div class="colonne demi gauche">
     	<section class="contenu demi">

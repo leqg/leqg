@@ -280,6 +280,10 @@ else {
 		elseif (isset($_GET['action']) && $_GET['action'] == 'nouveau') {
     		Core::tpl_load('admin', 'new');
 		}
+		
+		elseif (isset($_GET['action']) && $_GET['action'] == 'creation') {
+    		Core::tpl_load('admin', 'creation');
+		}
 			
 		// Sinon, on charge la page de gestion des utilisateurs	
 		else {

@@ -71,6 +71,8 @@ $api['mail']['from']['nom'] = 'Ne Pas Répondre';
 $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
+Configuration::write('api', $api);
+
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';
 require_once 'class/campagne.class.php';
