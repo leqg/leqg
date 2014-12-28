@@ -17,15 +17,15 @@
 	<?php if ($missions) : ?>
 		<section id="missions">
 			<ul class="liste-missions">
-				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); ?>
+				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); $parcours = $mission->statistiques_parcours(); ?>
 				<li>
     	    	    <a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
 					<a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
-						<?php if (!$mission->nombre_contacts(0)) : ?>
+						<?php if (!$parcours['attente']) : ?>
 							Il n'y a plus d'électeurs à visiter.
 						<?php else : ?>
-							Cette mission comporte encore <strong><?php echo $mission->nombre_contacts(0); ?></strong> électeurs à visiter.<br>
+							Cette mission comporte encore <strong><?php echo number_format($parcours['attente'], 0, ',', ' '); ?></strong> électeurs à visiter.<br>
 						<?php endif; ?>
 					</p>
 					<p>

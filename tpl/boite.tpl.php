@@ -22,7 +22,7 @@
     	    	    <a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
 					<a href="<?php Core::tpl_go_to('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
-						<?php if (!$mission->nombre_immeubles(0)) : ?>
+						<?php if (!$parcours['attente']) : ?>
 							Il n'y a plus d'immeuble à visiter.
 						<?php else : ?>
 							Cette mission comporte encore <strong><?php echo number_format($parcours['attente'], 0, ',', ' '); ?></strong> immeubles à boîter.<br>
