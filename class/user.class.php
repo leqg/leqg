@@ -182,7 +182,7 @@ class User {
 		$client = Configuration::read('ini')['LEQG']['compte'];
 		
 		// On effectue la recherche
-		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `auth_level` >= :authlevel ORDER BY `firstname`, `lastname` ASC');
+		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `auth_level` >= :authlevel AND `auth_level` < 9 ORDER BY `firstname`, `lastname` ASC');
 		$query->bindParam(':client', $client);
 		$query->bindParam(':authlevel', $auth_level, PDO::PARAM_INT);
 		$query->execute();
