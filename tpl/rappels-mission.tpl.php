@@ -45,6 +45,7 @@
 				<li class="tri ajoutTri premierAjoutTri" data-critere="bureau">Ajout d'un bureau de vote</li>
 				<li class="tri ajoutTri" data-critere="rue">Ajout des électeurs d'une rue</li>
 				<li class="tri ajoutTri" data-critere="ville">Ajout des électeurs d'une ville</li>
+				<li class="tri ajoutTri" data-critere="votes">Participation à une élection</li>
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
 			</ul>
 		</section>
@@ -211,6 +212,17 @@
 			</ul>
 			
 			<ul class="listeDesVilles form-liste"></ul>
+		</section>
+		
+		<section class="contenu demi selectionCritere-votes invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection d'une élection</h4>
+			
+			<button class="choixElection long" data-election="mun2008-1" data-clair="Municipales 2008">Municipales 2008</button>
+			<button class="choixElection long" data-election="mun2014-1" data-clair="Municipales 2014 – tour 1">Municipales 2014 – tour 1</button>
+			<button class="choixElection long" data-election="mun2014-2" data-clair="Municipales 2014 – tour 2">Municipales 2014 – tour 2</button>
+			<button class="choixElection long" data-election="eur2014" data-clair="Européennes 2014">Européennes 2014</button>
 		</section>
 			
 		<section class="contenu demi invisible listeFiches">

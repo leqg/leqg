@@ -501,6 +501,30 @@ var rappels = function() {
 	});
 	
 	
+	// Script à la validation d'un nouveau critère de naissance
+	$('.choixElection').click(function() {
+		// On récupère le critère demandé
+		var thema = $(this).data('election');
+		var clair = $(this).data('clair');
+		
+		// On ajoute ce critère à la liste des critères
+		var criteres = $('#listeCriteresTri').val();
+		var newCriteres = criteres + 'vote:' + thema + ';';
+		
+		// On met à jour la liste des critères
+		$('#listeCriteresTri').val(newCriteres);
+		
+		// On ajoute le critère à la liste dans la colonne de gauche
+		$('.premierAjoutTri').before('<li class="tri vote" data-critere="vote" data-valeur="' + thema + '">' + clair + '</li>');
+		
+		// On met à zéro le nombre de fiches déjà affichées
+		$('#nombreFiches').val(0);
+		
+		// On met à jour le listing
+		majListing('debut');
+	});
+	
+	
 	// Script de suppression d'un critère
 	$('.listeTris').on('dblclick', '.tri:not(.ajoutTri)', function() {
 		// On récupère le type

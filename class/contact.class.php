@@ -1188,6 +1188,7 @@ class Contact
 					$birth = array();
 					$bureaux = array();
 					$rues = array();
+					$votes = array();
 					
 					
 					// On sépare les critères de leurs type
@@ -1198,6 +1199,7 @@ class Contact
 						else if ($crit[0] == 'birth') { $birth[] = $crit[1]; }
 						else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; }
 						else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
+						else if ($crit[0] == 'vote') { $votes[] = $crit[1]; }
 					}
 					
 					// On va analyser les critères thématiques pour les ajouter à la condition SQL
@@ -1207,6 +1209,13 @@ class Contact
 							$thema = preg_replace('#[^[:alnum:]]#u', '%', $thema);
 							$criteres[] = '`contact_tags` LIKE "%' . $thema . '%"';
 						}
+					}
+					
+					// On va analyser les critères de votes pour les ajouter à la condition SQL
+					if (count($votes)) {
+    					foreach ($votes as $vote) {
+        					$criteres[] = '`contact_vote_' . $vote . '` = 1';
+    					}
 					}
 					
 					// On va analyser les critères de naissance pour les ajouter à la condition SQL
@@ -1289,7 +1298,7 @@ class Contact
 				$ids = $query->fetchAll(PDO::FETCH_NUM);
 				$contacts = array();
 				foreach ($ids as $id) $contacts[] = $id[0];
-				
+
 				// On retourne la liste des ids de fiches concernées par la requête
 				return $contacts;
 			}			

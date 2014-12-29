@@ -7,6 +7,6 @@
 	$mission = Boite::creation($info);
 	
 	// On redirige vers la page de la mission
-	Core::tpl_go_to('boite', array('mission' => md5($mission)), true);
+	Core::tpl_go_to('mission', array('code' => md5($mission)), true);
 
 ?>

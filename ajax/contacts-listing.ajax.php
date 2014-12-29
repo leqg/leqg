@@ -24,9 +24,9 @@
 			$contact = new Contact(md5($c));
 			$fiches[$c] = $contact->donnees();
 		}
-		
+		Core::debug($fiches);
 		// On transforme le tableau final en JSON
-		$json = json_encode($fiches);
+		$json = json_encode($fiches); Core::debug($json);
 		
 		// On retourne le tableau
 		echo $json;

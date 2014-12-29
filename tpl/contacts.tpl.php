@@ -19,7 +19,7 @@
 		<section class="contenu demi">
 			<ul class="iconesActions">
 				<a href="<?php Core::tpl_go_to('contact', array('operation' => 'creation')); ?>"><li class="new">Nouvelle fiche</li></a>
-				<a href="<?php Core::tpl_go_to('fiche', array('operation' => 'fusion')); ?>"><li class="merge">Fusion de fiches</li></a>
+				<!--<a href="<?php Core::tpl_go_to('fiche', array('operation' => 'fusion')); ?>"><li class="merge">Fusion de fiches</li></a>-->
 			</ul>
 		</section>
 		
@@ -30,8 +30,8 @@
 				<li class="tri ajoutTri premierAjoutTri" data-critere="bureau">Ajout d'un bureau de vote</li>
 				<li class="tri ajoutTri" data-critere="rue">Ajout des électeurs d'une rue</li>
 				<li class="tri ajoutTri" data-critere="ville">Ajout des électeurs d'une ville</li>
+				<li class="tri ajoutTri" data-critere="votes">Participation à une élection</li>
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
-				<li class="tri ajoutTri" data-critere="birth">Ajout d'une date de naissance</li>
 			</ul>
 		</section>
 		
@@ -167,20 +167,15 @@
 			</ul>
 		</section>
 		
-		<section class="contenu demi selectionCritere-birth invisible">
+		<section class="contenu demi selectionCritere-votes invisible">
 			<a href="#" class="fermerColonne">&#xe813;</a>
 
-			<h4>Sélection d'une date de naissance</h4>
+			<h4>Sélection d'une élection</h4>
 			
-			<ul class="formulaire">
-				<li>
-					<label for="choixCritereBirth" class="small">Date à rechercher</label>
-					<span class="form-icon decalage"><input type="text" name="choixCritereBirth" id="choixCritereBirth" placeholder="format jj/mm/aaaa" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
-				</li>
-				<li>
-					<button class="validerChoixCritereBirth">Ajouter le critère de tri</button>
-				</li>
-			</ul>
+			<button class="choixElection long" data-election="mun2008-1" data-clair="Municipales 2008">Municipales 2008</button>
+			<button class="choixElection long" data-election="mun2014-1" data-clair="Municipales 2014 – tour 1">Municipales 2014 – tour 1</button>
+			<button class="choixElection long" data-election="mun2014-2" data-clair="Municipales 2014 – tour 2">Municipales 2014 – tour 2</button>
+			<button class="choixElection long" data-election="eur2014" data-clair="Européennes 2014">Européennes 2014</button>
 		</section>
 		
 		<section class="contenu demi selectionCritere-bureau invisible">

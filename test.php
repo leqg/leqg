@@ -1,7 +1,7 @@
 <?php
 //error_reporting(E_ALL);
 
-//require_once('includes.php');
+require_once('includes.php');
 
 // L'idée, c'est de tester PDO
 
@@ -21,12 +21,18 @@ print_r($link);
 */
 
 //echo 'test';
-
+/*
 // Création d'un cookie pour avoir la paix
 setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', 'localhost');
 setcookie('time', time(), time()+3600*24*7, '/', 'localhost');
 setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', '2a01:e35:2e36:f120:94a7:98aa:5a7:b1d7');
 setcookie('time', time(), time()+3600*24*7, '/', '2a01:e35:2e36:f120:94a7:98aa:5a7:b1d7');
+*/
+
+$query = $link->query('SELECT * FROM `votes`');
+foreach ($query as $vote) {
+    $link->query('UPDATE `contacts` SET `contact_vote_' . $vote['vote_election'] . '` = ' . $vote['vote_participation'] . ' WHERE `contact_id` = ' . $vote['contact_id']);
+}
 
 /*
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système

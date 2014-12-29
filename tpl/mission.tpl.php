@@ -14,6 +14,14 @@
 	// On récupère les statistiques sur le parcours
 	$parcours = $data->statistiques_parcours();
 	
+	// On calcule le temps approximatif nécessaire en comptant 3 minutes par électeur
+	if ($militants['inscrit']) {
+    	$temps = ($parcours['attente'] / $militants['inscrit']) * 3; // 3 minutes par électeur par militant (1,5 minutes en vrai, mais ils sont en binômes)
+    	$temps = $temps / 60; // passage en heure
+	} else {
+    	$temps = false;
+	}
+	
 	// typologie
 	$typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';
 
@@ -72,7 +80,7 @@
         <?php if ($data->get('mission_statut')) : ?>
             <a href="ajax.php?script=mission-arret&code=<?php echo $data->get('mission_hash'); ?>" class="nostyle"><button class="deleting long" style="margin: .25em auto .15em;">Arrêter la mission</button></a>
         <?php else : ?>
-            <a href="ajax.php?script=mission-debut&code=<?php echo $data->get('mission_hash'); ?>" class="nostyle"><button class="long" style="margin: .25em auto .15em;">Démarrer la mission</button></a>
+            <a href="ajax.php?script=mission-debut&code=<?php echo $data->get('mission_hash'); ?>" class="nostyle"><button class="long" style="margin: .25em auto .15em;">Publier la mission</button></a>
         <?php endif; ?>
     </section>
 </div>
@@ -116,9 +124,12 @@
     		<h4>Statistiques</h4>
     		
     		<ul class="statistiquesMission">
-    			<li>Mission réalisée à <strong><?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?></strong>&nbsp;%</li>
-    			<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;<?php echo ($data->get('mission_type') == 'porte') ? 'électeurs' : 'immeubles'; ?> concernés par cette mission</li>
+    			<li>Mission réalisée à <strong><?php echo ceil(pourcentage($nombre['fait'], $nombre['total'])); ?></strong>&nbsp;%.</li>
+    			<li><strong><?php echo number_format($nombre['total'], 0, ',', ' '); ?></strong>&nbsp;<?php echo ($data->get('mission_type') == 'porte') ? 'électeurs' : 'immeubles'; ?> concernés par cette mission.</li>
     			<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;<?php echo ($data->get('mission_type') == 'porte') ? 'électeurs' : 'immeubles'; ?> à visiter.</li>
+                <?php if ($temps) : ?>
+                <li>Mission estimée à <strong><?php echo round($temps, 0); ?> heures</strong>.</li>
+                <?php endif; ?>
     		</ul>
 	    <?php else : ?>
     	    <p>Cette mission n'a pas encore de parcours.</p>
