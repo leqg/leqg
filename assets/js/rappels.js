@@ -603,9 +603,10 @@ var rappels = function() {
 	$('.appelSuivant').click(function() {
 		var contact = $('.titre').data('contact');
 		var argumentaire = $('.titre').data('argumentaire');
+		var reporting = $(this).data('reporting');
 		
 		// On passe à l'appel suivant
-		$.get('ajax.php?script=rappels-suivant', { contact: contact, argumentaire: argumentaire }, function() {
+		$.get('ajax.php?script=rappels-suivant', { contact: contact, argumentaire: argumentaire, reporting: reporting }, function() {
 			var destination = 'index.php?page=rappels&action=appel';
 			$(location).attr('href', destination);
 		});

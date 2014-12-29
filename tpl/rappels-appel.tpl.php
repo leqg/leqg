@@ -94,9 +94,6 @@
 					</span>
 				</li>
 			</ul>
-			
-			<button class="appelSuivant" style="margin-bottom: .5em;">Aller à l'appel suivant</button>
-			<button class="appelSansReponse deleting" style="margin-top: 2em; margin-bottom: .5em;">Appel sans réponse</button>
 		</section>
 	</div>
 	
@@ -109,6 +106,13 @@
 			<?php else : ?>
 			<p><em>Aucun argumentaire ajouté par l'équipe.</em></p>
 			<?php endif; ?>
+		</section>
+		
+		<section class="contenu demi">
+			<button class="appelSuivant long" data-reporting="2" style="margin-bottom: .5em;">Appel terminé</button>
+			<button class="appelSuivant long" data-reporting="3" style="margin-bottom: .5em;">Appel terminé, souhaite donner procuration</button>
+			<button class="appelSuivant long" data-reporting="4" style="margin-bottom: .5em;">Appel terminé, souhaite être recontacté</button>
+			<button class="appelSansReponse long deleting" style="margin-top: 2em; margin-bottom: .5em;">Appel sans réponse</button>
 		</section>
 	</div>
 <?php Core::tpl_footer(); ?>

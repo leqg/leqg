@@ -52,6 +52,70 @@
 		
 		<?php
 			// On récupère les commentaires
+			$procurations = $mission->procurations();
+			
+			// S'il en existe, on affiche le bloc
+			if ($procurations) :
+		?>
+		<section class="contenu demi">
+			<h4>Demandes de procuration</h4>
+			
+			<ul class="listeContacts">
+				<?php
+					foreach ($procurations as $commentaire) :
+						$fiche = new Contact(md5($commentaire['contact_id']));
+						if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
+						elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+						else { $sexe = 'isexe'; }
+						
+						if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
+						elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+						else { $nomAffichage = 'Fiche sans nom'; }
+				?>
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+					<li class="contact <?php echo $sexe; ?>">
+						<strong><?php echo $nomAffichage; ?></strong>
+					</li>
+				</a>
+				<?php endforeach; ?>
+			</ul>
+		</section>
+		<?php endif; ?>
+		
+		<?php
+			// On récupère les commentaires
+			$procurations = $mission->recontacts();
+			
+			// S'il en existe, on affiche le bloc
+			if ($procurations) :
+		?>
+		<section class="contenu demi">
+			<h4>Demandes de recontact</h4>
+			
+			<ul class="listeContacts">
+				<?php
+					foreach ($procurations as $commentaire) :
+						$fiche = new Contact(md5($commentaire['contact_id']));
+						if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
+						elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+						else { $sexe = 'isexe'; }
+						
+						if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
+						elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+						else { $nomAffichage = 'Fiche sans nom'; }
+				?>
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+					<li class="contact <?php echo $sexe; ?>">
+						<strong><?php echo $nomAffichage; ?></strong>
+					</li>
+				</a>
+				<?php endforeach; ?>
+			</ul>
+		</section>
+		<?php endif; ?>
+		
+		<?php
+			// On récupère les commentaires
 			$commentaires = $mission->commentaires();
 			
 			// S'il en existe, on affiche le bloc
