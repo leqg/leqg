@@ -1,4 +1,8 @@
 <?php 
+	// On met en place la protection
+	User::protection(1);
+	
+    // On charge le header
 	Core::tpl_header();
 ?>
 <table id="services">

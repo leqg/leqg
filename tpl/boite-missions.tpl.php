@@ -1,4 +1,7 @@
 <?php
+	// On met en place la protection
+	User::protection(1);
+
     // On charge la liste des missions où la personne est invitée
     $invitations = Mission::invitations('boitage', User::ID());
     

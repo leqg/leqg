@@ -1,4 +1,7 @@
 <?php
+	// On met en place la protection
+	User::protection(1);
+
 	// On se connecte à la BDD
 	$link = Configuration::read('db.link');
 	$userId = User::ID();
