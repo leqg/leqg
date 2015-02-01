@@ -136,7 +136,7 @@
 		
 		<section class="contenu demi invisible actionsFiches">
 			<ul class="iconesActions">
-				<li class="smsSelection">SMS groupé</li><!--
+				<li class="smsSelection">SMS&nbsp;groupé</li><!--
 			 --><li class="emailSelection">Emailing</li><!--
 			 --><li class="publiSelection">Publipostage</li><!--
 			 --><li class="exportSelection">Export</li>
@@ -144,7 +144,7 @@
 		</section>
 		
 		<section class="contenu demi invisible listeFiches">
-			<h4>Liste des fiches selon le tri</h4>
+			<h4>Liste des fiches selon le tri <span class="estimationDuNombreDeFichesTotales"></span></h4>
 			<input type="hidden" id="nombreFiches" value="0">
 			<input type="hidden" id="listeCriteresTri" value="">
 			
