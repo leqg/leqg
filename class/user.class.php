@@ -43,20 +43,7 @@ class User {
 				
 					// On vérifie que l'utilisateur dispose des droits suffisant pour cette page
 					if ($infos['auth_level'] >= $auth) {
-						
-						// On vérifie maintenant que la personne n'a pas demandé la réinitialisation de son cookie dernièrement
-						if (isset($_COOKIE['time']) && $_COOKIE['time'] >= strtotime($infos['last_reinit'])) {
-							
-							// On indique alors que tout va bien
-							return true;
-						}
-						
-						// Sinon on redirige vers l'interface de connexion en supprimant les cookies
-						else {
-							setcookie('leqg', null, time(), '/', 'leqg.info');
-							setcookie('time', null, time(), '/', 'leqg.info');
-							header('Location: http://auth.leqg.info');
-						}
+						return true;
 					}
 					
 					// Sinon, on redirige vers l'accueil de son compte
