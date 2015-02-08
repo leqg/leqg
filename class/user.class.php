@@ -28,7 +28,7 @@ class User {
 		if (isset($_COOKIE['leqg'], $_COOKIE['time']) && !empty($_COOKIE['time']) && !empty($_COOKIE['leqg'])) {
 			
 			// On recherche l'existence du compte
-			$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+			$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `user` WHERE SHA2(`id`, 256) = :cookie');
 			$query->bindParam(':cookie', $_COOKIE['leqg']);
 			$query->execute();
 			
@@ -106,7 +106,7 @@ class User {
 		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
 			
 			// On effectue la recherche du niveau d'accréditation
-			$query = $link->prepare('SELECT `auth_level` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+			$query = $link->prepare('SELECT `auth_level` FROM `user` WHERE SHA2(`id`, 256) = :cookie');
 			$query->bindParam(':cookie', $_COOKIE['leqg']);
 			$query->execute();
 			
@@ -144,7 +144,7 @@ class User {
 		if (isset($_COOKIE['leqg']) && !empty($_COOKIE['leqg'])) {
 			
 			// On effectue la recherche de l'ID en clair
-			$query = $link->prepare('SELECT `id` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+			$query = $link->prepare('SELECT `id` FROM `user` WHERE SHA2(`id`, 256) = :cookie');
 			$query->bindParam(':cookie', $_COOKIE['leqg']);
 			$query->execute();
 			
@@ -182,7 +182,7 @@ class User {
 		$client = Configuration::read('ini')['LEQG']['compte'];
 		
 		// On effectue la recherche
-		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `auth_level` >= :authlevel AND `auth_level` < 9 ORDER BY `firstname`, `lastname` ASC');
+		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `user` WHERE `client` = :client AND `auth_level` >= :authlevel AND `auth_level` < 9 ORDER BY `firstname`, `lastname` ASC');
 		$query->bindParam(':client', $client);
 		$query->bindParam(':authlevel', $auth_level, PDO::PARAM_INT);
 		$query->execute();
@@ -208,7 +208,7 @@ class User {
 		$link = Configuration::read('db.core');
 		
 		// On effectue la recherche
-		$query = $link->prepare('SELECT `firstname`, `lastname` FROM `compte` WHERE `id` = :id');
+		$query = $link->prepare('SELECT `firstname`, `lastname` FROM `user` WHERE `id` = :id');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -235,7 +235,7 @@ class User {
 		$client = Configuration::read('ini')['LEQG']['compte'];
 		
 		// On effectue la recherche
-		$query = $link->prepare('SELECT * FROM `compte` WHERE `id` = :id AND `client` = :client');
+		$query = $link->prepare('SELECT * FROM `user` WHERE `id` = :id AND `client` = :client');
 		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->bindParam(':client', $client);
 		$query->execute();
@@ -282,12 +282,12 @@ class User {
 		$client = Configuration::read('ini')['LEQG']['compte'];
 		
 		if (empty($sauf)) {
-    		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client');
+    		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `user` WHERE `client` = :client');
 		}
 		
 		else {
     		$notUsers = implode(',', $sauf);
-    		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `compte` WHERE `client` = :client AND `id` NOT IN (' . $notUsers . ')');
+    		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `user` WHERE `client` = :client AND `id` NOT IN (' . $notUsers . ')');
 		}
 		
 		$query->bindParam(':client', $client);
@@ -305,7 +305,7 @@ class User {
 		$user = $_COOKIE['leqg'];
 
 		// On recherche l'existence du compte
-		$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `compte` WHERE SHA2(`id`, 256) = :cookie');
+		$query = $link->prepare('SELECT `client`, `auth_level`, `last_reinit` FROM `user` WHERE SHA2(`id`, 256) = :cookie');
 		$query->bindParam(':cookie', $user);
 		$query->execute();
         $compte = $query->fetch(PDO::FETCH_ASSOC);
