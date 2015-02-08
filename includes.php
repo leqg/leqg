@@ -37,11 +37,11 @@ Configuration::write('db.pass', $config['BDD']['pass']);
 Configuration::write('ini', $config);
 
 // On fabrique la classe $noyau de connexion au noyau central
-$host = '217.70.189.234';
+$host = $config['BDD']['host'];
 $port = 3306;
-$dbname = 'leqg-core';
-$user = 'leqg-remote';
-$pass = 'pbNND3JY2cfrDUuZ';
+$dbname = 'leqg_' . $config['LEQG']['compte'];
+$user = $config['BDD']['user'];
+$pass = $config['BDD']['pass'];
 $charset = 'utf8';
 $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
 $core = new PDO($dsn, $user, $pass);
