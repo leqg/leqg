@@ -167,7 +167,7 @@ class User {
 		// On prépare le lien à la base de données centrale
 		$link = Configuration::read('db.core');
 		$client = Configuration::read('ini')['LEQG']['compte'];
-		Core::debug($client);
+		
 		// On effectue la recherche
 		$query = $link->prepare('SELECT `id`, `email`, `firstname`, `lastname`, `telephone` FROM `user` WHERE `client` = :client AND `auth_level` >= :authlevel AND `auth_level` < 9 ORDER BY `firstname`, `lastname` ASC');
 		$query->bindParam(':client', $client);
