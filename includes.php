@@ -31,7 +31,7 @@ $config = parse_ini_file('config.ini', true);
 
 // On applique la configuration chargée
 Configuration::write('db.host', $config['BDD']['host']);
-Configuration::write('db.basename', 'leqg');
+Configuration::write('db.basename', 'leqg_dev');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 Configuration::write('ini', $config);
@@ -39,7 +39,7 @@ Configuration::write('ini', $config);
 // On fabrique la classe $noyau de connexion au noyau central
 $host = $config['BDD']['host'];
 $port = 3306;
-$dbname = 'leqg_' . $config['LEQG']['compte'];
+$dbname = 'leqg_core';
 $user = $config['BDD']['user'];
 $pass = $config['BDD']['pass'];
 $charset = 'utf8';
