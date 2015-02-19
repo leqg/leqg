@@ -187,5 +187,31 @@ class Campagne {
 			return array();
 		}
 	}
+	
+	
+	/**
+     * Crée un nouvel emvoi
+     * 
+     * @param   string  $objet      Objet de l'envoi
+     * @param   string  $message    Message de l'envoi
+     * @param   string  $type       Type de l'envoi
+     * @return  int                 ID de l'envoi
+     * */
+    
+    public static function envoi($objet, $message, $type)
+    {
+        // On récupère les données
+        $user = User::ID();
+        
+        // On lance la création de l'envoi
+        $link = Configuration::read('db.link');
+        $query = $link->prepare('INSERT INTO `envois` (`compte_id`, `envoi_type`, `envoi_time`, `envoi_titre`, `envoi_texte`) VALUES (:compte, :type, NOW(), :titre, :texte)');
+        $query->bindValue(':compte', $user, PDO::PARAM_INT);
+        $query->bindValue(':type', $type);
+        $query->bindValue(':titre', $objet);
+        $query->bindValue(':texte', $message);
+        $query->execute();
+        
+        return $link->lastInsertId();
+    }
 }
-?>
