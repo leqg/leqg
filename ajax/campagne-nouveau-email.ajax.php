@@ -5,7 +5,7 @@ if (isset($_GET)) {
     $user = User::ID();
     
     // On crée la nouvelle mission en récupérant l'identifiant créé
-    $campagne = Campagne::nouvelle("email");
+    $campagne = Campaign::create("email");
     
     // On tâche de récupérer la liste des contacts concernés par l'envoi
 	$var = $_GET;
