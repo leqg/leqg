@@ -545,19 +545,10 @@ var contacts = function() {
         $('.droite section').hide();
         
         // On effectue l'estimation du nombre de fiches
-        $.get('ajax.php?script=contacts-estimation', data, function(nombre) {
-            // On affiche ce nombre dans le formulaire
-            $('.emailNombreDestinataire').val('');
-
-            if (nombre > 1) {
-                $('.emailNombreDestinataire').val(nombre + ' contacts');
-            } else {
-                $('.emailNombreDestinataire').val(nombre + ' contact');
-            }
+        $.get('ajax.php?script=campagne-nouveau-email', data, function (data) {
+        	    var url = 'index.php?page=campagne&id=' + data;
+        	    document.location.href = url;
         });
-        
-        // On ouvre ce formulaire
-        $('.emailEnvoiCampagne').fadeIn();
     });
     
     

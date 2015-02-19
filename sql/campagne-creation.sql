@@ -1,0 +1,1 @@
+INSERT INTO `campagne` (`user_id`, `campagne_type`) VALUES (:user, :type);

@@ -29,30 +29,13 @@ class Campagne {
 	 */
 	 
 	public function __construct( $campagne ) {
-		// On récupère le lien de connexion à la base de données
-		$this->link = Configuration::read('db.link');
-		
-		// On récupère les informations sur la campagne
-		$query = $this->link->prepare('SELECT *, MD5(`campagne_id`) AS `code` FROM `campagne` WHERE MD5(`campagne_id`) = :id');
-		$query->bindParam(':id', $campagne);
+		// On récupère les informations sur la campagne demandée
+		$query = Core::query('campagne-par-id');
+		$query->bindParam(':campagne', $campagne, PDO::PARAM_INT);
 		$query->execute();
 		
 		// On récupère les informations
-		$this->campagne = $query->fetch(PDO::FETCH_ASSOC);
-		
-		// On récupère le nombre d'envois réalisés
-		$query = $this->link->prepare('SELECT COUNT(*) AS `nombre` FROM `historique` WHERE MD5(`campagne_id`) = :id');
-		$query->bindParam(':id', $campagne);
-		$query->execute();
-		$nombre = $query->fetch(PDO::FETCH_NUM);
-		$this->campagne['nombre'] = $nombre[0];
-		
-		// On calcule le prix
-		$prix['sms'] = 0.08;
-		$prix['email'] = 0;
-		$prix['publi'] = 0;
-		$cout = $prix[$this->campagne['campagne_type']] * $this->campagne['nombre'];
-		$this->campagne['prix'] = $cout;
+        self::$campagne = $query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	
@@ -126,6 +109,33 @@ class Campagne {
 		
 		return $contacts;
 	}
+	
+	
+	/**
+    	 * Création d'une nouvelle campagne vierge
+    	 * 
+    	 * @param   string  $type       Type de campagne
+    	 * 
+    	 * @return  int                 ID de la campagne créée
+    	 * */
+    
+    public static function nouvelle($type)
+    {
+        // On récupère le lien vers la base de données
+        $link = Configuration::read('db.link');
+        
+        // On récupère l'identifiant de l'utilisateur connecté
+        $user = User::ID();
+        
+        // On effectue la création de la campagne
+        $query = Core::query('campagne-creation');
+        $query->bindParam(':type', $type);
+        $query->bindParam(':user', $user, PDO::PARAM_INT);
+        $query->execute();
+        
+        // On retourne l'identifiant de la campagne
+        return $link->lastInsertId();
+    }
 	
 	
 	/**

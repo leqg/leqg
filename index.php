@@ -108,6 +108,21 @@ else {
 	
 	
 	
+	// Si on demande le module de campagnes
+	else if ($_GET['page'] == 'campagne') {
+    	    // On regarde si on demande une fiche particulière
+    	    if (isset($_GET['id'])) {
+        	    Core::tpl_load('campagne', 'dashboard');
+    	    }
+    	    
+    	    // Sinon, on appelle la page principale du module
+    	    else {
+        	    Core::tpl_load('campagne');
+    	    }
+	}
+	
+	
+	
 	// Si on demande le module SMS
 	else if ($_GET['page'] == 'sms') {
 		// On regarde si une page en particulier est demandée
