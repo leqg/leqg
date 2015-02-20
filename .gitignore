@@ -15,3 +15,7 @@ exports/*.csv
 *.codekit
 
 *.map
+
+doc/*
+Doxyfile
+
