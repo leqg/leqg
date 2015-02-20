@@ -179,6 +179,23 @@ class Campaign
     
     
     /**
+     * Return name of used template
+     * @result string
+     * */
+    public function used_template()
+    {
+        if ($this->_campaign['template']) {
+            $query = Core::query('campaign-template-name');
+            $query->bindParam(':template', $this->_campaign['template']);
+            $query->execute();
+            return $query->fetch(PDO::FETCH_NUM)[0];
+        } else {
+            return false;
+        }
+    }
+    
+    
+    /**
      * Create a new campaign
      * @param  string $method Campaign method (email, sms, publi)
      * @return int
@@ -202,7 +219,7 @@ class Campaign
      * */
     public static function all($type) 
     {
-        $query = Core::query('campagne-liste');
+        $query = Core::query('campaigns-list');
         $query->bindParam(':type', $type);
         $query->execute();
         
@@ -211,6 +228,19 @@ class Campaign
         } else {
              return array();
         }
+    }
+    
+    
+    /**
+     * List all templates by name
+     * @result array
+     * */
+    public static function templates()
+    {
+        $query = Core::query('campaign-templates-list');
+        $query->execute();
+        
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

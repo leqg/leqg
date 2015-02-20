@@ -1,5 +1,6 @@
 SELECT      `campagne_id` AS `id`,
             `campagne_type` AS `type`,
+            `campagne_template` AS `template`,
             `campagne_titre` AS `titre`,
             `campagne_message` AS `message`,
             `campagne_date` AS `date`,
