@@ -208,7 +208,7 @@ class Campaign
         $query->bindParam(':type', $type);
         $query->bindParam(':user', $user, PDO::PARAM_INT);
         $query->execute();
-        return $link->lastInsertId();
+        return Configuration::read('db.link')->lastInsertId();
     }
     
     
@@ -241,6 +241,20 @@ class Campaign
         $query->execute();
         
         return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Create a new template
+     * @result int New template ID
+     * */
+    public static function template_new()
+    {
+        $user = User::ID();
+        $query = Core::query('campaign-template-new');
+        $query->bindParam(':user', $user);
+        $query->execute();
+        return Configuration::read('db.link')->lastInsertId();
     }
 
 }
