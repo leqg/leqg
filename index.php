@@ -112,23 +112,23 @@ else {
 	else if ($_GET['page'] == 'campagne') {
     	    // On regarde si on demande une fiche particulière
     	    if (isset($_GET['id'])) {
-        	    Core::tpl_load('campagne', 'dashboard');
+        	    Core::tpl_load('campaign', 'dashboard');
     	    }
     	    
     	    // On regarde si on demande un template particulier
     	    elseif (isset($_GET['template']) && is_numeric($_GET['template'])) {
-        	    Core::tpl_load('campagne', 'template');
+        	    Core::tpl_load('campaign', 'template');
     	    }
     	    
     	    // On regarde si on nous demande la création d'un nouveau template
     	    elseif (isset($_GET['template']) && $_GET['template'] == 'new') {
         	    $template = Campaign::template_new();
-        	    Core::tpl_go_to('campagne', array('template' => $template), true);
+        	    Core::tpl_go_to('campaign', array('template' => $template), true);
     	    }
     	    
     	    // Sinon, on appelle la page principale du module
     	    else {
-        	    Core::tpl_load('campagne');
+        	    Core::tpl_load('campaign');
     	    }
 	}
 	
