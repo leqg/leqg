@@ -204,6 +204,7 @@ class Campaign
     public function template_write($template)
     {
         $this->_campaign['template'] = $template;
+        $template = $this->template_parsing();
         $query = Core::query('campaign-template-update');
         $query->bindParam(':template', $template);
         $query->bindParam(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
@@ -236,10 +237,43 @@ class Campaign
     public function template_parsing()
     {
         $template = $this->_campaign['template'];
+        $nb_boucles = preg_match_all("#\{boucle\:(.+)\}(.+)\{finboucle\}#isU", $template, $boucles);
         
-        $test = preg_match("#\{boucle:articles\}(.+)\{finboucle\}#u", $template);
-        Core::debug($test, false);
-        
+        $cur = 0;
+        while($cur < $nb_boucles) {
+            $data = $boucles[1][$cur];
+            
+            switch ($data) {
+                case 'articles':
+                    // we load article tpl
+                    $tpl_articles = $boucles[2][$cur];
+                    $tpl_final = '';
+                    
+                    // we search last 5 articles
+                    $json = file_get_contents('https://public-api.wordpress.com/rest/v1.1/sites/preprod.leqg.info/posts/');
+                    $posts = json_decode($json)->posts;
+                    $posts = array_slice($posts, 0, 5);
+                    
+                    foreach ($posts as $post) {
+                        $tpl_article = $tpl_articles;
+                        $titre = '<a href="' . $post->URL . '">' . $post->title . '</a>';
+                        $contenu = $post->excerpt;
+                        $tpl_article = str_replace('{article:titre}', $titre, $tpl_article);
+                        $tpl_article = str_replace('{article:contenu}', $contenu, $tpl_article);
+                        $tpl_final .= $tpl_article;
+                        unset($tpl_article);
+                    }
+                    
+                    $template = preg_replace("#\{boucle\:(.+)\}(.+)\{finboucle\}#isU", $tpl_final, $template);
+                    
+                    break;
+            }
+            
+            $cur++;
+        }
+
+        $this->_campaign['mail'] = $template;
+        $query = Core::query();
         return $template;
     }
     
