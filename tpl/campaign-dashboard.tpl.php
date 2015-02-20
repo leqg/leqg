@@ -16,7 +16,7 @@ Core::tpl_header();
 <?php switch ($_GET['volet']) : case 'contenu': ?>
     <?php if ($data->get('template')) : ?>
     
-    <?php else : $templates = Campaign::templates(); ?>
+    <?php else : $templates = Template::all(); ?>
     <div class="colonne">
         <section class="contenu">
             <h4>Pour commencer, veuillez choisir un template de courrier électronique</h4>

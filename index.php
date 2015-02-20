@@ -122,7 +122,7 @@ else {
     	    
     	    // On regarde si on nous demande la création d'un nouveau template
     	    elseif (isset($_GET['template']) && $_GET['template'] == 'new') {
-        	    $template = Campaign::template_new();
+        	    $template = Template::create();
         	    Core::tpl_go_to('campaign', array('template' => $template), true);
     	    }
     	    

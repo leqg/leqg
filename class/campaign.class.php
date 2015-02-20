@@ -229,32 +229,5 @@ class Campaign
              return array();
         }
     }
-    
-    
-    /**
-     * List all templates by name
-     * @result array
-     * */
-    public static function templates()
-    {
-        $query = Core::query('campaign-templates-list');
-        $query->execute();
-        
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
-    
-    /**
-     * Create a new template
-     * @result int New template ID
-     * */
-    public static function template_new()
-    {
-        $user = User::ID();
-        $query = Core::query('campaign-template-new');
-        $query->bindParam(':user', $user);
-        $query->execute();
-        return Configuration::read('db.link')->lastInsertId();
-    }
 
 }

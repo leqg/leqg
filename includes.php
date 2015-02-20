@@ -77,6 +77,7 @@ require_once 'class/map.class.php';
 require_once 'class/mission.class.php';
 require_once 'class/porte.class.php';
 require_once 'class/rappel.class.php';
+require_once 'class/template.class.php';
 require_once 'class/user.class.php';
 
 ?>
