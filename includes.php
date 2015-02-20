@@ -62,6 +62,7 @@ $api['mail']['reply']['nom'] = 'LeQG';
 
 Configuration::write('api', $api);
 Configuration::write('mail', $mail);
+Configuration::write('mail.quota', $config['MAIL']['quota']);
 
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';

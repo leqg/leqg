@@ -44,7 +44,7 @@ class Campaign
      * */
     public function __construct($campaign) 
     {
-        $query = Core::query('campagne-informations');
+        $query = Core::query('campaign-data');
         $query->bindParam(':campagne', $campaign, PDO::PARAM_INT);
         $query->execute();
         $this->_campaign = $query->fetch(PDO::FETCH_ASSOC);
@@ -63,6 +63,122 @@ class Campaign
     
     
     /**
+     * Count number of items related to this campaign
+     * @param  string $target What to count
+     * @result array
+     * */
+    public function count($target = null)
+    {
+        switch ($target) {
+            // if we asked the number of send items & theirs status
+            case 'items':
+            
+                break;
+            
+            // if we asked the number of recipients
+            default:
+                $query = Core::query('campaign-recipients-count');
+                $query->bindParam(':campaign', $this->_campaign['id']);
+                $query->execute();
+                return $query->fetch(PDO::FETCH_NUM);
+                break;
+        }
+    }
+    
+    
+    /**
+     * Estimated sending time
+     * @result int
+     * */
+    public function estimated_time()
+    {
+        if (!isset($this->_campaign['count']['target'])) {
+            $this->_campaign['count']['target'] = $this->count()[0];
+        }
+        
+        $hourlyQuota = Configuration::read('mail.quota');
+        $target = $this->_campaign['count']['target'];
+        $hoursNeeded = $target / $hourlyQuota;
+        $result = array('months' => 0, 'weeks' => 0, 'days' => 0, 'hours' => 0);
+
+        if ($hoursNeeded > 24) {
+            $result['days'] = floor($hoursNeeded / 24);
+            $result['hours'] = $hoursNeeded - ($result['days'] * 24);
+            
+            if ($result['days'] > 7) {
+                $result['weeks'] = floor($result['days'] / 7);
+                $result['days'] = $result['days'] - ($result['weeks'] * 7);
+            }
+            
+            if ($result['weeks'] > 4) {
+                $result['days'] = $result['weeks'] * 7 + $result['days'];
+                $result['weeks'] = 0;
+                $result['months'] = floor($result['days'] / 30);
+                $result['days'] = $result['days'] - ($result['months'] * 30);
+                
+                if ($result['days'] > 7) {
+                    $result['weeks'] = floor($result['days'] / 7);
+                    $result['days'] = $result['days'] - ($result['weeks'] * 7);
+                }
+            }
+        } else {
+            unset($result);
+            $result['hours'] = floor($hoursNeeded);
+        }
+        
+        return $result;
+    }
+    
+    
+    /**
+     * Get global stats of a campaign and store them into $_campaign
+     * @result void
+     * */
+    public function stats()
+    {
+        // stats array init
+        $stats = array();
+        
+        // number of recipients
+        $this->_campaign['count']['target'] = $this->count()[0];
+        
+        // sending time estimation
+        $this->_campaign['count']['time'] = $this->estimated_time();
+    }
+    
+    
+    /**
+     * Display estimated time of this campaign
+     * @result string
+     * */
+    public function display_estimated_time()
+    {
+        if (!isset($this->_campaign['count']['time'])) {
+            $this->_campaign['count']['time'] = $this->estimated_time();
+        }
+        
+        $time = $this->_campaign['count']['time'];
+        $display = array();
+        
+        if (isset($time['months'], $time['weeks'], $time['days'])) {
+            if ($time['months'] >= 1) $display[] = $time['months'] . ' mois';
+            if ($time['weeks'] > 1) $display[] = $time['weeks'] . ' semaines';
+            if ($time['weeks'] == 1) $display[] = $time['weeks'] . ' semaine';
+            if ($time['days'] > 1) $display[] = $time['days'] . ' jours';
+            if ($time['days'] == 1) $display[] = $time['days'] . ' jour';
+            if ($time['hours'] > 1) $display[] = $time['hours'] . ' heures';
+            if ($time['hours'] == 1) $display[] = $time['hours'] . ' heure';
+            
+            $display = implode(', ', $display);
+        } else {
+            $display = 'Quelques minutes';
+        }
+        
+        return $display;
+    }
+    
+    
+    /**
      * Create a new campaign
      * @param  string $method Campaign method (email, sms, publi)
      * @return int
@@ -71,7 +187,7 @@ class Campaign
     {
         $user = User::ID();
 
-        $query = Core::query('campagne-creation');
+        $query = Core::query('campaign-create');
         $query->bindParam(':type', $type);
         $query->bindParam(':user', $user, PDO::PARAM_INT);
         $query->execute();

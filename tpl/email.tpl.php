@@ -16,6 +16,7 @@
 				<?php foreach ($liste as $element) : ?>
 				<li>
 					<a href="<?php Core::tpl_go_to('campagne', array('id' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; } else { echo 'Campagne sans titre'; } ?></h4></a>
+                    <p>Campagne <?php echo $element['type']; ?> créée le <?php echo date('d/m/Y', strtotime($element['date'])); ?></p>
 				</li>
 				<?php endforeach; ?>
 			</ul>

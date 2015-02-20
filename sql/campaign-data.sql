@@ -3,6 +3,7 @@ SELECT      `campagne_id` AS `id`,
             `campagne_titre` AS `titre`,
             `campagne_message` AS `message`,
             `campagne_date` AS `date`,
+            `campagne_status` AS `status`,
             `user_id` AS `user`
 FROM        `campagne`
 WHERE       `campagne_id` = :campagne
