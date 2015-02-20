@@ -22,6 +22,7 @@ Configuration::write('db.basename', 'leqg_dev');
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 Configuration::write('ini', $config);
+Configuration::write('price.email', 0.20);
 
 // On fabrique la classe $noyau de connexion au noyau central
 $host = $config['BDD']['host'];

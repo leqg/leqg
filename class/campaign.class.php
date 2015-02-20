@@ -431,6 +431,21 @@ class Campaign
         return $errors;
     }
     
+    /**
+     * Price estimation
+     * 
+     * @result  int
+     * */
+    public function price()
+    {
+        $emails = $this->count('items')['all'];
+        $pricePerThousand = Configuration::read('price.email');
+        $price = $pricePerThousand/1000;
+        $cost = $price * $emails;
+
+        return $cost;
+    }
+    
     
     /**
      * Create a new campaign

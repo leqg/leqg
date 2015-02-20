@@ -202,6 +202,10 @@ Core::tpl_header();
                     <span><?php echo $data->display_estimated_time(); ?></span>
                 </li>
                 <?php endif; ?>
+                <li class="prix">
+                    <span>Coût potentiel de la campagne</span>
+                    <span><?php if ($data->price() >= 1) : ?><?php echo number_format($data->price(), 2, ',', ' '); ?>&nbsp;&euro;<?php else : ?>coût négligeable<?php endif; ?></span>
+                </li>
             </ul>
         </section>
         
