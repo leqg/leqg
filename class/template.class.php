@@ -52,6 +52,17 @@ class Template
     
     
     /**
+     * Get a stored data
+     * @param  string $data Asked data
+     * @return mixed
+     * */
+    public function get($data) 
+    {
+        return $this->_template[ $data ];
+    }
+    
+    
+    /**
      * List all templates by name
      * @result array
      * */
