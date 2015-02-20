@@ -25,7 +25,7 @@ Core::tpl_header();
         <section class="contenu">
             <h4>Squelette du template</h4>
             
-            <form action="<?php Core::tpl_go_to('campagne', array('template' => $_GET['template'], 'volet' => 'contenu', 'operation' => 'sauvTemplate')); ?>" method="post">
+            <form action="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'contenu', 'operation' => 'sauvTemplate')); ?>" method="post">
                 <textarea class="templateEditor" id="templateEditor" name="templateEditor"><?php echo $data->get('template'); ?></textarea>
                 <script>CKEDITOR.replace('templateEditor');</script>
                 

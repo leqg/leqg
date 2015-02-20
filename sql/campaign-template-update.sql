@@ -1,0 +1,1 @@
+UPDATE `campagne` SET `template` = :template WHERE `campagne_id` = :campaign

@@ -196,6 +196,55 @@ class Campaign
     
     
     /**
+     * Update this campaign template
+     * 
+     * @param   string  $tempalte       New template version
+     * @result  void
+     * */
+    public function template_write($template)
+    {
+        $this->_campaign['template'] = $template;
+        $query = Core::query('campaign-template-update');
+        $query->bindParam(':template', $template);
+        $query->bindParam(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->execute();
+    }
+    
+    
+    /**
+     * Copy an existing template to this campaign
+     * 
+     * @param   int     $campaign       Existing template campaign ID
+     * @result  void
+     * */
+    public function template_copy($campaign)
+    {
+        $query = Core::query('campaign-template');
+        $query->bindParam(':campaign', $campaign);
+        $query->execute();
+        $template = $query->fetch(PDO::FETCH_NUM);
+        
+        $this->template_write($template[0]);
+    }
+    
+    
+    /**
+     * Template parsing method
+     * 
+     * @result  string                  Parsed template
+     * */
+    public function template_parsing()
+    {
+        $template = $this->_campaign['template'];
+        
+        $test = preg_match("#\{boucle:articles\}(.+)\{finboucle\}#u", $template);
+        Core::debug($test, false);
+        
+        return $template;
+    }
+    
+    
+    /**
      * Create a new campaign
      * @param  string $method Campaign method (email, sms, publi)
      * @return int
@@ -228,6 +277,19 @@ class Campaign
         } else {
              return array();
         }
+    }
+    
+    
+    /**
+     * List all templates by name
+     * @result array
+     * */
+    public static function templates()
+    {
+        $query = Core::query('campaign-templates-list');
+        $query->execute();
+        
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }
