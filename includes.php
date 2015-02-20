@@ -57,9 +57,11 @@ Configuration::write('db.link', $link);
 // On charge les API extérieures
 require_once 'api/esendex/autoload.php';
 require_once 'api/phpmailer/class.phpmailer.php';
+require_once 'api/mandrill.php';
 
 // On configure les données des API extérieures
 $api['sms']['auth'] = new \Esendex\Authentication\LoginAuthentication($config['SMS']['compte'], $config['SMS']['login'], $config['SMS']['pass']);
+$mail = new Mandrill($config['MAIL']['pass']);
 
 $api['mail']['charset'] = 'UTF-8';
 $api['mail']['smtp']['host'] = $config['MAIL']['host'];
@@ -72,6 +74,7 @@ $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
 Configuration::write('api', $api);
+Configuration::write('mail', $mail);
 
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';
