@@ -14,6 +14,10 @@ if (isset($_GET['operation'])) {
         case 'saveTemplate':
             $data->template_write($_POST['templateEditor']);
             break;
+        
+        case 'launch':
+            $data->launch();
+            break;
     }
 }
 
@@ -26,7 +30,6 @@ Core::tpl_header();
     <a href="<?php Core::tpl_go_to('campagne', array('id' => $data->get('id'), 'volet' => 'destinataires')); ?>">Destinataire</a>
     <?php if ($data->get('type') == 'email' && $data->get('status') == 'open') : ?>
         <a href="<?php Core::tpl_go_to('campagne', array('id' => $data->get('id'), 'volet' => 'template')); ?>">Template</a>
-        <a href="<?php Core::tpl_go_to('campagne', array('id' => $data->get('id'), 'volet' => 'contenus')); ?>">Contenus</a>
         <a href="<?php Core::tpl_go_to('campagne', array('id' => $data->get('id'), 'volet' => 'visu')); ?>">Email final</a>
     <?php endif; ?>
 </nav>
@@ -72,7 +75,15 @@ Core::tpl_header();
 
     <div class="colonne">
         <section class="contenu">
-            <?php echo $email; ?>
+            <?php echo $data->get('mail'); ?>
+        </section>
+    </div>
+    
+<?php break; case 'launch': ?>
+
+    <div class="colonne">
+        <section class="contenu">
+            <h3>Campagne lancée !</h3>
         </section>
     </div>
     
@@ -104,6 +115,10 @@ Core::tpl_header();
                 </li>
                 <?php endif; ?>
             </ul>
+        </section>
+        
+        <section class="contenu demi">
+            <a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'launch', 'volet' => 'launch')); ?>" class="nostyle"><button class="vert clair long" style="margin: .25em auto .15em;">Envoi de la campagne</button></a>
         </section>
     </div>
     

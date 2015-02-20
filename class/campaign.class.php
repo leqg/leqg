@@ -273,8 +273,89 @@ class Campaign
         }
 
         $this->_campaign['mail'] = $template;
-        $query = Core::query();
+        $query = Core::query('campaign-template-parsed');
+        $query->bindValue(':mail', $template);
+        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->execute();
         return $template;
+    }
+    
+    
+    /**
+     * Launch the campaign
+     * 
+     * @return  void
+     * */
+    public function launch()
+    {
+        $mandrill = Configuration::read('mail');
+        	
+        	$query = Core::query('campaign-contacts');
+        	$query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        	$query->execute();
+        	$contacts = $query->fetchAll(PDO::FETCH_NUM);
+        	$emails = array();
+
+        	$query = Core::query('contact-emails');
+        	foreach ($contacts as $contact) {
+            	$c = new Contact(md5($contact[0]));
+            	$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+            	$query->execute();
+            	$_emails = $query->fetchAll(PDO::FETCH_NUM);
+            	foreach ($_emails as $_email) {
+                	$emails[] = array(
+                    	'email' => $_email[0],
+                    	'name' => $c->get('nom_affichage'),
+                    	'type' => 'bcc'
+                	);
+            }
+        	}
+        	
+        	$message = array(
+            	'html' => $this->_campaign['mail'],
+            'subject' => $this->_campaign['objet'],
+            'from_email' => 'noreply@leqg.info',
+            'from_name' => 'LeQG',
+            'to' => $emails,
+            'headers' => array('Reply-To' => 'tech@leqg.info'),
+            'track_opens' => true,
+            'auto_text' => true
+        	);
+        	$async = true;
+        	$result = $mandrill->messages->send($message, $async);
+        
+        foreach ($result as $email) $this->tracking($email);
+    }
+    
+    
+    /**
+     * Launch an email tracking
+     * 
+     * @param   array   $result     Send email result
+     * @result  void
+     * */
+    public function tracking($result)
+    {
+        switch ($result['status']) {
+            case 'rejected':
+                $query = Core::query('campaign-tracking-reject');
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(':id', $result['_id']);
+                $query->bindValue(':email', $result['email']);
+                $query->bindValue(':status', $result['status']);
+                $query->bindValue(':reject', $result['reject_reason']);
+                $query->execute();
+                break;
+            
+            default:
+                $query = Core::query('campaign-tracking');
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(':id', $result['_id']);
+                $query->bindValue(':email', $result['email']);
+                $query->bindValue(':status', $result['status']);
+                $query->execute();
+                break;
+        }
     }
     
     
