@@ -63,16 +63,48 @@ class Campaign
     
     
     /**
+     * Recipients list
+     * 
+     * @result  array
+     * */
+    public function recipients()
+    {
+        $query = Core::query('campaign-recipients');
+        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->execute();
+        $recipients = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach($recipients as $key => $recipient) {
+            $query = Core::query('contact-by-email');
+            $query->bindValue(':email', $recipient['email']);
+            $query->execute();
+            $contact = $query->fetch(PDO::FETCH_NUM);
+            $recipients[$key]['contact'] = $contact[0];
+        }
+        
+        return $recipients;
+    }
+    
+    
+    /**
      * Count number of items related to this campaign
-     * @param  string $target What to count
-     * @result array
+     * @param   string  $target     What to count
+     * @result  array
      * */
     public function count($target = null)
     {
         switch ($target) {
             // if we asked the number of send items & theirs status
             case 'items':
-            
+                $query = Core::query('campaign-items-count');
+                $query->bindParam(':campaign', $this->_campaign['id']);
+                $query->execute();
+                $result = $query->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($result as $element) {
+                    $nb[$element['status']] = $element['nb'];
+                }
+                $nb['all'] = array_sum($nb);
+                return $nb;
                 break;
             
             // if we asked the number of recipients
@@ -144,6 +176,9 @@ class Campaign
         
         // sending time estimation
         $this->_campaign['count']['time'] = $this->estimated_time();
+        
+        // number of send items
+        $this->_campaign['count']['items'] = $this->count('items');
     }
     
     
@@ -288,6 +323,12 @@ class Campaign
      * */
     public function launch()
     {
+        $status = "send";
+        $query = Core::query('campaign-new-status');
+        $query->bindValue(':status', $status);
+        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->execute();
+        
         $mandrill = Configuration::read('mail');
         	
         	$query = Core::query('campaign-contacts');
@@ -360,6 +401,38 @@ class Campaign
     
     
     /**
+     * Get errors informations
+     * 
+     * @result  array
+     * */
+    public function errors()
+    {
+        $mandrill = Configuration::read('mail');
+        $query = Core::query('campaign-errors');
+        $query->bindValue(':campaign', $this->_campaign['id']);
+        $query->execute();
+        $errors = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($errors as $key => $error) {
+            $infos = $mandrill->messages->info($error['id']);
+            $errors[$key]['error'] = $infos['reject']['reason'];
+            $errors[$key]['time'] = $infos['reject']['last_event_at'];
+            
+            $query = Core::query('contact-by-email');
+            $query->bindValue(':email', $error['email']);
+            $query->execute();
+            $contact = $query->fetch(PDO::FETCH_NUM);
+            $errors[$key]['contact'] = $contact[0];
+            
+            $contact = new Contact(md5($contact[0]));
+            $errors[$key]['name'] = $contact->get('nom_affichage');
+        }
+        
+        return $errors;
+    }
+    
+    
+    /**
      * Create a new campaign
      * @param  string $method Campaign method (email, sms, publi)
      * @return int
@@ -405,6 +478,52 @@ class Campaign
         $query->execute();
         
         return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Tracking informations
+     * 
+     * @param   string  $track_id   Tracking ID
+     * @result  array               Tracking informations
+     * */
+    public static function tracking_infos($track_id)
+    {
+        $mandrill = Configuration::read('mail');
+        $result = $mandrill->messages->info($track_id);
+        return $result;
+    }
+    
+    
+    /**
+     * Display status in french
+     * 
+     * @param   string  $status     Status to translate
+     * @result  string
+     * */
+    public static function display_status($status)
+    {
+        switch ($status) {
+            case 'sent':
+                return 'envoyé';
+                break;
+            
+            case 'queued':
+                return 'en cours';
+                break;
+            
+            case 'scheduled':
+                return 'départ prévu';
+                break;
+            
+            case 'rejected':
+                return 'en erreur';
+                break;
+            
+            case 'invalid':
+                return 'invalide';
+                break;
+        }
     }
 
 }
