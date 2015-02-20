@@ -63,6 +63,22 @@ class Template
     
     
     /**
+     * Save a new version of this template
+     * 
+     * @param   string  $template   New version of this template
+     * @result  void
+     * */
+    public function write($template)
+    {
+        $this->_template['template'] = $template;
+        $query = Core::query('template-write');
+        $query->bindValue(':template', $template);
+        $query->bindValue(':id', $this->_template['id'], PDO::PARAM_INT);
+        $query->execute();
+    }
+    
+    
+    /**
      * List all templates by name
      * @result array
      * */

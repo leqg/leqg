@@ -20,6 +20,7 @@
 	<script src="assets/js/sweet-alert.min.js"></script>
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
+	<?php if (isset($_GET['template'])) { ?><script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script> <?php } ?>
 </head>
 
 <body class="flat">	
