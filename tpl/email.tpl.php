@@ -8,7 +8,7 @@
 	// On charge le template
 	Core::tpl_header(); 
 ?>
-	
+    <a href="<?php Core::tpl_go_to('campagne', array('template' => 'list')); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Liste des templates</button></a>	
 	<h2 class="titreCampagne" data-page="campagnes">Campagnes de Email groupés</h2>
 	<?php if (count($liste)) : ?>
 		<section id="campagnes">

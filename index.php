@@ -126,6 +126,11 @@ else {
         	    Core::tpl_go_to('campaign', array('template' => $template), true);
     	    }
     	    
+    	    // On regarde si on nous demande la liste des templates existants
+    	    elseif (isset($_GET['template']) && $_GET['template'] == 'list') {
+        	    Core::tpl_load('campaign', 'templates');
+    	    }
+    	    
     	    // Sinon, on appelle la page principale du module
     	    else {
         	    Core::tpl_load('campaign');
