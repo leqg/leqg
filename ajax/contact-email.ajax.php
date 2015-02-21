@@ -7,21 +7,12 @@
         	$user = User::ID();
         	$type = "email";
         	
-        	// On lance l'envoi
-        	$envoi = Campagne::envoi($_POST['objet'], $_POST['message'], $type);
-        	
         	// On récupère l'adresse email
         	$query = $link->prepare('SELECT `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_id` = :id');
         	$query->bindParam(':id', $_POST['adresse']);
         	$query->execute();
         	$adresse = $query->fetch(PDO::FETCH_ASSOC);
         	$adresse = $adresse['coordonnee_email'];
-        	
-        	// On lance le tracking
-        	$query = $link->prepare('INSERT INTO `tracking` (`envoi_id`, `tracking_mail`) VALUES (:envoi, :mail)');
-        	$query->bindValue(':envoi', $envoi);
-        	$query->bindValue(':mail', $adresse);
-        	$query->execute();
         	
         	// On ouvre la fiche du contact concerné
         	$contact = new contact(md5($_POST['contact']));
@@ -53,13 +44,13 @@
         	$result = $mail->messages->send($message, $async);
         	
     	    // On met à jour le tracking avec les informations retournées
-    	    $query = $link->prepare('UPDATE `tracking` SET `tracking_id` = :id, `tracking_status` = :status, `tracking_reject_reason` = :reject WHERE `envoi_id` = :envoi AND `tracking_mail` = :mail');
-    	    $query->bindValue(':id', $result[0]['_id']);
-    	    $query->bindValue(':status', $result[0]['status']);
-    	    $query->bindValue(':reject', $result[0]['reject_reason']);
-    	    $query->bindValue(':envoi', $envoi);
-    	    $query->bindValue(':mail', $adresse);
-    	    $query->execute();
+    	    $campaign = 0;
+        $query = Core::query('campaign-tracking');
+        $query->bindValue(':campaign', $campaign, PDO::PARAM_INT);
+        $query->bindValue(':id', $result[0]['_id']);
+        $query->bindValue(':email', $result[0]['email']);
+        $query->bindValue(':status', $result[0]['status']);
+        $query->execute();
     }
     else
     {
