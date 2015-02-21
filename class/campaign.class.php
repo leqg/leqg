@@ -63,26 +63,66 @@ class Campaign
     
     
     /**
+     * New object method
+     * 
+     * @param   string  $object     New object
+     * @result  void
+     * */
+    public function object($object)
+    {
+        $this->_campaign['objet'] = $object;
+        $query = Core::query('campaign-object');
+        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->bindValue(':object', $object);
+        $query->execute();
+    }
+    
+    
+    /**
      * Recipients list
      * 
      * @result  array
      * */
     public function recipients()
     {
-        $query = Core::query('campaign-recipients');
-        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
-        $query->execute();
-        $recipients = $query->fetchAll(PDO::FETCH_ASSOC);
-        
-        foreach($recipients as $key => $recipient) {
-            $query = Core::query('contact-by-email');
-            $query->bindValue(':email', $recipient['email']);
+        if ($this->_campaign['status'] == 'open') {
+            $query = Core::query('campaign-recipients-list');
+            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
             $query->execute();
-            $contact = $query->fetch(PDO::FETCH_NUM);
-            $recipients[$key]['contact'] = $contact[0];
-        }
+            $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
+            $recipients = array();
+            
+            foreach ($contacts as $contact) {
+                $query = Core::query('emails-by-contact');
+                $query->bindValue(':contact', $contact['contact'], PDO::PARAM_INT);
+                $query->execute();
+                $results = $query->fetchAll(PDO::FETCH_ASSOC);
+                
+                foreach ($results as $result) {
+                    $result['contact'] = $contact['contact'];
+                    $result['status'] = 'ready';
+                    $recipients[] = $result;
+                }
+            }
+            
+            return $recipients;
+            
+        } else {
+            $query = Core::query('campaign-recipients');
+            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+            $query->execute();
+            $recipients = $query->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach($recipients as $key => $recipient) {
+                $query = Core::query('contact-by-email');
+                $query->bindValue(':email', $recipient['email']);
+                $query->execute();
+                $contact = $query->fetch(PDO::FETCH_NUM);
+                $recipients[$key]['contact'] = $contact[0];
+            }
         
-        return $recipients;
+            return $recipients;
+        }
     }
     
     
@@ -100,11 +140,42 @@ class Campaign
                 $query->bindParam(':campaign', $this->_campaign['id']);
                 $query->execute();
                 $result = $query->fetchAll(PDO::FETCH_ASSOC);
+                $nb = array();
                 foreach ($result as $element) {
                     $nb[$element['status']] = $element['nb'];
                 }
-                $nb['all'] = array_sum($nb);
+                if (count($nb)) {
+                    $nb['all'] = array_sum($nb);
+                } else {
+                    $nb['all'] = 0;
+                }
                 return $nb;
+                break;
+            
+            case 'emails':
+                $query = Core::query('campaign-recipients-list');
+                $query->bindValue(':campaign', $this->_campaign['id']);
+                $query->execute();
+                
+                if ($query->rowCount()) {
+                    $contacts = $query->fetchAll(PDO::FETCH_NUM);
+                } else {
+                    $contacts = false;
+                }
+                
+                if ($contacts) {
+                    $nb = 0;
+                    foreach ($contacts as $contact) {
+                        $query = Core::query('campaign-recipients-email-count');
+                        $query->bindValue(':contact', $contact[0]);
+                        $query->execute();
+                        $count = $query->fetch(PDO::FETCH_NUM);
+                        $nb = $nb + $count[0];
+                    }
+                    return $nb;
+                } else {
+                    return 0;
+                }
                 break;
             
             // if we asked the number of recipients
@@ -124,12 +195,12 @@ class Campaign
      * */
     public function estimated_time()
     {
-        if (!isset($this->_campaign['count']['target'])) {
-            $this->_campaign['count']['target'] = $this->count()[0];
+        if (!isset($this->_campaign['count']['emails'])) {
+            $this->_campaign['count']['emails'] = $this->count('emails');
         }
         
         $hourlyQuota = Configuration::read('mail.quota');
-        $target = $this->_campaign['count']['target'];
+        $target = $this->_campaign['count']['emails'];
         $hoursNeeded = $target / $hourlyQuota;
         $result = array('months' => 0, 'weeks' => 0, 'days' => 0, 'hours' => 0);
 
@@ -173,6 +244,9 @@ class Campaign
         
         // number of recipients
         $this->_campaign['count']['target'] = $this->count()[0];
+        
+        // number of emails
+        $this->_campaign['count']['emails'] = $this->count('emails');
         
         // sending time estimation
         $this->_campaign['count']['time'] = $this->estimated_time();
@@ -261,6 +335,20 @@ class Campaign
         $template = $query->fetch(PDO::FETCH_NUM);
         
         $this->template_write($template[0]);
+    }
+    
+    
+    /**
+     * New empty template
+     * 
+     * @result  void
+     * */
+    public function template_empty()
+    {
+        $query = Core::query('campaign-empty-template');
+        $query->bindParam(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->execute();
+        $this->_campaign['template'] = '';
     }
     
     
@@ -395,6 +483,15 @@ class Campaign
                 $query->bindValue(':email', $result['email']);
                 $query->bindValue(':status', $result['status']);
                 $query->execute();
+                
+                $query = Core::query('contact-by-email');
+                $query->bindValue(':email', $result['email']);
+                $query->execute();
+                $contact = $query->fetch(PDO::FETCH_ASSOC);
+                $e = new Evenement($contact['contact'], false, true);
+                $e->modification('historique_type', 'email');
+                $e->modification('campagne_id', $this->_campaign['id']);
+                $e->modification('historique_objet', $this->_campaign['objet']);
                 break;
         }
     }
@@ -438,7 +535,7 @@ class Campaign
      * */
     public function price()
     {
-        $emails = $this->count('items')['all'];
+        $emails = $this->count('emails');
         $pricePerThousand = Configuration::read('price.email');
         $price = $pricePerThousand/1000;
         $cost = $price * $emails;
@@ -449,17 +546,19 @@ class Campaign
     
     /**
      * Create a new campaign
-     * @param  string $method Campaign method (email, sms, publi)
-     * @return int
+     * 
+     * @param   string  $method     Campaign method (email, sms, publi)
+     * @return  int
      * */
     public static function create($method)
     {
         $user = User::ID();
 
         $query = Core::query('campaign-create');
-        $query->bindParam(':type', $type);
+        $query->bindParam(':type', $method);
         $query->bindParam(':user', $user, PDO::PARAM_INT);
         $query->execute();
+        
         return Configuration::read('db.link')->lastInsertId();
     }
     
@@ -533,6 +632,10 @@ class Campaign
                 
             case 'close':
                 return 'campagne annulée';
+                break;
+                
+            case 'ready':
+                return 'prêt';
                 break;
                 
             case 'sent':

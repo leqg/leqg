@@ -18,12 +18,24 @@ if (isset($_GET['operation'])) {
         case 'launch':
             $data->launch();
             break;
+        
+        case 'newTemplate':
+            $data->template_empty();
+            break;
+        
+        case 'modificationObjetCampagne':
+            $data->object($_POST['objet']);
+            break;
+        
+        case 'copieTemplate':
+            $data->template_copy($_GET['template']);
+            break;
     }
 }
 
 Core::tpl_header();
 ?>
-<h2 id="titre-campagne" <?php if ($data->get('status') == 'open') : ?>class="titre"<?php endif; ?> data-campagne="<?php $data->get('id'); ?>"><?php if (!empty($data->get('titre'))) { echo 'Campagne ' . $data->get('titre'); } else { echo 'Campagne sans titre'; } ?></h2>
+<h2 id="titre-campagne" <?php if ($data->get('status') == 'open') : ?>class="titre"<?php endif; ?> data-campagne="<?php $data->get('id'); ?>"><?php if (!empty($data->get('objet'))) { echo 'Campagne &laquo;&nbsp;' . $data->get('objet') . '&nbsp;&raquo;'; } else { echo 'Campagne sans titre'; } ?></h2>
 
 <nav class="onglets">
     <a href="<?php Core::tpl_go_to('campagne', array('id' => $data->get('id'))); ?>">Supervision</a>
@@ -47,12 +59,12 @@ Core::tpl_header();
             
 			<ul class="liste-campagnes">
 				<li class="template">
-				    <a href="<?php Core::tpl_go_to('campagne', array('template' => 'new')); ?>" class="nostyle"><h4>Template vierge</h4></a>
+				    <a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'newTemplate')); ?>" class="nostyle"><h4>Template vierge</h4></a>
 				    <p>Vous pouvez commencer à partir d'un template vierge ou bien récupérer un précédent template pour l'adapter.</p>
 				</li>
 				<?php foreach ($templates as $element) : ?>
 				<li class="template">
-					<a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'copieTemplate', 'template' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['name'])) { echo $element['name']; } else { echo 'Template sans titre'; } ?></h4></a>
+					<a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'copieTemplate', 'template' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['objet'])) { echo $element['objet']; } else { echo 'Campagne sans titre'; } ?></h4></a>
                     <?php if (!empty($element['desc'])) : ?><p><?php echo $element['desc']; ?></p><?php endif; ?>
 				</li>
 				<?php endforeach; ?>
@@ -74,10 +86,10 @@ Core::tpl_header();
         <?php endif; ?>
     </div>
 
-<?php break; case 'visu': $email = $data->template_parsing(); ?>
+<?php break; case 'visu': ?>
 
     <div class="colonne">
-        <section class="contenu">
+        <section class="contenu previsualisationEmail">
             <?php echo $data->get('mail'); ?>
         </section>
     </div>
@@ -190,16 +202,16 @@ Core::tpl_header();
                     <span>Créateur</span>
                     <span><?php echo User::get_login_by_ID($data->get('user')); ?></span>
                 </li>
-                <?php if ($data->get('type') == 'email') : ?>
+                <?php if ($data->get('type') == 'email' && $data->get('status') != 'open') : ?>
                 <li class="utilisateurs inscrit">
                     <span>Nombre d'envois</span>
                     <span><strong><?php echo number_format($data->get('count')['items']['all'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['items']['all'] > 1) ? 's' : ''; ?></span>
                 </li>
                 <?php endif; ?>
-                <?php if ($data->get('status') == 'open') : ?>
+                <?php if ($data->get('type') == 'email' && $data->get('status') == 'open') : ?>
                 <li class="utilisateurs inscrit">
                     <span>Ciblage de la campagne</span>
-                    <span><strong><?php echo number_format($data->get('count')['target'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['target'] > 1) ? 's' : ''; ?></span>
+                    <span><strong><?php echo number_format($data->get('count')['target'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['target'] > 1) ? 's' : ''; ?> / <?php echo $data->get('count')['emails']; ?> email<?php echo ($data->get('count')['emails'] > 1) ? 's' : ''; ?></span>
                 </li>
                 <li class="date">
                     <span>Temps estimé pour l'envoi</span>
@@ -213,7 +225,7 @@ Core::tpl_header();
             </ul>
         </section>
         
-        <?php if ($data->get('status') == 'open' && !empty($data->get('titre'))) : ?>
+        <?php if ($data->get('status') == 'open' && !empty($data->get('objet'))) : ?>
         <section class="contenu demi">
             <a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'launch', 'volet' => 'launch')); ?>" class="nostyle"><button class="vert clair long" style="margin: .25em auto .15em;">Envoi de la campagne</button></a>
         </section>
@@ -223,8 +235,22 @@ Core::tpl_header();
     <div class="colonne demi droite">
         <section class="contenu demi">
             <h4>Objet de la campagne</h4>
-            <p><?php if (empty($data->get('titre'))) : echo 'Aucun titre actuellement, ce titre est nécessaire pour l\'envoi.'; else: echo $data->get('titre'); endif; ?></p>
-            <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="#" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
+            <?php if (isset($_GET['operation']) && $_GET['operation'] == 'modificationObjet') : ?>
+                <form action="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjetCampagne')); ?>" method="post">
+                    <ul class="formulaire">
+                        <li>
+                            <label class="small" for="objet">Objet de la campagne email</label>
+                            <span class="form-icon decalage"><input type="text" name="objet" value="<?php echo $data->get('objet'); ?>"></span>
+                        </li>
+                        <li>
+                            <button type="submit" class="vert clair long">Valider l'objet</button>
+                        </li>
+                    </ul>
+                </form>
+            <?php else : ?>
+                <p><?php if (empty($data->get('objet'))) : echo 'Aucun titre actuellement, ce titre est nécessaire pour l\'envoi.'; else: echo $data->get('objet'); endif; ?></p>
+                <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjet')); ?>" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
+            <?php endif; ?>
         </section>
     </div>
     
