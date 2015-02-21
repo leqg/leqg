@@ -23,7 +23,7 @@ if (isset($_GET['operation'])) {
 
 Core::tpl_header();
 ?>
-<h2 id="titre-campagne" class="titre" data-campagne="<?php $data->get('id'); ?>"><?php if (!empty($data->get('titre'))) { echo 'Campagne ' . $data->get('titre'); } else { echo 'Campagne sans titre'; } ?></h2>
+<h2 id="titre-campagne" <?php if ($data->get('status') == 'open') : ?>class="titre"<?php endif; ?> data-campagne="<?php $data->get('id'); ?>"><?php if (!empty($data->get('titre'))) { echo 'Campagne ' . $data->get('titre'); } else { echo 'Campagne sans titre'; } ?></h2>
 
 <nav class="onglets">
     <a href="<?php Core::tpl_go_to('campagne', array('id' => $data->get('id'))); ?>">Supervision</a>
@@ -166,8 +166,8 @@ Core::tpl_header();
                 <li>
                     <strong><?php echo $erreur['email']; ?></strong><br>
                     <a href="<?php Core::tpl_go_to('contact', array('contact' => md5($erreur['contact']))); ?>" class="nostyle"><?php echo $erreur['name']; ?></a><br>
-                    <em>Erreur : <?php echo $erreur['error']; ?></em><br>
-                    <em>Date : <?php echo date('d/m/Y H\hi', strtotime($erreur['time'])); ?></em>
+                    <em>Erreur :</em> <?php echo $erreur['error']; ?><br>
+                    <em>Date :</em> <?php echo date('d/m/Y H\hi', strtotime($erreur['time'])); ?>
                 </li>
                 <?php endforeach; ?>
             </ul>
@@ -182,6 +182,10 @@ Core::tpl_header();
             <h4>Données générales</h4>
             
             <ul class="informations">
+                <li class="courrier">
+                    <span>Statut de la campagne</span>
+                    <span><?php echo Campaign::display_status($data->get('status')); ?></span>
+                </li>
                 <li class="responsable">
                     <span>Créateur</span>
                     <span><?php echo User::get_login_by_ID($data->get('user')); ?></span>
@@ -209,11 +213,19 @@ Core::tpl_header();
             </ul>
         </section>
         
-        <?php if ($data->get('status') == 'open') : ?>
+        <?php if ($data->get('status') == 'open' && !empty($data->get('titre'))) : ?>
         <section class="contenu demi">
             <a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'launch', 'volet' => 'launch')); ?>" class="nostyle"><button class="vert clair long" style="margin: .25em auto .15em;">Envoi de la campagne</button></a>
         </section>
         <?php endif; ?>
+    </div>
+    
+    <div class="colonne demi droite">
+        <section class="contenu demi">
+            <h4>Objet de la campagne</h4>
+            <p><?php if (empty($data->get('titre'))) : echo 'Aucun titre actuellement, ce titre est nécessaire pour l\'envoi.'; else: echo $data->get('titre'); endif; ?></p>
+            <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="#" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
+        </section>
     </div>
     
 <?php endswitch; ?>

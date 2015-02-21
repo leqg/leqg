@@ -519,6 +519,22 @@ class Campaign
     public static function display_status($status)
     {
         switch ($status) {
+            case 'send':
+                return 'campagne lancée';
+                break;
+                
+            case 'open':
+                return 'campagne en préparation';
+                break;
+                
+            case 'schedule':
+                return 'campagne planifiée';
+                break;
+                
+            case 'close':
+                return 'campagne annulée';
+                break;
+                
             case 'sent':
                 return 'envoyé';
                 break;
