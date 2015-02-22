@@ -31,9 +31,9 @@ class People
 {
     
     /**
-     * @var array   $_people    People data
-     * @var array   $_address   Address data
-     * @var array   $_postal    Complete postal addresses
+     * @var array   $_people        People data
+     * @var array   $_address       Address data
+     * @var array   $_postal        Complete postal addresses
      * */
     private $_people, $_address, $_postal;
     
