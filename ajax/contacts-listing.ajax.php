@@ -14,7 +14,7 @@
 		if (isset($_GET['phone'])) { $tri['phone'] = $_GET['phone']; } else { $tri['phone'] = 0; }
 		
 		// On charge les fiches correspondantes
-		$contacts = People::listing($tri, $_GET['debut']);
+		$contacts = Contact::listing($tri, $_GET['debut']);
 		
 		// On prépare l'array de résultat
 		$fiches = array();

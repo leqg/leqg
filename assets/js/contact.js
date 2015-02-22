@@ -10,14 +10,14 @@ var contact = function() {
 	
 	// Action au chargement de la page d'ouverture directe d'un événement
 	$.urlParam = function(name) {
-		 var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-		 if (results==null){
-			return null;
-		 }
-		 else{
-			return results[1] || 0;
-		 }
-	}
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+    }
 	if ($.urlParam('evenement'))
 	{
 		var idEvenement = $.urlParam('evenement');
@@ -29,20 +29,20 @@ var contact = function() {
 	
 	// Action de suppression de la fiche
 	$('.supprimerFiche').click(function() {
-			 // On vérifie cette suppression
-			 if (confirm('Voulez-vous vraiment supprimer cette fiche ? Cette action est irréversible.'))
-			 {
-				 var fiche = $('.titre').data('fiche');
-				 $.post('ajax.php?script=contact-suppression', { fiche: fiche }, function() {
-					 var url = 'index.php?page=dossier';
-					 document.location.href = url;
-				 });
-				 return false;
-			 }
-			 else
-			 {
-				 return false;
-			 }
+    	    // On vérifie cette suppression
+    	    if (confirm('Voulez-vous vraiment supprimer cette fiche ? Cette action est irréversible.'))
+    	    {
+        	    var fiche = $('.titre').data('fiche');
+        	    $.post('ajax.php?script=contact-suppression', { fiche: fiche }, function() {
+            	    var url = 'index.php?page=dossier';
+            	    document.location.href = url;
+        	    });
+        	    return false;
+    	    }
+    	    else
+    	    {
+        	    return false;
+    	    }
 	});
 	
 	
@@ -257,53 +257,53 @@ var contact = function() {
 		$('#colonneDroite section').hide();
 		
 		// On recherche les informations sur l'événement
-		$.getJSON('ajax.php?script=event', { evenement: identifiant }, function(data) {
+		$.getJSON('ajax.php?script=evenement', { evenement: identifiant }, function(data) {
 			// On affecte les informations récupérées
-			$('#eventTitre').val(data.objet);
-			$('#eventType').val(data.type);
-			$('#eventDate').val(data.display_date);
-			$('#eventLieu').val(data.lieu);
-			$('#eventNotes').val(data.notes);
-			$('#evenement').data('evenement', data.id);
-			$('#formEvenement').val(data.id);
+			$('#eventTitre').val(data.historique_objet);
+			$('#eventType').val(data.historique_type);
+			$('#eventDate').val(data.historique_date_fr);
+			$('#eventLieu').val(data.historique_lieu);
+			$('#eventNotes').val(data.historique_notes);
+			$('#evenement').data('evenement', data.historique_id);
+			$('#formEvenement').val(data.historique_id);
 			
 			// On regarde s'il y a un dossier et si oui, on l'affiche
-			if (data.folder)
+			if (data.dossier_id)
 			{
-					   $('.lierDossier').hide();
-					   
-					   // On parse les informations du dossier
-					   var infosDossier = data.folder;
-					   
-					   // On affiche les informations du dossier
-					   $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + infosDossier.id);
-					   $('.afficherInfosDossier li strong').html(infosDossier.name);
-					   $('.afficherInfosDossier li em').html(infosDossier.desc);
-					   $('.afficherInfosDossier').show();
+    			    $('.lierDossier').hide();
+    			    
+    			    // On parse les informations du dossier
+    			    var infosDossier = $.parseJSON(data.dossier);
+    			    
+    			    // On affiche les informations du dossier
+    			    $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + infosDossier.dossier_md5);
+    			    $('.afficherInfosDossier li strong').html(infosDossier.dossier_nom);
+    			    $('.afficherInfosDossier li em').html(infosDossier.dossier_description);
+    			    $('.afficherInfosDossier').show();
 			}
 			
 			// On va formater la liste des fichiers pour l'ajouter à la fiche événement
-			var fichiers = data.files;
+			var fichiers = $.parseJSON(data.fichiers);
 			
 			// On fait une boucle des fichiers à afficher
 			$.each(fichiers, function(key, val) {
 				// On créé d'abord une nouvelle puce à la fin de la liste
-				$('.nouveauFichier').after('<a href="uploads/' + val.url + '" class="fichier-' + val.id + '" target="_blank"><li class="fichier"><strong></strong><em></em></li></a>');
+				$('.nouveauFichier').after('<a href="uploads/' + val.fichier_url + '" class="fichier-' + val.fichier_id + '" target="_blank"><li class="fichier"><strong></strong><em></em></li></a>');
 				
 				// On ajoute les données importantes dans dans la puce
-				$('.fichier-' + val.id + ' li strong').html(val.name);
-				$('.fichier-' + val.id + ' li em').html(val.description);
+				$('.fichier-' + val.fichier_id + ' li strong').html(val.fichier_nom);
+				$('.fichier-' + val.fichier_id + ' li em').html(val.fichier_description);
 			});
-
+			
 			// On va formater la liste des tâches pour l'ajouter à la fiche événement
-			var taches = data.tasks;
+			var taches = $.parseJSON(data.taches);
 			
 			// On fait une boucle des tâches à afficher
 			$.each(taches, function(key, val) {
 				// On créé d'abord une nouvelle puce à la fin de la liste
-				$('.nouvelleTache').after('<li class="tache tache-' + val.id + '" data-tache="' + val.id + '"><strong>' + val.task + '</strong></li>');
+				$('.nouvelleTache').after('<li class="tache tache-' + val.tache_id + '" data-tache="' + val.tache_id + '"><strong>' + val.tache_description + '</strong></li>');
 			});
-		
+			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
 		});
@@ -333,44 +333,44 @@ var contact = function() {
 		// On lance la création de l'événement
 		$.getJSON('ajax.php?script=evenement-nouveau', { contact: contact }, function(data) {
 			// On affiche l'ID dans la case data concernée
-			$('#evenement').data('evenement', data.id);
+			$('#evenement').data('evenement', data.historique_id);
 			
 			// On vide les éléments du formulaire
-			$('#eventTitre').val(data.objet);
-			$('#eventType').val(data.type);
-			$('#eventDate').val(data.display_date);
-			$('#eventLieu').val(data.lieu);
-			$('#eventNotes').val(data.notes);
-			$('#evenement').data('evenement', data.id);
-			$('#formEvenement').val(data.id);
+			$('#eventTitre').val(data.historique_objet);
+			$('#eventType').val(data.historique_type);
+			$('#eventDate').val(data.historique_date_fr);
+			$('#eventLieu').val(data.historique_lieu);
+			$('#eventNotes').val(data.historique_notes);
+			$('#evenement').data('evenement', data.historique_id);
+			$('#formEvenement').val(data.historique_id);
 		
-				// On commence par vider le dossier ouvert
-				$('.afficherInfosDossier').hide();
-				$('.lierDossier').show();
+        		// On commence par vider le dossier ouvert
+        		$('.afficherInfosDossier').hide();
+        		$('.lierDossier').show();
 			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
 			
 			// On ajoute l'événement à la liste des événements
 				// En commençant par déclarer le lien vers l'événement
-				$('li.nouvelEvenement').after('<a href="#" class="accesEvenement nostyle evenement-' + data.id + '" data-evenement="' + data.id + '"></a>');
+				$('li.nouvelEvenement').after('<a href="#" class="accesEvenement nostyle evenement-' + data.historique_id + '" data-evenement="' + data.historique_md5 + '"></a>');
 				
 				// À l'intérieur, on ajoute la puce
-				$('a.evenement-' + data.id).append('<li class="evenement ' + data.type + ' clic"></li>');
+				$('a.evenement-' + data.historique_id).append('<li class="evenement ' + data.historique_type + ' clic"></li>');
 				
 				// À l'intérieur de la puce, on ajoute les informations
-				$('a.evenement-' + data.id + ' li').append('<small><span>Nouvel événement</span></small>');
+				$('a.evenement-' + data.historique_id + ' li').append('<small><span>' + data.historique_type_clair + '</span></small>');
 				
-				if (data.objet.length >= 1)
+				if (data.historique_objet.length >= 1)
 				{
-					$('a.evenement-' + data.id + ' li').append('<strong>Nouvel événement</strong>');
+					$('a.evenement-' + data.historique_id + ' li').append('<strong>' + data.historique_objet + '</strong>');
 				}
 				else
 				{
-					$('a.evenement-' + data.id + ' li').append('<strong>Événement sans titre</strong>');
+					$('a.evenement-' + data.historique_id + ' li').append('<strong>Événement sans titre</strong>');
 				}
 				
-				$('a.evenement-' + data.id + ' li').append('<ul class="infosAnnexes"><li class="date">' + data.display_date + '</li></ul>');
+				$('a.evenement-' + data.historique_id + ' li').append('<ul class="infosAnnexes"><li class="date">' + data.historique_date_fr + '</li></ul>');
 		});
 		
 		// On annule le clic sur le bouton
@@ -492,7 +492,7 @@ var contact = function() {
 		var contact = $('#nomContact').data('fiche');
 		
 		// On effectue la sauvegarde
-		$.post('ajax.php?script=person-birthdate', { date: date , contact: contact }, function() {
+		$.post('ajax.php?script=contact-naissance-update', { date: date , contact: contact }, function() {
 			// On modifie l'information sur la fiche
 			$('li.naissance').html(date);
 			
@@ -899,7 +899,7 @@ var contact = function() {
 			
 			$.each(data, function(key, val) {
 				// On ajoute la tâche à la liste des tâches
-				$('.nouvelleTache').after('<li class="tache tache-' + val.id + '" data-tache="' + val.id + '"><strong>' + val.task + '</strong><em>' + val.user + '</em></li>');
+				$('.nouvelleTache').after('<li class="tache tache-' + val.tache_id + '" data-tache="' + val.tache_id + '"><strong>' + val.tache_description + '</strong><em>' + val.user + '</em></li>');
 			});
 			
 			// On revient en arrière pour revenir à l'événement
@@ -967,26 +967,26 @@ var contact = function() {
 	
 	// Script d'affichage du module d'envoi de SMS
 	$('.envoyerSMS').click(function() {
-			 // On vide au cas où le formulaire d'envoi de SMS
-			 $('#messageSMS').val('');
-			 
-			 // On affiche le formulaire
-			 $('#colonneDroite section').hide();
-			 $('.envoi-sms').fadeIn();
+    	    // On vide au cas où le formulaire d'envoi de SMS
+    	    $('#messageSMS').val('');
+    	    
+    	    // On affiche le formulaire
+    	    $('#colonneDroite section').hide();
+    	    $('.envoi-sms').fadeIn();
 	});
 	
 	
 	// Script d'envoi du SMS entré
 	$('.SMSsending').click(function() {
-			 // On récupère les paramètres entrés
-			 var contact = $('#nomContact').data('fiche');
-			 var numero = $('#choixNumero').val();
-			 var message = $('#messageSMS').val();
-			 
-			 // On lance l'envoi du SMS
-			 $.post('ajax.php?script=contact-sms', { contact: contact, numero: numero, message: message }, function(){
-				 // On ajoute le SMS à la liste des événements
-				 $('.nouvelEvenement').after('<li class="evenement sms"><strong>Envoi d\'un SMS</strong><ul class="infosAnnexes"><li class="date">Maintenant</li></ul></li>');
+    	    // On récupère les paramètres entrés
+    	    var contact = $('#nomContact').data('fiche');
+    	    var numero = $('#choixNumero').val();
+    	    var message = $('#messageSMS').val();
+    	    
+    	    // On lance l'envoi du SMS
+    	    $.post('ajax.php?script=contact-sms', { contact: contact, numero: numero, message: message }, function(){
+        	    // On ajoute le SMS à la liste des événements
+        	    $('.nouvelEvenement').after('<li class="evenement sms"><strong>Envoi d\'un SMS</strong><ul class="infosAnnexes"><li class="date">Maintenant</li></ul></li>');
 			
 			// On vide le formulaire
 			$('#messageSMS').val('');
@@ -994,33 +994,33 @@ var contact = function() {
 			// On ferme la colonne
 			$('#colonneDroite section').hide();
 			$('#colonneDroite section:not(.invisible)').fadeIn();	
-			 });
+    	    });
 	});
 	
 	
 	// Script d'affichage du module d'envoi de mail
 	$('.envoyerEmail').click(function() {
-			 // On vide au cas où le formulaire d'envoi de SMS
-			 $('#messageEmail').val('');
-			 
-			 // On affiche le formulaire
-			 $('#colonneDroite section').hide();
-			 $('.envoi-email').fadeIn();
+    	    // On vide au cas où le formulaire d'envoi de SMS
+    	    $('#messageEmail').val('');
+    	    
+    	    // On affiche le formulaire
+    	    $('#colonneDroite section').hide();
+    	    $('.envoi-email').fadeIn();
 	});
 	
 	
 	// Script d'envoi du SMS entré
 	$('.EmailSending').click(function() {
-			 // On récupère les paramètres entrés
-			 var contact = $('#nomContact').data('fiche');
-			 var adresse = $('#choixAdresse').val();
-			 var objet = $('#objetEmail').val();
-			 var message = $('#messageEmail').val();
-			 
-			 // On lance l'envoi du SMS
-			 $.post('ajax.php?script=contact-email', { contact: contact, adresse: adresse, objet: objet, message: message }, function(){
-				 // On ajoute le SMS à la liste des événements
-				 $('.nouvelEvenement').after('<li class="evenement email"><strong>Envoi d\'un courrier électronique</strong><ul class="infosAnnexes"><li class="date">Maintenant</li></ul></li>');
+    	    // On récupère les paramètres entrés
+    	    var contact = $('#nomContact').data('fiche');
+    	    var adresse = $('#choixAdresse').val();
+    	    var objet = $('#objetEmail').val();
+    	    var message = $('#messageEmail').val();
+    	    
+    	    // On lance l'envoi du SMS
+    	    $.post('ajax.php?script=contact-email', { contact: contact, adresse: adresse, objet: objet, message: message }, function(){
+        	    // On ajoute le SMS à la liste des événements
+        	    $('.nouvelEvenement').after('<li class="evenement email"><strong>Envoi d\'un courrier électronique</strong><ul class="infosAnnexes"><li class="date">Maintenant</li></ul></li>');
 			
 			// On vide le formulaire
 			$('#objetEmail').val('');
@@ -1029,26 +1029,26 @@ var contact = function() {
 			// On ferme la colonne
 			$('#colonneDroite section').hide();
 			$('#colonneDroite section:not(.invisible)').fadeIn();	
-			 });
+    	    });
 	});
 	
 	
 	// Script de suppression d'une adresse connue
 	$('.supprimerAdresse').click(function() {
-			 // On récupère le numéro de la fiche
-			 var fiche = $('#nomContact').data('fiche');
-			 
-			 // On lance la suppression de la fiche
-			 $.post('ajax.php?script=contact-adresse-suppression', { fiche: fiche }, function() {
-				 // On va retirer l'information affichée
-				 $('.etatcivil .adresse').html('<span class="inconnu">Adresse inconnue</span>');
-				 
-				 // On ferme le volet
-				 $('#colonneDroite section').hide();
-				 $('#colonneDroite section:not(.invisible)').fadeIn();
-			 });
-			 
-			 return false;
+    	    // On récupère le numéro de la fiche
+    	    var fiche = $('#nomContact').data('fiche');
+    	    
+    	    // On lance la suppression de la fiche
+    	    $.post('ajax.php?script=contact-adresse-suppression', { fiche: fiche }, function() {
+        	    // On va retirer l'information affichée
+        	    $('.etatcivil .adresse').html('<span class="inconnu">Adresse inconnue</span>');
+        	    
+        	    // On ferme le volet
+        	    $('#colonneDroite section').hide();
+        	    $('#colonneDroite section:not(.invisible)').fadeIn();
+    	    });
+    	    
+    	    return false;
 	});
 	
 	
@@ -1080,86 +1080,86 @@ var contact = function() {
 	
 	// Script d'affichage de la liaison de dossiers
 	$('.lierDossier').click(function() {
-			 // On ferme les onglets
-			 $('#colonneDroite section').hide();
-			 $('.selectionDossier').fadeIn();
+    	    // On ferme les onglets
+    	    $('#colonneDroite section').hide();
+    	    $('.selectionDossier').fadeIn();
 	});
 	
 	
 	// Script d'affichage de l'ajout de dossier
 	$('.ajoutDossier').click(function() {
-			 // On ferme les onglets
-			 $('#colonneDroite section').hide();
-			 $('.creationDossier').fadeIn();
+    	    // On ferme les onglets
+    	    $('#colonneDroite section').hide();
+    	    $('.creationDossier').fadeIn();
 	});
 	
 	
 	// Script de retour au choix des dossiers
 	$('.revenirDossier').click(function() {
-			 // On ferme les onglets
-			 $('#colonneDroite section').hide();
-			 $('.selectionDossier').fadeIn();
+    	    // On ferme les onglets
+    	    $('#colonneDroite section').hide();
+    	    $('.selectionDossier').fadeIn();
 	});
 	
 	
 	// Script de création du dossier
 	$('.creerDossier').click(function() {
-			 // On récupère les informations
-			 var nom = $('#creationDossierNom').val();
-			 var desc = $('#creationDossierDesc').val();
-			 var event = $('#evenement').data('evenement');
-			 
-			 // On enregistre le dossier
-			 $.getJSON('ajax.php?script=dossier-creer', { nom: nom, desc: desc, event: event }, function(data) {
-				 // On rajoute le dossier à la liste
-				 $('.listeDesDossiers .ajoutDossier').after('<a href="index.php?page=dossier&dossier=' + data.dossier_md5 + '"><li class="dossier dossier-' + data.dossier_id + '" data-dossier="' + data.dossier_id + '"><strong></strong><em></em></li></a>');
-				 $('dossier-' + data.dossier_id + ' strong').html(data.dossier_nom);
-				 $('dossier-' + data.dossier_id + ' em').html(data.dossier_description);
-				 
-				 // On modifie le dossier dans la fiche evenement
-				 $('.affichageDossier').html('<li class="dossier"><strong>' + data.dossier_nom + '</strong><em>' + data.dossier_description + '</em></li>');
-			 
-			// On ferme la fenètre
-			$('.creationDossier').hide();
-			
-			// On vide le formulaire
-			$('#creationDossierNom').val('');
-			$('#creationDossierDesc').val('');
-			
-			// On revient à l'événement
-			$('#colonneDroite section').hide();
-			$('#evenement').fadeIn();
-			 });
-			 
-			 return false;
+    	    // On récupère les informations
+    	    var nom = $('#creationDossierNom').val();
+    	    var desc = $('#creationDossierDesc').val();
+    	    var event = $('#evenement').data('evenement');
+    	    
+    	    // On enregistre le dossier
+    	    $.getJSON('ajax.php?script=dossier-creer', { nom: nom, desc: desc, event: event }, function(data) {
+        	    // On rajoute le dossier à la liste
+        	    $('.listeDesDossiers .ajoutDossier').after('<a href="index.php?page=dossier&dossier=' + data.dossier_md5 + '"><li class="dossier dossier-' + data.dossier_id + '" data-dossier="' + data.dossier_id + '"><strong></strong><em></em></li></a>');
+        	    $('dossier-' + data.dossier_id + ' strong').html(data.dossier_nom);
+        	    $('dossier-' + data.dossier_id + ' em').html(data.dossier_description);
+        	    
+        	    // On modifie le dossier dans la fiche evenement
+        	    $('.affichageDossier').html('<li class="dossier"><strong>' + data.dossier_nom + '</strong><em>' + data.dossier_description + '</em></li>');
+    	    
+            // On ferme la fenètre
+            $('.creationDossier').hide();
+            
+            // On vide le formulaire
+            $('#creationDossierNom').val('');
+            $('#creationDossierDesc').val('');
+            
+            // On revient à l'événement
+            $('#colonneDroite section').hide();
+            $('#evenement').fadeIn();
+    	    });
+    	    
+    	    return false;
 	});
 	
 	
 	// Script du au choix d'un dossier
 	$('.choixDossier').click(function() {
-			 var dossier = $(this).data('dossier');
-			 var evenement = $('#evenement').data('evenement');
-			 
-			 // On lie les deux éléments
-			 $.getJSON('ajax.php?script=dossier-lier', { dossier: dossier, evenement: evenement }, function(data) {
-				 // On rajoute le dossier à la liste
-				 $('.listeDesDossiers .ajoutDossier').after('<a href="index.php?page=dossier&dossier=' + data.dossier_md5 + '"><li class="dossier dossier-' + data.dossier_id + '" data-dossier="' + data.dossier_id + '"><strong></strong><em></em></li></a>');
-				 $('dossier-' + data.dossier_id + ' strong').html(data.dossier_nom);
-				 $('dossier-' + data.dossier_id + ' em').html(data.dossier_description);
-				 
-				 // On modifie le dossier dans la fiche evenement
-				 $('.lierDossier').hide();
-				 $('.afficherInfosDossier').show();
-				 $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + data.dossier_md5);
-				 $('.afficherInfosDossier li').html('<strong>' + data.dossier_nom + '</strong><em>' + data.dossier_description + '</em>');
-			 
-			// On ferme la fenètre
-			$('.creationDossier').hide();
-			
-			// On revient à l'événement
-			$('#colonneDroite section').hide();
-			$('#evenement').fadeIn();
-			 });
+    	    var dossier = $(this).data('dossier');
+    	    var evenement = $('#evenement').data('evenement');
+    	    
+    	    // On lie les deux éléments
+    	    $.getJSON('ajax.php?script=dossier-lier', { dossier: dossier, evenement: evenement }, function(data) {
+        	    // On rajoute le dossier à la liste
+        	    $('.listeDesDossiers .ajoutDossier').after('<a href="index.php?page=dossier&dossier=' + data.dossier_md5 + '"><li class="dossier dossier-' + data.dossier_id + '" data-dossier="' + data.dossier_id + '"><strong></strong><em></em></li></a>');
+        	    $('dossier-' + data.dossier_id + ' strong').html(data.dossier_nom);
+        	    $('dossier-' + data.dossier_id + ' em').html(data.dossier_description);
+        	    
+        	    // On modifie le dossier dans la fiche evenement
+        	    $('.lierDossier').hide();
+        	    $('.afficherInfosDossier').show();
+        	    $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + data.dossier_md5);
+        	    $('.afficherInfosDossier li').html('<strong>' + data.dossier_nom + '</strong><em>' + data.dossier_description + '</em>');
+    	    
+            // On ferme la fenètre
+            $('.creationDossier').hide();
+            
+            // On revient à l'événement
+            $('#colonneDroite section').hide();
+            $('#evenement').fadeIn();
+    	    });
 	});
 };
 

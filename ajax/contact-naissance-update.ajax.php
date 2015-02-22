@@ -1,6 +1,7 @@
 <?php
 	// On ouvre la fiche contact
-	$contact = new People($_POST['contact']);
+	$fiche = md5($_POST['contact']);
+	$contact = new contact($fiche);
 	
 	// On formate la date de naissance au bon format
 	$date = explode('/', $_POST['date']);
@@ -8,5 +9,5 @@
 	$date = implode('-', $date);
 	
 	// On met à jour la date de naissance
-	$contact->update('date_naissance', $date);
+	$contact->update('contact_naissance_date', $date);
 ?>

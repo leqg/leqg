@@ -12,7 +12,7 @@
 		);
 		
 		// On charge les fiches correspondantes
-		$estimation = People::listing($tri, true);
+		$estimation = Contact::listing($tri, true);
 		
 		echo $estimation;
 		

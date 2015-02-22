@@ -2,7 +2,7 @@
 	if (isset($_POST['fiche'], $_POST['evenement'], $_FILES['formFichier'], $_POST['formFichierTitre'], $_POST['formFichierDesc']))
 	{
 		// On récupère les informations
-		$fiche = $_POST['fiche'];
+		$fiche = md5($_POST['fiche']);
 		$evenement = $_POST['evenement'];
 		$fichier = $_FILES['formFichier'];
 		$titre = $_POST['formFichierTitre'];
@@ -16,13 +16,13 @@
 		);
 		
 		// On ouvre la fiche contact
-		$contact = new People($fiche);
+		$contact = new Contact($fiche);
 		
 		// On lance la gestion du fichier envoyé
-		$contact->file_upload($fichier, $data);
+		$contact->fichier_upload($fichier, $data);
 		
 		// On réoriente l'utilisateur
-		Core::tpl_go_to('contact', array('contact' => $fiche, 'evenement' => $evenement), true);
+		Core::tpl_go_to('contact', array('contact' => $fiche, 'evenement' => md5($evenement)), true);
 	}
 	else
 	{

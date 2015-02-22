@@ -1,3 +1,8 @@
 <?php
-$data = new People($_POST['contact']);
-$data->tag_remove($_POST['tag']);
+	// On ouvre la fiche contact
+	$fiche = md5($_POST['contact']);
+	$contact = new contact($fiche);
+	
+	// On ajoute le tag
+	$contact->tag_suppression($_POST['tag']);
+?>

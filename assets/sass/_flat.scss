@@ -1283,7 +1283,7 @@ main.dossier {
 			{
 				position: absolute; top: 0; top: calc(50% - 22px); left: 0;
 				color: $blanc;
-				content: '\e862';
+				content: '\e858';
 				font-family: $icons;
 				font-size: 25px;
 				height: 45px;
@@ -1291,6 +1291,11 @@ main.dossier {
 				text-align: center;
 				width: 45px;
 				@include transition(all);
+			}
+			
+			@each $typeEvent in $icon-names
+			{
+				&.#{nth($typeEvent, 1)}::after { content: nth($typeEvent, 2); }
 			}
 						
 			&.clic:hover::before { color: $rouge; }

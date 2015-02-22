@@ -48,10 +48,10 @@ else {
 		    // Si l'opération consiste en une création, on créé le contact ici
 		    if ($_GET['operation'] == 'creation') {
 			    // On va commencer par créer une nouvelle fiche et récupérer son identifiant
-			    $id = People::create();
+			    $id = Contact::creation();
 			    
 			    // On redirige vers la nouvelle fiche créée
-			    Core::tpl_go_to('contact', array('contact' => $id), true);
+			    Core::tpl_go_to('contact', array('contact' => md5($id)), true);
 		    }
 		    
 		    // Sinon, on charge le template
