@@ -3,53 +3,54 @@
 	User::protection(5);
 	
 	// Chargement de l'objet contact
-	$contact = new contact($_GET['contact']);
+	$data = new People($_GET['contact']);
+	$address = $data->postal_address();
 
 	// Chargement de l'entête
 	Core::tpl_header();
 ?>
 
-<h2 class="titre" id="nomContact" data-fiche="<?php echo $contact->contact['contact_id']; ?>"><?php if (!empty($contact->contact['contact_nom']) || !empty($contact->contact['contact_nom_usage']) || !empty($contact->contact['contact_prenoms'])) { echo $contact->noms(); } else { echo 'Cliquez pour ajouter un nom'; } ?></h2>
+<h2 class="titre" id="nomContact" data-fiche="<?php echo $data->get('id'); ?>"><?php if (!empty($data->display_name())) { echo $data->display_name(); } else { echo 'Cliquez pour ajouter un nom'; } ?></h2>
 
 <div class="colonne demi gauche">
 	<section id="fiche-details" class="contenu demi">
 		<ul class="icones-etatcivil">
-			<li class="sexe <?php if ($contact->contact['contact_sexe'] == 'M') { echo 'homme'; } else if ($contact->contact['contact_sexe'] == 'F') { echo 'femme'; } else { echo 'inconnu'; } ?>"><?php if ($contact->contact['contact_sexe'] == 'M') { echo 'Homme'; } else if ($contact->contact['contact_sexe'] == 'F') { echo 'Femme'; } else { echo 'Sexe'; } ?></li>
-			<li class="electeur <?php if ($contact->contact['contact_electeur'] && $contact->contact['contact_electeur_europeen']) { echo 'eur'; } elseif ($contact->contact['contact_electeur'] && !$contact->contact['contact_electeur_europeen']) { echo 'oui'; } else { echo 'non'; } ?>"><?php if ($contact->contact['contact_electeur_europeen']) { ?><span title="Électeur européen">Européen</span><?php } else { ?>Électeur<?php } ?></li>
-			<li class="sms <?php if ($contact->possede('mobile')) { ?>envoyerSMS<?php } ?>">SMS</li>
-			<li class="email <?php if ($contact->possede('email')) { ?>envoyerEmail<?php } ?>">Email</li>
+			<li class="sexe <?php echo strtolower($data->display_sex()); ?> ?>"><?php echo $data->display_sex(true); ?></li>
+			<li class="electeur <?php if ($data->get('electeur_europeen')) { echo 'eur'; } elseif ($data->get('electeur')) { echo 'oui'; } else { echo 'non'; } ?>"><?php if ($data->get('electeur_europeen')) { ?><span title="Électeur européen">Européen</span><?php } else { ?>Électeur<?php } ?></li>
+			<li class="sms <?php if ($data->contact_details_exist('mobile')) { ?>envoyerSMS<?php } ?>">SMS</li>
+			<li class="email <?php if ($data->contact_details_exist('email')) { ?>envoyerEmail<?php } ?>">Email</li>
 		</ul>
 	
 		<h4>Données connues</h4>
 		<ul class="etatcivil">
-			<li class="naissance modif" data-info="naissance"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->naissance(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
-			<li class="age"><?php if ($contact->contact['contact_naissance_date'] != '0000-00-00') { echo $contact->age(); } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
-			<li class="adresse modif" data-info="adresse"><?php if ($contact->contact['adresse_id']) { ?><?php echo $contact->adresse('declaree'); ?><?php } else { ?><span class="inconnu">Adresse inconnue</span><?php } ?></li>
+			<li class="naissance modif" data-info="naissance"><?php if ($data->get('date_naissance') != '0000-00-00') { echo $data->birthdate(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
+			<li class="age"><?php if ($data->get('date_naissance') != '0000-00-00') { echo $data->age().' ans'; } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
+			<li class="adresse modif" data-info="adresse"><?php if (!empty($address['reel'])) { echo $address['reel']; } else { ?><span class="inconnu">Adresse inconnue</span><?php } ?></li>
 			<li class="organisme modif" data-info="organisme">
 				<?php 
-				if (!empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_fonction'])) :
-					echo $contact->contact['contact_organisme'] . ' (' . $contact->contact['contact_fonction'] . ')';
-				elseif (!empty($contact->contact['contact_organisme']) && empty($contact->contact['contact_fonction'])) :
-					echo $contact->contact['contact_organisme'];
-				elseif (empty($contact->contact['contact_organisme']) && !empty($contact->contact['contact_fonction'])) :
-					echo $contact->contact['contact_fonction'];
+				if (!empty($data->get('organisme')) && !empty($data->get('fonction'))) :
+					echo $data->get('organisme') . ' (' . $data->get('fonction') . ')';
+				elseif (!empty($data->get('organisme')) && empty($data->get('fonction'))) :
+					echo $data->get('organisme');
+				elseif (empty($data->get('organisme')) && !empty($data->get('fonction'))) :
+					echo $data->get('fonction');
 				else : ?>
 					<span class="inconnu">Pas d'organisme renseigné</span>
 				<?php endif; ?>
 			</li>
 		</ul>
 		
-		<?php if ($contact->contact['contact_electeur'] == 1) : ?>
+		<?php if ($data->get('electeur') == 1 || $data->get('electeur_europeen') == 1) : ?>
 		<h4>Données électorales</h4>
 		<ul class="etatcivil">
-			<li class="bureau"><?php echo $contact->bureau(); ?></li>
-			<li class="immeuble"><?php echo $contact->adresse('electorale'); ?></li>
+			<li class="bureau"><?php $bureau = People::poll($data->get('id')); echo 'Bureau '.$bureau['number']; ?></li>
+			<li class="immeuble"><?php echo $address['officiel']; ?></li>
 		</ul>
 		<?php endif; ?>
 		
 		<h4>Données de contact</h4>
 		<ul class="etatcivil coordonnees">
-			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : ?>
+			<?php $coordonnees = $data->contact_details(); foreach ($coordonnees as $coordonnee) : ?>
 			<li class="<?php echo $coordonnee['coordonnee_type']; ?>" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
 				if ($coordonnee['coordonnee_type'] == 'email')
 				{
@@ -69,8 +70,8 @@
 		<h4>Fiches liées</h4>
 		
 		<ul class="etatcivil">
-			<?php $fiches = $contact->fichesLiees(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact(md5($identifiant)); ?>
-			<li class="lien fiche-liee-<?php echo $ficheLiee->get('contact_id'); ?>"><a href="<?php Core::tpl_go_to('contact', array('contact' => md5($ficheLiee->get('contact_id')))); ?>"><?php echo $ficheLiee->noms(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('contact_id'); ?>"><small>&#xe8b0;</small></a></li>
+			<?php $fiches = $data->linked_people(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact($identifiant); ?>
+			<li class="lien fiche-liee-<?php echo $ficheLiee->get('id'); ?>"><a href="<?php Core::tpl_go_to('contact', array('contact' => $ficheLiee->get('id'))); ?>"><?php echo $ficheLiee->display_name(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('id'); ?>"><small>&#xe8b0;</small></a></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>
@@ -83,13 +84,13 @@
 
 
 <div id="colonneDroite" class="colonne demi droite">
-	<?php if ($contact->contact['adresse_id'] != 0 || $contact->contact['immeuble_id'] != 0) { ?><section id="mapbox-contact" class="contenu demi"></section><?php } ?>
+	<?php if (!empty($address['reel']) || !empty($address['officiel'])) { ?><section id="mapbox-contact" class="contenu demi"></section><?php } ?>
 	
 	<section id="TagsContact" class="contenu demi">
 		<h4>Tags liés au contact</h4>
 		
 		<ul class="listeDesTags">
-			<?php $tags = explode(',', $contact->contact['contact_tags']); if (!empty($contact->contact['contact_tags'])) : foreach ($tags as $tag) : ?>
+			<?php if (count($data->get('tags'))) : foreach ($tags as $tag) : ?>
 			<li class="tag" data-tag="<?php echo $tag; ?>"><?php echo $tag; ?></li>
 			<?php endforeach; endif; ?>
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
@@ -104,15 +105,15 @@
 			<li class="evenement nouvelEvenement">
 				<strong>Créer un nouvel événement</strong>
 			</li>
-			<?php $events = $contact->listeEvenements(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
+			<?php $events = $data->events(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
 			<?php
 				// on regarde si on peut ouvrir l'événement
 				if ($event->lien() == 2) {
-					echo '<a href="#" class="accesEvenement nostyle evenement-' . md5($event->get_infos('id')) . ' evenement-' . $event->get_infos('id') . '" data-evenement="' . md5($event->get_infos('id')) . '">';
+					echo '<a href="#" class="accesEvenement nostyle evenement-' . $event->get_infos('id') . '" data-evenement="' . $event->get_infos('id') . '">';
 				}
 				// on regarde si on peut rediriger vers la campagne
 				elseif ($event->lien() == 1) {
-					echo '<a href="'; Core::tpl_go_to($event->get_infos('type'), array('campagne' => md5($event->get('campagne_id')))); echo '" class="nostyle">';
+					echo '<a href="'; Core::tpl_go_to($event->get_infos('type'), array('campagne' => $event->get('campagne_id'))); echo '" class="nostyle">';
 				}
 			?>
 				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
@@ -135,15 +136,15 @@
 		<ul class="formulaire">
 			<li>
 				<label class="small">Nom de famille</label>
-				<span class="form-icon decalage nom"><input type="text" name="changerNomFamille" id="changerNomFamille" value="<?php echo mb_convert_case($contact->contact['contact_nom'], MB_CASE_UPPER); ?>"></span>
+				<span class="form-icon decalage nom"><input type="text" name="changerNomFamille" id="changerNomFamille" value="<?php echo mb_convert_case($data->get('nom'), MB_CASE_UPPER); ?>"></span>
 			</li>
 			<li>
 				<label class="small">Nom d'usage</label>
-				<span class="form-icon decalage nom"><input type="text" name="changerNomUsage" id="changerNomUsage" value="<?php echo mb_convert_case($contact->contact['contact_nom_usage'], MB_CASE_UPPER); ?>"></span>
+				<span class="form-icon decalage nom"><input type="text" name="changerNomUsage" id="changerNomUsage" value="<?php echo mb_convert_case($data->get('nom_usage'), MB_CASE_UPPER); ?>"></span>
 			</li>
 			<li>
 				<label class="small">Prénoms</label>
-				<span class="form-icon decalage nom"><input type="text" name="changerPrenoms" id="changerPrenoms" value="<?php echo mb_convert_case($contact->contact['contact_prenoms'], MB_CASE_TITLE); ?>"></span>
+				<span class="form-icon decalage nom"><input type="text" name="changerPrenoms" id="changerPrenoms" value="<?php echo mb_convert_case($data->get('prenoms'), MB_CASE_TITLE); ?>"></span>
 			</li>
 			<li>
 				<button class="validerChangementNom">Changer le nom</button>
@@ -233,7 +234,7 @@
 		<a href="#" class="revenirEvenement">&#xe813;</a>
 		
 		<form id="envoiDeFichier" action="ajax.php?script=fichier-envoi" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="fiche" value="<?php echo $contact->contact['contact_id']; ?>">
+			<input type="hidden" name="fiche" value="<?php echo $data->get('id'); ?>">
 			<input type="hidden" name="evenement" id="formEvenement" value="">
 			<input type="hidden" name="MAX_FILE_SIZE" value="15728640">
 			<ul class="formulaire">
@@ -278,7 +279,7 @@
 		<ul class="formulaire">
 			<li>
 				<label class="small" for="dateDeNaissance">Date de naissance</label>
-				<span class="form-icon decalage naissance"><input type="text" name="dateDeNaissance" id="dateDeNaissance" placeholder="jj/mm/aaaa" value="<?php echo date('d/m/Y', strtotime($contact->contact['contact_naissance_date'])); ?>" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
+				<span class="form-icon decalage naissance"><input type="text" name="dateDeNaissance" id="dateDeNaissance" placeholder="jj/mm/aaaa" value="<?php if ($data->get('date_naissance') != '0000-00-00') echo $data->birthdate(); ?>" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}"></span>
 			</li>
 			<li>
 				<button class="sauvegardeDateNaissance">Sauvegarder les informations</button>
@@ -292,11 +293,11 @@
 		<ul class="formulaire">
 			<li>
 				<label class="small" for="changerOrganisme">Organisme</label>
-				<span class="form-icon decalage organisme"><input type="text" name="changerOrganisme" id="changerOrganisme" value="<?php echo $contact->contact['contact_organisme']; ?>" placeholder="Organisation"></span>
+				<span class="form-icon decalage organisme"><input type="text" name="changerOrganisme" id="changerOrganisme" value="<?php echo $data->get('organisation'); ?>" placeholder="Organisation"></span>
 			</li>
 			<li>
 				<label class="small" for="changerFonction">Fonction</label>
-				<span class="form-icon decalage fonction"><input type="text" name="changerFonction" id="changerFonction" value="<?php echo $contact->contact['contact_fonction']; ?>" placeholder="Fonction"></span>
+				<span class="form-icon decalage fonction"><input type="text" name="changerFonction" id="changerFonction" value="<?php echo $data->get('fonction'); ?>" placeholder="Fonction"></span>
 			</li>
 			<li>
 				<button class="sauvegarderOrganisation">Sauvegarder les informations</button>
@@ -505,24 +506,24 @@
         	        <span class="form-icon email">
 	        	        <label class="sbox" for="choixAdresse">
 		        	        <select name="choixAdresse" id="choixAdresse">
-		            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'email') : ?>
+		            			<?php $coordonnees = $data->contact_details('email'); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'email') : ?>
 		            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php echo $coordonnee['coordonnee_email']; ?></option>
 		            	        <?php endif; endforeach; ?>
 		        	        </select>
 	        	        </label>
         	        </span>
-	            </li>
-	            <li>
-	                <label class="small" for="objetEmail">Objet du courrier électronique</label>
-	                <span class="form-icon decalage objet"><input type="text" name="objetEmail" id="objetEmail" placeholder="Objet de l'email"></span>
-	            </li>
-	            <li>
-	                <label class="small" for="messageEmail">Message à envoyer</label>
-	                <span class="form-icon decalage email"><textarea name="messageEmail" id="messageEmail" placeholder="Email à envoyer"></textarea></span>
-	            </li>
-	            <li>
-	                <button class="EmailSending">Envoi de l'email (<i>&#xe8cd;</i>)</button>
-	            </li>
+            </li>
+            <li>
+                <label class="small" for="objetEmail">Objet du courrier électronique</label>
+                <span class="form-icon decalage objet"><input type="text" name="objetEmail" id="objetEmail" placeholder="Objet de l'email"></span>
+            </li>
+            <li>
+                <label class="small" for="messageEmail">Message à envoyer</label>
+                <span class="form-icon decalage email"><textarea name="messageEmail" id="messageEmail" placeholder="Email à envoyer"></textarea></span>
+            </li>
+            <li>
+                <button class="EmailSending">Envoi de l'email (<i>&#xe8cd;</i>)</button>
+            </li>
     	    </ul>
 	</section>
 	
@@ -596,16 +597,18 @@
 
 
 <?php 
-	if ($contact->get('adresse_id') > 0 || $contact->get('immeuble_id') > 0) : 
+	if (!empty($address['reel']) || !empty($address['officiel'])) : 
 	
-	if ($contact->get('adresse_id') > 0) { 
-		$immeuble = Carto::immeuble($contact->get('adresse_id'));
-		$rue = Carto::rue($immeuble['rue_id']);
-		$ville = Carto::ville($rue['commune_id']);
+	if (!empty($address['reel'])) {
+    	    $adresse = People::address($data->get('id'));
+		$immeuble = Carto::immeuble($adresse['reel']['building']);
+		$rue = Carto::rue($adresse['reel']['street']);
+		$ville = Carto::ville($adresse['reel']['city']);
 	} else {
-		$immeuble = Carto::immeuble($contact->get('immeuble_id'));
-		$rue = Carto::rue($immeuble['rue_id']);
-		$ville = Carto::ville($rue['commune_id']);
+    	    $adresse = People::address($data->get('id'));
+		$immeuble = Carto::immeuble($adresse['officiel']['building']);
+		$rue = Carto::rue($adresse['officiel']['street']);
+		$ville = Carto::ville($adresse['officiel']['city']);
 	}
 ?>
 <script>
@@ -620,8 +623,8 @@
 		format: 'json',
 		email: 'tech@leqg.info',
 		country: 'France',
-		city: "<?php echo $ville['commune_nom']; ?>",
-		street: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim($rue['rue_nom']); ?>"
+		city: "<?php echo $ville; ?>",
+		street: "<?php echo $immeuble . ' ' . trim($rue); ?>"
 	}
 	
 	// On récupère le JSON contenant les coordonnées de la rue
@@ -640,7 +643,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo $immeuble['immeuble_numero'] . ' ' . trim(mb_convert_case($rue['rue_nom'], MB_CASE_TITLE)); ?>"
+			title: "<?php echo $immeuble . ' ' . trim(mb_convert_case($rue, MB_CASE_TITLE)); ?>"
 		}).addTo(map);
 	});
 </script>

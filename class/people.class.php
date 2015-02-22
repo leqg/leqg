@@ -132,7 +132,7 @@ class People
         $display = array();
         if (!empty($this->_people['nom'])) $display[] = strtoupper($this->_people['nom']);
         if (!empty($this->_people['nom_usage'])) $display[] = strtoupper($this->_people['nom_usage']);
-        if (!empty($this->_people['prenoms'])) $display[] = $this->_people['prenoms'];
+        if (!empty($this->_people['prenoms'])) $display[] = ucwords(strtolower($this->_people['prenoms']));
         
         return implode(' ', $display);
     }
@@ -162,8 +162,8 @@ class People
     public function age()
     {
         if (!is_null($this->_people['date_naissance'])) {
-            return DateTime::createFromFormat('Y-m-d', $this->_people['date_naissance'], $timezone)
-                 ->diff(new Datetime('now', $timezone))
+            return DateTime::createFromFormat('Y-m-d', $this->_people['date_naissance'])
+                 ->diff(new Datetime('now'))
                  ->y;
         } else {
             return false;
@@ -195,11 +195,17 @@ class People
      * */
     public function postal_address()
     {
-        $display = '';
-        if (!empty($this->_postal['building'])) $display .= $this->_postal['building'].' ';
-        if (!empty($this->_postal['street'])) $display .= $this->_postal['street'].' ';
-        if (!empty($this->_postal['zipcode'])) $display .= $this->_postal['zipcode'].' ';
-        if (!empty($this->_postal['city'])) $display .= $this->_postal['city'];
+        $display['officiel'] = '';
+        if (!empty($this->_postal['officiel']['building'])) $display['officiel'] .= $this->_postal['officiel']['building'].' ';
+        if (!empty($this->_postal['officiel']['street'])) $display['officiel'] .= $this->_postal['officiel']['street'].' ';
+        if (!empty($this->_postal['officiel']['zipcode'])) $display['officiel'] .= $this->_postal['officiel']['zipcode'].' ';
+        if (!empty($this->_postal['officiel']['city'])) $display['officiel'] .= $this->_postal['officiel']['city'];
+        
+        $display['reel'] = '';
+        if (!empty($this->_postal['reel']['building'])) $display['reel'] .= $this->_postal['reel']['building'].' ';
+        if (!empty($this->_postal['reel']['street'])) $display['reel'] .= $this->_postal['reel']['street'].' ';
+        if (!empty($this->_postal['reel']['zipcode'])) $display['reel'] .= $this->_postal['reel']['zipcode'].' ';
+        if (!empty($this->_postal['reel']['city'])) $display['reel'] .= $this->_postal['reel']['city'];
         
         return $display;
     }
@@ -245,8 +251,9 @@ class People
         $query->bindValue(':contact', $this->_people['id'], PDO::PARAM_INT);
         $query->bindValue(':type', $type);
         $query->execute();
-        
-        if ($query->rowCount()) {
+        $count = $query->fetch(PDO::FETCH_NUM)[0];
+
+        if ($count) {
             return true;
         } else {
             return false;
@@ -379,6 +386,34 @@ class People
     
     
     /**
+     * Display sex
+     * 
+     * @param   bool    $generic    if true, display sex therefore unknown
+     * @result  string
+     * */
+    public function display_sex($generic = false)
+    {
+        switch ($this->_people['sexe']) {
+            case 'H':
+                return 'Homme';
+                break;
+            
+            case 'F':
+                return 'Femme';
+                break;
+            
+            default:
+                if ($generic) {
+                    return 'Sexe';
+                } else {
+                    return 'Inconnu';
+                }
+                break;
+        }
+    }
+    
+    
+    /**
      * Change sex data
      * 
      * @result  void
@@ -493,6 +528,8 @@ class People
             $building = $query->fetch(PDO::FETCH_NUM);
             $postal[$type]['building'] = $building[0];
         }
+        
+        return $postal;
     }
     
     
@@ -560,7 +597,7 @@ class People
      * */
     public static function listing(array $tri, $debut, $nombre = 5)
     {
-        if ((is_numeric($first) || is_bool($first)) && (is_numeric($number) || is_bool($number)) && is_array($sort)) {
+        if ((is_numeric($debut) || is_bool($debut)) && (is_numeric($nombre) || is_bool($nombre)) && is_array($tri)) {
             $link = Configuration::read('db.link');
 
             if (is_bool($debut) && $debut === true) {
