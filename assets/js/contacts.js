@@ -42,7 +42,7 @@ var contacts = function() {
         };
                 
         // On effectue l'appel AJAX qui va retourner l'estimation du nombre de fiches concernées
-        $.get('ajax.php?script=contacts-estimation', data, function(nombre) {
+        $.get('ajax.php?script=people-count', data, function(nombre) {
             // On affiche ce nombre dans le span prévu à cet effet
             $('.estimationDuNombreDeFichesTotales').html('');
             
@@ -62,7 +62,7 @@ var contacts = function() {
         });
         
         // On effectue l'appel AJAX qui va récupérer les x fiches correspondantes
-        $.getJSON('ajax.php?script=contacts-listing', data, function(data) {
+        $.getJSON('ajax.php?script=people-listing', data, function(data) {
             // On vérifie si ce n'est pas la fin de la liste (suite demandée et aucune donnée retournée
             if (data == '' && action == 'suite') {
                 // On supprime maintenant le bouton
@@ -95,34 +95,33 @@ var contacts = function() {
                 // On va faire une boucle de toutes les fiches créées pour les afficher dans cette liste de contacts
                 $.each(data, function(key, val){
                     // on détermine le sexe à afficher
-                    if (val.contact_sexe == 'M') {
+                    if (val.sexe == 'H') {
                         var sexe = 'homme';
                     }
-                    else if (val.contact_sexe == 'F') {
+                    else if (val.sexe == 'F') {
                         var sexe = 'femme';
                     }
                     else {
                         var sexe = 'isexe';
                     }
                     
-                    $('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.contact_md5 + '" class="nostyle contact-' + val.contact_id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span> - <span class="ville"></span></p></li></a>');
+                    $('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.id + '" class="nostyle contact-' + val.id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span></p></li></a>');
                     
                     // On ajoute demande le nom de la fiche
                     var nom;
-                    if (val.nom_affichage.length == 0) {
-                        if (val.contact_organisme.length == 0) {
+                    if (val.nom_complet.length == 0) {
+                        if (val.organisme.length == 0) {
                             nom = 'Contact sans nom';
                         } else {
-                            nom = val.contact_organisme;
+                            nom = val.organisme;
                         }
                     } else {
-                        nom = val.nom_affichage;
+                        nom = val.nom_complet;
                     }
                     
                     // On affecte les données aux balises HTML
-                    $('.resultatTri .contact-' + val.contact_id + ' li strong').html(nom);
-                    $('.resultatTri .contact-' + val.contact_id + ' li p .age').html(val.age);
-                    $('.resultatTri .contact-' + val.contact_id + ' li p .ville').html(val.ville);
+                    $('.resultatTri .contact-' + val.id + ' li strong').html(nom);
+                    $('.resultatTri .contact-' + val.id + ' li p .age').html(val.age);
                 });
                 
                 // On ajoute le bouton permettant d'afficher les 5 fiches suivantes

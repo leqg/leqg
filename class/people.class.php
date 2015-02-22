@@ -61,6 +61,13 @@ class People
         // address & postal data
         $this->_address = self::address($this->_people['id']);
         $this->_postal = self::postal($this->_address);
+        
+        // age calculator
+        if ($this->age()) {
+            $this->_people['age'] = $this->age().' âge';
+        } else {
+            $this->_people['age'] = 'Âge inconnu';
+        }
     }
     
     
@@ -159,7 +166,7 @@ class People
      * 
      * @result  int
      * */
-    public function age()
+    private function age()
     {
         if (!is_null($this->_people['date_naissance'])) {
             return DateTime::createFromFormat('Y-m-d', $this->_people['date_naissance'])
@@ -167,6 +174,44 @@ class People
                  ->y;
         } else {
             return false;
+        }
+    }
+    
+    
+    /**
+     * Age displaying method
+     * 
+     * @result  string
+     * */
+    public function display_age()
+    {
+        if ($this->age()) {
+            return $this->age().' ans';
+        } else {
+            return 'Âge inconnu';
+        }
+    }
+    
+    
+    /**
+     * City method
+     * 
+     * @result  string
+     * */
+    public function city_copie()
+    {
+        if ($this->_address['reel']['city'] || $this->_address['officiel']['city']) {
+            $query = Core::query('city-by-id');
+            
+            if ($this->_address['reel']['city']) {
+                $query->bindValue(':city', $this->_address['reel']['city'], PDO::PARAM_INT);
+            } else {
+                $query->bindValue(':city', $this->_address['officiel']['city'], PDO::PARAM_INT);
+            }
+            $query->execute();
+            return $query->fetch(PDO::FETCH_NUM)[0];
+        } else {
+            return 'Ville inconnue';
         }
     }
     
@@ -373,7 +418,7 @@ class People
     {
         $tags = $this->_people['tags'];
         
-        if (array_search($tag, $tags)) {
+        if (in_array($tag, $tags)) {
             $cle = array_search($tag, $tags);
             unset($tags[$cle]);
         }
@@ -566,7 +611,7 @@ class People
      * */
     public static function search($search)
     {
-        $birthdate = DateTime::createFromFormat('d/m/Y', $recherche);
+        $birthdate = DateTime::createFromFormat('d/m/Y', $search);
         
         if ($birthdate) {
             $search = $date->format('Y-m-d');
@@ -590,191 +635,184 @@ class People
     /**
      * People listing method
      * 
-     * @param   array   $tri        Sorting method
-     * @param   int     $debut      First
-     * @param   int     $nombre     Number of people
+     * @param   array   $sort       Sorting method
+     * @param   int     $debut      First if int or estimation if true
+     * @param   int     $nombre     Number of people or all if true
      * @result  array
      * */
-    public static function listing(array $tri, $debut, $nombre = 5)
+    public static function listing(array $sort, $debut, $nombre = 5)
     {
-        if ((is_numeric($debut) || is_bool($debut)) && (is_numeric($nombre) || is_bool($nombre)) && is_array($tri)) {
-            $link = Configuration::read('db.link');
+        $contacts = array(); // Contacts ciblés
+        $_contacts = array(); // Contacts exclus
+        
+        if (is_array($sort)) {
+            // We list people by contact detail sorting
+            if (isset($sort['email']) && $sort['email'] != 0) {
+                $query = Core::query('people-with-email');
+                $query->execute();
+                $contacts_with = array();
+                $contacts_with_emails = $query->fetchAll(PDO::FETCH_NUM);
+                foreach ($contacts_with_emails as $element) { $contacts_with[] = $element[0]; }
+                
+                if ($sort['email'] == 1) {
+                    $contacts = array_merge($contacts, $contacts_with);
+                } else {
+                    $_contacts = array_merge($_contacts, $contacts_with);
+                }
+            }
 
-            if (is_bool($debut) && $debut === true) {
-                // On commence par préparer le visage de la requête de recherche
-                $sql = 'SELECT COUNT(`contact_id`) AS `nombre` FROM `contacts` ';
-            } else {
-                // On commence par préparer le visage de la requête de recherche
-                $sql = 'SELECT `contact_id` FROM `contacts` ';
+            if (isset($sort['mobile']) && $sort['mobile'] != 0) {
+                $query = Core::query('people-with-mobile');
+                $query->execute();
+                $contacts_with = array();
+                $contacts_with_mobile = $query->fetchAll(PDO::FETCH_NUM);
+                foreach ($contacts_with_mobile as $element) { $contacts_with[] = $element[0]; }
+                
+                if ($sort['mobile'] == 1) {
+                    $contacts = array_merge($contacts, $contacts_with);
+                } else {
+                    $_contacts = array_merge($_contacts, $contacts_with);
+                }
             }
-            // On va chercher à y ajouter les différents critères, à travers un tableau $criteres
-            $criteres = array();
+
+            if (isset($sort['fixe']) && $sort['fixe'] != 0) {
+                $query = Core::query('people-with-fixe');
+                $query->execute();
+                $contacts_with = array();
+                $contacts_with_fixe = $query->fetchAll(PDO::FETCH_NUM);
+                foreach ($contacts_with_fixe as $element) { $contacts_with[] = $element[0]; }
+                
+                if ($sort['fixe'] == 1) {
+                    $contacts = array_merge($contacts, $contacts_with);
+                } else {
+                    $_contacts = array_merge($_contacts, $contacts_with);
+                }
+            }
+
+            if (isset($sort['phone']) && $sort['phone'] != 0) {
+                $query = Core::query('people-with-phone');
+                $query->execute();
+                $contacts_with = array();
+                $contacts_with_phone = $query->fetchAll(PDO::FETCH_NUM);
+                foreach ($contacts_with_phone as $element) { $contacts_with[] = $element[0]; }
+                
+                if ($sort['phone'] == 1) {
+                    $contacts = array_merge($contacts, $contacts_with);
+                } else {
+                    $_contacts = array_merge($_contacts, $contacts_with);
+                }
+            }
+
+            if (isset($sort['electeur']) && $sort['electeur'] != 0) {
+                $status = ($sort['electeur'] == 1) ? 1 : 0;
+                $query = Core::query('people-can-vote');
+                $query->bindValue(':status', $status, PDO::PARAM_INT);
+                $query->execute();
+                $contacts_can_vote = array();
+                $result = $query->fetchAll(PDO::FETCH_NUM);
+                foreach ($result as $element) { $contacts_can_vote[] = $element[0]; }
+                $contacts = array_merge($contacts, $contacts_can_vote);
+            }
             
-                // On retraite le critère "email" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['email']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['email'] == 2) { $criteres[] = '`contact_email` > 0'; }
-                    // Sinon, s'il concerne les fiches sans l'information
-                    else { $criteres[] = '`contact_email` = 0'; }
+            if (!empty($sort['criteres'])) {
+                $sorting = explode(';', $sort['criteres']);
+                
+                $themas = array();
+                $bureaux = array();
+                $rues = array();
+                $villes = array();
+                
+                foreach ($sorting as $critere) {
+                    $tri = explode(':', $sort['criteres']);
+                    
+                        if ($tri[0] == 'thema') { $themas[] = $tri[1]; }
+                    elseif ($tri[0] == 'bureau') { $bureaux[] = $tri[1]; }
+                    elseif ($tri[0] == 'rue') { $rues[] = $tri[1]; }
+                    elseif ($tri[0] == 'ville') { $villes[] = $tri[1]; }
                 }
                 
-                if ($tri['adresse']) {
-                    // Si le tri demandé concerne les fiches avec forcément une adresse
-                    if ($tri['adresse'] == 2) { $criteres[] = '(`adresse_id` != 0 OR `immeuble_id` != 0)'; }
-                    // Sinon s'il concerne les fiches sans l'information adresse
-                    else { $criteres[] = '(`adresse_id` = 0 AND `immeuble_id` = 0)'; }
+                if (count($themas)) {
+                    foreach ($themas as $thema) {
+                        $thema = '%,'.preg_replace('#[^[:alnum:]]#u', '%', $thema).',%';
+                        $query = Core::query('people-by-tags');
+                        $query->bindValue(':tag', $thema);
+                        $query->execute();
+                        $result = $query->fetchAll(PDO::FETCH_NUM);
+                        $contacts_with = array();
+                        foreach ($result as $element) { $contacts_with[] = $element[0]; }
+                        $contacts = array_merge($contacts, $contacts_with);
+                    }
                 }
-            
-                // On retraite le critère "mobile" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['mobile']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['mobile'] == 2) { $criteres[] = '`contact_mobile` > 0'; }
-                    // Sinon, s'il concerne les fiches sans l'information
-                    else { $criteres[] = '`contact_mobile` = 0'; }
-                }
-            
-                // On retraite le critère "fixe" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['fixe']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['fixe'] == 2) { $criteres[] = '`contact_fixe` > 0'; }
-                    // Sinon, s'il concerne les fiches sans l'information
-                    else { $criteres[] = '`contact_fixe` = 0'; }
+                    
+                if (count($bureaux)) {
+                    $ids = implode(',', $bureaux);
+                    $query = Core::query('people-by-poll');
+                    $query->bindValue(':polls', $ids);
+                    $query->execute();
+                    $result = $query->fetchAll(PDO::FETCH_NUM);
+                    $contacts_with = array();
+                    foreach ($result as $element) { $contacts_with[] = $element[0]; }
+                    $contacts = array_merge($contacts, $contacts_with);
                 }
                 
-                // On retraite le critère "phone" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if (isset($tri['phone']) && $tri['phone']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['phone'] == 2) { $criteres[] = '( `contact_fixe` > 0 OR `contact_mobile` > 0 )'; }
+                if (count($rues)) {
+                    $ids = implode(',', $rues);
+                    $query = Core::query('people-by-street');
+                    $query->bindValue(':streets', $ids);
+                    $query->execute();
+                    $result = $query->fetchAll(PDO::FETCH_NUM);
+                    $contacts_with = array();
+                    foreach ($result as $element) { $contacts_with[] = $element[0]; }
+                    $contacts = array_merge($contacts, $contacts_with);
                 }
-            
-                // On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }
                 
-                // Si des critères plus complexes sont demandés, on s'en occupe ici
-                if (!empty($tri['criteres'])) {
-                    $criteria = explode(';', $tri['criteres']);
-                    
-                    
-                    // On prépare les tableaux avec les différents critères
-                    $themas = array();
-                    $birth = array();
-                    $bureaux = array();
-                    $rues = array();
-                    $votes = array();
-                    
-                    
-                    // On sépare les critères de leurs type
-                    foreach ($criteria as $key => $val) {
-                        $crit = explode(':', $val);
-                        
-                        if ($crit[0] == 'thema') { $themas[] = $crit[1]; }
-                        else if ($crit[0] == 'birth') { $birth[] = $crit[1]; }
-                        else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; }
-                        else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
-                        else if ($crit[0] == 'vote') { $votes[] = $crit[1]; }
-                    }
-                    
-                    // On va analyser les critères thématiques pour les ajouter à la condition SQL
-                    if (count($themas)) {
-                        // On va ajouter chaque condition thématique à la recherche
-                        foreach ($themas as $thema) { 
-                            $thema = preg_replace('#[^[:alnum:]]#u', '%', $thema);
-                            $criteres[] = '`contact_tags` LIKE "%' . $thema . '%"';
-                        }
-                    }
-                    
-                    // On va analyser les critères de votes pour les ajouter à la condition SQL
-                    if (count($votes)) {
-                        foreach ($votes as $vote) {
-                            $criteres[] = '`contact_vote_' . $vote . '` = 1';
-                        }
-                    }
-                    
-                    // On va analyser les critères de naissance pour les ajouter à la condition SQL
-                    if (count($birth)) {
-                        // On va ajouter chaque condition de naissance à la recherche $dates en retraitant son format
-                        $dates = array();
-                        
-                        foreach ($birth as $date) {
-                            $date = explode('/', $date);
-                            krsort($date);
-                            $date = implode('-', $date);
-                            $dates[] = '`contact_naissance_date` = "' . $date . '"';
-                        }
-                        
-                        if (count($dates) == 1) {
-                            $criteres[] = $dates[0];
-                        } else {
-                            $criteres[] = '(`contact_naissance_date` = "' . implode('" OR `contact_naissance_date` = "') . '")';
-                        }
-                    }
-                    
-                    // On va analyser les bureaux de votes demandés pour extraire tous les électeurs au sein de ceux-ci
-                    if (count($bureaux)) {
-                        // On prépare la liste des bureaux de vote pour l'insérer dans la requête
-                        $ids = implode(',', $bureaux);
-                        
-                        // On prépare la condition SQL
-                        $criteres[] = '`bureau_id` IN (' . $ids . ')';
-                    }
-                    
-                    
-                    // On va analyser toutes les rues demandées pour récupérer tous les ID d'immeubles concernées par ces rues et les électeurs qui y sont
-                    if (count($rues)) {
-                        // Pour chaque rue, on cherche les immeubles concernés
-                        $immeubles = array();
-                        foreach ($rues as $rue) {
-                            $query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
-                            $query->bindParam(':id', $rue);
-                            $query->execute();
-                            $ids = $query->fetchAll(PDO::FETCH_NUM);
-                            
-                            // Pour chaque immeuble trouvé, on le rajoute dans le tableau $immeubles
-                            foreach ($ids as $id) { $immeubles[] = $id[0]; }
-                        }
-                        
-                        // On transforme cette liste d'immeuble pour l'intégrer dans la requête SQL
-                        $ids = implode(',', $immeubles);
-                        
-                        // On rajoute la requête aux conditions SQL
-                        $criteres[] = '( `immeuble_id` IN (' . $ids . ') OR `adresse_id` IN (' . $ids . ') )';
+                if (count($villes)) {
+                    $ids = implode(',', $villes);
+                    $query = Core::query('people-by-city');
+                    $query->bindValue(':cities', $ids);
+                    $query->execute();
+                    $result = $query->fetchAll(PDO::FETCH_NUM);
+                    $contacts_with = array();
+                    foreach ($result as $element) { $contacts_with[] = $element[0]; }
+                    $contacts = array_merge($contacts, $contacts_with);
+                }
+            }
+            
+            if (count($contacts) && count($_contacts)) {
+                foreach ($contacts as $key => $contact) {
+                    if (in_array($contact, $_contacts)) {
+                        unset($contacts[$key]);
                     }
                 }
             
-            
-            // On retraite les critères en conditions SQL
-            if ($criteres) {
-                $sql.= ' WHERE ' . implode(' AND ', $criteres);
-            }
-            
-            // On ajoute les conditions de nombre et d'ordre
-            if ($nombre && !is_bool($debut)) {
-                $sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC LIMIT ' . $debut . ', ' . $nombre;
-            } else {
-                $sql.= ' ORDER BY `contact_nom`, `contact_nom_usage`, `contact_prenoms` ASC';
-            }
-            // On exécute la requête SQL
-            $query = $link->prepare($sql);
-            $query->execute();
-            
-            // Si on souhaite uniquement une estimation, on retourne le nombre
-            if (is_bool($debut) && $debut === true) {
-                $nombre = $query->fetch(PDO::FETCH_NUM);
-                return $nombre[0];
-            }
-            // Sinon, on retourne la liste des identifiants
-            else {
-                // On retraite la liste des identifiants pour en faire un tableau PHP $contacts
-                $ids = $query->fetchAll(PDO::FETCH_NUM);
+            } elseif (!count($contacts) && count($_contacts)) {
+                $ids = implode(',', $_contacts);
+                $query = Core::query('people-except');
+                $query->bindValue(':ids', $ids);
+                $query->execute();
+                $result = $query->fetchAll(PDO::FETCH_NUM);
                 $contacts = array();
-                foreach ($ids as $id) $contacts[] = $id[0];
-                // On retourne la liste des ids de fiches concernées par la requête
-                return $contacts;
+                foreach ($result as $element) { $contacts[] = $element[0]; }
+                
+            } elseif (!count($contacts) && !count($_contacts)) {
+                $query = Core::query('people-all');
+                $query->execute();
+                $result = $query->fetchAll(PDO::FETCH_NUM);
+                $contacts = array();
+                foreach ($result as $element) { $contacts[] = $element[0]; }
             }
-                     
+            
+        }
+        
+        if (is_bool($debut) && $debut) {
+            return count($contacts);
+            
         } else {
-            // On retourne une erreur
-            return false;
+            if (is_bool($nombre) && $nombre) {
+                return $contacts;
+            } else {
+                return array_slice($contacts, $debut, $nombre);
+            }
         }
     }
     

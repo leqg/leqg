@@ -44,8 +44,8 @@
 					<span class="form-icon email">
 						<label class="sbox" for="coordonnees-email">
 							<select name="coordonnees-email" id="coordonnees-email" class="selectionTri">
-								<option value="2">Avec email uniquement</option>
-								<option value="1">Sans email uniquement</option>
+								<option value="1">Avec email uniquement</option>
+								<option value="-1">Sans email uniquement</option>
 								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
@@ -56,8 +56,8 @@
 					<span class="form-icon mobile">
 						<label class="sbox" for="coordonnees-mobile">
 							<select name="coordonnees-mobile" id="coordonnees-mobile" class="selectionTri">
-								<option value="2">Avec mobile uniquement</option>
-								<option value="1">Sans mobile uniquement</option>
+								<option value="1">Avec mobile uniquement</option>
+								<option value="-1">Sans mobile uniquement</option>
 								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
@@ -68,8 +68,8 @@
 					<span class="form-icon telephone">
 						<label class="sbox" for="coordonnees-fixe">
 							<select name="coordonnees-fixe" id="coordonnees-fixe" class="selectionTri">
-								<option value="2">Avec fixe uniquement</option>
-								<option value="1">Sans fixe uniquement</option>
+								<option value="1">Avec fixe uniquement</option>
+								<option value="-1">Sans fixe uniquement</option>
 								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>
@@ -80,8 +80,8 @@
 					<span class="form-icon utilisateur">
 						<label class="sbox" for="coordonnees-electeur">
 							<select name="coordonnees-electeur" id="coordonnees-electeur" class="selectionTri">
-								<option value="2">Le contact est électeur</option>
-								<option value="1">Le contact n'est pas électeur</option>
+								<option value="1">Le contact est électeur</option>
+								<option value="-1">Le contact n'est pas électeur</option>
 								<option value="0" selected>Indifférent</option>
 							</select>
 						</label>

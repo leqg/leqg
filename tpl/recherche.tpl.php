@@ -9,7 +9,7 @@
 	$terme = $_POST['recherche'];
 	
 	// On effectue la recherche
-	$resultats = Contact::recherche($terme);
+	$resultats = People::search($terme);
 
 	// On regarde le nombre de réponses trouvées
 	$nombre = count($resultats);
@@ -17,7 +17,7 @@
 	// S'il n'y a qu'une réponse, on redirige directement vers la réponse
 	if ($nombre == 1) {
 		$reponse = $resultats[0];
-		Core::tpl_go_to('contact', array('contact' => md5($reponse['contact_id'])), true);
+		Core::tpl_go_to('contact', array('contact' => $reponse['id']), true);
 	}
 	
 	// Quand tout est bon, on affiche le template
@@ -36,11 +36,11 @@
 	
 	<section class="contenu">
 		<ul class="listeContacts">
-			<?php foreach ($resultats as $resultat) : $contact = new Contact(md5($resultat['contact_id'])); ?><!--
-		 --><a class="nostyle" href="<?php Core::tpl_go_to('contact', array('contact' => $contact->get('contact_md5'))); ?>"><!--
-			 --><li class="demi contact <?php if ($contact->get('contact_sexe') == 'M') { echo 'homme'; } elseif ($contact->get('contact_sexe') == 'F') { echo 'femme'; } else { echo 'isexe'; } ?>">
-					<strong><?php echo $contact->noms(' '); ?></strong>
-					<p><?php echo $contact->get('age'); ?> – <?php echo $contact->get('ville'); ?></p>
+			<?php foreach ($resultats as $resultat) : $contact = new People($resultat['id']); ?><!--
+		 --><a class="nostyle" href="<?php Core::tpl_go_to('contact', array('contact' => $contact->get('id'))); ?>"><!--
+			 --><li class="demi contact <?php if ($contact->get('sexe') == 'H') { echo 'homme'; } elseif ($contact->get('contact_sexe') == 'F') { echo 'femme'; } else { echo 'isexe'; } ?>">
+					<strong><?php echo $contact->get('nom_complet'); ?></strong>
+					<p><?php echo $contact->display_age(); ?> – <?php echo $contact->city(); ?></p>
 				</li><!--
 		 --></a><!--
 		 --><?php endforeach; ?>

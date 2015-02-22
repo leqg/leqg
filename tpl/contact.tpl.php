@@ -24,7 +24,7 @@
 		<h4>Données connues</h4>
 		<ul class="etatcivil">
 			<li class="naissance modif" data-info="naissance"><?php if ($data->get('date_naissance') != '0000-00-00') { echo $data->birthdate(); } else { echo '<span class="inconnu">Date de naissance inconnue</span>'; } ?></li>
-			<li class="age"><?php if ($data->get('date_naissance') != '0000-00-00') { echo $data->age().' ans'; } else { echo '<span class="inconnu">Âge inconnu</span>'; } ?></li>
+			<li class="age"><?php echo $data->display_age(); ?></li>
 			<li class="adresse modif" data-info="adresse"><?php if (!empty($address['reel'])) { echo $address['reel']; } else { ?><span class="inconnu">Adresse inconnue</span><?php } ?></li>
 			<li class="organisme modif" data-info="organisme">
 				<?php 
@@ -90,7 +90,7 @@
 		<h4>Tags liés au contact</h4>
 		
 		<ul class="listeDesTags">
-			<?php if (count($data->get('tags'))) : foreach ($tags as $tag) : ?>
+			<?php if (count($data->get('tags'))) : foreach ($data->get('tags') as $tag) : ?>
 			<li class="tag" data-tag="<?php echo $tag; ?>"><?php echo $tag; ?></li>
 			<?php endforeach; endif; ?>
 			<li class="ajout ajouterTag">Ajouter un nouveau tag</li>
@@ -105,25 +105,25 @@
 			<li class="evenement nouvelEvenement">
 				<strong>Créer un nouvel événement</strong>
 			</li>
-			<?php $events = $data->events(); if (count($events) >= 1) : foreach ($events as $event) : $event = new evenement($event['historique_id'], false); ?>
+			<?php $events = $data->events(); if (count($events)) : foreach ($events as $event) : $event = new Event($event['id']); ?>
 			<?php
 				// on regarde si on peut ouvrir l'événement
-				if ($event->lien() == 2) {
-					echo '<a href="#" class="accesEvenement nostyle evenement-' . $event->get_infos('id') . '" data-evenement="' . $event->get_infos('id') . '">';
+				if ($event->link() == 2) {
+					echo '<a href="#" class="accesEvenement nostyle evenement-' . $event->get('id') . '" data-evenement="' . $event->get('id') . '">';
 				}
 				// on regarde si on peut rediriger vers la campagne
-				elseif ($event->lien() == 1) {
-					echo '<a href="'; Core::tpl_go_to($event->get_infos('type'), array('campagne' => $event->get('campagne_id'))); echo '" class="nostyle">';
+				elseif ($event->link() == 1) {
+					echo '<a href="'; Core::tpl_go_to($event->get('type'), array('campagne' => $event->get('campaign'))); echo '" class="nostyle">';
 				}
 			?>
-				<li class="evenement <?php echo $event->get_infos('type'); ?> <?php if ($event->lien()) { ?>clic<?php } ?>">
-					<small><span><?php echo Core::tpl_typeEvenement($event->get_infos('type')); ?></span></small>
-					<strong><?php echo (!empty($event->get_infos('objet'))) ? $event->get_infos('objet') : 'Événement sans titre'; ?></strong>
+				<li class="evenement <?php echo $event->get('type'); ?> <?php if ($event->link()) { ?>clic<?php } ?>">
+					<small><span><?php echo Event::display_type($event->get('type')); ?></span></small>
+					<strong><?php echo (!empty($event->get('objet'))) ? $event->get('objet') : 'Événement sans titre'; ?></strong>
 					<ul class="infosAnnexes">
-						<li class="date"><?php echo date('d/m/Y', strtotime($event->get_infos('date'))); ?></li>
+						<li class="date"><?php echo date('d/m/Y', strtotime($event->get('date'))); ?></li>
 					</ul>
 				</li>
-			<?php if ($event->lien()) { ?></a><?php } ?>
+			<?php if ($event->link()) { ?></a><?php } ?>
 			<?php endforeach; endif; ?>
 		</ul>
 	</section>

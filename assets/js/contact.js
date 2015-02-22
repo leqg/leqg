@@ -257,23 +257,23 @@ var contact = function() {
 		$('#colonneDroite section').hide();
 		
 		// On recherche les informations sur l'événement
-		$.getJSON('ajax.php?script=evenement', { evenement: identifiant }, function(data) {
+		$.getJSON('ajax.php?script=event', { evenement: identifiant }, function(data) {
 			// On affecte les informations récupérées
-			$('#eventTitre').val(data.historique_objet);
-			$('#eventType').val(data.historique_type);
-			$('#eventDate').val(data.historique_date_fr);
-			$('#eventLieu').val(data.historique_lieu);
-			$('#eventNotes').val(data.historique_notes);
-			$('#evenement').data('evenement', data.historique_id);
-			$('#formEvenement').val(data.historique_id);
+			$('#eventTitre').val(data.objet);
+			$('#eventType').val(data.type);
+			$('#eventDate').val(data.display_date);
+			$('#eventLieu').val(data.lieu);
+			$('#eventNotes').val(data.notes);
+			$('#evenement').data('evenement', data.id);
+			$('#formEvenement').val(data.id);
 			
-			// On regarde s'il y a un dossier et si oui, on l'affiche
-			if (data.dossier_id)
+/*			// On regarde s'il y a un dossier et si oui, on l'affiche
+			if (data.folder)
 			{
     			    $('.lierDossier').hide();
     			    
     			    // On parse les informations du dossier
-    			    var infosDossier = $.parseJSON(data.dossier);
+    			    var infosDossier = data.folder;
     			    
     			    // On affiche les informations du dossier
     			    $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + infosDossier.dossier_md5);
@@ -283,7 +283,7 @@ var contact = function() {
 			}
 			
 			// On va formater la liste des fichiers pour l'ajouter à la fiche événement
-			var fichiers = $.parseJSON(data.fichiers);
+			var fichiers = data.fichiers;
 			
 			// On fait une boucle des fichiers à afficher
 			$.each(fichiers, function(key, val) {
@@ -296,14 +296,14 @@ var contact = function() {
 			});
 			
 			// On va formater la liste des tâches pour l'ajouter à la fiche événement
-			var taches = $.parseJSON(data.taches);
+			var taches = data.taches;
 			
 			// On fait une boucle des tâches à afficher
 			$.each(taches, function(key, val) {
 				// On créé d'abord une nouvelle puce à la fin de la liste
 				$('.nouvelleTache').after('<li class="tache tache-' + val.tache_id + '" data-tache="' + val.tache_id + '"><strong>' + val.tache_description + '</strong></li>');
 			});
-			
+*/			
 			// On affiche le bloc
 			$('#evenement').fadeIn();
 		});
@@ -492,7 +492,7 @@ var contact = function() {
 		var contact = $('#nomContact').data('fiche');
 		
 		// On effectue la sauvegarde
-		$.post('ajax.php?script=contact-naissance-update', { date: date , contact: contact }, function() {
+		$.post('ajax.php?script=person-birthdate', { date: date , contact: contact }, function() {
 			// On modifie l'information sur la fiche
 			$('li.naissance').html(date);
 			
