@@ -75,6 +75,7 @@ require_once 'class/csv.class.php';
 require_once 'class/dossier.class.php';
 require_once 'class/evenement.class.php';
 require_once 'class/event.class.php';
+require_once 'class/folder.class.php';
 require_once 'class/map.class.php';
 require_once 'class/mission.class.php';
 require_once 'class/people.class.php';

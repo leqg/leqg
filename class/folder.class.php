@@ -74,7 +74,7 @@ class Folder
     public function update($data, $value)
     {
         $link = Configuration::read('db.link');
-        $query = $link->prepare('UPDATE `dossier` SET `'.$data.'` = :value WHERE `dossier_id` = :id');
+        $query = $link->prepare('UPDATE `dossiers` SET `'.$data.'` = :value WHERE `dossier_id` = :id');
         $query->bindValue(':id', $this->_folder['id'], PDO::PARAM_INT);
         $query->bindValue(':value', $value);
         $query->execute();
@@ -86,7 +86,7 @@ class Folder
      * 
      * @return  string
      * */
-    public function json($json)
+    public function json()
     {
         return json_encode($this->_folder);
     }
@@ -105,7 +105,7 @@ class Folder
         
         $events = array();
         $_events = $query->fetchAll(PDO::FETCH_NUM);
-        foreach ($_events as $event) = $events[] = $event[0];
+        foreach ($_events as $event) { $events[] = $event[0]; }
         
         return $events;
     }
@@ -121,12 +121,7 @@ class Folder
         $query = Core::query('folder-tasks');
         $query->bindValue(':folder', $this->_folder['id'], PDO::PARAM_INT);
         $query->execute();
-        
-        $tasks = array();
-        $_tasks = $query->fetchAll(PDO::FETCH_NUM);
-        foreach ($_tasks as $task) = $tasks[] = $task[0];
-        
-        return $tasks;
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     
     
@@ -140,12 +135,7 @@ class Folder
         $query = Core::query('folder-files');
         $query->bindValue(':folder', $this->_folder['id'], PDO::PARAM_INT);
         $query->execute();
-        
-        $files = array();
-        $_files = $query->fetchAll(PDO::FETCH_NUM);
-        foreach ($_files as $file) = $files[] = $file[0];
-        
-        return $files;
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     
     
@@ -178,11 +168,7 @@ class Folder
         $query = Core::query('folder-all');
         $query->bindValue(':status', $status, PDO::PARAM_INT);
         $query->execute();
-        $folders = array();
-        $_folders = $query->fetchAll(PDO::FETCH_NUM);
-        foreach ($_folders as $folder) { $folders[] = $folder[0]; }
-        
-        return $folders;
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     
 }

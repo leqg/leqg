@@ -195,7 +195,7 @@ class Event
      * @param   int     $folder     Folder
      * @return  void
      * */
-    public function linked_folder($folder)
+    public function link_folder($folder)
     {
         $query = Core::query('event-folder');
         $query->bindValue(':event', $this->_event['id'], PDO::PARAM_INT);

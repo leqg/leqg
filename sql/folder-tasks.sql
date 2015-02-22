@@ -1,4 +1,10 @@
-SELECT      `tache_id`
+SELECT      `tache_id` AS `id`,
+            `compte_id` AS `user`,
+            `historique_id` AS `event`,
+            `tache_description` AS `task`,
+            `tache_deadline` AS `deadline`,
+            `tache_creation` AS `begin`,
+            `tache_terminee` AS `status`
 FROM        `taches`
 LEFT JOIN   `historique`
 ON          `taches`.`historique_id` = `historique`.`historique_id`

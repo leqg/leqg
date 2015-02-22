@@ -1,5 +1,5 @@
 INSERT INTO `dossiers` (
-    `dossier_nom`
+    `dossier_nom`,
     `dossier_description`
 )
 VALUES (

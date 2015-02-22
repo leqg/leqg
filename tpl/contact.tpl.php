@@ -550,10 +550,10 @@
     		    <li class="dossier ajoutDossier">
     		        <strong>Créer un nouveau dossier</strong>
     		    </li>
-    		    <?php $dossiers = Dossier::liste_complete(); foreach ($dossiers as $dossier) : ?>
-	            <li class="dossier choixDossier dossier-<?php echo $dossier['dossier_id']; ?>" data-dossier="<?php echo $dossier['dossier_id']; ?>">
-	                <strong><?php echo $dossier['dossier_nom']; ?></strong>
-	                <em><?php echo $dossier['dossier_description']; ?></em>
+    		    <?php $dossiers = Folder::all(); foreach ($dossiers as $dossier) : ?>
+	            <li class="dossier choixDossier dossier-<?php echo $dossier['id']; ?>" data-dossier="<?php echo $dossier['id']; ?>">
+	                <strong><?php echo $dossier['name']; ?></strong>
+	                <em><?php echo $dossier['desc']; ?></em>
 	            </li>
     		    <?php endforeach; ?>
 		</ul>

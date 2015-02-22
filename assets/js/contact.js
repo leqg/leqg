@@ -267,7 +267,7 @@ var contact = function() {
 			$('#evenement').data('evenement', data.id);
 			$('#formEvenement').val(data.id);
 			
-/*			// On regarde s'il y a un dossier et si oui, on l'affiche
+			// On regarde s'il y a un dossier et si oui, on l'affiche
 			if (data.folder)
 			{
 					   $('.lierDossier').hide();
@@ -276,12 +276,12 @@ var contact = function() {
 					   var infosDossier = data.folder;
 					   
 					   // On affiche les informations du dossier
-					   $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + infosDossier.dossier_md5);
-					   $('.afficherInfosDossier li strong').html(infosDossier.dossier_nom);
-					   $('.afficherInfosDossier li em').html(infosDossier.dossier_description);
+					   $('.afficherInfosDossier').attr('href', 'index.php?page=dossier&dossier=' + infosDossier.id);
+					   $('.afficherInfosDossier li strong').html(infosDossier.name);
+					   $('.afficherInfosDossier li em').html(infosDossier.desc);
 					   $('.afficherInfosDossier').show();
 			}
-*/			
+			
 			// On va formater la liste des fichiers pour l'ajouter à la fiche événement
 			var fichiers = data.files;
 			
