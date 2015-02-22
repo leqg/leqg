@@ -95,7 +95,7 @@ class Event
     public function update($data, $value)
     {
         $link = Configuration::read('db.link');
-        $query = $link->prepare('UPDATE `people` SET `'.$data.'` = :value WHERE `id` = :id');
+        $query = $link->prepare('UPDATE `historique` SET `'.$data.'` = :value WHERE `historique_id` = :id');
         $query->bindValue(':id', $this->_event['id'], PDO::PARAM_INT);
         $query->bindValue(':value', $value);
         $query->execute();
@@ -214,6 +214,23 @@ class Event
         $query = Core::query('event-delete');
         $query->bindValue(':event', $this->_event['id'], PDO::PARAM_INT);
         $query->execute();
+    }
+    
+    
+    /**
+     * Create a new event
+     * 
+     * @param   int     $person     Person ID for this event
+     * @return  int
+     * */
+    public static function create($person)
+    {
+        $user = User::ID();
+        $query = Core::query('event-new');
+        $query->bindValue(':person', $person, PDO::PARAM_INT);
+        $query->bindValue(':user', $user, PDO::PARAM_INT);
+        $query->execute();
+        return Configuration::read('db.link')->lastInsertId();
     }
     
     

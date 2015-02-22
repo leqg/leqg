@@ -95,17 +95,17 @@
 		<section class="contenu demi">
 			<h4>Tâches à réaliser rapidement</h4>
 			
-			<?php $taches = Evenement::taches(); if ($taches) : ?>
+			<?php $taches = Event::tasks(); if ($taches) : ?>
 			<ul class="listeDesTaches">
 				<?php
 					foreach ($taches as $tache) :
-						$event = new Evenement($tache['historique_id'], false);
-						$fiche = new Contact($event->get('contact_id'));
+						$event = new Event($tache['event']);
+						$fiche = new People($event->get('people'));
 				?>
-				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('contact_id'), 'evenement' => md5($event->get('historique_id')))); ?>" class="transparent">
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'), 'evenement' => $event->get('id'))); ?>" class="transparent">
 					<li class="tache loupeOver">
-						<strong><?php echo $tache['tache_description']; ?></strong>
-						<em><?php echo User::get_login_by_ID($tache['compte_id']); ?></em>
+						<strong><?php echo $tache['task']; ?></strong>
+						<em><?php echo User::get_login_by_ID($tache['user']); ?></em>
 					</li>
 				</a>
 				<?php endforeach; ?>
@@ -115,18 +115,18 @@
 			<?php endif; ?>
 		</section>
 		
-        <?php $liste = Evenement::last( 5 ); if (count($liste)) : ?>
+        <?php $liste = Event::last(); if (count($liste)) : ?>
         <section class="contenu demi">
     	    <h4>Dernières interactions</h4>
     	    
     	    <ul class="listeDesEvenements">
-        	    <?php foreach ($liste as $event) : $e = new Evenement(md5($event['historique_id'])); $c = new Contact($e->get('contact_id')); ?>
-				<li class="evenement <?php echo $e->get_infos('type'); ?> <?php if ($e->lien()) { ?>clic<?php } ?>">
-					<small><span><?php echo Core::tpl_typeEvenement($e->get_infos('type')); ?></span></small>
-					<strong><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $c->get('contact_id'), 'evenement' => md5($e->get('historique_id')))); ?>"><?php echo (!empty($e->get_infos('objet'))) ? $e->get_infos('objet') : 'Événement sans titre'; ?></a></strong>
+        	    <?php foreach ($liste as $event) : $e = new Event($event['id']); $c = new People($e->get('people')); ?>
+				<li class="evenement <?php echo $e->get('type'); ?> <?php if ($e->link()) { ?>clic<?php } ?>">
+					<small><span><?php echo Event::display_type($e->get('type')); ?></span></small>
+					<strong><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $c->get('id'), 'evenement' => $e->get('id'))); ?>"><?php echo (!empty($e->get('objet'))) ? $e->get('objet') : 'Événement sans titre'; ?></a></strong>
 					<ul class="infosAnnexes">
-						<li class="contact"><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $c->get('contact_id'))); ?>"><?php echo $c->noms(' '); ?></a></li>
-						<li class="date"><?php echo date('d/m/Y', strtotime($e->get_infos('date'))); ?></li>
+						<li class="contact"><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $c->get('id'))); ?>"><?php echo $c->display_name(); ?></a></li>
+						<li class="date"><?php echo date('d/m/Y', strtotime($e->get('date'))); ?></li>
 					</ul>
 				</li>
                 <?php endforeach; ?>

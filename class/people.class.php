@@ -63,11 +63,7 @@ class People
         $this->_postal = self::postal($this->_address);
         
         // age calculator
-        if ($this->age()) {
-            $this->_people['age'] = $this->age().' âge';
-        } else {
-            $this->_people['age'] = 'Âge inconnu';
-        }
+        $this->_people['age'] = $this->display_age();
     }
     
     
@@ -185,7 +181,9 @@ class People
      * */
     public function display_age()
     {
-        if ($this->age()) {
+        if ($this->age() && $this->age() > 100) {
+            return 'Âge inconnu';
+        } elseif ($this->age()) {
             return $this->age().' ans';
         } else {
             return 'Âge inconnu';
@@ -345,6 +343,46 @@ class People
         $query = Core::query('contact-details-remove');
         $query->bindValue(':id', $detail, PDO::PARAM_INT);
         $query->execute();
+    }
+    
+    
+    /**
+     * File upload for an asked person
+     * 
+     * @param   mixed   $file           Uploaded file
+     * @param   array   $data           Linked data
+     * @param   array   $extensions     Auth extensions
+     * @param   int     $maxsize        File max allowed size
+     * @result  bool
+     * */
+    public function file_upload($file, array $data, $extensions = false, $maxsize = false)
+    {
+        $extension = substr(strrchr($file['name'], '.'), 1);
+        $nom = preg_replace("#[^a-zA-Z0-9]#", "-", strtolower($data['titre'])) . '-' . uniqid() . '.' . $extension;
+        
+        if (!isset($file) || $file['error'] > 0) return false;
+        if ($maxsize !== FALSE && $file['size'] > $maxsize) return false;
+        if ($extensions !== FALSE && !in_array($extension, $extensions)) return false;
+        
+        $destination = 'uploads/'.$nom;
+        
+        if (move_uploaded_file($file['tmp_name'], $destination))
+        {
+            $utilisateur = User::ID();
+            
+            $query = Core::query('file-upload');
+            $query->bindValue(':people', $this->_people['id'], PDO::PARAM_INT);
+            $query->bindValue(':user', $utilisateur, PDO::PARAM_INT);
+            $query->bindValue(':event', $data['evenement'], PDO::PARAM_INT);
+            $query->bindValue(':name', $data['titre']);
+            $query->bindValue(':desc', $data['description']);
+            $query->bindValue(':url', $nom);
+            $query->execute();
+            
+            return true;
+        } else {
+            return false;
+        }
     }
     
     
@@ -733,7 +771,7 @@ class People
                 
                 if (count($themas)) {
                     foreach ($themas as $thema) {
-                        $thema = '%,'.preg_replace('#[^[:alnum:]]#u', '%', $thema).',%';
+                        $thema = '%'.preg_replace('#[^[:alnum:]]#u', '%', $thema).'%';
                         $query = Core::query('people-by-tags');
                         $query->bindValue(':tag', $thema);
                         $query->execute();
@@ -794,7 +832,7 @@ class People
                 $contacts = array();
                 foreach ($result as $element) { $contacts[] = $element[0]; }
                 
-            } elseif (!count($contacts) && !count($_contacts)) {
+            } elseif (!count($contacts) && !count($_contacts) && empty($sort['criteres'])) {
                 $query = Core::query('people-all');
                 $query->execute();
                 $result = $query->fetchAll(PDO::FETCH_NUM);

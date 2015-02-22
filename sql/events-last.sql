@@ -15,5 +15,6 @@ OR          `historique_type` = "telephone"
 OR          `historique_type` = "courriel"
 OR          `historique_type` = "courrier"
 OR          `historique_type` = "autre"
-ORDER BY    `historique_date` DESC
+ORDER BY    `historique_date` DESC,
+            `historique_id` DESC
 LIMIT       0, 15

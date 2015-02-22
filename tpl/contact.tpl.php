@@ -416,6 +416,20 @@
 		</ul>
 	</section>
 	
+	<section class="contenu demi invisible newContactDetail">
+		<a href="#" class="fermerColonne">&#xe813;</a>
+		
+		<ul class="formulaire">
+			<li>
+				<label class="small" for="modifEmail">Numéro de téléphone ou adresse email</label>
+				<span class="form-icon decalage"><input type="text" name="newCoord" id="newCoord"></span>
+			</li>
+			<li>
+				<button class="enregistrerNewCoord" data-type="email">Enregistrer</button>
+			</li>
+		</ul>
+	</section>
+	
 	<section class="contenu demi invisible modifier-email" data-id="">
 		<a href="#" class="fermerColonne">&#xe813;</a>
 		
@@ -478,7 +492,7 @@
         	        <span class="form-icon sms">
 	        	        <label class="sbox" for="choixNumero">
 		        	        <select name="choixNumero" id="choixNumero">
-		            			<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'mobile') : ?>
+		            			<?php $coordonnees = $data->contact_details(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'mobile') : ?>
 		            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php Core::tpl_phone($coordonnee['coordonnee_numero']); ?></option>
 		            	        <?php endif; endforeach; ?>
 		        	        </select>
@@ -598,17 +612,11 @@
 
 <?php 
 	if (!empty($address['reel']) || !empty($address['officiel'])) : 
-	
+	$postal = People::postal($data->get('id'));
 	if (!empty($address['reel'])) {
-    	    $adresse = People::address($data->get('id'));
-		$immeuble = Carto::immeuble($adresse['reel']['building']);
-		$rue = Carto::rue($adresse['reel']['street']);
-		$ville = Carto::ville($adresse['reel']['city']);
+    	    $postal = $postal['reel'];
 	} else {
-    	    $adresse = People::address($data->get('id'));
-		$immeuble = Carto::immeuble($adresse['officiel']['building']);
-		$rue = Carto::rue($adresse['officiel']['street']);
-		$ville = Carto::ville($adresse['officiel']['city']);
+    	    $postal = $postal['officiel'];
 	}
 ?>
 <script>
@@ -623,8 +631,8 @@
 		format: 'json',
 		email: 'tech@leqg.info',
 		country: 'France',
-		city: "<?php echo $ville; ?>",
-		street: "<?php echo $immeuble . ' ' . trim($rue); ?>"
+		city: "<?php echo $postal['city']; ?>",
+		street: "<?php echo $postal['building'] . ' ' . $postal['street']; ?>"
 	}
 	
 	// On récupère le JSON contenant les coordonnées de la rue
@@ -643,7 +651,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo $immeuble . ' ' . trim(mb_convert_case($rue, MB_CASE_TITLE)); ?>"
+			title: "<?php echo $postal['building'] . ' ' . $postal['street']; ?>"
 		}).addTo(map);
 	});
 </script>
