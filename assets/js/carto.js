@@ -17,10 +17,10 @@ var carto = function() {
 				// On fait une boucle des différents résultats
 				$.each(data, function(key, val) {
 					// On créé la puce
-					$('.listeCommunes').append('<a class="nostyle ville-' + val.commune_id + '" href=""><li class="demi contact ville"><strong></strong><p></p></li></a>');
-					$('.ville-' + val.commune_id).attr('href', 'index.php?page=carto&niveau=communes&code=' + val.md5);
-					$('.ville-' + val.commune_id + ' li strong').html(val.commune_nom);
-					$('.ville-' + val.commune_id + ' li p').html(val.departement_nom);
+					$('.listeCommunes').append('<a class="nostyle ville-' + val.id + '" href=""><li class="demi contact ville"><strong></strong><p>Accès à la fiche</p></li></a>');
+					$('.ville-' + val.id).attr('href', 'index.php?page=carto&niveau=communes&code=' + val.id);
+					$('.ville-' + val.id + ' li strong').html(val.city);
+					$('.ville-' + val.id + ' li p').html(val.country_name);
 				});
 				
 				// On affiche la liste finale
