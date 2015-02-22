@@ -87,7 +87,7 @@ class People
     {
         if ($data != 'tags') $this->_people[$data] = $value;
         $link = Configuration::read('db.link');
-        $query = $link->prepare('UPDATE `contacts` SET `'.$data.'` = :value WHERE `contact_id` = :id');
+        $query = $link->prepare('UPDATE `people` SET `'.$data.'` = :value WHERE `id` = :id');
         $query->bindValue(':id', $this->_people['id']);
         $query->bindValue(':value', $value);
         $query->execute();

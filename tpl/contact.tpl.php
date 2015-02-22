@@ -293,7 +293,7 @@
 		<ul class="formulaire">
 			<li>
 				<label class="small" for="changerOrganisme">Organisme</label>
-				<span class="form-icon decalage organisme"><input type="text" name="changerOrganisme" id="changerOrganisme" value="<?php echo $data->get('organisation'); ?>" placeholder="Organisation"></span>
+				<span class="form-icon decalage organisme"><input type="text" name="changerOrganisme" id="changerOrganisme" value="<?php echo $data->get('organisme'); ?>" placeholder="Organisation"></span>
 			</li>
 			<li>
 				<label class="small" for="changerFonction">Fonction</label>
