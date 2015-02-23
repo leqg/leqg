@@ -110,6 +110,22 @@ class Maps
     
     
     /**
+     * Poll place search method
+     * 
+     * @param   int     $search     Search term
+     * @result  array
+     * */
+    public static function poll_search($search)
+    {
+        $search = '%'.preg_replace('#[^A-Za-z0-9]#', '%', $search).'%';
+        $query = Core::query('poll-search');
+        $query->bindValue(':search', $search);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
      * Load street's informations
      * 
      * @param   int     $street     Street ID
