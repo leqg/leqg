@@ -1,4 +1,14 @@
 <?php
+$service = new \Esendex\DispatchService($api['sms']['auth']);
+
+$campagne = array(
+    'titre' => $_GET['titre'],
+    'message' => $_GET['message']
+);
+
+
+Core::debug($campagne);
+    
 	if (isset($_GET)) {
 		// On assure le démarrage du service
 		$service = new \Esendex\DispatchService($api['sms']['auth']);

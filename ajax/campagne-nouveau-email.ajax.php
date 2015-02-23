@@ -12,9 +12,9 @@ if (isset($_GET)) {
 	
 	// On retraite les critères complexes
 	$var['criteres'] = trim($var['criteres'], ';');
-
+	
 	// On charge les identifiants des fiches correspondantes
-	$contacts = Contact::listing($var, 0, false);
+	$contacts = People::listing($var, 0, false);
 	
 	// On prépare la requête d'ajout des destinataires
 	$query = Core::query('campagne-destinataires');

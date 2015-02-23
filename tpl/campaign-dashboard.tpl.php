@@ -117,11 +117,11 @@ Core::tpl_header();
                         <th class="align-center petit">Statut</th>
                     </tr>
                 </thead>
-                <?php foreach ($destinataires as $destinataire) : $contact = new Contact(md5($destinataire['contact'])); ?>
+                <?php foreach ($destinataires as $destinataire) : $contact = new People($destinataire['contact']); ?>
                 <tbody>
                     <tr>
                         <td><?php echo $destinataire['email']; ?></td>
-                        <td><a href="<?php echo Core::tpl_go_to('contact', array('contact' => hash('md5', $destinataire['contact']))); ?>"><?php echo $contact->get('nom_affichage'); ?></a></td>
+                        <td><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $contact->get('id'))); ?>"><?php echo $contact->display_name(); ?></a></td>
                         <td><?php echo Campaign::display_status($destinataire['status']); ?></td>
                     </tr>
                 </tbody>
