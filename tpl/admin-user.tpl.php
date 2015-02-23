@@ -3,11 +3,11 @@
 	User::protection(5);
 	
 	// On cherche des infos sur l'utilisateur
-	$user = User::infos($_GET['compte']);
+	$user = User::data($_GET['compte']);
 	
 	// On défini les niveaux d'autorisation
 	$auth_lvl = array(
-    	9 => 'Maintenance technique',
+    	9 => 'Service technique – maintenance',
     	8 => 'Administrateur',
     	7 => 'Administrateur',
     	6 => 'Administrateur',
@@ -39,16 +39,16 @@
                 </li>
                 <li class="mobile">
                     <span>Téléphone</span>
-                    <span><?php echo Core::get_tpl_phone($user['telephone']); ?></span>
+                    <span><?php if ($user['phone'] != '0000000000') { echo Core::get_tpl_phone($user['phone']); } else { echo 'Donnée inconnue'; } ?></span>
                 </li>
                 <li class="date">
                     <span>Dernière connexion</span>
-                    <span><?php $connexion = DateTime::createFromFormat('Y-m-d H:i:s', $user['last_login']); echo $connexion->format('d/m/Y H:i'); ?></span>
+                    <span><?php if ($user['last_login'] != '0000-00-00 00:00:00') { $last_login = new DateTime($user['last_login']); echo $last_login->format('d/m/Y H:i'); } else { echo 'Donnée inconnue'; }?></span>
                 </li>
             </ul>
     	</section>
     	
-    	<?php if(User::ID() != $_GET['compte']) : ?>
+    	<?php if (User::ID() != $_GET['compte']) : ?>
     	<section class="contenu demi">
         	<a href="ajax.php?script=admin-suppression&compte=<?php echo $_GET['compte']; ?>" class="nostyle"><button class="deleting long" style="margin: 0 auto">Supprimer ce compte</button></a>
     	</section>

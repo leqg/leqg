@@ -1,4 +1,5 @@
-SELECT      `poll`.`number`,
+SELECT      `poll`.`id`,
+            `poll`.`number`,
             `poll`.`name`,
             `city`.`city` AS `city_name`
 FROM        `poll`

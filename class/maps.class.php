@@ -110,6 +110,21 @@ class Maps
     
     
     /**
+     * Load poll place's informations
+     * 
+     * @param   int     $poll       Poll ID
+     * @result  array
+     * */
+    public static function poll_data($poll)
+    {
+        $query = Core::query('poll-data');
+        $query->bindValue(':poll', $poll, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
      * Poll place search method
      * 
      * @param   int     $search     Search term

@@ -17,6 +17,8 @@ require_once('class/configuration.class.php');
 $config = parse_ini_file('config.ini', true);
 
 // On applique la configuration chargée
+Configuration::write('url', $config['SERVER']['url']);
+Configuration::write('client', $config['LEQG']['compte']);
 Configuration::write('db.host', $config['BDD']['host']);
 Configuration::write('db.basename', 'leqg_dev');
 Configuration::write('db.user', $config['BDD']['user']);

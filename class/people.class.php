@@ -162,7 +162,7 @@ class People
      * 
      * @result  int
      * */
-    private function age()
+    public function age()
     {
         if (!is_null($this->_people['date_naissance'])) {
             return DateTime::createFromFormat('Y-m-d', $this->_people['date_naissance'])

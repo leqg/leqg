@@ -407,7 +407,7 @@
 				<span class="form-icon utilisateur">
 					<label class="sbox" for="formDestinataireTache">
 						<select id="formDestinataireTache" name="formDestinataireTache">
-							<?php $users = User::liste(); foreach ($users as $user) : ?>
+							<?php $users = User::all(0); foreach ($users as $user) : ?>
 							<option value="<?php echo $user['id']; ?>"><?php echo $user['firstname']; ?> <?php echo $user['lastname']; ?></option>
 							<?php endforeach; ?>
 						</select>
