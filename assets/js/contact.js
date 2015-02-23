@@ -599,12 +599,12 @@ var contact = function() {
 				$.each( data, function( key, val ) {
 				
 					// On créé d'abord une nouvelle puce
-					$('#listeRues').append('<li id="rue-' + val.rue_id + '"></li>');
+					$('#listeRues').append('<li id="rue-' + val.id + '"></li>');
 					
 					// On ajoute après les différents span
-					$('#rue-' + val.rue_id).append('<button class="ajouterLaRue" data-rue="' + val.rue_id + '" data-nom="' + val.rue_nom + '" data-ville="' + val.commune_nom + '">Choisir</button>');
-					$('#rue-' + val.rue_id).append('<span class="rue-nom">' + val.rue_nom + '</span>');
-					$('#rue-' + val.rue_id).append('<span class="rue-ville">' + val.commune_nom + '</span>');
+					$('#rue-' + val.id).append('<button class="ajouterLaRue" data-rue="' + val.id + '" data-nom="' + val.street + '" data-ville="' + val.city_name + '">Choisir</button>');
+					$('#rue-' + val.id).append('<span class="rue-nom">' + val.street + '</span>');
+					$('#rue-' + val.id).append('<span class="rue-ville">' + val.city_name + '</span>');
 				});
 				
 				// On ajoute une dernière puce, l'ajout d'une nouvelle rue
@@ -639,12 +639,12 @@ var contact = function() {
 				$.each( data, function( key, val ) {
 				
 					// On créé d'abord une nouvelle puce
-					$('#listeVilles').append('<li id="ville-' + val.commune_id + '"></li>');
+					$('#listeVilles').append('<li id="ville-' + val.id + '"></li>');
 					
 					// On ajoute après les différents span
-					$('#ville-' + val.commune_id).append('<button class="choisirLaVille" data-ville="' + val.commune_id + '" data-nom="' + val.commune_nom + '">Choisir</button>');
-					$('#ville-' + val.commune_id).append('<span class="ville-nom">' + val.commune_nom + '</span>');
-					$('#ville-' + val.commune_id).append('<span class="ville-ville" style="font-size: 0.1em; line-height: 0.1em;">&nbsp;</span>');
+					$('#ville-' + val.id).append('<button class="choisirLaVille" data-ville="' + val.id + '" data-nom="' + val.city + '">Choisir</button>');
+					$('#ville-' + val.id).append('<span class="ville-nom">' + val.city + '</span>');
+					$('#ville-' + val.id).append('<span class="ville-ville" style="font-size: 0.1em; line-height: 0.1em;">&nbsp;</span>');
 				});
 				
 				$('#listeVilles').show();
@@ -672,11 +672,12 @@ var contact = function() {
 		var fiche = $('.titre').data('fiche');
 		var immeuble = $('#immeubleNouvelleRue').val();
 		var rue = $('#nomNouvelleRue').val();
+		var codePostal = $('#nomCodePostal').val();
 		var ville = $('#villeNouvelleRue').val();
 		var commune = $('#communeNouvelleRue').val();
 		
 		// On enregistre les informations dans la base de données
-		$.post('ajax.php?script=contact-ajout-adresse', { fiche: fiche, ville: ville, rue: rue, immeuble: immeuble }, function(data) {
+		$.post('ajax.php?script=contact-ajout-adresse', { fiche: fiche, ville: ville, zipcode: codePostal, rue: rue, immeuble: immeuble }, function(data) {
 			// On change l'adresse et on vient en arrière
 			$('.adresse').html(data);
 			
@@ -714,8 +715,8 @@ var contact = function() {
 				
 				// On ajoute après les différents span
 				$('#immeuble-' + val.id).append('<button class="choisirImmeuble" data-immeuble="' + val.id + '">Choisir</button>');
-				$('#immeuble-' + val.id).append('<span class="rue-immeuble">' + val.numero + ' ' + nom + '</span>');
-				$('#immeuble-' + val.id).append('<span class="rue-ville">' + ville + '</span>');
+				$('#immeuble-' + val.id).append('<span class="rue-immeuble">' + val.building + ' ' + nom + '</span>');
+				$('#immeuble-' + val.id).append('<span class="rue-ville">&nbsp;</span>');
 			});
 			
 			$('#listeImmeubles').show();

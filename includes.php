@@ -68,6 +68,7 @@ Configuration::write('mail.quota', $config['MAIL']['quota']);
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';
 require_once 'class/campaign.class.php';
+require_once 'class/campagne.class.php';
 require_once 'class/carto.class.php';
 require_once 'class/contact.class.php';
 require_once 'class/core.class.php';

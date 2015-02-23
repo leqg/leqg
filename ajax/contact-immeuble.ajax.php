@@ -1,22 +1,9 @@
 <?php
-	if (isset($_POST['fiche'], $_POST['rue'], $_POST['immeuble']))
-	{
-		// On créé le bordel
-		$immeuble = Carto::ajoutImmeuble(array('rue' => $_POST['rue'], 'numero' => $_POST['immeuble']));
-		
-		// On ouvre le contact
-		$contact = new contact(md5($_POST['fiche']));
-		
-		// On modifie l'adresse
-		$contact->modification('adresse_id', $immeuble);
-		
-		// On rouvre le contact
-		$contact = new contact(md5($_POST['fiche']));
-		
-		// On cherche l'adresse en question
-		$adresse = $contact->adresse('declaree');
-		
-		// On retourne l'adresse
-		echo $adresse;
-	}
-?>
+$street = Maps::street_data($_POST['rue']);
+$building = Maps::building_new($_POST['immeuble'], $street['id']);
+$zipcode = Maps::zipcode_detect($street['id']);
+$city = Maps::city_data($street['city']);
+$address = Maps::address_new($_POST['fiche'], $city['id'], $zipcode, $street['id'], $building);
+$data = new People($_POST['fiche']);
+$postal = $data->postal_address();
+echo $postal['reel'];

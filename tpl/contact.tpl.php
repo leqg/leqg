@@ -362,6 +362,10 @@
 				<span class="form-icon decalage rue"><input type="text" name="nomNouvelleRue" id="nomNouvelleRue"></span>
 			</li>
 			<li>
+				<label class="small" for="nomCodePostal">Code postal</label>
+				<span class="form-icon decalage ville"><input type="text" name="nomCodePostal" id="nomCodePostal"></span>
+			</li>
+			<li>
 				<label class="small" for="communeNouvelleRue">Ville de la rue</label>
 				<span class="form-icon decalage ville"><input type="text" name="communeNouvelleRue" id="communeNouvelleRue" disabled></span>
 				<input type="hidden" name="villeNouvelleRue" id="villeNouvelleRue">

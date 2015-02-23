@@ -52,7 +52,7 @@ class Maps
      * */
     public static function city_search($search)
     {
-        $search = "%$search%";
+        $search = '%'.preg_replace('#[^A-Za-z]#', '%', $search).'%';
         $query = Core::query('city-search');
         $query->bindValue(':search', $search);
         $query->execute();
@@ -106,6 +106,158 @@ class Maps
         $query->execute();
         $data = $query->fetch(PDO::FETCH_NUM);
         return $data[0];
+    }
+    
+    
+    /**
+     * Load street's informations
+     * 
+     * @param   int     $street     Street ID
+     * @result  array
+     * */
+    public static function street_data($street)
+    {
+        $query = Core::query('street-data');
+        $query->bindValue(':street', $street, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Street search method
+     * 
+     * @param   string  $search     Search term
+     * @result  array
+     * */
+    public static function street_search($search)
+    {
+        $search = '%'.preg_replace('#[^A-Za-z]#', '%', $search).'%';
+        $query = Core::query('street-search');
+        $query->bindValue(':search', $search);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * List all buildings on a street
+     * 
+     * @param   int     $street     Asked street ID
+     * @result  array
+     * */
+    public static function street_buildings($street)
+    {
+        $query = Core::query('street-buildings');
+        $query->bindValue(':street', $street, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Create a new street
+     * 
+     * @param   string  $street     New street name
+     * @param   int     $city       City ID
+     * @result  int
+     * */
+    public static function street_new($street, $city=null)
+    {
+        $query = Core::query('street-new');
+        $query->bindValue(':street', $street);
+        $query->bindValue(':city', $city);
+        $query->execute();
+        return Configuration::read('db.link')->lastInsertId();
+    }
+    
+    
+    /**
+     * Load building's informations
+     * 
+     * @param   int     $building   Building ID
+     * @result  array
+     * */
+    public static function building_data($building)
+    {
+        $query = Core::query('building-data');
+        $query->bindValue(':building', $building, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    
+    /**
+     * Create a new building
+     * 
+     * @param   string  $building   New building number
+     * @param   int     $street     Street ID
+     * @result  int
+     * */
+    public static function building_new($building, $street = null)
+    {
+        $query = Core::query('building-new');
+        $query->bindValue(':building', $building);
+        $query->bindValue(':street', $street);
+        $query->execute();
+        return Configuration::read('db.link')->lastInsertId();
+    }
+    
+    
+    /**
+     * Most used zipcode for a street
+     * 
+     * @param   int     $street     Street ID
+     * @result  int
+     * */
+    public static function zipcode_detect($street)
+    {
+        $query = Core::query('zipcode-detect');
+        $query->bindValue(':street', $street, PDO::PARAM_INT);
+        $query->execute();
+        $zipcode = $query->fetch(PDO::FETCH_NUM);
+        return $zipcode[0];
+    }
+    
+    
+    /**
+     * Create a new building
+     * 
+     * @param   string  $zipcode    New building number
+     * @param   int     $city       City ID
+     * @result  int
+     * */
+    public static function zipcode_new($zipcode, $city = null)
+    {
+        $query = Core::query('zipcode-new');
+        $query->bindValue(':zipcode', $zipcode);
+        $query->bindValue(':city', $city);
+        $query->execute();
+        return Configuration::read('db.link')->lastInsertId();
+    }
+
+    
+    /**
+     * Create a new address for a contact
+     * 
+     * @param   int     $person     Person ID
+     * @param   int     $city       City ID
+     * @param   int     $zipcode    Zipcode ID
+     * @param   int     $street     Street ID
+     * @param   int     $building   Building ID
+     * @param   string  $type       Address type
+     * @result  int                 Address ID
+     * */
+    public static function address_new($person, $city, $zipcode, $street, $building, $type = 'reel')
+    {
+        $query = Core::query('address-new');
+        $query->bindValue(':people', $person, PDO::PARAM_INT);
+        $query->bindValue(':type', $type);
+        $query->bindValue(':city', $city, PDO::PARAM_INT);
+        $query->bindValue(':zipcode', $zipcode, PDO::PARAM_INT);
+        $query->bindValue(':street', $street, PDO::PARAM_INT);
+        $query->bindValue(':building', $building, PDO::PARAM_INT);
+        $query->execute();
     }
     
 }

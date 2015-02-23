@@ -446,7 +446,7 @@ var contacts = function() {
         // On récupère les données
         var data = {
             'email': $('#coordonnees-email').val(),
-            'mobile': 2,
+            'mobile': 1,
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
             'adresse': 0,
@@ -501,7 +501,7 @@ var contacts = function() {
         // On récupère les données
         var data = {
             'email': $('#coordonnees-email').val(),
-            'mobile': 2,
+            'mobile': 1,
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
             'adresse': 0,
@@ -532,7 +532,7 @@ var contacts = function() {
     $('.emailSelection').click(function() {
         // On récupère les données
         var data = {
-            'email': 2,
+            'email': 1,
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
@@ -555,7 +555,7 @@ var contacts = function() {
     $('.emailValidationCampagne').click(function() {
         // On récupère les données
         var data = {
-            'email': 2,
+            'email': 1,
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
@@ -591,7 +591,7 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 2,
+            'adresse': 1,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -623,7 +623,7 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 2,
+            'adresse': 1,
             'criteres': ';' + $('#listeCriteresTri').val(),
             'titre': $('#publiTitreCampagne').val(),
             'message': $('#publiDescriptionCampagne').val()

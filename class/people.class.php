@@ -846,7 +846,7 @@ class People
             return count($contacts);
             
         } else {
-            if (is_bool($nombre) && $nombre) {
+            if (is_bool($nombre)) {
                 return $contacts;
             } else {
                 return array_slice($contacts, $debut, $nombre);
