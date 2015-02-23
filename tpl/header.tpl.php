@@ -48,7 +48,21 @@
 								'rappels' => 'Rappels',
 								'administration' => 'Utilisateurs'  );
 					
-			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
+                if (isset($_GET['page'])) {
+                    switch ($_GET['page']) {
+                        case 'contact':
+                            $actuel = 'contacts';
+                            break;
+                        
+                        case 'campagne':
+                            $actuel = Configuration::read('tpl.actuel');
+                            break;
+                        
+                        default:
+                            $actuel = $_GET['page'];
+                            break;
+                    }
+                }
 		
 			foreach ($menu as $key => $element) : ?>
 		<a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>" <?php if ($actuel == $key) echo 'class="actif"'; ?>><?php echo $element; ?></a>

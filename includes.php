@@ -23,6 +23,8 @@ Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 Configuration::write('ini', $config);
 Configuration::write('price.email', 0.20);
+Configuration::write('price.sms', 0.08);
+Configuration::write('sms.size', 70);
 
 // On fabrique la classe $noyau de connexion au noyau central
 $host = $config['BDD']['host'];
@@ -62,8 +64,10 @@ $api['mail']['reply']['email'] = 'serveur@leqg.info';
 $api['mail']['reply']['nom'] = 'LeQG';
 
 Configuration::write('api', $api);
+Configuration::write('sms', $api['sms']['auth']);
 Configuration::write('mail', $mail);
 Configuration::write('mail.quota', $config['MAIL']['quota']);
+Configuration::write('sms.sender', 'LeQG');
 
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';

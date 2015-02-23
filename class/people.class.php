@@ -234,7 +234,7 @@ class People
     /**
      * Return postal address
      * 
-     * @result  string
+     * @result  array
      * */
     public function postal_address()
     {
@@ -251,6 +251,17 @@ class People
         if (!empty($this->_postal['reel']['city'])) $display['reel'] .= $this->_postal['reel']['city'];
         
         return $display;
+    }
+    
+    
+    /**
+     * Return postal address, separated data
+     * 
+     * @result  array
+     * */
+    public function postal_array()
+    {
+        return $this->_postal;
     }
     
     
@@ -591,6 +602,7 @@ class People
             $query->bindValue(':city', $address['city']);
             $query->execute();
             $city = $query->fetch(PDO::FETCH_NUM);
+            $postal[$type]['country'] = $city[3];
             $postal[$type]['city'] = $city[0];
             
             $query = Core::query('zipcode-data');

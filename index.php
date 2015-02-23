@@ -127,7 +127,7 @@ else {
 	else if ($_GET['page'] == 'sms') {
 		// On regarde si une page en particulier est demandée
 		if (isset($_GET['campagne'])) {
-			Core::tpl_load('sms', 'campagne');
+			Core::tpl_go_to('campagne', array('id' => $_GET['campagne']), true);
 		}
 		
 		// Sinon, on appelle la page principale du module
@@ -142,7 +142,7 @@ else {
 	else if ($_GET['page'] == 'email') {
 		// On regarde si une page en particulier est demandée
 		if (isset($_GET['campagne'])) {
-			Core::tpl_load('email', 'campagne');
+			Core::tpl_go_to('campagne', array('id' => $_GET['campagne']), true);
 		}
 		
 		// Sinon, on appelle la page principale du module

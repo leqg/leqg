@@ -1,5 +1,8 @@
-SELECT      `city`,
-            `id`,
-            `country`
+SELECT      `city`.`city`,
+            `city`.`id`,
+            `city`.`country`,
+            `country`.`country` AS `country_name`
 FROM        `city`
-WHERE       `id` = :city
+LEFT JOIN   `country`
+ON          `country`.`id` = `city`.`country`
+WHERE       `city`.`id` = :city

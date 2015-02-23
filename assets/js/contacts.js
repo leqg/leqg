@@ -194,9 +194,7 @@ var contacts = function() {
             // On fait la boucle de tous les éléments trouvés et on les affiche
             $.each(data, function(key, val) {
                 // Pour chaque bureau, on créé une puce
-                $('.listeDesBureaux').append('<li class="bureau-' + val.bureau_id + '"><span class="bureau-nom"></span><span class="bureau-ville"></span><button class="choisirBureau" data-bureau="' + val.bureau_id + '" data-numero="' + val.bureau_numero + '">Choisir</button></li>');
-                $('.bureau-' + val.bureau_id + ' .bureau-nom').html('Bureau ' + val.bureau_numero + ' ' + val.bureau_nom);
-                $('.bureau-' + val.bureau_id + ' .bureau-ville').html(val.commune_nom + ' (' + val.departement_id + ')');
+                $('.listeDesBureaux').append('<li class="bureau-' + val.bureau_id + '"><span class="bureau-nom">Bureau ' + val.number + ' ' + val.name + '</span><span class="bureau-ville">' + val.city_name + '</span><button class="choisirBureau" data-bureau="' + val.id + '" data-numero="' + val.number + '">Choisir</button></li>');
             });
         });
     });
@@ -218,9 +216,9 @@ var contacts = function() {
                 // On fait la boucle de tous les éléments trouvés et on les affiche
                 $.each(data, function(key, val) {
                     // Pour chaque rue, on créé une puce
-                    $('.listeDesRues').append('<li class="rue-' + val.rue_id + '"><span class="rue-nom"></span><span class="rue-ville"></span><button class="choisirRue" data-rue="' + val.rue_id + '" data-nom="' + val.rue_nom + '">Choisir</button></li>');
-                    $('.rue-' + val.rue_id + ' .rue-nom').html(val.rue_nom);
-                    $('.rue-' + val.rue_id + ' .rue-ville').html(val.commune_nom + ' (' + val.departement_id + ')');
+                    $('.listeDesRues').append('<li class="rue-' + val.id + '"><span class="rue-nom"></span><span class="rue-ville"></span><button class="choisirRue" data-rue="' + val.id + '" data-nom="' + val.street + '">Choisir</button></li>');
+                    $('.rue-' + val.id + ' .rue-nom').html(val.street);
+                    $('.rue-' + val.id + ' .rue-ville').html(val.city_name);
                 });
             });
         } else {
@@ -245,9 +243,9 @@ var contacts = function() {
                 // On fait la boucle de tous les éléments trouvés et on les affiche
                 $.each(data, function(key, val) {
                     // Pour chaque rue, on créé une puce
-                    $('.listeDesVilles').append('<li class="ville-' + val.commune_id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.commune_id + '" data-nom="' + val.commune_nom + '">Choisir</button></li>');
-                    $('.ville-' + val.commune_id + ' .ville-nom').html(val.commune_nom);
-                    $('.ville-' + val.commune_id + ' .ville-dept').html(val.departement_nom);
+                    $('.listeDesVilles').append('<li class="ville-' + val.id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.id + '" data-nom="' + val.city + '">Choisir</button></li>');
+                    $('.ville-' + val.id + ' .ville-nom').html(val.city);
+                    $('.ville-' + val.id + ' .ville-dept').html(val.country_name);
                 });
             });
         } else {
@@ -510,20 +508,9 @@ var contacts = function() {
             'message': $('#smsMessageCampagne').val()
         };
         
-        $.get('ajax.php?script=sms-campagne', data, function() {
-            // On affiche une alertbox pour prévenir que la mission a été créée
-            swal({
-                title: 'Envoi réussi !',
-                text: 'Vous pouvez retrouver cette campagne dans le module SMS',
-                type: 'success'
-            });
-            
-            // On revient à la situation initiale en vidant le formulaire
-            $('.droite section').hide();
-            $('#smsTitreCampagne').val('');
-            $('#smsNombreDestinataire').val('');
-            $('#smsMessageCampagne').val('');
-            $('.droite section:not(.invisible)').fadeIn();
+        $.get('ajax.php?script=sms-campagne', data, function(data) {
+        	    var url = 'index.php?page=campagne&id=' + data;
+        	    document.location.href = url;
         });
     });
     

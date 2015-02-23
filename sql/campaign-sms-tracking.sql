@@ -7,8 +7,8 @@ INSERT INTO `tracking` (
 VALUES (
     :campaign,
     :id,
-    :email,
-    :status
+    :numero,
+    "queued"
 )
 ON DUPLICATE KEY UPDATE `id` = VALUES(`id`),
                         `status` = VALUES(`status`)

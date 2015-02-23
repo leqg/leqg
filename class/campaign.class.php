@@ -48,6 +48,15 @@ class Campaign
         $query->bindParam(':campagne', $campaign, PDO::PARAM_INT);
         $query->execute();
         $this->_campaign = $query->fetch(PDO::FETCH_ASSOC);
+        
+        if ($this->_campaign['type'] == 'publi')
+        {
+            $query = Core::query('campaign-events-count');
+            $query->bindValue(':campaign', $this->_campaign['id']);
+            $query->execute();
+            $count = $query->fetch(PDO::FETCH_NUM);
+            $this->_campaign['count'] = $count[0];
+        }
     }
     
     
@@ -59,6 +68,24 @@ class Campaign
     public function get($data) 
     {
         return $this->_campaign[ $data ];
+    }
+    
+    
+    /**
+     * Update an information
+     * 
+     * @param   string  $data       Data to update
+     * @param   string  $value      Value
+     * @result  void
+     * */
+    public function update($data, $value)
+    {
+        $this->_campaign[$data] = $value;
+        $link = Configuration::read('db.link');
+        $query = $link->prepare('UPDATE `campagne` SET `'.$data.'` = :value WHERE `campagne_id` = :campaign');
+        $query->bindValue(':value', $value);
+        $query->bindValue(':campaign', $this->_campaign['id']);
+        $query->execute();
     }
     
     
@@ -79,6 +106,24 @@ class Campaign
     
     
     /**
+     * Recipients adding method
+     * 
+     * @param   array   $recipients     List of recipients' ID
+     * @result  void
+     * */
+    public function recipients_add($recipients)
+    {
+        $query = Core::query('campaign-recipient-add');
+        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        
+        foreach ($recipients as $element) {
+            $query->bindParam(':person', $element, PDO::PARAM_INT);
+            $query->execute();
+        }
+    }
+    
+    
+    /**
      * Recipients list
      * 
      * @result  array
@@ -93,10 +138,18 @@ class Campaign
             $recipients = array();
             
             foreach ($contacts as $contact) {
-                $query = Core::query('emails-by-contact');
+                switch ($this->_campaign['type']) {
+                    case 'email':
+                        $query = Core::query('emails-by-contact');
+                        break;
+                    
+                    case 'sms':
+                        $query = Core::query('mobiles-by-contact');
+                        break;
+                }
                 $query->bindValue(':contact', $contact['contact'], PDO::PARAM_INT);
                 $query->execute();
-                $results = $query->fetchAll(PDO::FETCH_ASSOC);
+                $results = $query->fetchAll(PDO::FETCH_NUM);
                 
                 foreach ($results as $result) {
                     $result['contact'] = $contact['contact'];
@@ -114,8 +167,16 @@ class Campaign
             $recipients = $query->fetchAll(PDO::FETCH_ASSOC);
             
             foreach($recipients as $key => $recipient) {
-                $query = Core::query('contact-by-email');
-                $query->bindValue(':email', $recipient['email']);
+                switch ($this->_campaign['type']) {
+                    case 'email':
+                        $query = Core::query('contact-by-email');
+                        break;
+                    
+                    case 'sms':
+                        $query = Core::query('contact-by-mobile');
+                        break;
+                }
+                $query->bindValue(':coord', $recipient['email']);
                 $query->execute();
                 $contact = $query->fetch(PDO::FETCH_NUM);
                 $recipients[$key]['contact'] = $contact[0];
@@ -167,6 +228,32 @@ class Campaign
                     $nb = 0;
                     foreach ($contacts as $contact) {
                         $query = Core::query('campaign-recipients-email-count');
+                        $query->bindValue(':contact', $contact[0]);
+                        $query->execute();
+                        $count = $query->fetch(PDO::FETCH_NUM);
+                        $nb = $nb + $count[0];
+                    }
+                    return $nb;
+                } else {
+                    return 0;
+                }
+                break;
+            
+            case 'mobile':
+                $query = Core::query('campaign-recipients-list');
+                $query->bindValue(':campaign', $this->_campaign['id']);
+                $query->execute();
+                
+                if ($query->rowCount()) {
+                    $contacts = $query->fetchAll(PDO::FETCH_NUM);
+                } else {
+                    $contacts = false;
+                }
+                
+                if ($contacts) {
+                    $nb = 0;
+                    foreach ($contacts as $contact) {
+                        $query = Core::query('campaign-recipients-mobile-count');
                         $query->bindValue(':contact', $contact[0]);
                         $query->execute();
                         $count = $query->fetch(PDO::FETCH_NUM);
@@ -416,44 +503,71 @@ class Campaign
         $query->bindValue(':status', $status);
         $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
         $query->execute();
-        
-        $mandrill = Configuration::read('mail');
         	
         	$query = Core::query('campaign-contacts');
         	$query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
         	$query->execute();
         	$contacts = $query->fetchAll(PDO::FETCH_NUM);
-        	$emails = array();
-
-        	$query = Core::query('contact-emails');
-        	foreach ($contacts as $contact) {
-            	$c = new Contact(md5($contact[0]));
-            	$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
-            	$query->execute();
-            	$_emails = $query->fetchAll(PDO::FETCH_NUM);
-            	foreach ($_emails as $_email) {
-                	$emails[] = array(
-                    	'email' => $_email[0],
-                    	'name' => $c->get('nom_affichage'),
-                    	'type' => 'bcc'
-                	);
-            }
-        	}
-        	
-        	$message = array(
-            	'html' => $this->_campaign['mail'],
-            'subject' => $this->_campaign['objet'],
-            'from_email' => 'noreply@leqg.info',
-            'from_name' => 'LeQG',
-            'to' => $emails,
-            'headers' => array('Reply-To' => 'tech@leqg.info'),
-            'track_opens' => true,
-            'auto_text' => true
-        	);
-        	$async = true;
-        	$result = $mandrill->messages->send($message, $async);
         
-        foreach ($result as $email) $this->tracking($email);
+        switch($this->_campaign['type']) {
+            case 'email':
+                $mandrill = Configuration::read('mail');
+                	$emails = array();
+                
+                	$query = Core::query('contact-emails');
+                	foreach ($contacts as $contact) {
+                    	$c = new People($contact[0]);
+                    	$query->bindValue(':contact', $c->get('id'), PDO::PARAM_INT);
+                    	$query->execute();
+                    	$_emails = $query->fetchAll(PDO::FETCH_NUM);
+                    	foreach ($_emails as $_email) {
+                        	$emails[] = array(
+                            	'email' => $_email[0],
+                            	'name' => $c->display_name(),
+                            	'type' => 'bcc'
+                        	);
+                    }
+                	}
+                	
+                	$message = array(
+                    	'html' => $this->_campaign['mail'],
+                    'subject' => $this->_campaign['objet'],
+                    'from_email' => 'noreply@leqg.info',
+                    'from_name' => 'LeQG',
+                    'to' => $emails,
+                    'headers' => array('Reply-To' => 'tech@leqg.info'),
+                    'track_opens' => true,
+                    'auto_text' => true
+                	);
+                	$async = true;
+                	
+                	$result = $mandrill->messages->send($message, $async);
+                foreach ($result as $_element) $this->tracking($_element);
+                break;
+            
+            case 'sms':
+                	// On assure le démarrage du service
+                	$service = new \Esendex\DispatchService(Configuration::read('sms'));
+                	
+                	$query = Core::query('mobiles-by-contact');
+                	foreach ($contacts as $contact) {
+                    	$query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
+                    	$query->execute();
+                    	$_sms = $query->fetchAll(PDO::FETCH_NUM);
+                    	
+                    	foreach ($_sms as $_element) {
+                        	$sms = new \Esendex\Model\DispatchMessage(
+                        	    Configuration::read('sms.sender'),
+                        	    $_element[0],
+                        	    $this->_campaign['message'],
+                        	    \Esendex\Model\Message::SmsType
+                        	);
+                        	
+                        	$result = $service->send($sms);
+                        	$this->tracking($result, $_element[0], $contact[0]);
+                    	}
+                	}
+        }
     }
     
     
@@ -461,37 +575,67 @@ class Campaign
      * Launch an email tracking
      * 
      * @param   array   $result     Send email result
+     * @param   string  $numero     Send numero
+     * @param   int     $contact    Person ID
      * @result  void
      * */
-    public function tracking($result)
+    public function tracking($result, $numero = null, $contact = null)
     {
-        switch ($result['status']) {
-            case 'rejected':
-                $query = Core::query('campaign-tracking-reject');
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
-                $query->bindValue(':id', $result['_id']);
-                $query->bindValue(':email', $result['email']);
-                $query->bindValue(':status', $result['status']);
-                $query->bindValue(':reject', $result['reject_reason']);
-                $query->execute();
+        switch ($this->_campaign['type']) {
+            case 'email':
+                switch ($result['status']) {
+                    case 'rejected':
+                        $query = Core::query('campaign-tracking-reject');
+                        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                        $query->bindValue(':id', $result['_id']);
+                        $query->bindValue(':email', $result['email']);
+                        $query->bindValue(':status', $result['status']);
+                        $query->bindValue(':reject', $result['reject_reason']);
+                        $query->execute();
+                        break;
+                    
+                    default:
+                        $query = Core::query('campaign-tracking');
+                        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                        $query->bindValue(':id', $result['_id']);
+                        $query->bindValue(':email', $result['email']);
+                        $query->bindValue(':status', $result['status']);
+                        $query->execute();
+                        
+                        $query = Core::query('contact-by-email');
+                        $query->bindValue(':coord', $result['email']);
+                        $query->execute();
+                        $contact = $query->fetch(PDO::FETCH_ASSOC);
+
+                        $event = Event::create($contact['contact']);
+                        $event = new Event($event);
+                        $event->update('historique_type', 'email');
+                        $event->update('historique_objet', $this->_campaign['objet']);
+                        $event->update('historique_date', date('Y-m-d'));
+                        $event->update('campagne_id', $this->_campaign['id']);
+                        
+                        $e = new Evenement($contact['contact'], false, true);
+                        $e->modification('historique_type', 'email');
+                        $e->modification('campagne_id', $this->_campaign['id']);
+                        $e->modification('historique_objet', $this->_campaign['objet']);
+                        break;
+                }
                 break;
             
-            default:
-                $query = Core::query('campaign-tracking');
+            case 'sms':
+                $query = Core::query('campaign-sms-tracking');
                 $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
-                $query->bindValue(':id', $result['_id']);
-                $query->bindValue(':email', $result['email']);
-                $query->bindValue(':status', $result['status']);
+                $query->bindValue(':numero', $numero);
+                $query->bindValue(':id', $result->id());
                 $query->execute();
                 
-                $query = Core::query('contact-by-email');
-                $query->bindValue(':email', $result['email']);
-                $query->execute();
-                $contact = $query->fetch(PDO::FETCH_ASSOC);
-                $e = new Evenement($contact['contact'], false, true);
-                $e->modification('historique_type', 'email');
-                $e->modification('campagne_id', $this->_campaign['id']);
-                $e->modification('historique_objet', $this->_campaign['objet']);
+                $event = Event::create($contact);
+                $event = new Event($event);
+                $event->update('historique_type', 'sms');
+                $event->update('historique_objet', $this->_campaign['titre']);
+                $event->update('historique_notes', $this->_campaign['message']);
+                $event->update('historique_date', date('Y-m-d'));
+                $event->update('campagne_id', $this->_campaign['id']);
                 break;
         }
     }
@@ -516,13 +660,13 @@ class Campaign
             $errors[$key]['time'] = $infos['reject']['last_event_at'];
             
             $query = Core::query('contact-by-email');
-            $query->bindValue(':email', $error['email']);
+            $query->bindValue(':coord', $error['email']);
             $query->execute();
             $contact = $query->fetch(PDO::FETCH_NUM);
             $errors[$key]['contact'] = $contact[0];
             
-            $contact = new Contact(md5($contact[0]));
-            $errors[$key]['name'] = $contact->get('nom_affichage');
+            $contact = new People($contact[0]);
+            $errors[$key]['name'] = $contact->display_name();
         }
         
         return $errors;
@@ -535,12 +679,109 @@ class Campaign
      * */
     public function price()
     {
-        $emails = $this->count('emails');
-        $pricePerThousand = Configuration::read('price.email');
-        $price = $pricePerThousand/1000;
-        $cost = $price * $emails;
-
+        switch ($this->_campaign['type']) {
+            case 'email':
+                $nombre = $this->count('emails');
+                $pricePerThousand = Configuration::read('price.email');
+                $price = $pricePerThousand/1000;
+                $cost = $price * $nombre;
+                break;
+            
+            case 'sms':
+                $nombre = $this->count('mobile');
+                $size = ceil(strlen($this->_campaign['message']) / Configuration::read('sms.size'));
+                $price = Configuration::read('price.sms');
+                $cost = $price * $nombre * $size;
+                break;
+        }
+        
         return $cost;
+    }
+    
+    
+    /**
+     * Update tracking status
+     * 
+     * @result  void
+     * */
+    public function tracking_update()
+    {
+        switch ($this->_campaign['type']) {
+            case 'sms': 
+                $service = new \Esendex\MessageHeaderService(Configuration::read('sms'));
+                break;
+                
+            case 'email': 
+                $service = Configuration::read('mail');
+                break;
+        }
+        
+        $query = Core::query('campaign-trackers');
+        $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+        $query->execute();
+        $trackers = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($trackers as $element) {
+            switch ($this->_campaign['type']) {
+                case 'sms':
+                    $status = $service->message($element['id'])->status();
+                
+                    $query = Core::query('campaign-tracker-status-update');
+                    $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                    $query->bindValue(':coord', $element['coord']);
+                    
+                    switch ($status) {
+                        case 'Delivered':
+                            $query->bindValue(':status', "sent");
+                            $query->execute();
+                            break;
+                            
+                        default:
+                            $query->bindValue(':status', "rejected");
+                            $query->execute();
+                            break;
+                        
+                    }
+                    break;
+                
+                case 'email':
+                    $status = $service->messages->info($element['id']);
+                    
+                    switch ($status['state']) {
+                        case 'rejected':
+                            $query = Core::query('campaign-tracker-status-reject');
+                            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                            $query->bindValue(':coord', $status['email']);
+                            $query->bindValue(':status', $status['state']);
+                            $query->bindValue(':reason', $status['reject']['reason']);
+                            $query->execute();
+                            break;
+                        
+                        default:
+                            $query = Core::query('campaign-tracker-status-update');
+                            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                            $query->bindValue(':coord', $status['email']);
+                            $query->bindValue(':status', $status['state']);
+                            $query->execute();
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+    
+    
+    /**
+     * List all persons with an event related to this campaign
+     * 
+     * @return  array
+     * */
+    public function list_events()
+    {
+        $query = Core::query('campaign-events-list');
+        $query->bindValue(':campaign', $this->_campaign['id']);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     
     
