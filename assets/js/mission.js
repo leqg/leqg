@@ -12,12 +12,12 @@ var mission = function() {
 				$.each( data, function( key, val ) {
 				
 					// On créé d'abord une nouvelle puce
-					$('#listeRues').append('<li id="rue-' + val.rue_id + '"></li>');
+					$('#listeRues').append('<li id="rue-' + val.id + '"></li>');
 					
 					// On ajoute après les différents span
-					$('#rue-' + val.rue_id).append('<a href="ajax.php?script=mission-ajout-rue&code=' + mission + '&rue=' + val.rue_id + '" class="nostyle"><button>Choisir</button></a>');
-					$('#rue-' + val.rue_id).append('<span class="rue-nom">' + val.rue_nom + '</span>');
-					$('#rue-' + val.rue_id).append('<span class="rue-ville">' + val.commune_nom + '</span>');
+					$('#rue-' + val.id).append('<a href="ajax.php?script=mission-ajout-rue&code=' + mission + '&rue=' + val.id + '" class="nostyle"><button>Choisir</button></a>');
+					$('#rue-' + val.id).append('<span class="rue-nom">' + val.street + '</span>');
+					$('#rue-' + val.id).append('<span class="rue-ville">' + val.city_name + '</span>');
 				});
 				
 				$('#listeRues').show();

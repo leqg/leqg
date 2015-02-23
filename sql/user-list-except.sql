@@ -8,6 +8,5 @@ SELECT      `email`,
             `phone`,
             `last_login`
 FROM        `user` 
-WHERE       `auth_level` >= :auth
-AND         `client` = :client
+WHERE       `client` = :client
 AND         `id` NOT IN (:exclude)
