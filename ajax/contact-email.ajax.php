@@ -1,19 +1,11 @@
 <?php
     if (is_string($_POST['objet']) && is_string($_POST['message']) && is_numeric($_POST['adresse']) && is_numeric($_POST['contact']))
     {
-        	// On créé le lien vers la BDD Client
-        	$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-        			';dbname=' . Configuration::read('db.basename');
-        	$user = Configuration::read('db.user');
-        	$pass = Configuration::read('db.pass');
-        	$link = new PDO($dsn, $user, $pass);
-        	
-        	// On créé le lien vers la BDD Centrale
-        	$dsn =  'mysql:host=' . Configuration::read('db.host') . 
-        			';dbname=leqg';
-        	$user = Configuration::read('db.user');
-        	$pass = Configuration::read('db.pass');
-        	$zentrum = new PDO($dsn, $user, $pass);
+        	// On récupère le lien vers les BDD
+        	$link = Configuration::read('db.link');
+        	$zentrum = Configuration::read('db.core');
+        	$user = User::ID();
+        	$type = "email";
         	
         	// On récupère l'adresse email
         	$query = $link->prepare('SELECT `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_id` = :id');
@@ -25,54 +17,40 @@
         	// On ouvre la fiche du contact concerné
         	$contact = new contact(md5($_POST['contact']));
         	
-		// On démarre l'instance
-		$mail = new PHPMailer();
-		
-		// On contacte le serveur d'envoi SMTP
-		$mail->IsSMTP();
-		$mail->SMTPAuth = true;
-		$mail->Host = $api['mail']['smtp']['host'];
-		$mail->Port = $api['mail']['smtp']['port'];
-		$mail->Username = $api['mail']['smtp']['user'];
-		$mail->Password = $api['mail']['smtp']['pass'];
-        
-		// On configure le mail à envoyer
-		$mail->CharSet = $api['mail']['charset'];
-		$mail->SetFrom($api['mail']['from']['email'], $api['mail']['from']['nom']);
-		$mail->AddReplyTo($api['mail']['reply']['email'], $api['mail']['reply']['nom']);
-		$mail->AddAddress($adresse, $contact->noms(' ', ''));
-		$mail->Subject = $_POST['objet'];
-		$mail->MsgHTML(nl2br($_POST['message']));
+        	// On charge le système de mail
+        	$mail = Configuration::read('mail');
         	
-        	// On procède à l'envoi du mail
-        	if ($mail->Send())
-        	{
-            // On ouvre ce nouvel événement
-            $evenement = new evenement($_POST['contact'], false, true);
-            
-            // On enregistre les données
-            $evenement->modification('historique_type', 'email');
-            $evenement->modification('historique_date', date('d/m/Y'));
-            $evenement->modification('historique_objet', $_POST['objet']);
-            $evenement->modification('historique_notes', $_POST['message']);
-            
-            
-            // On enregistre l'achat de ce SMS
-            unset($query);
-            $utilisateur = (isset($_COOKIE['leqg-user'])) ? $_COOKIE['leqg-user'] : 0;
-            $query = $zentrum->prepare('INSERT INTO `email` (`user`, `destinataire`, `objet`, `texte`) VALUES (:user, :destinataire, :objet, :texte)');
-            $query->bindParam(':user', $utilisateur);
-            $query->bindParam(':destinataire', $adresse);
-            $query->bindParam(':objet', $_POST['objet']);
-            $query->bindParam(':texte', $_POST['message']);
-            $query->execute();
-            
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        	// On prépare le message
+        	$message = array(
+            	'html' => nl2br($_POST['message']),
+            'subject' => $_POST['objet'],
+            'from_email' => 'noreply@leqg.info',
+            'from_name' => 'LeQG',
+            'to' => array(
+                array(
+                    'email' => $adresse,
+                    'name' => $contact->noms(' ', ''),
+                    'type' => 'to'
+                )
+            ),
+            'headers' => array('Reply-To' => 'webmaster@leqg.info'),
+            'track_opens' => true,
+            'auto_text' => true
+        	);
+        	// mode asynchrone d'envoi du mail
+        	$async = true;
+        	
+        	// on lance l'envoi du mail
+        	$result = $mail->messages->send($message, $async);
+        	
+    	    // On met à jour le tracking avec les informations retournées
+    	    $campaign = 0;
+        $query = Core::query('campaign-tracking');
+        $query->bindValue(':campaign', $campaign, PDO::PARAM_INT);
+        $query->bindValue(':id', $result[0]['_id']);
+        $query->bindValue(':email', $result[0]['email']);
+        $query->bindValue(':status', $result[0]['status']);
+        $query->execute();
     }
     else
     {

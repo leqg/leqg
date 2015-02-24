@@ -370,7 +370,7 @@ class Mission {
             $rues = $query->fetchAll(PDO::FETCH_ASSOC);
             
             foreach ($rues as $key => $rue) {
-                $query = $this->link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :rue');
+                $query = $this->link->prepare('SELECT * FROM `street` WHERE `id` = :rue');
                 $query->bindParam(':rue', $rue['rue_id']);
                 $query->execute();
                 $street = $query->fetch(PDO::FETCH_ASSOC);
@@ -379,7 +379,7 @@ class Mission {
             }
             
             // On tri le tableau selon rue_nom
-            Core::triMultidimentionnel($rues, 'rue_nom');
+            Core::triMultidimentionnel($rues, 'street');
             
             return $rues;
         }
@@ -454,8 +454,8 @@ class Mission {
 	 
 	public function ajoutRue( $rue ) {
 		// On effectue une recherche de tous les immeubles contenus dans la rue demandée
-		$query = $this->link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :rue');
-		$query->bindParam(':rue', $rue, PDO::PARAM_INT);
+		$query = Core::query('building-by-street');
+		$query->bindValue(':street', $rue, PDO::PARAM_INT);
 		$query->execute();
 		
 		// S'il y a des immeubles
@@ -467,14 +467,14 @@ class Mission {
 			if ($this->data['mission_type'] == 'porte') {
 				// Pour chaque immeuble, on recherche tous les électeurs
 				foreach ($immeubles as $immeuble) {
-					$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble');
-					$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
+    				    $query = Core::query('people-by-building');
+					$query->bindValue(':building', $immeuble[0], PDO::PARAM_INT);
 					$query->execute();
 					$contacts = $query->fetchAll(PDO::FETCH_NUM);
 					
 					// Pour chaque électeur, on créé une porte à frapper
 					foreach ($contacts as $contact) {
-						$query = $this->link->prepare('INSERT INTO `items` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
+						$query = Core::query('item-new');
 						$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 						$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 						$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -487,7 +487,7 @@ class Mission {
 			// Si la mission est un boîtage, on enregistre les immeubles
 			else {
 				foreach ($immeubles as $immeuble) {
-					$query = $this->link->prepare('INSERT INTO `items` (`mission_id`, `rue_id`, `immeuble_id`) VALUES (:mission, :rue, :immeuble)');
+					$query = Core::query('item-boitage-new');
 					$query->bindParam(':mission', $this->data['mission_id'], PDO::PARAM_INT);
 					$query->bindParam(':rue', $rue, PDO::PARAM_INT);
 					$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -515,7 +515,7 @@ class Mission {
 	 
 	public function ajoutBureau( $bureau ) {
 		// On effectue une recherche de tous les immeubles contenus dans le buerau demandée
-		$query = $this->link->prepare('SELECT DISTINCT `immeuble_id` FROM `contacts` WHERE `bureau_id` = :bureau');
+		$query = $this->link->prepare('SELECT DISTINCT `id` FROM `people` WHERE `bureau` = :bureau');
 		$query->bindParam(':bureau', $bureau, PDO::PARAM_INT);
 		$query->execute();
 		
@@ -528,12 +528,12 @@ class Mission {
 			if ($this->data['mission_type'] == 'porte') {
 				// Pour chaque immeuble, on récupère les infos et on créé une porte à boîter
 				foreach ($immeubles as $immeuble) {
-    				$query = $this->link->prepare('SELECT `rue_id` FROM `immeubles` WHERE `immeuble_id` = :id');
+    				$query = $this->link->prepare('SELECT `street` FROM `building` WHERE `id` = :id');
     				$query->bindParam(':id', $immeuble[0]);
     				$query->execute();
     				$info = $query->fetch(PDO::FETCH_NUM);
     				
-					$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble');
+					$query = $this->link->prepare('SELECT `people` AS `id` FROM `address` WHERE `building` = :immeuble');
 					$query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
 					$query->execute();
 					$contacts = $query->fetchAll(PDO::FETCH_NUM);
@@ -553,7 +553,7 @@ class Mission {
 			// Si la mission est un boîtage, on enregistre les immeubles
 			else {
 				foreach ($immeubles as $immeuble) {
-    				$query = $this->link->prepare('SELECT `rue_id` FROM `immeubles` WHERE `immeuble_id` = :id');
+    				$query = $this->link->prepare('SELECT `street` FROM `building` WHERE `id` = :id');
     				$query->bindParam(':id', $immeuble[0]);
     				$query->execute();
     				$info = $query->fetch(PDO::FETCH_NUM);
@@ -633,7 +633,7 @@ class Mission {
 		// s'il s'agit d'un boîtage et que l'immeuble a été fait, on fait un élément d'historique pour tous les habitants électeurs déclarés dans l'immeuble concerné
 		elseif ($type == 'boitage' && $statut == 2) {
     		// On cherche tous les contacts qui habitent ou sont déclarés électoralement dans l'immeuble en question pour créer un élément d'historique
-    		$query = $this->link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble OR `adresse_id` = :immeuble');
+    		$query = $this->link->prepare('SELECT `people` FROM `address` WHERE `building` = :immeuble');
     		$query->bindParam(':immeuble', $electeur);
     		$query->execute();
     		$contacts = $query->fetchAll(PDO::FETCH_NUM);

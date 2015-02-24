@@ -3,28 +3,25 @@
 	User::protection(5);
 	
 	// On récupère les données génériques sur la ville
-	$ville = Carto::ville_secure($_GET['code']);
-	$departement = Carto::departement($ville['departement_id']);
-	$region = Carto::region($departement['region_id']);
-	
+	$ville = Maps::city_data($_GET['code']);
+	$pays = Maps::country_data($ville['country']);
+
 	// On récupère les statistiques
-	$electeurs = Carto::nombreElecteurs('commune', $ville['commune_id']);
-	$emails = Carto::nombreElecteurs('commune', $ville['commune_id'], 'email');
-	$mobiles = Carto::nombreElecteurs('commune', $ville['commune_id'], 'mobile');
-	$fixes = Carto::nombreElecteurs('commune', $ville['commune_id'], 'fixe');
+	$electeurs = Maps::city_electeurs($ville['id']);
+	$emails = Maps::city_contact_details($ville['id'], 'email');
+	$mobiles = Maps::city_contact_details($ville['id'], 'mobile');
+	$fixes = Maps::city_contact_details($ville['id'], 'fixe');
 	
 	// Chargement du template
 	Core::tpl_header();
 ?>
 
-<h2><?php echo mb_convert_case($ville['commune_nom'], MB_CASE_TITLE); ?></h2>
+<h2><?php echo mb_convert_case($ville['city'], MB_CASE_TITLE); ?></h2>
 
 <div class="colonne demi gauche">
 	<section class="contenu">
 		<h4>Informations générales</h4>
 		<ul class="informations">
-			<li class="code"><span>Code INSEE</span><span><?php echo $ville['commune_id']; ?></span></li>
-			<li class="region"><span>Département</span><span><?php echo $departement['departement_nom']; ?> (<?php echo $region['region_nom']; ?>)</span></li>
 			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php } ?> importé<?php if ($electeurs > 1) { ?>s<?php } ?></em></span></li>
 			<li class="email"><span>Emails recueillis</span><span><strong><?php echo number_format($emails, 0, ',', ' '); ?></strong> <em>contact<?php if ($emails > 1) { ?>s<?php } ?></em></span></li>
 			<li class="mobile"><span>Mobiles recueillis</span><span><strong><?php echo number_format($mobiles, 0, ',', ' '); ?></strong> <em>contact<?php if ($mobiles > 1) { ?>s<?php } ?></em></span></li>
@@ -43,7 +40,7 @@
 		<ul class="formulaire">
 			<li>
 				<label for="rechercheRue" class="small">Rue à chercher</label>
-				<span class="form-icon decalage rue"><input type="text" name="rechercheRue" id="rechercheRue" class="rechercheRue" placeholder="rue du Marché, par exemple" data-ville="<?php echo $ville['commune_id']; ?>">
+				<span class="form-icon decalage rue"><input type="text" name="rechercheRue" id="rechercheRue" class="rechercheRue" placeholder="rue du Marché, par exemple" data-ville="<?php echo $ville['id']; ?>">
 			</li>
 		</ul>
 	</section>
@@ -54,7 +51,7 @@
 		<ul class="formulaire">
 			<li>
 				<label for="rechercheBureau" class="small">Bureau à chercher</label>
-				<span class="form-icon decalage bureau"><input type="text" name="rechercheBureau" id="rechercheBureau" class="rechercheBureau" placeholder="103 par exemple" data-ville="<?php echo $ville['commune_id']; ?>">
+				<span class="form-icon decalage bureau"><input type="text" name="rechercheBureau" id="rechercheBureau" class="rechercheBureau" placeholder="103 par exemple" data-ville="<?php echo $ville['id']; ?>">
 			</li>
 		</ul>
 	</section>
@@ -83,8 +80,8 @@
 	var data = {
 		format: 'json',
 		email: 'tech@leqg.info',
-		country: 'France',
-		city: "<?php echo $ville['commune_nom']; ?>"
+		country: "<?php echo $pays['country']; ?>",
+		city: "<?php echo $ville['city']; ?>"
 	}
 	
 	// On récupère le JSON contenant les coordonnées de la rue
@@ -103,7 +100,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo mb_convert_case($ville['commune_nom'], MB_CASE_TITLE); ?>"
+			title: "<?php echo mb_convert_case($ville['city'], MB_CASE_TITLE); ?>"
 		}).addTo(map);
 	});
 </script>

@@ -11,7 +11,7 @@
 	<div class="colonne demi gauche">
     	<?php
     		// On récupère la liste des dossiers ouverts
-    		$dossiers = Dossier::liste();
+    		$dossiers = Folder::all();
     		
     		if (count($dossiers) > 0) :
     	?>
@@ -20,13 +20,10 @@
     		<?php
     			// On fait une boucle des dossiers ouverts
     			foreach ($dossiers as $dossier) :
-    			
-    			// On ouvre l'objet contenant le dossier
-    			$d = new Dossier(md5($dossier['dossier_id']));
     		?>
     			<li>
-    				<a href="<?php Core::tpl_go_to('dossier', array('dossier' => md5($d->get('dossier_id')))); ?>" class="nostyle"><h4><?php echo $d->get('dossier_nom'); ?></h4></a>
-    				<p><?php echo $d->get('dossier_description'); ?></p>
+    				<a href="<?php Core::tpl_go_to('dossier', array('dossier' => $dossier['id'])); ?>" class="nostyle"><h4><?php echo $dossier['name']; ?></h4></a>
+    				<p><?php echo $dossier['desc']; ?></p>
     			</li>
     		<?php endforeach; ?>
     		</ul>

@@ -35,7 +35,7 @@
 			<ul class="formulaire" id="choixResponsable">
 				<li>
 					<label>Faites le choix d'un responsable</label>
-					<?php $comptes = User::liste(); foreach($comptes as $compte) : ?>
+					<?php $comptes = User::all(5); foreach($comptes as $compte) : ?>
 					<div class="radio"><input type="radio" name="selectResponsable" class="radioResponsable" id="selectResponsable-<?php echo $compte['id']; ?>" value="<?php echo $compte['id']; ?>" data-nom="<?php echo $compte['firstname']; ?> <?php echo $compte['lastname']; ?>"><label for="selectResponsable-<?php echo $compte['id']; ?>"><span><span></span></span><?php echo $compte['firstname']; ?> <?php echo $compte['lastname']; ?></label></div>
 					<?php endforeach; ?>
 				</li>

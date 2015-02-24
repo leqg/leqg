@@ -1,8 +1,7 @@
 <?php
 	// On ouvre la fiche contact
-	$tache = md5($_POST['evenement']);
-	$evenement = new evenement($tache);
+	$evenement = new Event($_POST['evenement']);
 	
 	// On ajoute le tag
-	$evenement->tache_suppression($_POST['tache']);
+	$evenement->task_remove($_POST['tache']);
 ?>

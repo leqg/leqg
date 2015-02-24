@@ -1,0 +1,1 @@
+SELECT `template` FROM `campagne` WHERE `campagne_id` = :campaign

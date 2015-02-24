@@ -1,0 +1,1 @@
+UPDATE `campagne` SET `mail` = :mail WHERE `campagne_id` = :campaign

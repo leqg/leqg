@@ -1,14 +1,9 @@
 <?php
-	// On ouvre la fiche contact
-	$fiche = md5($_POST['contact']);
-	$contact = new contact($fiche);
-	
-	// On récupère l'identifiant de l'immeuble
-	$immeuble = $_POST['immeuble'];
-	
-	// On met à jour l'organisme
-	$contact->update('adresse_id', $immeuble);
-	
-	// On récupère l'adresse postale correspondante à cet immeuble
-	echo $contact->adresse('declaree');
-?>
+$building = Maps::building_data($_POST['immeuble']);
+$street = Maps::street_data($building['street']);
+$zipcode = Maps::zipcode_detect($street['id']);
+$city = Maps::city_data($street['city']);
+$address = Maps::address_new($_POST['contact'], $city['id'], $zipcode, $street['id'], $building['id']);
+$data = new People($_POST['contact']);
+$postal = $data->postal_address();
+echo $postal['reel'];

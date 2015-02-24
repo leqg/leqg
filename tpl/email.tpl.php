@@ -3,23 +3,20 @@
 	User::protection(5);
 	
 	// On récupère la liste des campagnes
-	$liste = Campagne::liste('email');
+	$liste = Campaign::all('email');
 
 	// On charge le template
 	Core::tpl_header(); 
 ?>
-	
 	<h2 class="titreCampagne" data-page="campagnes">Campagnes de Email groupés</h2>
 	<?php if (count($liste)) : ?>
 		<section id="campagnes">
 			<ul class="liste-campagnes">
-				<?php foreach ($liste as $element) : $campagne = new Campagne($element['code']); ?>
+				<?php foreach ($liste as $element) : ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('email', array('campagne' => $element['code'])); ?>" class="nostyle"><h4><?php echo $campagne->get('campagne_titre'); ?></h4></a>
-					<p>
-						Cette campagne <?php echo $campagne->get('campagne_type'); ?> a été envoyée à <strong><?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?></strong> contact<?php if ($campagne->get('nombre') >1) { ?>s<?php } ?>.<br>
-						Elle a été envoyée le <strong><?php echo strftime('%d %B %Y', strtotime($campagne->get('campagne_date'))); ?></strong> par <em><?php echo User::get_login_by_ID($campagne->get('campagne_createur')); ?></em>.
-					</p>
+					<a href="<?php Core::tpl_go_to('campagne', array('id' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['objet'])) { echo $element['objet']; } else { echo 'Campagne sans titre'; } ?></h4></a>
+                    <p>Campagne <?php echo $element['type']; ?> créée le <?php echo date('d/m/Y', strtotime($element['date'])); ?></p>
+                    <p>Campagne <strong><?php if ($element['status'] == 'open') : ?>en préparation<?php elseif ($element['status'] == 'send') : ?>envoyée<?php else: ?>abandonnée<?php endif; ?></strong></p>
 				</li>
 				<?php endforeach; ?>
 			</ul>

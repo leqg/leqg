@@ -1,0 +1,1 @@
+UPDATE `template` SET `template` = :template WHERE `id` = :id

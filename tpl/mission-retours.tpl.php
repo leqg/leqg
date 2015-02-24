@@ -39,17 +39,17 @@
 				$contacts = $data->liste_contacts(4);
 				foreach ($contacts as $contact) :
 					// On ouvre la fiche du contact concerné
-					$fiche = new Contact(md5($contact[0]));
+					$fiche = new People($contact[0]);
 					
-					if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
-					elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+					if ($fiche->get('sexe') == 'H') { $sexe = 'homme'; }
+					elseif ($fiche->get('sexe') == 'F') { $sexe = 'femme'; }
 					else { $sexe = 'isexe'; }
 					
-					if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
-					elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+					if (!empty($fiche->display_name())) { $nomAffichage = $fiche->display_name(); }
+					elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 					else { $nomAffichage = 'Fiche sans nom'; }
         ?>
-		<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+		<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 			<li class="contact <?php echo $sexe; ?>">
 				<strong><?php echo $nomAffichage; ?></strong>
 			</li>
@@ -76,15 +76,15 @@
 					// On ouvre la fiche du contact concerné
 					$fiche = new Contact(md5($contact[0]));
 					
-					if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
-					elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+					if ($fiche->get('sexe') == 'H') { $sexe = 'homme'; }
+					elseif ($fiche->get('sexe') == 'F') { $sexe = 'femme'; }
 					else { $sexe = 'isexe'; }
 					
-					if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
-					elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+					if (!empty($fiche->display_name())) { $nomAffichage = $fiche->display_name(); }
+					elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 					else { $nomAffichage = 'Fiche sans nom'; }
         ?>
-		<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+		<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 			<li class="contact <?php echo $sexe; ?>">
 				<strong><?php echo $nomAffichage; ?></strong>
 			</li>

@@ -48,10 +48,10 @@ else {
 		    // Si l'opération consiste en une création, on créé le contact ici
 		    if ($_GET['operation'] == 'creation') {
 			    // On va commencer par créer une nouvelle fiche et récupérer son identifiant
-			    $id = Contact::creation();
+			    $id = People::create();
 			    
 			    // On redirige vers la nouvelle fiche créée
-			    Core::tpl_go_to('contact', array('contact' => md5($id)), true);
+			    Core::tpl_go_to('contact', array('contact' => $id), true);
 		    }
 		    
 		    // Sinon, on charge le template
@@ -108,11 +108,26 @@ else {
 	
 	
 	
+	// Si on demande le module de campagnes
+	else if ($_GET['page'] == 'campagne') {
+    	    // On regarde si on demande une fiche particulière
+    	    if (isset($_GET['id'])) {
+        	    Core::tpl_load('campaign', 'dashboard');
+    	    }
+    	    
+    	    // Sinon, on appelle la page principale du module
+    	    else {
+        	    Core::tpl_load('campaign');
+    	    }
+	}
+	
+	
+	
 	// Si on demande le module SMS
 	else if ($_GET['page'] == 'sms') {
 		// On regarde si une page en particulier est demandée
 		if (isset($_GET['campagne'])) {
-			Core::tpl_load('sms', 'campagne');
+			Core::tpl_go_to('campagne', array('id' => $_GET['campagne']), true);
 		}
 		
 		// Sinon, on appelle la page principale du module
@@ -127,7 +142,7 @@ else {
 	else if ($_GET['page'] == 'email') {
 		// On regarde si une page en particulier est demandée
 		if (isset($_GET['campagne'])) {
-			Core::tpl_load('email', 'campagne');
+			Core::tpl_go_to('campagne', array('id' => $_GET['campagne']), true);
 		}
 		
 		// Sinon, on appelle la page principale du module
@@ -331,7 +346,7 @@ $loading['time-sql'] = number_format($loading['time'], 6, '.', '');
 $page = (isset($_GET['page'])) ? $_GET['page'] : '';
 
 // On enregistre le temps de chargement de la page à des fins statistiques
-$query = $core->prepare('INSERT INTO `chargements` (`compte`, `page`, `plateforme`, `temps`) VALUES (:compte, :page, "desktop", :temps)');
+$query = $core->prepare('INSERT INTO `stats` (`user`, `page`, `time`) VALUES (:compte, :page, :temps)');
 $utilisateur = User::ID();
 $query->bindParam(':compte', $utilisateur);
 $query->bindParam(':page', $page);

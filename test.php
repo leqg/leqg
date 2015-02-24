@@ -28,12 +28,12 @@ setcookie('time', time(), time()+3600*24*7, '/', 'localhost');
 setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', '2a01:e35:2e36:f120:94a7:98aa:5a7:b1d7');
 setcookie('time', time(), time()+3600*24*7, '/', '2a01:e35:2e36:f120:94a7:98aa:5a7:b1d7');
 */
-
+/*
 $query = $link->query('SELECT * FROM `votes`');
 foreach ($query as $vote) {
     $link->query('UPDATE `contacts` SET `contact_vote_' . $vote['vote_election'] . '` = ' . $vote['vote_participation'] . ' WHERE `contact_id` = ' . $vote['contact_id']);
 }
-
+*/
 /*
 // On lance un mécanisme de transfert automatique des coordonnées depuis le système actuel vers le nouveau système
 $link = new PDO("mysql:host=" . Configuration::read('db.host') . ";dbname=" . Configuration::read('db.basename') . ";charset=utf8", Configuration::read('db.user'), Configuration::read('db.pass'));
@@ -525,4 +525,17 @@ foreach ($data as $key => $line) {
 // On calcule un mot de passe pour l'ajouter à la base
 //echo $user->encrypt_pass('evecsanobi-67');	
 
-?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

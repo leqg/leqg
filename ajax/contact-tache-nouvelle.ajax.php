@@ -1,15 +1,14 @@
 <?php
 	// On ouvre la fiche contact
-	$evenement = md5($_POST['evenement']);
-	$evenement = new evenement($evenement);
+	$evenement = new Event($_POST['evenement']);
 	
 	// On ajoute le tag
-	$tache = $evenement->tache_ajout($_POST['user'], $_POST['tache'], $_POST['deadline']);
+	$tache[0] = $evenement->task_new($_POST['user'], $_POST['tache'], $_POST['deadline']);
 	
-	if (isset($tache[0]['compte_id']))
+	if (isset($tache[0]['user']))
 	{
 		// On récupère le nom de la fiche qui est concernée par cette tâche
-		$nickname = User::get_login_by_ID($tache[0]['compte_id']);
+		$nickname = User::get_login_by_ID($tache[0]['user']);
 	}
 	else
 	{

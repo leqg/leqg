@@ -9,7 +9,7 @@
 	$var['criteres'] = trim($var['criteres'], ';');
 	
 	// On récupère la liste des contacts concernés
-	$contacts = Contact::listing($var, 0, false);
+	$contacts = People::listing($var, 0, false);
 	
 	// Pour chaque contact, on l'ajoute à la mission
 	foreach($contacts as $contact) {

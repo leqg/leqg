@@ -54,6 +54,31 @@ class Core {
 	
 	
 	/**
+     * Prépare une requête SQL
+     * 
+     * @param   string  $query  Requête à appeler
+     * @param   string  $bdd    Base de données à appeler
+     * @result  object          Requête préparée
+     * */
+    
+    public static function query($query, $bdd = 'link')
+    {
+        // On récupère le lien vers la BDD
+        $link = Configuration::read('db.' . $bdd);
+        
+        // On vérifie que la requête existe
+        if (file_exists("sql/$query.sql")) {
+            // On récupère la requête et on retourne la requête préparée
+            $query = file_get_contents("sql/$query.sql");
+            return $link->prepare($query);
+            
+        } else {
+            exit;
+        }
+    }
+	
+	
+	/**
 	 * Cette méthode permet de sécuriser les données qui doivent transiter par la base de données
 	 * 
 	 * @author	Damien Senger <mail@damiensenger.me>

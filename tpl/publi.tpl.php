@@ -3,22 +3,21 @@
 	User::protection(5);
 	
 	// On récupère la liste des campagnes
-	$liste = Campagne::liste('publi');
+	$liste = Campaign::all('publi');
 
 	// On charge le template
 	Core::tpl_header(); 
 ?>
-	
 	<h2 class="titreCampagne" data-page="campagnes">Préparation des campagnes de publipostage</h2>
 	<?php if (count($liste)) : ?>
 		<section id="campagnes">
 			<ul class="liste-campagnes">
-				<?php foreach ($liste as $element) : $campagne = new Campagne($element['code']); ?>
+				<?php foreach ($liste as $element) : $campaign = new Campaign($element['id']); ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('publi', array('campagne' => $element['code'])); ?>" class="nostyle"><h4><?php echo $campagne->get('campagne_titre'); ?></h4></a>
+					<a href="<?php Core::tpl_go_to('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; } else { echo 'Campagne sans titre'; } ?></h4></a>
 					<p>
-						Cette campagne <?php echo $campagne->get('campagne_type'); ?> a été envoyée à <strong><?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?></strong> contact<?php if ($campagne->get('nombre') >1) { ?>s<?php } ?>.<br>
-						Elle a été envoyée le <strong><?php echo strftime('%d %B %Y', strtotime($campagne->get('campagne_date'))); ?></strong> par <em><?php echo User::get_login_by_ID($campagne->get('campagne_createur')); ?></em>.
+						Cette campagne de publipostage a été envoyée à <strong><?php echo number_format($campaign->get('count'), 0, ',', ' '); ?></strong> contact<?php if ($campaign->get('count') >1) { ?>s<?php } ?>.<br>
+						Elle a été préparée le <strong><?php echo strftime('%d %B %Y', strtotime($campaign->get('date'))); ?></strong> par <em><?php echo User::get_login_by_ID($campaign->get('user')); ?></em>.
 					</p>
 				</li>
 				<?php endforeach; ?>

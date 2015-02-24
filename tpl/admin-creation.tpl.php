@@ -23,7 +23,7 @@
         $link = Configuration::read('db.core');
         $client = Configuration::read('ini')['LEQG']['compte'];
 
-        $query = $link->prepare('INSERT INTO `compte` (`client`, `email`, `password`, `firstname`, `lastname`, `auth_level`) VALUES (:client, :email, :pass, :first, :last, :auth)');
+        $query = $link->prepare('INSERT INTO `user` (`client`, `email`, `password`, `firstname`, `lastname`, `auth_level`) VALUES (:client, :email, :pass, :first, :last, :auth)');
         $query->bindParam(':client', $client);
         $query->bindParam(':email', $form['email']);
         $query->bindParam(':pass', $form['pass_sec']);

@@ -1,8 +1,5 @@
 <?php
-	// On ouvre la fiche contact
-	$fiche = md5($_POST['contact']);
-	$contact = new contact($fiche);
-	
-	// On ajoute le tag
-	$contact->tag_ajout($_POST['tag']);
-?>
+$data = new People($_POST['contact']);
+if (!empty($_POST['tag'])) {
+    $data->tag_add($_POST['tag']);
+}

@@ -1,0 +1,1 @@
+INSERT INTO `template` (`user`) VALUES (:user);

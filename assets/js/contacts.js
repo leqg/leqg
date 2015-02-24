@@ -16,7 +16,6 @@ var contacts = function() {
         data["mobile"] = $('#coordonnees-mobile').val();
         data["fixe"] = $('#coordonnees-fixe').val();
         data["electeur"] = $('#coordonnees-electeur').val();
-        data["adresse"] = 0;
         data["criteres"] = $('#listeCriteresTri').val();
         
         // Nombre de fiches déjà affichée
@@ -42,7 +41,7 @@ var contacts = function() {
         };
                 
         // On effectue l'appel AJAX qui va retourner l'estimation du nombre de fiches concernées
-        $.get('ajax.php?script=contacts-estimation', data, function(nombre) {
+        $.get('ajax.php?script=people-count', data, function(nombre) {
             // On affiche ce nombre dans le span prévu à cet effet
             $('.estimationDuNombreDeFichesTotales').html('');
             
@@ -62,7 +61,7 @@ var contacts = function() {
         });
         
         // On effectue l'appel AJAX qui va récupérer les x fiches correspondantes
-        $.getJSON('ajax.php?script=contacts-listing', data, function(data) {
+        $.getJSON('ajax.php?script=people-listing', data, function(data) {
             // On vérifie si ce n'est pas la fin de la liste (suite demandée et aucune donnée retournée
             if (data == '' && action == 'suite') {
                 // On supprime maintenant le bouton
@@ -95,34 +94,33 @@ var contacts = function() {
                 // On va faire une boucle de toutes les fiches créées pour les afficher dans cette liste de contacts
                 $.each(data, function(key, val){
                     // on détermine le sexe à afficher
-                    if (val.contact_sexe == 'M') {
+                    if (val.sexe == 'H') {
                         var sexe = 'homme';
                     }
-                    else if (val.contact_sexe == 'F') {
+                    else if (val.sexe == 'F') {
                         var sexe = 'femme';
                     }
                     else {
                         var sexe = 'isexe';
                     }
                     
-                    $('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.contact_md5 + '" class="nostyle contact-' + val.contact_id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span> - <span class="ville"></span></p></li></a>');
+                    $('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.id + '" class="nostyle contact-' + val.id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span></p></li></a>');
                     
                     // On ajoute demande le nom de la fiche
                     var nom;
-                    if (val.nom_affichage.length == 0) {
-                        if (val.contact_organisme.length == 0) {
+                    if (val.nom_complet.length == 0) {
+                        if (val.organisme.length == 0) {
                             nom = 'Contact sans nom';
                         } else {
-                            nom = val.contact_organisme;
+                            nom = val.organisme;
                         }
                     } else {
-                        nom = val.nom_affichage;
+                        nom = val.nom_complet;
                     }
                     
                     // On affecte les données aux balises HTML
-                    $('.resultatTri .contact-' + val.contact_id + ' li strong').html(nom);
-                    $('.resultatTri .contact-' + val.contact_id + ' li p .age').html(val.age);
-                    $('.resultatTri .contact-' + val.contact_id + ' li p .ville').html(val.ville);
+                    $('.resultatTri .contact-' + val.id + ' li strong').html(nom);
+                    $('.resultatTri .contact-' + val.id + ' li p .age').html(val.age);
                 });
                 
                 // On ajoute le bouton permettant d'afficher les 5 fiches suivantes
@@ -195,9 +193,7 @@ var contacts = function() {
             // On fait la boucle de tous les éléments trouvés et on les affiche
             $.each(data, function(key, val) {
                 // Pour chaque bureau, on créé une puce
-                $('.listeDesBureaux').append('<li class="bureau-' + val.bureau_id + '"><span class="bureau-nom"></span><span class="bureau-ville"></span><button class="choisirBureau" data-bureau="' + val.bureau_id + '" data-numero="' + val.bureau_numero + '">Choisir</button></li>');
-                $('.bureau-' + val.bureau_id + ' .bureau-nom').html('Bureau ' + val.bureau_numero + ' ' + val.bureau_nom);
-                $('.bureau-' + val.bureau_id + ' .bureau-ville').html(val.commune_nom + ' (' + val.departement_id + ')');
+                $('.listeDesBureaux').append('<li class="bureau-' + val.bureau_id + '"><span class="bureau-nom">Bureau ' + val.number + ' ' + val.name + '</span><span class="bureau-ville">' + val.city_name + '</span><button class="choisirBureau" data-bureau="' + val.id + '" data-numero="' + val.number + '">Choisir</button></li>');
             });
         });
     });
@@ -219,9 +215,9 @@ var contacts = function() {
                 // On fait la boucle de tous les éléments trouvés et on les affiche
                 $.each(data, function(key, val) {
                     // Pour chaque rue, on créé une puce
-                    $('.listeDesRues').append('<li class="rue-' + val.rue_id + '"><span class="rue-nom"></span><span class="rue-ville"></span><button class="choisirRue" data-rue="' + val.rue_id + '" data-nom="' + val.rue_nom + '">Choisir</button></li>');
-                    $('.rue-' + val.rue_id + ' .rue-nom').html(val.rue_nom);
-                    $('.rue-' + val.rue_id + ' .rue-ville').html(val.commune_nom + ' (' + val.departement_id + ')');
+                    $('.listeDesRues').append('<li class="rue-' + val.id + '"><span class="rue-nom"></span><span class="rue-ville"></span><button class="choisirRue" data-rue="' + val.id + '" data-nom="' + val.street + '">Choisir</button></li>');
+                    $('.rue-' + val.id + ' .rue-nom').html(val.street);
+                    $('.rue-' + val.id + ' .rue-ville').html(val.city_name);
                 });
             });
         } else {
@@ -246,9 +242,9 @@ var contacts = function() {
                 // On fait la boucle de tous les éléments trouvés et on les affiche
                 $.each(data, function(key, val) {
                     // Pour chaque rue, on créé une puce
-                    $('.listeDesVilles').append('<li class="ville-' + val.commune_id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.commune_id + '" data-nom="' + val.commune_nom + '">Choisir</button></li>');
-                    $('.ville-' + val.commune_id + ' .ville-nom').html(val.commune_nom);
-                    $('.ville-' + val.commune_id + ' .ville-dept').html(val.departement_nom);
+                    $('.listeDesVilles').append('<li class="ville-' + val.id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.id + '" data-nom="' + val.city + '">Choisir</button></li>');
+                    $('.ville-' + val.id + ' .ville-nom').html(val.city);
+                    $('.ville-' + val.id + ' .ville-dept').html(val.country_name);
                 });
             });
         } else {
@@ -426,7 +422,6 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -447,10 +442,9 @@ var contacts = function() {
         // On récupère les données
         var data = {
             'email': $('#coordonnees-email').val(),
-            'mobile': 2,
+            'mobile': 1,
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -502,29 +496,17 @@ var contacts = function() {
         // On récupère les données
         var data = {
             'email': $('#coordonnees-email').val(),
-            'mobile': 2,
+            'mobile': 1,
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val(),
             'titre': $('#smsTitreCampagne').val(),
             'message': $('#smsMessageCampagne').val()
         };
         
-        $.get('ajax.php?script=sms-campagne', data, function() {
-            // On affiche une alertbox pour prévenir que la mission a été créée
-            swal({
-                title: 'Envoi réussi !',
-                text: 'Vous pouvez retrouver cette campagne dans le module SMS',
-                type: 'success'
-            });
-            
-            // On revient à la situation initiale en vidant le formulaire
-            $('.droite section').hide();
-            $('#smsTitreCampagne').val('');
-            $('#smsNombreDestinataire').val('');
-            $('#smsMessageCampagne').val('');
-            $('.droite section:not(.invisible)').fadeIn();
+        $.get('ajax.php?script=sms-campagne', data, function(data) {
+        	    var url = 'index.php?page=campagne&id=' + data;
+        	    document.location.href = url;
         });
     });
     
@@ -533,11 +515,10 @@ var contacts = function() {
     $('.emailSelection').click(function() {
         // On récupère les données
         var data = {
-            'email': 2,
+            'email': 1,
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -545,19 +526,10 @@ var contacts = function() {
         $('.droite section').hide();
         
         // On effectue l'estimation du nombre de fiches
-        $.get('ajax.php?script=contacts-estimation', data, function(nombre) {
-            // On affiche ce nombre dans le formulaire
-            $('.emailNombreDestinataire').val('');
-
-            if (nombre > 1) {
-                $('.emailNombreDestinataire').val(nombre + ' contacts');
-            } else {
-                $('.emailNombreDestinataire').val(nombre + ' contact');
-            }
+        $.get('ajax.php?script=campagne-nouveau-email', data, function (data) {
+        	    var url = 'index.php?page=campagne&id=' + data;
+        	    document.location.href = url;
         });
-        
-        // On ouvre ce formulaire
-        $('.emailEnvoiCampagne').fadeIn();
     });
     
     
@@ -565,11 +537,10 @@ var contacts = function() {
     $('.emailValidationCampagne').click(function() {
         // On récupère les données
         var data = {
-            'email': 2,
+            'email': 1,
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val(),
             'titre': $('#emailTitreCampagne').val(),
             'message': $('#emailMessageCampagne').val()
@@ -601,7 +572,7 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 2,
+            'adresse': 1,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -633,7 +604,7 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 2,
+            'adresse': 1,
             'criteres': ';' + $('#listeCriteresTri').val(),
             'titre': $('#publiTitreCampagne').val(),
             'message': $('#publiDescriptionCampagne').val()

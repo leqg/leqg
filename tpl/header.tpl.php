@@ -20,6 +20,7 @@
 	<script src="assets/js/sweet-alert.min.js"></script>
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
+	<?php if (isset($_GET['volet']) && $_GET['volet'] == 'template') { ?><script src="//cdn.ckeditor.com/4.4.7/full/ckeditor.js"></script><?php } ?>
 </head>
 
 <body class="flat">	
@@ -47,7 +48,21 @@
 								'rappels' => 'Rappels',
 								'administration' => 'Utilisateurs'  );
 					
-			if (isset($_GET['page'])) $actuel = ($_GET['page'] == 'contact') ? 'contacts' : $_GET['page'];
+                if (isset($_GET['page'])) {
+                    switch ($_GET['page']) {
+                        case 'contact':
+                            $actuel = 'contacts';
+                            break;
+                        
+                        case 'campagne':
+                            $actuel = Configuration::read('tpl.actuel');
+                            break;
+                        
+                        default:
+                            $actuel = $_GET['page'];
+                            break;
+                    }
+                }
 		
 			foreach ($menu as $key => $element) : ?>
 		<a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>" <?php if ($actuel == $key) echo 'class="actif"'; ?>><?php echo $element; ?></a>

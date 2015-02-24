@@ -5,10 +5,10 @@
 	$prenoms = (isset($_POST['prenoms'])) ? $_POST['prenoms'] : '';
 	
 	// On ouvre cette nouvelle fiche
-	$contact = new contact(md5($fiche));
+	$data = new People($fiche);
 	
 	// On lance le changement de sexe
-	$contact->modification('contact_nom', $nom);
-	$contact->modification('contact_nom_usage', $nom_usage);
-	$contact->modification('contact_prenoms', $prenoms);
+	$data->update('nom', $nom);
+	$data->update('nom_usage', $nom_usage);
+	$data->update('prenoms', $prenoms);
 ?>

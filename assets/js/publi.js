@@ -12,35 +12,35 @@ var publi = function() {
 			// On fait une boucle des informations
 			$.each(data, function(key, val) {
 				// On créé la puce
-				$('.listeContacts').append('<a href="" class="nostyle contact-' + val.contact_md5 + '"><li class="contact"><strong></strong><p><span class="ville"></span></p></li></a>');
+				$('.listeContacts').append('<a href="" class="nostyle contact-' + val.people + '"><li class="contact"><strong></strong><p><span class="ville"></span></p></li></a>');
 				
 				// On y applique un sexe
-				if (val.contact_sexe == 'M') {
-					$('.listeContacts a.contact-' + val.contact_md5 + ' li').addClass('homme');
+				if (val.sexe == 'M') {
+					$('.listeContacts a.contact-' + val.people + ' li').addClass('homme');
 				} 
-				else if (val.contact_sexe == 'F') { 
-					$('.listeContacts a.contact-' + val.contact_md5 + ' li').addClass('femme');
+				else if (val.sexe == 'F') { 
+					$('.listeContacts a.contact-' + val.people + ' li').addClass('femme');
 				} 
 				else { 
-					$('.listeContacts a.contact-' + val.contact_md5 + ' li').addClass('isexe');
+					$('.listeContacts a.contact-' + val.people + ' li').addClass('isexe');
 				}
 				
 				// On ajoute demande le nom de la fiche
 				var nom;
-				if (val.nom_affichage.length == 0) {
+				if (val.nom.length == 0) {
 					if (val.contact_organisme.length == 0) {
 						nom = 'Contact sans nom';
 					} else {
-						nom = val.contact_organisme;
+						nom = val.organisme;
 					}
 				} else {
-					nom = val.nom_affichage;
+					nom = val.nom + ' ' + val.nom_usage + ' ' + val.prenoms;
 				}
 			
 				// On rempli les informations
-				$('.listeContacts a.contact-' + val.contact_md5).attr('href', 'index.php?page=contact&contact=' + val.contact_md5);
-				$('.listeContacts a.contact-' + val.contact_md5 + ' li strong').html(nom);
-				$('.listeContacts a.contact-' + val.contact_md5 + ' li p .ville').html(val.ville);
+				$('.listeContacts a.contact-' + val.people).attr('href', 'index.php?page=contact&contact=' + val.people);
+				$('.listeContacts a.contact-' + val.people + ' li strong').html(nom);
+				$('.listeContacts a.contact-' + val.people + ' li p .ville').html(val.ville);
 			});
 		});
 	}
