@@ -133,9 +133,9 @@ class People
     public function display_name()
     {
         $display = array();
-        if (!empty($this->_people['nom'])) $display[] = strtoupper($this->_people['nom']);
-        if (!empty($this->_people['nom_usage'])) $display[] = strtoupper($this->_people['nom_usage']);
-        if (!empty($this->_people['prenoms'])) $display[] = ucwords(strtolower($this->_people['prenoms']));
+        if (!empty($this->_people['nom'])) $display[] = mb_convert_case($this->_people['nom'], MB_CASE_UPPER);
+        if (!empty($this->_people['nom_usage'])) $display[] = mb_convert_case($this->_people['nom_usage'], MB_CASE_UPPER);
+        if (!empty($this->_people['prenoms'])) $display[] = mb_convert_case($this->_people['prenoms'], MB_CASE_TITLE);
         
         return implode(' ', $display);
     }
