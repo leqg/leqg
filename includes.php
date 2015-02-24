@@ -20,7 +20,7 @@ $config = parse_ini_file('config.ini', true);
 Configuration::write('url', $config['SERVER']['url']);
 Configuration::write('client', $config['LEQG']['compte']);
 Configuration::write('db.host', $config['BDD']['host']);
-Configuration::write('db.basename', 'leqg_dev');
+Configuration::write('db.basename', 'leqg_'.$config['LEQG']['compte']);
 Configuration::write('db.user', $config['BDD']['user']);
 Configuration::write('db.pass', $config['BDD']['pass']);
 Configuration::write('ini', $config);
