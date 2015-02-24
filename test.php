@@ -21,13 +21,13 @@ print_r($link);
 */
 
 //echo 'test';
-
+/*
 // Création d'un cookie pour avoir la paix
 setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', 'localhost');
 setcookie('time', time(), time()+3600*24*7, '/', 'localhost');
 setcookie('leqg', hash('sha256', 1), time()+3600*24*7, '/', '2a01:e35:2e36:f120:94a7:98aa:5a7:b1d7');
 setcookie('time', time(), time()+3600*24*7, '/', '2a01:e35:2e36:f120:94a7:98aa:5a7:b1d7');
-
+*/
 /*
 $query = $link->query('SELECT * FROM `votes`');
 foreach ($query as $vote) {
@@ -525,4 +525,17 @@ foreach ($data as $key => $line) {
 // On calcule un mot de passe pour l'ajouter à la base
 //echo $user->encrypt_pass('evecsanobi-67');	
 
-?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

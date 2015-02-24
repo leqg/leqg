@@ -40,12 +40,12 @@ var mission = function() {
 				$.each( data, function( key, val ) {
 				
 					// On créé d'abord une nouvelle puce
-					$('#listeBureaux').append('<li id="bureau-' + val.bureau_id + '"></li>');
+					$('#listeBureaux').append('<li id="bureau-' + val.id + '"></li>');
 					
 					// On ajoute après les différents span
-					$('#bureau-' + val.bureau_id).append('<a href="ajax.php?script=mission-ajout-bureau&code=' + mission + '&bureau=' + val.bureau_id + '" class="nostyle"><button>Ajouter</button></a>');
-					$('#bureau-' + val.bureau_id).append('<span class="bureau-nom">Bureau ' + val.bureau_code + ' ' + val.bureau_nom + '</span>');
-					$('#bureau-' + val.bureau_id).append('<span class="bureau-ville">' + val.commune_nom + '</span>');
+					$('#bureau-' + val.id).append('<a href="ajax.php?script=mission-ajout-bureau&code=' + mission + '&bureau=' + val.id + '" class="nostyle"><button>Ajouter</button></a>');
+					$('#bureau-' + val.id).append('<span class="bureau-nom">Bureau ' + val.number + ' ' + val.name + '</span>');
+					$('#bureau-' + val.id).append('<span class="bureau-ville">' + val.city_name + '</span>');
 				});
 				
 				$('#listeBureaux').show();

@@ -16,7 +16,6 @@ var contacts = function() {
         data["mobile"] = $('#coordonnees-mobile').val();
         data["fixe"] = $('#coordonnees-fixe').val();
         data["electeur"] = $('#coordonnees-electeur').val();
-        data["adresse"] = 0;
         data["criteres"] = $('#listeCriteresTri').val();
         
         // Nombre de fiches déjà affichée
@@ -423,7 +422,6 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -447,7 +445,6 @@ var contacts = function() {
             'mobile': 1,
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -502,7 +499,6 @@ var contacts = function() {
             'mobile': 1,
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val(),
             'titre': $('#smsTitreCampagne').val(),
             'message': $('#smsMessageCampagne').val()
@@ -523,7 +519,6 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
@@ -546,7 +541,6 @@ var contacts = function() {
             'mobile': $('#coordonnees-mobile').val(),
             'fixe': $('#coordonnees-fixe').val(),
             'electeur': $('#coordonnees-electeur').val(),
-            'adresse': 0,
             'criteres': ';' + $('#listeCriteresTri').val(),
             'titre': $('#emailTitreCampagne').val(),
             'message': $('#emailMessageCampagne').val()

@@ -758,177 +758,187 @@ class People
      * */
     public static function listing(array $sort, $debut, $nombre = 5)
     {
-        $contacts = array(); // Contacts ciblés
-        $_contacts = array(); // Contacts exclus
-        
-        if (is_array($sort)) {
-            // We list people by contact detail sorting
-            if (isset($sort['email']) && $sort['email'] != 0) {
-                $query = Core::query('people-with-email');
-                $query->execute();
-                $contacts_with = array();
-                $contacts_with_emails = $query->fetchAll(PDO::FETCH_NUM);
-                foreach ($contacts_with_emails as $element) { $contacts_with[] = $element[0]; }
-                
-                if ($sort['email'] == 1) {
-                    $contacts = array_merge($contacts, $contacts_with);
-                } else {
-                    $_contacts = array_merge($_contacts, $contacts_with);
-                }
-            }
-
-            if (isset($sort['mobile']) && $sort['mobile'] != 0) {
-                $query = Core::query('people-with-mobile');
-                $query->execute();
-                $contacts_with = array();
-                $contacts_with_mobile = $query->fetchAll(PDO::FETCH_NUM);
-                foreach ($contacts_with_mobile as $element) { $contacts_with[] = $element[0]; }
-                
-                if ($sort['mobile'] == 1) {
-                    $contacts = array_merge($contacts, $contacts_with);
-                } else {
-                    $_contacts = array_merge($_contacts, $contacts_with);
-                }
-            }
-
-            if (isset($sort['fixe']) && $sort['fixe'] != 0) {
-                $query = Core::query('people-with-fixe');
-                $query->execute();
-                $contacts_with = array();
-                $contacts_with_fixe = $query->fetchAll(PDO::FETCH_NUM);
-                foreach ($contacts_with_fixe as $element) { $contacts_with[] = $element[0]; }
-                
-                if ($sort['fixe'] == 1) {
-                    $contacts = array_merge($contacts, $contacts_with);
-                } else {
-                    $_contacts = array_merge($_contacts, $contacts_with);
-                }
-            }
-
-            if (isset($sort['phone']) && $sort['phone'] != 0) {
-                $query = Core::query('people-with-phone');
-                $query->execute();
-                $contacts_with = array();
-                $contacts_with_phone = $query->fetchAll(PDO::FETCH_NUM);
-                foreach ($contacts_with_phone as $element) { $contacts_with[] = $element[0]; }
-                
-                if ($sort['phone'] == 1) {
-                    $contacts = array_merge($contacts, $contacts_with);
-                } else {
-                    $_contacts = array_merge($_contacts, $contacts_with);
-                }
-            }
-
-            if (isset($sort['electeur']) && $sort['electeur'] != 0) {
-                $status = ($sort['electeur'] == 1) ? 1 : 0;
-                $query = Core::query('people-can-vote');
-                $query->bindValue(':status', $status, PDO::PARAM_INT);
-                $query->execute();
-                $contacts_can_vote = array();
-                $result = $query->fetchAll(PDO::FETCH_NUM);
-                foreach ($result as $element) { $contacts_can_vote[] = $element[0]; }
-                $contacts = array_merge($contacts, $contacts_can_vote);
-            }
-            
-            if (!empty($sort['criteres'])) {
-                $sorting = explode(';', $sort['criteres']);
-                
-                $themas = array();
-                $bureaux = array();
-                $rues = array();
-                $villes = array();
-                
-                foreach ($sorting as $critere) {
-                    $tri = explode(':', $sort['criteres']);
-                    
-                        if ($tri[0] == 'thema') { $themas[] = $tri[1]; }
-                    elseif ($tri[0] == 'bureau') { $bureaux[] = $tri[1]; }
-                    elseif ($tri[0] == 'rue') { $rues[] = $tri[1]; }
-                    elseif ($tri[0] == 'ville') { $villes[] = $tri[1]; }
-                }
-                
-                if (count($themas)) {
-                    foreach ($themas as $thema) {
-                        $thema = '%'.preg_replace('#[^[:alnum:]]#u', '%', $thema).'%';
-                        $query = Core::query('people-by-tags');
-                        $query->bindValue(':tag', $thema);
-                        $query->execute();
-                        $result = $query->fetchAll(PDO::FETCH_NUM);
-                        $contacts_with = array();
-                        foreach ($result as $element) { $contacts_with[] = $element[0]; }
-                        $contacts = array_merge($contacts, $contacts_with);
-                    }
-                }
-                    
-                if (count($bureaux)) {
-                    $ids = implode(',', $bureaux);
-                    $query = Core::query('people-by-poll');
-                    $query->bindValue(':polls', $ids);
-                    $query->execute();
-                    $result = $query->fetchAll(PDO::FETCH_NUM);
-                    $contacts_with = array();
-                    foreach ($result as $element) { $contacts_with[] = $element[0]; }
-                    $contacts = array_merge($contacts, $contacts_with);
-                }
-                
-                if (count($rues)) {
-                    $ids = implode(',', $rues);
-                    $query = Core::query('people-by-street');
-                    $query->bindValue(':streets', $ids);
-                    $query->execute();
-                    $result = $query->fetchAll(PDO::FETCH_NUM);
-                    $contacts_with = array();
-                    foreach ($result as $element) { $contacts_with[] = $element[0]; }
-                    $contacts = array_merge($contacts, $contacts_with);
-                }
-                
-                if (count($villes)) {
-                    $ids = implode(',', $villes);
-                    $query = Core::query('people-by-city');
-                    $query->bindValue(':cities', $ids);
-                    $query->execute();
-                    $result = $query->fetchAll(PDO::FETCH_NUM);
-                    $contacts_with = array();
-                    foreach ($result as $element) { $contacts_with[] = $element[0]; }
-                    $contacts = array_merge($contacts, $contacts_with);
-                }
-            }
-            
-            if (count($contacts) && count($_contacts)) {
-                foreach ($contacts as $key => $contact) {
-                    if (in_array($contact, $_contacts)) {
-                        unset($contacts[$key]);
-                    }
-                }
-            
-            } elseif (!count($contacts) && count($_contacts)) {
-                $ids = implode(',', $_contacts);
-                $query = Core::query('people-except');
-                $query->bindValue(':ids', $ids);
-                $query->execute();
-                $result = $query->fetchAll(PDO::FETCH_NUM);
-                $contacts = array();
-                foreach ($result as $element) { $contacts[] = $element[0]; }
-                
-            } elseif (!count($contacts) && !count($_contacts) && empty($sort['criteres'])) {
-                $query = Core::query('people-all');
-                $query->execute();
-                $result = $query->fetchAll(PDO::FETCH_NUM);
-                $contacts = array();
-                foreach ($result as $element) { $contacts[] = $element[0]; }
-            }
-            
+        if (is_bool($debut) && $debut) {
+            $query = 'SELECT COUNT(`id`) FROM `people`';
+        } else {
+            $query = 'SELECT `id` FROM `people`';
         }
         
+        $conditionsStrictes = array();
+        
+        if (isset($sort['email']) && $sort['email'] == 1) {
+            $conditionsStrictes[] = '`id` IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "email"
+                GROUP BY    `contact_id`
+            )';
+        } elseif (isset($sort['email']) && $sort['email'] == -1) {
+            $conditionsStrictes[] = '`id` NOT IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "email"
+                GROUP BY    `contact_id`
+            )';
+        }
+        
+        if (isset($sort['mobile']) && $sort['mobile'] == 1) {
+            $conditionsStrictes[] = '`id` IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "mobile"
+                GROUP BY    `contact_id`
+            )';
+        } elseif (isset($sort['mobile']) && $sort['mobile'] == -1) {
+            $conditionsStrictes[] = '`id` NOT IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "mobile"
+                GROUP BY    `contact_id`
+            )';
+        }
+        
+        if (isset($sort['fixe']) && $sort['fixe'] == 1) {
+            $conditionsStrictes[] = '`id` IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "fixe"
+                GROUP BY    `contact_id`
+            )';
+        } elseif (isset($sort['fixe']) && $sort['fixe'] == -1) {
+            $conditionsStrictes[] = '`id` NOT IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "fixe"
+                GROUP BY    `contact_id`
+            )';
+        }
+        
+        if (isset($sort['phone']) && $sort['phone'] == 1) {
+            $conditionsStrictes[] = '`id` IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "fixe"
+                OR          `coordonnee_type` = "mobile"
+                GROUP BY    `contact_id`
+            )';
+        } elseif (isset($sort['phone']) && $sort['phone'] == -1) {
+            $conditionsStrictes[] = '`id` NOT IN (
+                SELECT      `contact_id`
+                FROM        `coordonnees`
+                WHERE       `coordonnee_type` = "fixe"
+                OR          `coordonnee_type` = "mobile"
+                GROUP BY    `contact_id`
+            )';
+        }
+        
+        if (isset($sort['electeur']) && $sort['electeur'] == 1) {
+            $conditionsStrictes[] = '`electeur` = 1';
+        } elseif (isset($sort['electeur']) && $sort['electeur'] == -1) {
+            $conditionsStrictes[] = '`electeur` = 0';
+        }
+        
+        if (isset($sort['adresse']) && $sort['adresse'] == 1) {
+            $conditionsStrictes[] = '`id` IN (
+                SELECT      `people`
+                FROM        `address`
+                GROUP BY    `people`
+            )';
+        } elseif (isset($sort['adresse']) && $sort['adresse'] == -1) {
+            $conditionsStrictes[] = '`id` NOT IN (
+                SELECT      `people`
+                FROM        `address`
+                GROUP BY    `people`
+            )';
+        }
+        
+        
+        $criteres = explode(';', $sort['criteres']);
+        $conditions = array();
+        $_conditions = array();
+        
+        if (!empty($criteres[0])) {
+            foreach ($criteres as $critere) {
+                $tri = explode(':', $critere);
+                $_conditions[$tri[0]][] = $tri[1];
+            }
+        }
+
+        if (isset($_conditions['bureau']) && count($_conditions['bureau'])) {
+            $ids = implode(',', $_conditions['bureau']);
+            $conditions[] = '`bureau` IN ('.$ids.')';
+        }
+        
+        if (isset($_conditions['rue']) && count($_conditions['rue'])) {
+            $ids = implode(',', $_conditions['rue']);
+            $conditions[] = '`id` IN (
+                SELECT      `people`
+                FROM        `address`
+                WHERE       `street` IN ('.$ids.')
+                GROUP BY    `people`
+            )';
+        }
+        
+        if (isset($_conditions['ville']) && count($_conditions['ville'])) {
+            $ids = implode(',', $_conditions['ville']);
+            $conditions[] = '`id` IN (
+                SELECT      `people`
+                FROM        `address`
+                WHERE       `city` IN ('.$ids.')
+                GROUP BY    `people`
+            )';
+        }
+        
+        if (isset($_conditions['thema']) && count($_conditions['thema'])) {
+            foreach ($_conditions['thema'] as $tag) {
+                $conditions[] = '`tags` LIKE "%'.$tag.'%"';
+            }
+        }
+        
+        if (count($conditionsStrictes) || count($conditions)) {
+            $query .= ' WHERE ';
+        }
+        
+        if (count($conditionsStrictes)) {
+            $conditionsStrictes = implode(' AND ', $conditionsStrictes);
+            $query .= '( '.$conditionsStrictes.' )';
+        }
+        
+        if (count($conditions)) {
+            $conditions = implode(' AND ', $conditions);
+            if (count($conditionsStrictes)) {
+                $query .= ' AND ( '.$conditions.' )';
+            } else {
+                $query .= '( '.$conditions.' )';
+            }
+        }
+
         if (is_bool($debut) && $debut) {
-            return count($contacts);
+            $query = Configuration::read('db.link')->prepare($query);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_NUM);
+            return $result[0];
             
         } else {
+            $query .= ' ORDER BY `nom`, `nom_usage`, `prenoms` ASC';
+            
             if (is_bool($nombre)) {
-                return $contacts;
+                $query = Configuration::read('db.link')->prepare($query);
+                $query->execute();
+                $contacts = $query->fetchAll(PDO::FETCH_NUM);
+            
             } else {
-                return array_slice($contacts, $debut, $nombre);
+                $query .= ' LIMIT '.$debut.','.$nombre;
+                $query = Configuration::read('db.link')->prepare($query);
+                $query->execute();
+                $contacts = $query->fetchAll(PDO::FETCH_NUM);
             }
+            
+            $ids = array();
+            foreach ($contacts as $contact) {
+                $ids[] = $contact[0];
+            }
+            return $ids;
         }
     }
     
