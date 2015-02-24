@@ -79,9 +79,9 @@
 		        </tr>
 	        </thead>
 	        <tbody>
-		        <?php foreach ($coordonnees as $electeur) : $contact = new Contact(md5($electeur)); ?>
-		        <tr class="ligne-electeur-<?php echo md5($contact->get('contact_id')); ?>">
-    		        <td><?php echo mb_convert_case($contact->get('contact_nom'), MB_CASE_UPPER) . ' ' . mb_convert_case($contact->get('contact_nom_usage'), MB_CASE_UPPER) . ' ' . mb_convert_case($contact->get('contact_prenoms'), MB_CASE_TITLE); ?></td>
+		        <?php foreach ($coordonnees as $electeur) : $contact = new People($electeur); ?>
+		        <tr class="ligne-electeur-<?php echo $contact->get('id'); ?>">
+    		        <td><?php echo $contact->display_name(); ?></td>
     		        <td><input type="text" name="email-<?php echo $electeur; ?>" placeholder="email" style="border: none; width: 100%; text-align: center;"></td>
     		        <td><input type="text" name="phone-<?php echo $electeur; ?>" placeholder="numéro" style="border: none; width: 100%; text-align: center;"></td>
 		        </tr>

@@ -6,8 +6,8 @@
 	if ($data->err) Core::tpl_go_to('porte', true);
 	
 	// On récupère tous les items de la rue et la rue en question et la ville concernée
-	$rue = Carto::rue($_GET['rue']);
-	$ville = Carto::ville(Carto::villeParRue($_GET['rue']));
+	$rue = Maps::street_data($_GET['rue']);
+	$ville = Maps::city_data($rue['city']);
 	$items = $data->items($_GET['rue']);
 	
 	if (!$items) Core::tpl_go_to('reporting', array('mission' => $_GET['mission']), true);
@@ -32,9 +32,9 @@
                 $numeros = array();
                 $numeros_sauv = array();
                 foreach ($items as $immeuble => $electeurs) {
-                    $infos = Carto::immeuble($immeuble);
-                    $numeros[$immeuble] = preg_replace('#[^0-9]+#', '', $infos['immeuble_numero']);
-                    $numeros_sauv[$immeuble] = $infos['immeuble_numero'];
+                    $infos = Maps::building_data($immeuble);
+                    $numeros[$immeuble] = preg_replace('#[^0-9]+#', '', $infos['building']);
+                    $numeros_sauv[$immeuble] = $infos['building'];
                 }
                 
                 // On tri les immeubles
@@ -44,7 +44,7 @@
                 foreach ($numeros as $immeuble => $numero) :
                     $electeurs = $items[$immeuble];
         ?>
-            <h4><?php echo $numero; ?> <?php echo $rue['rue_nom']; ?></h4>
+            <h4><?php echo $numero; ?> <?php echo $rue['street']; ?></h4>
             		        
             <table class="reporting">
     	        <thead>
@@ -58,14 +58,14 @@
     		        </tr>
     	        </thead>
     	        <tbody>
-    		        <?php foreach ($electeurs as $electeur) : $contact = new Contact(md5($electeur)); ?>
-    		        <tr class="ligne-electeur-<?php echo md5($contact->get('contact_id')); ?>">
-        		        <td><?php echo mb_convert_case($contact->get('contact_nom'), MB_CASE_UPPER) . ' ' . mb_convert_case($contact->get('contact_nom_usage'), MB_CASE_UPPER) . ' ' . mb_convert_case($contact->get('contact_prenoms'), MB_CASE_TITLE); ?></td>
-        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('contact_id'); ?>" data-val="1" type="radio" id="electeur-<?php echo $contact->get('contact_id'); ?>-a" name="electeur-<?php echo $contact->get('contact_id'); ?>" value="1"><label for="electeur-<?php echo $contact->get('contact_id'); ?>-a" data-contact="<?php echo md5($contact->get('contact_id')); ?>" data-val="1"><span><span></span></span></label></div></td>
-        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('contact_id'); ?>" data-val="2" type="radio" id="electeur-<?php echo $contact->get('contact_id'); ?>-o" name="electeur-<?php echo $contact->get('contact_id'); ?>" value="2"><label for="electeur-<?php echo $contact->get('contact_id'); ?>-o" data-contact="<?php echo md5($contact->get('contact_id')); ?>" data-val="2"><span><span></span></span></label></div></td>
-        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('contact_id'); ?>" data-val="3" type="radio" id="electeur-<?php echo $contact->get('contact_id'); ?>-p" name="electeur-<?php echo $contact->get('contact_id'); ?>" value="3"><label for="electeur-<?php echo $contact->get('contact_id'); ?>-p" data-contact="<?php echo md5($contact->get('contact_id')); ?>" data-val="3"><span><span></span></span></label></div></td>
-        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('contact_id'); ?>" data-val="4" type="radio" id="electeur-<?php echo $contact->get('contact_id'); ?>-c" name="electeur-<?php echo $contact->get('contact_id'); ?>" value="4"><label for="electeur-<?php echo $contact->get('contact_id'); ?>-c" data-contact="<?php echo md5($contact->get('contact_id')); ?>" data-val="4"><span><span></span></span></label></div></td>
-        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('contact_id'); ?>" data-val="-1" type="radio" id="electeur-<?php echo $contact->get('contact_id'); ?>-n" name="electeur-<?php echo $contact->get('contact_id'); ?>" value="-1"><label for="electeur-<?php echo $contact->get('contact_id'); ?>-n" data-contact="<?php echo md5($contact->get('contact_id')); ?>" data-val="-1"><span><span></span></span></label></div></td>
+    		        <?php foreach ($electeurs as $electeur) : $contact = new People($electeur); ?>
+    		        <tr class="ligne-electeur-<?php echo md5($contact->get('id')); ?>">
+        		        <td><?php echo $contact->display_name(); ?></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('id'); ?>" data-val="1" type="radio" id="electeur-<?php echo $contact->get('id'); ?>-a" name="electeur-<?php echo $contact->get('id'); ?>" value="1"><label for="electeur-<?php echo $contact->get('id'); ?>-a" data-contact="<?php echo md5($contact->get('id')); ?>" data-val="1"><span><span></span></span></label></div></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('id'); ?>" data-val="2" type="radio" id="electeur-<?php echo $contact->get('id'); ?>-o" name="electeur-<?php echo $contact->get('id'); ?>" value="2"><label for="electeur-<?php echo $contact->get('id'); ?>-o" data-contact="<?php echo md5($contact->get('id')); ?>" data-val="2"><span><span></span></span></label></div></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('id'); ?>" data-val="3" type="radio" id="electeur-<?php echo $contact->get('id'); ?>-p" name="electeur-<?php echo $contact->get('id'); ?>" value="3"><label for="electeur-<?php echo $contact->get('id'); ?>-p" data-contact="<?php echo md5($contact->get('id')); ?>" data-val="3"><span><span></span></span></label></div></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('id'); ?>" data-val="4" type="radio" id="electeur-<?php echo $contact->get('id'); ?>-c" name="electeur-<?php echo $contact->get('id'); ?>" value="4"><label for="electeur-<?php echo $contact->get('id'); ?>-c" data-contact="<?php echo md5($contact->get('id')); ?>" data-val="4"><span><span></span></span></label></div></td>
+        		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $contact->get('id'); ?>" data-val="-1" type="radio" id="electeur-<?php echo $contact->get('id'); ?>-n" name="electeur-<?php echo $contact->get('id'); ?>" value="-1"><label for="electeur-<?php echo $contact->get('id'); ?>-n" data-contact="<?php echo md5($contact->get('id')); ?>" data-val="-1"><span><span></span></span></label></div></td>
     		        </tr>
     		        <?php endforeach; ?>
     	        </tbody>
@@ -80,9 +80,9 @@
                 $numeros = array();
                 $numeros_sauv = array();
                 foreach ($items as $immeuble) {
-                    $infos = Carto::immeuble($immeuble['immeuble_id']);
-                    $numeros[$immeuble['immeuble_id']] = preg_replace('#[^0-9]+#', '', $infos['immeuble_numero']);
-                    $numeros_sauv[$immeuble['immeuble_id']] = $infos['immeuble_numero'];
+                    $infos = Maps::building_data($immeuble['immeuble_id']);
+                    $numeros[$immeuble['immeuble_id']] = preg_replace('#[^0-9]+#', '', $infos['building']);
+                    $numeros_sauv[$immeuble['immeuble_id']] = $infos['building'];
                 }
                 
                 // On tri les immeubles
@@ -95,7 +95,7 @@
             <table class="reporting">
     	        <thead>
     		        <tr>
-        		        <th style="font-size: .95em;">Électeur</th>
+        		        <th style="font-size: .95em;">Immeuble</th>
         		        <th class="petit" style="font-size: .95em;">Non&nbsp;boîté</th>
         		        <th class="petit" style="font-size: .95em;">Boîté</th>
     		        </tr>
@@ -103,7 +103,7 @@
     	        <tbody>
     		        <?php foreach ($numeros as $immeuble => $numero) : ?>
     		        <tr class="ligne-electeur-<?php echo $immeuble; ?>">
-        		        <td><?php echo $numeros_sauv[$immeuble]; ?> <?php echo $rue['rue_nom']; ?></td>
+        		        <td><?php echo $numeros_sauv[$immeuble]; ?> <?php echo $rue['street']; ?></td>
         		        <td class="petit"><div class="radio bouton-reporting"><input  type="radio" id="electeur-<?php echo $immeuble; ?>-a" name="electeur-<?php echo $immeuble; ?>" value="1"><label for="electeur-<?php echo $immeuble; ?>-a" data-contact="<?php echo md5($immeuble); ?>" data-val="1"><span><span></span></span></label></div></td>
         		        <td class="petit"><div class="radio bouton-reporting"><input  type="radio" id="electeur-<?php echo $immeuble; ?>-o" name="electeur-<?php echo $immeuble; ?>" value="2"><label for="electeur-<?php echo $immeuble; ?>-o" data-contact="<?php echo md5($immeuble); ?>" data-val="2"><span><span></span></span></label></div></td>
     		        </tr>
@@ -128,8 +128,8 @@
 		format: 'json',
 		email: 'tech@leqg.info',
 		country: 'France',
-		city: "<?php echo $ville['commune_nom']; ?>",
-		street: "<?php echo $numeros_sauv[$immeuble] . ' ' . $rue['rue_nom']; ?>"
+		city: "<?php echo $ville['city']; ?>",
+		street: "<?php echo $numeros_sauv[$immeuble] . ' ' . $rue['street']; ?>"
 	}
 	
 	// On récupère le JSON contenant les coordonnées de la rue
@@ -148,7 +148,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo $numeros_sauv[$immeuble] . ' ' . $rue['rue_nom']; ?>"
+			title: "<?php echo $numeros_sauv[$immeuble] . ' ' . $rue['street']; ?>"
 		}).addTo(map);
 	});
 	<?php endforeach; ?>

@@ -11,7 +11,7 @@
     // On charge le header
 	Core::tpl_header();
 ?>
-	<?php if (User::auth_lvl() >= 5) : ?><a href="<?php Core::tpl_go_to('boite'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a><?php endif; ?>
+	<?php if (User::auth_level() >= 5) : ?><a href="<?php Core::tpl_go_to('boite'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a><?php endif; ?>
 	<h2 class="titre" data-user="<?php echo User::ID(); ?>">Boîtage</h2>
 	
 	<?php if ($invitations) : ?>
