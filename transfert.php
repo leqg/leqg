@@ -165,8 +165,6 @@ foreach ($contacts as $contact) {
     $query->execute();
 }
 
-Core::debug('fin');
-
 $query = $link->query('SELECT COUNT(*) FROM `imports`');
 $nb = $query->fetch(PDO::FETCH_NUM);
 if ($nb[0]) :
