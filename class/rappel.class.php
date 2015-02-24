@@ -318,12 +318,12 @@ class Rappel
             $test = true;
             
             // On ouvre la fiche correspondante
-            $contact = new Contact(md5($numero['contact_id']));
+            $contact = new People($numero['contact_id']);
             
             // On récupère son bureau de vote, son âge et ses tags
-            $ageContact = $contact->age(false);
-            $bureau = $contact->get('bureau_id');
-            $tags = $contact->get('contact_tags');
+            $ageContact = $contact->age();
+            $bureau = $contact->get('bureau');
+            $tags = $contact->get('tags');
             
             // On vérifie si la fiche correspond aux arguments entrés, concernant l'âge
             if ($age && $test)
@@ -373,7 +373,7 @@ class Rappel
             // en utilisant comme key l'ID du contact pour éviter les doublons
             if ($test)
             {
-                $id = $contact->get('contact_id');
+                $id = $contact->get('id');
                 $num[ $id ] = $numero['coordonnee_id'];
             }
         }

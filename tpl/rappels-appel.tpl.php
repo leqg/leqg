@@ -22,11 +22,11 @@
 		$argumentaire = $query->fetch(PDO::FETCH_ASSOC);
 		
 		// On ouvre la fiche du contact
-		$contact = new Contact(md5($rappel['contact_id']));
+		$contact = new People($rappel['contact_id']);
 		
 		// On cherche le nom à afficher
-		if (!empty($contact->get('nom_affichage'))) { $nomAffichage = $contact->get('nom_affichage'); }
-		elseif (!empty($contact->get('contact_organisme'))) { $nomAffichage = $contact->get('contact_organisme'); }
+		if (!empty($contact->display_name())) { $nomAffichage = $contact->display_name(); }
+		elseif (!empty($contact->get('organisme'))) { $nomAffichage = $contact->get('organisme'); }
 		else { $nomAffichage = 'Fiche sans nom'; }
 	}
 	
@@ -49,27 +49,27 @@
 		$argumentaire = $query->fetch(PDO::FETCH_ASSOC);
 		
 		// On ouvre la fiche du contact
-		$contact = new Contact(md5($rappel['contact_id']));
+		$contact = new People($rappel['contact_id']);
 		
 		// On cherche le nom à afficher
-		if (!empty($contact->get('nom_affichage'))) { $nomAffichage = $contact->get('nom_affichage'); }
-		elseif (!empty($contact->get('contact_organisme'))) { $nomAffichage = $contact->get('contact_organisme'); }
+		if (!empty($contact->display_name())) { $nomAffichage = $contact->display_name(); }
+		elseif (!empty($contact->get('organisme'))) { $nomAffichage = $contact->get('organisme'); }
 		else { $nomAffichage = 'Fiche sans nom'; }
 	}
 	
 	// On charge le template
 	Core::tpl_header();
 ?>
-	<h2 class="titre" data-argumentaire="<?php echo $argumentaire['argumentaire_id']; ?>" data-contact="<?php echo $contact->get('contact_id'); ?>">Appel militant</h2>
+	<h2 class="titre" data-argumentaire="<?php echo $argumentaire['argumentaire_id']; ?>" data-contact="<?php echo $contact->get('id'); ?>">Appel militant</h2>
 	
 	<div class="colonne demi gauche">
 		<section class="contenu demi">
 			<h4><?php echo $nomAffichage; ?></h4>
-			
-			<?php if ($contact->get('bureau_id') && $contact->get('immeuble_id')) { ?>
+			<?php $address = $contact->postal_address(); ?>
+			<?php if ($contact->get('bureau') && !empty($address['officiel'])) { ?>
 			<ul class="etatcivil">
-				<li class="bureau"><?php echo $contact->bureau(); ?></li>
-				<li class="immeuble"><?php echo $contact->adresse('electorale'); ?></li>
+				<li class="bureau"><?php echo $contact->get('bureau'); ?></li>
+				<li class="immeuble"><?php echo $address['officiel']; ?></li>
 			</ul>
 			<?php } else { ?>
 			<ul class="etatcivil">
@@ -79,7 +79,7 @@
 			
 			<h4>Données de contact</h4>
 			<ul class="etatcivil coordonnees">
-				<?php $coordonnees = $contact->coordonnees(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] != 'email') : ?>
+				<?php $coordonnees = $contact->contact_details(); Core::debug($coordonnees); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] != 'email') : ?>
 				<li class="<?php echo $coordonnee['coordonnee_type']; ?> noUpdate" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
 					Core::tpl_phone($coordonnee['coordonnee_numero']); 
 			  ?></li>

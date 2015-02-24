@@ -370,7 +370,7 @@ class Mission {
             $rues = $query->fetchAll(PDO::FETCH_ASSOC);
             
             foreach ($rues as $key => $rue) {
-                $query = $this->link->prepare('SELECT * FROM `rues` WHERE `rue_id` = :rue');
+                $query = $this->link->prepare('SELECT * FROM `street` WHERE `id` = :rue');
                 $query->bindParam(':rue', $rue['rue_id']);
                 $query->execute();
                 $street = $query->fetch(PDO::FETCH_ASSOC);
@@ -379,7 +379,7 @@ class Mission {
             }
             
             // On tri le tableau selon rue_nom
-            Core::triMultidimentionnel($rues, 'rue_nom');
+            Core::triMultidimentionnel($rues, 'street');
             
             return $rues;
         }

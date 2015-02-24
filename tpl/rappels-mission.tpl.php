@@ -63,16 +63,16 @@
 			<ul class="listeContacts">
 				<?php
 					foreach ($procurations as $commentaire) :
-						$fiche = new Contact(md5($commentaire['contact_id']));
-						if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
-						elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+						$fiche = new People($commentaire['contact_id']);
+						if ($fiche->get('sexe') == 'H') { $sexe = 'homme'; }
+						elseif ($fiche->get('sexe') == 'F') { $sexe = 'femme'; }
 						else { $sexe = 'isexe'; }
 						
-						if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
-						elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+						if (!empty($fiche->display_name())) { $nomAffichage = $fiche->display_name(); }
+						elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 						else { $nomAffichage = 'Fiche sans nom'; }
 				?>
-				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 					</li>
@@ -95,16 +95,16 @@
 			<ul class="listeContacts">
 				<?php
 					foreach ($procurations as $commentaire) :
-						$fiche = new Contact(md5($commentaire['contact_id']));
-						if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
-						elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+						$fiche = new People($commentaire['contact_id']);
+						if ($fiche->get('sexe') == 'H') { $sexe = 'homme'; }
+						elseif ($fiche->get('sexe') == 'F') { $sexe = 'femme'; }
 						else { $sexe = 'isexe'; }
 						
-						if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
-						elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+						if (!empty($fiche->display_name())) { $nomAffichage = $fiche->display_name(); }
+						elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 						else { $nomAffichage = 'Fiche sans nom'; }
 				?>
-				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 					</li>
@@ -126,17 +126,17 @@
 			
 			<ul class="listeContacts">
 				<?php
-					foreach ($commentaires as $commentaire) :
-						$fiche = new Contact(md5($commentaire['contact_id']));
-						if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
-						elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+					foreach ($procurations as $commentaire) :
+						$fiche = new People($commentaire['contact_id']);
+						if ($fiche->get('sexe') == 'H') { $sexe = 'homme'; }
+						elseif ($fiche->get('sexe') == 'F') { $sexe = 'femme'; }
 						else { $sexe = 'isexe'; }
 						
-						if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
-						elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+						if (!empty($fiche->display_name())) { $nomAffichage = $fiche->display_name(); }
+						elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 						else { $nomAffichage = 'Fiche sans nom'; }
 				?>
-				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 						<p><?php echo nl2br($commentaire['rappel_reporting']); ?></p>
@@ -181,17 +181,17 @@
 				// On récupère les informations sur les fiches
 				$fiches = array();
 				foreach ($contacts as $contact) {
-					$fiche = new Contact(md5($contact['contact_id']));
-					$fiches[$fiche->get('contact_id')] = $fiche->donnees();
-					if ($fiche->get('contact_sexe') == 'M') { $sexe = 'homme'; }
-					elseif ($fiche->get('contact_sexe') == 'F') { $sexe = 'femme'; }
+					$fiche = new People($contact['contact_id']);
+					$fiches[$fiche->get('id')] = $fiche->data();
+					if ($fiche->get('sexe') == 'H') { $sexe = 'homme'; }
+					elseif ($fiche->get('sexe') == 'F') { $sexe = 'femme'; }
 					else { $sexe = 'isexe'; }
 					
-					if (!empty($fiche->get('nom_affichage'))) { $nomAffichage = $fiche->get('nom_affichage'); }
-					elseif (!empty($fiche->get('contact_organisme'))) { $nomAffichage = $fiche->get('contact_organisme'); }
+					if (!empty($fiche->display_name())) { $nomAffichage = $fiche->display_name(); }
+					elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 					else { $nomAffichage = 'Fiche sans nom'; }
 			?>
-				<a href="<?php Core::tpl_go_to('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 					</li>

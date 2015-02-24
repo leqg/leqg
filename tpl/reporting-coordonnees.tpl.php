@@ -31,11 +31,11 @@
     
     // Pour chaque contact, on enregistre l'information
     foreach ($reporting as $report => $infos) {
-        $contact = new Contact(md5($report));
+        $contact = new People($report);
         
         // On enregistre l'adresse mail si elle existe
         if (isset($infos['email'])) {
-            $contact->ajoutCoordonnees('email', $infos['email']);
+            $contact->contact_details_add($infos['email']);
         }
         
         // On regarde le type de numéro de téléphone puis on l'enregistre s'il existe
@@ -44,9 +44,9 @@
     		$premiersNums = $numero{0}.$numero{1};
     		
     		if ($premiersNums == 06 || $premiersNums == 07) {
-                $contact->ajoutCoordonnees('mobile', $numero);
+                $contact->contact_details_add($numero);
     		} else {
-                $contact->ajoutCoordonnees('fixe', $numero);
+                $contact->contact_details_add($numero);
     		}
         }
     }

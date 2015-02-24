@@ -13,7 +13,7 @@ function majListing( action ) {
 	data["email"] = 0;
 	data["mobile"] = 0;
 	data["fixe"] = 0;
-	data["phone"] = 2;
+	data["phone"] = 1;
 	data["electeur"] = 0;
 	data["adresse"] = 0;
 	data["criteres"] = $('#listeCriteresTri').val();
@@ -42,7 +42,7 @@ function majListing( action ) {
 	};
 	
 	// On effectue l'appel AJAX qui va récupérer les x fiches correspondantes
-	$.getJSON('ajax.php?script=contacts-listing', data, function(data) {
+	$.getJSON('ajax.php?script=people-listing', data, function(data) {
 		// On vérifie si ce n'est pas la fin de la liste (suite demandée et aucune donnée retournée
 		if (data == '' && action == 'suite') {
 			// On supprime maintenant le bouton
@@ -75,7 +75,7 @@ function majListing( action ) {
 			// On va faire une boucle de toutes les fiches créées pour les afficher dans cette liste de contacts
 			$.each(data, function(key, val){
 				// on détermine le sexe à afficher
-				if (val.contact_sexe == 'M') {
+				if (val.sexe == 'H') {
 					var sexe = 'homme';
 				}
 				else if (val.contact_sexe == 'F') {
@@ -85,24 +85,24 @@ function majListing( action ) {
 					var sexe = 'isexe';
 				}
 				
-				$('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.contact_md5 + '" class="nostyle contact-' + val.contact_id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span> - <span class="ville"></span></p></li></a>');
+				$('.resultatTri').append('<a href="index.php?page=contact&contact=' + val.id + '" class="nostyle contact-' + val.id + '"><li class="contact ' + sexe + '"><strong></strong><p><span class="age"></span> - <span class="ville"></span></p></li></a>');
 				
 				// On ajoute demande le nom de la fiche
 				var nom;
-				if (val.nom_affichage.length == 0) {
+				if (val.nom.length == 0) {
 					if (val.contact_organisme.length == 0) {
 						nom = 'Contact sans nom';
 					} else {
-						nom = val.contact_organisme;
+						nom = val.organisme;
 					}
 				} else {
-					nom = val.nom_affichage;
+					nom = val.nom + ' ' + val.nom_usage + ' ' + val.prenoms;
 				}
 				
 				// On affecte les données aux balises HTML
-				$('.resultatTri .contact-' + val.contact_id + ' li strong').html(nom);
-				$('.resultatTri .contact-' + val.contact_id + ' li p .age').html(val.age);
-				$('.resultatTri .contact-' + val.contact_id + ' li p .ville').html(val.ville);
+				$('.resultatTri .contact-' + val.id + ' li strong').html(nom);
+				$('.resultatTri .contact-' + val.id + ' li p .age').html(val.age);
+				$('.resultatTri .contact-' + val.id + ' li p .ville').html(val.ville);
 			});
 			
 			// On ajoute le bouton permettant d'afficher les 5 fiches suivantes
@@ -329,9 +329,9 @@ var rappels = function() {
 			// On fait la boucle de tous les éléments trouvés et on les affiche
 			$.each(data, function(key, val) {
 				// Pour chaque bureau, on créé une puce
-				$('.listeDesBureaux').append('<li class="bureau-' + val.bureau_id + '"><span class="bureau-nom"></span><span class="bureau-ville"></span><button class="choisirBureau" data-bureau="' + val.bureau_id + '" data-numero="' + val.bureau_numero + '">Choisir</button></li>');
-				$('.bureau-' + val.bureau_id + ' .bureau-nom').html('Bureau ' + val.bureau_numero + ' ' + val.bureau_nom);
-				$('.bureau-' + val.bureau_id + ' .bureau-ville').html(val.commune_nom + ' (' + val.departement_id + ')');
+				$('.listeDesBureaux').append('<li class="bureau-' + val.id + '"><span class="bureau-nom"></span><span class="bureau-ville"></span><button class="choisirBureau" data-bureau="' + val.id + '" data-numero="' + val.number + '">Choisir</button></li>');
+				$('.bureau-' + val.id + ' .bureau-nom').html('Bureau ' + val.number + ' ' + val.name);
+				$('.bureau-' + val.id + ' .bureau-ville').html(val.city);
 			});
 		});
 	});
@@ -353,9 +353,9 @@ var rappels = function() {
 				// On fait la boucle de tous les éléments trouvés et on les affiche
 				$.each(data, function(key, val) {
 					// Pour chaque rue, on créé une puce
-					$('.listeDesRues').append('<li class="rue-' + val.rue_id + '"><span class="rue-nom"></span><span class="rue-ville"></span><button class="choisirRue" data-rue="' + val.rue_id + '" data-nom="' + val.rue_nom + '">Choisir</button></li>');
-					$('.rue-' + val.rue_id + ' .rue-nom').html(val.rue_nom);
-					$('.rue-' + val.rue_id + ' .rue-ville').html(val.commune_nom + ' (' + val.departement_id + ')');
+					$('.listeDesRues').append('<li class="rue-' + val.id + '"><span class="rue-nom"></span><span class="rue-ville"></span><button class="choisirRue" data-rue="' + val.id + '" data-nom="' + val.street + '">Choisir</button></li>');
+					$('.rue-' + val.id + ' .rue-nom').html(val.street);
+					$('.rue-' + val.id + ' .rue-ville').html(val.city_name);
 				});
 			});
 		} else {
@@ -380,9 +380,9 @@ var rappels = function() {
 				// On fait la boucle de tous les éléments trouvés et on les affiche
 				$.each(data, function(key, val) {
 					// Pour chaque rue, on créé une puce
-					$('.listeDesVilles').append('<li class="ville-' + val.commune_id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.commune_id + '" data-nom="' + val.commune_nom + '">Choisir</button></li>');
-					$('.ville-' + val.commune_id + ' .ville-nom').html(val.commune_nom);
-					$('.ville-' + val.commune_id + ' .ville-dept').html(val.departement_nom);
+					$('.listeDesVilles').append('<li class="ville-' + val.id + '"><span class="ville-nom"></span><span class="ville-dept"></span><button class="choisirVille" data-ville="' + val.id + '" data-nom="' + val.city + '">Choisir</button></li>');
+					$('.ville-' + val.id + ' .ville-nom').html(val.city);
+					$('.ville-' + val.id + ' .ville-dept').html(val.country_name);
 				});
 			});
 		} else {
@@ -574,7 +574,7 @@ var rappels = function() {
 			'email': 0,
 			'mobile': 0,
 			'fixe': 0,
-			'phone': 2,
+			'phone': 1,
 			'electeur': 0,
 			'adresse': 0,
 			'criteres': ';' + $('#listeCriteresTri').val()

@@ -33,10 +33,10 @@
         
         <?php if ($rues) : ?>
         <ul class="form-liste" id="listeDesRues">
-            <?php foreach ($rues as $rue) : $stats = $data->statistique_rue($rue['rue_id']); ?>
+            <?php foreach ($rues as $rue) : $stats = $data->statistique_rue($rue['id']); ?>
         	<li>
-        		<?php if ($stats['proportion'] < 100) { ?><a href="<?php Core::tpl_go_to('reporting', array('mission' => $data->get('mission_hash'), 'rue' => $rue['rue_id'])); ?>" class="nostyle"><button class="voirRue gris">Voir la fiche</button></a><?php } ?>
-        		<span><?php echo $rue['rue_nom']; ?></span>
+        		<?php if ($stats['proportion'] < 100) { ?><a href="<?php Core::tpl_go_to('reporting', array('mission' => $data->get('mission_hash'), 'rue' => $rue['id'])); ?>" class="nostyle"><button class="voirRue gris">Voir la fiche</button></a><?php } ?>
+        		<span><?php echo $rue['street']; ?></span>
         		<?php if ($stats && $stats['proportion']) : ?>
             		<span>Réalisée à <?php echo $stats['proportion']; ?>&nbsp;%</span>
         		<?php elseif ($stats) : ?>
