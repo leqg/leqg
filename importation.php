@@ -85,7 +85,7 @@ foreach ($contacts as $contact) {
         }
         
         if (!empty($adresse['rue'])) {
-            $streets = Maps::street_search($adresse['rue'] $address['city']);
+            $streets = Maps::street_search($adresse['rue'], $address['city']);
             if (count($streets)) {
                 $address['street'] = $streets[0]['id'];
             } else {
