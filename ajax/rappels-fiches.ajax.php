@@ -14,8 +14,8 @@
 		// On récupère les informations sur les fiches
 		$fiches = array();
 		foreach ($contacts as $contact) {
-			$fiche = new Contact(md5($contact['contact_id']));
-			$fiches[$fiche->get('contact_id')] = $fiche->donnees();
+			$fiche = new People($contact['contact_id']);
+			$fiches[$fiche->get('contact_id')] = $fiche->data();
 		}
 		
 		// On retourne toutes les informations sur les fiches trouvées
