@@ -64,6 +64,9 @@ class People
         
         // age calculator
         $this->_people['age'] = $this->display_age();
+        
+        // display name
+        $this->_people['nom_complet'] = $this->display_name();
     }
     
     

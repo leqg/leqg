@@ -23,9 +23,9 @@ foreach ($contacts as $contact) {
     
     // Traitement du nom
     $prenoms = str_replace(',', '', $contact['PRENOMS']);
-    $person->update('nom', utf8_encode($contact['NOMFAM']));
-    $person->update('nom_usage', utf8_encode($contact['NOMUSA']));
-    $person->update('prenoms', utf8_encode($prenoms));
+    $person->update('nom', $contact['NOMFAM']);
+    $person->update('nom_usage', $contact['NOMUSA']);
+    $person->update('prenoms', $prenoms);
     
     // On calibre le fait qu'il s'agit d'un électeur
     $person->update('electeur', 1);
