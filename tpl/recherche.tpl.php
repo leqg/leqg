@@ -10,7 +10,7 @@
 	
 	// On effectue la recherche
 	$resultats = People::search($terme);
-
+	
 	// On regarde le nombre de réponses trouvées
 	$nombre = count($resultats);
 

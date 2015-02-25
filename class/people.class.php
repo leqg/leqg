@@ -667,10 +667,10 @@ class People
         $birthdate = DateTime::createFromFormat('d/m/Y', $search);
         
         if ($birthdate) {
-            $search = $date->format('Y-m-d');
+            $search = $birthdate->format('Y-m-d');
             $query = Core::query('person-search-birthdate');
             $query->bindValue(':date', $search);
-            if (!$query->execute()) return false;
+            $query->execute();
             return $query->fetchAll(PDO::FETCH_ASSOC);
             
         } else {
