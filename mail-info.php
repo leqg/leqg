@@ -22,6 +22,7 @@ $infos = $query->fetch(PDO::FETCH_ASSOC);
 <head>
     <meta charset="utf8">
     <title>Newsletter Philip Cordery</title>
+    <link rel="stylesheet" media="all" href="assets/css/mail.css">
 </head>
 <body>
     <h1>Newsletter Philip Cordery</h1>
@@ -57,5 +58,7 @@ $infos = $query->fetch(PDO::FETCH_ASSOC);
             </li>
         </ul>
     </form>
+    
+    <a href="http://preprod.leqg.info/" class="back">Retour au site internet Philip Cordery</a>
 </body>
 </html>
