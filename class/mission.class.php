@@ -379,7 +379,7 @@ class Mission {
             }
             
             // On tri le tableau selon rue_nom
-            Core::triMultidimentionnel($rues, 'street');
+            //Core::triMultidimentionnel($rues, 'street');
             
             return $rues;
         }
