@@ -114,11 +114,25 @@ foreach ($contacts as $contact) {
     if (!empty($contact['Téléphone2domicile'])) $person->contact_details_add($contact['Téléphone2domicile'], 'fixe');
     if (!empty($contact['Télmobile'])) $person->contact_details_add($contact['Télmobile'], 'mobile');
 
-    if (!empty($contact['Adressedemessagerie'])) $person->contact_details_add($contact['Adressedemessagerie']);
-    if (!empty($contact['Adressedemessagerie2'])) $person->contact_details_add($contact['Adressedemessagerie2']);
-    if (!empty($contact['Adressedemessagerie3'])) $person->contact_details_add($contact['Adressedemessagerie3']);
+    if (!empty($contact['Adressedemessagerie'])) $person->contact_details_add($contact['Adressedemessagerie'], 'email');
+    if (!empty($contact['Adressedemessagerie2'])) $person->contact_details_add($contact['Adressedemessagerie2'], 'email');
+    if (!empty($contact['Adressedemessagerie3'])) $person->contact_details_add($contact['Adressedemessagerie3'], 'email');
 
-    Core::debug($search, false);
+
+    $person->tag_add('contacts');
+
     
-    Core::debug($contact);
+    $query = $link->prepare('DELETE FROM `TABLE 47` WHERE `id` = :id');
+    $query->bindValue(':id', $contact['id'], PDO::PARAM_INT);
+    $query->execute();
 }
+
+$query = $link->query('SELECT COUNT(*) FROM `TABLE 47`');
+$nb = $query->fetch(PDO::FETCH_NUM);
+if ($nb[0]) :
+?>
+<script>
+    var url = 'importation.php';
+    document.location.href = url;
+</script>
+<?php else: echo 'Fini!'; endif; ?>
