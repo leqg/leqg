@@ -44,7 +44,7 @@ $infos = $query->fetch(PDO::FETCH_ASSOC);
             </li>
             <li>
                 <label for="nom">Email</label>
-                <input type="text" name="email" value="<?php echo $infos['email']; ?>">
+                <input type="text" name="newemail" value="<?php echo $infos['email']; ?>">
             </li>
             <li>
                 <input type="submit" value="Valider">
