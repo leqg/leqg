@@ -4,7 +4,7 @@ require_once('includes.php');
 $link = Configuration::read('db.link');
 
 $query = $link->prepare('
-    SELECT      `coordonnee_id` AS `id`
+    SELECT      `contact_id` AS `id`
     FROM        `coordonnees`
     WHERE       MD5(`coordonnee_email`) = :email
     LIMIT       0, 1
