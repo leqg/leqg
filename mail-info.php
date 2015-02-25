@@ -32,6 +32,12 @@ $infos = $query->fetch(PDO::FETCH_ASSOC);
     </div>
     <?php endif; ?>
     
+    <?php if (isset($_GET['action']) && $_GET['action'] == 'modification') : ?>
+    <div class="alerte">
+        Modification réussie.
+    </div>
+    <?php endif; ?>
+    
     <form action="mail-update.php?email=<?php echo $_GET['email']; ?>" method="post">
         <ul class="formulaire">
             <li>

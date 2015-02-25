@@ -12,7 +12,7 @@ $query = $link->prepare('
 $query->bindValue(':email', $_GET['email']);
 $query->execute();
 $infos = $query->fetch(PDO::FETCH_ASSOC);
-Core::debug($infos);
+
 $person = new People($infos['id']);
 $person->update('nom', $_POST['nom']);
 $person->update('prenoms', $_POST['prenom']);
@@ -26,4 +26,4 @@ $query->bindValue(':email', $_POST['newemail']);
 $query->bindValue(':id', $_GET['email']);
 $query->execute();
 
-header('Location: http://cordery.leqg.info/mail-info.php?email='.md5($_POST['newemail']));
+header('Location: http://cordery.leqg.info/mail-info.php?email='.md5($_POST['newemail']).'&action=modification');
