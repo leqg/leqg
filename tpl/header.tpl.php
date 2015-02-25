@@ -39,7 +39,7 @@
 			if (User::auth_level() >= 5) :
 				$menu = array(  'contacts' => 'Contacts',
 								'dossier' => 'Dossiers',
-								'carto' => 'Cartographie',
+							/*	'carto' => 'Cartographie',*/
 								'sms' => 'SMS groupés',
 								'email' => 'Emails groupés',
 								'publi' => 'Publipostage',
