@@ -634,7 +634,7 @@
 	var data = {
 		format: 'json',
 		email: 'tech@leqg.info',
-		country: 'France',
+		country: '<?php echo $postal['country']; ?>',
 		city: "<?php echo $postal['city']; ?>",
 		street: "<?php echo $postal['building'] . ' ' . $postal['street']; ?>"
 	}
@@ -655,7 +655,7 @@
 		// On ajoute un marker au milieu de la rue
 		L.marker([data.lat, data.lon], {
 			clicable: false,
-			title: "<?php echo $postal['building'] . ' ' . $postal['street']; ?>"
+			title: "<?php echo $postal['building'] . ' ' . $postal['street'] . ' ' . $postal['zipcode'] . ' ' . $postal['city'] . ' ' . $postal['country']; ?>"
 		}).addTo(map);
 	});
 </script>
