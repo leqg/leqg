@@ -93,7 +93,7 @@ Core::tpl_header();
             
             <form action="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'saveTemplate')); ?>" method="post">
                 <textarea class="templateEditor" id="templateEditor" name="templateEditor"><?php echo $data->get('template'); ?></textarea>
-                <script>CKEDITOR.replace( 'templateEditor' );</script>
+                <!--<script>CKEDITOR.replace( 'templateEditor' );</script>-->
                 <button class="vert clair" type="submit">Sauvegarder le template</button>
             </form>
         </section>
