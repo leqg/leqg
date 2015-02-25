@@ -66,7 +66,7 @@ foreach ($contacts as $contact) {
         
         if (!empty($adresse['ville'])) {
             $cities = Maps::city_search($adresse['ville']);
-            if (count($countries)) {
+            if (count($cities)) {
                 $address['city'] = $cities[0]['id'];
             } else {
                 $city = Maps::city_create($adresse['ville']);
