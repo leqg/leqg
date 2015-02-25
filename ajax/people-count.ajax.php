@@ -3,12 +3,13 @@
 if (isset($_GET)) {
 	// On retraite sous forme d'un tableau les données envoyées par le formulaire
 	$tri = array(
-		'email' => $_GET['email'],
-		'mobile' => $_GET['mobile'],
-		'fixe' => $_GET['fixe'],
-		'electeur' => $_GET['electeur'],
-		'adresse' => $_GET['adresse'],
-		'criteres' => trim($_GET['criteres'], ';')
+		'email' => (isset($_GET['email'])) ? $_GET['email'] : '',
+		'mobile' => (isset($_GET['mobile'])) ? $_GET['mobile'] : '',
+		'fixe' => (isset($_GET['fixe'])) ? $_GET['fixe'] : '',
+		'phone' => (isset($_GET['phone'])) ? $_GET['phone'] : '',
+		'electeur' => (isset($_GET['electeur'])) ? $_GET['electeur'] : '',
+		'adresse' => (isset($_GET['adresse'])) ? $_GET['adresse'] : '',
+		'criteres' => (isset($_GET['criteres'])) ? trim($_GET['criteres'], ';') : ''
 	);
 	
 	// On charge les fiches correspondantes
