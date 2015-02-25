@@ -322,23 +322,25 @@ class People
      * Add a contact detail
      * 
      * @param   string  $detail     Contact detail to add
+     * @param   string  $type       Contact detail type
      * @result  void
      * */
-    public function contact_details_add($detail)
+    public function contact_details_add($detail, $type = null)
     {
         if (filter_var($detail, FILTER_VALIDATE_EMAIL)) {
             $query = Core::query('contact-details-add-email');
             $type = "email";
         } else {
-            $detail = preg_replace('#[^0-9]#', '', $detail);
-            $indicatif = substr($detail, 0, 2);
-            if ($indicatif == "06" && $indicatif == "07") {
-                $type = "mobile";
-            } else {
-                $type = "fixe";
-            }
             $query = Core::query('contact-details-add-phone');
+            
+            $detail = str_replace(' ', '', $detail);
+            $detail = str_replace('+', '00', $detail);
+            $detail = str_replace('.', '', $detail);
+            $detail = str_replace('/', '', $detail);
+            
+            if (is_null($type)) $type = "fixe";
         }
+
         $query->bindValue(':contact', $this->_people['id'], PDO::PARAM_INT);
         $query->bindValue(':type', $type);
         $query->bindValue(':detail', $detail);
