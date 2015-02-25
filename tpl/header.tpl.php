@@ -23,7 +23,7 @@
 	<?php /*if (isset($_GET['volet']) && $_GET['volet'] == 'template') { ?><script src="//cdn.ckeditor.com/4.4.7/full/ckeditor.js"></script><?php } */?>
     <?php if (isset($_GET['volet']) && $_GET['volet'] == 'template') { ?>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script>tinymce.init({selector:'templateEditor'});</script>
+    <script>tinymce.init({selector:'textarea'});</script>
     <?php } ?>
 </head>
 
