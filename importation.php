@@ -18,10 +18,14 @@ foreach ($contacts as $contact) {
         } else {
             $person = People::create();
             $person = new People($person);
+            $person->update('nom', $contact['Nom']);
+            $person->update('prenoms', $contact['Prénom']);
         }
     } else {
         $person = People::create();
         $person = new People($person);
+        $person->update('nom', $contact['Nom']);
+        $person->update('prenoms', $contact['Prénom']);
     }
     
     // On met à jour l'organisation si elle existe
