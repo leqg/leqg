@@ -26,6 +26,12 @@ $infos = $query->fetch(PDO::FETCH_ASSOC);
 <body>
     <h1>Newsletter Philip Cordery</h1>
     
+    <?php if (isset($_GET['action']) && $_GET['action'] == 'inscription') : ?>
+    <div class="alerte">
+        Inscription réussie à la lettre d'information
+    </div>
+    <?php endif; ?>
+    
     <form action="mail-update.php?email=<?php echo $_GET['email']; ?>" method="post">
         <ul class="formulaire">
             <li>
