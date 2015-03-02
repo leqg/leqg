@@ -213,58 +213,6 @@ class Campaign
                 return $nb;
                 break;
             
-            case 'emails':
-                $query = Core::query('campaign-recipients-list');
-                $query->bindValue(':campaign', $this->_campaign['id']);
-                $query->execute();
-                
-                if ($query->rowCount()) {
-                    $contacts = $query->fetchAll(PDO::FETCH_NUM);
-                } else {
-                    $contacts = false;
-                }
-                
-                if ($contacts) {
-                    $nb = 0;
-                    foreach ($contacts as $contact) {
-                        $query = Core::query('campaign-recipients-email-count');
-                        $query->bindValue(':contact', $contact[0]);
-                        $query->execute();
-                        $count = $query->fetch(PDO::FETCH_NUM);
-                        $nb = $nb + $count[0];
-                    }
-                    return $nb;
-                } else {
-                    return 0;
-                }
-                break;
-            
-            case 'mobile':
-                $query = Core::query('campaign-recipients-list');
-                $query->bindValue(':campaign', $this->_campaign['id']);
-                $query->execute();
-                
-                if ($query->rowCount()) {
-                    $contacts = $query->fetchAll(PDO::FETCH_NUM);
-                } else {
-                    $contacts = false;
-                }
-                
-                if ($contacts) {
-                    $nb = 0;
-                    foreach ($contacts as $contact) {
-                        $query = Core::query('campaign-recipients-mobile-count');
-                        $query->bindValue(':contact', $contact[0]);
-                        $query->execute();
-                        $count = $query->fetch(PDO::FETCH_NUM);
-                        $nb = $nb + $count[0];
-                    }
-                    return $nb;
-                } else {
-                    return 0;
-                }
-                break;
-            
             // if we asked the number of recipients
             default:
                 $query = Core::query('campaign-recipients-count');
@@ -282,12 +230,12 @@ class Campaign
      * */
     public function estimated_time()
     {
-        if (!isset($this->_campaign['count']['emails'])) {
-            $this->_campaign['count']['emails'] = $this->count('emails');
+        if (!isset($this->_campaign['count']['target'])) {
+            $this->_campaign['count']['target'] = $this->count('emails');
         }
         
         $hourlyQuota = Configuration::read('mail.quota');
-        $target = $this->_campaign['count']['emails'];
+        $target = $this->_campaign['count']['target'];
         $hoursNeeded = $target / $hourlyQuota;
         $result = array('months' => 0, 'weeks' => 0, 'days' => 0, 'hours' => 0);
 
@@ -329,17 +277,15 @@ class Campaign
         // stats array init
         $stats = array();
         
-        // number of recipients
-        $this->_campaign['count']['target'] = $this->count()[0];
-        
-        // number of emails
-        $this->_campaign['count']['emails'] = $this->count('emails');
-        
-        // sending time estimation
-        $this->_campaign['count']['time'] = $this->estimated_time();
-        
-        // number of send items
-        $this->_campaign['count']['items'] = $this->count('items');
+        if ($this->_campaign['status'] == 'open') {
+            // number of recipients
+            $this->_campaign['count']['target'] = $this->count()[0];
+            $this->_campaign['count']['time'] = $this->estimated_time();
+            
+        } else {
+            // number of send items
+            $this->_campaign['count']['items'] = $this->count('items');
+        }
     }
     
     
@@ -362,7 +308,7 @@ class Campaign
             if ($time['weeks'] == 1) $display[] = $time['weeks'] . ' semaine';
             if ($time['days'] > 1) $display[] = $time['days'] . ' jours';
             if ($time['days'] == 1) $display[] = $time['days'] . ' jour';
-            if ($time['hours'] > 1) $display[] = $time['hours'] . ' heures';
+            if ($time['hours'] > 1) $display[] = round($time['hours']) . ' heures';
             if ($time['hours'] == 1) $display[] = $time['hours'] . ' heure';
             
             $display = implode(', ', $display);
@@ -681,7 +627,7 @@ class Campaign
     {
         switch ($this->_campaign['type']) {
             case 'email':
-                $nombre = $this->count('emails');
+                $nombre = $this->_campaign['count']['target'];
                 $pricePerThousand = Configuration::read('price.email');
                 $price = $pricePerThousand/1000;
                 $cost = $price * $nombre;

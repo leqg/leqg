@@ -231,7 +231,7 @@ Core::tpl_header();
                 <?php if ($data->get('type') == 'email' && $data->get('status') == 'open') : ?>
                 <li class="utilisateurs inscrit">
                     <span>Ciblage de la campagne</span>
-                    <span><strong><?php echo number_format($data->get('count')['target'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['target'] > 1) ? 's' : ''; ?> / <?php echo $data->get('count')['emails']; ?> email<?php echo ($data->get('count')['emails'] > 1) ? 's' : ''; ?></span>
+                    <span><strong><?php echo number_format($data->get('count')['target'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['target'] > 1) ? 's' : ''; ?></span>
                 </li>
                 <li class="date">
                     <span>Temps estimé pour l'envoi</span>
