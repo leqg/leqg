@@ -533,9 +533,6 @@ var contacts = function() {
             'criteres': ';' + $('#listeCriteresTri').val()
         };
         
-        // On ferme la colonne
-        $('.droite section').hide();
-        
         // On effectue l'estimation du nombre de fiches
         $.get('ajax.php?script=campagne-nouveau-email', data, function (data) {
         	    var url = 'index.php?page=campagne&id=' + data;
