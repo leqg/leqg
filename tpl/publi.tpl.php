@@ -22,12 +22,12 @@
 				</li>
 				<?php endforeach; ?>
 			</ul>
-			<a href="index.php?page=contacts" class="nostyle"><button>Lancer une nouvelle campagne</button></a>
+			<a href="index.php?page=contacts" class="nostyle"><button>Lancer un tri pour démarrer une campagne</button></a>
 		</section>
 	<?php else : ?>
 		<section class="icone" id="aucuneMission">
 			<h3>Aucune campagne lancée actuellement !</h3>
-			<a href="index.php?page=contacts" class="nostyle"><button>Lancer une nouvelle campagne</button></a>
+			<a href="index.php?page=contacts" class="nostyle"><button>Lancer un tri pour démarrer une campagne</button></a>
 		</section>
 	<?php endif; ?>
 	
