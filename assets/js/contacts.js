@@ -4,6 +4,9 @@ var contacts = function() {
         // On prépare le tableau des données à envoyer
         var data = [];
         
+        $('.droite section').hide();
+        $('.chargementEnCours').fadeIn();
+        
         // On commence par supprimer un possible bouton d'affichage de la suite pour éviter les interférences
         $('.afficherSuite').html('chargement…');
         $('.afficherSuite').attr('disabled', 'disabled');
@@ -493,6 +496,10 @@ var contacts = function() {
     
     // Script d'envoi en masse d'une campagne SMS
     $('.smsValidationCampagne').click(function() {
+                
+        $('.droite section').hide();
+        $('.creationEnCours').fadeIn();
+
         // On récupère les données
         var data = {
             'email': $('#coordonnees-email').val(),
@@ -513,6 +520,10 @@ var contacts = function() {
     
     // Lancement d'une campagne Email
     $('.emailSelection').click(function() {
+                
+        $('.droite section').hide();
+        $('.creationEnCours').fadeIn();
+
         // On récupère les données
         var data = {
             'email': 1,
