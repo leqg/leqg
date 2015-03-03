@@ -126,14 +126,23 @@ class Campaign
     /**
      * Recipients list
      * 
+     * @param   int     $first      Première ligne appelée
      * @result  array
      * */
-    public function recipients()
+    public function recipients($first = null)
     {
         if ($this->_campaign['status'] == 'open') {
-            $query = Core::query('campaign-recipients-list');
-            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
-            $query->execute();
+            if (is_null($first)) {
+                $query = Core::query('campaign-recipients-list');
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->execute();
+            } else {
+                $query = file_get_contents('sql/campaign-recipients-list-limited.sql');
+                $query = str_replace(':first', $first, $query);
+                $query = Configuration::read('db.link')->prepare($query);
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->execute();
+            }
             $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
             $recipients = array();
             

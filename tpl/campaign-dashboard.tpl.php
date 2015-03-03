@@ -123,7 +123,21 @@ Core::tpl_header();
         <section class="contenu">
             <h4>Liste des destinataires</h4>
             
-            <?php $destinataires = $data->recipients(); ?>
+            <?php 
+                if (isset($_GET['first'])) {
+                    $destinataires = $data->recipients($_GET['first']);
+                    $suivant = $_GET['first'] + 10;
+                    if ($_GET['first'] > 10) {
+                        $precedent = $_GET['first'] - 10;
+                    } else {
+                        $precedent = 0;
+                    }
+                } else {
+                    $destinataires = $data->recipients(0);
+                    $suivant = 10;
+                    $precedent = null;
+                }
+            ?>
             <table class="listeDestinataires">
                 <thead>
                     <tr>
@@ -142,6 +156,9 @@ Core::tpl_header();
                 </tbody>
                 <?php endforeach; ?>
             </table>
+            <?php if (count($destinataires)) : ?>
+            <a class="pagination-rapide" style="text-align: center; display: block;" href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'first' => $suivant)); ?>">Contacts suivants</a>
+            <?php endif; ?>
             <?php if ($data->get('status') == 'send') { ?><a class="nostyle" href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'operation' => 'updateTracking')); ?>"><button class="vert clair">Mettre à jour</button></a><?php } ?>
         </section>
     </div>
