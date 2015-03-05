@@ -11,8 +11,6 @@ foreach ($contacts as $contact) {
     $person = People::create();
     $person = new People($person);
     
-    Core::debug($contact, false);
-    
     // Traitement du bureau de vote
     $polls = Maps::poll_search($contact['LIB_BUREAU_DE_VOTE']);
     if (count($polls)) {
