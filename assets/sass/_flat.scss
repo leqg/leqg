@@ -1916,3 +1916,8 @@ input[type='submit'].flat {
 	&.jaune { background-color: darken($orange, 15%); }
 	&.jaune:hover { background-color: $orange; }
 }
+
+.redactor-box {
+    margin: 0 auto !important;
+    width: 760px !important;
+}

@@ -21,8 +21,8 @@
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
 	<?php if (isset($_GET['volet']) && $_GET['volet'] == 'template') { ?>
-        <link rel="stylesheet" href="redactor/redactor.css" />
-        <script src="redactor/redactor.min.js"></script>
+        <link rel="stylesheet" href="api/redactor/redactor.css" />
+        <script src="api/redactor/redactor.min.js"></script>
         
         <script type="text/javascript">
             $(function() {
