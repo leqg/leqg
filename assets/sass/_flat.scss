@@ -138,68 +138,6 @@ main.dossier {
 		padding: 0 1em 0 0;
 	}
 	
-	button,
-	input[type='submit'].flat {
-		display: block;
-		background-color: darken($vert, 10%);
-		border: none;
-		@include shadow(0, 2px, 0, $grisClair);
-		color: $blanc;
-		font-family: $flat;
-		font-size: 1.15em;
-		font-variant: small-caps;
-		margin: 1.66em auto;
-		padding: .66em 1.5em;
-		text-transform: lowercase;
-		@include transition(all);
-		
-		&:hover { background-color: $vert; }
-		&.gris { background-color: $gris; }
-		&.gris:hover { background-color: $grisMoyen; }
-		
-		&.long { width: 100%; }
-		
-		&.clair {
-			background-color: $grisClair;
-			color: $grisFonce;
-			font-weight: 600;
-			
-			&:hover {
-				background-color: $vert;
-				color: $blanc;
-			}
-		}
-		
-		&.deleting
-		{
-			background-color: $grisClair;
-			color: $rouge;
-			font-weight: 600;
-			margin-top: 3em;
-			
-			&:hover {
-				background-color: $rouge;
-				color: $blanc;
-			}
-		}
-		
-		&.new
-		{
-			background-color: $grisClair;
-			color: darken($vert, 15%);
-			font-weight: 600;
-			
-			&:hover
-			{
-				background-color: $vert;
-				color: $blanc;
-			}
-		}
-		
-		&.jaune { background-color: darken($orange, 15%); }
-		&.jaune:hover { background-color: $orange; }
-	}
-	
 	h2 {
 		color: $grisFonce;
 		font-family: $flat;
@@ -1915,4 +1853,66 @@ nav.onglets {
         	border-collapse: collapse;
         	border-spacing: 0;
     }
+}
+	
+button,
+input[type='submit'].flat {
+	display: block;
+	background-color: darken($vert, 10%);
+	border: none;
+	@include shadow(0, 2px, 0, $grisClair);
+	color: $blanc;
+	font-family: $flat;
+	font-size: 1.15em;
+	font-variant: small-caps;
+	margin: 1.66em auto;
+	padding: .66em 1.5em;
+	text-transform: lowercase;
+	@include transition(all);
+	
+	&:hover { background-color: $vert; }
+	&.gris { background-color: $gris; }
+	&.gris:hover { background-color: $grisMoyen; }
+	
+	&.long { width: 100%; }
+	
+	&.clair {
+		background-color: $grisClair;
+		color: $grisFonce;
+		font-weight: 600;
+		
+		&:hover {
+			background-color: $vert;
+			color: $blanc;
+		}
+	}
+	
+	&.deleting
+	{
+		background-color: $grisClair;
+		color: $rouge;
+		font-weight: 600;
+		margin-top: 3em;
+		
+		&:hover {
+			background-color: $rouge;
+			color: $blanc;
+		}
+	}
+	
+	&.new
+	{
+		background-color: $grisClair;
+		color: darken($vert, 15%);
+		font-weight: 600;
+		
+		&:hover
+		{
+			background-color: $vert;
+			color: $blanc;
+		}
+	}
+	
+	&.jaune { background-color: darken($orange, 15%); }
+	&.jaune:hover { background-color: $orange; }
 }

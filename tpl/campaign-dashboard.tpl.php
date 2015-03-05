@@ -233,7 +233,7 @@ Core::tpl_header();
                 </li>
                 <li class="courrier">
                     <span>Statut de la campagne</span>
-                    <span><?php echo Campaign::display_status($data->get('status')); ?></span>
+                    <span><?php echo ucfirst(Campaign::display_status($data->get('status'))); ?></span>
                 </li>
                 <li class="responsable">
                     <span>Créateur</span>
