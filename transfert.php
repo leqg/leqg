@@ -3,7 +3,7 @@ require_once('includes.php');
 
 $link = Configuration::read('db.link');
 
-$query = $link->prepare('SELECT * FROM `imports` LIMIT 0, 50');
+$query = $link->prepare('SELECT * FROM `TABLE 46` LIMIT 0, 50');
 $query->execute();
 $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -11,6 +11,7 @@ foreach ($contacts as $contact) {
     $person = People::create();
     $person = new People($person);
     
+    Core::debug($contact, false);
     
     // Traitement du bureau de vote
     $polls = Maps::poll_search($contact['LIB_BUREAU_DE_VOTE']);
@@ -20,7 +21,6 @@ foreach ($contacts as $contact) {
         $poll = Maps::poll_create($contact['CODE_BUREAU_VOTE'], $contact['LIB_BUREAU_DE_VOTE']);
         $person->update('bureau', $poll);
     }
-    
     
     // Traitement du nom
     $prenoms = str_replace(',', '', $contact['PRENOMS']);
@@ -34,80 +34,133 @@ foreach ($contacts as $contact) {
 
     // Traitement de la naissance
     $date_naissance = DateTime::createFromFormat('Ymd', $contact['DATNAI']);
-    $person->update('date_naissance', $date_naissance->format('Y-m-d'));
+    $person->update('date_naissance', $date_naissance->format('Y-m-d'));    
     
+    $adresse = array(
+        'pays' => '',
+        'ville' => '',
+        'zip' => '',
+        'street' => '',
+        'building' => ''
+    );
     
-    // Traitement de l'adresse postale
-    $address = array();
-    $cpville = explode(' ', $contact['ADR2']);
-    $cp = $cpville[0];
-    $ville = $cpville[1];
-    
-    $countries = Maps::country_search($contact['ADR3']);
-    if (count($countries)) {
-        $address['pays'] = $countries[0]['id'];
+    // On cherche le numéro
+    /*
+    if (!empty($contact['ADR2'])) {
+        $adresse['building'] = $contact['ADR2'];
+    } elseif (is_numeric(substr($contact['ADR1'], 0, 1))) {
+        $num_rue = explode(' ', $contact['ADR1']);
+        $adresse['building'] = $num_rue[0];
+        unset($num_rue[0]);
+        $adresse['street'] = implode(' ', $num_rue);
+    } elseif (is_numeric(substr($contact['ADR1'], -1, 1))) {
+        $num_rue = explode(' ', $contact['ADR1']);
+        $adresse['building'] = $num_rue[count($num_rue)-1];
+        unset($num_rue[count($num_rue)-1]);
+        $adresse['street'] = implode(' ', $num_rue);
     } else {
-        $country = Maps::country_create($contact['ADR3']);
-        $address['pays'] = $country;
+        $adresse['street'] = $contact['ADR1'];
+        $adresse['building'] = null;
     }
-    
-    $countries = Maps::city_search($ville);
-    if (count($countries)) {
-        $address['ville'] = $countries[0]['id'];
+    */
+    if (is_numeric(substr($contact['ADR1'], 0, 1))) {
+        $num_rue = explode(' ', $contact['ADR1']);
+        $adresse['building'] = $num_rue[0];
+        unset($num_rue[0]);
+        $adresse['street'] = implode(' ', $num_rue);
+    } elseif (is_numeric(substr($contact['ADR1'], -1, 1))) {
+        $num_rue = explode(' ', $contact['ADR1']);
+        $adresse['building'] = $num_rue[count($num_rue)-1];
+        unset($num_rue[count($num_rue)-1]);
+        $adresse['street'] = implode(' ', $num_rue);
     } else {
-        $city = Maps::city_create($ville, $address['pays']);
-        $address['ville'] = $city;
+        $adresse['street'] = $contact['ADR1'];
+        $adresse['building'] = null;
     }
+
+    // On cherche le code postal
+    $cp_ville = explode(' ', $contact['ADR2']);
+    $adresse['zip'] = $cp_ville[0];
+    unset($cp_ville[0]);
+    $adresse['ville'] = implode(' ', $cp_ville);
+    $adresse['pays'] = $contact['ADR3'];
     
-    $zipcodes = Maps::zipcode_search($cp);
-    if (count($zipcodes)) {
-        $address['zip'] = $zipcodes[0]['id'];
-    } else {
-        $zipcode = Maps::zipcode_new($cp, $address['ville']);
-        $address['zip'] = $zipcode;
-    }
+    if (empty($adresse['pays'])) $adresse['pays'] = null;
+    if (empty($adresse['ville'])) $adresse['ville'] = null;
+    if (empty($adresse['zip'])) $adresse['zip'] = null;
+    if (empty($adresse['street'])) $adresse['street'] = null;
+    if (empty($adresse['building'])) $adresse['building'] = null;
     
-    $adresse1 = $contact['ADR1'];
-    $first = substr($adresse1, 0, 1);
-    $last = substr($adresse1, -1, 1);
+    $address = array(
+        'pays' => '',
+        'ville' => '',
+        'zip' => '',
+        'street' => '',
+        'building' => ''
+    );
     
-    if (is_numeric($first)) {
-        $_address = explode(' ', $adresse1);
-        $immeuble = $_address[0];
-        unset($_address[0]);
-        $rue = implode(' ', $_address);
-    } elseif (is_numeric($last)) {
-        $_address = explode(' ', $adresse1);
-        $count = count($_address);
-        $immeuble = $_address[$count - 1];
-        unset($_address[$count - 1]);
-        $rue = implode(' ', $_address);
-    } else {
-        $rue = $address1;
-        $immeuble = null;
-    }
-    
-    $streets = Maps::street_search($rue, $address['ville']);
-    if (count($streets)) {
-        $address['street'] = $streets[0]['id'];
-    } else {
-        $street = Maps::street_create($rue, $address['ville']);
-        $address['street'] = $street;
-    }
-    
-    if (!is_null($immeuble)) {
-        $buildings = Maps::building_search($immeuble, $address['street']);
-        if (count($buildings)) {
-            $address['building'] = $buildings[0]['id'];
+    if (!is_null($adresse['pays'])) {
+        $countries = Maps::country_search($adresse['pays']);
+        if (count($countries)) {
+            $address['pays'] = $countries[0]['id'];
         } else {
-            $building = Maps::building_new($immeuble, $address['street']);
+            $country = Maps::country_create($adresse['pays']);
+            $address['pays'] = $country;
+        }
+    } else {
+        $address['pays'] = null;
+    }
+    
+    if (!is_null($adresse['ville'])) {
+        $city = Maps::city_search($adresse['ville'], $address['pays']);
+        if (count($city)) {
+            $address['ville'] = $city[0]['id'];
+        } else {
+            $city = Maps::city_create($adresse['ville'], $address['pays']);
+            $address['ville'] = $city;
+        }
+    } else {
+        $address['ville'] = null;
+    }
+    
+    if (!is_null($adresse['zip'])) {
+        $zipcode = Maps::zipcode_search($adresse['zip'], $address['ville']);
+        if (count($zipcode)) {
+            $address['zip'] = $zipcode[0]['id'];
+        } else {
+            $zipcode = Maps::zipcode_new($adresse['zip'], $address['ville']);
+            $address['zip'] = $zipcode;
+        }
+    } else {
+        $address['zip'] = null;
+    }
+    
+    if (!is_null($adresse['street'])) {
+        $street = Maps::street_search($adresse['street'], $address['ville']);
+        if (count($street)) {
+            $address['street'] = $street[0]['id'];
+        } else {
+            $street = Maps::street_create($adresse['street'], $address['ville']);
+            $address['street'] = $street;
+        }
+    } else {
+        $address['street'] = null;
+    }
+    
+    if (!is_null($adresse['building'])) {
+        $building = Maps::building_search($adresse['building'], $address['street']);
+        if (count($building)) {
+            $address['building'] = $building[0]['id'];
+        } else {
+            $building = Maps::building_new($adresse['building'], $address['street']);
             $address['building'] = $building;
         }
+    } else {
+        $address['building'] = null;
     }
     
     // On lance la création de l'adresse
     Maps::address_new($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'officiel');
-
 
     // On lance la récupération de l'adresse email
     if (!empty($contact['MAIL'])) {
@@ -115,13 +168,12 @@ foreach ($contacts as $contact) {
     }
     
     $person->tag_add($contact['LIB_CENTRE_LEC']);
-    
-    $query = $link->prepare('DELETE FROM `imports` WHERE `id` = :id');
+    $query = $link->prepare('DELETE FROM `TABLE 46` WHERE `id` = :id');
     $query->bindValue(':id', $contact['id'], PDO::PARAM_INT);
     $query->execute();
 }
 
-$query = $link->query('SELECT COUNT(*) FROM `imports`');
+$query = $link->query('SELECT COUNT(*) FROM `TABLE 46`');
 $nb = $query->fetch(PDO::FETCH_NUM);
 if ($nb[0]) :
 ?>
