@@ -833,6 +833,12 @@ class Campaign
         $person = new People($data[0]);
         unset($data);
         
+        $mail = $campaign->get('mail');
+        $replace = array(
+            'mail-optout.php?test' => 'mail-optout.php?email='.md5($email)
+        );
+        $mail = strtr($mail, $replace);
+        
         $to = array(
             array(
                 'email' => $email,
@@ -842,7 +848,7 @@ class Campaign
         );
         
         $message = array(
-            'html' => $campaign->get('mail'),
+            'html' => $mail,
             'subject' => $campaign->get('objet'),
             'from_email' => Configuration::read('mail.sender.mail'),
             'from_name' => Configuration::read('mail.sender.name'),
