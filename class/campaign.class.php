@@ -440,7 +440,7 @@ class Campaign
         
         if (strstr($template, '{readonline}')) {
             $remplace = array(
-                '{readonline}' => '<a href="http://'.Configuration::read('url').'mail-view.php?'.md5($this->_campaign['id']).'" style="color: inherit; text-decoration: none;">',
+                '{readonline}' => '<a href="http://'.Configuration::read('url').'/mail-view.php?'.md5($this->_campaign['id']).'" style="color: inherit; text-decoration: none;">',
                 '{/readonline}' => '</a>'
             );
             $template = strtr($template, $remplace);
@@ -448,7 +448,7 @@ class Campaign
         
         if (strstr($template, '{unsubscribe}')) {
             $remplace = array(
-                '{unsubscribe}' => '<a href="http://'.Configuration::read('url').'mail-optout.php?test" style="color: inherit; text-decoration: none;">',
+                '{unsubscribe}' => '<a href="http://'.Configuration::read('url').'/mail-optout.php?test" style="color: inherit; text-decoration: none;">',
                 '{/unsubscribe}' => '</a>'
             );
             $template = strtr($template, $remplace);
