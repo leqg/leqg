@@ -294,6 +294,7 @@ class Campaign
         } else {
             // number of send items
             $this->_campaign['count']['items'] = $this->count('items');
+            $this->_campaign['count']['target'] = $this->_campaign['count']['items'];
         }
     }
     
@@ -483,39 +484,17 @@ class Campaign
         
         switch($this->_campaign['type']) {
             case 'email':
-                $mandrill = Configuration::read('mail');
-                	$emails = array();
-                
                 	$query = Core::query('contact-emails');
                 	foreach ($contacts as $contact) {
-                    	$c = new People($contact[0]);
-                    	$query->bindValue(':contact', $c->get('id'), PDO::PARAM_INT);
+                    	$query->bindValue(':contact', $contact[0], PDO::PARAM_INT);
                     	$query->execute();
                     	$_emails = $query->fetchAll(PDO::FETCH_NUM);
                     	foreach ($_emails as $_email) {
-                        	$emails[] = array(
-                            	'email' => $_email[0],
-                            	'name' => $c->display_name(),
-                            	'type' => 'bcc'
-                        	);
+                        	$this->tracking_new($_email[0]);
                     }
                 	}
                 	
-                	$message = array(
-                    	'html' => $this->_campaign['mail'],
-                    'subject' => $this->_campaign['objet'],
-                    'from_email' => 'noreply@leqg.info',
-                    'from_name' => 'LeQG',
-                    'to' => $emails,
-                    'headers' => array('Reply-To' => 'tech@leqg.info'),
-                    'track_opens' => true,
-                    'auto_text' => true
-                	);
-                	$async = true;
-                	
-                	$result = $mandrill->messages->send($message, $async);
-                foreach ($result as $_element) $this->tracking($_element);
-                break;
+                	break;
             
             case 'sms':
                 	// On assure le démarrage du service
@@ -614,6 +593,31 @@ class Campaign
     
     
     /**
+     * Prepare a new email to go
+     * 
+     * @param   array   $email      Recipient's mail
+     * @result  void
+     * */
+    
+    public function tracking_new($email)
+    {
+        switch ($this->_campaign['type']) {
+            case 'email':
+                $query = Core::query('tracking-new');
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(':email', $email);
+                $query->execute();
+                break;
+                
+            case 'sms':
+            
+                break;
+        }
+    }
+
+    
+    
+    /**
      * Get errors informations
      * 
      * @result  array
@@ -653,7 +657,7 @@ class Campaign
     {
         switch ($this->_campaign['type']) {
             case 'email':
-                $nombre = $this->_campaign['count']['target'];
+                $nombre = $this->_campaign['count']['target']['all'];
                 $pricePerThousand = Configuration::read('price.email');
                 $price = $pricePerThousand/1000;
                 $cost = $price * $nombre;
@@ -809,6 +813,66 @@ class Campaign
     
     
     /**
+     * Email sending method
+     * 
+     * @param   int     $campaign   Campaign ID
+     * @param   string  $email      Recipient's email
+     * @result  void
+     * */
+    
+    public static function sending($campaign, $email)
+    {
+        // campaign data
+        $campaign = new Campaign($campaign);
+        
+        // recipient data
+        $query = Core::query('contact-by-email');
+        $query->bindValue(':coord', $email);
+        $query->execute();
+        $data = $query->fetch(PDO::FETCH_NUM);
+        $person = new People($data[0]);
+        unset($data);
+        
+        $to = array(
+            array(
+                'email' => $email,
+                'name' => $person->display_name(),
+                'type' => 'to'
+            )
+        );
+        
+        $message = array(
+            'html' => $campaign->get('mail'),
+            'subject' => $campaign->get('objet'),
+            'from_email' => Configuration::read('mail.sender.mail'),
+            'from_name' => Configuration::read('mail.sender.name'),
+            'headers' => array('Reply-To' => Configuration::read('mail.replyto')),
+            'to' => $to,
+            'track_opens' => true,
+            'auto_text' => true,
+            'subaccount' => Configuration::read('client')
+        );
+        $async = true;
+        
+        $mandrill = Configuration::read('mail');
+        
+        $result = $mandrill->messages->send($message, $async);
+        
+        // we parse mail sending result
+        $result = $result[0];
+        
+        // we save result data
+        $query = Core::query('tracking-update');
+        $query->bindValue(':campaign', $campaign->get('id'), PDO::PARAM_INT);
+        $query->bindValue(':email', $result['email']);
+        $query->bindValue(':id', $result['_id']);
+        $query->bindValue(':status', $result['status']);
+        $query->bindValue(':reject', $result['reject_reason']);
+        $query->execute();
+    }
+    
+    
+    /**
      * Tracking informations
      * 
      * @param   string  $track_id   Tracking ID
@@ -831,6 +895,10 @@ class Campaign
     public static function display_status($status)
     {
         switch ($status) {
+            case 'pending':
+                return 'dans la file d\'attente';
+                break;
+            
             case 'send':
                 return 'campagne lancée';
                 break;

@@ -83,6 +83,9 @@ Configuration::write('api', $api);
 Configuration::write('sms', $api['sms']['auth']);
 Configuration::write('mail', $mail);
 Configuration::write('mail.quota', $config['MAIL']['quota']);
+Configuration::write('mail.sender.mail', 'noreply@leqg.info');
+Configuration::write('mail.sender.name', 'SaaS LeQG.info');
+Configuration::write('mail.replyto', 'contact@leqg.info');
 Configuration::write('sms.sender', 'LeQG');
 
 // On inclut les classes non chargées
