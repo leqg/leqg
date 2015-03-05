@@ -355,11 +355,12 @@ class Campaign
     public function template_write($template)
     {
         $this->_campaign['template'] = $template;
-        $template = $this->template_parsing();
         $query = Core::query('campaign-template-update');
         $query->bindParam(':template', $template);
         $query->bindParam(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
         $query->execute();
+        
+        $this->template_parsing();
     }
     
     
@@ -435,6 +436,22 @@ class Campaign
             }
             
             $cur++;
+        }
+        
+        if (strstr($template, '{readonline}')) {
+            $remplace = array(
+                '{readonline}' => '<a href="http://'.Configuration::read('url').'mail-view.php?'.md5($this->_campaign['id']).'" style="color: inherit; text-decoration: none;">',
+                '{/readonline}' => '</a>'
+            );
+            $template = strtr($template, $remplace);
+        }
+        
+        if (strstr($template, '{unsubscribe}')) {
+            $remplace = array(
+                '{unsubscribe}' => '<a href="http://'.Configuration::read('url').'mail-optout.php?test" style="color: inherit; text-decoration: none;">',
+                '{/unsubscribe}' => '</a>'
+            );
+            $template = strtr($template, $remplace);
         }
 
         $this->_campaign['mail'] = $template;
