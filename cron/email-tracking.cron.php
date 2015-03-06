@@ -5,7 +5,7 @@ $mandrill = Configuration::read('mail');
 
 // on recherche tous les emails envoyés 
 $link = Configuration::read('db.link');
-$query = $link->prepare('SELECT * FROM `tracking` WHERE `status` NOT IN ("pending", "sent", "rejected") OR (`status` = "sent" AND `control` = 0) ORDER BY RAND() LIMIT 0, 150');
+$query = $link->prepare('SELECT * FROM `tracking` WHERE `status` NOT IN ("pending", "sent", "rejected") OR (`status` = "sent" AND `control` = 0) ORDER BY RAND() LIMIT 0, 300');
 $query->execute();
 $datas = $query->fetchAll(PDO::FETCH_ASSOC);
 
