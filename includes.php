@@ -74,19 +74,15 @@ $api['mail']['smtp']['host'] = $config['MAIL']['host'];
 $api['mail']['smtp']['user'] = $config['MAIL']['user'];
 $api['mail']['smtp']['pass'] = $config['MAIL']['pass'];
 $api['mail']['smtp']['port'] = $config['MAIL']['port'];
-$api['mail']['from']['email'] = 'no-reply@leqg.info';
-$api['mail']['from']['nom'] = 'Ne Pas Répondre';
-$api['mail']['reply']['email'] = 'serveur@leqg.info';
-$api['mail']['reply']['nom'] = 'LeQG';
 
 Configuration::write('api', $api);
 Configuration::write('sms', $api['sms']['auth']);
 Configuration::write('mail', $mail);
 Configuration::write('mail.quota', $config['MAIL']['quota']);
-Configuration::write('mail.sender.mail', 'noreply@leqg.info');
-Configuration::write('mail.sender.name', 'SaaS LeQG.info');
-Configuration::write('mail.replyto', 'contact@leqg.info');
-Configuration::write('sms.sender', 'LeQG');
+Configuration::write('mail.sender.mail', $config['SENDER']['mail']);
+Configuration::write('mail.sender.name', $config['SENDER']['name']);
+Configuration::write('mail.replyto', $config['SENDER']['reply']);
+Configuration::write('sms.sender', $config['SENDER']['name']);
 
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';
