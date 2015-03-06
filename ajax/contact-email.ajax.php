@@ -24,8 +24,8 @@
         	$message = array(
             	'html' => nl2br($_POST['message']),
             'subject' => $_POST['objet'],
-            'from_email' => 'noreply@leqg.info',
-            'from_name' => 'LeQG',
+            'from_email' => Configuration::read('mail.sender.mail'),
+            'from_name' => Configuration::read('mail.sender.name'),
             'to' => array(
                 array(
                     'email' => $adresse,
@@ -33,9 +33,10 @@
                     'type' => 'to'
                 )
             ),
-            'headers' => array('Reply-To' => 'webmaster@leqg.info'),
+            'headers' => array('Reply-To' => Configuration::read('mail.replyto')),
             'track_opens' => true,
-            'auto_text' => true
+            'auto_text' => true,
+            'subaccount' => Configuration::read('client')
         	);
         	// mode asynchrone d'envoi du mail
         	$async = true;
