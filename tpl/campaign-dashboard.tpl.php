@@ -190,19 +190,19 @@ Core::tpl_header();
             }
             ?>
             <div id="avancementMission"><!--
-             --><div class="npai" style="width: <?php echo pourcentage($nombre['scheduled'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;prévu<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['scheduled'], 0, ',', ' '); ?></span></div><!--
-             --><div class="ouvert" style="width: <?php echo pourcentage($nombre['sent'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;délivré<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['sent'], 0, ',', ' '); ?></span></div><!--
-             --><div class="procuration" style="width: <?php echo pourcentage($nombre['rejected'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;erreur&nbsp;:&nbsp;<?php echo number_format($nombre['rejected'], 0, ',', ' '); ?></span></div><!--
-             --><div class="contact" style="width: <?php echo pourcentage($nombre['invalid'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;invalide<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['invalid'], 0, ',', ' '); ?></span></div><!--
-             --><div class="absent" style="width: <?php echo pourcentage($nombre['togo'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['togo'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;cours&nbsp;:&nbsp;<?php echo number_format($nombre['togo'], 0, ',', ' '); ?></span></div><!--
+             --><div class="npai" style="width: <?php echo pourcentage($nombre['scheduled'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;prévu<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['scheduled'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="ouvert" style="width: <?php echo pourcentage($nombre['sent'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;délivré<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['sent'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="procuration" style="width: <?php echo pourcentage($nombre['rejected'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;erreur&nbsp;:&nbsp;<?php echo number_format($nombre['rejected'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="contact" style="width: <?php echo pourcentage($nombre['invalid'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;invalide<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['invalid'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="absent" style="width: <?php echo pourcentage($nombre['togo'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['togo'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;cours&nbsp;:&nbsp;<?php echo number_format($nombre['togo'], 0, ',', '&nbsp;'); ?></span></div><!--
          --></div>
          
             <ul class="statistiquesMission">
-                <?php if ($nombre['scheduled']) : ?><li><strong><?php echo number_format($nombre['scheduled'], 0, ',', ' '); ?></strong> élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?> planifié<?php if($nombre['scheduled'] > 1) { echo 's'; } ?></li><?php endif; ?>
-                <?php if ($nombre['sent']) : ?><li><strong><?php echo number_format($nombre['sent'], 0, ',', ' '); ?></strong> élément<?php if($nombre['sent'] > 1) { echo 's'; } ?> envoyé<?php if($nombre['sent'] > 1) { echo 's'; } ?> et reçu<?php if($nombre['sent'] > 1) { echo 's'; } ?></li><?php endif; ?>
-                <?php if ($nombre['rejected']) : ?><li><strong><?php echo number_format($nombre['rejected'], 0, ',', ' '); ?></strong> élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?> en erreur</li><?php endif; ?>
-                <?php if ($nombre['invalid']) : ?><li><strong><?php echo number_format($nombre['invalid'], 0, ',', ' '); ?></strong> élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?> invalides</li><?php endif; ?>
-                <?php if ($nombre['togo']) : ?><li><strong><?php echo number_format($nombre['togo'], 0, ',', ' '); ?></strong> élément<?php if($nombre['togo'] > 1) { echo 's'; } ?> en cours d'envoi</li><?php endif; ?>
+                <?php if ($nombre['scheduled']) : ?><li><strong><?php echo number_format($nombre['scheduled'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?> planifié<?php if($nombre['scheduled'] > 1) { echo 's'; } ?></li><?php endif; ?>
+                <?php if ($nombre['sent']) : ?><li><strong><?php echo number_format($nombre['sent'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['sent'] > 1) { echo 's'; } ?> envoyé<?php if($nombre['sent'] > 1) { echo 's'; } ?> et reçu<?php if($nombre['sent'] > 1) { echo 's'; } ?></li><?php endif; ?>
+                <?php if ($nombre['rejected']) : ?><li><strong><?php echo number_format($nombre['rejected'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?> en erreur</li><?php endif; ?>
+                <?php if ($nombre['invalid']) : ?><li><strong><?php echo number_format($nombre['invalid'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?> invalides</li><?php endif; ?>
+                <?php if ($nombre['togo']) : ?><li><strong><?php echo number_format($nombre['togo'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['togo'] > 1) { echo 's'; } ?> en cours d'envoi</li><?php endif; ?>
             </ul>
         </section>
     </div>
