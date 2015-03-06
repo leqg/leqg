@@ -674,18 +674,11 @@ class Campaign
         $errors = $query->fetchAll(PDO::FETCH_ASSOC);
         
         foreach ($errors as $key => $error) {
-            $infos = $mandrill->messages->info($error['id']);
-            $errors[$key]['error'] = $infos['reject']['reason'];
-            $errors[$key]['time'] = $infos['reject']['last_event_at'];
-            
             $query = Core::query('contact-by-email');
             $query->bindValue(':coord', $error['email']);
             $query->execute();
             $contact = $query->fetch(PDO::FETCH_NUM);
             $errors[$key]['contact'] = $contact[0];
-            
-            $contact = new People($contact[0]);
-            $errors[$key]['name'] = $contact->display_name();
         }
         
         return $errors;

@@ -215,11 +215,10 @@ Core::tpl_header();
             
             <ul class="statistiquesMission">
                 <?php foreach($erreurs as $erreur) : ?>
-                <li>
+                <li style="margin-bottom: 2em;">
                     <strong><?php echo $erreur['email']; ?></strong><br>
-                    <a href="<?php Core::tpl_go_to('contact', array('contact' => $erreur['contact'])); ?>" class="nostyle"><?php echo $erreur['name']; ?></a><br>
-                    <em>Erreur :</em> <?php echo $erreur['error']; ?><br>
-                    <em>Date :</em> <?php echo date('d/m/Y H\hi', strtotime($erreur['time'])); ?>
+                    <a href="<?php Core::tpl_go_to('contact', array('contact' => $erreur['contact'])); ?>" class="nostyle">Accéder à la fiche contact</a><br>
+                    <em>Erreur :</em> <?php echo $erreur['reject_reason']; ?><br>
                 </li>
                 <?php endforeach; ?>
             </ul>
