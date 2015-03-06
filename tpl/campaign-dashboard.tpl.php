@@ -98,7 +98,6 @@ Core::tpl_header();
             
             <form action="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'saveTemplate')); ?>" method="post">
                 <textarea class="templateEditor" id="templateEditor" name="templateEditor"><?php echo $data->get('template'); ?></textarea>
-                <script>CKEDITOR.replace( 'templateEditor' );</script>
                 <button class="vert clair" type="submit">Sauvegarder le template</button>
             </form>
         </section>
@@ -202,7 +201,8 @@ Core::tpl_header();
                 <?php if ($nombre['sent']) : ?><li><strong><?php echo number_format($nombre['sent'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['sent'] > 1) { echo 's'; } ?> envoyé<?php if($nombre['sent'] > 1) { echo 's'; } ?> et reçu<?php if($nombre['sent'] > 1) { echo 's'; } ?></li><?php endif; ?>
                 <?php if ($nombre['rejected']) : ?><li><strong><?php echo number_format($nombre['rejected'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?> en erreur</li><?php endif; ?>
                 <?php if ($nombre['invalid']) : ?><li><strong><?php echo number_format($nombre['invalid'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?> invalides</li><?php endif; ?>
-                <?php if ($nombre['togo']) : ?><li><strong><?php echo number_format($nombre['togo'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['togo'] > 1) { echo 's'; } ?> en cours d'envoi</li><?php endif; ?>
+                <?php if ($nombre['queued']) : ?><li><strong><?php echo number_format($nombre['queued'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['queued'] > 1) { echo 's'; } ?> dans la file d'attente</li><?php endif; ?>
+                <?php if ($nombre['pending']) : ?><li><strong><?php echo number_format($nombre['pending'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['pending'] > 1) { echo 's'; } ?> en préparation</li><?php endif; ?>
             </ul>
         </section>
     </div>
