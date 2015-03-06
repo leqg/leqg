@@ -13,9 +13,16 @@ $query = $link->prepare('UPDATE `tracking` SET `opens` = :opens, `status` = :sta
 
 foreach ($datas as $data) {
     $result = $mandrill->messages->info($data['id']);
-
+    
     $query->bindParam(':opens', $result['opens']);
     $query->bindParam(':status', $result['state']);
     $query->bindParam(':id', $result['_id']);
     $query->execute();
+    
+    if ($result['state'] == 'rejected') {
+        $query = $link->prepare('UPDATE `tracking` SET `reject_reason` = :reason WHERE `id` = :id');
+        $query->bindValue(':reason', $result['smtp_events'][0]['type']);
+        $query->bindValue(':id', $result['_id']);
+        $query->execute();
+    }
 }
