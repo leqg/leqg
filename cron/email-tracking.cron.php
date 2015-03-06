@@ -13,7 +13,7 @@ $query = $link->prepare('UPDATE `tracking` SET `opens` = :opens, `status` = :sta
 
 foreach ($datas as $data) {
     $result = $mandrill->messages->info($data['id']);
-    
+
     switch($result['state']) {
         case 'deferred':
             $result['state'] = 'queued';
@@ -31,13 +31,14 @@ foreach ($datas as $data) {
             $result['state'] = 'rejected';
             break;
     }
+
     $query->bindParam(':opens', $result['opens']);
     $query->bindParam(':status', $result['state']);
     $query->bindParam(':id', $result['_id']);
     $query->execute();
     
     if ($result['state'] == 'rejected') {
-        $query2 = $link->prepare('UPDATE `tracking` SET `status` = "reject", `reject_reason` = :reason, `reject_msg` = :msg WHERE `id` = :id');
+        $query2 = $link->prepare('UPDATE `tracking` SET `reject_reason` = :reason, `reject_msg` = :msg WHERE `id` = :id');
         $query2->bindValue(':reason', $result['bounce_description']);
         $query2->bindValue(':msg', $result['diag']);
         $query2->bindValue(':id', $result['_id']);
