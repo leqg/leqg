@@ -665,7 +665,11 @@ class Campaign
     {
         switch ($this->_campaign['type']) {
             case 'email':
-                $nombre = $this->_campaign['count']['target']['all'];
+                if ($this->_campaign['status'] == 'open') {
+                    $nombre = $this->_campaign['count']['target'];
+                } else {
+                    $nombre = $this->_campaign['count']['target']['all'];
+                }
                 $pricePerThousand = Configuration::read('price.email');
                 $price = $pricePerThousand/1000;
                 $cost = $price * $nombre;
