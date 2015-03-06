@@ -170,9 +170,17 @@ class Campaign
             return $recipients;
             
         } else {
-            $query = Core::query('campaign-recipients');
-            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
-            $query->execute();
+            if (is_null($first)) {
+                $query = Core::query('campaign-recipients');
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->execute();
+            } else {
+                $query = file_get_contents('sql/campaign-recipients-limited.sql');
+                $query = str_replace(':first', $first, $query);
+                $query = Configuration::read('db.link')->prepare($query);
+                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->execute();
+            }
             $recipients = $query->fetchAll(PDO::FETCH_ASSOC);
             
             foreach($recipients as $key => $recipient) {
