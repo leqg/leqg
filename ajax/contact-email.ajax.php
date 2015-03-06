@@ -15,7 +15,7 @@
         	$adresse = $adresse['coordonnee_email'];
         	
         	// On ouvre la fiche du contact concerné
-        	$contact = new contact(md5($_POST['contact']));
+        	$contact = new People($_POST['contact']);
         	
         	// On charge le système de mail
         	$mail = Configuration::read('mail');
@@ -29,7 +29,7 @@
             'to' => array(
                 array(
                     'email' => $adresse,
-                    'name' => $contact->noms(' ', ''),
+                    'name' => $contact->get('nom_complet'),
                     'type' => 'to'
                 )
             ),
@@ -51,6 +51,12 @@
         $query->bindValue(':email', $result[0]['email']);
         $query->bindValue(':status', $result[0]['status']);
         $query->execute();
+        
+        $event = Event::create($contact->get('id'));
+        $event = new Event($event);
+        $event->update('historique_type', 'courriel');
+        $event->update('historique_objet', $_POST['objet']);
+        $event->update('historique_notes', $_GET['message']);
     }
     else
     {

@@ -38,6 +38,11 @@ if (isset($_GET['operation'])) {
         case 'updateTracking':
             $data->tracking_update();
             break;
+        
+        case 'test':
+            $data->testing();
+            Core::tpl_go_to('campagne', array('id' => $_GET['id']), true);
+            break;
     }
 }
 
@@ -291,6 +296,11 @@ Core::tpl_header();
                 <p><?php if (empty($data->get('objet'))) : echo 'Aucun titre actuellement, ce titre est nécessaire pour l\'envoi.'; else: echo $data->get('objet'); endif; ?></p>
                 <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjet')); ?>" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
             <?php endif; ?>
+        </section>
+        <section class="contenu demi">
+            <a class="nostyle" href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'test')); ?>">
+                <button class="clair long" style="margin: .25em auto .15em;">Envoi d'un essai</button>
+            </a>
         </section>
         <?php elseif ($data->get('type') == 'sms') : ?>
         <section class="contenu demi">

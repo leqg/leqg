@@ -531,6 +531,41 @@ class Campaign
     
     
     /**
+     * Send a test email
+     * 
+     * @result void
+     * */
+    public function testing()
+    {
+        $mail = $this->get('mail');
+
+        $to = array(
+            array(
+                'email' => Configuration::read('mail.replyto'),
+                'name' => Configuration::read('mail.sender.name'),
+                'type' => 'to'
+            )
+        );
+        
+        $message = array(
+            'html' => $mail,
+            'subject' => '[LeQG – Mail test] '.$this->get('objet'),
+            'from_email' => Configuration::read('mail.sender.mail'),
+            'from_name' => Configuration::read('mail.sender.name'),
+            'headers' => array('Reply-To' => Configuration::read('mail.replyto')),
+            'to' => $to,
+            'track_opens' => true,
+            'auto_text' => true,
+            'subaccount' => Configuration::read('client')
+        );
+        $async = true;
+        
+        $mandrill = Configuration::read('mail');
+        $mandrill->messages->send($message, $async);    
+    }
+    
+    
+    /**
      * Launch an email tracking
      * 
      * @param   array   $result     Send email result
