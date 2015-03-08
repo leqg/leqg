@@ -3,7 +3,7 @@ require_once('includes.php');
 
 $link = Configuration::read('db.link');
 
-$query = $link->prepare('SELECT * FROM `TABLE 29` LIMIT 0, 50');
+$query = $link->prepare('SELECT * FROM `TABLE 30` LIMIT 0, 50');
 $query->execute();
 $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -129,15 +129,15 @@ foreach ($contacts as $contact) {
     Maps::address_new($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'reel');
     
     $person->contact_details_add($contact['MAIL']);
-    $person->tag_add('Député');
-    $person->tag_add($contact['GROUPE']);
+    $person->tag_add('Sénateur PS');
+    $person->tag_add($contact['REGION']);
     
-    $query = $link->prepare('DELETE FROM `TABLE 29` WHERE `id` = :id');
+    $query = $link->prepare('DELETE FROM `TABLE 30` WHERE `id` = :id');
     $query->bindValue(':id', $contact['id'], PDO::PARAM_INT);
     $query->execute();
 }
 
-$query = $link->query('SELECT COUNT(*) FROM `TABLE 29`');
+$query = $link->query('SELECT COUNT(*) FROM `TABLE 30`');
 $nb = $query->fetch(PDO::FETCH_NUM);
 if ($nb[0]) :
 ?>
