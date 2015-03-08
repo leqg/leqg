@@ -1,10 +1,12 @@
 <?php
-	// On fait un git status du répertoire pour voir où on en est
-	exec('git status', $output);
-	echo '<pre>'; print_r($output); echo '</pre>';
-	unset($output);
-	
-	// On tente le git pull du répertoire
-	exec('git pull', $output);
-	echo '<pre>'; print_r($output); echo '</pre>';
-	unset($output);
+$headers = getallheaders();
+$request = file_get_contents('php://input');
+
+// check send secret
+if ($headers['X-Hub-Signature'] == 'sha1=' . hash_hmac('sha1', $request, 'YoshiLoveLeQG')) {
+    $output = shell_exec('git pull');
+    echo $output;
+    http_response_code(200);
+} else {
+    http_response_code(403);
+}
