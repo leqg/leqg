@@ -77,13 +77,17 @@ class User {
     	 * */
 	public static function auth_level()
 	{
-    	    $query = Core::query('user-data-cookie', 'core');
-    	    $query->bindValue(':cookie', $_COOKIE['leqg'], PDO::PARAM_INT);
-    	    $query->execute();
-    	    
-    	    if ($query->rowCount() == 1) {
-        	    $data = $query->fetch(PDO::FETCH_ASSOC);
-        	    return $data['auth_level'];
+    	    if (isset($_COOKIE['leqg'])) {
+        	    $query = Core::query('user-data-cookie', 'core');
+        	    $query->bindValue(':cookie', $_COOKIE['leqg'], PDO::PARAM_INT);
+        	    $query->execute();
+        	    
+        	    if ($query->rowCount() == 1) {
+            	    $data = $query->fetch(PDO::FETCH_ASSOC);
+            	    return $data['auth_level'];
+        	    } else {
+            	    return 0;
+        	    }
     	    } else {
         	    return 0;
     	    }

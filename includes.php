@@ -42,6 +42,20 @@ $core = new PDO($dsn, $user, $pass);
 $dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 $link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
 
+$core->query("SET
+character_set_results = 'utf8',
+character_set_client = 'utf8',
+character_set_connection = 'utf8',
+character_set_database = 'utf8',
+character_set_server = 'utf8'");
+
+$link->query("SET
+character_set_results = 'utf8',
+character_set_client = 'utf8',
+character_set_connection = 'utf8',
+character_set_database = 'utf8',
+character_set_server = 'utf8'");
+
 // On enregistre les liaisons SQL
 Configuration::write('db.core', $core);
 Configuration::write('db.link', $link);
@@ -60,16 +74,15 @@ $api['mail']['smtp']['host'] = $config['MAIL']['host'];
 $api['mail']['smtp']['user'] = $config['MAIL']['user'];
 $api['mail']['smtp']['pass'] = $config['MAIL']['pass'];
 $api['mail']['smtp']['port'] = $config['MAIL']['port'];
-$api['mail']['from']['email'] = 'no-reply@leqg.info';
-$api['mail']['from']['nom'] = 'Ne Pas Répondre';
-$api['mail']['reply']['email'] = 'serveur@leqg.info';
-$api['mail']['reply']['nom'] = 'LeQG';
 
 Configuration::write('api', $api);
 Configuration::write('sms', $api['sms']['auth']);
 Configuration::write('mail', $mail);
 Configuration::write('mail.quota', $config['MAIL']['quota']);
-Configuration::write('sms.sender', 'LeQG');
+Configuration::write('mail.sender.mail', $config['SENDER']['mail']);
+Configuration::write('mail.sender.name', $config['SENDER']['name']);
+Configuration::write('mail.replyto', $config['SENDER']['reply']);
+Configuration::write('sms.sender', $config['SENDER']['name']);
 
 // On inclut les classes non chargées
 require_once 'class/boite.class.php';

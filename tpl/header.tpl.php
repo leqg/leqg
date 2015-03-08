@@ -20,7 +20,18 @@
 	<script src="assets/js/sweet-alert.min.js"></script>
 	<script src="assets/js/main.js"></script>
 	<?php if (isset($_GET['page'])) { ?><script src="assets/js/<?php echo $_GET['page']; ?>.js"></script><?php } ?>
-	<?php if (isset($_GET['volet']) && $_GET['volet'] == 'template') { ?><script src="//cdn.ckeditor.com/4.4.7/full/ckeditor.js"></script><?php } ?>
+	<?php if (isset($_GET['volet']) && $_GET['volet'] == 'template') { ?>
+        <link rel="stylesheet" href="api/redactor/redactor.css" />
+        <script src="api/redactor/redactor.min.js"></script>
+        
+        <script type="text/javascript">
+            $(function() {
+                $('#templateEditor').redactor({
+                    focus: true
+                });
+            });
+        </script>    
+    <?php } ?>
 </head>
 
 <body class="flat">	
@@ -39,7 +50,7 @@
 			if (User::auth_level() >= 5) :
 				$menu = array(  'contacts' => 'Contacts',
 								'dossier' => 'Dossiers',
-								'carto' => 'Cartographie',
+							/*	'carto' => 'Cartographie',*/
 								'sms' => 'SMS groupés',
 								'email' => 'Emails groupés',
 								'publi' => 'Publipostage',

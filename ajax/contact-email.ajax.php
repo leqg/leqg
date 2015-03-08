@@ -15,7 +15,7 @@
         	$adresse = $adresse['coordonnee_email'];
         	
         	// On ouvre la fiche du contact concerné
-        	$contact = new contact(md5($_POST['contact']));
+        	$contact = new People($_POST['contact']);
         	
         	// On charge le système de mail
         	$mail = Configuration::read('mail');
@@ -24,18 +24,19 @@
         	$message = array(
             	'html' => nl2br($_POST['message']),
             'subject' => $_POST['objet'],
-            'from_email' => 'noreply@leqg.info',
-            'from_name' => 'LeQG',
+            'from_email' => Configuration::read('mail.sender.mail'),
+            'from_name' => Configuration::read('mail.sender.name'),
             'to' => array(
                 array(
                     'email' => $adresse,
-                    'name' => $contact->noms(' ', ''),
+                    'name' => $contact->get('nom_complet'),
                     'type' => 'to'
                 )
             ),
-            'headers' => array('Reply-To' => 'webmaster@leqg.info'),
+            'headers' => array('Reply-To' => Configuration::read('mail.replyto')),
             'track_opens' => true,
-            'auto_text' => true
+            'auto_text' => true,
+            'subaccount' => Configuration::read('client')
         	);
         	// mode asynchrone d'envoi du mail
         	$async = true;
@@ -51,6 +52,12 @@
         $query->bindValue(':email', $result[0]['email']);
         $query->bindValue(':status', $result[0]['status']);
         $query->execute();
+        
+        $event = Event::create($contact->get('id'));
+        $event = new Event($event);
+        $event->update('historique_type', 'courriel');
+        $event->update('historique_objet', $_POST['objet']);
+        $event->update('historique_notes', $_GET['message']);
     }
     else
     {

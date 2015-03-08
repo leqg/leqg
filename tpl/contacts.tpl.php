@@ -297,6 +297,16 @@
 				</li>
 			</ul>
 		</section>
+		
+		<section class="contenu demi invisible chargementEnCours">
+    		    <p style="text-align: center">Chargement...</p>
+    		    <p style="text-align: center">Ceci peut prendre plusieurs minutes.</p>
+		</section>
+		
+		<section class="contenu demi invisible creationEnCours">
+    		    <p style="text-align: center">Création en cours...</p>
+    		    <p style="text-align: center">La création peut prendre plusieurs minutes.</p>
+		</section>
 	</div>
 
 <?php Core::tpl_footer(); ?>

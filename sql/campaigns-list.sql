@@ -3,6 +3,7 @@ SELECT      `campagne_id` AS `id`,
             `campagne_type` AS `type`,
             `campagne_status` AS `status`,
             `titre`,
+            `objet`,
             `message`, 
             `campagne_date` AS `date`
 FROM        `campagne`

@@ -38,6 +38,11 @@ if (isset($_GET['operation'])) {
         case 'updateTracking':
             $data->tracking_update();
             break;
+        
+        case 'test':
+            $data->testing();
+            Core::tpl_go_to('campagne', array('id' => $_GET['id']), true);
+            break;
     }
 }
 
@@ -93,7 +98,6 @@ Core::tpl_header();
             
             <form action="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'saveTemplate')); ?>" method="post">
                 <textarea class="templateEditor" id="templateEditor" name="templateEditor"><?php echo $data->get('template'); ?></textarea>
-                <script>CKEDITOR.replace( 'templateEditor' );</script>
                 <button class="vert clair" type="submit">Sauvegarder le template</button>
             </form>
         </section>
@@ -123,7 +127,21 @@ Core::tpl_header();
         <section class="contenu">
             <h4>Liste des destinataires</h4>
             
-            <?php $destinataires = $data->recipients(); ?>
+            <?php 
+                if (isset($_GET['first'])) {
+                    $destinataires = $data->recipients($_GET['first']);
+                    $suivant = $_GET['first'] + 10;
+                    if ($_GET['first'] > 10) {
+                        $precedent = $_GET['first'] - 10;
+                    } else {
+                        $precedent = 0;
+                    }
+                } else {
+                    $destinataires = $data->recipients(0);
+                    $suivant = 10;
+                    $precedent = null;
+                }
+            ?>
             <table class="listeDestinataires">
                 <thead>
                     <tr>
@@ -142,6 +160,9 @@ Core::tpl_header();
                 </tbody>
                 <?php endforeach; ?>
             </table>
+            <?php if (count($destinataires)) : ?>
+            <a class="pagination-rapide" style="text-align: center; display: block;" href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'first' => $suivant)); ?>">Contacts suivants</a>
+            <?php endif; ?>
             <?php if ($data->get('status') == 'send') { ?><a class="nostyle" href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'operation' => 'updateTracking')); ?>"><button class="vert clair">Mettre à jour</button></a><?php } ?>
         </section>
     </div>
@@ -154,6 +175,8 @@ Core::tpl_header();
             <?php
             $nombre['sent']        = (isset($data->get('count')['items']['sent'])) ? $data->get('count')['items']['sent'] : 0;
             $nombre['queued']      = (isset($data->get('count')['items']['queued'])) ? $data->get('count')['items']['queued'] : 0;
+            $nombre['pending']     = (isset($data->get('count')['items']['pending'])) ? $data->get('count')['items']['pending'] : 0;
+            $nombre['togo']        = $nombre['pending'] + $nombre['queued'];
             $nombre['scheduled']   = (isset($data->get('count')['items']['scheduled'])) ? $data->get('count')['items']['scheduled'] : 0;
             $nombre['rejected']    = (isset($data->get('count')['items']['rejected'])) ? $data->get('count')['items']['rejected'] : 0;
             $nombre['invalid']     = (isset($data->get('count')['items']['invalid'])) ? $data->get('count')['items']['invalid'] : 0;
@@ -166,19 +189,20 @@ Core::tpl_header();
             }
             ?>
             <div id="avancementMission"><!--
-             --><div class="npai" style="width: <?php echo pourcentage($nombre['scheduled'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;prévu<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['scheduled'], 0, ',', ' '); ?></span></div><!--
-             --><div class="absent" style="width: <?php echo pourcentage($nombre['queued'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['queued'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;cours&nbsp;:&nbsp;<?php echo number_format($nombre['queued'], 0, ',', ' '); ?></span></div><!--
-             --><div class="ouvert" style="width: <?php echo pourcentage($nombre['sent'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;délivré<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['sent'], 0, ',', ' '); ?></span></div><!--
-             --><div class="procuration" style="width: <?php echo pourcentage($nombre['rejected'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;erreur&nbsp;:&nbsp;<?php echo number_format($nombre['rejected'], 0, ',', ' '); ?></span></div><!--
-             --><div class="contact" style="width: <?php echo pourcentage($nombre['invalid'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;invalide<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['invalid'], 0, ',', ' '); ?></span></div><!--
+             --><div class="npai" style="width: <?php echo pourcentage($nombre['scheduled'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;prévu<?php if($nombre['scheduled'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['scheduled'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="ouvert" style="width: <?php echo pourcentage($nombre['sent'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;délivré<?php if($nombre['sent'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['sent'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="procuration" style="width: <?php echo pourcentage($nombre['rejected'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;erreur&nbsp;:&nbsp;<?php echo number_format($nombre['rejected'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="contact" style="width: <?php echo pourcentage($nombre['invalid'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;invalide<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['invalid'], 0, ',', '&nbsp;'); ?></span></div><!--
+             --><div class="absent" style="width: <?php echo pourcentage($nombre['togo'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['togo'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;cours&nbsp;:&nbsp;<?php echo number_format($nombre['togo'], 0, ',', '&nbsp;'); ?></span></div><!--
          --></div>
          
             <ul class="statistiquesMission">
-                <?php if ($nombre['scheduled']) : ?><li><strong><?php echo number_format($nombre['scheduled'], 0, ',', ' '); ?></strong> élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?> planifié<?php if($nombre['scheduled'] > 1) { echo 's'; } ?></li><?php endif; ?>
-                <?php if ($nombre['queued']) : ?><li><strong><?php echo number_format($nombre['queued'], 0, ',', ' '); ?></strong> élément<?php if($nombre['queued'] > 1) { echo 's'; } ?> en cours d'envoi</li><?php endif; ?>
-                <?php if ($nombre['sent']) : ?><li><strong><?php echo number_format($nombre['sent'], 0, ',', ' '); ?></strong> élément<?php if($nombre['sent'] > 1) { echo 's'; } ?> envoyé<?php if($nombre['sent'] > 1) { echo 's'; } ?> et reçu<?php if($nombre['sent'] > 1) { echo 's'; } ?></li><?php endif; ?>
-                <?php if ($nombre['rejected']) : ?><li><strong><?php echo number_format($nombre['rejected'], 0, ',', ' '); ?></strong> élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?> en erreur</li><?php endif; ?>
-                <?php if ($nombre['invalid']) : ?><li><strong><?php echo number_format($nombre['invalid'], 0, ',', ' '); ?></strong> élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?> invalides</li><?php endif; ?>
+                <?php if ($nombre['scheduled']) : ?><li><strong><?php echo number_format($nombre['scheduled'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?> planifié<?php if($nombre['scheduled'] > 1) { echo 's'; } ?></li><?php endif; ?>
+                <?php if ($nombre['sent']) : ?><li><strong><?php echo number_format($nombre['sent'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['sent'] > 1) { echo 's'; } ?> envoyé<?php if($nombre['sent'] > 1) { echo 's'; } ?> et reçu<?php if($nombre['sent'] > 1) { echo 's'; } ?></li><?php endif; ?>
+                <?php if ($nombre['rejected']) : ?><li><strong><?php echo number_format($nombre['rejected'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['rejected'] > 1) { echo 's'; } ?> en erreur</li><?php endif; ?>
+                <?php if ($nombre['invalid']) : ?><li><strong><?php echo number_format($nombre['invalid'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?> invalides</li><?php endif; ?>
+                <?php if ($nombre['queued']) : ?><li><strong><?php echo number_format($nombre['queued'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['queued'] > 1) { echo 's'; } ?> dans la file d'attente</li><?php endif; ?>
+                <?php if ($nombre['pending']) : ?><li><strong><?php echo number_format($nombre['pending'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['pending'] > 1) { echo 's'; } ?> en préparation</li><?php endif; ?>
             </ul>
         </section>
     </div>
@@ -191,11 +215,10 @@ Core::tpl_header();
             
             <ul class="statistiquesMission">
                 <?php foreach($erreurs as $erreur) : ?>
-                <li>
+                <li style="margin-bottom: 2em;">
                     <strong><?php echo $erreur['email']; ?></strong><br>
-                    <a href="<?php Core::tpl_go_to('contact', array('contact' => $erreur['contact'])); ?>" class="nostyle"><?php echo $erreur['name']; ?></a><br>
-                    <em>Erreur :</em> <?php echo $erreur['error']; ?><br>
-                    <em>Date :</em> <?php echo date('d/m/Y H\hi', strtotime($erreur['time'])); ?>
+                    <a href="<?php Core::tpl_go_to('contact', array('contact' => $erreur['contact'])); ?>" class="nostyle">Accéder à la fiche contact</a><br>
+                    <em>Erreur :</em> <?php echo $erreur['reject_reason']; ?><br>
                 </li>
                 <?php endforeach; ?>
             </ul>
@@ -216,7 +239,7 @@ Core::tpl_header();
                 </li>
                 <li class="courrier">
                     <span>Statut de la campagne</span>
-                    <span><?php echo Campaign::display_status($data->get('status')); ?></span>
+                    <span><?php echo ucfirst(Campaign::display_status($data->get('status'))); ?></span>
                 </li>
                 <li class="responsable">
                     <span>Créateur</span>
@@ -231,7 +254,7 @@ Core::tpl_header();
                 <?php if ($data->get('type') == 'email' && $data->get('status') == 'open') : ?>
                 <li class="utilisateurs inscrit">
                     <span>Ciblage de la campagne</span>
-                    <span><strong><?php echo number_format($data->get('count')['target'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['target'] > 1) ? 's' : ''; ?> / <?php echo $data->get('count')['emails']; ?> email<?php echo ($data->get('count')['emails'] > 1) ? 's' : ''; ?></span>
+                    <span><strong><?php echo number_format($data->get('count')['target'], 0, ',', ' '); ?></strong> destinataire<?php echo ($data->get('count')['target'] > 1) ? 's' : ''; ?></span>
                 </li>
                 <li class="date">
                     <span>Temps estimé pour l'envoi</span>
@@ -272,6 +295,11 @@ Core::tpl_header();
                 <p><?php if (empty($data->get('objet'))) : echo 'Aucun titre actuellement, ce titre est nécessaire pour l\'envoi.'; else: echo $data->get('objet'); endif; ?></p>
                 <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjet')); ?>" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
             <?php endif; ?>
+        </section>
+        <section class="contenu demi">
+            <a class="nostyle" href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'test')); ?>">
+                <button class="clair long" style="margin: .25em auto .15em;">Envoi d'un essai</button>
+            </a>
         </section>
         <?php elseif ($data->get('type') == 'sms') : ?>
         <section class="contenu demi">

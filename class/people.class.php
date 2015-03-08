@@ -64,6 +64,9 @@ class People
         
         // age calculator
         $this->_people['age'] = $this->display_age();
+        
+        // display name
+        $this->_people['nom_complet'] = $this->display_name();
     }
     
     
@@ -133,9 +136,9 @@ class People
     public function display_name()
     {
         $display = array();
-        if (!empty($this->_people['nom'])) $display[] = strtoupper($this->_people['nom']);
-        if (!empty($this->_people['nom_usage'])) $display[] = strtoupper($this->_people['nom_usage']);
-        if (!empty($this->_people['prenoms'])) $display[] = ucwords(strtolower($this->_people['prenoms']));
+        if (!empty($this->_people['nom'])) $display[] = mb_convert_case($this->_people['nom'], MB_CASE_UPPER);
+        if (!empty($this->_people['nom_usage'])) $display[] = mb_convert_case($this->_people['nom_usage'], MB_CASE_UPPER);
+        if (!empty($this->_people['prenoms'])) $display[] = mb_convert_case($this->_people['prenoms'], MB_CASE_TITLE);
         
         return implode(' ', $display);
     }
@@ -319,23 +322,25 @@ class People
      * Add a contact detail
      * 
      * @param   string  $detail     Contact detail to add
+     * @param   string  $type       Contact detail type
      * @result  void
      * */
-    public function contact_details_add($detail)
+    public function contact_details_add($detail, $type = null)
     {
         if (filter_var($detail, FILTER_VALIDATE_EMAIL)) {
             $query = Core::query('contact-details-add-email');
             $type = "email";
         } else {
-            $detail = preg_replace('#[^0-9]#', '', $detail);
-            $indicatif = substr($detail, 0, 2);
-            if ($indicatif == "06" && $indicatif == "07") {
-                $type = "mobile";
-            } else {
-                $type = "fixe";
-            }
             $query = Core::query('contact-details-add-phone');
+            
+            $detail = str_replace(' ', '', $detail);
+            $detail = str_replace('+', '00', $detail);
+            $detail = str_replace('.', '', $detail);
+            $detail = str_replace('/', '', $detail);
+            
+            if (is_null($type)) $type = "fixe";
         }
+
         $query->bindValue(':contact', $this->_people['id'], PDO::PARAM_INT);
         $query->bindValue(':type', $type);
         $query->bindValue(':detail', $detail);
@@ -664,11 +669,17 @@ class People
         $birthdate = DateTime::createFromFormat('d/m/Y', $search);
         
         if ($birthdate) {
-            $search = $date->format('Y-m-d');
+            $search = $birthdate->format('Y-m-d');
             $query = Core::query('person-search-birthdate');
             $query->bindValue(':date', $search);
-            if (!$query->execute()) return false;
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_NUM);
+            
+        } elseif (filter_var($search, FILTER_VALIDATE_EMAIL)) {
+            $query = Core::query('contact-by-email');
+            $query->bindValue(':coord', $search);
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_NUM);
             
         } else {
             $search = trim($search);
@@ -677,7 +688,7 @@ class People
             $query = Core::query('person-search');
             $query->bindValue(':search', $search);
             if (!$query->execute()) return false;
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetchAll(PDO::FETCH_NUM);
         }
     }
     
@@ -767,69 +778,59 @@ class People
         $conditionsStrictes = array();
         
         if (isset($sort['email']) && $sort['email'] == 1) {
-            $conditionsStrictes[] = '`id` IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "email"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('person-with-emails');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['email']) && $sort['email'] == -1) {
-            $conditionsStrictes[] = '`id` NOT IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "email"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('person-with-emails');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
         
         if (isset($sort['mobile']) && $sort['mobile'] == 1) {
-            $conditionsStrictes[] = '`id` IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "mobile"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('people-with-mobile');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['mobile']) && $sort['mobile'] == -1) {
-            $conditionsStrictes[] = '`id` NOT IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "mobile"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('people-with-mobile');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
         
         if (isset($sort['fixe']) && $sort['fixe'] == 1) {
-            $conditionsStrictes[] = '`id` IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "fixe"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('people-with-fixe');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['fixe']) && $sort['fixe'] == -1) {
-            $conditionsStrictes[] = '`id` NOT IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "fixe"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('people-with-fixe');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
         
         if (isset($sort['phone']) && $sort['phone'] == 1) {
-            $conditionsStrictes[] = '`id` IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "fixe"
-                OR          `coordonnee_type` = "mobile"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('people-with-phone');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['phone']) && $sort['phone'] == -1) {
-            $conditionsStrictes[] = '`id` NOT IN (
-                SELECT      `contact_id`
-                FROM        `coordonnees`
-                WHERE       `coordonnee_type` = "fixe"
-                OR          `coordonnee_type` = "mobile"
-                GROUP BY    `contact_id`
-            )';
+            $_query = Core::query('people-with-phone');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
         
         if (isset($sort['electeur']) && $sort['electeur'] == 1) {
@@ -839,17 +840,17 @@ class People
         }
         
         if (isset($sort['adresse']) && $sort['adresse'] == 1) {
-            $conditionsStrictes[] = '`id` IN (
-                SELECT      `people`
-                FROM        `address`
-                GROUP BY    `people`
-            )';
+            $_query = Core::query('people-with-address');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['adresse']) && $sort['adresse'] == -1) {
-            $conditionsStrictes[] = '`id` NOT IN (
-                SELECT      `people`
-                FROM        `address`
-                GROUP BY    `people`
-            )';
+            $_query = Core::query('people-with-address');
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
         
         
@@ -871,22 +872,22 @@ class People
         
         if (isset($_conditions['rue']) && count($_conditions['rue'])) {
             $ids = implode(',', $_conditions['rue']);
-            $conditions[] = '`id` IN (
-                SELECT      `people`
-                FROM        `address`
-                WHERE       `street` IN ('.$ids.')
-                GROUP BY    `people`
-            )';
+            $_query = Core::query('people-from-streets');
+            $_query->bindValue(':ids', $ids);
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditions[] = '`id` IN ('.implode(',', $ids).')';
         }
         
         if (isset($_conditions['ville']) && count($_conditions['ville'])) {
             $ids = implode(',', $_conditions['ville']);
-            $conditions[] = '`id` IN (
-                SELECT      `people`
-                FROM        `address`
-                WHERE       `city` IN ('.$ids.')
-                GROUP BY    `people`
-            )';
+            $_query = Core::query('people-from-cities');
+            $_query->bindValue(':ids', $ids);
+            $_query->execute();
+            $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
+            foreach ($result AS $element) { $ids[] = $element[0]; }
+            $conditions[] = '`id` IN ('.implode(',', $ids).')';
         }
         
         if (isset($_conditions['thema']) && count($_conditions['thema'])) {

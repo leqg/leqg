@@ -1,0 +1,96 @@
+* {
+    outline: none;
+}
+
+body {
+    background-color: rgb(230, 230, 230);
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin: 2em auto 1.5em;
+    text-align: center;
+    width: 450px;
+}
+
+ul.formulaire {
+    display: block;
+    background-color: rgb(255, 255, 255);
+    border-radius: 1em;
+    list-style: none;
+    margin: 0 auto;
+    padding: 1em 1.5em;
+    text-align: center;
+    width: 450px;
+}
+
+ul.formulaire li {
+    padding: .5em 0 .5em 0;
+}
+
+ul.formulaire li label {
+    display: block;
+    color: rgb(75, 75, 75);
+    font-size: 1em;
+    font-weight: 900;
+    letter-spacing: .05em;
+    padding: .85em 0 .33em;
+    text-transform: uppercase;
+}
+
+ul.formulaire li input {
+    border: 2px solid #BF1010;
+    border-radius: 1.05em;
+    font-size: 1.15em;
+    font-weight: 400;
+    padding: .5em 1em;
+    text-align: center;
+    width: 75%;
+    -webkit-appearance: none;
+}
+
+ul.formulaire li input:focus {
+    font-weight: 500;
+}
+
+ul.formulaire li input[type='submit'] {
+    background-color: #BF1010;
+    color: white;
+    cursor: pointer;
+    font-size: .95em;
+    font-weight: 600;
+    margin-top: .85em;
+    margin-bottom: .25em;
+    text-transform: uppercase;
+    width: 50%;
+}
+
+ul.formulaire li input[type="submit"]:hover {
+    box-shadow: 0 3px 0 rgb(200, 200, 200);
+}
+
+.alerte {
+    background-color: rgb(188,201,135);
+    border-radius: 1em;
+    font-weight: 900;
+    margin: 0 auto 2em;
+    padding: .85em 1em .75em;
+    text-align: center;
+    width: 250px;
+}
+
+.back {
+    display: block;
+    color: rgb(125, 125, 125);
+    font-size: .95em;
+    font-weight: 500;
+    margin: 2em auto;
+    text-align: center;
+    text-decoration: none;
+}
+
+.back:hover {
+    color: rgb(33, 33, 33);
+    text-decoration: underline;
+}
