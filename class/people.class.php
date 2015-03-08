@@ -673,7 +673,13 @@ class People
             $query = Core::query('person-search-birthdate');
             $query->bindValue(':date', $search);
             $query->execute();
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetchAll(PDO::FETCH_NUM);
+            
+        } elseif (filter_var($search, FILTER_VALIDATE_EMAIL)) {
+            $query = Core::query('contact-by-email');
+            $query->bindValue(':coord', $search);
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_NUM);
             
         } else {
             $search = trim($search);
@@ -682,7 +688,7 @@ class People
             $query = Core::query('person-search');
             $query->bindValue(':search', $search);
             if (!$query->execute()) return false;
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetchAll(PDO::FETCH_NUM);
         }
     }
     

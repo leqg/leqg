@@ -17,7 +17,7 @@
 	// S'il n'y a qu'une réponse, on redirige directement vers la réponse
 	if ($nombre == 1) {
 		$reponse = $resultats[0];
-		Core::tpl_go_to('contact', array('contact' => $reponse['id']), true);
+		Core::tpl_go_to('contact', array('contact' => $reponse[0]), true);
 	}
 	
 	// Quand tout est bon, on affiche le template
@@ -36,7 +36,7 @@
 	
 	<section class="contenu">
 		<ul class="listeContacts">
-			<?php foreach ($resultats as $resultat) : $contact = new People($resultat['id']); ?><!--
+			<?php foreach ($resultats as $resultat) : $contact = new People($resultat[0]); ?><!--
 		 --><a class="nostyle" href="<?php Core::tpl_go_to('contact', array('contact' => $contact->get('id'))); ?>"><!--
 			 --><li class="demi contact <?php if ($contact->get('sexe') == 'H') { echo 'homme'; } elseif ($contact->get('contact_sexe') == 'F') { echo 'femme'; } else { echo 'isexe'; } ?>">
 					<strong><?php echo $contact->get('nom_complet'); ?></strong>
