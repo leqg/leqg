@@ -10,78 +10,62 @@ $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
 foreach ($contacts as $contact) {
     $person = People::create();
     $person = new People($person);
-    
+    Core::debug($contact, false);
     // Traitement du bureau de vote
-    $polls = Maps::poll_search($contact['LIB_BUREAU_DE_VOTE']);
+    $polls = Maps::poll_search($contact['Bureau']);
     if (count($polls)) {
         $person->update('bureau', $polls[0]['id']);
     } else {
-        $poll = Maps::poll_create($contact['CODE_BUREAU_VOTE'], $contact['LIB_BUREAU_DE_VOTE']);
+        $poll = Maps::poll_create($contact['Bureau'], "", 1);
         $person->update('bureau', $poll);
     }
-    
+
     // Traitement du nom
-    $prenoms = str_replace(',', '', $contact['PRENOMS']);
-    $person->update('nom', $contact['NOMFAM']);
-    $person->update('nom_usage', $contact['NOMUSA']);
-    $person->update('prenoms', $prenoms);
+    $prenoms = str_replace(',', '', $contact['Prénoms']);
+    $person->update('nom', $contact['Nom']);
+    $person->update('nom_usage', $contact['Nom d\'usage']);
+    $person->update('prenoms', mb_convert_case($prenoms, MB_CASE_TITLE));
     
     // On calibre le fait qu'il s'agit d'un électeur
     $person->update('electeur', 1);
     
-
+    // On paramètre le sexe
+    if ($contact['Sexe'] == 'F') {
+        $person->update('sexe', 'F');
+    } else {
+        $person->update('sexe', 'H');
+    }
+    
     // Traitement de la naissance
-    $date_naissance = DateTime::createFromFormat('Ymd', $contact['DATNAI']);
-    $person->update('date_naissance', $date_naissance->format('Y-m-d'));    
+    $date_naissance = DateTime::createFromFormat('d/m/Y', $contact['Date de naissance']);
+    $person->update('date_naissance', $date_naissance->format('Y-m-d'));
     
     $adresse = array(
-        'pays' => '',
+        'pays' => 'France',
         'ville' => '',
         'zip' => '',
         'street' => '',
         'building' => ''
     );
     
-    // On cherche le numéro
-    /*
-    if (!empty($contact['ADR2'])) {
-        $adresse['building'] = $contact['ADR2'];
-    } elseif (is_numeric(substr($contact['ADR1'], 0, 1))) {
-        $num_rue = explode(' ', $contact['ADR1']);
-        $adresse['building'] = $num_rue[0];
-        unset($num_rue[0]);
-        $adresse['street'] = implode(' ', $num_rue);
-    } elseif (is_numeric(substr($contact['ADR1'], -1, 1))) {
-        $num_rue = explode(' ', $contact['ADR1']);
-        $adresse['building'] = $num_rue[count($num_rue)-1];
-        unset($num_rue[count($num_rue)-1]);
-        $adresse['street'] = implode(' ', $num_rue);
+    $decomposition_rue = explode(' ', $contact['Adresse 1']);
+    $numero = $decomposition_rue[0];
+    $first = substr($numero, 0, 1);
+    
+    if (is_numeric($first)) {
+        $adresse['building'] = $numero;
+        unset($decomposition_rue[0]);
     } else {
-        $adresse['street'] = $contact['ADR1'];
         $adresse['building'] = null;
     }
-    */
-    if (is_numeric(substr($contact['ADR1'], 0, 1))) {
-        $num_rue = explode(' ', $contact['ADR1']);
-        $adresse['building'] = $num_rue[0];
-        unset($num_rue[0]);
-        $adresse['street'] = implode(' ', $num_rue);
-    } elseif (is_numeric(substr($contact['ADR1'], -1, 1))) {
-        $num_rue = explode(' ', $contact['ADR1']);
-        $adresse['building'] = $num_rue[count($num_rue)-1];
-        unset($num_rue[count($num_rue)-1]);
-        $adresse['street'] = implode(' ', $num_rue);
-    } else {
-        $adresse['street'] = $contact['ADR1'];
-        $adresse['building'] = null;
-    }
+    
+    $adresse['street'] = mb_convert_case(implode(' ', $decomposition_rue), MB_CASE_TITLE);
 
     // On cherche le code postal
-    $cp_ville = explode(' ', $contact['ADR2']);
+    $cp_ville = explode(' ', $contact['Adresse 4']);
     $adresse['zip'] = $cp_ville[0];
     unset($cp_ville[0]);
-    $adresse['ville'] = implode(' ', $cp_ville);
-    $adresse['pays'] = $contact['ADR3'];
+    $adresse['ville'] = mb_convert_case(implode(' ', $cp_ville), MB_CASE_TITLE);
     
     if (empty($adresse['pays'])) $adresse['pays'] = null;
     if (empty($adresse['ville'])) $adresse['ville'] = null;
@@ -159,13 +143,7 @@ foreach ($contacts as $contact) {
     
     // On lance la création de l'adresse
     Maps::address_new($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'officiel');
-
-    // On lance la récupération de l'adresse email
-    if (!empty($contact['MAIL'])) {
-        $person->contact_details_add($contact['MAIL']);
-    }
     
-    $person->tag_add($contact['LIB_CENTRE_LEC']);
     $query = $link->prepare('DELETE FROM `TABLE 46` WHERE `id` = :id');
     $query->bindValue(':id', $contact['id'], PDO::PARAM_INT);
     $query->execute();
