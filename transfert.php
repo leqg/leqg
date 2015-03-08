@@ -3,7 +3,7 @@ require_once('includes.php');
 
 $link = Configuration::read('db.link');
 
-$query = $link->prepare('SELECT * FROM `TABLE 46` LIMIT 0, 50');
+$query = $link->prepare('SELECT * FROM `TABLE 29` LIMIT 0, 50');
 $query->execute();
 $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -11,34 +11,18 @@ foreach ($contacts as $contact) {
     $person = People::create();
     $person = new People($person);
     Core::debug($contact, false);
-    // Traitement du bureau de vote
-    $polls = Maps::poll_search($contact['Bureau']);
-    if (count($polls)) {
-        $person->update('bureau', $polls[0]['id']);
-    } else {
-        $poll = Maps::poll_create($contact['Bureau'], "", 1);
-        $person->update('bureau', $poll);
-    }
 
     // Traitement du nom
-    $prenoms = str_replace(',', '', $contact['Prénoms']);
-    $person->update('nom', $contact['Nom']);
-    $person->update('nom_usage', $contact['Nom d\'usage']);
-    $person->update('prenoms', mb_convert_case($prenoms, MB_CASE_TITLE));
-    
-    // On calibre le fait qu'il s'agit d'un électeur
-    $person->update('electeur', 1);
+    $person->update('nom', $contact['NOM']);
+    $person->update('prenoms', $contact['PRENOM']);
     
     // On paramètre le sexe
-    if ($contact['Sexe'] == 'F') {
+    $genre = trim($contact['GENRE']);
+    if ($genre == 'Madame') {
         $person->update('sexe', 'F');
     } else {
         $person->update('sexe', 'H');
     }
-    
-    // Traitement de la naissance
-    $date_naissance = DateTime::createFromFormat('d/m/Y', $contact['Date de naissance']);
-    $person->update('date_naissance', $date_naissance->format('Y-m-d'));
     
     $adresse = array(
         'pays' => 'France',
@@ -48,7 +32,7 @@ foreach ($contacts as $contact) {
         'building' => ''
     );
     
-    $decomposition_rue = explode(' ', $contact['Adresse 1']);
+    $decomposition_rue = explode(' ', $contact['ADRESSE 3']);
     $numero = $decomposition_rue[0];
     $first = substr($numero, 0, 1);
     
@@ -62,10 +46,10 @@ foreach ($contacts as $contact) {
     $adresse['street'] = mb_convert_case(implode(' ', $decomposition_rue), MB_CASE_TITLE);
 
     // On cherche le code postal
-    $cp_ville = explode(' ', $contact['Adresse 4']);
+    $cp_ville = explode(' ', $contact['VILLE']);
     $adresse['zip'] = $cp_ville[0];
     unset($cp_ville[0]);
-    $adresse['ville'] = mb_convert_case(implode(' ', $cp_ville), MB_CASE_TITLE);
+    $adresse['ville'] = mb_convert_case(trim(implode(' ', $cp_ville)), MB_CASE_TITLE);
     
     if (empty($adresse['pays'])) $adresse['pays'] = null;
     if (empty($adresse['ville'])) $adresse['ville'] = null;
@@ -142,14 +126,18 @@ foreach ($contacts as $contact) {
     }
     
     // On lance la création de l'adresse
-    Maps::address_new($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'officiel');
+    Maps::address_new($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'reel');
     
-    $query = $link->prepare('DELETE FROM `TABLE 46` WHERE `id` = :id');
+    $person->contact_details_add($contact['MAIL']);
+    $person->tag_add('Député');
+    $person->tag_add($contact['GROUPE']);
+    
+    $query = $link->prepare('DELETE FROM `TABLE 29` WHERE `id` = :id');
     $query->bindValue(':id', $contact['id'], PDO::PARAM_INT);
     $query->execute();
 }
 
-$query = $link->query('SELECT COUNT(*) FROM `TABLE 46`');
+$query = $link->query('SELECT COUNT(*) FROM `TABLE 29`');
 $nb = $query->fetch(PDO::FETCH_NUM);
 if ($nb[0]) :
 ?>
