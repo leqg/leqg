@@ -1,0 +1,14 @@
+{
+  "name": "LeQG",
+  "version": "1.0.0",
+  "homepage": "http://leqg.info",
+  "authors": [
+    "Damien Senger <hi@hiwelo.co>"
+  ],
+  "description": "Political list manager",
+  "license": "Personal use only",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}
