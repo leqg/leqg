@@ -13,6 +13,7 @@ uploads/
 
 # All CSV files to upload
 csv/
+exports/
 
 # Config file
 config.ini
