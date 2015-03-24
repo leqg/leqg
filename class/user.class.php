@@ -53,7 +53,7 @@ class User {
                 	    }
                 	    
             	    } else {
-					header('Location: http://'.$infos['client'].'.leqg.info'.$_SERVER['PHP_SELF']);
+					header('Location: http://'.$data['client'].'.leqg.info'.$_SERVER['PHP_SELF']);
             	    }
             	    
         	    } else {
