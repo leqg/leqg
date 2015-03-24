@@ -1,22 +1,27 @@
-
-*.scssc
-
+# ignore SASS cache and map files
 .sass-cache
+*.css.map
 
-koala-config.json
+# Bower & Grunt files
+bower_components/
+node_modules/
+dist/
+*.log
 
-uploads/*
+# All uploads files, except empty index file
+uploads/
 !uploads/index.html
 
-csv/*.traite.csv
+# All CSV files to upload
+csv/
+exports/
+
+# Config file
 config.ini
 
-exports/*.csv
-*.codekit
-
-*.map
-
-doc/*
+# Documentation dir
+doc/
 Doxyfile
 
+# Transfert files
 transfert-*

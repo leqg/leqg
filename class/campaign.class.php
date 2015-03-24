@@ -412,38 +412,69 @@ class Campaign
     public function template_parsing()
     {
         $template = $this->_campaign['template'];
-        $nb_boucles = preg_match_all("#\{boucle\:(.+)\}(.+)\{finboucle\}#isU", $template, $boucles);
-        
+        $nb_boucles_article = preg_match_all("#\{articles\}(.+)\{finarticles\}#isU", $template, $boucles);
+
         $cur = 0;
-        while($cur < $nb_boucles) {
-            $data = $boucles[1][$cur];
+        while($cur < $nb_boucles_article) {
+            // we load article tpl
+            $tpl_articles = $boucles[1][$cur];
+            $tpl_final = '';
             
-            switch ($data) {
-                case 'articles':
-                    // we load article tpl
-                    $tpl_articles = $boucles[2][$cur];
-                    $tpl_final = '';
-                    
-                    // we search last 5 articles
-                    $json = file_get_contents('https://public-api.wordpress.com/rest/v1.1/sites/preprod.leqg.info/posts/');
-                    $posts = json_decode($json)->posts;
-                    $posts = array_slice($posts, 0, 5);
-                    
-                    foreach ($posts as $post) {
-                        $tpl_article = $tpl_articles;
-                        $titre = '<a href="' . $post->URL . '">' . $post->title . '</a>';
-                        $contenu = $post->excerpt;
-                        $tpl_article = str_replace('{article:titre}', $titre, $tpl_article);
-                        $tpl_article = str_replace('{article:contenu}', $contenu, $tpl_article);
-                        $tpl_final .= $tpl_article;
-                        unset($tpl_article);
-                    }
-                    
-                    $template = preg_replace("#\{boucle\:(.+)\}(.+)\{finboucle\}#isU", $tpl_final, $template);
-                    
-                    break;
+            // we search last 5 articles
+            $json = file_get_contents('https://public-api.wordpress.com/rest/v1.1/sites/preprod.leqg.info/posts/?category=newsletter');
+            $posts = json_decode($json)->posts;
+            $posts = array_slice($posts, 0, 5);
+
+            foreach ($posts as $post) {
+                $tpl_article = $tpl_articles;
+                $titre = '<a href="' . $post->URL . '">' . $post->title . '</a>';
+                $contenu = $post->excerpt;
+                $tpl_article = str_replace('{article:titre}', $titre, $tpl_article);
+                $tpl_article = str_replace('{article:contenu}', $contenu, $tpl_article);
+                $tpl_final .= $tpl_article;
+                unset($tpl_article);
             }
             
+            $template = preg_replace("#\{articles\}(.+)\{finarticles\}#isU", $tpl_final, $template);
+
+            $cur++;
+        }
+        
+        
+        $nb_boucles_agenda = preg_match_all("#\{agenda\}(.+)\{finagenda\}#isU", $template, $boucles);
+
+        $cur = 0;
+        while($cur < $nb_boucles_agenda) {
+            // we load article tpl
+            $tpl_articles = $boucles[1][$cur];
+            $tpl_final = '';
+            
+            // we search next 5 events
+            $host = Configuration::read('db.host');
+            $port = 3306;
+            $dbname = 'pcordery';
+            $user = Configuration::read('db.user');
+            $pass = Configuration::read('db.pass');
+            $charset = 'utf8';
+            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
+            $event_db = new PDO($dsn, $user, $pass);
+            
+            $query = $event_db->prepare('SELECT * FROM `wp_em_events` WHERE `event_start_date` >= NOW() AND `event_status` = 1 ORDER BY `event_start_date` ASC LIMIT 0, 3');
+            $query->execute();
+            $events = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($events as $post) {
+                $tpl_article = $tpl_articles;
+                $titre = '<a href="http://philipcordery.fr/evenets/' . $post['event_slug'] . '">' . $post['event_name'] . '</a>';
+                $date = date('d/m/Y H\hi', strtotime($post['event_start_date'].' '.$post['event_start_time']));
+                $tpl_article = str_replace('{agenda:titre}', $titre, $tpl_article);
+                $tpl_article = str_replace('{agenda:date}', $date, $tpl_article);
+                $tpl_final .= $tpl_article;
+                unset($tpl_article);
+            }
+            
+            $template = preg_replace("#\{agenda\}(.+)\{finagenda\}#isU", $tpl_final, $template);
+
             $cur++;
         }
         
