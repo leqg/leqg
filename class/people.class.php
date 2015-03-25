@@ -891,9 +891,12 @@ class People
         }
         
         if (isset($_conditions['thema']) && count($_conditions['thema'])) {
+            $themas = array();
             foreach ($_conditions['thema'] as $tag) {
-                $conditions[] = '`tags` LIKE "%'.$tag.'%"';
+                $themas[] = '`tags` LIKE "%'.$tag.'%"';
             }
+            
+            $conditions[] = '('.implode(' OR ', $themas).')';
         }
         
         if (count($conditionsStrictes) || count($conditions)) {
