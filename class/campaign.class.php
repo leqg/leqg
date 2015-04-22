@@ -423,7 +423,7 @@ class Campaign
             // we search last 5 articles
             $json = file_get_contents('https://public-api.wordpress.com/rest/v1.1/sites/preprod.leqg.info/posts/?category=newsletter');
             $posts = json_decode($json)->posts;
-            $posts = array_slice($posts, 0, 5);
+            $posts = array_slice($posts, 0, 20);
 
             foreach ($posts as $post) {
                 $tpl_article = $tpl_articles;
@@ -459,7 +459,7 @@ class Campaign
             $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
             $event_db = new PDO($dsn, $user, $pass);
             
-            $query = $event_db->prepare('SELECT * FROM `wp_em_events` WHERE `event_start_date` >= NOW() AND `event_status` = 1 ORDER BY `event_start_date` ASC LIMIT 0, 3');
+            $query = $event_db->prepare('SELECT * FROM `wp_em_events` WHERE `event_start_date` >= NOW() AND `event_status` = 1 ORDER BY `event_start_date` ASC');
             $query->execute();
             $events = $query->fetchAll(PDO::FETCH_ASSOC);
 
