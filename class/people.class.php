@@ -900,6 +900,7 @@ class People
         }
 
         if (isset($_conditions['zipcode']) && count($_conditions['zipcode'])) {
+            $ids = array();
             foreach ($_conditions['zipcode'] as $zip) {
                 $_zipcodes = explode('&', $zip);
                 $_query = Core::query('zipcodes-id-by-range');
@@ -914,7 +915,7 @@ class People
                     $__query->bindValue(':zipcode', $id);
                     $__query->bindValue(':country', $_zipcodes[2]);
                     $__query->execute();
-                    $ids = array(); $result = $__query->fetchAll(PDO::FETCH_NUM);
+                    $result = $__query->fetchAll(PDO::FETCH_NUM);
                     foreach($result as $element) { $ids[] = $element[0]; }
                 }
 
