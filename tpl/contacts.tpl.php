@@ -209,6 +209,23 @@
 					<span class="form-icon decalage search"><input type="text" name="rechercheCodePostalFin" id="rechercheCodePostalFin" placeholder="Code postal de fin de la séquence recherchée"></span>
 				</li>
 				<li>
+					<label for="rechercheCodePostalPays" class="small">Pays concerné</label>
+					<span class="form-icon search">
+						<label class="sbox" for="rechercheCodePostalPays">
+							<select name="rechercheCodePostalPays" id="rechercheCodePostalPays">
+								<?php
+									$query = Core::query('country-approuved');
+									$query->execute();
+									$countries = $query->fetchAll(PDO::FETCH_ASSOC);
+									foreach ($countries as $country) :
+								?>
+								<option value="<?php echo $country['id']; ?>"><?php echo ucfirst(strtolower($country['country'])); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</label>
+					</span>
+				</li>
+				<li>
 					<button class="validerRechercheCodesPostaux">Ajouter le critère de tri</button>
 				</li>
 			</ul>

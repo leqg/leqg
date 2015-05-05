@@ -912,6 +912,7 @@ class People
                 foreach($zipcodes_ids as $id) {
                     $__query = Core::query('people-by-zipcode');
                     $__query->bindValue(':zipcode', $id);
+                    $__query->bindValue(':country', $_zipcodes[2]);
                     $__query->execute();
                     $ids = array(); $result = $__query->fetchAll(PDO::FETCH_NUM);
                     foreach($result as $element) { $ids[] = $element[0]; }

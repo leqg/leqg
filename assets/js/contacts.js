@@ -371,7 +371,8 @@ var contacts = function() {
         // On récupère le critère demandé
         var zipcode_debut = $('#rechercheCodePostalDebut').val(),
             zipcode_fin = $('#rechercheCodePostalFin').val(),
-            valeur = zipcode_debut + '&' + zipcode_fin;
+            zipcode_pays = $('#rechercheCodePostalPays').val(),
+            valeur = zipcode_debut + '&' + zipcode_fin + '&' + zipcode_pays;
 
         // On efface ce formulaire
         $('#rechercheCodePostalDebut').val('');
@@ -385,7 +386,7 @@ var contacts = function() {
         $('#listeCriteresTri').val(newCriteres);
 
         // On ajoute le critère à la liste dans la colonne de gauche
-        $('.premierAjoutTri').before('<li class="tri zipcode" data-critere="zicpode" data-valeur="' + valeur + '">' + zipcode_debut + ' – ' + zipcode_fin + '</li>');
+        $('.premierAjoutTri').before('<li class="tri ville" data-critere="zipcode" data-valeur="' + valeur + '">' + zipcode_debut + ' – ' + zipcode_fin + '</li>');
 
         // On met à zéro le nombre de fiches déjà affichées
         $('#nombreFiches').val(0);
