@@ -1,10 +1,10 @@
-<?php 
+<?php
 	User::protection(5);
 	Core::tpl_header();
 ?>
 
 	<h2>Votre fichier contacts consolidé</h2>
-	
+
 	<form class="rechercheGlobale" action="index.php?page=recherche" method="post">
 		<span class="search-icon">
 			<input type="search" name="recherche" placeholder="Recherche d'un contact">
@@ -14,7 +14,7 @@
 			</span>
 		</span>
 	</form>
-	
+
 	<div class="colonne demi gauche">
 		<section class="contenu demi">
 			<ul class="iconesActions">
@@ -22,22 +22,23 @@
 				<!--<a href="<?php Core::tpl_go_to('fiche', array('operation' => 'fusion')); ?>"><li class="merge">Fusion de fiches</li></a>-->
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi">
 			<h4>Critères multiples de tri</h4>
-			
+
 			<ul class="listeTris">
 				<li class="tri ajoutTri premierAjoutTri" data-critere="bureau">Ajout d'un bureau de vote</li>
 				<li class="tri ajoutTri" data-critere="rue">Ajout des électeurs d'une rue</li>
 				<li class="tri ajoutTri" data-critere="ville">Ajout des électeurs d'une ville</li>
 				<li class="tri ajoutTri" data-critere="votes">Participation à une élection</li>
 				<li class="tri ajoutTri" data-critere="thema">Ajout d'un critère thématique</li>
+				<li class="tri ajoutTri" data-critere="zipcode">Ajout d'un critère postal</li>
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi">
 			<h4>Critères généraux de tri</h4>
-			
+
 			<ul class="formulaire serre">
 				<li>
 					<label class="small" for="coordonnees-email">Email</label>
@@ -94,7 +95,7 @@
 	<div class="colonne demi droite">
 		<section class="contenu demi">
 			<h4>Tâches à réaliser rapidement</h4>
-			
+
 			<?php $taches = Event::tasks(); if ($taches) : ?>
 			<ul class="listeDesTaches">
 				<?php
@@ -111,14 +112,14 @@
 				<?php endforeach; ?>
 			</ul>
 			<?php else : ?>
-			
+
 			<?php endif; ?>
 		</section>
-		
+
         <?php $liste = Event::last(); if (count($liste)) : ?>
         <section class="contenu demi">
     	    <h4>Dernières interactions</h4>
-    	    
+
     	    <ul class="listeDesEvenements">
         	    <?php foreach ($liste as $event) : $e = new Event($event['id']); $c = new People($e->get('people')); ?>
 				<li class="evenement <?php echo $e->get('type'); ?> <?php if ($e->link()) { ?>clic<?php } ?>">
@@ -133,7 +134,7 @@
     	    </ul>
 	    </section>
 	    <?php endif; ?>
-		
+
 		<section class="contenu demi invisible actionsFiches">
 			<ul class="iconesActions">
 				<li class="smsSelection">SMS&nbsp;groupé</li><!--
@@ -142,20 +143,20 @@
 			 --><li class="exportSelection">Export</li>
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi invisible listeFiches">
 			<h4>Liste des fiches selon le tri <span class="estimationDuNombreDeFichesTotales"></span></h4>
 			<input type="hidden" id="nombreFiches" value="0">
 			<input type="hidden" id="listeCriteresTri" value="">
-			
+
 			<ul class="listeContacts resultatTri"></ul>
 		</section>
-		
+
 		<section class="contenu demi selectionCritere-thema invisible">
 			<a href="#" class="fermerColonne">&#xe813;</a>
 
 			<h4>Sélection d'un critère thématique</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label for="choixCritereThema" class="small">Tag à rechercher</label>
@@ -166,69 +167,91 @@
 				</li>
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi selectionCritere-votes invisible">
 			<a href="#" class="fermerColonne">&#xe813;</a>
 
 			<h4>Sélection d'une élection</h4>
-			
+
 			<button class="choixElection long" data-election="mun2008-1" data-clair="Municipales 2008">Municipales 2008</button>
 			<button class="choixElection long" data-election="mun2014-1" data-clair="Municipales 2014 – tour 1">Municipales 2014 – tour 1</button>
 			<button class="choixElection long" data-election="mun2014-2" data-clair="Municipales 2014 – tour 2">Municipales 2014 – tour 2</button>
 			<button class="choixElection long" data-election="eur2014" data-clair="Européennes 2014">Européennes 2014</button>
 		</section>
-		
+
 		<section class="contenu demi selectionCritere-bureau invisible">
 			<a href="#" class="fermerColonne">&#xe813;</a>
 
 			<h4>Sélection d'un bureau de vote</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label for="rechercheBureauVote" class="small">Recherche du bureau de vote</label>
 					<span class="form-icon decalage search"><input type="text" name="rechercheBureauVote" id="rechercheBureauVote" placeholder="Numéro du bureau ou nom si configuré"></span>
 				</li>
 			</ul>
-			
+
 			<ul class="listeDesBureaux form-liste"></ul>
 		</section>
-		
+
+		<section class="contenu demi selectionCritere-zipcode invisible">
+			<a href="#" class="fermerColonne">&#xe813;</a>
+
+			<h4>Sélection par code postal</h4>
+
+			<ul class="formulaire">
+				<li>
+					<label for="rechercheCodePostalDebut" class="small">Code postal de démarrage</label>
+					<span class="form-icon decalage search"><input type="text" name="rechercheCodePostalDebut" id="rechercheCodePostalDebut" placeholder="Code postal de début de la séquence recherchée"></span>
+				</li>
+				<li>
+					<label for="rechercheCodePostalFin" class="small">Code postal final</label>
+					<span class="form-icon decalage search"><input type="text" name="rechercheCodePostalFin" id="rechercheCodePostalFin" placeholder="Code postal de fin de la séquence recherchée"></span>
+				</li>
+				<li>
+					<button class="validerRechercheCodesPostaux">Ajouter le critère de tri</button>
+				</li>
+			</ul>
+
+			<ul class="listeDesBureaux form-liste"></ul>
+		</section>
+
 		<section class="contenu demi selectionCritere-rue invisible">
 			<a href="#" class="fermerColonne">&#xe813;</a>
 
 			<h4>Sélection d'une rue</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label for="rechercheRue" class="small">Recherche d'une rue</label>
 					<span class="form-icon decalage search"><input type="text" name="rechercheRue" id="rechercheRue" placeholder="Nom de la rue, toute ville confondue"></span>
 				</li>
 			</ul>
-			
+
 			<ul class="listeDesRues form-liste"></ul>
 		</section>
-		
+
 		<section class="contenu demi selectionCritere-ville invisible">
 			<a href="#" class="fermerColonne">&#xe813;</a>
 
 			<h4>Sélection d'une ville</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label for="rechercheVille" class="small">Recherche d'une ville</label>
 					<span class="form-icon decalage search"><input type="text" name="rechercheVille" id="rechercheVille" placeholder="Nom de la ville"></span>
 				</li>
 			</ul>
-			
+
 			<ul class="listeDesVilles form-liste"></ul>
 		</section>
-		
+
 		<section class="contenu demi invisible smsEnvoiCampagne">
 			<a href="#" class="fermerColonneListe">&#xe813;</a>
 			<input type="hidden" name="smsCriteresComplets" id="smsCriteresComplets" value="">
-			
+
 			<h4>Envoi d'une nouvelle campagne SMS</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label class="small" for="smsTitreCampagne">Titre de la campagne</label>
@@ -247,13 +270,13 @@
 				</li>
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi invisible emailEnvoiCampagne">
 			<a href="#" class="fermerColonneListe">&#xe813;</a>
 			<input type="hidden" name="emailCriteresComplets" id="emailCriteresComplets" value="">
-			
+
 			<h4>Envoi d'une nouvelle campagne Email</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label class="small" for="emailTitreCampagne">Objet de la campagne</label>
@@ -272,13 +295,13 @@
 				</li>
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi invisible publiEnvoiCampagne">
 			<a href="#" class="fermerColonneListe">&#xe813;</a>
 			<input type="hidden" name="publiCriteresComplets" id="publiCriteresComplets" value="">
-			
+
 			<h4>Préparation d'un nouveau publipostage</h4>
-			
+
 			<ul class="formulaire">
 				<li>
 					<label class="small" for="publiTitreCampagne">Titre de la campagne</label>
@@ -297,12 +320,12 @@
 				</li>
 			</ul>
 		</section>
-		
+
 		<section class="contenu demi invisible chargementEnCours">
     		    <p style="text-align: center">Chargement...</p>
     		    <p style="text-align: center">Ceci peut prendre plusieurs minutes.</p>
 		</section>
-		
+
 		<section class="contenu demi invisible creationEnCours">
     		    <p style="text-align: center">Création en cours...</p>
     		    <p style="text-align: center">La création peut prendre plusieurs minutes.</p>
