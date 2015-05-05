@@ -1,0 +1,5 @@
+{
+    "require": {
+        "esendex/sdk": "1.0.*"
+    }
+}
