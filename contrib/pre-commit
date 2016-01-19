@@ -6,7 +6,7 @@
 #
 # see the README
 
-PHPCS_BIN=vendor/bin/phpcs
+PHPCS_BIN=vendor/squizlabs/php_codesniffer/scripts/phpcs
 PHPCS_CODING_STANDARD=PEAR
 PHPCS_IGNORE=
 TMP_STAGING=".tmp_staging"
