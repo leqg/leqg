@@ -42,8 +42,8 @@ class Event
     /**
      * Construct method
      * 
-     * @param   string  $eventasked Event ID (w/o hash)
-     * @result  void
+     * @param  string $eventasked Event ID (w/o hash)
+     * @result void
      * */
     public function __construct($eventasked)
     {
@@ -76,8 +76,8 @@ class Event
     /**
      * Get an asked information
      * 
-     * @param   string  $data       Asked information
-     * @result  mixed
+     * @param  string $data Asked information
+     * @result mixed
      * */
     public function get($data)
     {
@@ -88,9 +88,9 @@ class Event
     /**
      * Update an asked information
      * 
-     * @param   string  $data       Asked information
-     * @param   string  $value      New value
-     * @result  void
+     * @param  string $data  Asked information
+     * @param  string $value New value
+     * @result void
      * */
     public function update($data, $value)
     {
@@ -105,14 +105,15 @@ class Event
     /**
      * Data JSON export
      * 
-     * @return  string
+     * @return string
      * */
     public function json()
     {
         $datas = $this->_event;
         $datas['files'] = $this->_files;
         $datas['tasks'] = $this->_tasks;
-        if ($this->_event['folder']) $datas['folder'] = $this->_folder;
+        if ($this->_event['folder']) { $datas['folder'] = $this->_folder; 
+        }
         
         return json_encode($datas);
     }
@@ -121,7 +122,7 @@ class Event
     /**
      * Return a boolean to know if an event's card exist
      * 
-     * @result  int                 2 for an event's card,
+     * @result int                 2 for an event's card,
      *                              1 for a campaign link,
      *                              0 for a simple data
      * */
@@ -143,10 +144,10 @@ class Event
     /**
      * Add a new task
      * 
-     * @param   int     $user       Assigned user ID
-     * @param   string  $task       Task assigned
-     * @param   string  $deadline   Deadline assigned
-     * @return  array               Task informations
+     * @param  int    $user     Assigned user ID
+     * @param  string $task     Task assigned
+     * @param  string $deadline Deadline assigned
+     * @return array               Task informations
      * */
     public function task_new($user, $task, $deadline)
     {
@@ -178,8 +179,8 @@ class Event
     /**
      * Remove a task
      * 
-     * @param   int     $task       Task to remove
-     * @return  void
+     * @param  int $task Task to remove
+     * @return void
      * */
     public function task_remove($task)
     {
@@ -192,8 +193,8 @@ class Event
     /**
      * Link to a folder
      * 
-     * @param   int     $folder     Folder
-     * @return  void
+     * @param  int $folder Folder
+     * @return void
      * */
     public function link_folder($folder)
     {
@@ -207,7 +208,7 @@ class Event
     /**
      * Delete an event
      * 
-     * @return  void
+     * @return void
      * */
     public function delete()
     {
@@ -220,8 +221,8 @@ class Event
     /**
      * Create a new event
      * 
-     * @param   int     $person     Person ID for this event
-     * @return  int
+     * @param  int $person Person ID for this event
+     * @return int
      * */
     public static function create($person)
     {
@@ -237,7 +238,7 @@ class Event
     /**
      * Last 15 events
      * 
-     * @result  array
+     * @result array
      * */
     public static function last()
     {
@@ -250,8 +251,8 @@ class Event
     /**
      * Tasks to come, by deadline
      * 
-     * @param   int     $user       User ID related, if asked
-     * @result  array
+     * @param  int $user User ID related, if asked
+     * @result array
      * */
     public static function tasks($user = null)
     {
@@ -275,8 +276,8 @@ class Event
     /**
      * Display name of a type of event
      * 
-     * @param   string  $type       Type asked
-     * @result  string
+     * @param  string $type Type asked
+     * @result string
      * */
     public static function display_type($type)
     {

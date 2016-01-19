@@ -10,6 +10,7 @@ $req = explode(';', $sql);
 $erreurs = array();
 
 // On exécute toutes les requêtes
-foreach ($req as $r) $db->query($r);
+foreach ($req as $r) { $db->query($r); 
+}
 
 ?>

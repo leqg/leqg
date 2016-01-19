@@ -1,62 +1,62 @@
 <?php
-	// On protège la page
-	User::protection(5);
-	
-	// On charge le contact
-	if (isset($_GET['fiche'])) :
-		$contact = new Contact(md5($_GET['fiche']));
-	else :
-		Core::tpl_go_to('contacts', true);
-	endif;
-	
-	// On charge le template
-	Core::tpl_header();
+    // On protège la page
+    User::protection(5);
+    
+    // On charge le contact
+if (isset($_GET['fiche'])) :
+    $contact = new Contact(md5($_GET['fiche']));
+    else :
+        Core::tpl_go_to('contacts', true);
+    endif;
+    
+    // On charge le template
+    Core::tpl_header();
 ?>
 <section id="fiche">
 	<header>
-		<?php if (!empty($contact->get('contact_nom')) || !empty($contact->get('contact_nom_usage')) || !empty($contact->get('contact_prenoms'))) : ?>
+    <?php if (!empty($contact->get('contact_nom')) || !empty($contact->get('contact_nom_usage')) || !empty($contact->get('contact_prenoms'))) : ?>
 		<h2><?php echo $contact->get('nom_affichage'); ?></h2>
-		<?php elseif (!empty($contact->get('contact_organisme'))) : ?>
+    <?php elseif (!empty($contact->get('contact_organisme'))) : ?>
 		<h2><?php echo $contact->get('contact_organisme'); ?>
-		<?php else : ?>
+    <?php else : ?>
 		<h2>Fiche sans nom</h2>
-		<?php endif; ?>
+    <?php endif; ?>
 	</header>
 	
 	<ul class="infos">
-		<?php if ($contact->get('contact_naissance_date') != '0000-00-00') : ?>
+    <?php if ($contact->get('contact_naissance_date') != '0000-00-00') : ?>
 		<li class="age">
 			<p>Né le <?php echo date('d/m/Y', strtotime($contact->get('contact_naissance_date'))); ?> (<?php echo $contact->age(); ?>)</p>
 		</li>
-		<?php endif; ?>
+    <?php endif; ?>
 		<li class="adresse">
-			<?php 
-				if ($contact->get('adresse_id')) :
-					$adresse = Carto::detailAdresse($contact->get('adresse_id'));
-					echo $adresse['immeuble_numero'] . ' ' . mb_convert_case(trim($adresse['rue_nom']), MB_CASE_TITLE) . '<br>' . $adresse['code_postal'] . ' ' . mb_convert_case($adresse['commune_nom'], MB_CASE_UPPER);
-				elseif ($contact->get('immeuble_id')) :
-					$adresse = Carto::detailAdresse($contact->get('immeuble_id'));
-					echo $adresse['immeuble_numero'] . ' ' . mb_convert_case(trim($adresse['rue_nom']), MB_CASE_TITLE) . '<br>' . $adresse['code_postal'] . ' ' . mb_convert_case($adresse['commune_nom'], MB_CASE_UPPER);
-				else :
-					echo 'Aucune adresse renseignée';
-				endif;
-			?>
+    <?php 
+    if ($contact->get('adresse_id')) :
+        $adresse = Carto::detailAdresse($contact->get('adresse_id'));
+        echo $adresse['immeuble_numero'] . ' ' . mb_convert_case(trim($adresse['rue_nom']), MB_CASE_TITLE) . '<br>' . $adresse['code_postal'] . ' ' . mb_convert_case($adresse['commune_nom'], MB_CASE_UPPER);
+                elseif ($contact->get('immeuble_id')) :
+                    $adresse = Carto::detailAdresse($contact->get('immeuble_id'));
+                    echo $adresse['immeuble_numero'] . ' ' . mb_convert_case(trim($adresse['rue_nom']), MB_CASE_TITLE) . '<br>' . $adresse['code_postal'] . ' ' . mb_convert_case($adresse['commune_nom'], MB_CASE_UPPER);
+                else :
+                    echo 'Aucune adresse renseignée';
+                endif;
+    ?>
 		</li>
-		<?php if ($contact->get('contact_email')) : ?>
+    <?php if ($contact->get('contact_email')) : ?>
 		<li class="email">
-			<?php echo $contact->get('email'); ?>
+    <?php echo $contact->get('email'); ?>
 		</li>
-		<?php endif; ?>
-		<?php if ($contact->get('contact_mobile')) : ?>
+    <?php endif; ?>
+    <?php if ($contact->get('contact_mobile')) : ?>
 		<li class="mobile">
-			<?php echo $contact->get('mobile'); ?>
+    <?php echo $contact->get('mobile'); ?>
 		</li>
-		<?php endif; ?>
-		<?php if ($contact->get('contact_fixe')) : ?>
+    <?php endif; ?>
+    <?php if ($contact->get('contact_fixe')) : ?>
 		<li class="fixe">
-			<?php echo $contact->get('fixe'); ?>
+    <?php echo $contact->get('fixe'); ?>
 		</li>
-		<?php endif; ?>
+    <?php endif; ?>
 	</ul>
 </section>
 
@@ -65,20 +65,20 @@
 		<h2>Historique des interactions</h2>
 		
 		<ul class="infos">
-			<?php $interactions = $contact->listeEvenements(); foreach ($interactions as $event) : $interaction = new Evenement($event[0], false); ?>
+    <?php $interactions = $contact->listeEvenements(); foreach ($interactions as $event) : $interaction = new Evenement($event[0], false); ?>
 			<li>
 				<p>
 					<em><?php echo date('d/m/Y', strtotime($interaction->get('historique_date'))); ?></em><br>
 					
 					<em><?php Core::tpl_typeEvenement($interaction->get('historique_type')); ?></em><br>
 					
-					<?php if ($interaction->get('historique_type') == 'sms') : ?><strong>Envoi d'un SMS</strong><br><em>&laquo;&nbsp;<?php echo $interaction->get('historique_notes'); ?>&nbsp;&raquo;</em>
-					<?php elseif ($interaction->get('historique_type') == 'porte') : ?><strong>Porte à porte</strong><br><em><?php echo $interaction->get('historique_objet'); ?></em>
-					<?php else : ?><strong><?php echo $interaction->get('historique_objet'); ?></strong>
-					<?php endif; ?>
+        <?php if ($interaction->get('historique_type') == 'sms') : ?><strong>Envoi d'un SMS</strong><br><em>&laquo;&nbsp;<?php echo $interaction->get('historique_notes'); ?>&nbsp;&raquo;</em>
+        <?php elseif ($interaction->get('historique_type') == 'porte') : ?><strong>Porte à porte</strong><br><em><?php echo $interaction->get('historique_objet'); ?></em>
+        <?php else : ?><strong><?php echo $interaction->get('historique_objet'); ?></strong>
+        <?php endif; ?>
 				</p>
 			</li>
-			<?php endforeach; ?>
+    <?php endforeach; ?>
 		</ul>
 	</div>
 	

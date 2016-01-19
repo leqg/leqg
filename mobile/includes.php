@@ -13,17 +13,17 @@ header('Content-Type: text/html; charset=utf-8');
 // On lance la classe de configuration
 class Configuration
 {
-	static $confArray;
-	
-	public static function read($name)
-	{
-		return self::$confArray[$name];
-	}
-	
-	public static function write($name, $value)
-	{
-		self::$confArray[$name] = $value;
-	}
+    static $confArray;
+    
+    public static function read($name)
+    {
+        return self::$confArray[$name];
+    }
+    
+    public static function write($name, $value)
+    {
+        self::$confArray[$name] = $value;
+    }
 }
 
 // On récupère le fichier de configuration

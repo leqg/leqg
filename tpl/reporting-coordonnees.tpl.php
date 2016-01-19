@@ -1,9 +1,10 @@
 <?php
-	// On ouvre la mission
-	$data = new Mission($_GET['mission']);
-	
-	// On vérifie que la mission a bien été ouverte
-	if ($data->err) Core::tpl_go_to('porte', true);
+    // On ouvre la mission
+    $data = new Mission($_GET['mission']);
+    
+    // On vérifie que la mission a bien été ouverte
+if ($data->err) { Core::tpl_go_to('porte', true); 
+}
 
     // On récupère les données du formulaire
     $reporting = $_POST;
@@ -40,14 +41,14 @@
         
         // On regarde le type de numéro de téléphone puis on l'enregistre s'il existe
         if (isset($infos['phone'])) {
-    		$numero = preg_replace('`[^0-9]`', '', $infos['phone']);
-    		$premiersNums = $numero{0}.$numero{1};
-    		
-    		if ($premiersNums == 06 || $premiersNums == 07) {
+            $numero = preg_replace('`[^0-9]`', '', $infos['phone']);
+            $premiersNums = $numero{0}.$numero{1};
+            
+            if ($premiersNums == 06 || $premiersNums == 07) {
                 $contact->contact_details_add($numero);
-    		} else {
+            } else {
                 $contact->contact_details_add($numero);
-    		}
+            }
         }
     }
     

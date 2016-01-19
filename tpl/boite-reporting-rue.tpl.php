@@ -5,8 +5,8 @@
 	<section id="mapbox-mission"></section>
 
     <section class="mission-porte">        
-    		<?php if (Boite::nombreImmeubles($mission['mission_id'])) : ?>
-    		    <?php $rues = Boite::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
+        <?php if (Boite::nombreImmeubles($mission['mission_id'])) : ?>
+            <?php $rues = Boite::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : ?>
     		    <h4><?php $nomRue = Carto::afficherRue($rue, true); echo $nomRue; ?></h4>
                 
                 <table class="reporting">
@@ -19,25 +19,27 @@
         		        </thead>
         		        
         		        <tbody>
-            		        <?php
-                		        $idImmeubles = array();
-                        		foreach ($immeubles as $key => $immeuble) {
-                        			$immeubles[$key] = Carto::afficherImmeuble($immeuble, true);
-                        			$idImmeubles[$immeubles[$key]] = $immeuble;
-                        		}
-                        		natsort($immeubles);
-                        		foreach ($immeubles as $immeuble) :
-                        ?>
-                        <tr class="ligne-immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>">
-                		        <td><?php echo $immeuble; ?></span> <?php echo $nomRue; ?></td>
-                		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="2" type="radio" id="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-a" name="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>" value="1"><label for="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-a" data-immeuble="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="2"><span><span></span></span></label></div></td>
-                		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="1" type="radio" id="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-o" name="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>" value="0"><label for="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-o" data-immeuble="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="1"><span><span></span></span></label></div></td>
-                        </tr>
-                        <?php endforeach; ?>
+                        <?php
+                                $idImmeubles = array();
+                                foreach ($immeubles as $key => $immeuble) {
+                                    $immeubles[$key] = Carto::afficherImmeuble($immeuble, true);
+                                    $idImmeubles[$immeubles[$key]] = $immeuble;
+                                }
+                                natsort($immeubles);
+                                foreach ($immeubles as $immeuble) :
+                                ?>
+                              <tr class="ligne-immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>">
+                              <td><?php echo $immeuble; ?></span> <?php echo $nomRue; ?></td>
+                              <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="2" type="radio" id="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-a" name="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>" value="1"><label for="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-a" data-immeuble="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="2"><span><span></span></span></label></div></td>
+                              <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="1" type="radio" id="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-o" name="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>" value="0"><label for="immeuble-<?php echo md5($idImmeubles[$immeuble]); ?>-o" data-immeuble="<?php echo md5($idImmeubles[$immeuble]); ?>" data-val="1"><span><span></span></span></label></div></td>
+                            </tr>
+                                <?php endforeach; ?>
         		        </tbody>
                 </table>
 
-    		    <?php endif; endif; endforeach; ?>
+            <?php endif; 
+            endif; 
+            endforeach; ?>
         <?php else : ?>
         Aucun immeuble à visiter dans cette mission
         <?php endif; ?>
@@ -49,27 +51,27 @@
         <?php endif; ?>
     </section>
     
-	<?php
-		if (Boite::nombreImmeubles($mission['mission_id'])) :
-		
-	    	$rues = Boite::liste($mission['mission_id']);
-	    	
-	    	foreach ($rues as $rue => $immeubles) :
-	    	
-	    		if (count($immeubles)) :
-	    		
-	    			if ($rue == $_GET['rue']) :
-	    			
-	    				$ville = Carto::ville(Carto::villeParRue($rue));
-	?>
-					    <script>
-							// Mise en place de la map
-							var map = L.map('mapbox-mission');
+    <?php
+    if (Boite::nombreImmeubles($mission['mission_id'])) :
+        
+        $rues = Boite::liste($mission['mission_id']);
+            
+        foreach ($rues as $rue => $immeubles) :
+            
+            if (count($immeubles)) :
+                
+                if ($rue == $_GET['rue']) :
+                    
+                    $ville = Carto::ville(Carto::villeParRue($rue));
+            ?>
+            <script>
+             // Mise en place de la map
+             var map = L.map('mapbox-mission');
 							
-							// Sélection du tile layer OSM
-							L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+             // Sélection du tile layer OSM
+             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 						
-							<?php foreach ($immeubles as $immeuble) : ?>
+            <?php foreach ($immeubles as $immeuble) : ?>
 							// On récupère sur le Nominatim OSM les coordonnées de la rue en question
 							var data = {
 								format: 'json',
@@ -98,14 +100,14 @@
 									title: "<?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?>"
 								}).addTo(map);
 							});
-							<?php endforeach; ?>
-						</script>
-	<?php
-					endif;
-				endif;
-			endforeach;
-		endif;
-	?>
+            <?php endforeach; ?>
+         </script>
+            <?php
+                endif;
+            endif;
+        endforeach;
+    endif;
+    ?>
 
     
 <?php Core::tpl_footer(); ?>

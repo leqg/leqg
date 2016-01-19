@@ -32,8 +32,8 @@ class Maps
     /**
      * Load country's informations
      * 
-     * @param   int     $country    Country ID
-     * @result  array
+     * @param  int $country Country ID
+     * @result array
      * */
     public static function country_data($country)
     {
@@ -47,8 +47,8 @@ class Maps
     /**
      * Country search method
      * 
-     * @param   string  $search     Search term
-     * @result  array
+     * @param  string $search Search term
+     * @result array
      * */
     public static function country_search($search)
     {
@@ -63,8 +63,8 @@ class Maps
     /**
      * Create new country method
      * 
-     * @param   string  $country    Country name
-     * @result  array
+     * @param  string $country Country name
+     * @result array
      * */
     public static function country_create($country)
     {
@@ -78,8 +78,8 @@ class Maps
     /**
      * City search method
      * 
-     * @param   string  $search     Search term
-     * @result  array
+     * @param  string $search Search term
+     * @result array
      * */
     public static function city_search($search)
     {
@@ -94,8 +94,8 @@ class Maps
     /**
      * Load city's informations
      * 
-     * @param   int     $city       City ID
-     * @result  array
+     * @param  int $city City ID
+     * @result array
      * */
     public static function city_data($city)
     {
@@ -109,9 +109,9 @@ class Maps
     /**
      * Create new city method
      * 
-     * @param   string  $city       City name
-     * @param   int     $country    Country ID
-     * @result  array
+     * @param  string $city    City name
+     * @param  int    $country Country ID
+     * @result array
      * */
     public static function city_create($city, $country = null)
     {
@@ -126,8 +126,8 @@ class Maps
     /**
      * Load city's number of voters
      * 
-     * @param   int     $city       City ID
-     * @result  int
+     * @param  int $city City ID
+     * @result int
      * */
     public static function city_electeurs($city)
     {
@@ -142,9 +142,9 @@ class Maps
     /**
      * Load city's number of people w/ a knowed asked type of contact detail
      * 
-     * @param   int     $city       City ID
-     * @param   string  $type       Contact detail type
-     * @result  int
+     * @param  int    $city City ID
+     * @param  string $type Contact detail type
+     * @result int
      * */
     public static function city_contact_details($city, $type)
     {
@@ -160,8 +160,8 @@ class Maps
     /**
      * Load poll place's informations
      * 
-     * @param   int     $poll       Poll ID
-     * @result  array
+     * @param  int $poll Poll ID
+     * @result array
      * */
     public static function poll_data($poll)
     {
@@ -175,8 +175,8 @@ class Maps
     /**
      * Poll place search method
      * 
-     * @param   int     $search     Search term
-     * @result  array
+     * @param  int $search Search term
+     * @result array
      * */
     public static function poll_search($search)
     {
@@ -191,10 +191,10 @@ class Maps
     /**
      * Create a new poll place
      * 
-     * @param   string  $number     Poll number
-     * @param   string  $name       Poll name
-     * @param   string  $city       Poll city
-     * @result  array
+     * @param  string $number Poll number
+     * @param  string $name   Poll name
+     * @param  string $city   Poll city
+     * @result array
      * */
     public static function poll_create($number, $name, $city = null)
     {
@@ -211,8 +211,8 @@ class Maps
     /**
      * Load street's informations
      * 
-     * @param   int     $street     Street ID
-     * @result  array
+     * @param  int $street Street ID
+     * @result array
      * */
     public static function street_data($street)
     {
@@ -226,9 +226,9 @@ class Maps
     /**
      * Create new street method
      * 
-     * @param   string  $street     Street name
-     * @param   int     $city       City ID
-     * @result  array
+     * @param  string $street Street name
+     * @param  int    $city   City ID
+     * @result array
      * */
     public static function street_create($street, $city = null)
     {
@@ -243,8 +243,8 @@ class Maps
     /**
      * Street search method
      * 
-     * @param   string  $search     Search term
-     * @result  array
+     * @param  string $search Search term
+     * @result array
      * */
     public static function street_search($search, $city = null)
     {
@@ -268,8 +268,8 @@ class Maps
     /**
      * List all buildings on a street
      * 
-     * @param   int     $street     Asked street ID
-     * @result  array
+     * @param  int $street Asked street ID
+     * @result array
      * */
     public static function street_buildings($street)
     {
@@ -283,9 +283,9 @@ class Maps
     /**
      * Create a new street
      * 
-     * @param   string  $street     New street name
-     * @param   int     $city       City ID
-     * @result  int
+     * @param  string $street New street name
+     * @param  int    $city   City ID
+     * @result int
      * */
     public static function street_new($street, $city=null)
     {
@@ -300,8 +300,8 @@ class Maps
     /**
      * Load building's informations
      * 
-     * @param   int     $building   Building ID
-     * @result  array
+     * @param  int $building Building ID
+     * @result array
      * */
     public static function building_data($building)
     {
@@ -315,9 +315,9 @@ class Maps
     /**
      * Building search method
      * 
-     * @param   string  $search     Search term
-     * @param   int     $street     Into a street ?
-     * @result  array
+     * @param  string $search Search term
+     * @param  int    $street Into a street ?
+     * @result array
      * */
     public static function building_search($search, $street = null)
     {
@@ -341,9 +341,9 @@ class Maps
     /**
      * Create a new building
      * 
-     * @param   string  $building   New building number
-     * @param   int     $street     Street ID
-     * @result  int
+     * @param  string $building New building number
+     * @param  int    $street   Street ID
+     * @result int
      * */
     public static function building_new($building, $street = null)
     {
@@ -358,8 +358,8 @@ class Maps
     /**
      * Most used zipcode for a street
      * 
-     * @param   int     $street     Street ID
-     * @result  int
+     * @param  int $street Street ID
+     * @result int
      * */
     public static function zipcode_detect($street)
     {
@@ -374,9 +374,9 @@ class Maps
     /**
      * Create a new building
      * 
-     * @param   string  $zipcode    New building number
-     * @param   int     $city       City ID
-     * @result  int
+     * @param  string $zipcode New building number
+     * @param  int    $city    City ID
+     * @result int
      * */
     public static function zipcode_new($zipcode, $city = null)
     {
@@ -391,8 +391,8 @@ class Maps
     /**
      * Zipcode search method
      * 
-     * @param   string  $search     Search term
-     * @result  array
+     * @param  string $search Search term
+     * @result array
      * */
     public static function zipcode_search($search)
     {
@@ -406,13 +406,13 @@ class Maps
     /**
      * Create a new address for a contact
      * 
-     * @param   int     $person     Person ID
-     * @param   int     $city       City ID
-     * @param   int     $zipcode    Zipcode ID
-     * @param   int     $street     Street ID
-     * @param   int     $building   Building ID
-     * @param   string  $type       Address type
-     * @result  int                 Address ID
+     * @param  int    $person   Person ID
+     * @param  int    $city     City ID
+     * @param  int    $zipcode  Zipcode ID
+     * @param  int    $street   Street ID
+     * @param  int    $building Building ID
+     * @param  string $type     Address type
+     * @result int                 Address ID
      * */
     public static function address_new($person, $city, $zipcode, $street, $building, $type = 'reel')
     {

@@ -1,22 +1,25 @@
 <?php
-	// On met en place la protection
-	User::protection(5);
-	
-	// On récupère la liste des campagnes
-	$liste = Campaign::all('publi');
+    // On met en place la protection
+    User::protection(5);
+    
+    // On récupère la liste des campagnes
+    $liste = Campaign::all('publi');
 
-	// On charge le template
-	Core::tpl_header(); 
+    // On charge le template
+    Core::tpl_header(); 
 ?>
 	<h2 class="titreCampagne" data-page="campagnes">Préparation des campagnes de publipostage</h2>
-	<?php if (count($liste)) : ?>
+    <?php if (count($liste)) : ?>
 		<section id="campagnes">
 			<ul class="liste-campagnes">
 				<?php foreach ($liste as $element) : $campaign = new Campaign($element['id']); ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; } else { echo 'Campagne sans titre'; } ?></h4></a>
+					<a href="<?php Core::tpl_go_to('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
+    } else { echo 'Campagne sans titre'; 
+} ?></h4></a>
 					<p>
-						Cette campagne de publipostage a été envoyée à <strong><?php echo number_format($campaign->get('count'), 0, ',', ' '); ?></strong> contact<?php if ($campaign->get('count') >1) { ?>s<?php } ?>.<br>
+						Cette campagne de publipostage a été envoyée à <strong><?php echo number_format($campaign->get('count'), 0, ',', ' '); ?></strong> contact<?php if ($campaign->get('count') >1) { ?>s<?php 
+     } ?>.<br>
 						Elle a été préparée le <strong><?php echo strftime('%d %B %Y', strtotime($campaign->get('date'))); ?></strong> par <em><?php echo User::get_login_by_ID($campaign->get('user')); ?></em>.
 					</p>
 				</li>
@@ -24,11 +27,11 @@
 			</ul>
 			<a href="index.php?page=contacts" class="nostyle"><button>Lancer un tri pour démarrer une campagne</button></a>
 		</section>
-	<?php else : ?>
+    <?php else : ?>
 		<section class="icone" id="aucuneMission">
 			<h3>Aucune campagne lancée actuellement !</h3>
 			<a href="index.php?page=contacts" class="nostyle"><button>Lancer un tri pour démarrer une campagne</button></a>
 		</section>
-	<?php endif; ?>
+    <?php endif; ?>
 	
 <?php Core::tpl_footer(); ?>

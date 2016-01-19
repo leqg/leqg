@@ -1,15 +1,16 @@
 <?php
-	// On protège l'accès
-	User::protection(5);
-	
-	// On vérifie l'existance d'un élément dossier
-	if (!isset($_GET['dossier'])) Core::tpl_go_to('dossier', true);
-	
-	// On ouvre l'objet dossier
-	$dossier = new Folder($_GET['dossier']);
+    // On protège l'accès
+    User::protection(5);
+    
+    // On vérifie l'existance d'un élément dossier
+if (!isset($_GET['dossier'])) { Core::tpl_go_to('dossier', true); 
+}
+    
+    // On ouvre l'objet dossier
+    $dossier = new Folder($_GET['dossier']);
 
-	// On affiche l'entête
-	Core::tpl_header();
+    // On affiche l'entête
+    Core::tpl_header();
 ?>
 	
 	<h2 class="titre" data-dossier="<?php echo $dossier->get('id'); ?>"><?php echo $dossier->get('name'); ?></h2>

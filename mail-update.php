@@ -1,14 +1,16 @@
 <?php
-require_once('includes.php');
+require_once 'includes.php';
 
 $link = Configuration::read('db.link');
 
-$query = $link->prepare('
+$query = $link->prepare(
+    '
     SELECT      `contact_id` AS `id`
     FROM        `coordonnees`
     WHERE       MD5(`coordonnee_email`) = :email
     LIMIT       0, 1
-');
+'
+);
 $query->bindValue(':email', $_GET['email']);
 $query->execute();
 $infos = $query->fetch(PDO::FETCH_ASSOC);
@@ -17,11 +19,13 @@ $person = new People($infos['id']);
 $person->update('nom', $_POST['nom']);
 $person->update('prenoms', $_POST['prenom']);
 
-$query = $link->prepare('
+$query = $link->prepare(
+    '
     UPDATE      `coordonnees`
     SET         `coordonnee_email` = :email
     WHERE       MD5(`coordonnee_email`) = :id
-');
+'
+);
 $query->bindValue(':email', $_POST['newemail']);
 $query->bindValue(':id', $_GET['email']);
 $query->execute();

@@ -1,5 +1,5 @@
 <?php
-require_once('includes.php');
+require_once 'includes.php';
 
 $link = Configuration::read('db.link');
 
@@ -112,15 +112,23 @@ foreach ($contacts as $contact) {
     }
     
     // On rajoute les coordonnées téléphoniques
-    if (!empty($contact['Téléphonebureau'])) $person->contact_details_add($contact['Téléphonebureau'], 'fixe');
-    if (!empty($contact['Téléphone2bureau'])) $person->contact_details_add($contact['Téléphone2bureau'], 'fixe');
-    if (!empty($contact['Téléphonedomicile'])) $person->contact_details_add($contact['Téléphonedomicile'], 'fixe');
-    if (!empty($contact['Téléphone2domicile'])) $person->contact_details_add($contact['Téléphone2domicile'], 'fixe');
-    if (!empty($contact['Télmobile'])) $person->contact_details_add($contact['Télmobile'], 'mobile');
+    if (!empty($contact['Téléphonebureau'])) { $person->contact_details_add($contact['Téléphonebureau'], 'fixe'); 
+    }
+    if (!empty($contact['Téléphone2bureau'])) { $person->contact_details_add($contact['Téléphone2bureau'], 'fixe'); 
+    }
+    if (!empty($contact['Téléphonedomicile'])) { $person->contact_details_add($contact['Téléphonedomicile'], 'fixe'); 
+    }
+    if (!empty($contact['Téléphone2domicile'])) { $person->contact_details_add($contact['Téléphone2domicile'], 'fixe'); 
+    }
+    if (!empty($contact['Télmobile'])) { $person->contact_details_add($contact['Télmobile'], 'mobile'); 
+    }
 
-    if (!empty($contact['Adressedemessagerie'])) $person->contact_details_add($contact['Adressedemessagerie'], 'email');
-    if (!empty($contact['Adressedemessagerie2'])) $person->contact_details_add($contact['Adressedemessagerie2'], 'email');
-    if (!empty($contact['Adressedemessagerie3'])) $person->contact_details_add($contact['Adressedemessagerie3'], 'email');
+    if (!empty($contact['Adressedemessagerie'])) { $person->contact_details_add($contact['Adressedemessagerie'], 'email'); 
+    }
+    if (!empty($contact['Adressedemessagerie2'])) { $person->contact_details_add($contact['Adressedemessagerie2'], 'email'); 
+    }
+    if (!empty($contact['Adressedemessagerie3'])) { $person->contact_details_add($contact['Adressedemessagerie3'], 'email'); 
+    }
 
 
     $person->tag_add('contacts');
@@ -139,4 +147,5 @@ if ($nb[0]) :
     var url = 'importation.php';
     document.location.href = url;
 </script>
-<?php else: echo 'Fini!'; endif; ?>
+<?php else: echo 'Fini!'; 
+endif; ?>

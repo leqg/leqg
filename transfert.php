@@ -1,5 +1,5 @@
 <?php
-require_once('includes.php');
+require_once 'includes.php';
 
 $link = Configuration::read('db.link');
 
@@ -51,11 +51,16 @@ foreach ($contacts as $contact) {
     unset($cp_ville[0]);
     $adresse['ville'] = mb_convert_case(trim(implode(' ', $cp_ville)), MB_CASE_TITLE);
     
-    if (empty($adresse['pays'])) $adresse['pays'] = null;
-    if (empty($adresse['ville'])) $adresse['ville'] = null;
-    if (empty($adresse['zip'])) $adresse['zip'] = null;
-    if (empty($adresse['street'])) $adresse['street'] = null;
-    if (empty($adresse['building'])) $adresse['building'] = null;
+    if (empty($adresse['pays'])) { $adresse['pays'] = null; 
+    }
+    if (empty($adresse['ville'])) { $adresse['ville'] = null; 
+    }
+    if (empty($adresse['zip'])) { $adresse['zip'] = null; 
+    }
+    if (empty($adresse['street'])) { $adresse['street'] = null; 
+    }
+    if (empty($adresse['building'])) { $adresse['building'] = null; 
+    }
     
     $address = array(
         'pays' => '',
@@ -145,4 +150,5 @@ if ($nb[0]) :
     var url = 'transfert.php';
     document.location.href = url;
 </script>
-<?php else: echo 'Fini!'; endif; ?>
+<?php else: echo 'Fini!'; 
+endif; ?>

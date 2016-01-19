@@ -1,38 +1,38 @@
 <?php 
-	// On protège la page
-	User::protection(5);
-	
-	// On charge le template
-	Core::tpl_header(); 
+    // On protège la page
+    User::protection(5);
+    
+    // On charge le template
+    Core::tpl_header(); 
 ?>
 	
 	<h2>Dossiers en cours</h2>
 	
 	<div class="colonne demi gauche">
-    	<?php
-    		// On récupère la liste des dossiers ouverts
-    		$dossiers = Folder::all();
-    		
-    		if (count($dossiers) > 0) :
-    	?>
-    	<section id="dossiers">
-    		<ul class="liste-dossiers">
-    		<?php
-    			// On fait une boucle des dossiers ouverts
-    			foreach ($dossiers as $dossier) :
-    		?>
-    			<li>
+        <?php
+        // On récupère la liste des dossiers ouverts
+        $dossiers = Folder::all();
+            
+        if (count($dossiers) > 0) :
+        ?>
+       <section id="dossiers">
+        <ul class="liste-dossiers">
+        <?php
+         // On fait une boucle des dossiers ouverts
+        foreach ($dossiers as $dossier) :
+        ?>
+        <li>
     				<a href="<?php Core::tpl_go_to('dossier', array('dossier' => $dossier['id'])); ?>" class="nostyle"><h4><?php echo $dossier['name']; ?></h4></a>
     				<p><?php echo $dossier['desc']; ?></p>
-    			</li>
-    		<?php endforeach; ?>
-    		</ul>
-    	</section>
-    	<?php else: ?>
+        </li>
+        <?php endforeach; ?>
+        </ul>
+       </section>
+        <?php else: ?>
     	<section class="icone" id="aucunDossier">
     		<h3>Aucun dossier ouvert actuellement.</h3>
     	</section>
-    	<?php endif; ?>
+        <?php endif; ?>
 	</div>
 	
 	<div class="colonne demi droite">

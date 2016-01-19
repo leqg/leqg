@@ -65,8 +65,8 @@ class Template
     /**
      * Save a new version of this template
      * 
-     * @param   string  $template   New version of this template
-     * @result  void
+     * @param  string $template New version of this template
+     * @result void
      * */
     public function write($template)
     {

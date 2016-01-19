@@ -1,9 +1,10 @@
 <?php
-require_once('includes.php');
+require_once 'includes.php';
 
 $link = Configuration::read('db.link');
 
-$query = $link->prepare('
+$query = $link->prepare(
+    '
     SELECT      `coordonnees`.`coordonnee_email` AS `email`,
                 `people`.`nom` AS `nom`,
                 `people`.`prenoms` AS `prenoms`
@@ -12,7 +13,8 @@ $query = $link->prepare('
     ON          `people`.`id` = `coordonnees`.`contact_id`
     WHERE       MD5(`coordonnee_email`) = :email
     LIMIT       0, 1
-');
+'
+);
 $query->bindValue(':email', $_GET['email']);
 $query->execute();
 $infos = $query->fetch(PDO::FETCH_ASSOC);

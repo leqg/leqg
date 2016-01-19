@@ -13,7 +13,9 @@
   "main": "index.php",
   "scripts": {
     "test": "npm run tests",
-    "phpcs": "phpcs --extensions=php --standard=PEAR ."
+    "phpcs": "phpcs --extensions=php --standard=PEAR --ignore=api/*.php .",
+    "phpcbf": "phpcbf --extensions=php --standard=PEAR --ignore=api/*.php .",
+    "tests": "npm run phpcbf && npm run phpcs"
   },
   "repository": {
     "type": "git",

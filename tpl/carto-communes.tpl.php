@@ -1,19 +1,19 @@
 <?php
-	// Protection de la page
-	User::protection(5);
-	
-	// On récupère les données génériques sur la ville
-	$ville = Maps::city_data($_GET['code']);
-	$pays = Maps::country_data($ville['country']);
+    // Protection de la page
+    User::protection(5);
+    
+    // On récupère les données génériques sur la ville
+    $ville = Maps::city_data($_GET['code']);
+    $pays = Maps::country_data($ville['country']);
 
-	// On récupère les statistiques
-	$electeurs = Maps::city_electeurs($ville['id']);
-	$emails = Maps::city_contact_details($ville['id'], 'email');
-	$mobiles = Maps::city_contact_details($ville['id'], 'mobile');
-	$fixes = Maps::city_contact_details($ville['id'], 'fixe');
-	
-	// Chargement du template
-	Core::tpl_header();
+    // On récupère les statistiques
+    $electeurs = Maps::city_electeurs($ville['id']);
+    $emails = Maps::city_contact_details($ville['id'], 'email');
+    $mobiles = Maps::city_contact_details($ville['id'], 'mobile');
+    $fixes = Maps::city_contact_details($ville['id'], 'fixe');
+    
+    // Chargement du template
+    Core::tpl_header();
 ?>
 
 <h2><?php echo mb_convert_case($ville['city'], MB_CASE_TITLE); ?></h2>
@@ -22,10 +22,15 @@
 	<section class="contenu">
 		<h4>Informations générales</h4>
 		<ul class="informations">
-			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php } ?> importé<?php if ($electeurs > 1) { ?>s<?php } ?></em></span></li>
-			<li class="email"><span>Emails recueillis</span><span><strong><?php echo number_format($emails, 0, ',', ' '); ?></strong> <em>contact<?php if ($emails > 1) { ?>s<?php } ?></em></span></li>
-			<li class="mobile"><span>Mobiles recueillis</span><span><strong><?php echo number_format($mobiles, 0, ',', ' '); ?></strong> <em>contact<?php if ($mobiles > 1) { ?>s<?php } ?></em></span></li>
-			<li class="fixe"><span>Fixes recueillis</span><span><strong><?php echo number_format($fixes, 0, ',', ' '); ?></strong> <em>contact<?php if ($fixes > 1) { ?>s<?php } ?></em></span></li>
+			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php 
+  } ?> importé<?php if ($electeurs > 1) { ?>s<?php 
+} ?></em></span></li>
+			<li class="email"><span>Emails recueillis</span><span><strong><?php echo number_format($emails, 0, ',', ' '); ?></strong> <em>contact<?php if ($emails > 1) { ?>s<?php 
+  } ?></em></span></li>
+			<li class="mobile"><span>Mobiles recueillis</span><span><strong><?php echo number_format($mobiles, 0, ',', ' '); ?></strong> <em>contact<?php if ($mobiles > 1) { ?>s<?php 
+  } ?></em></span></li>
+			<li class="fixe"><span>Fixes recueillis</span><span><strong><?php echo number_format($fixes, 0, ',', ' '); ?></strong> <em>contact<?php if ($fixes > 1) { ?>s<?php 
+  } ?></em></span></li>
 		</ul>
 	</section>
 	

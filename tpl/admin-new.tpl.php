@@ -1,6 +1,6 @@
 <?php
-	// On protège la page
-	User::protection(5);
+    // On protège la page
+    User::protection(5);
 
     Core::tpl_header();
 ?>

@@ -16,21 +16,21 @@ foreach ($datas as $data) {
         $result = $mandrill->messages->info($data['id']);
         
         switch($result['state']) {
-            case 'deferred':
-                $result['state'] = 'queued';
-                break;
+        case 'deferred':
+            $result['state'] = 'queued';
+            break;
             
-            case 'hard-bounced':
-                $result['state'] = 'rejected';
-                break;
+        case 'hard-bounced':
+            $result['state'] = 'rejected';
+            break;
             
-            case 'soft-bounced':
-                $result['state'] = 'rejected';
-                break;
+        case 'soft-bounced':
+            $result['state'] = 'rejected';
+            break;
             
-            case 'bounced':
-                $result['state'] = 'rejected';
-                break;
+        case 'bounced':
+            $result['state'] = 'rejected';
+            break;
         }
     
         $query->bindParam(':opens', $result['opens']);

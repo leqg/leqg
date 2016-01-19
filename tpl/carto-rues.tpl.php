@@ -1,21 +1,21 @@
 <?php
-	// Protection de la page
-	User::protection(5);
-	
-	// On récupère les données génériques sur la rue
-	$rue = Carto::rue_secure($_GET['code']);
-	$ville = Carto::ville($rue['commune_id']);
-	$departement = Carto::departement($ville['departement_id']);
-	$region = Carto::region($departement['region_id']);
-	
-	// On récupère les statistiques
-	$electeurs = Carto::nombreElecteurs('rue', $rue['rue_id']);
-	$emails = Carto::nombreElecteurs('rue', $rue['rue_id'], 'email');
-	$mobiles = Carto::nombreElecteurs('rue', $rue['rue_id'], 'mobile');
-	$fixes = Carto::nombreElecteurs('rue', $rue['rue_id'], 'fixe');
-	
-	// Chargement du template
-	Core::tpl_header();
+    // Protection de la page
+    User::protection(5);
+    
+    // On récupère les données génériques sur la rue
+    $rue = Carto::rue_secure($_GET['code']);
+    $ville = Carto::ville($rue['commune_id']);
+    $departement = Carto::departement($ville['departement_id']);
+    $region = Carto::region($departement['region_id']);
+    
+    // On récupère les statistiques
+    $electeurs = Carto::nombreElecteurs('rue', $rue['rue_id']);
+    $emails = Carto::nombreElecteurs('rue', $rue['rue_id'], 'email');
+    $mobiles = Carto::nombreElecteurs('rue', $rue['rue_id'], 'mobile');
+    $fixes = Carto::nombreElecteurs('rue', $rue['rue_id'], 'fixe');
+    
+    // Chargement du template
+    Core::tpl_header();
 ?>
 
 <h2><?php echo mb_convert_case(trim($rue['rue_nom']), MB_CASE_TITLE); ?></h2>
@@ -26,10 +26,15 @@
 		<ul class="informations">
 			<li class="ville"><span>Ville</span><span><a href="<?php Core::tpl_go_to('carto', array('niveau' => 'communes', 'code' => hash('sha256', $ville['commune_id']))); ?>" class="nostyle"><strong><?php echo $ville['commune_nom']; ?></strong></a></span></li>
 			<li class="region"><span>Département</span><span><?php echo $departement['departement_nom']; ?> (<?php echo $region['region_nom']; ?>)</span></li>
-			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php } ?> importé<?php if ($electeurs > 1) { ?>s<?php } ?></em></span></li>
-			<li class="email"><span>Emails recueillis</span><span><strong><?php echo number_format($emails, 0, ',', ' '); ?></strong> <em>contact<?php if ($emails > 1) { ?>s<?php } ?></em></span></li>
-			<li class="mobile"><span>Mobiles recueillis</span><span><strong><?php echo number_format($mobiles, 0, ',', ' '); ?></strong> <em>contact<?php if ($mobiles > 1) { ?>s<?php } ?></em></span></li>
-			<li class="fixe"><span>Fixes recueillis</span><span><strong><?php echo number_format($fixes, 0, ',', ' '); ?></strong> <em>contact<?php if ($fixes > 1) { ?>s<?php } ?></em></span></li>
+			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php 
+  } ?> importé<?php if ($electeurs > 1) { ?>s<?php 
+} ?></em></span></li>
+			<li class="email"><span>Emails recueillis</span><span><strong><?php echo number_format($emails, 0, ',', ' '); ?></strong> <em>contact<?php if ($emails > 1) { ?>s<?php 
+  } ?></em></span></li>
+			<li class="mobile"><span>Mobiles recueillis</span><span><strong><?php echo number_format($mobiles, 0, ',', ' '); ?></strong> <em>contact<?php if ($mobiles > 1) { ?>s<?php 
+  } ?></em></span></li>
+			<li class="fixe"><span>Fixes recueillis</span><span><strong><?php echo number_format($fixes, 0, ',', ' '); ?></strong> <em>contact<?php if ($fixes > 1) { ?>s<?php 
+  } ?></em></span></li>
 		</ul>
 	</section>
 	
@@ -42,14 +47,15 @@
 		<h4>Immeubles connus dans cette rue</h4>
 
 		<ul class="listeDesImmeubles form-liste">
-			<?php $immeubles = Carto::listeImmeubles($rue['rue_id']); foreach ($immeubles as $immeuble) : $contactsDansImmeuble = Carto::coordonneesDansImmeuble($immeuble['immeuble_id']); ?>
-			<li <?php if ($contactsDansImmeuble) echo 'class="presenceContacts"'; ?>>
+    <?php $immeubles = Carto::listeImmeubles($rue['rue_id']); foreach ($immeubles as $immeuble) : $contactsDansImmeuble = Carto::coordonneesDansImmeuble($immeuble['immeuble_id']); ?>
+			<li <?php if ($contactsDansImmeuble) { echo 'class="presenceContacts"'; 
+  } ?>>
 				<span><strong class="immeuble"><?php echo $immeuble['numero']; ?></strong> <?php echo mb_convert_case($rue['rue_nom'], MB_CASE_TITLE); ?></span>
 				<a href="<?php Core::tpl_go_to('carto', array('niveau' => 'immeubles', 'code' => hash('sha256', $immeuble['immeuble_id']))); ?>" class="nostyle">
 					<button>Explorer</button>
 				</a>
 			</li>
-			<?php endforeach; ?>
+    <?php endforeach; ?>
 		</ul>
 	</section>
 </div>

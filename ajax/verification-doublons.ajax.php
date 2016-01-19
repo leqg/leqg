@@ -12,18 +12,18 @@
  */
 
 
- 	// On récupère les informations envoyées par le formulaire
-	 	$infos = array(	'nom'		=> $_POST['nom'],
-	 					'nom-usage'	=> $_POST['nom-usage'],
-	 					'prenom'		=> $_POST['prenom'],
-	 					'sexe'		=> $_POST['sexe'],
-	 					'fixe'	=> $core->securisation_string($_POST['fixe']),
-	 					'mobile'		=> $core->securisation_string($_POST['mobile']),
-	 					'email'		=> $core->securisation_string($_POST['email']) );
- 	
- 	
- 	// On va procéder à la recherche de fiches similaires
- 		$contacts = $fiche->recherche($infos['prenom'], $infos['nom'], $infos['nom-usage'], $infos['sexe']);
+     // On récupère les informations envoyées par le formulaire
+         $infos = array(    'nom'        => $_POST['nom'],
+                         'nom-usage'    => $_POST['nom-usage'],
+                         'prenom'        => $_POST['prenom'],
+                         'sexe'        => $_POST['sexe'],
+                         'fixe'    => $core->securisation_string($_POST['fixe']),
+                         'mobile'        => $core->securisation_string($_POST['mobile']),
+                         'email'        => $core->securisation_string($_POST['email']) );
+     
+     
+         // On va procéder à la recherche de fiches similaires
+         $contacts = $fiche->recherche($infos['prenom'], $infos['nom'], $infos['nom-usage'], $infos['sexe']);
 ?>
 
 <h3>Sélectionnez une fiche à mettre à jour ou validez la création</h3>
@@ -35,7 +35,7 @@
 		</header>
 	</article>
 	
-	<?php foreach ($contacts as $contact) : $fiche->acces($contact['id'], true); ?>
+    <?php foreach ($contacts as $contact) : $fiche->acces($contact['id'], true); ?>
 	
 	<article class="fiche existante" data-contact="<?php $fiche->the_ID(); ?>">
 		<header>
@@ -47,5 +47,5 @@
 		</ul>
 	</article>
 	
-	<?php endforeach; ?>
+    <?php endforeach; ?>
 </ul>

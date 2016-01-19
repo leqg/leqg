@@ -1,6 +1,6 @@
 <?php 
-	User::protection(5);
-	Core::tpl_header();
+    User::protection(5);
+    Core::tpl_header();
 ?>
 
 	<h2>Module d'exploration cartographique</h2>

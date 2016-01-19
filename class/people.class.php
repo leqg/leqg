@@ -41,8 +41,8 @@ class People
     /**
      * Construct method
      *
-     * @param   string  $person     asked person ID (w/o hash)
-     * @result  void
+     * @param  string $person asked person ID (w/o hash)
+     * @result void
      * */
     public function __construct($person)
     {
@@ -73,8 +73,8 @@ class People
     /**
      * Get an asked information
      *
-     * @param   string  $data   Asked information
-     * @result  mixed
+     * @param  string $data Asked information
+     * @result mixed
      * */
     public function get($data)
     {
@@ -85,13 +85,14 @@ class People
     /**
      * Update an asked information
      *
-     * @param   string  $data   Data to update
-     * @param   string  $value  New value
-     * @result  void
+     * @param  string $data  Data to update
+     * @param  string $value New value
+     * @result void
      * */
     public function update($data, $value)
     {
-        if ($data != 'tags') $this->_people[$data] = $value;
+        if ($data != 'tags') { $this->_people[$data] = $value; 
+        }
         $link = Configuration::read('db.link');
         $query = $link->prepare('UPDATE `people` SET `'.$data.'` = :value WHERE `id` = :id');
         $query->bindValue(':id', $this->_people['id']);
@@ -103,7 +104,7 @@ class People
     /**
      * Personal data JSON export
      *
-     * @result  string
+     * @result string
      * */
     public function json()
     {
@@ -117,7 +118,7 @@ class People
     /**
      * Personal data export
      *
-     * @result  array
+     * @result array
      * */
     public function data()
     {
@@ -131,14 +132,17 @@ class People
     /**
      * Display name generator method
      *
-     * @result  string
+     * @result string
      * */
     public function display_name()
     {
         $display = array();
-        if (!empty($this->_people['nom'])) $display[] = mb_convert_case($this->_people['nom'], MB_CASE_UPPER);
-        if (!empty($this->_people['nom_usage'])) $display[] = mb_convert_case($this->_people['nom_usage'], MB_CASE_UPPER);
-        if (!empty($this->_people['prenoms'])) $display[] = mb_convert_case($this->_people['prenoms'], MB_CASE_TITLE);
+        if (!empty($this->_people['nom'])) { $display[] = mb_convert_case($this->_people['nom'], MB_CASE_UPPER); 
+        }
+        if (!empty($this->_people['nom_usage'])) { $display[] = mb_convert_case($this->_people['nom_usage'], MB_CASE_UPPER); 
+        }
+        if (!empty($this->_people['prenoms'])) { $display[] = mb_convert_case($this->_people['prenoms'], MB_CASE_TITLE); 
+        }
 
         return implode(' ', $display);
     }
@@ -147,7 +151,7 @@ class People
     /**
      * Return birthdate
      *
-     * @result  string
+     * @result string
      * */
     public function birthdate()
     {
@@ -163,7 +167,7 @@ class People
     /**
      * Age method
      *
-     * @result  int
+     * @result int
      * */
     public function age()
     {
@@ -180,7 +184,7 @@ class People
     /**
      * Age displaying method
      *
-     * @result  string
+     * @result string
      * */
     public function display_age()
     {
@@ -197,7 +201,7 @@ class People
     /**
      * City method
      *
-     * @result  string
+     * @result string
      * */
     public function city_copie()
     {
@@ -220,7 +224,7 @@ class People
     /**
      * Return person city
      *
-     * @result  string
+     * @result string
      * */
     public function city()
     {
@@ -237,21 +241,29 @@ class People
     /**
      * Return postal address
      *
-     * @result  array
+     * @result array
      * */
     public function postal_address()
     {
         $display['officiel'] = '';
-        if (!empty($this->_postal['officiel']['building'])) $display['officiel'] .= $this->_postal['officiel']['building'].' ';
-        if (!empty($this->_postal['officiel']['street'])) $display['officiel'] .= $this->_postal['officiel']['street'].' ';
-        if (!empty($this->_postal['officiel']['zipcode'])) $display['officiel'] .= $this->_postal['officiel']['zipcode'].' ';
-        if (!empty($this->_postal['officiel']['city'])) $display['officiel'] .= $this->_postal['officiel']['city'];
+        if (!empty($this->_postal['officiel']['building'])) { $display['officiel'] .= $this->_postal['officiel']['building'].' '; 
+        }
+        if (!empty($this->_postal['officiel']['street'])) { $display['officiel'] .= $this->_postal['officiel']['street'].' '; 
+        }
+        if (!empty($this->_postal['officiel']['zipcode'])) { $display['officiel'] .= $this->_postal['officiel']['zipcode'].' '; 
+        }
+        if (!empty($this->_postal['officiel']['city'])) { $display['officiel'] .= $this->_postal['officiel']['city']; 
+        }
 
         $display['reel'] = '';
-        if (!empty($this->_postal['reel']['building'])) $display['reel'] .= $this->_postal['reel']['building'].' ';
-        if (!empty($this->_postal['reel']['street'])) $display['reel'] .= $this->_postal['reel']['street'].' ';
-        if (!empty($this->_postal['reel']['zipcode'])) $display['reel'] .= $this->_postal['reel']['zipcode'].' ';
-        if (!empty($this->_postal['reel']['city'])) $display['reel'] .= $this->_postal['reel']['city'];
+        if (!empty($this->_postal['reel']['building'])) { $display['reel'] .= $this->_postal['reel']['building'].' '; 
+        }
+        if (!empty($this->_postal['reel']['street'])) { $display['reel'] .= $this->_postal['reel']['street'].' '; 
+        }
+        if (!empty($this->_postal['reel']['zipcode'])) { $display['reel'] .= $this->_postal['reel']['zipcode'].' '; 
+        }
+        if (!empty($this->_postal['reel']['city'])) { $display['reel'] .= $this->_postal['reel']['city']; 
+        }
 
         return $display;
     }
@@ -260,7 +272,7 @@ class People
     /**
      * Return postal address, separated data
      *
-     * @result  array
+     * @result array
      * */
     public function postal_array()
     {
@@ -271,23 +283,23 @@ class People
     /**
      * Contact details
      *
-     * @param   string  $type       Contact details type, null for all
-     * @result  array
+     * @param  string $type Contact details type, null for all
+     * @result array
      * */
     public function contact_details($type = null)
     {
         switch ($type) {
-            case 'email':
-                $query = Core::query('contact-details-person-emails');
-                break;
+        case 'email':
+            $query = Core::query('contact-details-person-emails');
+            break;
 
-            case null:
-                $query = Core::query('contact-details-person-all');
-                break;
+        case null:
+            $query = Core::query('contact-details-person-all');
+            break;
 
-            default:
-                $query = Core::query('contact-details-person-phone');
-                break;
+        default:
+            $query = Core::query('contact-details-person-phone');
+            break;
         }
         $query->bindValue(':contact', $this->_people['id'], PDO::PARAM_INT);
         $query->execute();
@@ -299,8 +311,8 @@ class People
     /**
      * Check if a specific contact detail exist
      *
-     * @param   string  $type       Contact detail type to check
-     * @result  bool
+     * @param  string $type Contact detail type to check
+     * @result bool
      * */
     public function contact_details_exist($type)
     {
@@ -321,9 +333,9 @@ class People
     /**
      * Add a contact detail
      *
-     * @param   string  $detail     Contact detail to add
-     * @param   string  $type       Contact detail type
-     * @result  void
+     * @param  string $detail Contact detail to add
+     * @param  string $type   Contact detail type
+     * @result void
      * */
     public function contact_details_add($detail, $type = null)
     {
@@ -338,7 +350,8 @@ class People
             $detail = str_replace('.', '', $detail);
             $detail = str_replace('/', '', $detail);
 
-            if (is_null($type)) $type = "fixe";
+            if (is_null($type)) { $type = "fixe"; 
+            }
         }
 
         $query->bindValue(':contact', $this->_people['id'], PDO::PARAM_INT);
@@ -351,8 +364,8 @@ class People
     /**
      * Remove a contact detail
      *
-     * @param   int     $detail     Contact detail to remove
-     * @result  void
+     * @param  int $detail Contact detail to remove
+     * @result void
      * */
     public function contact_details_remove($detail)
     {
@@ -365,25 +378,27 @@ class People
     /**
      * File upload for an asked person
      *
-     * @param   mixed   $file           Uploaded file
-     * @param   array   $data           Linked data
-     * @param   array   $extensions     Auth extensions
-     * @param   int     $maxsize        File max allowed size
-     * @result  bool
+     * @param  mixed $file       Uploaded file
+     * @param  array $data       Linked data
+     * @param  array $extensions Auth extensions
+     * @param  int   $maxsize    File max allowed size
+     * @result bool
      * */
     public function file_upload($file, array $data, $extensions = false, $maxsize = false)
     {
         $extension = substr(strrchr($file['name'], '.'), 1);
         $nom = preg_replace("#[^a-zA-Z0-9]#", "-", strtolower($data['titre'])) . '-' . uniqid() . '.' . $extension;
 
-        if (!isset($file) || $file['error'] > 0) return false;
-        if ($maxsize !== FALSE && $file['size'] > $maxsize) return false;
-        if ($extensions !== FALSE && !in_array($extension, $extensions)) return false;
+        if (!isset($file) || $file['error'] > 0) { return false; 
+        }
+        if ($maxsize !== false && $file['size'] > $maxsize) { return false; 
+        }
+        if ($extensions !== false && !in_array($extension, $extensions)) { return false; 
+        }
 
         $destination = 'uploads/'.$nom;
 
-        if (move_uploaded_file($file['tmp_name'], $destination))
-        {
+        if (move_uploaded_file($file['tmp_name'], $destination)) {
             $utilisateur = User::ID();
 
             $query = Core::query('file-upload');
@@ -405,7 +420,7 @@ class People
     /**
      * Linked people list
      *
-     * @result  array
+     * @result array
      * */
     public function linked_people()
     {
@@ -430,7 +445,7 @@ class People
     /**
      * Events list
      *
-     * @result  array
+     * @result array
      * */
     public function events()
     {
@@ -444,8 +459,8 @@ class People
     /**
      * Add a new tag
      *
-     * @param   string  $tag        Tag to add
-     * @result  void
+     * @param  string $tag Tag to add
+     * @result void
      * */
     public function tag_add($tag)
     {
@@ -465,8 +480,8 @@ class People
     /**
      * Remove an asked tag
      *
-     * @param   string  $tag        Tag to remove
-     * @result  void
+     * @param  string $tag Tag to remove
+     * @result void
      * */
     public function tag_remove($tag)
     {
@@ -487,27 +502,27 @@ class People
     /**
      * Display sex
      *
-     * @param   bool    $generic    if true, display sex therefore unknown
-     * @result  string
+     * @param  bool $generic if true, display sex therefore unknown
+     * @result string
      * */
     public function display_sex($generic = false)
     {
         switch ($this->_people['sexe']) {
-            case 'H':
-                return 'Homme';
+        case 'H':
+            return 'Homme';
                 break;
 
-            case 'F':
-                return 'Femme';
+        case 'F':
+            return 'Femme';
                 break;
 
-            default:
-                if ($generic) {
-                    return 'Sexe';
-                } else {
-                    return 'Inconnu';
-                }
-                break;
+        default:
+            if ($generic) {
+                return 'Sexe';
+            } else {
+                return 'Inconnu';
+            }
+            break;
         }
     }
 
@@ -515,22 +530,22 @@ class People
     /**
      * Change sex data
      *
-     * @result  void
+     * @result void
      * */
     public function change_sex()
     {
         switch ($this->_people['sexe']) {
-            case 'H':
-                $this->update('sexe', 'F');
-                break;
+        case 'H':
+            $this->update('sexe', 'F');
+            break;
 
-            case 'F':
-                $this->update('sexe', null);
-                break;
+        case 'F':
+            $this->update('sexe', null);
+            break;
 
-            case null:
-                $this->update('sexe', 'H');
-                break;
+        case null:
+            $this->update('sexe', 'H');
+            break;
         }
     }
 
@@ -538,7 +553,7 @@ class People
     /**
      * Delete this person
      *
-     * @result  void
+     * @result void
      * */
     public function delete()
     {
@@ -551,7 +566,7 @@ class People
     /**
      * Create a new person
      *
-     * @result  int                 new person id
+     * @result int                 new person id
      * */
     public static function create()
     {
@@ -564,8 +579,8 @@ class People
     /**
      * Address returning for an asked contact
      *
-     * @param   string  $person     asked person ID (w/o hash)
-     * @result  array
+     * @param  string $person asked person ID (w/o hash)
+     * @result array
      * */
     public static function address($person)
     {
@@ -588,9 +603,9 @@ class People
     /**
      * Postal address for an asked contact
      *
-     * @param   mixed   $data       if array, address elements ID
+     * @param  mixed $data if array, address elements ID or if numeric, asked person ID (w/o hash) or if numeric, asked person ID (w/o hash)
      *                              or if numeric, asked person ID (w/o hash)
-     * @result  array
+     * @result array
      * */
     public static function postal($data)
     {
@@ -636,9 +651,9 @@ class People
     /**
      * Poll informations for an asked person
      *
-     * @param   int     $person     asked person id, or poll id if $poll is true
-     * @param   bool    $poll       true if $person is a poll id
-     * @result  array
+     * @param  int  $person asked person id, or poll id if $poll is true
+     * @param  bool $poll   true if $person is a poll id
+     * @result array
      * */
     public static function poll($person, $poll = false)
     {
@@ -661,8 +676,8 @@ class People
     /**
      * People searching method
      *
-     * @param   string  $search     Search term
-     * @result  array
+     * @param  string $search Search term
+     * @result array
      * */
     public static function search($search)
     {
@@ -687,7 +702,8 @@ class People
             $search = "%$search%";
             $query = Core::query('person-search');
             $query->bindValue(':search', $search);
-            if (!$query->execute()) return false;
+            if (!$query->execute()) { return false; 
+            }
             return $query->fetchAll(PDO::FETCH_NUM);
         }
     }
@@ -696,8 +712,8 @@ class People
     /**
      * Thematic searching method
      *
-     * @param   string  $search     Search term
-     * @result  array
+     * @param  string $search Search term
+     * @result array
      * */
     public static function search_tags($search)
     {
@@ -727,7 +743,8 @@ class People
         $query->execute();
         if ($query->rowCount() >= 1) {
             $resultats = $query->fetchAll(PDO::FETCH_NUM);
-            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; 
+            }
             unset($resultats);
         }
 
@@ -737,7 +754,8 @@ class People
         $query->execute();
         if ($query->rowCount() >= 1) {
             $resultats = $query->fetchAll(PDO::FETCH_NUM);
-            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; 
+            }
             unset($resultats);
         }
 
@@ -747,7 +765,8 @@ class People
         $query->execute();
         if ($query->rowCount() >= 1) {
             $resultats = $query->fetchAll(PDO::FETCH_NUM);
-            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; 
+            }
             unset($resultats);
         }
 
@@ -762,10 +781,10 @@ class People
     /**
      * People listing method
      *
-     * @param   array   $sort       Sorting method
-     * @param   int     $debut      First if int or estimation if true
-     * @param   int     $nombre     Number of people or all if true
-     * @result  array
+     * @param  array $sort   Sorting method
+     * @param  int   $debut  First if int or estimation if true
+     * @param  int   $nombre Number of people or all if true
+     * @result array
      * */
     public static function listing(array $sort, $debut, $nombre = 5)
     {
@@ -781,13 +800,15 @@ class People
             $_query = Core::query('person-with-emails');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['email']) && $sort['email'] == -1) {
             $_query = Core::query('person-with-emails');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
 
@@ -795,13 +816,15 @@ class People
             $_query = Core::query('people-with-mobile');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['mobile']) && $sort['mobile'] == -1) {
             $_query = Core::query('people-with-mobile');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
 
@@ -809,13 +832,15 @@ class People
             $_query = Core::query('people-with-fixe');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['fixe']) && $sort['fixe'] == -1) {
             $_query = Core::query('people-with-fixe');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
 
@@ -823,13 +848,15 @@ class People
             $_query = Core::query('people-with-phone');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['phone']) && $sort['phone'] == -1) {
             $_query = Core::query('people-with-phone');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
 
@@ -843,13 +870,15 @@ class People
             $_query = Core::query('people-with-address');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` IN ('.implode(',', $ids).')';
         } elseif (isset($sort['adresse']) && $sort['adresse'] == -1) {
             $_query = Core::query('people-with-address');
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditionsStrictes[] = '`id` NOT IN ('.implode(',', $ids).')';
         }
 
@@ -876,7 +905,8 @@ class People
             $_query->bindValue(':ids', $ids);
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditions[] = '`id` IN ('.implode(',', $ids).')';
         }
 
@@ -886,7 +916,8 @@ class People
             $_query->bindValue(':ids', $ids);
             $_query->execute();
             $ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-            foreach ($result AS $element) { $ids[] = $element[0]; }
+            foreach ($result AS $element) { $ids[] = $element[0]; 
+            }
             $conditions[] = '`id` IN ('.implode(',', $ids).')';
         }
 
@@ -908,7 +939,8 @@ class People
                 $_query->bindValue(':end', $_zipcodes[1]);
                 $_query->execute();
                 $zipcodes_ids = array(); $result = $_query->fetchAll(PDO::FETCH_NUM);
-                foreach($result as $element) { $zipcodes_ids[] = $element[0]; }
+                foreach($result as $element) { $zipcodes_ids[] = $element[0]; 
+                }
 
                 foreach($zipcodes_ids as $id) {
                     $__query = Core::query('people-by-zipcode');
@@ -916,7 +948,8 @@ class People
                     $__query->bindValue(':country', $_zipcodes[2]);
                     $__query->execute();
                     $result = $__query->fetchAll(PDO::FETCH_NUM);
-                    foreach($result as $element) { $ids[] = $element[0]; }
+                    foreach($result as $element) { $ids[] = $element[0]; 
+                    }
                 }
 
                 $conditions[] = '`id` IN ('.implode(',', $ids).')';
@@ -974,8 +1007,8 @@ class People
     /**
      * Last created persons
      *
-     * @param   int     $number     Asked number of created persons
-     * @return  array
+     * @param  int $number Asked number of created persons
+     * @return array
      * */
     public static function last($number = 5)
     {

@@ -1,8 +1,8 @@
 <?php
-	User::protection(5);
-	Core::tpl_header();
-	
-	$destination = (isset($_GET['destination'])) ? $_GET['destination'] : null;
+    User::protection(5);
+    Core::tpl_header();
+    
+    $destination = (isset($_GET['destination'])) ? $_GET['destination'] : null;
 ?>
 <form action="<?php Core::tpl_go_to('resultats', array('destination' => $destination)); ?>" method="post" class="form-simple">
 	<h2 style="margin-bottom: 2em;">Recherche de contact</h2>

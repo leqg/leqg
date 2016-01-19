@@ -3,9 +3,9 @@
 /**
  * La classe contact permet de créer un objet contact contenant toutes les opérations liées au contact ouvert
  * 
- * @package     leQG
- * @author      Damien Senger <mail@damiensenger.me>
- * @copyright   2014 MSG SAS – LeQG
+ * @package   leQG
+ * @author    Damien Senger <mail@damiensenger.me>
+ * @copyright 2014 MSG SAS – LeQG
  */
 
 class Contact
@@ -25,10 +25,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $contact    Identifiant (hashage SHA2) du contact demandé
-     * @param   bool    $securite   Permet de savoir si on doit revenir au module contact si aucune fiche contact n'est trouvée
+     * @param string $contact  Identifiant (hashage SHA2) du contact demandé
+     * @param bool   $securite Permet de savoir si on doit revenir au module contact si aucune fiche contact n'est trouvée
      *
-     * @result  void
+     * @result void
      */
      
     public function __construct($contact, $securite = false)
@@ -46,8 +46,7 @@ class Contact
         $contact['contact_md5'] = md5($contact['contact_id']);
         
         // On récupère la liste des tags
-        if (!empty($contact['contact_tags']))
-        {
+        if (!empty($contact['contact_tags'])) {
             $contact['tags'] = explode(',', $contact['contact_tags']);
         }
         else
@@ -70,12 +69,10 @@ class Contact
         // Pour chaque coordonnées, on retraite dans le bon tableau
         foreach ($coordonnees as $coordonnee)
         {
-            if ($coordonnee['coordonnee_type'] == 'email')
-            {
+            if ($coordonnee['coordonnee_type'] == 'email') {
                 $contact['email'] = $coordonnee['coordonnee_email'];
             }
-            elseif ($coordonnee['coordonnee_type'] == 'mobile')
-            {
+            elseif ($coordonnee['coordonnee_type'] == 'mobile') {
                 $contact['mobile'] = Core::get_tpl_phone($coordonnee['coordonnee_numero']);
             }
             else
@@ -110,7 +107,7 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @result  string      Données connues sous format JSON
+     * @result string      Données connues sous format JSON
      */
     
     public function json()
@@ -128,7 +125,7 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @result  string      Données connues sous format PHP
+     * @result string      Données connues sous format PHP
      */
     
     public function donnees()
@@ -143,9 +140,9 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string   $info    Nom de l'information demandée
+     * @param string $info Nom de l'information demandée
      *
-     * @result  string   Information demandée
+     * @result string   Information demandée
      */
 
     public function get( $info )
@@ -160,10 +157,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $separateur     Élement choisi pour séparer les composants affichés
-     * @param   string  $conteneur      Conteneur choisi pour les différents composants affichés
+     * @param string $separateur Élement choisi pour séparer les composants affichés
+     * @param string $conteneur  Conteneur choisi pour les différents composants affichés
      *
-     * @result  string                  Noms et prénoms mis en forme du demandeur
+     * @result string                  Noms et prénoms mis en forme du demandeur
      */
     
     public function noms( $separateur = ' ', $conteneur = 'span' )
@@ -172,18 +169,15 @@ class Contact
         $retour = array();
         
         // On ajoute le conteneur comprenant le nom, le nom d'usage et les prénoms
-        if (!empty($this->contact['contact_nom']))
-        {
+        if (!empty($this->contact['contact_nom'])) {
             $retour[] = $this->contenir(mb_convert_case($this->contact['contact_nom'], MB_CASE_UPPER), 'span');
         }
         
-        if (!empty($this->contact['contact_nom_usage']))
-        {
+        if (!empty($this->contact['contact_nom_usage'])) {
             $retour[] = $this->contenir(mb_convert_case($this->contact['contact_nom_usage'], MB_CASE_UPPER), 'span');
         }
         
-        if (!empty($this->contact['contact_prenoms']))
-        {
+        if (!empty($this->contact['contact_prenoms'])) {
             $retour[] = $this->contenir(mb_convert_case($this->contact['contact_prenoms'], MB_CASE_TITLE), 'span');
         }
         
@@ -201,10 +195,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $separateur         Séparateur utilisé pour la date
-     * @param   bool    $date_uniquement    Si true, cette méthode ne retourne que la date de naissance
+     * @param string $separateur      Séparateur utilisé pour la date
+     * @param bool   $date_uniquement Si true, cette méthode ne retourne que la date de naissance
      *
-     * @result  array                       Informations de naissance mises en forme
+     * @result array                       Informations de naissance mises en forme
      */
     
     public function naissance( $separateur = '/' , $date_uniquement = false )
@@ -219,8 +213,7 @@ class Contact
         $retour[] = date('d' . $separateur . 'm' . $separateur . 'Y', $time);
         
         // On ne prépare les informations relatives aux départements et communes de naissance que si c'est demandé
-        if ($date_uniquement === false && $this->contact['contact_naissance_commune_id'] != 0)
-        {
+        if ($date_uniquement === false && $this->contact['contact_naissance_commune_id'] != 0) {
             // on récupère les informations géographiques
             $query = $this->link->prepare('SELECT `commune_nom`, `departement_id` FROM `communes` WHERE `commune_id` = :commune');
             $query->bindParam(':commune', $this->contact['contact_naissance_commune_id']);
@@ -251,9 +244,9 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.1
      *
-     * @param   bool    $textuel    Activer le mode textuel
+     * @param bool $textuel Activer le mode textuel
      *
-     * @return  string|int          Âge du contact en mode textuel ou non
+     * @return string|int          Âge du contact en mode textuel ou non
      */
     
     public function age( $textuel = true )
@@ -276,24 +269,20 @@ class Contact
             $age = 2014 - $annee;
             
             // On ajuste par rapport au mois
-            if ($mois >= date('m'))
-            {
+            if ($mois >= date('m')) {
                 // On ajuste par rapport au jour
-                if ($jour > date('j'))
-                {
+                if ($jour > date('j')) {
                     $age = $age - 1;
                 }
             }
             
             // On regarde le mode d'affichage et on adapte le retour en conséquence
-            if ($textuel === true)
-            {
+            if ($textuel === true) {
                 // On retourne l'âge accompagné du mot "an(s)"
                 $retour = $age . ' an';
                 
                 // On regarde si le pluriel du mot doit être mis ou non
-                if ($age > 1)
-                {
+                if ($age > 1) {
                     $retour.= 's';
                 }
                 
@@ -320,10 +309,11 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @result  string   Nom de la ville
+     * @result string   Nom de la ville
      */
     
-    public function ville( ) {
+    public function ville( ) 
+    {
         // On vérifie si une donnée géographique existe
         if ($this->contact['adresse_id'] > 0 || $this->contact['immeuble_id'] > 0) {
             // On récupère l'identifiant de l'adresse connue la plus intéressante
@@ -363,10 +353,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $adresse        Adresse choisie (électorale ou déclarée)
-     * @param   string  $separateur     Séparateur choisi entre les différentes entités de l'adresse
+     * @param string $adresse    Adresse choisie (électorale ou déclarée)
+     * @param string $separateur Séparateur choisi entre les différentes entités de l'adresse
      *
-     * @result  string                  Adresse retournée
+     * @result string                  Adresse retournée
      */
     
     public function adresse( $adresse = 'electoral' , $separateur = '<br>' )
@@ -411,9 +401,9 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      * 
-     * @param   bool    $adresse    Si true, l'adresse sera affichée, sinon non
+     * @param bool $adresse Si true, l'adresse sera affichée, sinon non
      *
-     * @return  string              Informations relatives au bureau de vote, mises en forme
+     * @return string              Informations relatives au bureau de vote, mises en forme
      */
     
     public function bureau( $adresse = false )
@@ -437,8 +427,7 @@ class Contact
         
         // On prépare le nom du bureau de vote et de son numéro dans la variable $ligne
         $ligne = 'Bureau <a href="index.php?page=carto&niveau=bureau&code=' . hash('sha256', $bureau['bureau_id']) . '">' . $bureau['bureau_code'] . '</a> &ndash; ' . $ville['commune_nom'];
-        if (!empty($bureau['bureau_nom']))
-        {
+        if (!empty($bureau['bureau_nom'])) {
             $ligne.= '<br>' . $bureau['bureau_nom'];
         }
         
@@ -447,8 +436,7 @@ class Contact
         unset($ligne);
         
         // On prépare l'affichage de l'adresse
-        if ($adresse === true)
-        {
+        if ($adresse === true) {
             $ligne = $bureau['bureau_adresse'] . '<br>';
             $ligne.= $bureau['bureau_cp'] . ' ' . $ville['commune_nom'];
             
@@ -471,24 +459,21 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      * 
-     * @param   string  $type       Type de coordonnées particulier demandé (email, fixe, mobile)
+     * @param string $type Type de coordonnées particulier demandé (email, fixe, mobile)
      *
-     * @result  array               Tableau des coordonnées correspondant à la demande
+     * @result array               Tableau des coordonnées correspondant à la demande
      */
     
     public function coordonnees( $type = 'toutes' )
     {
         // On prépare les requêtes SQL
-        if ( $type == 'email' )
-        {
+        if ($type == 'email' ) {
             $query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_type` = "email" AND `coordonnee_email` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_email` ASC');
         }
-        else if ( $type == 'fixe' )
-        {
+        else if ($type == 'fixe' ) {
             $query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "fixe" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
         }   
-        else if ( $type == 'mobile' )
-        {
+        else if ($type == 'mobile' ) {
             $query = $this->link->prepare('SELECT `coordonnee_id`, `coordonnee_type`, `coordonnee_numero` FROM `coordonnees` WHERE `coordonnee_type` = "mobile" AND `coordonnee_numero` IS NOT NULL AND `contact_id` = :contact ORDER BY `coordonnee_numero` ASC');
         }
         else
@@ -512,16 +497,15 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $type   Type demandé à la vérification d'une coordonnée ou non
+     * @param string $type Type demandé à la vérification d'une coordonnée ou non
      *
-     * @return  bool
+     * @return bool
      */
     
     public function possede( $type )
     {
         // On retourne un booléen selon le nombre de données trouvées
-        if ($this->get('contact_' . $type))
-        {
+        if ($this->get('contact_' . $type)) {
             return true;
         }
         else
@@ -537,10 +521,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $contenu        Contenu concerné
-     * @param   string  $conteneur      Conteneur à ajouter autour de l'élément
+     * @param string $contenu   Contenu concerné
+     * @param string $conteneur Conteneur à ajouter autour de l'élément
      *
-     * @result  string                  Contenu et son conteneur
+     * @result string                  Contenu et son conteneur
      */
     
     private function contenir( $contenu, $conteneur = '' )
@@ -549,13 +533,15 @@ class Contact
         $retour = '';
     
         // On ajoute l'ouverture du conteneur
-        if (!empty($conteneur)) { $retour.= '<' . $conteneur . '>'; }
+        if (!empty($conteneur)) { $retour.= '<' . $conteneur . '>'; 
+        }
         
         // On ajoute le contenu
         $retour.= $contenu;
         
         // On ajoute la fermeture du conteneur
-        if (!empty($conteneur)) { $retour.= '</' . $conteneur . '>'; }
+        if (!empty($conteneur)) { $retour.= '</' . $conteneur . '>'; 
+        }
         
         // On retourne le contenu
         return $retour;
@@ -568,17 +554,16 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string      $type           Type de coordonnées envoyées
-     * @param   string|int  $coordonnees    Coordonnées à rajouter
+     * @param string     $type        Type de coordonnées envoyées
+     * @param string|int $coordonnees Coordonnées à rajouter
      *
-     * @result  void
+     * @result void
      */
     
     public function ajoutCoordonnees( $type , $coordonnees )
     {
         // On prépare la requête selon le type fourni
-        if ($type == 'email')
-        {
+        if ($type == 'email') {
             $query = $this->link->prepare('INSERT INTO `coordonnees` (`contact_id`, `coordonnee_type`, `coordonnee_email`) VALUES (:contact, :type, :coordonnees)');
         }
         else
@@ -607,7 +592,7 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @result  array       Tableau des fiches liées
+     * @result array       Tableau des fiches liées
      */
      
     public function fichesLiees()
@@ -627,8 +612,7 @@ class Contact
         foreach ($fiches as $fiche)
         {
             // On regarde quelle est la deuxième fiche liée, et on l'affecte à la variable $fiche_id
-            if ($fiche['ficheA'] == $this->contact['contact_id'])
-            {
+            if ($fiche['ficheA'] == $this->contact['contact_id']) {
                 $fiche_id = $fiche['ficheB'];
             }
             else
@@ -686,10 +670,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      * 
-     * @param   int     $info       Information à mettre à jour
-     * @param   mixed   $value      Valeur à intégrer dans la base
+     * @param int   $info  Information à mettre à jour
+     * @param mixed $value Valeur à intégrer dans la base
      *
-     * @result  void
+     * @result void
      */
     
     public function update( $info , $value )
@@ -717,9 +701,9 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $tag    Tag à ajouter à la fiche
+     * @param string $tag Tag à ajouter à la fiche
      *
-     * @result  void
+     * @result void
      */
     
     public function tag_ajout( $tag )
@@ -763,9 +747,9 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $tag    Tag à supprimer
+     * @param string $tag Tag à supprimer
      *
-     * @result  void
+     * @result void
      */
     
     public function tag_suppression( $tag )
@@ -777,8 +761,7 @@ class Contact
         $tags = explode(',', $tags);
         
         // On regarde si on trouve le tag à supprimer dans la base de données
-        if (array_search($tag, $tags))
-        {
+        if (array_search($tag, $tags)) {
             $cle = array_search($tag, $tags);
             
             // On retire le tag de la liste en question
@@ -812,12 +795,12 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   mixed   $file           Fichier à gérer
-     * @param   array   $data           Données liées 
-     * @param   array   $extensions     Extensions autorisées
-     * @param   int     $maxsize        Taille maximale autorisée des fichiers
+     * @param mixed $file       Fichier à gérer
+     * @param array $data       Données liées 
+     * @param array $extensions Extensions autorisées
+     * @param int   $maxsize    Taille maximale autorisée des fichiers
      *
-     * @result  void
+     * @result void
      */
     
     public function fichier_upload( $file , array $data , $extensions = false , $maxsize = false )
@@ -827,21 +810,23 @@ class Contact
         $nom = preg_replace("#[^a-z0-9]#", "-", strtolower($data['titre'])) . '-' . time() . '.' . $extension;
         
         // test1 : on vérifie que le fichier s'est uploadé correctement
-        if (!isset($file) || $file['error'] > 0) return false;
+        if (!isset($file) || $file['error'] > 0) { return false; 
+        }
         
         // test2 : on vérifie si on ne dépasse pas la taille limite
-        if ($maxsize !== FALSE && $file['size'] > $maxsize) return false;
+        if ($maxsize !== false && $file['size'] > $maxsize) { return false; 
+        }
         
         // test3 : on vérifie si l'extension est autorisée
         $extension = substr(strrchr($file['name'], '.'), 1);
-        if ($extensions !== FALSE && !in_array($extension, $extensions)) return false;
+        if ($extensions !== false && !in_array($extension, $extensions)) { return false; 
+        }
         
         // On détermine la destination
         $destination = 'uploads/' . $nom;
         
         // Dans ce cas, on déplace le fichier à sa destination finale
-        if (move_uploaded_file($file['tmp_name'], $destination))
-        {
+        if (move_uploaded_file($file['tmp_name'], $destination)) {
             // On récupère l'ID de l'utilisateur
             $utilisateur = (isset($_COOKIE['leqg-user'])) ? $_COOKIE['leqg-user'] : 0;
             
@@ -906,10 +891,10 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string   $info   Information à modifier
-     * @param   string   $valeur Information à enregistrer
+     * @param string $info   Information à modifier
+     * @param string $valeur Information à enregistrer
      *
-     * @return  void
+     * @return void
      */
     
     public function modification( $info , $valeur )
@@ -932,7 +917,7 @@ class Contact
          * @author  Damien Senger <mail@damiensenger.me>
          * @version 1.0
          * 
-         * @result  void
+         * @result void
          */
     
     public function destruction( )
@@ -957,7 +942,7 @@ class Contact
          * @author  Damien Senger <mail@damiensenger.me>
          * @version 1.0
          * 
-         * @result  int   Identifiant de la fiche créée
+         * @result int   Identifiant de la fiche créée
          */
     
     public static function creation( )
@@ -988,12 +973,13 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      * 
-     * @param   string   $recherche   Terme recherché par l'utilisateur
+     * @param string $recherche Terme recherché par l'utilisateur
      * 
-     * @result  array    ID des fiches répondant à la recherche
+     * @result array    ID des fiches répondant à la recherche
      */
     
-    public static function recherche( $recherche ) {
+    public static function recherche( $recherche ) 
+    {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');
         
@@ -1009,7 +995,8 @@ class Contact
             $query->bindParam(':date', $recherche);
             
             // On exécute la recherche et on vérifie qu'il n'y a pas d'erreurs d'exécution
-            if (!$query->execute()) return false;
+            if (!$query->execute()) { return false; 
+            }
             
             // On retraite les données de la requête
             $resultats = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -1032,7 +1019,8 @@ class Contact
             $query->bindValue(':terme', $terme);
             
             // On exécute et on vérifie qu'il n'y a pas d'erreurs d'exécution
-            if (!$query->execute()) return false;
+            if (!$query->execute()) { return false; 
+            }
             
             // On retraite les données de la requête
             $resultats = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -1050,9 +1038,9 @@ class Contact
          * @author  Damien Senger <mail@damiensenger.me>
          * @version 1.0
          *
-         * @param   string  $terme   Terme de la recherche
+         * @param string $terme Terme de la recherche
          * 
-         * @result  array   Tableau des résultats
+         * @result array   Tableau des résultats
          */
     
     public static function rechercheThematique( $terme )
@@ -1072,7 +1060,8 @@ class Contact
         $query->execute();
         if ($query->rowCount() >= 1) {
             $resultats = $query->fetchAll(PDO::FETCH_NUM);
-            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; 
+            }
             unset($resultats);
         }
                 
@@ -1082,7 +1071,8 @@ class Contact
         $query->execute();
         if ($query->rowCount() >= 1) {
             $resultats = $query->fetchAll(PDO::FETCH_NUM);
-            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; 
+            }
             unset($resultats);
         }
         
@@ -1092,7 +1082,8 @@ class Contact
         $query->execute();
         if ($query->rowCount() >= 1) {
             $resultats = $query->fetchAll(PDO::FETCH_NUM);
-            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; }
+            foreach ($resultats as $resultat) { $contacts[] = $resultat[0]; 
+            }
             unset($resultats);
         }
         
@@ -1113,11 +1104,11 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   string  $tri     Méthodes de tri demandées
-     * @param   int     $debut   Ordre de la première occurence demandée (ou si true on estime simplement le nombre)
-     * @param   int     $nombre  Nombre de fiches demandées selon la méthode
+     * @param string $tri    Méthodes de tri demandées
+     * @param int    $debut  Ordre de la première occurence demandée (ou si true on estime simplement le nombre)
+     * @param int    $nombre Nombre de fiches demandées selon la méthode
      *
-     * @result  array   Liste des fiches correspondante au sein d'un tableau PHP
+     * @result array   Liste des fiches correspondante au sein d'un tableau PHP
      */
     
     public static function listing( array $tri , $debut , $nombre = 5 )
@@ -1139,135 +1130,151 @@ class Contact
             $criteres = array();
             
                 // On retraite le critère "email" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['email']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['email'] == 2) { $criteres[] = '`contact_email` > 0'; }
-                    // Sinon, s'il concerne les fiches sans l'information
-                    else { $criteres[] = '`contact_email` = 0'; }
+            if ($tri['email']) {
+                // Si le tri demandé concerne les fiches avec l'information
+                if ($tri['email'] == 2) { $criteres[] = '`contact_email` > 0'; 
                 }
+                // Sinon, s'il concerne les fiches sans l'information
+                else { $criteres[] = '`contact_email` = 0'; 
+                }
+            }
                 
-                if ($tri['adresse']) {
-                    // Si le tri demandé concerne les fiches avec forcément une adresse
-                    if ($tri['adresse'] == 2) { $criteres[] = '(`adresse_id` != 0 OR `immeuble_id` != 0)'; }
-                    // Sinon s'il concerne les fiches sans l'information adresse
-                    else { $criteres[] = '(`adresse_id` = 0 AND `immeuble_id` = 0)'; }
+            if ($tri['adresse']) {
+                // Si le tri demandé concerne les fiches avec forcément une adresse
+                if ($tri['adresse'] == 2) { $criteres[] = '(`adresse_id` != 0 OR `immeuble_id` != 0)'; 
                 }
+                // Sinon s'il concerne les fiches sans l'information adresse
+                else { $criteres[] = '(`adresse_id` = 0 AND `immeuble_id` = 0)'; 
+                }
+            }
             
                 // On retraite le critère "mobile" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['mobile']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['mobile'] == 2) { $criteres[] = '`contact_mobile` > 0'; }
-                    // Sinon, s'il concerne les fiches sans l'information
-                    else { $criteres[] = '`contact_mobile` = 0'; }
+            if ($tri['mobile']) {
+                // Si le tri demandé concerne les fiches avec l'information
+                if ($tri['mobile'] == 2) { $criteres[] = '`contact_mobile` > 0'; 
                 }
+                // Sinon, s'il concerne les fiches sans l'information
+                else { $criteres[] = '`contact_mobile` = 0'; 
+                }
+            }
             
                 // On retraite le critère "fixe" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['fixe']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['fixe'] == 2) { $criteres[] = '`contact_fixe` > 0'; }
-                    // Sinon, s'il concerne les fiches sans l'information
-                    else { $criteres[] = '`contact_fixe` = 0'; }
+            if ($tri['fixe']) {
+                // Si le tri demandé concerne les fiches avec l'information
+                if ($tri['fixe'] == 2) { $criteres[] = '`contact_fixe` > 0'; 
                 }
+                // Sinon, s'il concerne les fiches sans l'information
+                else { $criteres[] = '`contact_fixe` = 0'; 
+                }
+            }
                 
                 // On retraite le critère "phone" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if (isset($tri['phone']) && $tri['phone']) {
-                    // Si le tri demandé concerne les fiches avec l'information
-                    if ($tri['phone'] == 2) { $criteres[] = '( `contact_fixe` > 0 OR `contact_mobile` > 0 )'; }
+            if (isset($tri['phone']) && $tri['phone']) {
+                // Si le tri demandé concerne les fiches avec l'information
+                if ($tri['phone'] == 2) { $criteres[] = '( `contact_fixe` > 0 OR `contact_mobile` > 0 )'; 
                 }
+            }
             
                 // On retraite le critère "electeur" (si 1 (non) ou 2 (oui) on fait -1 pour obtenir le booléen souhaité pour la BDD
-                if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); }
+            if ($tri['electeur']) { $criteres[] = '`contact_electeur` = ' . ($tri['electeur'] - 1); 
+            }
                 
                 // Si des critères plus complexes sont demandés, on s'en occupe ici
-                if (!empty($tri['criteres'])) {
-                    $criteria = explode(';', $tri['criteres']);
+            if (!empty($tri['criteres'])) {
+                $criteria = explode(';', $tri['criteres']);
                     
                     
-                    // On prépare les tableaux avec les différents critères
-                    $themas = array();
-                    $birth = array();
-                    $bureaux = array();
-                    $rues = array();
-                    $votes = array();
+                // On prépare les tableaux avec les différents critères
+                $themas = array();
+                $birth = array();
+                $bureaux = array();
+                $rues = array();
+                $votes = array();
                     
                     
-                    // On sépare les critères de leurs type
-                    foreach ($criteria as $key => $val) {
-                        $crit = explode(':', $val);
+                // On sépare les critères de leurs type
+                foreach ($criteria as $key => $val) {
+                    $crit = explode(':', $val);
                         
-                        if ($crit[0] == 'thema') { $themas[] = $crit[1]; }
-                        else if ($crit[0] == 'birth') { $birth[] = $crit[1]; }
-                        else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; }
-                        else if ($crit[0] == 'rue') { $rues[] = $crit[1]; }
-                        else if ($crit[0] == 'vote') { $votes[] = $crit[1]; }
+                    if ($crit[0] == 'thema') { $themas[] = $crit[1]; 
                     }
-                    
-                    // On va analyser les critères thématiques pour les ajouter à la condition SQL
-                    if (count($themas)) {
-                        // On va ajouter chaque condition thématique à la recherche
-                        foreach ($themas as $thema) { 
-                            $thema = preg_replace('#[^[:alnum:]]#u', '%', $thema);
-                            $criteres[] = '`contact_tags` LIKE "%' . $thema . '%"';
-                        }
+                    else if ($crit[0] == 'birth') { $birth[] = $crit[1]; 
                     }
-                    
-                    // On va analyser les critères de votes pour les ajouter à la condition SQL
-                    if (count($votes)) {
-                        foreach ($votes as $vote) {
-                            $criteres[] = '`contact_vote_' . $vote . '` = 1';
-                        }
+                    else if ($crit[0] == 'bureau') { $bureaux[] = $crit[1]; 
                     }
-                    
-                    // On va analyser les critères de naissance pour les ajouter à la condition SQL
-                    if (count($birth)) {
-                        // On va ajouter chaque condition de naissance à la recherche $dates en retraitant son format
-                        $dates = array();
-                        
-                        foreach ($birth as $date) {
-                            $date = explode('/', $date);
-                            krsort($date);
-                            $date = implode('-', $date);
-                            $dates[] = '`contact_naissance_date` = "' . $date . '"';
-                        }
-                        
-                        if (count($dates) == 1) {
-                            $criteres[] = $dates[0];
-                        } else {
-                            $criteres[] = '(`contact_naissance_date` = "' . implode('" OR `contact_naissance_date` = "') . '")';
-                        }
+                    else if ($crit[0] == 'rue') { $rues[] = $crit[1]; 
                     }
-                    
-                    // On va analyser les bureaux de votes demandés pour extraire tous les électeurs au sein de ceux-ci
-                    if (count($bureaux)) {
-                        // On prépare la liste des bureaux de vote pour l'insérer dans la requête
-                        $ids = implode(',', $bureaux);
-                        
-                        // On prépare la condition SQL
-                        $criteres[] = '`bureau_id` IN (' . $ids . ')';
-                    }
-                    
-                    
-                    // On va analyser toutes les rues demandées pour récupérer tous les ID d'immeubles concernées par ces rues et les électeurs qui y sont
-                    if (count($rues)) {
-                        // Pour chaque rue, on cherche les immeubles concernés
-                        $immeubles = array();
-                        foreach ($rues as $rue) {
-                            $query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
-                            $query->bindParam(':id', $rue);
-                            $query->execute();
-                            $ids = $query->fetchAll(PDO::FETCH_NUM);
-                            
-                            // Pour chaque immeuble trouvé, on le rajoute dans le tableau $immeubles
-                            foreach ($ids as $id) { $immeubles[] = $id[0]; }
-                        }
-                        
-                        // On transforme cette liste d'immeuble pour l'intégrer dans la requête SQL
-                        $ids = implode(',', $immeubles);
-                        
-                        // On rajoute la requête aux conditions SQL
-                        $criteres[] = '( `immeuble_id` IN (' . $ids . ') OR `adresse_id` IN (' . $ids . ') )';
+                    else if ($crit[0] == 'vote') { $votes[] = $crit[1]; 
                     }
                 }
+                    
+                // On va analyser les critères thématiques pour les ajouter à la condition SQL
+                if (count($themas)) {
+                    // On va ajouter chaque condition thématique à la recherche
+                    foreach ($themas as $thema) { 
+                        $thema = preg_replace('#[^[:alnum:]]#u', '%', $thema);
+                        $criteres[] = '`contact_tags` LIKE "%' . $thema . '%"';
+                    }
+                }
+                    
+                // On va analyser les critères de votes pour les ajouter à la condition SQL
+                if (count($votes)) {
+                    foreach ($votes as $vote) {
+                        $criteres[] = '`contact_vote_' . $vote . '` = 1';
+                    }
+                }
+                    
+                // On va analyser les critères de naissance pour les ajouter à la condition SQL
+                if (count($birth)) {
+                    // On va ajouter chaque condition de naissance à la recherche $dates en retraitant son format
+                    $dates = array();
+                        
+                    foreach ($birth as $date) {
+                        $date = explode('/', $date);
+                        krsort($date);
+                        $date = implode('-', $date);
+                        $dates[] = '`contact_naissance_date` = "' . $date . '"';
+                    }
+                        
+                    if (count($dates) == 1) {
+                        $criteres[] = $dates[0];
+                    } else {
+                        $criteres[] = '(`contact_naissance_date` = "' . implode('" OR `contact_naissance_date` = "') . '")';
+                    }
+                }
+                    
+                // On va analyser les bureaux de votes demandés pour extraire tous les électeurs au sein de ceux-ci
+                if (count($bureaux)) {
+                    // On prépare la liste des bureaux de vote pour l'insérer dans la requête
+                    $ids = implode(',', $bureaux);
+                        
+                    // On prépare la condition SQL
+                    $criteres[] = '`bureau_id` IN (' . $ids . ')';
+                }
+                    
+                    
+                // On va analyser toutes les rues demandées pour récupérer tous les ID d'immeubles concernées par ces rues et les électeurs qui y sont
+                if (count($rues)) {
+                    // Pour chaque rue, on cherche les immeubles concernés
+                    $immeubles = array();
+                    foreach ($rues as $rue) {
+                        $query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
+                        $query->bindParam(':id', $rue);
+                        $query->execute();
+                        $ids = $query->fetchAll(PDO::FETCH_NUM);
+                            
+                        // Pour chaque immeuble trouvé, on le rajoute dans le tableau $immeubles
+                        foreach ($ids as $id) { $immeubles[] = $id[0]; 
+                        }
+                    }
+                        
+                    // On transforme cette liste d'immeuble pour l'intégrer dans la requête SQL
+                    $ids = implode(',', $immeubles);
+                        
+                    // On rajoute la requête aux conditions SQL
+                    $criteres[] = '( `immeuble_id` IN (' . $ids . ') OR `adresse_id` IN (' . $ids . ') )';
+                }
+            }
             
             
             // On retraite les critères en conditions SQL
@@ -1297,7 +1304,8 @@ class Contact
                 // On retraite la liste des identifiants pour en faire un tableau PHP $contacts
                 $ids = $query->fetchAll(PDO::FETCH_NUM);
                 $contacts = array();
-                foreach ($ids as $id) $contacts[] = $id[0];
+                foreach ($ids as $id) { $contacts[] = $id[0]; 
+                }
 
                 // On retourne la liste des ids de fiches concernées par la requête
                 return $contacts;
@@ -1318,11 +1326,12 @@ class Contact
      * @author  Damien Senger <mail@damiensenger.me>
      * @version 1.0
      *
-     * @param   int    $nombre  Nombre de fiches à retourner
-     * @result  array  Tableau des identifiants des fiches retournées
+     * @param  int $nombre Nombre de fiches à retourner
+     * @result array  Tableau des identifiants des fiches retournées
      */
     
-    public static function last( $nombre = 5 ) {
+    public static function last( $nombre = 5 ) 
+    {
         // On commence par paramétrer les données PDO
         $link = Configuration::read('db.link');
         
@@ -1339,7 +1348,8 @@ class Contact
             $ids = $query->fetchAll(PDO::FETCH_ASSOC);
             
             // On retraite les informations pour les ajouter au tableau $fiches
-            foreach ($ids as $id) $fiches[] = $id['contact_id'];
+            foreach ($ids as $id) { $fiches[] = $id['contact_id']; 
+            }
             
             // On retourne le tableau correspondant
             return $fiches;

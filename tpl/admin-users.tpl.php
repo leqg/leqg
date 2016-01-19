@@ -7,10 +7,10 @@ Core::tpl_header();
     
     <section class="contenu">
         	<ul class="listeContacts" style="padding-top: 1em;">
-        	<?php $utilisateurs = User::all(0); foreach ($utilisateurs as $utilisateur) : ?><!--
+            <?php $utilisateurs = User::all(0); foreach ($utilisateurs as $utilisateur) : ?><!--
         	 --><a href="<?php Core::tpl_go_to('administration', array('compte' => $utilisateur['id'])); ?>" class="nostyle"><li class="demi contact homme cursor">
         	 		<strong><?php echo $utilisateur['firstname']; ?> <?php echo $utilisateur['lastname']; ?></strong>
-        		</li></a><?php endforeach; ?>
+</li></a><?php endforeach; ?>
         	</ul>
     </section>
 <?php Core::tpl_footer(); ?>

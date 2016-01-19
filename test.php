@@ -1,7 +1,7 @@
 <?php
 //error_reporting(E_ALL);
 
-require_once('includes.php');
+require_once 'includes.php';
 
 // L'idée, c'est de tester PDO
 

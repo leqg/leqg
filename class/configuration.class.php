@@ -33,27 +33,27 @@ class Configuration
     /**
      * @var array $confArray Configuration data array
      * */
-	static $confArray;
-	
-	/**
-    	 * Reading configuration method
-    	 * @param string $name Saved conf data name
-    	 * @result mixed
-    	 * */
-	public static function read($name)
-	{
-		return self::$confArray[$name];
-	}
-	
-	/**
-    	 * Writing configuration method
-    	 * @param string $name To save data name
-    	 * @param mixed $value To save data content
-    	 * @result void
-    	 * */	
-	public static function write($name, $value)
-	{
-		self::$confArray[$name] = $value;
-	}
-	
+    static $confArray;
+    
+    /**
+         * Reading configuration method
+         * @param string $name Saved conf data name
+         * @result mixed
+         * */
+    public static function read($name)
+    {
+        return self::$confArray[$name];
+    }
+    
+    /**
+         * Writing configuration method
+         * @param string $name  To save data name
+         * @param mixed  $value To save data content
+         * @result void
+         * */    
+    public static function write($name, $value)
+    {
+        self::$confArray[$name] = $value;
+    }
+    
 }

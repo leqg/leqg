@@ -1,9 +1,9 @@
 <?php
-	// On importe d'abord les fichiers associés
-	require_once 'includes.php';
-	
-	// On importe le header
-	$core->tpl_header();
+    // On importe d'abord les fichiers associés
+    require_once 'includes.php';
+    
+    // On importe le header
+    $core->tpl_header();
 ?>
 
 	<div id="installation" style="margin: 3em;">
@@ -17,9 +17,9 @@
 	<script src="assets/js/installation.js"></script>
 
 <?php
-	// On importe le footer
-	$core->tpl_footer();
-	
-	// On importe la purge
-	require_once 'purge.php';
+    // On importe le footer
+    $core->tpl_footer();
+    
+    // On importe la purge
+    require_once 'purge.php';
 ?>

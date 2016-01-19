@@ -39,24 +39,24 @@ class Folder
     /**
      * Construct method
      * 
-     * @param   string  $folder     Folder ID (w/o hash)
-     * @result  void
+     * @param  string $folder Folder ID (w/o hash)
+     * @result void
      * */
     public function __construct($folder)
     {
-		$query = Core::query('folder-data');
-		$query->bindParam(':folder', $folder, PDO::PARAM_INT);
-		$query->execute();
-		$this->_folder = $query->fetch(PDO::FETCH_ASSOC);
-		$this->_folder['md5'] = md5($this->_folder['id']);
+        $query = Core::query('folder-data');
+        $query->bindParam(':folder', $folder, PDO::PARAM_INT);
+        $query->execute();
+        $this->_folder = $query->fetch(PDO::FETCH_ASSOC);
+        $this->_folder['md5'] = md5($this->_folder['id']);
     }
     
     
     /**
      * Get an asked information
      * 
-     * @param   string  $data       Asked information
-     * @return  mixed
+     * @param  string $data Asked information
+     * @return mixed
      * */
     public function get($data)
     {
@@ -67,9 +67,9 @@ class Folder
     /**
      * Update an asked information
      * 
-     * @param   string  $data       Asked information
-     * @param   string  $value      New value
-     * @result  void
+     * @param  string $data  Asked information
+     * @param  string $value New value
+     * @result void
      * */
     public function update($data, $value)
     {
@@ -84,7 +84,7 @@ class Folder
     /**
      * Export known informations in JSON
      * 
-     * @return  string
+     * @return string
      * */
     public function json()
     {
@@ -95,7 +95,7 @@ class Folder
     /**
      * List of all events linked to the folder
      * 
-     * @return  array
+     * @return array
      * */
     public function events()
     {
@@ -105,7 +105,8 @@ class Folder
         
         $events = array();
         $_events = $query->fetchAll(PDO::FETCH_NUM);
-        foreach ($_events as $event) { $events[] = $event[0]; }
+        foreach ($_events as $event) { $events[] = $event[0]; 
+        }
         
         return $events;
     }
@@ -114,7 +115,7 @@ class Folder
     /**
      * List of all tasks linked to the folder
      * 
-     * @return  array
+     * @return array
      * */
     public function tasks()
     {
@@ -128,7 +129,7 @@ class Folder
     /**
      * List of all tasks linked to the folder
      * 
-     * @return  array
+     * @return array
      * */
     public function files()
     {
@@ -142,9 +143,9 @@ class Folder
     /**
      * Create a new folder
      * 
-     * @param   string  $name       Folder's name
-     * @param   string  $desc       Folder's description
-     * @result  int                 New folder ID
+     * @param  string $name Folder's name
+     * @param  string $desc Folder's description
+     * @result int                 New folder ID
      * */
     public static function create($name, $desc)
     {
@@ -160,8 +161,8 @@ class Folder
     /**
      * List of all folders
      * 
-     * @param   int     $status     Status of asked folders (1 open 0 close)
-     * @return  array
+     * @param  int $status Status of asked folders (1 open 0 close)
+     * @return array
      * */
     public static function all($status = 1)
     {

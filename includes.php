@@ -11,7 +11,7 @@ setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr');
 header('Content-Type: text/html; charset=utf-8');
 
 // we load configuration method
-require_once('class/configuration.class.php');
+require_once 'class/configuration.class.php';
 
 // On récupère le fichier de configuration
 $config = parse_ini_file('config.ini', true);
@@ -42,19 +42,23 @@ $core = new PDO($dsn, $user, $pass);
 $dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
 $link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
 
-$core->query("SET
+$core->query(
+    "SET
 character_set_results = 'utf8',
 character_set_client = 'utf8',
 character_set_connection = 'utf8',
 character_set_database = 'utf8',
-character_set_server = 'utf8'");
+character_set_server = 'utf8'"
+);
 
-$link->query("SET
+$link->query(
+    "SET
 character_set_results = 'utf8',
 character_set_client = 'utf8',
 character_set_connection = 'utf8',
 character_set_database = 'utf8',
-character_set_server = 'utf8'");
+character_set_server = 'utf8'"
+);
 
 // On enregistre les liaisons SQL
 Configuration::write('db.core', $core);

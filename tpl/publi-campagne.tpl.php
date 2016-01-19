@@ -1,15 +1,17 @@
 <?php
-	// On met en place la protection
-	User::protection(5);
-	
-	// On récupère les informations sur la campagne demandée
-	$campaign = new Campaign($_GET['campagne']);
+    // On met en place la protection
+    User::protection(5);
+    
+    // On récupère les informations sur la campagne demandée
+    $campaign = new Campaign($_GET['campagne']);
 
-	// On charge le template
-	Core::tpl_header(); 
+    // On charge le template
+    Core::tpl_header(); 
 ?>
 	
-	<h2 class="titreCampagne" data-campagne="<?php echo $campaign->get('id'); ?>" data-page="campagne"><?php if (!empty($campaign->get('titre'))) { echo $campaign->get('titre'); } else { echo 'Campagne sans titre'; }?></h2>
+	<h2 class="titreCampagne" data-campagne="<?php echo $campaign->get('id'); ?>" data-page="campagne"><?php if (!empty($campaign->get('titre'))) { echo $campaign->get('titre'); 
+} else { echo 'Campagne sans titre'; 
+}?></h2>
 	
 	<div class="colonne demi gauche">
 		<section class="contenu demi">
@@ -30,7 +32,8 @@
 				</li>
 				<li class="email">
 					<span>Nombre d'envois</span>
-					<span><strong><?php echo number_format($campaign->get('count'), 0, ',', ' '); ?></strong> envoi<?php if ($campaign->get('count') > 1) { ?>s<?php } ?></span>
+					<span><strong><?php echo number_format($campaign->get('count'), 0, ',', ' '); ?></strong> envoi<?php if ($campaign->get('count') > 1) { ?>s<?php 
+    } ?></span>
 				</li>
 			</ul>
 		</section>

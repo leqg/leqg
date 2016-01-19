@@ -1,7 +1,7 @@
 <?php
-	User::protection(5);
-	$contact = new Contact(md5($_GET['fiche']));
-	Core::tpl_header();
+    User::protection(5);
+    $contact = new Contact(md5($_GET['fiche']));
+    Core::tpl_header();
 ?>
 <h2>Ajout d'une interaction</h2>
 

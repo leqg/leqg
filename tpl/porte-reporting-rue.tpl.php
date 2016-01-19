@@ -5,27 +5,29 @@
 	<section id="mapbox-mission"></section>
 
     <section class="mission-porte">        
-    		<?php if (Porte::nombreVisites($mission['mission_id'])) : ?>
-    		    <?php $rues = Porte::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : $ville = Carto::ville(Carto::villeParRue($rue)); ?>
+        <?php if (Porte::nombreVisites($mission['mission_id'])) : ?>
+            <?php $rues = Porte::liste($mission['mission_id']); foreach ($rues as $rue => $immeubles) : if (count($immeubles)) : if ($rue == $_GET['rue']) : $ville = Carto::ville(Carto::villeParRue($rue)); ?>
     		    <h4><?php $nomRue = Carto::afficherRue($rue, true); echo $nomRue; ?></h4>
 
-        		    <?php
-            		    // On va tenter de retrier les immeubles dans le bon ordre
-            		    $link = Configuration::read('db.link');
-            		    $query = 'SELECT `immeuble_id`, `immeuble_numero` FROM `immeubles` WHERE `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ORDER BY `immeuble_numero` ASC';
-            		    $sql = $link->query($query);
-            		    $buildings = array();
-            		    while ($d = $sql->fetch(PDO::FETCH_ASSOC)) { $buildings[] = $d; }
-            		    
-            		    Core::triMultidimentionnel($buildings, 'immeuble_numero');
-            		    
-            		    $immeubles = array();
-            		    foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; }
-	            		    
-	                    foreach ($immeubles as $immeuble) :
-		                    $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble));
-		                    if ($electeurs) :
-	                ?>
+                <?php
+                        // On va tenter de retrier les immeubles dans le bon ordre
+                        $link = Configuration::read('db.link');
+                        $query = 'SELECT `immeuble_id`, `immeuble_numero` FROM `immeubles` WHERE `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ORDER BY `immeuble_numero` ASC';
+                        $sql = $link->query($query);
+                        $buildings = array();
+                        while ($d = $sql->fetch(PDO::FETCH_ASSOC)) { $buildings[] = $d; 
+                        }
+                        
+                        Core::triMultidimentionnel($buildings, 'immeuble_numero');
+                        
+                        $immeubles = array();
+                        foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; 
+                        }
+                            
+                        foreach ($immeubles as $immeuble) :
+                            $electeurs = Porte::electeurs(md5($mission['mission_id']), md5($immeuble));
+                            if ($electeurs) :
+                    ?>
         		    
         		        <h5><?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?></h5>
         		        
@@ -41,7 +43,7 @@
                 		        </tr>
             		        </thead>
             		        <tbody>
-             		        <?php foreach ($electeurs as $electeur) : ?>
+                        <?php foreach ($electeurs as $electeur) : ?>
                		        <tr class="ligne-electeur-<?php echo md5($electeur['contact_id']); ?>">
                     		        <td><?php echo mb_convert_case($electeur['contact_nom'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_nom_usage'], MB_CASE_UPPER) . ' ' . mb_convert_case($electeur['contact_prenoms'], MB_CASE_TITLE); ?></td>
                     		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-a" name="electeur-<?php echo $electeur['contact_id']; ?>" value="1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-a" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="1"><span><span></span></span></label></div></td>
@@ -50,13 +52,16 @@
                     		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="4" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-c" name="electeur-<?php echo $electeur['contact_id']; ?>" value="4"><label for="electeur-<?php echo $electeur['contact_id']; ?>-c" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="4"><span><span></span></span></label></div></td>
                     		        <td class="petit"><div class="radio bouton-reporting"><input data-contact="<?php echo $electeur['contact_id']; ?>" data-val="-1" type="radio" id="electeur-<?php echo $electeur['contact_id']; ?>-n" name="electeur-<?php echo $electeur['contact_id']; ?>" value="-1"><label for="electeur-<?php echo $electeur['contact_id']; ?>-n" data-contact="<?php echo md5($electeur['contact_id']); ?>" data-val="-1"><span><span></span></span></label></div></td>
                 		        </tr>
-                		        <?php endforeach; ?>
+                        <?php endforeach; ?>
             		        </tbody>
         		        </table>
 
-        		    <?php endif; endforeach; ?>
+                            <?php endif; 
+                        endforeach; ?>
 
-    		    <?php endif; endif; endforeach; ?>
+            <?php endif; 
+            endif; 
+            endforeach; ?>
         <?php else : ?>
         Aucun immeuble à visiter dans cette mission
         <?php endif; ?>
@@ -69,38 +74,40 @@
     </section>
     
 <?php
-	if (Porte::nombreVisites($mission['mission_id'])) :
-	
-		$rues = Porte::liste($mission['mission_id']);
-		
-		foreach ($rues as $rue => $immeubles) :
-		
-			if (count($immeubles)) :
-			
-				if ($rue == $_GET['rue']) :
-				
-					$ville = Carto::ville(Carto::villeParRue($rue));
-					
-				    // On va tenter de retrier les immeubles dans le bon ordre
-				    $link = Configuration::read('db.link');
-				    $query = 'SELECT `immeuble_id`, `immeuble_numero` FROM `immeubles` WHERE `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ORDER BY `immeuble_numero` ASC';
-				    $sql = $link->query($query);
-				    $buildings = array();
-				    while ($d = $sql->fetch(PDO::FETCH_ASSOC)) { $buildings[] = $d; }
+if (Porte::nombreVisites($mission['mission_id'])) :
     
-				    Core::triMultidimentionnel($buildings, 'immeuble_numero');
-				    
-				    $immeubles = array();
-				    foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; }
-?>
-<script>
-	// Mise en place de la map
-	var map = L.map('mapbox-mission');
+    $rues = Porte::liste($mission['mission_id']);
+        
+    foreach ($rues as $rue => $immeubles) :
+        
+        if (count($immeubles)) :
+            
+            if ($rue == $_GET['rue']) :
+                
+                $ville = Carto::ville(Carto::villeParRue($rue));
+                    
+                // On va tenter de retrier les immeubles dans le bon ordre
+                $link = Configuration::read('db.link');
+                $query = 'SELECT `immeuble_id`, `immeuble_numero` FROM `immeubles` WHERE `immeuble_id` = ' . implode(' OR `immeuble_id` = ', $immeubles) . ' ORDER BY `immeuble_numero` ASC';
+                $sql = $link->query($query);
+                $buildings = array();
+                while ($d = $sql->fetch(PDO::FETCH_ASSOC)) { $buildings[] = $d; 
+                }
+    
+                Core::triMultidimentionnel($buildings, 'immeuble_numero');
+                    
+                $immeubles = array();
+                foreach ($buildings as $building) { $immeubles[] = $building['immeuble_id']; 
+                }
+        ?>
+        <script>
+         // Mise en place de la map
+         var map = L.map('mapbox-mission');
 	
-	// Sélection du tile layer OSM
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+         // Sélection du tile layer OSM
+         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
-	<?php foreach ($immeubles as $immeuble) : ?>
+            <?php foreach ($immeubles as $immeuble) : ?>
 	// On récupère sur le Nominatim OSM les coordonnées de la rue en question
 	var data = {
 		format: 'json',
@@ -129,12 +136,12 @@
 			title: "<?php Carto::afficherImmeuble($immeuble); echo $nomRue; ?>"
 		}).addTo(map);
 	});
-	<?php endforeach; ?>
-</script>    
-<?php
-				endif;
-			endif;
-		endforeach;
-	endif;
+            <?php endforeach; ?>
+      </script>    
+        <?php
+            endif;
+        endif;
+    endforeach;
+endif;
 ?>
 <?php Core::tpl_footer(); ?>

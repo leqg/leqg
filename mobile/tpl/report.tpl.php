@@ -1,18 +1,22 @@
 <?php
-	// On ouvre la mission
-	$data = new Mission($_GET['code']);
-	
-	// On vérifie que la mission a bien été ouverte
-	if ($data->err) Core::tpl_go_to('porte', true);
-	
-    if (!isset($_GET['electeur'], $_GET['statut'])) Core::tpl_go_to(true);
+    // On ouvre la mission
+    $data = new Mission($_GET['code']);
+    
+    // On vérifie que la mission a bien été ouverte
+if ($data->err) { Core::tpl_go_to('porte', true); 
+}
+    
+if (!isset($_GET['electeur'], $_GET['statut'])) { Core::tpl_go_to(true); 
+}
     
     // On récupère les données du formulaire
     $data->reporting($_GET['electeur'], $_GET['statut']);
     
     // S'il faut des coordonnées, on reste sur la page, sinon on dégage
-    if ($_GET['statut'] != 4 && $data->get('mission_type') == 'porte') Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble']), true);
-    if ($data->get('mission_type') == 'boitage') Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue']), true);
+if ($_GET['statut'] != 4 && $data->get('mission_type') == 'porte') { Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble']), true); 
+}
+if ($data->get('mission_type') == 'boitage') { Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue']), true); 
+}
     
     Core::tpl_header();
 ?>

@@ -1,12 +1,12 @@
 <?php
-	// On met en place la protection
-	User::protection(5);
-	
-	// On récupère les informations sur la campagne demandée
-	$campagne = new Campagne($_GET['campagne']);
+    // On met en place la protection
+    User::protection(5);
+    
+    // On récupère les informations sur la campagne demandée
+    $campagne = new Campagne($_GET['campagne']);
 
-	// On charge le template
-	Core::tpl_header(); 
+    // On charge le template
+    Core::tpl_header(); 
 ?>
 	
 	<h2 class="titreCampagne" data-campagne="<?php echo $campagne->get('code'); ?>" data-page="campagne"><?php echo $campagne->get('campagne_titre');?></h2>
@@ -32,7 +32,8 @@
 				</li>
 				<li class="email">
 					<span>Nombre d'envois</span>
-					<span><strong><?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?></strong> envoi<?php if ($campagne->get('nombre') > 1) { ?>s<?php } ?></span>
+					<span><strong><?php echo number_format($campagne->get('nombre'), 0, ',', ' '); ?></strong> envoi<?php if ($campagne->get('nombre') > 1) { ?>s<?php 
+    } ?></span>
 				</li>
 			</ul>
 		</section>
