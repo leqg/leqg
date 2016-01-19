@@ -1,24 +1,43 @@
 <?php
-if (is_string($_POST['objet']) && is_string($_POST['message']) && is_numeric($_POST['adresse']) && is_numeric($_POST['contact'])) {
+/**
+ * Modification de l'email d'un contact
+ *
+ * PHP version 5
+ *
+ * @category Ajax
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
+
+if (is_string($_POST['objet'])
+    && is_string($_POST['message'])
+    && is_numeric($_POST['adresse'])
+    && is_numeric($_POST['contact'])
+) {
      // On récupère le lien vers les BDD
      $link = Configuration::read('db.link');
      $zentrum = Configuration::read('db.core');
      $user = User::ID();
      $type = "email";
-            
+
      // On récupère l'adresse email
-     $query = $link->prepare('SELECT `coordonnee_email` FROM `coordonnees` WHERE `coordonnee_id` = :id');
+     $query = 'SELECT `coordonnee_email`
+               FROM `coordonnees`
+               WHERE `coordonnee_id` = :id';
+     $query = $link->prepare($query);
      $query->bindParam(':id', $_POST['adresse']);
      $query->execute();
      $adresse = $query->fetch(PDO::FETCH_ASSOC);
      $adresse = $adresse['coordonnee_email'];
-            
+
      // On ouvre la fiche du contact concerné
      $contact = new People($_POST['contact']);
-            
+
      // On charge le système de mail
      $mail = Configuration::read('mail');
-            
+
      // On prépare le message
      $message = array(
          'html' => nl2br($_POST['message']),
@@ -39,10 +58,10 @@ if (is_string($_POST['objet']) && is_string($_POST['message']) && is_numeric($_P
      );
      // mode asynchrone d'envoi du mail
      $async = true;
-            
+
      // on lance l'envoi du mail
      $result = $mail->messages->send($message, $async);
-            
+
      // On met à jour le tracking avec les informations retournées
      $campaign = 0;
      $query = Core::query('campaign-tracking');
@@ -51,15 +70,12 @@ if (is_string($_POST['objet']) && is_string($_POST['message']) && is_numeric($_P
      $query->bindValue(':email', $result[0]['email']);
      $query->bindValue(':status', $result[0]['status']);
      $query->execute();
-        
+
      $event = Event::create($contact->get('id'));
      $event = new Event($event);
      $event->update('historique_type', 'courriel');
      $event->update('historique_objet', $_POST['objet']);
      $event->update('historique_notes', $_GET['message']);
-}
-else
-{
+} else {
     return false;
 }
-?>

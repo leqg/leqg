@@ -1,4 +1,16 @@
 <?php
+/**
+ * Réalisation d'un export de contacts selon un tri envoyé
+ *
+ * PHP version 5
+ *
+ * @category Ajax
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
+
 $var = $_GET;
 $var['criteres'] = trim($var['criteres'], ';');
 $contacts = People::listing($var, 0, false);
@@ -8,7 +20,7 @@ $fichier = array();
 $nomFichier = 'export-' . User::ID() . '-' . uniqid() . '.csv';
 $file = fopen('exports/' . $nomFichier, 'w+');
 
-$entete = array(
+$entete = [
     'nom',
     'nom_usage',
     'prenoms',
@@ -25,7 +37,7 @@ $entete = array(
     'organisme',
     'fonction',
     'tags'
-);
+];
 
 fputcsv($file, $entete, ';', '"');
 
@@ -34,7 +46,7 @@ foreach ($contacts as $_contact) {
     $address = $contact->postal_address();
     $poll = Maps::poll_data($contact->get('bureau'));
     $birthdate = new DateTime($contact->get('date_naissance'));
-    
+
     $_fichier = array(
         $contact->get('nom'),
         $contact->get('nom_usage'),
@@ -53,7 +65,7 @@ foreach ($contacts as $_contact) {
         $contact->get('fonction'),
         implode(',', $contact->get('tags'))
     );
-    
+
     fputcsv($file, $_fichier, ';', '"');
 }
 
@@ -63,7 +75,10 @@ $f = 'exports/' . $nomFichier;
 if ($f) {
     $email = file_get_contents('tpl/mail/export-reussi.tpl.html');
     $objet = '[LeQG] Votre export est prêt à être téléchargé';
-    $email = strtr($email, array('{URL}' => 'http://'.Configuration::read('url').$f));
+    $email = strtr(
+        $email,
+        array('{URL}' => 'http://'.Configuration::read('url').$f)
+    );
 } else {
     $email = file_get_contents('tpl/mail/export-echec.tpl.html');
     $objet = '[LeQG] Votre export a provoqué un erreur';

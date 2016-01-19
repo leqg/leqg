@@ -1,4 +1,16 @@
 <?php
+/**
+ * Préparation d'une campagne de publipostage
+ *
+ * PHP version 5
+ *
+ * @category Ajax
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
+
 $campagne = array(
     'titre' => $_GET['titre'],
     'message' => $_GET['message']
@@ -35,7 +47,7 @@ fputcsv($file, $entete, ';', '"');
 foreach ($contacts as $contact) {
     $person = new People($contact);
     $address = $person->postal_array();
-    
+
     if (isset($address['reel'])) {
         $address = $address['reel'];
         $origine = 'declaree';
@@ -43,7 +55,7 @@ foreach ($contacts as $contact) {
         $address = $address['officiel'];
         $origine = 'liste-electorale';
     }
-    
+
     $_fichier = array(
         $person->get('nom'),
         $person->get('nom_usage'),
@@ -55,7 +67,7 @@ foreach ($contacts as $contact) {
         $address['country'],
         $origine
     );
-    
+
     if (fputcsv($file, $_fichier, ';', '"')) {
         $event = Event::create($person->get('id'));
         $event = new Event($event);
