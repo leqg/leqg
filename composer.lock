@@ -1,23 +1,122 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "48d46264478410789e75607ca58a937f",
+    "hash": "30ddfc097117354ac288e2b2e9fac4b4",
+    "content-hash": "efdba8891d2c0b66533d69ab67480df1",
     "packages": [
         {
-            "name": "esendex/sdk",
-            "version": "v1.0.6",
+            "name": "composer/installers",
+            "version": "v1.0.22",
             "source": {
                 "type": "git",
-                "url": "https://github.com/esendex/esendex-php-sdk.git",
-                "reference": "d304ac2df3f8b99fe3e45a666678b9e586532778"
+                "url": "https://github.com/composer/installers.git",
+                "reference": "bd9b14f094c89c8b5804a4e41edeb7853bb85046"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/esendex/esendex-php-sdk/zipball/d304ac2df3f8b99fe3e45a666678b9e586532778",
-                "reference": "d304ac2df3f8b99fe3e45a666678b9e586532778",
+                "url": "https://api.github.com/repos/composer/installers/zipball/bd9b14f094c89c8b5804a4e41edeb7853bb85046",
+                "reference": "bd9b14f094c89c8b5804a4e41edeb7853bb85046",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "1.0.0"
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.0.*@dev",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Composer\\Installers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "http://composer.github.com/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Hurad",
+                "MODX Evo",
+                "OXID",
+                "SMF",
+                "Thelia",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "elgg",
+                "fuelphp",
+                "grav",
+                "installer",
+                "joomla",
+                "kohana",
+                "laravel",
+                "lithium",
+                "magento",
+                "mako",
+                "mediawiki",
+                "modulework",
+                "moodle",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "puppet",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "symfony",
+                "typo3",
+                "wordpress",
+                "zend",
+                "zikula"
+            ],
+            "time": "2015-10-29 23:28:48"
+        },
+        {
+            "name": "esendex/sdk",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/esendex/esendex-php-sdk.git",
+                "reference": "68ec1747466f73d88c7ae768751a03b4f3a28fce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/esendex/esendex-php-sdk/zipball/68ec1747466f73d88c7ae768751a03b4f3a28fce",
+                "reference": "68ec1747466f73d88c7ae768751a03b4f3a28fce",
                 "shasum": ""
             },
             "require": {
@@ -25,6 +124,7 @@
                 "php": ">=5.3"
             },
             "require-dev": {
+                "phing/phing": "2.*",
                 "phpunit/phpunit": "4.3.*"
             },
             "type": "library",
@@ -52,7 +152,7 @@
                 "restful",
                 "sms"
             ],
-            "time": "2014-12-18 09:47:35"
+            "time": "2015-08-24 09:24:18"
         }
     ],
     "packages-dev": [],
@@ -61,6 +161,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.6.0"
+    },
     "platform-dev": []
 }

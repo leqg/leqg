@@ -28,3 +28,7 @@ transfert-*
 
 # Composer files
 vendor/
+
+# Composer
+composer.phar
+/vendor/
