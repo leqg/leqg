@@ -27,8 +27,8 @@
       "post-install-cmd": [
         "bash contrib/setup.sh"
       ],
-      "phpcs": "phpcs --extensions=php --standard=PEAR --ignore=api/*.php .",
-      "phpcbf": "phpcbf --extensions=php --standard=PEAR --ignore=api/*.php ."
+      "phpcs": "phpcs --extensions=php --standard=PEAR --ignore=api/,vendor/ .",
+      "phpcbf": "phpcbf --extensions=php --standard=PEAR --ignore=api/,vendor/ ."
     },
     "autoload": {
       "psr-4": {
