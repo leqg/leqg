@@ -1,7 +1,24 @@
 {
+    "name": "leqg/leqg",
+    "description": "Système de gestion d'assistanat parlementaire pour députés – dépôt relatif à l'application web",
+    "type": "project",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Damien Senger",
+            "email": "hi@hiwelo.co"
+        }
+    ],
+    "minimum-stability": "stable",
     "require": {
-        "esendex/sdk": "1.0.*",
-        "composer/installers": "^1.0",
-        "php": ">=5.6.0"
+        "esendex/sdk": "^1.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.5"
+    },
+    "scripts": {
+      "post-install-cmd": [
+        "bash contrib/setup.sh"
+      ]
     }
 }
