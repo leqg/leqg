@@ -1,14 +1,21 @@
 {
     "name": "leqg/leqg",
     "description": "Système de gestion d'assistanat parlementaire pour députés – dépôt relatif à l'application web",
+    "homepage": "http://leqg.info/",
     "type": "project",
     "license": "GPL-3.0",
     "authors": [
         {
             "name": "Damien Senger",
-            "email": "hi@hiwelo.co"
+            "email": "hi@hiwelo.co",
+            "homepage": "https://hiwelo.co",
+            "role": "Developer"
         }
     ],
+    "support": {
+      "issues": "https://github.com/leqg/leqg/issues",
+      "source": "https://github.com/leqg/leqg"
+    },
     "minimum-stability": "stable",
     "require": {
         "esendex/sdk": "^1.0"
@@ -19,6 +26,13 @@
     "scripts": {
       "post-install-cmd": [
         "bash contrib/setup.sh"
-      ]
+      ],
+      "phpcs": "phpcs --extensions=php --standard=PEAR --ignore=api/*.php .",
+      "phpcbf": "phpcbf --extensions=php --standard=PEAR --ignore=api/*.php ."
+    },
+    "autoload": {
+      "psr-4": {
+        "LeQG\\": "class/"
+      }
     }
 }
