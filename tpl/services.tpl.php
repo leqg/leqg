@@ -3,31 +3,31 @@
     User::protection(1);
     
     // On charge le header
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 <table id="services">
     <?php if (User::auth_level() >= 5) : ?>
 	<tr>
-		<td><a href="<?php Core::tpl_go_to('contacts'); ?>"><span>&#xe840;</span><p>Contacts</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('dossier'); ?>"><span>&#xe851;</span><p>Dossiers</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('carto'); ?>"><span>&#xe845;</span><p>Cartographie</p></a></td>
+		<td><a href="<?php Core::goTo('contacts'); ?>"><span>&#xe840;</span><p>Contacts</p></a></td>
+		<td><a href="<?php Core::goTo('dossier'); ?>"><span>&#xe851;</span><p>Dossiers</p></a></td>
+		<td><a href="<?php Core::goTo('carto'); ?>"><span>&#xe845;</span><p>Cartographie</p></a></td>
 	</tr>
 	<tr>
-		<td><a href="<?php Core::tpl_go_to('poste'); ?>"><span>&#xe8ef;</span><p>Publipostage</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('email'); ?>"><span>&#xe805;</span><p>Emailing</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('sms'); ?>"><span>&#xe8e4;</span><p>SMS</p></a></td>
+		<td><a href="<?php Core::goTo('poste'); ?>"><span>&#xe8ef;</span><p>Publipostage</p></a></td>
+		<td><a href="<?php Core::goTo('email'); ?>"><span>&#xe805;</span><p>Emailing</p></a></td>
+		<td><a href="<?php Core::goTo('sms'); ?>"><span>&#xe8e4;</span><p>SMS</p></a></td>
 	</tr>
 	<tr>
-		<td><a href="<?php Core::tpl_go_to('porte'); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('boite'); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('rappels'); ?>" class="inactif"><span class="inactif">&#xe854;</span><p class="inactif">Rappels</p></a></td>
+		<td><a href="<?php Core::goTo('porte'); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
+		<td><a href="<?php Core::goTo('boite'); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
+		<td><a href="<?php Core::goTo('rappels'); ?>" class="inactif"><span class="inactif">&#xe854;</span><p class="inactif">Rappels</p></a></td>
 	</tr>
     <?php else : ?>
 	<tr>
-		<td><a href="<?php Core::tpl_go_to('porte', array('action' => 'missions')); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('boite', array('action' => 'missions')); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
-		<td><a href="<?php Core::tpl_go_to('rappels', array('action' => 'appel')); ?>"><span>&#xe854;</span><p>Rappels</p></a></td>
+		<td><a href="<?php Core::goTo('porte', array('action' => 'missions')); ?>"><span>&#xe841;</span><p>Porte à porte</p></a></td>
+		<td><a href="<?php Core::goTo('boite', array('action' => 'missions')); ?>"><span>&#xe84d;</span><p>Boîtage</p></a></td>
+		<td><a href="<?php Core::goTo('rappels', array('action' => 'appel')); ?>"><span>&#xe854;</span><p>Rappels</p></a></td>
 	</tr>
     <?php endif; ?>
 </table>
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

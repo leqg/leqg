@@ -19,5 +19,5 @@ if (isset($_POST['fiche'])) {
     $contact->delete();
 
     // On redirige vers les dossiers
-    Core::tpl_go_to('contacts', true);
+    Core::goTo('contacts', true);
 }

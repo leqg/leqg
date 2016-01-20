@@ -64,7 +64,7 @@ else {
 }
     
     // On charge le template
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 	<h2 class="titre" data-argumentaire="<?php echo $argumentaire['argumentaire_id']; ?>" data-contact="<?php echo $contact->get('id'); ?>">Appel militant</h2>
 	
@@ -87,7 +87,7 @@ else {
 			<ul class="etatcivil coordonnees">
 				<?php $coordonnees = $contact->contact_details(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] != 'email') : ?>
 				<li class="<?php echo $coordonnee['coordonnee_type']; ?> noUpdate" id="<?php echo $coordonnee['coordonnee_type']; ?>-<?php echo $coordonnee['coordonnee_id']; ?>" data-id="<?php echo $coordonnee['coordonnee_id']; ?>"><?php 
-                    Core::tpl_phone($coordonnee['coordonnee_numero']); 
+                    Core::formatPhone($coordonnee['coordonnee_numero']); 
         ?></li>
 				<?php endif; 
     endforeach; ?>
@@ -125,4 +125,4 @@ else {
 			<button class="appelSansReponse long deleting" style="margin-top: 2em; margin-bottom: .5em;">Appel sans réponse</button>
 		</section>
 	</div>
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

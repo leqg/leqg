@@ -76,7 +76,7 @@ class Evenement
             $evenement['historique_md5'] = md5($evenement['historique_id']);
                 
             // On retraite ensuite le type en clair
-            $evenement['historique_type_clair'] = Core::tpl_typeEvenement($evenement['historique_type']);
+            $evenement['historique_type_clair'] = Core::eventType($evenement['historique_type']);
             
             // On effectue une recherche des fichiers associés à l'événement
             unset($query);
@@ -139,7 +139,7 @@ class Evenement
             
             // Si on ne trouve pas d'utilisateur, on retourne vers la page d'accueil du module contact
             if (!count($evenements)) {
-                Core::tpl_go_to('contacts', true);
+                Core::goTo('contacts', true);
             }
             // Sinon, on affecte les données aux propriétés de l'objet
             else
@@ -152,7 +152,7 @@ class Evenement
                 $evenement['historique_md5'] = md5($evenement['historique_id']);
                 
                 // On retraite ensuite le type en clair
-                $evenement['historique_type_clair'] = Core::tpl_typeEvenement($evenement['historique_type']);
+                $evenement['historique_type_clair'] = Core::eventType($evenement['historique_type']);
             
                 // On effectue une recherche des fichiers associés à l'événement
                 unset($query);
@@ -328,7 +328,7 @@ class Evenement
         // Sinon on retraite les caractères spéciaux
         else
         {
-            $value = Core::securisation_string($value);
+            $value = Core::securisationString($value);
         }
         
         // On prépare la requête

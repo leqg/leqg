@@ -22,7 +22,7 @@ $info = $sql->fetch_assoc();
 
 // On vérifie que le mot de passe entré correspond au mot de passe existant
 if ($user->encrypt_pass($donnees['actuel']) != $info['user_password']) {
-    $core->tpl_go_to(
+    $core->goTo(
         'utilisateur',
         array('modification' => 'pass', 'message' => 'erreur-motdepasse'),
         true
@@ -74,5 +74,5 @@ $mail->MsgHTML($email);
 
 // On redirige vers la page de profil avec un message spécifique
 if ($mail->Send()) {
-    $core->tpl_go_to(true);
+    $core->goTo(true);
 }

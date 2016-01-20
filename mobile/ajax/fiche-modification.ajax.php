@@ -25,6 +25,6 @@
         $sql = $db->query($query);
     endif;
     
-    $core->tpl_go_to('contacts', array('fiche' => $infos['fiche']), true);
+    $core->goTo('contacts', array('fiche' => $infos['fiche']), true);
     
 ?>

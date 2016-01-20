@@ -93,11 +93,11 @@ class Contact
             if ($coordonnee['coordonnee_type'] == 'email') {
                 $contact['email'] = $coordonnee['coordonnee_email'];
             } elseif ($coordonnee['coordonnee_type'] == 'mobile') {
-                $contact['mobile'] = Core::get_tpl_phone(
+                $contact['mobile'] = Core::getFormatPhone(
                     $coordonnee['coordonnee_numero']
                 );
             } else {
-                $contact['fixe'] = Core::get_tpl_phone(
+                $contact['fixe'] = Core::getFormatPhone(
                     $coordonnee['coordonnee_numero']
                 );
             }

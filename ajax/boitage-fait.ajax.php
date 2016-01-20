@@ -51,7 +51,7 @@ if (in_array($immeuble, $afaire)) {
         );
     }
 
-    $core->tpl_go_to(
+    $core->goTo(
         'boite',
         array(
             'action' => 'mission',

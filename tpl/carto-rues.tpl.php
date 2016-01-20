@@ -15,7 +15,7 @@
     $fixes = Carto::nombreElecteurs('rue', $rue['rue_id'], 'fixe');
     
     // Chargement du template
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 <h2><?php echo mb_convert_case(trim($rue['rue_nom']), MB_CASE_TITLE); ?></h2>
@@ -24,7 +24,7 @@
 	<section class="contenu">
 		<h4>Informations générales</h4>
 		<ul class="informations">
-			<li class="ville"><span>Ville</span><span><a href="<?php Core::tpl_go_to('carto', array('niveau' => 'communes', 'code' => hash('sha256', $ville['commune_id']))); ?>" class="nostyle"><strong><?php echo $ville['commune_nom']; ?></strong></a></span></li>
+			<li class="ville"><span>Ville</span><span><a href="<?php Core::goTo('carto', array('niveau' => 'communes', 'code' => hash('sha256', $ville['commune_id']))); ?>" class="nostyle"><strong><?php echo $ville['commune_nom']; ?></strong></a></span></li>
 			<li class="region"><span>Département</span><span><?php echo $departement['departement_nom']; ?> (<?php echo $region['region_nom']; ?>)</span></li>
 			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php 
   } ?> importé<?php if ($electeurs > 1) { ?>s<?php 
@@ -51,7 +51,7 @@
 			<li <?php if ($contactsDansImmeuble) { echo 'class="presenceContacts"'; 
   } ?>>
 				<span><strong class="immeuble"><?php echo $immeuble['numero']; ?></strong> <?php echo mb_convert_case($rue['rue_nom'], MB_CASE_TITLE); ?></span>
-				<a href="<?php Core::tpl_go_to('carto', array('niveau' => 'immeubles', 'code' => hash('sha256', $immeuble['immeuble_id']))); ?>" class="nostyle">
+				<a href="<?php Core::goTo('carto', array('niveau' => 'immeubles', 'code' => hash('sha256', $immeuble['immeuble_id']))); ?>" class="nostyle">
 					<button>Explorer</button>
 				</a>
 			</li>
@@ -97,4 +97,4 @@
 	});
 </script>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

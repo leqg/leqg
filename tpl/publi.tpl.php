@@ -6,7 +6,7 @@
     $liste = Campaign::all('publi');
 
     // On charge le template
-    Core::tpl_header(); 
+    Core::loadHeader(); 
 ?>
 	<h2 class="titreCampagne" data-page="campagnes">Préparation des campagnes de publipostage</h2>
     <?php if (count($liste)) : ?>
@@ -14,7 +14,7 @@
 			<ul class="liste-campagnes">
 				<?php foreach ($liste as $element) : $campaign = new Campaign($element['id']); ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
+					<a href="<?php Core::goTo('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
     } else { echo 'Campagne sans titre'; 
 } ?></h4></a>
 					<p>
@@ -34,4 +34,4 @@
 		</section>
     <?php endif; ?>
 	
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

@@ -21,7 +21,7 @@ if (isset($_GET['code']) || isset($_POST['code'])) {
 
     // On change le statut de la mission comme ouvert et on redirige
     if ($mission->fermer()) {
-        Core::tpl_go_to('mission', array('code' => $code), true);
+        Core::goTo('mission', array('code' => $code), true);
     } else {
         // En cas d'erreur, on affiche un code d'erreur
         http_response_code(418);

@@ -18,4 +18,4 @@ $info = $_POST;
 $mission = Mission::creation('porte', $info);
 
 // On redirige vers la page de la mission
-Core::tpl_go_to('mission', array('code' => md5($mission)), true);
+Core::goTo('mission', array('code' => md5($mission)), true);

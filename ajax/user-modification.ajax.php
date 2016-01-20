@@ -18,9 +18,9 @@ header('Content-Type: application/json');
 $infos = $_POST;
 
 // On les retraite pour la base de données
-$firstname = $core->securisation_string($infos['firstname']);
-$lastname = $core->securisation_string($infos['lastname']);
-$email = $core->securisation_string($infos['email']);
+$firstname = $core->securisationString($infos['firstname']);
+$lastname = $core->securisationString($infos['lastname']);
+$email = $core->securisationString($infos['email']);
 $auth = $infos['auth'];
 $id = $infos['compte'];
 

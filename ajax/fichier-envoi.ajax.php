@@ -41,7 +41,7 @@ if ($isset) {
     $contact->file_upload($fichier, $data);
 
     // On réoriente l'utilisateur
-    Core::tpl_go_to(
+    Core::goTo(
         'contact',
         ['contact' => $fiche, 'evenement' => $evenement],
         true

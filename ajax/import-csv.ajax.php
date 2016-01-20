@@ -44,7 +44,7 @@ foreach ($data as $line) :
     $rue = explode(' ', $line[10], 2);
     $ville = explode(' ', $line[13], 2);
     $adresse['immeuble'] = $rue[0];
-    $adresse['rue'] = $core->tpl_transform_texte($rue[1]);
+    $adresse['rue'] = $core->transformText($rue[1]);
     $adresse['code_postal'] = $ville[0];
     $adresse['ville'] = $ville[1];
 
@@ -52,7 +52,7 @@ foreach ($data as $line) :
     $query = 'SELECT *
               FROM communes
               WHERE commune_nom
-              LIKE "' . $core->formatage_recherche($adresse['ville']) . '"
+              LIKE "' . $core->formatageRecherche($adresse['ville']) . '"
               LIMIT 0,1';
     $sql = $db->query($query); $row = $sql->fetch_assoc();
     $code['ville'] = $row['commune_id'];

@@ -3,7 +3,7 @@
     User::protection(5);
     
     // On charge le template de header
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 <h2>Nouvelle mission de boîtage</h2>
 
@@ -43,4 +43,4 @@
     	</section>
 	</div>
 </form>
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

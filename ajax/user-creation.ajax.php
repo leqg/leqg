@@ -13,9 +13,9 @@
 
 // On récupère les informations
 $infos = array(
-    'firstname' => $core->securisation_string($_POST['firstname']),
-    'lastname' => $core->securisation_string($_POST['lastname']),
-    'email' => $core->securisation_string($_POST['email']),
+    'firstname' => $core->securisationString($_POST['firstname']),
+    'lastname' => $core->securisationString($_POST['lastname']),
+    'email' => $core->securisationString($_POST['email']),
     'auth' => $_POST['auth']
 );
 
@@ -58,4 +58,4 @@ $mail->MsgHTML($email);
 
 $mail->Send();
 
-$core->tpl_go_to('administration', true);
+$core->goTo('administration', true);

@@ -21,16 +21,16 @@
 	<body>
 	
 		<header id="barreHaute">
-			<h1><a href="<?php Core::tpl_go_to(); ?>" class="nostyle">LeQG</a></h1>
+			<h1><a href="<?php Core::goTo(); ?>" class="nostyle">LeQG</a></h1>
 			<a id="goToMenu" href="#menu">&#xe811;</a>
 		</header>
 		
 		<nav id="menu">
-			<a href="<?php Core::tpl_go_to('recherche'); ?>"><span>&#xe803;</span>Recherche</a>
-			<a href="<?php Core::tpl_go_to('contacts'); ?>"><span>&#xe840;</span>Contacts</a>
-			<a href="<?php Core::tpl_go_to('porte'); ?>"><span>&#xe841;</span>Porte à porte</a>
-			<a href="<?php Core::tpl_go_to('boitage'); ?>"><span>&#xe84d;</span>Boîtage</a>
-			<a href="<?php Core::tpl_go_to('deconnexion'); ?>" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');"><span>&#xe85d;</span>Déconnexion</a>
+			<a href="<?php Core::goTo('recherche'); ?>"><span>&#xe803;</span>Recherche</a>
+			<a href="<?php Core::goTo('contacts'); ?>"><span>&#xe840;</span>Contacts</a>
+			<a href="<?php Core::goTo('porte'); ?>"><span>&#xe841;</span>Porte à porte</a>
+			<a href="<?php Core::goTo('boitage'); ?>"><span>&#xe84d;</span>Boîtage</a>
+			<a href="<?php Core::goTo('deconnexion'); ?>" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');"><span>&#xe85d;</span>Déconnexion</a>
 		</nav>
 		
 		<main>

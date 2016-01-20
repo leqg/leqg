@@ -21,8 +21,8 @@ $sql1 = $db->query($query1);
 $sql2 = $db->query($query2);
 $contact1 = $sql1->fetch_assoc();
 $contact2 = $sql2->fetch_assoc();
-$contact1 = $core->formatage_donnees($contact1);
-$contact2 = $core->formatage_donnees($contact2);
+$contact1 = $core->formatageDonnees($contact1);
+$contact2 = $core->formatageDonnees($contact2);
 
 // On regarde si la première fiche ou la deuxième fiche
 // correspondent à une fiche électeur
@@ -91,6 +91,6 @@ if ($contact1['electeur'] == 1 || $contact2['electeur'] == 1) :
               WHERE `contact_id` = ' . $off;
 
     // On se déplace vers la nouvelle fiche fusionnée
-    $core->tpl_go_to('fiche', array('id' => $on), true);
+    $core->goTo('fiche', array('id' => $on), true);
 
 endif;

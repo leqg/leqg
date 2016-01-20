@@ -3,7 +3,7 @@
     $data = new Mission($_GET['mission']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::tpl_go_to('porte', true); 
+if ($data->err) { Core::goTo('porte', true); 
 }
     
     // On récupère tous les items de la rue et la rue en question et la ville concernée
@@ -11,21 +11,21 @@ if ($data->err) { Core::tpl_go_to('porte', true);
     $ville = Maps::city_data($rue['city']);
     $items = $data->items($_GET['rue']);
     
-if (!$items) { Core::tpl_go_to('reporting', array('mission' => $_GET['mission']), true); 
+if (!$items) { Core::goTo('reporting', array('mission' => $_GET['mission']), true); 
 }
     
     // typologie
     $typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';
 
     // On charge le header
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
-<a href="<?php Core::tpl_go_to('reporting', array('mission' => $data->get('mission_hash'))); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la mission</button></a>	
+<a href="<?php Core::goTo('reporting', array('mission' => $data->get('mission_hash'))); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la mission</button></a>	
 <h2 id="titre-mission" class="titre" data-mission="<?php echo $data->get('mission_hash'); ?>">Mission &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
 
 <section id="mapbox-mission"></section>
 
-<form action="<?php Core::tpl_go_to('reporting', array('action' => 'envoi', 'mission' => $data->get('mission_hash'), 'rue' => $_GET['rue'])); ?>" method="post">
+<form action="<?php Core::goTo('reporting', array('action' => 'envoi', 'mission' => $data->get('mission_hash'), 'rue' => $_GET['rue'])); ?>" method="post">
     <section class="contenu">
         <?php
             // Affichage spécial s'il s'agit d'un porte à porte

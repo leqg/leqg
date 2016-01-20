@@ -43,7 +43,7 @@
 		<a class="nostyle" id="notifications" href="#" title="Afficher les notifications"><?php $nb_taches = Evenement::taches_personnelles(); if ($nb_taches) : ?><span></span><?php 
  endif; ?></a>
 		<a class="nostyle" id="rechercheRapide" href="#" title="Rechercher une fiche"></a>
-		<form method="post" action="<?php Core::tpl_go_to('recherche'); ?>"><input type="search" id="searchForm" name="recherche" pattern=".{3,}" placeholder="Michel Dupont" autocomplete="off"><input type="submit" value="&#xe803;" id="searchSubmit"></form>
+		<form method="post" action="<?php Core::goTo('recherche'); ?>"><input type="search" id="searchForm" name="recherche" pattern=".{3,}" placeholder="Michel Dupont" autocomplete="off"><input type="submit" value="&#xe803;" id="searchSubmit"></form>
 	</header><!--header#top-->
 	
 	<!-- Navigation principale -->
@@ -78,14 +78,14 @@
         }
         
         foreach ($menu as $key => $element) : ?>
-       <a href="<?php Core::tpl_go_to($key); ?>" id="lien-<?php echo $key; ?>" <?php if ($actuel == $key) { echo 'class="actif"'; 
+       <a href="<?php Core::goTo($key); ?>" id="lien-<?php echo $key; ?>" <?php if ($actuel == $key) { echo 'class="actif"'; 
       } ?>><?php echo $element; ?></a>
         <?php endforeach; ?>
    <a href="http://auth.leqg.info/deconnexion.php" id="lien-logout">Déconnexion</a>
     <?php else: ?>
-		<a href="<?php Core::tpl_go_to('porte', array('action' => 'missions')); ?>" id="lien-porte">Porte-à-porte</a>
-		<a href="<?php Core::tpl_go_to('boite', array('action' => 'missions')); ?>" id="lien-boite">Boîtage</a>
-		<a href="<?php Core::tpl_go_to('rappels', array('action' => 'appel')); ?>" id="lien-rappels">Rappels</a>
+		<a href="<?php Core::goTo('porte', array('action' => 'missions')); ?>" id="lien-porte">Porte-à-porte</a>
+		<a href="<?php Core::goTo('boite', array('action' => 'missions')); ?>" id="lien-boite">Boîtage</a>
+		<a href="<?php Core::goTo('rappels', array('action' => 'appel')); ?>" id="lien-rappels">Rappels</a>
 		<a href="http://auth.leqg.info/deconnexion.php" id="lien-logout">Déconnexion</a>
     <?php endif; ?>
 	</nav><!--nav#principale-->

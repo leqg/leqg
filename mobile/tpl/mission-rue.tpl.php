@@ -3,19 +3,19 @@
 	$data = new Mission($_GET['code']);
 	
 	// On vérifie que la mission a bien été ouverte
-	if ($data->err) Core::tpl_go_to('porte', true);
+	if ($data->err) Core::goTo('porte', true);
 	
 	// On récupère tous les items de la rue et la rue en question et la ville concernée
 	$rue = Carto::rue($_GET['rue']);
 	$items = $data->items($_GET['rue']);
 	
-	if (!$items) Core::tpl_go_to('reporting', array('mission' => $_GET['mission']), true);
+	if (!$items) Core::goTo('reporting', array('mission' => $_GET['mission']), true);
 	
 	// typologie
 	$typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';
 
     // On charge le header
-	Core::tpl_header();
+	Core::loadHeader();
 ?>
 
 	<h2>Mission &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
@@ -38,7 +38,7 @@
                 // On fait la boucle des immeubles
                 foreach ($numeros as $immeuble => $numero) :
             ?>
-        		<a class="nostyle" href="<?php Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $immeuble)); ?>">
+        		<a class="nostyle" href="<?php Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $immeuble)); ?>">
         			<li id="element-<?php echo $immeuble; ?>">
         				<span><?php if (!empty($numeros_sauv[$immeuble])) { echo $numeros_sauv[$immeuble]; } else { echo '&nbsp;'; } ?></span> <?php echo $rue['rue_nom']; ?>
         			</li>
@@ -61,7 +61,7 @@
                 // On fait la boucle des immeubles
                 foreach ($numeros as $immeuble => $numero) :
             ?>
-        		<a class="nostyle" href="<?php Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $immeuble)); ?>">
+        		<a class="nostyle" href="<?php Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $immeuble)); ?>">
         			<li id="element-<?php echo $immeuble; ?>">
         				<span><?php if (!empty($numeros_sauv[$immeuble])) { echo $numeros_sauv[$immeuble]; } else { echo '&nbsp;'; } ?></span> <?php echo $rue['rue_nom']; ?>
         			</li>
@@ -72,6 +72,6 @@
             ?>
 	</ul>
 	
-	<a href="<?php Core::tpl_go_to('mission', array('code' => $_GET['code'])); ?>" class="bouton nostyle">Retour à la mission</a>
+	<a href="<?php Core::goTo('mission', array('code' => $_GET['code'])); ?>" class="bouton nostyle">Retour à la mission</a>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

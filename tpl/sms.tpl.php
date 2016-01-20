@@ -6,7 +6,7 @@
     $liste = Campaign::all('sms');
 
     // On charge le template
-    Core::tpl_header(); 
+    Core::loadHeader(); 
 ?>
 	<h2 class="titreCampagne" data-page="campagnes">Campagnes de SMS groupés</h2>
     <?php if (count($liste)) : ?>
@@ -14,7 +14,7 @@
 			<ul class="liste-campagnes">
 				<?php foreach ($liste as $element) : ?>
 				<li>
-					<a href="<?php Core::tpl_go_to('campagne', array('id' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
+					<a href="<?php Core::goTo('campagne', array('id' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
     } else { echo 'Campagne sans titre'; 
 } ?></h4></a>
                     <p>Campagne <?php echo $element['type']; ?> créée le <?php echo date('d/m/Y', strtotime($element['date'])); ?></p>
@@ -32,4 +32,4 @@
 		</section>
     <?php endif; ?>
 	
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

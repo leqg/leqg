@@ -13,7 +13,7 @@
 
 
 // Script de recherche
-$recherche = $core->formatage_recherche($_POST['recherche']);
+$recherche = $core->formatageRecherche($_POST['recherche']);
 
 // On effectue la recherche des fiches dont les tags correspondent
 $query = 'SELECT *
@@ -32,15 +32,15 @@ $sql = $db->query($query);
 
 if ($sql->num_rows > 0) :
     while ($contacts = $sql->fetch_assoc()) :
-        $contact = $core->formatage_donnees($contacts);
+        $contact = $core->formatageDonnees($contacts);
 ?>
 <?php if ($_GET['fiche'] == 1) { ?>
-    <a href="<?php $core->tpl_go_to(
+    <a href="<?php $core->goTo(
         'fiche',
         array('operation' => 'fusion', 'fiche1' => $contact['id'])
     ); ?>">
 <?php } else { ?>
-    <a href="<?php $core->tpl_go_to(
+    <a href="<?php $core->goTo(
         'fiche',
         array(
             'operation' => 'fusion',

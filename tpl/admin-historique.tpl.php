@@ -14,7 +14,7 @@
 		<li class="<?php echo $ligne['type']; ?>">
 			<strong><?php $historique->returnType($ligne['type']); ?> &laquo;&nbsp;<?php echo $ligne['objet']; ?>&nbsp;&raquo;</strong>
 			<ul>
-				<li class="contact"><a class="nostyle" href="<?php $core->tpl_go_to('contact', array('contact' => md5($ligne['contact_id']))); ?>"><?php echo $fiche->affichageNomByID($ligne['contact_id']); ?></a></li>
+				<li class="contact"><a class="nostyle" href="<?php $core->goTo('contact', array('contact' => md5($ligne['contact_id']))); ?>"><?php echo $fiche->affichageNomByID($ligne['contact_id']); ?></a></li>
 				<li class="date"><?php echo date('d/m/Y \à H:i', strtotime($ligne['timestamp'])); ?></li>
 			</ul>
 		</li>

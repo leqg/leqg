@@ -132,13 +132,13 @@ if (isset($_GET['fichier'])) { $file = $_GET['fichier'];
             }
                 
             // On commence d'abord par récupérer l'ID de la ville en question
-            $query = 'SELECT * FROM communes WHERE commune_nom LIKE "' . $core->formatage_recherche($donnees['ville']) . '" LIMIT 0,1';
+            $query = 'SELECT * FROM communes WHERE commune_nom LIKE "' . $core->formatageRecherche($donnees['ville']) . '" LIMIT 0,1';
             $sql = $db->query($query); $row = $sql->fetch_assoc();
             $code['ville'] = $row['commune_id'];
 
                 
             // On continu en vérifiant si la rue existe déjà
-            $query = 'SELECT * FROM rues WHERE commune_id = ' . $code['ville'] . ' AND rue_nom LIKE "%' . $core->formatage_recherche($donnees['rue']) . '%" LIMIT 0,1';
+            $query = 'SELECT * FROM rues WHERE commune_id = ' . $code['ville'] . ' AND rue_nom LIKE "%' . $core->formatageRecherche($donnees['rue']) . '%" LIMIT 0,1';
             $sql = $db->query($query);
             
             // S'il existe déjà une rue dans la base de données, on récupère l'identifiant
@@ -170,7 +170,7 @@ if (isset($_GET['fichier'])) { $file = $_GET['fichier'];
                 
             
             // On recherche maintenant une fiche similaire
-            $query = 'SELECT contact_id, immeuble_id FROM contacts WHERE ( contact_nom LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%" OR contact_nom_usage LIKE "' . $core->formatage_recherche($donnees['nom']) . '" ) AND contact_prenoms LIKE "' . $core->formatage_recherche($donnees['prenom']) . '%" ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
+            $query = 'SELECT contact_id, immeuble_id FROM contacts WHERE ( contact_nom LIKE "%' . $core->formatageRecherche($donnees['nom']) . '%" OR contact_nom_usage LIKE "' . $core->formatageRecherche($donnees['nom']) . '" ) AND contact_prenoms LIKE "' . $core->formatageRecherche($donnees['prenom']) . '%" ORDER BY contact_nom, contact_nom_usage, contact_prenoms ASC';
             $sql = $db->query($query);
                 
             if ($sql->num_rows >= 1) :
@@ -202,7 +202,7 @@ if (isset($_GET['fichier'])) { $file = $_GET['fichier'];
                      else :
                                 
                             // On cherche si dans la base il existe exactement le même prénom pour les fiches où la recherche donne trop de noms
-                            $query = 'SELECT * FROM `contacts` WHERE ( `contact_nom` = "' . $core->formatage_recherche($donnees['nom']) . '" OR `contact_nom_usage`= "' . $core->formatage_recherche($donnees['nom']) . '" ) AND `contact_prenoms` LIKE "' . $core->formatage_recherche($donnees['prenom']) . ' %"';
+                            $query = 'SELECT * FROM `contacts` WHERE ( `contact_nom` = "' . $core->formatageRecherche($donnees['nom']) . '" OR `contact_nom_usage`= "' . $core->formatageRecherche($donnees['nom']) . '" ) AND `contact_prenoms` LIKE "' . $core->formatageRecherche($donnees['prenom']) . ' %"';
                             $sql = $db->query($query);
 
                             // Si une fiche seule est trouvée
@@ -229,7 +229,7 @@ if (isset($_GET['fichier'])) { $file = $_GET['fichier'];
               else :
                         
                     // On cherche si dans la base il existe exactement le même prénom pour les fiches où la recherche donne trop de noms
-                    $query = 'SELECT * FROM `contacts` WHERE ( `contact_nom` = "' . $core->formatage_recherche($donnees['nom']) . '" OR `contact_nom_usage`= "' . $core->formatage_recherche($donnees['nom']) . '" ) AND ( `contact_prenoms` LIKE "' . $core->formatage_recherche($donnees['prenom']) . '" OR `contact_prenoms` LIKE "' . $core->formatage_recherche($donnees['prenom']) . ' %" )';
+                    $query = 'SELECT * FROM `contacts` WHERE ( `contact_nom` = "' . $core->formatageRecherche($donnees['nom']) . '" OR `contact_nom_usage`= "' . $core->formatageRecherche($donnees['nom']) . '" ) AND ( `contact_prenoms` LIKE "' . $core->formatageRecherche($donnees['prenom']) . '" OR `contact_prenoms` LIKE "' . $core->formatageRecherche($donnees['prenom']) . ' %" )';
                     $sql = $db->query($query);
 
                     // Si une fiche seule est trouvée
@@ -331,9 +331,9 @@ if (isset($_GET['fichier'])) { $file = $_GET['fichier'];
 
                 // Si aucune fiche n'existe, on créé cette fiche
                 $informations = array('immeuble' => $code['immeuble'],
-                                          'nom' => $core->securisation_string($donnees['nom']),
+                                          'nom' => $core->securisationString($donnees['nom']),
                                           'nom-usage' => '',
-                                          'prenoms' => $core->securisation_string($donnees['prenom']),
+                                          'prenoms' => $core->securisationString($donnees['prenom']),
                                           'sexe' => 'i',
                                           'date-naissance' => '',
                                           'mobile' => $donnees['mobile'],

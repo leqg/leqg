@@ -2,13 +2,13 @@
     // On protège la page
     User::protection(5);
 
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
-<a href="<?php Core::tpl_go_to('administration'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la liste</button></a>	
+<a href="<?php Core::goTo('administration'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la liste</button></a>	
 
 <h2>Création d'un nouveau compte</h2>
 
-<form action="<?php Core::tpl_go_to('administration', array('action' => 'creation')); ?>" method="post">
+<form action="<?php Core::goTo('administration', array('action' => 'creation')); ?>" method="post">
 	
 	<div class="colonne demi gauche">
     	<section class="contenu demi">
@@ -57,4 +57,4 @@
 	</div>
 	
 </form>
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

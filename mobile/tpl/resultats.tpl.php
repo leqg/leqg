@@ -21,18 +21,18 @@ if ($query->rowCount() == 1) {
     // On redirige selon la destination demandée
     if (isset($_GET['destimation'])) {
         if ($_GET['destination'] == 'interaction') {
-            Core::tpl_go_to('interaction', array('action' => 'ajout', 'fiche' => $contact[0]), true);
+            Core::goTo('interaction', array('action' => 'ajout', 'fiche' => $contact[0]), true);
         } else {
-            Core::tpl_go_to('contacts', array('fiche' => $contact[0]), true);
+            Core::goTo('contacts', array('fiche' => $contact[0]), true);
         }
     } else {
-        Core::tpl_go_to('contacts', array('fiche' => $contact[0]), true);
+        Core::goTo('contacts', array('fiche' => $contact[0]), true);
     }
 }
     
     $contacts = $query->fetchAll(PDO::FETCH_NUM);
     
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 <h2>Résultats</h2>
@@ -42,9 +42,9 @@ if ($query->rowCount() == 1) {
     <?php foreach ($contacts as $c) : $contact = new Contact(md5($c[0])); ?>
 	<li class="electeur">
     <?php if (isset($_GET['destination']) && $_GET['destination'] == 'interaction') : ?>
-		<a href="<?php Core::tpl_go_to('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
+		<a href="<?php Core::goTo('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
     <?php else: ?> 
-		<a href="<?php Core::tpl_go_to('contacts', array('fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
+		<a href="<?php Core::goTo('contacts', array('fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
     <?php endif; ?>
 			<strong><?php echo $contact->get('nom_affichage'); ?></strong>
 		</a>
@@ -53,4 +53,4 @@ if ($query->rowCount() == 1) {
 
 </ul>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

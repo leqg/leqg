@@ -39,7 +39,7 @@ if (isset($_GET['fichier'])) { $file = $_GET['fichier'];
             $donnees['mobile'] = preg_replace('`[^0-9]`', '', $donnees['mobile']);
             
             // On recherche les informations sur la fiche concernée
-            $query = 'SELECT * FROM `contacts` WHERE (`contact_nom` LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%" OR `contact_nom_usage` LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%") AND `contact_prenoms` LIKE "%' . $core->formatage_recherche($donnees['prenom']) . '%" AND `contact_tags` LIKE "%' . implode(',', $tag) . '%"';
+            $query = 'SELECT * FROM `contacts` WHERE (`contact_nom` LIKE "%' . $core->formatageRecherche($donnees['nom']) . '%" OR `contact_nom_usage` LIKE "%' . $core->formatageRecherche($donnees['nom']) . '%") AND `contact_prenoms` LIKE "%' . $core->formatageRecherche($donnees['prenom']) . '%" AND `contact_tags` LIKE "%' . implode(',', $tag) . '%"';
             $sql = $db->query($query);
             
             if ($sql->num_rows == 1) :

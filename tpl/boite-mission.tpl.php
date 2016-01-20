@@ -9,9 +9,9 @@ if (isset($_GET['mission']) && Boite::verification($_GET['mission'])) {
     // On ouvre la mission
     $data = new Mission($_GET['mission']);
         
-    Core::tpl_header();
+    Core::loadHeader();
 } else {
-    Core::tpl_go_to('boite', true);
+    Core::goTo('boite', true);
 }
 ?>
 

@@ -25,7 +25,7 @@ if (isset($_GET['page'])) :
         if ($user->deconnexion()) :
             
             // On retourne vers la page de login
-            Core::tpl_go_to('login', array(), true);
+            Core::goTo('login', array(), true);
             
         endif;
         
@@ -33,32 +33,32 @@ if (isset($_GET['page'])) :
         // S'il s'agit d'une recherche
     elseif ($_GET['page'] == 'recherche') :
     
-        Core::tpl_load('recherche');
+        Core::loadTemplate('recherche');
                 
     
         // S'il s'agit de l'affichage des résultats d'une recherche
     elseif ($_GET['page'] == 'resultats') :
         
-        Core::tpl_load('resultats');
+        Core::loadTemplate('resultats');
     
         
     elseif ($_GET['page'] == 'mission') :
     
         if (isset($_GET['rue'], $_GET['immeuble'], $_GET['electeur'])) :
         
-            Core::tpl_load('mission', 'electeur');
+            Core::loadTemplate('mission', 'electeur');
     
         elseif (isset($_GET['rue'], $_GET['immeuble'])) :
         
-            Core::tpl_load('mission', 'immeuble');
+            Core::loadTemplate('mission', 'immeuble');
     
         elseif (isset($_GET['rue'])) :
         
-            Core::tpl_load('mission', 'rue');
+            Core::loadTemplate('mission', 'rue');
            
         else :
         
-            Core::tpl_load('mission');
+            Core::loadTemplate('mission');
            
         endif;
     
@@ -67,11 +67,11 @@ if (isset($_GET['page'])) :
     
         if (isset($_GET['action'])) :
         
-            Core::tpl_load('report', 'coord');
+            Core::loadTemplate('report', 'coord');
         
         else : 
         
-            Core::tpl_load('report');
+            Core::loadTemplate('report');
         
         endif;
     
@@ -82,13 +82,13 @@ if (isset($_GET['page'])) :
         // On regarde s'il s'agit d'une page particulière, sinon on met l'accueil du module
         if (isset($_GET['fiche'])) :
         
-            Core::tpl_load('fiche');
+            Core::loadTemplate('fiche');
         
             // Si aucune page précise n'a été demandée, on affiche l'accueil du module
         else :
         
             // On charge les éléments du template
-            Core::tpl_load('contacts');
+            Core::loadTemplate('contacts');
         
         endif;
         
@@ -103,18 +103,18 @@ if (isset($_GET['page'])) :
             if ($_GET['action'] == 'ajout') :
             
                 // On charge les éléments de template
-                Core::tpl_load('interaction-ajout');
+                Core::loadTemplate('interaction-ajout');
 
                 // Sinon, on redirige vers le module contact, vers une fiche si une fiche existait				
          else :
             
                 if (isset($_GET['fiche'])) :
                 
-                    Core::tpl_go_to('contacts', array('fiche' => $_GET['fiche']), true);
+                    Core::goTo('contacts', array('fiche' => $_GET['fiche']), true);
                 
           else :
                 
-                Core::tpl_go_to('contacts', array(), true);
+                Core::goTo('contacts', array(), true);
                 
           endif;
             
@@ -125,12 +125,12 @@ if (isset($_GET['page'])) :
             // Si aucune action n'est demandée, on charge la page de lecture d'une interaction s'il existe une fiche demandée
             if (isset($_GET['interaction'])) :
             
-                Core::tpl_load('interaction');
+                Core::loadTemplate('interaction');
             
                 // Sinon, on charge le module "contacts"	
             else :
             
-                Core::tpl_go_to('contacts', array(), true);
+                Core::goTo('contacts', array(), true);
                 
             endif;
                 
@@ -141,25 +141,25 @@ if (isset($_GET['page'])) :
     elseif ($_GET['page'] == 'boitage' || $_GET['page'] == 'porte') :
     
         // On regarde s'il s'agit d'une action particulière, sinon on charge le démarrage du module
-        if (isset($_GET['mission']) && isset($_GET['rue'])) { Core::tpl_load($_GET['page'], 'rue'); 
+        if (isset($_GET['mission']) && isset($_GET['rue'])) { Core::loadTemplate($_GET['page'], 'rue'); 
         }
             
-        elseif (isset($_GET['mission']) && isset($_GET['immeuble'])) { Core::tpl_load($_GET['page'], 'immeuble'); 
+        elseif (isset($_GET['mission']) && isset($_GET['immeuble'])) { Core::loadTemplate($_GET['page'], 'immeuble'); 
         }
         
-        elseif (isset($_GET['mission'])) { Core::tpl_load($_GET['page'], 'mission'); 
+        elseif (isset($_GET['mission'])) { Core::loadTemplate($_GET['page'], 'mission'); 
         }
             
-        else { Core::tpl_load($_GET['page']); 
+        else { Core::loadTemplate($_GET['page']); 
         }
     
     
         // S'il ne s'agit d'aucune de ces pages, on redirige vers les services
     else :
     
-        Core::tpl_header();
-        Core::tpl_load($_GET['page']);
-        Core::tpl_footer();
+        Core::loadHeader();
+        Core::loadTemplate($_GET['page']);
+        Core::loadFooter();
     
     endif;
     
@@ -167,9 +167,9 @@ if (isset($_GET['page'])) :
     // Si on ne détecte pas de page demandée, on charge l'accueil
 else :
 
-    Core::tpl_header();
-    Core::tpl_load('services');
-    Core::tpl_footer();
+    Core::loadHeader();
+    Core::loadTemplate('services');
+    Core::loadFooter();
 
 endif;
     

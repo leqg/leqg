@@ -41,7 +41,7 @@ $loading['begin'] = microtime();
     // On fait la liste des différents scripts pouvant être appelés ci-après
 
     // On vérifie que le script demandé existe
-    $script = $core->securisation_string($_GET['script']);
+    $script = $core->securisationString($_GET['script']);
     
     if (!in_array($script, $scripts)) { exit; // Si le script demandé n'existe pas, on arrête l'exécution de la page ici.
     }    

@@ -6,11 +6,11 @@
 if (isset($_GET['fiche'])) :
     $contact = new Contact(md5($_GET['fiche']));
     else :
-        Core::tpl_go_to('contacts', true);
+        Core::goTo('contacts', true);
     endif;
     
     // On charge le template
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 <section id="fiche">
 	<header>
@@ -70,7 +70,7 @@ if (isset($_GET['fiche'])) :
 				<p>
 					<em><?php echo date('d/m/Y', strtotime($interaction->get('historique_date'))); ?></em><br>
 					
-					<em><?php Core::tpl_typeEvenement($interaction->get('historique_type')); ?></em><br>
+					<em><?php Core::eventType($interaction->get('historique_type')); ?></em><br>
 					
         <?php if ($interaction->get('historique_type') == 'sms') : ?><strong>Envoi d'un SMS</strong><br><em>&laquo;&nbsp;<?php echo $interaction->get('historique_notes'); ?>&nbsp;&raquo;</em>
         <?php elseif ($interaction->get('historique_type') == 'porte') : ?><strong>Porte à porte</strong><br><em><?php echo $interaction->get('historique_objet'); ?></em>
@@ -118,7 +118,7 @@ if (isset($_GET['fiche'])) :
 
 <nav id="actions-fiche">
 	<a href="#" id="goToHistorique" class="historique">&#xe8dd;</a>
-	<a href="<?php Core::tpl_go_to('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" id="ajoutInteraction" class="central">&#xe816;</a>
+	<a href="<?php Core::goTo('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" id="ajoutInteraction" class="central">&#xe816;</a>
 	<a href="#" id="goToModif" class="modifier">&#xe855;</a>
 </nav>
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

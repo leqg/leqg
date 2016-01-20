@@ -1164,7 +1164,7 @@ class Carto
         }
 
         // On remet en forme l'affichage
-        $affichage = Core::tpl_transform_texte($affichage);
+        $affichage = Core::transformText($affichage);
 
         // On retourne les informations demandées
         if (!$return) {

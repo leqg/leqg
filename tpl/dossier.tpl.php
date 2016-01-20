@@ -3,14 +3,14 @@
     User::protection(5);
     
     // On vérifie l'existance d'un élément dossier
-if (!isset($_GET['dossier'])) { Core::tpl_go_to('dossier', true); 
+if (!isset($_GET['dossier'])) { Core::goTo('dossier', true); 
 }
     
     // On ouvre l'objet dossier
     $dossier = new Folder($_GET['dossier']);
 
     // On affiche l'entête
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 	
 	<h2 class="titre" data-dossier="<?php echo $dossier->get('id'); ?>"><?php echo $dossier->get('name'); ?></h2>
@@ -27,11 +27,11 @@ if (!isset($_GET['dossier'])) { Core::tpl_go_to('dossier', true);
 			<ul class="listeDesEvenements listing">
 				<?php $evenements = $dossier->events(); foreach ($evenements as $evenement) : $e = new Event($evenement); $c = new People($e->get('people')); ?>
 				<li class="objet <?php echo $e->get('type'); ?>">
-					<small><span><?php echo Core::tpl_typeEvenement($e->get('type')); ?></span></small>
-					<strong><a href="<?php Core::tpl_go_to('contact', array('contact' => $e->get('people'), 'evenement' => $e->get('id'))); ?>"><?php echo $e->get('objet'); ?></a></strong>
+					<small><span><?php echo Core::eventType($e->get('type')); ?></span></small>
+					<strong><a href="<?php Core::goTo('contact', array('contact' => $e->get('people'), 'evenement' => $e->get('id'))); ?>"><?php echo $e->get('objet'); ?></a></strong>
 					<ul class="infosAnnexes">
 						<li class="date"><?php echo date('d/m/Y', strtotime($e->get('date'))); ?></li>
-						<li class="contact"><a href="<?php Core::tpl_go_to('contact', array('contact' => $e->get('people'))); ?>"><?php echo $c->display_name(); ?></a></li>
+						<li class="contact"><a href="<?php Core::goTo('contact', array('contact' => $e->get('people'))); ?>"><?php echo $c->display_name(); ?></a></li>
 					</ul>
 				</li>
 				<?php endforeach; ?>
@@ -125,4 +125,4 @@ if (!isset($_GET['dossier'])) { Core::tpl_go_to('dossier', true);
 		
 	</div>
 	
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

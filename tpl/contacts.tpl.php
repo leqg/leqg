@@ -1,6 +1,6 @@
 <?php
 	User::protection(5);
-	Core::tpl_header();
+	Core::loadHeader();
 ?>
 
 	<h2>Votre fichier contacts consolidé</h2>
@@ -18,8 +18,8 @@
 	<div class="colonne demi gauche">
 		<section class="contenu demi">
 			<ul class="iconesActions">
-				<a href="<?php Core::tpl_go_to('contact', array('operation' => 'creation')); ?>"><li class="new">Nouvelle fiche</li></a>
-				<!--<a href="<?php Core::tpl_go_to('fiche', array('operation' => 'fusion')); ?>"><li class="merge">Fusion de fiches</li></a>-->
+				<a href="<?php Core::goTo('contact', array('operation' => 'creation')); ?>"><li class="new">Nouvelle fiche</li></a>
+				<!--<a href="<?php Core::goTo('fiche', array('operation' => 'fusion')); ?>"><li class="merge">Fusion de fiches</li></a>-->
 			</ul>
 		</section>
 
@@ -103,7 +103,7 @@
 						$event = new Event($tache['event']);
 						$fiche = new People($event->get('people'));
 				?>
-				<a href="<?php Core::tpl_go_to('contact', array('contact' => $fiche->get('id'), 'evenement' => $event->get('id'))); ?>" class="transparent">
+				<a href="<?php Core::goTo('contact', array('contact' => $fiche->get('id'), 'evenement' => $event->get('id'))); ?>" class="transparent">
 					<li class="tache loupeOver">
 						<strong><?php echo $tache['task']; ?></strong>
 						<em><?php echo User::get_login_by_ID($tache['user']); ?></em>
@@ -124,9 +124,9 @@
         	    <?php foreach ($liste as $event) : $e = new Event($event['id']); $c = new People($e->get('people')); ?>
 				<li class="evenement <?php echo $e->get('type'); ?> <?php if ($e->link()) { ?>clic<?php } ?>">
 					<small><span><?php echo Event::display_type($e->get('type')); ?></span></small>
-					<strong><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $c->get('id'), 'evenement' => $e->get('id'))); ?>"><?php echo (!empty($e->get('objet'))) ? $e->get('objet') : 'Événement sans titre'; ?></a></strong>
+					<strong><a href="<?php echo Core::goTo('contact', array('contact' => $c->get('id'), 'evenement' => $e->get('id'))); ?>"><?php echo (!empty($e->get('objet'))) ? $e->get('objet') : 'Événement sans titre'; ?></a></strong>
 					<ul class="infosAnnexes">
-						<li class="contact"><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $c->get('id'))); ?>"><?php echo $c->display_name(); ?></a></li>
+						<li class="contact"><a href="<?php echo Core::goTo('contact', array('contact' => $c->get('id'))); ?>"><?php echo $c->display_name(); ?></a></li>
 						<li class="date"><?php echo date('d/m/Y', strtotime($e->get('date'))); ?></li>
 					</ul>
 				</li>
@@ -349,4 +349,4 @@
 		</section>
 	</div>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

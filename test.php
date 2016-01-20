@@ -121,7 +121,7 @@ foreach ($contacts as $contact) {
 
 // On teste la recherche
 //$recherche = 'chem';
-//$rue = $core->formatage_recherche($recherche);
+//$rue = $core->formatageRecherche($recherche);
 //$rues = $carto->rechercheRue('67482', $rue);
 
 //$core->debug($rues);
@@ -173,7 +173,7 @@ foreach ($data as $key => $line) {
 	if ($key > 0) break;
 	
 	// On cherche la fiche dont le nom correspond à la ligne, avec pour tag 'parti'
-	$query = 'SELECT * FROM `contacts` WHERE (`contact_nom` LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%" OR `contact_nom_usage` LIKE "%' . $core->formatage_recherche($donnees['nom']) . '%") AND `contact_prenoms` LIKE "%' . $core->formatage_recherche($donnees['prenom']) . '%" AND `contact_tags` LIKE "%parti%"';
+	$query = 'SELECT * FROM `contacts` WHERE (`contact_nom` LIKE "%' . $core->formatageRecherche($donnees['nom']) . '%" OR `contact_nom_usage` LIKE "%' . $core->formatageRecherche($donnees['nom']) . '%") AND `contact_prenoms` LIKE "%' . $core->formatageRecherche($donnees['prenom']) . '%" AND `contact_tags` LIKE "%parti%"';
 	$sql = $db->query($query); $core->debug($query);
 	
 	if ($sql->num_rows == 1) { $resultats['correct'][] = $line; }

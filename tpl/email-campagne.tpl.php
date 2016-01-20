@@ -6,7 +6,7 @@
     $campagne = new Campagne($_GET['campagne']);
 
     // On charge le template
-    Core::tpl_header(); 
+    Core::loadHeader(); 
 ?>
 	
 	<h2 class="titreCampagne" data-campagne="<?php echo $campagne->get('code'); ?>" data-page="campagne"><?php echo $campagne->get('campagne_titre');?></h2>
@@ -47,4 +47,4 @@
 		</section>
 	</div>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

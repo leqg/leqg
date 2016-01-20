@@ -3,7 +3,7 @@
     $data = new Mission($_GET['code']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::tpl_go_to('porte', true); 
+if ($data->err) { Core::goTo('porte', true); 
 }
     
     // On récupère les statistiques sur les militants
@@ -16,7 +16,7 @@ if ($data->err) { Core::tpl_go_to('porte', true);
     $typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';
 
     // On charge le header
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 	<h2>Mission &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
@@ -24,7 +24,7 @@ if ($data->err) { Core::tpl_go_to('porte', true);
     <?php if ($rues) : ?>
     	<ul class="listeMissions">
             <?php foreach ($rues as $rue) : $stats = $data->statistique_rue($rue['rue_id']); ?>
-    		<a href="<?php Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $rue['rue_id'])); ?>" class="nostyle">
+    		<a href="<?php Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $rue['rue_id'])); ?>" class="nostyle">
     			<li class="rue">
     				<h4><?php echo $rue['rue_nom']; ?></h4>
                 <?php if ($stats && $stats['proportion']) : ?>
@@ -42,4 +42,4 @@ if ($data->err) { Core::tpl_go_to('porte', true);
     	<p>Aucune rue n'a été sélectionnée pour l'instant.</p>
     <?php endif; ?>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

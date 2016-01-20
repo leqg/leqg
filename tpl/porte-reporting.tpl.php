@@ -1,4 +1,4 @@
-<?php Core::tpl_header(); $mission = Porte::informations($_GET['reporting'])[0]; ?>
+<?php Core::loadHeader(); $mission = Porte::informations($_GET['reporting'])[0]; ?>
 
     <h2 class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
@@ -64,4 +64,4 @@
         <?php endif; ?>
     </section>
         
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

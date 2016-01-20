@@ -3,7 +3,7 @@
     $data = new Mission($_GET['mission']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::tpl_go_to('porte', true); 
+if ($data->err) { Core::goTo('porte', true); 
 }
 
     // On récupère les données du formulaire
@@ -52,5 +52,5 @@ if ($data->err) { Core::tpl_go_to('porte', true);
         }
     }
     
-    Core::tpl_go_to('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
+    Core::goTo('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
 ?>

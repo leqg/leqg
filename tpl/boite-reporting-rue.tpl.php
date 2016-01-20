@@ -1,4 +1,4 @@
-<?php Core::tpl_header(); $mission = Boite::informations($_GET['mission'])[0]; ?>
+<?php Core::loadHeader(); $mission = Boite::informations($_GET['mission'])[0]; ?>
 
     <h2 class="titre" data-mission="<?php echo md5($mission['mission_id']); ?>">Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
 
@@ -45,9 +45,9 @@
         <?php endif; ?>
         
         <?php if (User::auth_level() > 5) : ?>
-        <a href="<?php Core::tpl_go_to('boite', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <a href="<?php Core::goTo('boite', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
         <?php else : ?>
-        <a href="<?php Core::tpl_go_to('boite', array('action' => 'voir', 'mission' => $mission['mission_id'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <a href="<?php Core::goTo('boite', array('action' => 'voir', 'mission' => $mission['mission_id'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
         <?php endif; ?>
     </section>
     
@@ -110,4 +110,4 @@
     ?>
 
     
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

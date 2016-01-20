@@ -3,29 +3,29 @@
     $data = new Mission($_GET['code']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::tpl_go_to('porte', true); 
+if ($data->err) { Core::goTo('porte', true); 
 }
     
-if (!isset($_GET['electeur'], $_GET['statut'])) { Core::tpl_go_to(true); 
+if (!isset($_GET['electeur'], $_GET['statut'])) { Core::goTo(true); 
 }
     
     // On récupère les données du formulaire
     $data->reporting($_GET['electeur'], $_GET['statut']);
     
     // S'il faut des coordonnées, on reste sur la page, sinon on dégage
-if ($_GET['statut'] != 4 && $data->get('mission_type') == 'porte') { Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble']), true); 
+if ($_GET['statut'] != 4 && $data->get('mission_type') == 'porte') { Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble']), true); 
 }
-if ($data->get('mission_type') == 'boitage') { Core::tpl_go_to('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue']), true); 
+if ($data->get('mission_type') == 'boitage') { Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue']), true); 
 }
     
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 	<h2>Mission &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
 
     <h3 style="margin: 20px;">Comment contacter cet électeur ?</h3>
     
-    <form action="<?php Core::tpl_go_to('report', array('action' => 'coord', 'code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'])); ?>" method="post">
+    <form action="<?php Core::goTo('report', array('action' => 'coord', 'code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'])); ?>" method="post">
         <p style="text-align: center;">Email</p>
         <input type="email" name="email">
         
@@ -35,4 +35,4 @@ if ($data->get('mission_type') == 'boitage') { Core::tpl_go_to('mission', array(
         <input type="submit" value="Valider">
     </form>
     
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

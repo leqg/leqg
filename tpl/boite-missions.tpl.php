@@ -9,9 +9,9 @@
     $missions_ouvertes = Mission::missions_ouvertes('boitage', User::ID());
     
     // On charge le header
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
-    <?php if (User::auth_level() >= 5) : ?><a href="<?php Core::tpl_go_to('boite'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a><?php 
+    <?php if (User::auth_level() >= 5) : ?><a href="<?php Core::goTo('boite'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Administration</button></a><?php 
     endif; ?>
 	<h2 class="titre" data-user="<?php echo User::ID(); ?>">Boîtage</h2>
 	
@@ -39,8 +39,8 @@
     	<ul class="liste-missions">
         <?php foreach ($missions_ouvertes as $mission_ouverte) : $mission = new Mission(md5($mission_ouverte)); $deadline = DateTime::createFromFormat('Y-m-d', $mission->get('mission_deadline')); ?>
     		<li>
-    		    <a href="<?php Core::tpl_go_to('reporting', array('mission' => $mission->get('mission_hash'))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
-    		    <a href="<?php Core::tpl_go_to('reporting', array('mission' => $mission->get('mission_hash'))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
+    		    <a href="<?php Core::goTo('reporting', array('mission' => $mission->get('mission_hash'))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
+    		    <a href="<?php Core::goTo('reporting', array('mission' => $mission->get('mission_hash'))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
             <?php if ($mission->get('mission_deadline')) : ?>
     		    <p>Cette mission de boîtage doit être terminée pour le <strong><?php echo $deadline->format('d/m/Y'); ?></strong>.</p>
             <?php else : ?>
@@ -58,4 +58,4 @@
 		</section>
     <?php endif; ?>
 	
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

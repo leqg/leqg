@@ -24,7 +24,7 @@ if (isset($_POST['rue'], $_POST['code']) || isset($_GET['rue'], $_GET['code'])) 
     $mission->ajoutRue($rue);
 
     // On retourne un code de réussite
-    Core::tpl_go_to('mission', array('code' => $code, 'admin' => 'parcours'), true);
+    Core::goTo('mission', array('code' => $code, 'admin' => 'parcours'), true);
 } else {
     // On retourne un code d'erreur
     http_response_code(418);

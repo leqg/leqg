@@ -25,9 +25,9 @@ $infos = array(
     'nom-usage' => $_POST['nom-usage'],
     'prenom' => $_POST['prenom'],
     'sexe' => $_POST['sexe'],
-    'fixe' => $core->securisation_string($_POST['fixe']),
-    'mobile' => $core->securisation_string($_POST['mobile']),
-    'email' => $core->securisation_string($_POST['email'])
+    'fixe' => $core->securisationString($_POST['fixe']),
+    'mobile' => $core->securisationString($_POST['mobile']),
+    'email' => $core->securisationString($_POST['email'])
 );
 
 // On va procéder à la recherche de fiches similaires

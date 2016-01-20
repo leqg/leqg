@@ -4,7 +4,7 @@
     // On ouvre la mission
     $data = new Mission(md5($_GET['mission']));
     
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 <h2 id="titre-mission" data-mission="<?php echo md5($mission['mission_id']); ?>">Porte-à-porte &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>

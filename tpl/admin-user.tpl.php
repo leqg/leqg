@@ -18,9 +18,9 @@
         1 => 'Militant'
     );
 
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
-    <a href="<?php Core::tpl_go_to('administration'); ?>" class="nostyle"><button style="float: right; margin-top: 0em;" class="gris">Retour à la liste</button></a>	
+    <a href="<?php Core::goTo('administration'); ?>" class="nostyle"><button style="float: right; margin-top: 0em;" class="gris">Retour à la liste</button></a>	
 	
 	<h2><?php echo $user['firstname'] . ' ' . $user['lastname']; ?></h2>
 	
@@ -39,7 +39,7 @@
                 </li>
                 <li class="mobile">
                     <span>Téléphone</span>
-                    <span><?php if ($user['phone'] != '0000000000') { echo Core::get_tpl_phone($user['phone']); 
+                    <span><?php if ($user['phone'] != '0000000000') { echo Core::getFormatPhone($user['phone']); 
                    } else { echo 'Donnée inconnue'; 
 } ?></span>
                 </li>

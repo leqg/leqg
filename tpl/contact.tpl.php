@@ -7,7 +7,7 @@
 	$address = $data->postal_address();
 
 	// Chargement de l'entête
-	Core::tpl_header();
+	Core::loadHeader();
 ?>
 
 <h2 class="titre" id="nomContact" data-fiche="<?php echo $data->get('id'); ?>"><?php if (!empty($data->display_name())) { echo $data->display_name(); } else { echo 'Cliquez pour ajouter un nom'; } ?></h2>
@@ -58,7 +58,7 @@
 				}
 				else
 				{ 
-					Core::tpl_phone($coordonnee['coordonnee_numero']); 
+					Core::formatPhone($coordonnee['coordonnee_numero']); 
 				} 
 		  ?></li>
 			<?php endforeach; ?>
@@ -71,7 +71,7 @@
 		
 		<ul class="etatcivil">
 			<?php $fiches = $data->linked_people(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact($identifiant); ?>
-			<li class="lien fiche-liee-<?php echo $ficheLiee->get('id'); ?>"><a href="<?php Core::tpl_go_to('contact', array('contact' => $ficheLiee->get('id'))); ?>"><?php echo $ficheLiee->display_name(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('id'); ?>"><small>&#xe8b0;</small></a></li>
+			<li class="lien fiche-liee-<?php echo $ficheLiee->get('id'); ?>"><a href="<?php Core::goTo('contact', array('contact' => $ficheLiee->get('id'))); ?>"><?php echo $ficheLiee->display_name(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('id'); ?>"><small>&#xe8b0;</small></a></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>
@@ -113,7 +113,7 @@
 				}
 				// on regarde si on peut rediriger vers la campagne
 				elseif ($event->link() == 1) {
-					echo '<a href="'; Core::tpl_go_to($event->get('type'), array('campagne' => $event->get('campaign'))); echo '" class="nostyle">';
+					echo '<a href="'; Core::goTo($event->get('type'), array('campagne' => $event->get('campaign'))); echo '" class="nostyle">';
 				}
 			?>
 				<li class="evenement <?php echo $event->get('type'); ?> <?php if ($event->link()) { ?>clic<?php } ?>">
@@ -497,7 +497,7 @@
 	        	        <label class="sbox" for="choixNumero">
 		        	        <select name="choixNumero" id="choixNumero">
 		            			<?php $coordonnees = $data->contact_details(); foreach ($coordonnees as $coordonnee) : if ($coordonnee['coordonnee_type'] == 'mobile') : ?>
-		            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php Core::tpl_phone($coordonnee['coordonnee_numero']); ?></option>
+		            	        <option value="<?php echo $coordonnee['coordonnee_id']; ?>"><?php Core::formatPhone($coordonnee['coordonnee_numero']); ?></option>
 		            	        <?php endif; endforeach; ?>
 		        	        </select>
 	        	        </label>
@@ -661,4 +661,4 @@
 </script>
 <?php endif; ?>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

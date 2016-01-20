@@ -3,7 +3,7 @@
     require_once 'includes.php';
     
     // On importe le header
-    $core->tpl_header();
+    $core->loadHeader();
 ?>
 
 	<div id="installation" style="margin: 3em;">
@@ -18,7 +18,7 @@
 
 <?php
     // On importe le footer
-    $core->tpl_footer();
+    $core->loadFooter();
     
     // On importe la purge
     require_once 'purge.php';

@@ -12,7 +12,7 @@
  */
 
 // On récupère la ville recherchée et on la formate
-$ville = $core->formatage_recherche($_POST['ville']);
+$ville = $core->formatageRecherche($_POST['ville']);
 
 // On fait la recherche
 $villes = $carto->rechercheVille($ville);
@@ -20,7 +20,7 @@ $villes = $carto->rechercheVille($ville);
 // On fait la liste des résultats
 foreach ($villes as $ville) :
 ?>
-<a href="<?php $core->tpl_go_to(
+<a href="<?php $core->goTo(
     'porte',
     array('action' => 'nouveau', 'ville' => $ville['id'])
 ); ?>">

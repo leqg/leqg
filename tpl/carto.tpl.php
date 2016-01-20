@@ -1,6 +1,6 @@
 <?php 
     User::protection(5);
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 	<h2>Module d'exploration cartographique</h2>
@@ -20,4 +20,4 @@
 		<ul class="listeCommunes"></ul>
 	</section>
 	
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

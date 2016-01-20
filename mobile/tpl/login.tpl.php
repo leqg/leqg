@@ -1,4 +1,4 @@
-	<form action="<?php $core->tpl_get_url('login'); ?>" method="post">
+	<form action="<?php $core->getUrl('login'); ?>" method="post">
 		<ul>
 			<li>
 				<label for="form-login">Nom d'utilisateur</label>

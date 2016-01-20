@@ -13,7 +13,7 @@
     $fixes = Maps::city_contact_details($ville['id'], 'fixe');
     
     // Chargement du template
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 
 <h2><?php echo mb_convert_case($ville['city'], MB_CASE_TITLE); ?></h2>
@@ -110,4 +110,4 @@
 	});
 </script>
 
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

@@ -1,7 +1,7 @@
 <?php
     User::protection(5);
     $contact = new Contact(md5($_GET['fiche']));
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
 <h2>Ajout d'une interaction</h2>
 
@@ -16,11 +16,11 @@
 			<label for="form-type">Type</label>
 			<label class="selectbox" for="form-type">
 				<select name="type" id="form-type">
-					<option value="contact"><?php echo Core::tpl_typeEvenement('contact'); ?></option>
-					<option value="telephone"><?php echo Core::tpl_typeEvenement('telephone'); ?></option>
-					<option value="email"><?php echo Core::tpl_typeEvenement('email'); ?></option>
-					<option value="courrier"><?php echo Core::tpl_typeEvenement('courrier'); ?></option>
-					<option value="autre"><?php echo Core::tpl_typeEvenement('autre'); ?></option>
+					<option value="contact"><?php echo Core::eventType('contact'); ?></option>
+					<option value="telephone"><?php echo Core::eventType('telephone'); ?></option>
+					<option value="email"><?php echo Core::eventType('email'); ?></option>
+					<option value="courrier"><?php echo Core::eventType('courrier'); ?></option>
+					<option value="autre"><?php echo Core::eventType('autre'); ?></option>
 				</select>
 			</label>
 		</li>
@@ -44,4 +44,4 @@
 			<input type="submit" value="Sauvegarder">
 		</li>
 	</ul>
-<?php Core::tpl_footer(); ?>
+<?php Core::loadFooter(); ?>

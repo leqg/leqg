@@ -3,7 +3,7 @@
     $data = new Mission($_GET['mission']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::tpl_go_to('porte', true); 
+if ($data->err) { Core::goTo('porte', true); 
 }
 
     // On récupère les données du formulaire
@@ -35,7 +35,7 @@ if ($data->get('mission_type') == 'porte') {
     }
         
     // S'il n'y a pas de coordonnées à récupérer, on redirige
-    if (!count($coordonnees)) { Core::tpl_go_to('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true); 
+    if (!count($coordonnees)) { Core::goTo('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true); 
     }
 }
     
@@ -58,17 +58,17 @@ else {
         $data->reporting($report, $statut);
     }
         
-    Core::tpl_go_to('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
+    Core::goTo('reporting', array('mission' => $_GET['mission'], 'rue' => $_GET['rue']), true);
 }
     
 
     // On charge le header
-    Core::tpl_header();
+    Core::loadHeader();
 ?>
-<a href="<?php Core::tpl_go_to('reporting', array('mission' => $data->get('mission_hash'))); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la mission</button></a>	
+<a href="<?php Core::goTo('reporting', array('mission' => $data->get('mission_hash'))); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la mission</button></a>	
 <h2 id="titre-mission" class="titre" data-mission="<?php echo $data->get('mission_hash'); ?>">Mission &laquo;&nbsp;<?php echo $data->get('mission_nom'); ?>&nbsp;&raquo;</h2>
 
-<form action="<?php Core::tpl_go_to('reporting', array('action' => 'coordonnees', 'mission' => $_GET['mission'], 'rue' => $_GET['rue'])); ?>" method="post">
+<form action="<?php Core::goTo('reporting', array('action' => 'coordonnees', 'mission' => $_GET['mission'], 'rue' => $_GET['rue'])); ?>" method="post">
     <section class="contenu">
         <h4>Demande d'informations complémentaires</h4>
         
