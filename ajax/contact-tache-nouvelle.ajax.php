@@ -23,7 +23,7 @@ $tache[0] = $evenement->newTask(
 
 if (isset($tache[0]['user'])) {
     // On récupère le nom de la fiche qui est concernée par cette tâche
-    $nickname = User::get_login_by_ID($tache[0]['user']);
+    $nickname = User::getLoginByID($tache[0]['user']);
 } else {
     $nickname = 'Pas d\'utilisateur attribué';
 }

@@ -32,7 +32,7 @@ $objet = 'LeQG – Création de votre compte utilisateur.';
 // On insère dans le mail l'URL du fichier pour qu'il puisse être téléchargé
 $email = strtr(
     $email, array('{COMPTE}' => $infos['firstname'] ,
-    '{USER}' => $user->get_login_by_ID($_COOKIE['leqg-user']) ,
+    '{USER}' => $user->getLoginByID($_COOKIE['leqg-user']) ,
     '{EMAIL}' => $infos['email'] ,
     '{PASS}' => $infos['pass'] )
 );

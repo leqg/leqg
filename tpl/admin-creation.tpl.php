@@ -35,11 +35,11 @@ if (isset($_POST)) {
         
     // On lance l'envoi du mail avec les informations de connexion
     $email = file_get_contents('tpl/mail/user-creation.tpl.html');
-    $objet = 'LeQG – Votre compte a été créé par ' . User::get_login_by_ID(User::ID()) . '.';
+    $objet = 'LeQG – Votre compte a été créé par ' . User::getLoginByID(User::ID()) . '.';
         
     // On insère dans le mail l'URL du fichier pour qu'il puisse être téléchargé
     $email = strtr($email, array('{COMPTE}' => $form['prenom'] . ' ' . $form['nom']));
-    $email = strtr($email, array('{USER}' => User::get_login_by_ID(User::ID())));
+    $email = strtr($email, array('{USER}' => User::getLoginByID(User::ID())));
     $email = strtr($email, array('{EMAIL}' => $form['email']));
     $email = strtr($email, array('{PASS}' => $form['pass']));
         

@@ -1,4 +1,4 @@
-<?php if (User::auth_level() >= 5) : ?>
+<?php if (User::authLevel() >= 5) : ?>
 <ul id="actions">
 	<li>
 		<a href="<?php Core::goPage('contacts'); ?>">

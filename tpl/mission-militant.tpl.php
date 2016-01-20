@@ -35,7 +35,7 @@
         
         <ul class="listeContacts">
             <?php if ($militants[1]) : foreach ($militants[1] as $militant) : ?>
-			<li class="contact user homme"><?php echo User::get_login_by_ID($militant['user_id']); ?></li>
+			<li class="contact user homme"><?php echo User::getLoginByID($militant['user_id']); ?></li>
 			<?php endforeach; else : ?>
 			<li class="contact user homme">Aucun militant inscrit.</li>
             <?php endif; ?>
@@ -47,7 +47,7 @@
         
         <ul class="listeContacts">
             <?php if ($militants[-1]) : foreach ($militants[-1] as $militant) : ?>
-			<li class="contact user homme"><?php echo User::get_login_by_ID($militant['user_id']); ?></li>
+			<li class="contact user homme"><?php echo User::getLoginByID($militant['user_id']); ?></li>
 			<?php endforeach; else : ?>
 			<li class="contact user homme">Aucun militant ayant refusé l'invitation.</li>
             <?php endif; ?>
@@ -62,7 +62,7 @@
         <ul class="listeContacts">
             <a href="<?php Core::goPage('mission', array('code' => $data->get('mission_hash'), 'admin' => 'invitations')); ?>" class="nostyle"><li class="contact ajout">Inviter de nouveaux militants à la mission</li></a>
             <?php if ($militants[0]) : foreach ($militants[0] as $militant) : ?>
-			<li class="contact user homme"><?php echo User::get_login_by_ID($militant['user_id']); ?></li>
+			<li class="contact user homme"><?php echo User::getLoginByID($militant['user_id']); ?></li>
 			<?php endforeach; else : ?>
 			<li class="contact user homme">Aucun militant invité.</li>
             <?php endif; ?>

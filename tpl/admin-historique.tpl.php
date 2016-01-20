@@ -1,6 +1,6 @@
 <?php $usr = $user->infos($_GET['historique']); ?>
 <section id="timeline-usr">
-	<h2>Historique de l'utilisateur <strong><?php echo $user->get_login_by_ID($usr['id']); ?></strong></h2>
+	<h2>Historique de l'utilisateur <strong><?php echo $user->getLoginByID($usr['id']); ?></strong></h2>
 
 	<ul class="timelineHistorique">
     <?php if ($usr['lastaction'] != '0000-00-00 00:00:00') : ?>

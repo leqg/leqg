@@ -49,7 +49,7 @@
 	<!-- Navigation principale -->
 	<nav id="principale">
     <?php 
-    if (User::auth_level() >= 5) :
+    if (User::authLevel() >= 5) :
         $menu = array(  'contacts' => 'Contacts',
                                 'dossier' => 'Dossiers',
         /*	'carto' => 'Cartographie',*/

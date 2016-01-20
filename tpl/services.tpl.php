@@ -6,7 +6,7 @@
     Core::loadHeader();
 ?>
 <table id="services">
-    <?php if (User::auth_level() >= 5) : ?>
+    <?php if (User::authLevel() >= 5) : ?>
 	<tr>
 		<td><a href="<?php Core::goPage('contacts'); ?>"><span>&#xe840;</span><p>Contacts</p></a></td>
 		<td><a href="<?php Core::goPage('dossier'); ?>"><span>&#xe851;</span><p>Dossiers</p></a></td>

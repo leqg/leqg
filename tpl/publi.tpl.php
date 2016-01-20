@@ -20,7 +20,7 @@
 					<p>
 						Cette campagne de publipostage a été envoyée à <strong><?php echo number_format($campaign->get('count'), 0, ',', ' '); ?></strong> contact<?php if ($campaign->get('count') >1) { ?>s<?php 
      } ?>.<br>
-						Elle a été préparée le <strong><?php echo strftime('%d %B %Y', strtotime($campaign->get('date'))); ?></strong> par <em><?php echo User::get_login_by_ID($campaign->get('user')); ?></em>.
+						Elle a été préparée le <strong><?php echo strftime('%d %B %Y', strtotime($campaign->get('date'))); ?></strong> par <em><?php echo User::getLoginByID($campaign->get('user')); ?></em>.
 					</p>
 				</li>
 				<?php endforeach; ?>

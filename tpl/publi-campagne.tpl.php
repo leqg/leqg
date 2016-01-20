@@ -28,7 +28,7 @@
 				</li>
 				<li class="utilisateur">
 					<span>Utilisateur à l'origine de la campagne</span>
-					<span><?php echo User::get_login_by_id($campaign->get('user')); ?></span>
+					<span><?php echo User::getLoginByID($campaign->get('user')); ?></span>
 				</li>
 				<li class="email">
 					<span>Nombre d'envois</span>

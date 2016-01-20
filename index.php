@@ -19,7 +19,7 @@ require_once 'includes.php';
 if (empty($_GET['page'])) {
     
     // Redirection si l'utilisateur à une accréditation inférieure au niveau 5
-    if (User::auth_level() >= 5) {
+    if (User::authLevel() >= 5) {
         Core::goPage('contacts', true);
     }
     
@@ -315,7 +315,7 @@ else {
     // Si on demande le module d'affichage des services
     else if ($_GET['page'] == 'services') {
         // Si l'utilisateur a une forte accréditation, il s'agit de l'écran d'accueil du module contacts qui est demandé
-        if (User::auth_level() >= 5) {
+        if (User::authLevel() >= 5) {
             Core::goPage('contacts', true);
         }
         
@@ -329,7 +329,7 @@ else {
     
     // On redirige automatiquement sur vers la page de présentation des services ou le module contacts en cas de module non trouvé selon l'accréditation
     else {
-        if (User::auth_level() >= 5) {
+        if (User::authLevel() >= 5) {
             Core::goPage('contacts', true);
         }
         

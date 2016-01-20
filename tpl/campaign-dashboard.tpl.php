@@ -243,7 +243,7 @@ Core::loadHeader();
                 </li>
                 <li class="responsable">
                     <span>Créateur</span>
-                    <span><?php echo User::get_login_by_ID($data->get('user')); ?></span>
+                    <span><?php echo User::getLoginByID($data->get('user')); ?></span>
                 </li>
                 <?php if ($data->get('type') == 'email' && $data->get('status') != 'open') : ?>
                 <li class="utilisateurs inscrit">

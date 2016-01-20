@@ -28,12 +28,12 @@
             <ul class="informations">
                 <li class="responsable">
                     <span>Votre responsable</span>
-                    <span><?php echo User::get_login_by_ID($data->get('responsable_id')); ?></span>
+                    <span><?php echo User::getLoginByID($data->get('responsable_id')); ?></span>
                 </li>
                 <li class="actif<?php echo (!$militants['reporting']) ? '-inconnu' : ''; ?>">
                     <span>Militant le plus actif</span>
                     <?php if ($militants['reporting']) : ?>
-                    <span><?php echo User::get_login_by_ID($militants['actif']); ?></span>
+                    <span><?php echo User::getLoginByID($militants['actif']); ?></span>
                     <?php else : ?>
                     <span>Aucun militant actif pour l'instant</span>
                     <?php endif; ?>

@@ -39,7 +39,7 @@
     <ul class="listeContacts">
         <?php if ($users) : foreach ($users as $militant) : ?><!--
 	 --><a href="ajax.php?script=mission-invitation&code=<?php echo $data->get('mission_hash'); ?>&user=<?php echo $militant['id']; ?>" class="nostyle"><!--
-    	 --><li class="demi contact user homme cursor" data-user="<?php echo $militant['id']; ?>"><?php echo User::get_login_by_ID($militant['id']); ?></li><!--
+    	 --><li class="demi contact user homme cursor" data-user="<?php echo $militant['id']; ?>"><?php echo User::getLoginByID($militant['id']); ?></li><!--
      --></a><!--
 	 --><?php endforeach; else : ?>
 		<li class="contact user homme">Aucun militant n'est disponible pour une invitation.</li>

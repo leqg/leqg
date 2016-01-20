@@ -106,7 +106,7 @@
 				<a href="<?php Core::goPage('contact', array('contact' => $fiche->get('id'), 'evenement' => $event->get('id'))); ?>" class="transparent">
 					<li class="tache loupeOver">
 						<strong><?php echo $tache['task']; ?></strong>
-						<em><?php echo User::get_login_by_ID($tache['user']); ?></em>
+						<em><?php echo User::getLoginByID($tache['user']); ?></em>
 					</li>
 				</a>
 				<?php endforeach; ?>
