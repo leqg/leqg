@@ -1,74 +1,70 @@
 <?php
 /**
- * LeQG – political database manager
- * Email Template class
- * 
- * PHP Version 5.5.21
- * 
- * @category  LeQG
- * @package   LeQG
- * @author    Damien Senger <hi@hiwelo.co>
- * @copyright 2014-2015 MSG SAS – LeQG
- * @license   Personal Use Only
- * @version   GIT:<git@github.com:hiwelo/leqg.git>
- * @link      http://hiwelo.co/
- * */
+ * Email template methods
+ *
+ * PHP version 5
+ *
+ * @category Template
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 
 /**
- * LeQG – political database manager
- * Email Template class
- * 
- * PHP Version 5.5.21
- * 
- * @category  LeQG
- * @package   LeQG
- * @author    Damien Senger <hi@hiwelo.co>
- * @copyright 2014-2015 MSG SAS – LeQG
- * @license   Personal Use Only
- * @link      http://hiwelo.co/
- * */
+ * Email template methods
+ *
+ * PHP version 5
+ *
+ * @category Template
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 class Template
 {
-    
     /**
-     * Properties definition
-     * @var array $_template Template data array
-     * */
-    private $_template = array();
-    
+     * Template data array
+     * @var array $_template
+     */
+    private $_template = [];
 
     /**
      * Class constructer, load asked template informations
-     * @param  string $template Template ID
+     *
+     * @param integer $template Template ID
+     *
      * @return void
-     * */
-    public function __construct($template) 
+     */
+    public function __construct(int $template)
     {
         $query = Core::query('template-data');
         $query->bindParam(':template', $template, PDO::PARAM_INT);
         $query->execute();
         $this->_template = $query->fetch(PDO::FETCH_ASSOC);
     }
-    
-    
+
     /**
      * Get a stored data
-     * @param  string $data Asked data
+     *
+     * @param string $data Asked data
+     *
      * @return mixed
-     * */
-    public function get($data) 
+     */
+    public function get(string $data)
     {
-        return $this->_template[ $data ];
+        return $this->_template[$data];
     }
-    
-    
+
     /**
      * Save a new version of this template
-     * 
-     * @param  string $template New version of this template
-     * @result void
-     * */
-    public function write($template)
+     *
+     * @param string $template New version of this template
+     *
+     * @return void
+     */
+    public function write(string $template)
     {
         $this->_template['template'] = $template;
         $query = Core::query('template-write');
@@ -76,25 +72,27 @@ class Template
         $query->bindValue(':id', $this->_template['id'], PDO::PARAM_INT);
         $query->execute();
     }
-    
-    
+
     /**
      * List all templates by name
-     * @result array
-     * */
+     *
+     * @return array
+     * @static
+     */
     public static function all()
     {
         $query = Core::query('templates-list');
         $query->execute();
-        
+
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
+
     /**
      * Create a new template
-     * @result int New template ID
-     * */
+     *
+     * @return integer
+     * @static
+     */
     public static function create()
     {
         $user = User::ID();
@@ -103,5 +101,4 @@ class Template
         $query->execute();
         return Configuration::read('db.link')->lastInsertId();
     }
-
-} 
+}
