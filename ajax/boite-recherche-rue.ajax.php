@@ -17,7 +17,7 @@ $ville = $_POST['ville'];
 
 
 // On fait la recherche
-$rues = $carto->recherche_rue($ville, $rue);
+$rues = $carto->rechercheRue($ville, $rue);
 
 // On fait la liste des résultats
 foreach ($rues as $rue) :

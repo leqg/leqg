@@ -3,7 +3,7 @@
     User::protection(5);
     
     // On récupère les données génériques sur la rue
-    $rue = Carto::rue_secure($_GET['code']);
+    $rue = Carto::rueSecure($_GET['code']);
     $ville = Carto::ville($rue['commune_id']);
     $departement = Carto::departement($ville['departement_id']);
     $region = Carto::region($departement['region_id']);

@@ -24,6 +24,6 @@ $campaign->update('message', $campagne['message']);
 
 $var = $_GET;
 $var['criteres'] = trim($var['criteres'], ';');
-$campaign->recipients_add(People::listing($var, 0, false));
+$campaign->addRecipients(People::listing($var, 0, false));
 
 echo $campaign->get('id');

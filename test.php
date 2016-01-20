@@ -122,7 +122,7 @@ foreach ($contacts as $contact) {
 // On teste la recherche
 //$recherche = 'chem';
 //$rue = $core->formatage_recherche($recherche);
-//$rues = $carto->recherche_rue('67482', $rue);
+//$rues = $carto->rechercheRue('67482', $rue);
 
 //$core->debug($rues);
 

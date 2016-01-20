@@ -15,7 +15,7 @@
 $ville = $core->formatage_recherche($_POST['ville']);
 
 // On fait la recherche
-$villes = $carto->recherche_ville($ville);
+$villes = $carto->rechercheVille($ville);
 
 // On fait la liste des résultats
 foreach ($villes as $ville) :

@@ -8,37 +8,37 @@ $data->stats();
 if (isset($_GET['operation'])) {
     switch ($_GET['operation']) {
         case 'copieTemplate':
-            $data->template_copy($_GET['template']);
+            $data->templateCopy($_GET['template']);
             break;
-        
+
         case 'saveTemplate':
-            $data->template_write($_POST['templateEditor']);
+            $data->templateWrite($_POST['templateEditor']);
             break;
-        
+
         case 'launch':
             $data->launch();
             break;
-        
+
         case 'newTemplate':
-            $data->template_empty();
+            $data->templateEmpty();
             break;
-        
+
         case 'modificationObjetCampagne':
             $data->object($_POST['objet']);
             break;
-        
+
         case 'copieTemplate':
-            $data->template_copy($_GET['template']);
+            $data->templateCopy($_GET['template']);
             break;
-        
+
         case 'modificationSMSCampagne':
             $data->update('message', $_POST['message']);
             break;
-        
+
         case 'updateTracking':
-            $data->tracking_update();
+            $data->trackingUpdate();
             break;
-        
+
         case 'test':
             $data->testing();
             Core::tpl_go_to('campagne', array('id' => $_GET['id']), true);
@@ -73,10 +73,10 @@ Core::tpl_header();
 
     <div class="colonne">
         <?php if (is_null($data->get('template'))) : $templates = Campaign::templates(); ?>
-        
+
         <section class="contenu">
             <h4>Création du template</h4>
-            
+
 			<ul class="liste-campagnes">
 				<li class="template">
 				    <a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'newTemplate')); ?>" class="nostyle"><h4>Template vierge</h4></a>
@@ -90,18 +90,18 @@ Core::tpl_header();
 				<?php endforeach; ?>
 			</ul>
         </section>
-        
+
         <?php else : ?>
-            
+
         <section class="contenu">
             <h4>Personnalisation du template</h4>
-            
+
             <form action="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'saveTemplate')); ?>" method="post">
                 <textarea class="templateEditor" id="templateEditor" name="templateEditor"><?php echo $data->get('template'); ?></textarea>
                 <button class="vert clair" type="submit">Sauvegarder le template</button>
             </form>
         </section>
-            
+
         <?php endif; ?>
     </div>
 
@@ -112,7 +112,7 @@ Core::tpl_header();
             <?php echo $data->get('mail'); ?>
         </section>
     </div>
-    
+
 <?php break; case 'launch': ?>
 
     <div class="colonne">
@@ -120,14 +120,14 @@ Core::tpl_header();
             <h3>Campagne lancée !</h3>
         </section>
     </div>
-    
+
 <?php break; case 'destinataires' : ?>
 
     <div class="colonne">
         <section class="contenu">
             <h4>Liste des destinataires</h4>
-            
-            <?php 
+
+            <?php
                 if (isset($_GET['first'])) {
                     $destinataires = $data->recipients($_GET['first']);
                     $suivant = $_GET['first'] + 10;
@@ -155,7 +155,7 @@ Core::tpl_header();
                     <tr>
                         <td><?php if ($data->get('status') == 'open') { echo $destinataire[0]; } else { echo $destinataire['email']; } ?></td>
                         <td><a href="<?php echo Core::tpl_go_to('contact', array('contact' => $contact->get('id'))); ?>"><?php echo $contact->display_name(); ?></a></td>
-                        <td><?php echo Campaign::display_status($destinataire['status']); ?></td>
+                        <td><?php echo Campaign::displayStatus($destinataire['status']); ?></td>
                     </tr>
                 </tbody>
                 <?php endforeach; ?>
@@ -181,7 +181,7 @@ Core::tpl_header();
             $nombre['rejected']    = (isset($data->get('count')['items']['rejected'])) ? $data->get('count')['items']['rejected'] : 0;
             $nombre['invalid']     = (isset($data->get('count')['items']['invalid'])) ? $data->get('count')['items']['invalid'] : 0;
             $nombre['total']       = (isset($data->get('count')['items']['all'])) ? $data->get('count')['items']['all'] : 0;
-            
+
             function pourcentage( $actu , $total ) {
                 $pourcentage = $actu * 100 / $total;
                 $pourcentage = str_replace(',', '.', $pourcentage);
@@ -195,7 +195,7 @@ Core::tpl_header();
              --><div class="contact" style="width: <?php echo pourcentage($nombre['invalid'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;invalide<?php if($nombre['invalid'] > 1) { echo 's'; } ?>&nbsp;:&nbsp;<?php echo number_format($nombre['invalid'], 0, ',', '&nbsp;'); ?></span></div><!--
              --><div class="absent" style="width: <?php echo pourcentage($nombre['togo'], $nombre['total']); ?>%;"><span>Élément<?php if($nombre['togo'] > 1) { echo 's'; } ?>&nbsp;en&nbsp;cours&nbsp;:&nbsp;<?php echo number_format($nombre['togo'], 0, ',', '&nbsp;'); ?></span></div><!--
          --></div>
-         
+
             <ul class="statistiquesMission">
                 <?php if ($nombre['scheduled']) : ?><li><strong><?php echo number_format($nombre['scheduled'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['scheduled'] > 1) { echo 's'; } ?> planifié<?php if($nombre['scheduled'] > 1) { echo 's'; } ?></li><?php endif; ?>
                 <?php if ($nombre['sent']) : ?><li><strong><?php echo number_format($nombre['sent'], 0, ',', '&nbsp;'); ?></strong> élément<?php if($nombre['sent'] > 1) { echo 's'; } ?> envoyé<?php if($nombre['sent'] > 1) { echo 's'; } ?> et reçu<?php if($nombre['sent'] > 1) { echo 's'; } ?></li><?php endif; ?>
@@ -206,13 +206,13 @@ Core::tpl_header();
             </ul>
         </section>
     </div>
-    
+
     <div class="colonne demi droite">
         <?php if ($nombre['rejected'] || $nombre['invalid']) : ?>
         <section class="contenu demi">
             <h4>Envois en erreur</h4>
             <?php $erreurs = $data->errors(); ?>
-            
+
             <ul class="statistiquesMission">
                 <?php foreach($erreurs as $erreur) : ?>
                 <li style="margin-bottom: 2em;">
@@ -225,13 +225,13 @@ Core::tpl_header();
         </section>
         <?php endif; ?>
     </div>
-    
+
 <?php break; default: ?>
 
     <div class="colonne demi gauche">
         <section class="contenu demi">
             <h4>Données générales</h4>
-            
+
             <ul class="informations">
                 <li class="type">
                     <span>Type de campagne</span>
@@ -239,7 +239,7 @@ Core::tpl_header();
                 </li>
                 <li class="courrier">
                     <span>Statut de la campagne</span>
-                    <span><?php echo ucfirst(Campaign::display_status($data->get('status'))); ?></span>
+                    <span><?php echo ucfirst(Campaign::displayStatus($data->get('status'))); ?></span>
                 </li>
                 <li class="responsable">
                     <span>Créateur</span>
@@ -258,7 +258,7 @@ Core::tpl_header();
                 </li>
                 <li class="date">
                     <span>Temps estimé pour l'envoi</span>
-                    <span><?php echo $data->display_estimated_time(); ?></span>
+                    <span><?php echo $data->displayEstimatedTime(); ?></span>
                 </li>
                 <?php endif; ?>
                 <li class="prix">
@@ -267,14 +267,14 @@ Core::tpl_header();
                 </li>
             </ul>
         </section>
-        
+
         <?php if ($data->get('status') == 'open' && ( ($data->get('type') == 'email' && !empty($data->get('objet'))) || ($data->get('type') == 'sms' && !empty($data->get('message'))) )) : ?>
         <section class="contenu demi">
             <a href="<?php Core::tpl_go_to('campagne', array('id' => $_GET['id'], 'operation' => 'launch', 'volet' => 'launch')); ?>" class="nostyle"><button class="vert clair long" style="margin: .25em auto .15em;">Envoi de la campagne</button></a>
         </section>
         <?php endif; ?>
     </div>
-    
+
     <div class="colonne demi droite">
         <?php if ($data->get('type') == 'email') : ?>
         <section class="contenu demi">
@@ -323,5 +323,5 @@ Core::tpl_header();
         </section>
         <?php endif; ?>
     </div>
-    
+
 <?php endswitch; ?>

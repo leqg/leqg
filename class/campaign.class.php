@@ -1,48 +1,43 @@
 <?php
 /**
- * LeQG – political database manager
- * Campaign class
+ * Méthodes de traitement des campagnes email, SMS ou publipostage
  *
- * PHP Version 5.5.21
+ * PHP version 5
  *
- * @category  LeQG
- * @package   LeQG
- * @author    Damien Senger <hi@hiwelo.co>
- * @copyright 2014-2015 MSG SAS – LeQG
- * @license   Personal Use Only
- * @version   GIT:<git@github.com:hiwelo/leqg.git>
- * @link      http://hiwelo.co/
- * */
+ * @category Campaign
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 
 /**
- * LeQG – political database manager
- * Campaign class
+ * Méthodes de traitement des campagnes email, SMS ou publipostage
  *
- * PHP Version 5.5.21
+ * PHP version 5
  *
- * @category  LeQG
- * @package   LeQG
- * @author    Damien Senger <hi@hiwelo.co>
- * @copyright 2014-2015 MSG SAS – LeQG
- * @license   Personal Use Only
- * @link      http://hiwelo.co/
- * */
+ * @category Campaign
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 class Campaign
 {
-
     /**
-     * Properties definition
-     * @var array $_campaign Campaign data array
+     * Campaign data array
+     * @var array
      * */
-    private $_campaign = array();
-
+    private $_campaign = [];
 
     /**
-     * Class constructer, load asked campaign informations
-     * @param  string $campaign Campaign ID
+     * Constructor
+     *
+     * @param integer $campaign Campaign ID
+     *
      * @return void
-     * */
-    public function __construct($campaign)
+     **/
+    public function __construct(int $campaign)
     {
         $query = Core::query('campaign-data');
         $query->bindParam(':campagne', $campaign, PDO::PARAM_INT);
@@ -58,43 +53,47 @@ class Campaign
         }
     }
 
-
     /**
      * Get a stored data
-     * @param  string $data Asked data
+     *
+     * @param string $data Asked data
+     *
      * @return mixed
-     * */
-    public function get($data)
+     **/
+    public function get(string $data)
     {
-        return $this->_campaign[ $data ];
+        return $this->_campaign[$data];
     }
-
 
     /**
      * Update an information
      *
-     * @param  string $data  Data to update
-     * @param  string $value Value
-     * @result void
-     * */
-    public function update($data, $value)
+     * @param string $data  Data to update
+     * @param mixed  $value Value
+     *
+     * @return void
+     **/
+    public function update(string $data, $value)
     {
         $this->_campaign[$data] = $value;
         $link = Configuration::read('db.link');
-        $query = $link->prepare('UPDATE `campagne` SET `'.$data.'` = :value WHERE `campagne_id` = :campaign');
+        $query = 'UPDATE `campagne`
+                  SET `'.$data.'` = :value
+                  WHERE `campagne_id` = :campaign';
+        $query = $link->prepare($query);
         $query->bindValue(':value', $value);
         $query->bindValue(':campaign', $this->_campaign['id']);
         $query->execute();
     }
 
-
     /**
      * New object method
      *
-     * @param  string $object New object
-     * @result void
-     * */
-    public function object($object)
+     * @param string $object New object
+     *
+     * @return void
+     **/
+    public function object(string $object)
     {
         $this->_campaign['objet'] = $object;
         $query = Core::query('campaign-object');
@@ -103,14 +102,14 @@ class Campaign
         $query->execute();
     }
 
-
     /**
      * Recipients adding method
      *
-     * @param  array $recipients List of recipients' ID
-     * @result void
-     * */
-    public function recipients_add($recipients)
+     * @param array $recipients List of recipients' ID
+     *
+     * @return void
+     **/
+    public function addRecipients(array $recipients)
     {
         $query = Core::query('campaign-recipient-add');
         $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
@@ -121,25 +120,35 @@ class Campaign
         }
     }
 
-
     /**
      * Recipients list
      *
-     * @param  int $first Première ligne appelée
-     * @result array
-     * */
+     * @param int $first Première ligne appelée
+     *
+     * @return array
+     **/
     public function recipients($first = null)
     {
         if ($this->_campaign['status'] == 'open') {
             if (is_null($first)) {
                 $query = Core::query('campaign-recipients-list');
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->execute();
             } else {
-                $query = file_get_contents('sql/campaign-recipients-list-limited.sql');
+                $query = file_get_contents(
+                    'sql/campaign-recipients-list-limited.sql'
+                );
                 $query = str_replace(':first', $first, $query);
                 $query = Configuration::read('db.link')->prepare($query);
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->execute();
             }
             $contacts = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -155,7 +164,11 @@ class Campaign
                     $query = Core::query('mobiles-by-contact');
                     break;
                 }
-                $query->bindValue(':contact', $contact['contact'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':contact',
+                    $contact['contact'],
+                    PDO::PARAM_INT
+                );
                 $query->execute();
                 $results = $query->fetchAll(PDO::FETCH_NUM);
 
@@ -171,18 +184,26 @@ class Campaign
         } else {
             if (is_null($first)) {
                 $query = Core::query('campaign-recipients');
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->execute();
             } else {
                 $query = file_get_contents('sql/campaign-recipients-limited.sql');
                 $query = str_replace(':first', $first, $query);
                 $query = Configuration::read('db.link')->prepare($query);
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->execute();
             }
             $recipients = $query->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach($recipients as $key => $recipient) {
+            foreach ($recipients as $key => $recipient) {
                 switch ($this->_campaign['type']) {
                 case 'email':
                     $query = Core::query('contact-by-email');
@@ -205,13 +226,15 @@ class Campaign
 
     /**
      * Count number of items related to this campaign
-     * @param   string $target What to count
-     * @result  array
-     * */
+     *
+     * @param string $target What to count
+     *
+     * @return array
+     **/
     public function count($target = null)
     {
         switch ($target) {
-            // if we asked the number of send items & theirs status
+        // if we asked the number of send items & theirs status
         case 'items':
             $query = Core::query('campaign-items-count');
             $query->bindParam(':campaign', $this->_campaign['id']);
@@ -227,7 +250,7 @@ class Campaign
                 $nb['all'] = 0;
             }
             return $nb;
-                break;
+            break;
 
             // if we asked the number of recipients
         default:
@@ -235,16 +258,16 @@ class Campaign
             $query->bindParam(':campaign', $this->_campaign['id']);
             $query->execute();
             return $query->fetch(PDO::FETCH_NUM);
-                break;
+            break;
         }
     }
 
-
     /**
      * Estimated sending time
-     * @result int
-     * */
-    public function estimated_time()
+     *
+     * @return integer
+     **/
+    public function estimatedTime()
     {
         if (!isset($this->_campaign['count']['target'])) {
             $this->_campaign['count']['target'] = $this->count('emails');
@@ -283,56 +306,62 @@ class Campaign
         return $result;
     }
 
-
     /**
      * Get global stats of a campaign and store them into $_campaign
-     * @result void
-     * */
+     *
+     * @return void
+     **/
     public function stats()
     {
         // stats array init
-        $stats = array();
+        $stats = [];
 
         if ($this->_campaign['status'] == 'open') {
             // number of recipients
             $this->_campaign['count']['target'] = $this->count()[0];
-            $this->_campaign['count']['time'] = $this->estimated_time();
-
+            $this->_campaign['count']['time'] = $this->estimatedTime();
         } else {
             // number of send items
             $this->_campaign['count']['items'] = $this->count('items');
-            $this->_campaign['count']['target'] = $this->_campaign['count']['items'];
+            $this->_campaign['count']['target'] = $this->count('items');
         }
     }
 
-
     /**
      * Display estimated time of this campaign
-     * @result string
-     * */
-    public function display_estimated_time()
+     *
+     * @return string
+     **/
+    public function displayEstimatedTime()
     {
         if (!isset($this->_campaign['count']['time'])) {
-            $this->_campaign['count']['time'] = $this->estimated_time();
+            $this->_campaign['count']['time'] = $this->estimatedTime();
         }
 
         $time = $this->_campaign['count']['time'];
-        $display = array();
+        $display = [];
 
         if (isset($time['months'], $time['weeks'], $time['days'])) {
-            if ($time['months'] >= 1) { $display[] = $time['months'] . ' mois'; 
+            if ($time['months'] >= 1) {
+                $display[] = $time['months'] . ' mois';
             }
-            if ($time['weeks'] > 1) { $display[] = $time['weeks'] . ' semaines'; 
+            if ($time['weeks'] > 1) {
+                $display[] = $time['weeks'] . ' semaines';
             }
-            if ($time['weeks'] == 1) { $display[] = $time['weeks'] . ' semaine'; 
+            if ($time['weeks'] == 1) {
+                $display[] = $time['weeks'] . ' semaine';
             }
-            if ($time['days'] > 1) { $display[] = $time['days'] . ' jours'; 
+            if ($time['days'] > 1) {
+                $display[] = $time['days'] . ' jours';
             }
-            if ($time['days'] == 1) { $display[] = $time['days'] . ' jour'; 
+            if ($time['days'] == 1) {
+                $display[] = $time['days'] . ' jour';
             }
-            if ($time['hours'] > 1) { $display[] = round($time['hours']) . ' heures'; 
+            if ($time['hours'] > 1) {
+                $display[] = round($time['hours']) . ' heures';
             }
-            if ($time['hours'] == 1) { $display[] = $time['hours'] . ' heure'; 
+            if ($time['hours'] == 1) {
+                $display[] = $time['hours'] . ' heure';
             }
 
             $display = implode(', ', $display);
@@ -343,12 +372,12 @@ class Campaign
         return $display;
     }
 
-
     /**
      * Return name of used template
-     * @result string
-     * */
-    public function used_template()
+     *
+     * @return string
+     **/
+    public function usedTemplate()
     {
         if ($this->_campaign['template']) {
             $query = Core::query('campaign-template-name');
@@ -360,48 +389,45 @@ class Campaign
         }
     }
 
-
     /**
      * Update this campaign template
      *
-     * @param  string $tempalte New template version
-     * @result void
-     * */
-    public function template_write($template)
+     * @param string $template New template version
+     *
+     * @return void
+     **/
+    public function templateWrite(string $template)
     {
         $this->_campaign['template'] = $template;
         $query = Core::query('campaign-template-update');
         $query->bindParam(':template', $template);
         $query->bindParam(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
         $query->execute();
-
-        $this->template_parsing();
+        $this->templateParsing();
     }
-
 
     /**
      * Copy an existing template to this campaign
      *
-     * @param  int $campaign Existing template campaign ID
-     * @result void
-     * */
-    public function template_copy($campaign)
+     * @param integer $campaign Existing template campaign ID
+     *
+     * @return void
+     **/
+    public function templateCopy(int $campaign)
     {
         $query = Core::query('campaign-template');
         $query->bindParam(':campaign', $campaign);
         $query->execute();
         $template = $query->fetch(PDO::FETCH_NUM);
-
-        $this->template_write($template[0]);
+        $this->templateWrite($template[0]);
     }
-
 
     /**
      * New empty template
      *
-     * @result void
-     * */
-    public function template_empty()
+     * @return void
+     **/
+    public function templateEmpty()
     {
         $query = Core::query('campaign-empty-template');
         $query->bindParam(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
@@ -409,25 +435,31 @@ class Campaign
         $this->_campaign['template'] = '';
     }
 
-
     /**
      * Template parsing method
      *
-     * @result string                  Parsed template
-     * */
-    public function template_parsing()
+     * @return string
+     **/
+    public function templateParsing()
     {
         $template = $this->_campaign['template'];
-        $nb_boucles_article = preg_match_all("#\{articles\}(.+)\{finarticles\}#isU", $template, $boucles);
+        $nb_boucles_article = preg_match_all(
+            "#\{articles\}(.+)\{finarticles\}#isU",
+            $template,
+            $boucles
+        );
 
         $cur = 0;
-        while($cur < $nb_boucles_article) {
+        while ($cur < $nb_boucles_article) {
             // we load article tpl
             $tpl_articles = $boucles[1][$cur];
             $tpl_final = '';
 
             // we search last 5 articles
-            $json = file_get_contents('https://public-api.wordpress.com/rest/v1.1/sites/preprod.leqg.info/posts/?category=newsletter');
+            $json = file_get_contents(
+                'https://public-api.wordpress.com/rest/v1.1/sites/' .
+                'preprod.leqg.info/posts/?category=newsletter'
+            );
             $posts = json_decode($json)->posts;
             $posts = array_slice($posts, 0, 20);
 
@@ -436,24 +468,45 @@ class Campaign
                 $titre = '<a href="' . $post->URL . '">' . $post->title . '</a>';
                 $contenu = $post->excerpt;
                 $miniature_url = $post->post_thumbnail->URL;
-                $miniature = '<img src="'.$miniature_url.'" style="width: 100%; height: auto;" alt="Miniature de l\'article">';
-                $tpl_article = str_replace('{article:titre}', $titre, $tpl_article);
-                $tpl_article = str_replace('{article:contenu}', $contenu, $tpl_article);
-                $tpl_article = str_replace('{article:miniature}', $miniature, $tpl_article);
+                $miniature = '<img src="'.$miniature_url.'" ' .
+                                  'style="width: 100%; height: auto;" ' .
+                                  'alt="Miniature de l\'article">';
+                $tpl_article = str_replace(
+                    '{article:titre}',
+                    $titre,
+                    $tpl_article
+                );
+                $tpl_article = str_replace(
+                    '{article:contenu}',
+                    $contenu,
+                    $tpl_article
+                );
+                $tpl_article = str_replace(
+                    '{article:miniature}',
+                    $miniature,
+                    $tpl_article
+                );
                 $tpl_final .= $tpl_article;
                 unset($tpl_article);
             }
 
-            $template = preg_replace("#\{articles\}(.+)\{finarticles\}#isU", $tpl_final, $template);
+            $template = preg_replace(
+                "#\{articles\}(.+)\{finarticles\}#isU",
+                $tpl_final,
+                $template
+            );
 
             $cur++;
         }
 
-
-        $nb_boucles_agenda = preg_match_all("#\{agenda\}(.+)\{finagenda\}#isU", $template, $boucles);
+        $nb_boucles_agenda = preg_match_all(
+            "#\{agenda\}(.+)\{finagenda\}#isU",
+            $template,
+            $boucles
+        );
 
         $cur = 0;
-        while($cur < $nb_boucles_agenda) {
+        while ($cur < $nb_boucles_agenda) {
             // we load article tpl
             $tpl_articles = $boucles[1][$cur];
             $tpl_final = '';
@@ -468,28 +521,46 @@ class Campaign
             $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
             $event_db = new PDO($dsn, $user, $pass);
 
-            $query = $event_db->prepare('SELECT * FROM `wp_em_events` WHERE `event_start_date` >= NOW() AND `event_status` = 1 ORDER BY `event_start_date` ASC');
+            $query = 'SELECT *
+                      FROM `wp_em_events`
+                      WHERE `event_start_date` >= NOW()
+                      AND `event_status` = 1
+                      ORDER BY `event_start_date` ASC';
+            $query = $event_db->prepare($query);
             $query->execute();
             $events = $query->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($events as $post) {
                 $tpl_article = $tpl_articles;
-                $titre = '<a href="http://philipcordery.fr/evenets/' . $post['event_slug'] . '">' . $post['event_name'] . '</a>';
-                $date = date('d/m/Y H\hi', strtotime($post['event_start_date'].' '.$post['event_start_time']));
+                $titre = '<a href="http://philipcordery.fr/evenets/' .
+                         $post['event_slug'] . '">' . $post['event_name'] . '</a>';
+                $date = date(
+                    'd/m/Y H\hi',
+                    strtotime(
+                        $post['event_start_date'] . ' ' . $post['event_start_time']
+                    )
+                );
                 $tpl_article = str_replace('{agenda:titre}', $titre, $tpl_article);
                 $tpl_article = str_replace('{agenda:date}', $date, $tpl_article);
                 $tpl_final .= $tpl_article;
                 unset($tpl_article);
             }
 
-            $template = preg_replace("#\{agenda\}(.+)\{finagenda\}#isU", $tpl_final, $template);
+            $template = preg_replace(
+                "#\{agenda\}(.+)\{finagenda\}#isU",
+                $tpl_final,
+                $template
+            );
 
             $cur++;
         }
 
         if (strstr($template, '{readonline}')) {
             $remplace = array(
-                '{readonline}' => '<a href="http://'.Configuration::read('url').'/mail-view.php?'.md5($this->_campaign['id']).'" style="color: inherit; text-decoration: none;">',
+                '{readonline}' => '<a href="http://' . Configuration::read('url') .
+                                  '/mail-view.php?'.md5($this->_campaign['id']) .
+                                  '" style="color: inherit; ' .
+                                  'text-decoration: none;">',
                 '{/readonline}' => '</a>'
             );
             $template = strtr($template, $remplace);
@@ -497,7 +568,10 @@ class Campaign
 
         if (strstr($template, '{unsubscribe}')) {
             $remplace = array(
-                '{unsubscribe}' => '<a href="http://'.Configuration::read('url').'/mail-optout.php?test" style="color: inherit; text-decoration: none;">',
+                '{unsubscribe}' => '<a href="http://' . Configuration::read('url') .
+                                   '/mail-optout.php?test" ' .
+                                   'style="color: inherit; ' .
+                                   'text-decoration: none;">',
                 '{/unsubscribe}' => '</a>'
             );
             $template = strtr($template, $remplace);
@@ -511,12 +585,11 @@ class Campaign
         return $template;
     }
 
-
     /**
      * Launch the campaign
      *
      * @return void
-     * */
+     **/
     public function launch()
     {
         $status = "send";
@@ -538,17 +611,16 @@ class Campaign
                 $query->execute();
                 $_emails = $query->fetchAll(PDO::FETCH_NUM);
                 foreach ($_emails as $_email) {
-                    $this->tracking_new($_email[0]);
+                    $this->trackingNew($_email[0]);
                 }
             }
-
             break;
 
         case 'sms':
-             // On assure le démarrage du service
-             $service = new \Esendex\DispatchService(Configuration::read('sms'));
+            // On assure le démarrage du service
+            $service = new \Esendex\DispatchService(Configuration::read('sms'));
 
-             $query = Core::query('mobiles-by-contact');
+            $query = Core::query('mobiles-by-contact');
             foreach ($contacts as $contact) {
                 $query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
                 $query->execute();
@@ -569,12 +641,11 @@ class Campaign
         }
     }
 
-
     /**
      * Send a test email
      *
-     * @result void
-     * */
+     * @return void
+     **/
     public function testing()
     {
         $mail = $this->get('mail');
@@ -604,23 +675,27 @@ class Campaign
         $mandrill->messages->send($message, $async);
     }
 
-
     /**
      * Launch an email tracking
      *
-     * @param  array  $result  Send email result
-     * @param  string $numero  Send numero
-     * @param  int    $contact Person ID
-     * @result void
-     * */
-    public function tracking($result, $numero = null, $contact = null)
+     * @param array  $result  Send email result
+     * @param string $numero  Send numero
+     * @param int    $contact Person ID
+     *
+     * @return void
+     **/
+    public function tracking(array $result, $numero = null, $contact = null)
     {
         switch ($this->_campaign['type']) {
         case 'email':
             switch ($result['status']) {
             case 'rejected':
                 $query = Core::query('campaign-tracking-reject');
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->bindValue(':id', $result['_id']);
                 $query->bindValue(':email', $result['email']);
                 $query->bindValue(':status', $result['status']);
@@ -630,7 +705,11 @@ class Campaign
 
             default:
                 $query = Core::query('campaign-tracking');
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->bindValue(':id', $result['_id']);
                 $query->bindValue(':email', $result['email']);
                 $query->bindValue(':status', $result['status']);
@@ -674,37 +753,34 @@ class Campaign
         }
     }
 
-
     /**
      * Prepare a new email to go
      *
-     * @param  array $email Recipient's mail
-     * @result void
-     * */
-
-    public function tracking_new($email)
+     * @param array $email Recipient's mail
+     *
+     * @return void
+     **/
+    public function trackingNew(array $email)
     {
         switch ($this->_campaign['type']) {
         case 'email':
             $query = Core::query('tracking-new');
-            $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+            $query->bindValue(
+                ':campaign',
+                $this->_campaign['id'],
+                PDO::PARAM_INT
+            );
             $query->bindValue(':email', $email);
             $query->execute();
-            break;
-
-        case 'sms':
-
             break;
         }
     }
 
-
-
     /**
      * Get errors informations
      *
-     * @result array
-     * */
+     * @return array
+     **/
     public function errors()
     {
         $mandrill = Configuration::read('mail');
@@ -727,8 +803,8 @@ class Campaign
     /**
      * Price estimation
      *
-     * @result int
-     * */
+     * @return int
+     **/
     public function price()
     {
         switch ($this->_campaign['type']) {
@@ -739,13 +815,14 @@ class Campaign
                 $nombre = $this->_campaign['count']['target']['all'];
             }
             $pricePerThousand = Configuration::read('price.email');
-            $price = $pricePerThousand/1000;
+            $price = $pricePerThousand / 1000;
             $cost = $price * $nombre;
             break;
 
         case 'sms':
             $nombre = $this->count('mobile');
-            $size = ceil(strlen($this->_campaign['message']) / Configuration::read('sms.size'));
+            $messageSize = $this->_campaign['message'];
+            $size = ceil(strlen($messageSize) / Configuration::read('sms.size'));
             $price = Configuration::read('price.sms');
             $cost = $price * $nombre * $size;
             break;
@@ -754,17 +831,18 @@ class Campaign
         return $cost;
     }
 
-
     /**
      * Update tracking status
      *
-     * @result void
-     * */
-    public function tracking_update()
+     * @return void
+     **/
+    public function trackingUpdate()
     {
         switch ($this->_campaign['type']) {
         case 'sms':
-            $service = new \Esendex\MessageHeaderService(Configuration::read('sms'));
+            $service = new \Esendex\MessageHeaderService(
+                Configuration::read('sms')
+            );
             break;
 
         case 'email':
@@ -783,7 +861,11 @@ class Campaign
                 $status = $service->message($element['id'])->status();
 
                 $query = Core::query('campaign-tracker-status-update');
-                $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                $query->bindValue(
+                    ':campaign',
+                    $this->_campaign['id'],
+                    PDO::PARAM_INT
+                );
                 $query->bindValue(':coord', $element['coord']);
 
                 switch ($status) {
@@ -806,7 +888,11 @@ class Campaign
                 switch ($status['state']) {
                 case 'rejected':
                     $query = Core::query('campaign-tracker-status-reject');
-                    $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                    $query->bindValue(
+                        ':campaign',
+                        $this->_campaign['id'],
+                        PDO::PARAM_INT
+                    );
                     $query->bindValue(':coord', $status['email']);
                     $query->bindValue(':status', $status['state']);
                     $query->bindValue(':reason', $status['reject']['reason']);
@@ -815,7 +901,11 @@ class Campaign
 
                 default:
                     $query = Core::query('campaign-tracker-status-update');
-                    $query->bindValue(':campaign', $this->_campaign['id'], PDO::PARAM_INT);
+                    $query->bindValue(
+                        ':campaign',
+                        $this->_campaign['id'],
+                        PDO::PARAM_INT
+                    );
                     $query->bindValue(':coord', $status['email']);
                     $query->bindValue(':status', $status['state']);
                     $query->execute();
@@ -826,13 +916,12 @@ class Campaign
         }
     }
 
-
     /**
      * List all persons with an event related to this campaign
      *
      * @return array
-     * */
-    public function list_events()
+     **/
+    public function listEvents()
     {
         $query = Core::query('campaign-events-list');
         $query->bindValue(':campaign', $this->_campaign['id']);
@@ -840,14 +929,15 @@ class Campaign
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
     /**
      * Create a new campaign
      *
-     * @param  string $method Campaign method (email, sms, publi)
+     * @param string $method Campaign method (email, sms, publi)
+     *
      * @return int
-     * */
-    public static function create($method)
+     * @static
+     **/
+    static public function create(string $method)
     {
         $user = User::ID();
 
@@ -859,13 +949,15 @@ class Campaign
         return Configuration::read('db.link')->lastInsertId();
     }
 
-
     /**
      * List all campaigns by type
-     * @param  string $type Campaign method (email, sms, publi)
+     *
+     * @param string $type Campaign method (email, sms, publi)
+     *
      * @return array
-     * */
-    public static function all($type)
+     * @static
+     **/
+    static public function all(string $type)
     {
         $query = Core::query('campaigns-list');
         $query->bindParam(':type', $type);
@@ -878,12 +970,13 @@ class Campaign
         }
     }
 
-
     /**
      * List all templates by name
-     * @result array
-     * */
-    public static function templates()
+     *
+     * @return array
+     * @static
+     **/
+    static public function templates()
     {
         $query = Core::query('campaign-templates-list');
         $query->execute();
@@ -895,12 +988,13 @@ class Campaign
     /**
      * Email sending method
      *
-     * @param  int    $campaign Campaign ID
-     * @param  string $email    Recipient's email
-     * @result void
-     * */
-
-    public static function sending($campaign, $email)
+     * @param integer $campaign Campaign ID
+     * @param string  $email    Recipient's email
+     *
+     * @return void
+     * @static
+     **/
+    static public function sending(int $campaign, string $email)
     {
         // campaign data
         $campaign = new Campaign($campaign);
@@ -961,10 +1055,12 @@ class Campaign
     /**
      * Tracking informations
      *
-     * @param  string $track_id Tracking ID
-     * @result array               Tracking informations
-     * */
-    public static function tracking_infos($track_id)
+     * @param string $track_id Tracking ID
+     *
+     * @return array
+     * @static
+     **/
+    static public function trackingInfos(string $track_id)
     {
         $mandrill = Configuration::read('mail');
         $result = $mandrill->messages->info($track_id);
@@ -975,10 +1071,12 @@ class Campaign
     /**
      * Display status in french
      *
-     * @param  string $status Status to translate
-     * @result string
-     * */
-    public static function display_status($status)
+     * @param string $status Status to translate
+     *
+     * @return string
+     * @static
+     **/
+    static public function displayStatus(string $status)
     {
         switch ($status) {
         case 'pending':
@@ -1026,5 +1124,4 @@ class Campaign
                 break;
         }
     }
-
 }

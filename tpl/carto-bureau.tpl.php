@@ -3,7 +3,7 @@
     User::protection(5);
     
     // On récupère les données génériques sur le bureau
-    $bureau = Carto::bureau_secure($_GET['code']);
+    $bureau = Carto::bureauSecure($_GET['code']);
     $ville = Carto::ville($bureau['commune_id']);
     $departement = Carto::departement($ville['departement_id']);
     $region = Carto::region($departement['region_id']);
