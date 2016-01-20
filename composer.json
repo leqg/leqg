@@ -29,7 +29,8 @@
         "bash contrib/setup.sh"
       ],
       "phpcs": "phpcs --extensions=php --standard=ruleset.xml --ignore=api/,vendor/ .",
-      "phpcbf": "phpcbf --extensions=php --standard=ruleset.xml --ignore=api/,vendor/ ."
+      "phpcbf": "phpcbf --extensions=php --standard=ruleset.xml --ignore=api/,vendor/ .",
+      "phpdoc": "phpdoc -d . -t ./doc/api --ignore=api/,vendor/"
     },
     "autoload": {
       "psr-4": {
