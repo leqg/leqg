@@ -15,7 +15,7 @@
 $evenement = new Event($_POST['evenement']);
 
 // On ajoute le tag
-$tache[0] = $evenement->task_new(
+$tache[0] = $evenement->newTask(
     $_POST['user'],
     $_POST['tache'],
     $_POST['deadline']

@@ -117,7 +117,7 @@
 				}
 			?>
 				<li class="evenement <?php echo $event->get('type'); ?> <?php if ($event->link()) { ?>clic<?php } ?>">
-					<small><span><?php echo Event::display_type($event->get('type')); ?></span></small>
+					<small><span><?php echo Event::displayType($event->get('type')); ?></span></small>
 					<strong><?php echo (!empty($event->get('objet'))) ? $event->get('objet') : 'Événement sans titre'; ?></strong>
 					<ul class="infosAnnexes">
 						<li class="date"><?php echo date('d/m/Y', strtotime($event->get('date'))); ?></li>

@@ -15,4 +15,4 @@
 $evenement = new Event($_POST['evenement']);
 
 // On ajoute le tag
-$evenement->task_remove($_POST['tache']);
+$evenement->removeTask($_POST['tache']);

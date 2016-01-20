@@ -123,7 +123,7 @@
     	    <ul class="listeDesEvenements">
         	    <?php foreach ($liste as $event) : $e = new Event($event['id']); $c = new People($e->get('people')); ?>
 				<li class="evenement <?php echo $e->get('type'); ?> <?php if ($e->link()) { ?>clic<?php } ?>">
-					<small><span><?php echo Event::display_type($e->get('type')); ?></span></small>
+					<small><span><?php echo Event::displayType($e->get('type')); ?></span></small>
 					<strong><a href="<?php echo Core::goPage('contact', array('contact' => $c->get('id'), 'evenement' => $e->get('id'))); ?>"><?php echo (!empty($e->get('objet'))) ? $e->get('objet') : 'Événement sans titre'; ?></a></strong>
 					<ul class="infosAnnexes">
 						<li class="contact"><a href="<?php echo Core::goPage('contact', array('contact' => $c->get('id'))); ?>"><?php echo $c->display_name(); ?></a></li>
