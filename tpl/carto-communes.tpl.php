@@ -3,14 +3,14 @@
     User::protection(5);
     
     // On récupère les données génériques sur la ville
-    $ville = Maps::city_data($_GET['code']);
-    $pays = Maps::country_data($ville['country']);
+    $ville = Maps::cityData($_GET['code']);
+    $pays = Maps::countryData($ville['country']);
 
     // On récupère les statistiques
-    $electeurs = Maps::city_electeurs($ville['id']);
-    $emails = Maps::city_contact_details($ville['id'], 'email');
-    $mobiles = Maps::city_contact_details($ville['id'], 'mobile');
-    $fixes = Maps::city_contact_details($ville['id'], 'fixe');
+    $electeurs = Maps::cityVoters($ville['id']);
+    $emails = Maps::cityContactDetails($ville['id'], 'email');
+    $mobiles = Maps::cityContactDetails($ville['id'], 'mobile');
+    $fixes = Maps::cityContactDetails($ville['id'], 'fixe');
     
     // Chargement du template
     Core::loadHeader();

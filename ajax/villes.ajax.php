@@ -11,5 +11,5 @@
  * @link     http://leqg.info
  */
 
-$cities = Maps::city_search($_GET['ville']);
+$cities = Maps::citySearch($_GET['ville']);
 echo json_encode($cities);

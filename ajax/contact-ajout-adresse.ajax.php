@@ -11,10 +11,10 @@
  * @link     http://leqg.info
  */
 
-$rue = Maps::street_new($_POST['rue'], $_POST['ville']);
-$immeuble = Maps::building_new($_POST['immeuble'], $rue);
-$zipcode = Maps::zipcode_new($_POST['zipcode'], $_POST['ville']);
-$adresse = Maps::address_new(
+$rue = Maps::streetNew($_POST['rue'], $_POST['ville']);
+$immeuble = Maps::buildingNew($_POST['immeuble'], $rue);
+$zipcode = Maps::zipcodeNew($_POST['zipcode'], $_POST['ville']);
+$adresse = Maps::addressNew(
     $_POST['fiche'],
     $_POST['ville'],
     $zipcode,

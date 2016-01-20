@@ -11,5 +11,5 @@
  * @link     http://leqg.info
  */
 
-$polls = Maps::poll_search($_GET['bureau']);
+$polls = Maps::pollSearch($_GET['bureau']);
 echo json_encode($polls);

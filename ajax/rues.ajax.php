@@ -11,5 +11,5 @@
  * @link     http://leqg.info
  */
 
-$rues = Maps::street_search($_GET['rue']);
+$rues = Maps::streetSearch($_GET['rue']);
 echo json_encode($rues);

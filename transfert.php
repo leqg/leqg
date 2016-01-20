@@ -71,11 +71,11 @@ foreach ($contacts as $contact) {
     );
     
     if (!is_null($adresse['pays'])) {
-        $countries = Maps::country_search($adresse['pays']);
+        $countries = Maps::countrySearch($adresse['pays']);
         if (count($countries)) {
             $address['pays'] = $countries[0]['id'];
         } else {
-            $country = Maps::country_create($adresse['pays']);
+            $country = Maps::countryCreate($adresse['pays']);
             $address['pays'] = $country;
         }
     } else {
@@ -83,11 +83,11 @@ foreach ($contacts as $contact) {
     }
     
     if (!is_null($adresse['ville'])) {
-        $city = Maps::city_search($adresse['ville'], $address['pays']);
+        $city = Maps::citySearch($adresse['ville'], $address['pays']);
         if (count($city)) {
             $address['ville'] = $city[0]['id'];
         } else {
-            $city = Maps::city_create($adresse['ville'], $address['pays']);
+            $city = Maps::cityCreate($adresse['ville'], $address['pays']);
             $address['ville'] = $city;
         }
     } else {
@@ -95,11 +95,11 @@ foreach ($contacts as $contact) {
     }
     
     if (!is_null($adresse['zip'])) {
-        $zipcode = Maps::zipcode_search($adresse['zip'], $address['ville']);
+        $zipcode = Maps::zipcodeSearch($adresse['zip'], $address['ville']);
         if (count($zipcode)) {
             $address['zip'] = $zipcode[0]['id'];
         } else {
-            $zipcode = Maps::zipcode_new($adresse['zip'], $address['ville']);
+            $zipcode = Maps::zipcodeNew($adresse['zip'], $address['ville']);
             $address['zip'] = $zipcode;
         }
     } else {
@@ -107,11 +107,11 @@ foreach ($contacts as $contact) {
     }
     
     if (!is_null($adresse['street'])) {
-        $street = Maps::street_search($adresse['street'], $address['ville']);
+        $street = Maps::streetSearch($adresse['street'], $address['ville']);
         if (count($street)) {
             $address['street'] = $street[0]['id'];
         } else {
-            $street = Maps::street_create($adresse['street'], $address['ville']);
+            $street = Maps::streetCreate($adresse['street'], $address['ville']);
             $address['street'] = $street;
         }
     } else {
@@ -119,11 +119,11 @@ foreach ($contacts as $contact) {
     }
     
     if (!is_null($adresse['building'])) {
-        $building = Maps::building_search($adresse['building'], $address['street']);
+        $building = Maps::buildingSearch($adresse['building'], $address['street']);
         if (count($building)) {
             $address['building'] = $building[0]['id'];
         } else {
-            $building = Maps::building_new($adresse['building'], $address['street']);
+            $building = Maps::buildingNew($adresse['building'], $address['street']);
             $address['building'] = $building;
         }
     } else {
@@ -131,7 +131,7 @@ foreach ($contacts as $contact) {
     }
     
     // On lance la création de l'adresse
-    Maps::address_new($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'reel');
+    Maps::addressNew($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'reel');
     
     $person->contact_details_add($contact['MAIL']);
     $person->tag_add('Sénateur PS');

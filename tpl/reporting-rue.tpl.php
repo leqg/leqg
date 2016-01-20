@@ -7,8 +7,8 @@ if ($data->err) { Core::goPage('porte', true);
 }
     
     // On récupère tous les items de la rue et la rue en question et la ville concernée
-    $rue = Maps::street_data($_GET['rue']);
-    $ville = Maps::city_data($rue['city']);
+    $rue = Maps::streetData($_GET['rue']);
+    $ville = Maps::cityData($rue['city']);
     $items = $data->items($_GET['rue']);
     
 if (!$items) { Core::goPage('reporting', array('mission' => $_GET['mission']), true); 
@@ -34,7 +34,7 @@ if (!$items) { Core::goPage('reporting', array('mission' => $_GET['mission']), t
             $numeros = array();
             $numeros_sauv = array();
             foreach ($items as $immeuble => $electeurs) {
-                $infos = Maps::building_data($immeuble);
+                $infos = Maps::buildingData($immeuble);
                 $numeros[$immeuble] = preg_replace('#[^0-9]+#', '', $infos['building']);
                 $numeros_sauv[$immeuble] = $infos['building'];
             }
@@ -82,7 +82,7 @@ if (!$items) { Core::goPage('reporting', array('mission' => $_GET['mission']), t
                 $numeros = array();
                 $numeros_sauv = array();
                 foreach ($items as $immeuble) {
-                    $infos = Maps::building_data($immeuble['immeuble_id']);
+                    $infos = Maps::buildingData($immeuble['immeuble_id']);
                     $numeros[$immeuble['immeuble_id']] = preg_replace('#[^0-9]+#', '', $infos['building']);
                     $numeros_sauv[$immeuble['immeuble_id']] = $infos['building'];
                 }

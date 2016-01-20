@@ -44,7 +44,7 @@ fputcsv($file, $entete, ';', '"');
 foreach ($contacts as $_contact) {
     $contact = new People($_contact);
     $address = $contact->postal_address();
-    $poll = Maps::poll_data($contact->get('bureau'));
+    $poll = Maps::pollData($contact->get('bureau'));
     $birthdate = new DateTime($contact->get('date_naissance'));
 
     $_fichier = array(

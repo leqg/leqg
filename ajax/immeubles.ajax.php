@@ -11,4 +11,4 @@
  * @link     http://leqg.info
  */
 
-echo json_encode(Maps::street_buildings($_GET['rue']));
+echo json_encode(Maps::streetBuildings($_GET['rue']));

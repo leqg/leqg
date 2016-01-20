@@ -69,46 +69,46 @@ foreach ($contacts as $contact) {
         );
         
         if (!empty($adresse['ville'])) {
-            $cities = Maps::city_search($adresse['ville']);
+            $cities = Maps::citySearch($adresse['ville']);
             if (count($cities)) {
                 $address['city'] = $cities[0]['id'];
             } else {
-                $city = Maps::city_create($adresse['ville']);
+                $city = Maps::cityCreate($adresse['ville']);
                 $address['city'] = $city;
             }
         }
         
         if (!empty($adresse['cp'])) {
-            $zipcodes = Maps::zipcode_search($adresse['cp']);
+            $zipcodes = Maps::zipcodeSearch($adresse['cp']);
             if (count($zipcodes)) {
                 $address['zip'] = $zipcodes[0]['id'];
             } else {
-                $zipcode = Maps::zipcode_new($adresse['cp'], $address['city']);
+                $zipcode = Maps::zipcodeNew($adresse['cp'], $address['city']);
                 $address['zip'] = $zipcode;
             }
         }
         
         if (!empty($adresse['rue'])) {
-            $streets = Maps::street_search($adresse['rue'], $address['city']);
+            $streets = Maps::streetSearch($adresse['rue'], $address['city']);
             if (count($streets)) {
                 $address['street'] = $streets[0]['id'];
             } else {
-                $street = Maps::street_create($adresse['rue'], $address['city']);
+                $street = Maps::streetCreate($adresse['rue'], $address['city']);
                 $address['street'] = $street;
             }
         }
         
         if (!empty($adresse['numero']) && !is_null($adresse['numero'])) {
-            $buildings = Maps::building_search($adresse['numero'], $address['street']);
+            $buildings = Maps::buildingSearch($adresse['numero'], $address['street']);
             if (count($buildings)) {
                 $address['building'] = $buildings[0]['id'];
             } else {
-                $building = Maps::building_new($adresse['numero'], $address['street']);
+                $building = Maps::buildingNew($adresse['numero'], $address['street']);
                 $address['building'] = $building;
             }
         }
         
-        Maps::address_new($person->get('id'), $address['city'], $address['zip'], $address['street'], $address['building'], 'reel');
+        Maps::addressNew($person->get('id'), $address['city'], $address['zip'], $address['street'], $address['building'], 'reel');
     }
     
     // On rajoute les coordonnées téléphoniques
