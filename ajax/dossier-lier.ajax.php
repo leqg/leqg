@@ -24,7 +24,7 @@ $dossier_json = $dossier->json();
 $evenement = new evenement(md5($evenement));
 
 // On lie l'événement et le dossier
-$evenement->lier_dossier($dossier->get('dossier_id'));
+$evenement->linkFolder($dossier->get('dossier_id'));
 
 // On retourne les informations sur le dossier en JSON
 echo $dossier_json;

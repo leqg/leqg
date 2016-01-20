@@ -16,7 +16,7 @@ if (is_string($_GET['evenement'])) {
     $event = new Evenement($_GET['evenement']);
 
     // On récupère les informations et on retourne le JSON
-    echo $event->json_infos();
+    echo $event->json();
 } else {
     return false;
 }
