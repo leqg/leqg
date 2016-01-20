@@ -9,10 +9,10 @@
 	if ($data->err) Core::goPage('porte', true);
 	
 	// On récupère les statistiques sur les militants
-	$militants = $data->statistiques_militant();
+	$militants = $data->userStats();
 	
 	// On récupère les statistiques sur le parcours
-	$parcours = $data->statistiques_parcours();
+	$parcours = $data->missionStats();
 	
 	// On calcule le temps approximatif nécessaire en comptant 3 minutes par électeur
 	if ($militants['inscrit']) {

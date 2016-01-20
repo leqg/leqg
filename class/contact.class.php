@@ -990,7 +990,7 @@ class Contact
      * @return integer new contact ID
      * @static
      */
-    static public function creation()
+    public static function creation()
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');
@@ -1018,7 +1018,7 @@ class Contact
      * @return array all matches ID
      * @static
      */
-    static public function recherche(string $recherche)
+    public static function recherche(string $recherche)
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');
@@ -1096,7 +1096,7 @@ class Contact
      * @return array all matches contact
      * @static
      */
-    static public function rechercheThematique( $terme )
+    public static function rechercheThematique( $terme )
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');
@@ -1409,7 +1409,7 @@ class Contact
      * @return array
      * @static
      */
-    static public function last($nombre = 5)
+    public static function last($nombre = 5)
     {
         // On commence par paramétrer les données PDO
         $link = Configuration::read('db.link');

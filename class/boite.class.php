@@ -48,7 +48,7 @@ class Boite
      * @return bool
      * @static
      */
-    static public function estInscrit(bool $mission)
+    public static function estInscrit(bool $mission)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -78,7 +78,7 @@ class Boite
      * @return integer
      * @static
      */
-    static public function nombre()
+    public static function nombre()
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -102,7 +102,7 @@ class Boite
      * @return array
      * @static
      */
-    static public function missions()
+    public static function missions()
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -130,7 +130,7 @@ class Boite
      * @return integer
      * @static
      */
-    static public function creation(array $infos)
+    public static function creation(array $infos)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -171,7 +171,7 @@ class Boite
      * @return bool
      * @static
      */
-    static public function verification(string $mission)
+    public static function verification(string $mission)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -203,7 +203,7 @@ class Boite
      * @return array
      * @static
      */
-    static public function informations(string $mission)
+    public static function informations(string $mission)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -230,7 +230,7 @@ class Boite
      * @return integer
      * @static
      */
-    static public function nombreImmeubles(int $mission, $type = 0)
+    public static function nombreImmeubles(int $mission, $type = 0)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -267,7 +267,7 @@ class Boite
      * @return boolean
      * @static
      */
-    static public function ajoutRue(int $rue, int $mission)
+    public static function ajoutRue(int $rue, int $mission)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -306,7 +306,7 @@ class Boite
      * @return boolean
      * @static
      */
-    static public function ajoutBureau(int $bureau, int $mission)
+    public static function ajoutBureau(int $bureau, int $mission)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -342,7 +342,7 @@ class Boite
      * @return array
      * @static
      */
-    static public function liste(int $mission, $statut = 0)
+    public static function liste(int $mission, $statut = 0)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -384,7 +384,7 @@ class Boite
      * @return integer
      * @static
      */
-    static public function estimation(int $mission, $type = 0)
+    public static function estimation(int $mission, $type = 0)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -446,7 +446,7 @@ class Boite
      * @return void
      * @static
      */
-    static public function reporting(string $mission, string $immeuble, int $statut)
+    public static function reporting(string $mission, string $immeuble, int $statut)
     {
         // On met en place le lien vers la base de données
         $link = Configuration::read('db.link');

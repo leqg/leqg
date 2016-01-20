@@ -143,7 +143,7 @@ class Campagne
      * @return integer
      * @static
      */
-    static public function nouvelle(string $type)
+    public static function nouvelle(string $type)
     {
         // On récupère le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -170,7 +170,7 @@ class Campagne
      * @return void
      * @static
      */
-    static public function creation(string $type, array $infos)
+    public static function creation(string $type, array $infos)
     {
         // On récupère le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -208,7 +208,7 @@ class Campagne
      * @return void
      * @static
      */
-    static public function liste(string $type)
+    public static function liste(string $type)
     {
         // On récupère le lien vers la base de données
         $link = Configuration::read('db.link');
@@ -240,7 +240,7 @@ class Campagne
      * @return integer
      * @static
      */
-    static public function envoi(string $objet, string $message, string $type)
+    public static function envoi(string $objet, string $message, string $type)
     {
         // On récupère les données
         $user = User::ID();

@@ -1,6 +1,6 @@
 <?php
     // On charge la liste des missions ouvertes où la personne est inscrite
-    $missions_ouvertes = Mission::missions_ouvertes('porte', User::ID());
+    $missions_ouvertes = Mission::openMissions('porte', User::ID());
     
     // On charge le header
     Core::loadHeader();

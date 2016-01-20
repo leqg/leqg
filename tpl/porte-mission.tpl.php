@@ -85,12 +85,12 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
     <?php if (Porte::nombreVisites($mission['mission_id'], 1)) { ?>
 		<section id="porte-statistiques" class="contenu demi">
     <?php
-                $nombre['attente']     = $data->nombre_contacts(0);
-                $nombre['absent']      = $data->nombre_contacts(1);
-                $nombre['ouvert']      = $data->nombre_contacts(2);
-                $nombre['procuration'] = $data->nombre_contacts(3);
-                $nombre['contact']     = $data->nombre_contacts(4);
-                $nombre['npai']        = $data->nombre_contacts(-1);
+                $nombre['attente']     = $data->contactsCount(0);
+                $nombre['absent']      = $data->contactsCount(1);
+                $nombre['ouvert']      = $data->contactsCount(2);
+                $nombre['procuration'] = $data->contactsCount(3);
+                $nombre['contact']     = $data->contactsCount(4);
+                $nombre['npai']        = $data->contactsCount(-1);
                 $nombre['total']       = array_sum($nombre);
                 $nombre['fait']        = $nombre['total'] - $nombre['attente'];
                 
@@ -136,14 +136,14 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
 		</section>
     <?php } ?>
 	
-    <?php if ($data->nombre_procurations()) : ?>
+    <?php if ($data->procurationsNumber()) : ?>
 	<section id="procurations" class="contenu demi">
 		<h4>Électeurs demandant une procuration</h4>
 		
 		<ul class="listeContacts">
     <?php
                 // On fait la liste des contacts concernés
-                $contacts = $data->liste_contacts(3);
+                $contacts = $data->contactsList(3);
     foreach ($contacts as $contact) :
         // On ouvre la fiche du contact concerné
         $fiche = new Contact(md5($contact[0]));
@@ -172,14 +172,14 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
 	</section>
     <?php endif; ?>
 	
-    <?php if ($data->nombre_recontacts()) : ?>
+    <?php if ($data->newContactsNumber()) : ?>
 	<section id="procurations" class="contenu demi">
 		<h4>Électeurs souhaitant être recontactés</h4>
 		
 		<ul class="listeContacts">
     <?php
                 // On fait la liste des contacts concernés
-                $contacts = $data->liste_contacts(4);
+                $contacts = $data->contactsList(4);
     foreach ($contacts as $contact) :
         // On ouvre la fiche du contact concerné
         $fiche = new Contact(md5($contact[0]));

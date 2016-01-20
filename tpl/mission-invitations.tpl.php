@@ -9,10 +9,10 @@
 	if ($data->err) Core::goPage('porte', true);
 	
 	// On récupère la liste des militants par statut d'invitation
-	$militants[1] = $data->liste_inscrits(1);
-	$militants[0] = $data->liste_inscrits(0);
-	$militants[-1] = $data->liste_inscrits(-1);
-	$comptes = $data->liste_inscrits();
+	$militants[1] = $data->missionMembers(1);
+	$militants[0] = $data->missionMembers(0);
+	$militants[-1] = $data->missionMembers(-1);
+	$comptes = $data->missionMembers();
 	
 	// On récupère la liste des membres inscrits sur le site, à l'exception de ceux déjà ajoutés
 	$users = User::sauf($comptes);

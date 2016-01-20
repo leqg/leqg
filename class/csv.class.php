@@ -33,7 +33,7 @@ class Csv
      * @return array
      * @static
      */
-    static public function lectureFichier(string $fichier, $separateur = ';')
+    public static function lectureFichier(string $fichier, $separateur = ';')
     {
         // On défini les données de démarrage
         $row = 0;

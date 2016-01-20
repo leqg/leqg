@@ -6,7 +6,7 @@
 	if ($data->err) Core::goPage('porte', true);
 	
 	// On récupère les statistiques sur les militants
-	$militants = $data->statistiques_militant();
+	$militants = $data->userStats();
 	
 	// On récupère la liste des rues de la mission
     $rues = $data->rues();
@@ -61,7 +61,7 @@
         
         <?php if ($rues) : ?>
         <ul class="form-liste" id="listeDesRues">
-            <?php foreach ($rues as $rue) : $stats = $data->statistique_rue($rue['id']); ?>
+            <?php foreach ($rues as $rue) : $stats = $data->streetStats($rue['id']); ?>
         	<li>
         		<?php if ($stats['proportion'] < 100) { ?><a href="<?php Core::goPage('reporting', array('mission' => $data->get('mission_hash'), 'rue' => $rue['id'])); ?>" class="nostyle"><button class="voirRue">Fiche</button></a><?php } ?>
         		<span><?php echo $rue['street']; ?></span>

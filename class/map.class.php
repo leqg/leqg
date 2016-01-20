@@ -32,7 +32,7 @@ class Map
      * @return array
      * @static
      */
-    static public function geocoder(array $adresse)
+    public static function geocoder(array $adresse)
     {
         // On prépare la liaison à la base de données
         $link = Configuration::read('db.link');

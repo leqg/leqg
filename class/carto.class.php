@@ -32,7 +32,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rechercheVille(string $search)
+    public static function rechercheVille(string $search)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -67,7 +67,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rechercheRue(int $ville, $search = '')
+    public static function rechercheRue(int $ville, $search = '')
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -105,7 +105,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rechercheRueJSON(string $search)
+    public static function rechercheRueJSON(string $search)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -141,7 +141,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rechercheVilleJSON(string $search)
+    public static function rechercheVilleJSON(string $search)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -172,7 +172,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rechercheBureauJSON(string $search)
+    public static function rechercheBureauJSON(string $search)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -244,7 +244,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rechercheCanton(string $search)
+    public static function rechercheCanton(string $search)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -273,7 +273,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function region(int $id)
+    public static function region(int $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -298,7 +298,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function departement(int $id)
+    public static function departement(int $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -323,7 +323,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function arrondissement(int $id)
+    public static function arrondissement(int $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -348,7 +348,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function canton(int $id)
+    public static function canton(int $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -373,7 +373,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function bureauSecure(string $id)
+    public static function bureauSecure(string $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -398,7 +398,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function bureau(int $id)
+    public static function bureau(int $id)
     {
         return self::bureauSecure(hash('sha256', $id));
     }
@@ -411,7 +411,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function villeSecure(string $id)
+    public static function villeSecure(string $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -436,7 +436,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function ville(int $id)
+    public static function ville(int $id)
     {
         return self::villeSecure(hash('sha256', $id));
     }
@@ -449,7 +449,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rueSecure(string $id)
+    public static function rueSecure(string $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -474,7 +474,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function rue(int $id)
+    public static function rue(int $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -500,7 +500,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function immeubleSecure(string $id)
+    public static function immeubleSecure(string $id)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -525,7 +525,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function immeuble(int $id)
+    public static function immeuble(int $id)
     {
         return self::immeubleSecure(hash('sha256', $id));
     }
@@ -539,7 +539,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherArrondissement(int $id, $return = false)
+    public static function afficherArrondissement(int $id, $return = false)
     {
         // On lance la recherche d'informations
         $arrondissement = self::arrondissement($id);
@@ -561,7 +561,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherCanton(int $id, $return = false)
+    public static function afficherCanton(int $id, $return = false)
     {
         // On lance la recherche d'informations
         $canton = self::canton($id);
@@ -583,7 +583,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherVille(int $id, $return = false)
+    public static function afficherVille(int $id, $return = false)
     {
         // On lance la recherche d'informations
         $ville = self::ville($id);
@@ -606,7 +606,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherRue(int $id, $return = false)
+    public static function afficherRue(int $id, $return = false)
     {
         // On lance la recherche d'informations
         $rue = self::rue($id);
@@ -628,7 +628,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherDepartement(int $id, $return = false)
+    public static function afficherDepartement(int $id, $return = false)
     {
         // On lance la recherche d'informations
         $rue = self::departement($id);
@@ -650,7 +650,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherRegion(int $id, $return = false)
+    public static function afficherRegion(int $id, $return = false)
     {
         // On lance la recherche d'informations
         $rue = self::region($id);
@@ -672,7 +672,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function afficherImmeuble(int $id ,$return = false)
+    public static function afficherImmeuble(int $id ,$return = false)
     {
         // On lance la recherche d'informations
         $immeuble = self::immeuble($id);
@@ -693,7 +693,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function listeBureaux(int $ville)
+    public static function listeBureaux(int $ville)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -717,7 +717,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function listeTousBureaux()
+    public static function listeTousBureaux()
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -742,7 +742,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function listeRues(int $ville)
+    public static function listeRues(int $ville)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -768,7 +768,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function listeImmeubles(int $rue)
+    public static function listeImmeubles(int $rue)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -813,7 +813,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function listeElecteurs(int $immeuble)
+    public static function listeElecteurs(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -850,7 +850,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function nombreElecteursParImmeuble(int $immeuble)
+    public static function nombreElecteursParImmeuble(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -885,7 +885,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function listeElecteursParBureau(
+    public static function listeElecteursParBureau(
         int $bureau,
         $coordonnees = false
     ) {
@@ -932,7 +932,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function bureauParImmeuble(int $immeuble)
+    public static function bureauParImmeuble(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -959,7 +959,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function villeParImmeuble(int $immeuble)
+    public static function villeParImmeuble(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -990,7 +990,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function villeParRue(int $rue)
+    public static function villeParRue(int $rue)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1014,7 +1014,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function departementParVille(int $ville)
+    public static function departementParVille(int $ville)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1040,7 +1040,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function cantonParImmeuble(int $immeuble)
+    public static function cantonParImmeuble(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1067,7 +1067,7 @@ class Carto
      * @return array
      * @static
      */
-    static public function detailAdresse(int $immeuble)
+    public static function detailAdresse(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1129,7 +1129,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function adressePostale(
+    public static function adressePostale(
         int $immeuble,
         $separateur = '<br>',
         $return = false
@@ -1183,7 +1183,7 @@ class Carto
      * @return string|void
      * @static
      */
-    static public function bureauDeVote($immeuble, $return = false, $mini = false)
+    public static function bureauDeVote($immeuble, $return = false, $mini = false)
     {
         // On récupère toutes les informations nécessaires par rapport
         // à cet immeuble et donc son bureau de vote
@@ -1226,7 +1226,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function ajoutRue(int $ville, string $rue)
+    public static function ajoutRue(int $ville, string $rue)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1251,7 +1251,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function ajoutImmeuble(array $infos)
+    public static function ajoutImmeuble(array $infos)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1282,7 +1282,7 @@ class Carto
      *
      * @return integer
      */
-    static public function nombreElecteurs($branche, int $id, $coordonnees = null)
+    public static function nombreElecteurs($branche, int $id, $coordonnees = null)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1462,7 +1462,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function coordonneesDansImmeuble(int $immeuble)
+    public static function coordonneesDansImmeuble(int $immeuble)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');
@@ -1495,7 +1495,7 @@ class Carto
      * @return integer
      * @static
      */
-    static public function coordonneesDansBureau(int $bureau)
+    public static function coordonneesDansBureau(int $bureau)
     {
         // On lance la connexion à la base de données
         $link = Configuration::read('db.link');

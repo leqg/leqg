@@ -9,9 +9,9 @@
 	if ($data->err) Core::goPage('porte', true);
 	
 	// On récupère la liste des militants par statut d'invitation
-	$militants[1] = $data->liste_inscrits(1);
-	$militants[0] = $data->liste_inscrits(0);
-	$militants[-1] = $data->liste_inscrits(-1);
+	$militants[1] = $data->missionMembers(1);
+	$militants[0] = $data->missionMembers(0);
+	$militants[-1] = $data->missionMembers(-1);
 	
 	// typologie
 	$typologie = ($data->get('mission_type') == 'porte') ? 'porte' : 'boite';

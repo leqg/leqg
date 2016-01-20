@@ -143,7 +143,7 @@ class Folder
      * @return integer New folder ID
      * @static
      **/
-    static public function create(string $name, string $desc)
+    public static function create(string $name, string $desc)
     {
         $query = Core::query('folder-new');
         $query->bindValue(':name', $name);
@@ -161,7 +161,7 @@ class Folder
      * @return array
      * @static
      **/
-    static public function all($status = 1)
+    public static function all($status = 1)
     {
         $query = Core::query('folder-all');
         $query->bindValue(':status', $status, PDO::PARAM_INT);

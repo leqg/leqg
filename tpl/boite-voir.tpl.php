@@ -47,9 +47,9 @@
     <?php if (Boite::nombreImmeubles($mission['mission_id'], 1)) { ?>
     	<section id="boitage-statistiques" class="contenu demi">
     <?php
-                $nombre['attente']     = $data->nombre_immeubles(0);
-                $nombre['impossible']  = $data->nombre_immeubles(1);
-                $nombre['realise']     = $data->nombre_immeubles(2);
+                $nombre['attente']     = $data->buidlingNumber(0);
+                $nombre['impossible']  = $data->buidlingNumber(1);
+                $nombre['realise']     = $data->buidlingNumber(2);
                 $nombre['total']       = array_sum($nombre);
                 $nombre['fait']        = $nombre['total'] - $nombre['attente'];
                 

@@ -937,7 +937,7 @@ class Campaign
      * @return int
      * @static
      **/
-    static public function create(string $method)
+    public static function create(string $method)
     {
         $user = User::ID();
 
@@ -957,7 +957,7 @@ class Campaign
      * @return array
      * @static
      **/
-    static public function all(string $type)
+    public static function all(string $type)
     {
         $query = Core::query('campaigns-list');
         $query->bindParam(':type', $type);
@@ -976,7 +976,7 @@ class Campaign
      * @return array
      * @static
      **/
-    static public function templates()
+    public static function templates()
     {
         $query = Core::query('campaign-templates-list');
         $query->execute();
@@ -994,7 +994,7 @@ class Campaign
      * @return void
      * @static
      **/
-    static public function sending(int $campaign, string $email)
+    public static function sending(int $campaign, string $email)
     {
         // campaign data
         $campaign = new Campaign($campaign);
@@ -1060,7 +1060,7 @@ class Campaign
      * @return array
      * @static
      **/
-    static public function trackingInfos(string $track_id)
+    public static function trackingInfos(string $track_id)
     {
         $mandrill = Configuration::read('mail');
         $result = $mandrill->messages->info($track_id);
@@ -1076,7 +1076,7 @@ class Campaign
      * @return string
      * @static
      **/
-    static public function displayStatus(string $status)
+    public static function displayStatus(string $status)
     {
         switch ($status) {
         case 'pending':

@@ -32,7 +32,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function countryData(int $country)
+    public static function countryData(int $country)
     {
         $query = Core::query('country-data');
         $query->bindValue(':country', $country, PDO::PARAM_INT);
@@ -48,7 +48,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function countrySearch(string $search)
+    public static function countrySearch(string $search)
     {
         $search = '%'.preg_replace('#[^A-Za-z]#', '%', $search).'%';
         $query = Core::query('country-search');
@@ -65,7 +65,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function countryCreate(string $country)
+    public static function countryCreate(string $country)
     {
         $query = Core::query('country-create');
         $query->bindValue(':country', $country);
@@ -81,7 +81,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function citySearch(string $search)
+    public static function citySearch(string $search)
     {
         $search = '%'.preg_replace('#[^A-Za-z]#', '%', $search).'%';
         $query = Core::query('city-search');
@@ -98,7 +98,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function cityData(int $city)
+    public static function cityData(int $city)
     {
         $query = Core::query('city-data');
         $query->bindValue(':city', $city, PDO::PARAM_INT);
@@ -115,7 +115,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function cityCreate(string $city, $country = null)
+    public static function cityCreate(string $city, $country = null)
     {
         $query = Core::query('city-create');
         $query->bindValue(':city', $city);
@@ -132,7 +132,7 @@ class Maps
      * @return integer
      * @static
      */
-    static public function cityVoters(int $city)
+    public static function cityVoters(int $city)
     {
         $query = Core::query('city-voters-count');
         $query->bindValue(':city', $city, PDO::PARAM_INT);
@@ -150,7 +150,7 @@ class Maps
      * @return integer
      * @static
      */
-    static public function cityContactDetails(int $city, string $type)
+    public static function cityContactDetails(int $city, string $type)
     {
         $query = Core::query('city-contact-details');
         $query->bindValue(':city', $city, PDO::PARAM_INT);
@@ -168,7 +168,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function pollData(array $poll)
+    public static function pollData(array $poll)
     {
         $query = Core::query('poll-data');
         $query->bindValue(':poll', $poll, PDO::PARAM_INT);
@@ -184,7 +184,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function pollSearch(int $search)
+    public static function pollSearch(int $search)
     {
         $search = '%'.preg_replace('#[^A-Za-z0-9]#', '%', $search).'%';
         $query = Core::query('poll-search');
@@ -203,7 +203,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function pollCreate(string $number, string $name, $city = null)
+    public static function pollCreate(string $number, string $name, $city = null)
     {
         $query = Core::query('poll-create');
         $query->bindValue(':number', $number);
@@ -221,7 +221,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function streetData(int $street)
+    public static function streetData(int $street)
     {
         $query = Core::query('street-data');
         $query->bindValue(':street', $street, PDO::PARAM_INT);
@@ -238,7 +238,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function streetCreate(string $street, $city = null)
+    public static function streetCreate(string $street, $city = null)
     {
         $query = Core::query('street-create');
         $query->bindValue(':street', $street);
@@ -256,7 +256,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function streetSearch(string $search, $city = null)
+    public static function streetSearch(string $search, $city = null)
     {
         if (is_null($city)) {
             $search = '%'.preg_replace('#[^A-Za-z0-9]#', '%', $search).'%';
@@ -282,7 +282,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function streetBuildings(int $street)
+    public static function streetBuildings(int $street)
     {
         $query = Core::query('street-buildings');
         $query->bindValue(':street', $street, PDO::PARAM_INT);
@@ -299,7 +299,7 @@ class Maps
      * @return integer
      * @static
      */
-    static public function streetNew(string $street, $city = null)
+    public static function streetNew(string $street, $city = null)
     {
         $query = Core::query('street-new');
         $query->bindValue(':street', $street);
@@ -316,7 +316,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function buildingData(int $building)
+    public static function buildingData(int $building)
     {
         $query = Core::query('building-data');
         $query->bindValue(':building', $building, PDO::PARAM_INT);
@@ -333,7 +333,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function buildingSearch(string $search, $street = null)
+    public static function buildingSearch(string $search, $street = null)
     {
         if (is_null($street)) {
             $search = '%'.preg_replace('#[^A-Za-z0-9]#', '%', $search).'%';
@@ -360,7 +360,7 @@ class Maps
      * @return integer
      * @static
      */
-    static public function buildingNew(string $building, $street = null)
+    public static function buildingNew(string $building, $street = null)
     {
         $query = Core::query('building-new');
         $query->bindValue(':building', $building);
@@ -377,7 +377,7 @@ class Maps
      * @return integer
      * @static
      */
-    static public function zipcodeDetect(int $street)
+    public static function zipcodeDetect(int $street)
     {
         $query = Core::query('zipcode-detect');
         $query->bindValue(':street', $street, PDO::PARAM_INT);
@@ -395,7 +395,7 @@ class Maps
      * @return integer
      * @static
      * */
-    static public function zipcodeNew(string $zipcode, $city = null)
+    public static function zipcodeNew(string $zipcode, $city = null)
     {
         $query = Core::query('zipcode-new');
         $query->bindValue(':zipcode', $zipcode);
@@ -412,7 +412,7 @@ class Maps
      * @return array
      * @static
      */
-    static public function zipcodeSearch(string $search)
+    public static function zipcodeSearch(string $search)
     {
         $query = Core::query('zipcode-search');
         $query->bindValue(':search', $search);
@@ -433,7 +433,7 @@ class Maps
      * @return integer
      * @static
      */
-    static public function addressNew(
+    public static function addressNew(
         int $person,
         int $city,
         int $zipcode,

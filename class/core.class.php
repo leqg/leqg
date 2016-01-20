@@ -33,7 +33,7 @@ class Core
      * @return void
      * @static
      */
-    static public function debug($objet, $exit = true)
+    public static function debug($objet, $exit = true)
     {
         echo '<pre class="nowrap">';
 
@@ -96,7 +96,7 @@ class Core
      * @deprecated
      * @static
      */
-    static public function securisationString(string $string, $charset = 'utf-8')
+    public static function securisationString(string $string, $charset = 'utf-8')
     {
         // On transforme les caractères spéciaux en entités HTML
         $string = htmlentities($string, ENT_QUOTES, $charset);
@@ -116,7 +116,7 @@ class Core
      * @see        Core::searchFormat()
      * @static
      */
-    static public function formatageRecherche(string $string, $charset = 'utf-8')
+    public static function formatageRecherche(string $string, $charset = 'utf-8')
     {
         // On vérifie que le texte entré est bien un champ texte
         if (!is_string($string)) {
@@ -156,7 +156,7 @@ class Core
      * @deprecated
      * @static
      */
-    static public function formatageDonnees(array $array)
+    public static function formatageDonnees(array $array)
     {
         if (!is_array($array)) {
             return $array;
@@ -202,7 +202,7 @@ class Core
      * @return array
      * @static
      */
-    static public function triParColonne(array &$arr, string $col, $dir = SORT_ASC)
+    public static function triParColonne(array &$arr, string $col, $dir = SORT_ASC)
     {
         // On prépare le tableau de tri
         $sort_col = array();
@@ -226,7 +226,7 @@ class Core
      * @return array
      * @static
      */
-    static public function triMultidimentionnel(
+    public static function triMultidimentionnel(
         array &$arr,
         string $col ,
         $dir = SORT_ASC
@@ -251,7 +251,7 @@ class Core
      * @return void
      * @static
      */
-    static public function sortie(string $texte)
+    public static function sortie(string $texte)
     {
         // On retraite le contenu envoyé pour l'affichage
         $texte = stripslashes($texte);
@@ -269,7 +269,7 @@ class Core
      * @return void
      * @static
      */
-    static public function loadTemplate(string $slug, $nom = null)
+    public static function loadTemplate(string $slug, $nom = null)
     {
         if (empty($nom)) {
             include 'tpl/' . $slug . '.tpl.php';
@@ -286,7 +286,7 @@ class Core
      * @return void
      * @static
      */
-    static public function loadHeader($nom = null)
+    public static function loadHeader($nom = null)
     {
         self::loadTemplate('header', $nom);
     }
@@ -299,7 +299,7 @@ class Core
      * @return void
      * @static
      */
-    static public function loadFooter($nom = null)
+    public static function loadFooter($nom = null)
     {
         self::loadTemplate('footer', $nom);
     }
@@ -312,7 +312,7 @@ class Core
      * @return void
      * @static
      */
-    static public function loadAside($nom = null)
+    public static function loadAside($nom = null)
     {
         $this->loadTemplate('aside', $nom);
     }
@@ -329,7 +329,7 @@ class Core
      * @see        Core::goPage()
      * @static
      */
-    static public function redirect($page = null, $valeur = null, $attribut = null)
+    public static function redirect($page = null, $valeur = null, $attribut = null)
     {
         if (!empty($page) && !empty($attribut) && !empty($valeur)) {
             header(
@@ -361,7 +361,7 @@ class Core
      * @return string|void
      * @static
      */
-    static public function goPage($page = null, $arguments = [], $redirect = false)
+    public static function goPage($page = null, $arguments = [], $redirect = false)
     {
         // Si $page == true, on demande une redirection immédiate
         // vers la page d'accueil
@@ -417,7 +417,7 @@ class Core
      * @see        Core::goPage()
      * @static
      */
-    static public function returnUri(
+    public static function returnUri(
         $page = null,
         $valeur = null,
         $attribut = null,
@@ -491,7 +491,7 @@ class Core
      * @see        Core::goPage()
      * @static
      */
-    static public function getUrl(
+    public static function getUrl(
         $page = null,
         $valeur = null,
         $attribut = null,
@@ -508,7 +508,7 @@ class Core
      * @deprecated use a $_ENV for this method
      * @static
      */
-    static public function returnDomain()
+    public static function returnDomain()
     {
         $domain = 'http://' . $this->url;
         return $domain;
@@ -521,7 +521,7 @@ class Core
      * @deprecated use a $_ENV for this method
      * @static
      */
-    static public function getDomain()
+    public static function getDomain()
     {
         echo self::returnDomain();
     }
@@ -534,7 +534,7 @@ class Core
      * @return void
      * @static
      */
-    static public function formatPhone($numero)
+    public static function formatPhone($numero)
     {
         if (!empty($numero)) {
             echo self::getFormatPhone($numero);
@@ -549,7 +549,7 @@ class Core
      * @return string
      * @static
      */
-    static public function getFormatPhone( $numero )
+    public static function getFormatPhone( $numero )
     {
         if (!empty($numero)) {
             return $numero{0} . $numero{1} . ' ' .
@@ -568,7 +568,7 @@ class Core
      * @return string
      * @static
      */
-    static public function eventType(string $type)
+    public static function eventType(string $type)
     {
         // On prépare le tableau de traduction
         $types = [

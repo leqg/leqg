@@ -34,9 +34,9 @@
 		
 		<ul class="listeContacts">
     	<?php
-            if ($data->nombre_recontacts()) :
+            if ($data->newContactsNumber()) :
 				// On fait la liste des contacts concernés
-				$contacts = $data->liste_contacts(4);
+				$contacts = $data->contactsList(4);
 				foreach ($contacts as $contact) :
 					// On ouvre la fiche du contact concerné
 					$fiche = new People($contact[0]);
@@ -69,9 +69,9 @@
 		
 		<ul class="listeContacts">
     	<?php
-            if ($data->nombre_procurations()) :
+            if ($data->procurationsNumber()) :
 				// On fait la liste des contacts concernés
-				$contacts = $data->liste_contacts(3);
+				$contacts = $data->contactsList(3);
 				foreach ($contacts as $contact) :
 					// On ouvre la fiche du contact concerné
 					$fiche = new Contact(md5($contact[0]));

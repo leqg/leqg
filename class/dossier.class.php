@@ -247,7 +247,7 @@ class Dossier
      * @return array
      * @static
      */
-    static public function liste($statut = 1)
+    public static function liste($statut = 1)
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');
@@ -276,7 +276,7 @@ class Dossier
      * @return array
      * @static
      */
-    static public function listeComplete($tous = false)
+    public static function listeComplete($tous = false)
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');

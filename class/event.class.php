@@ -280,7 +280,7 @@ class Event
      * @return string
      * @static
      */
-    static public function displayType($type)
+    public static function displayType($type)
     {
         $display = [
             'contact' => 'Entrevue',

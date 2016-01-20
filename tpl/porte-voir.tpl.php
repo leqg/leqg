@@ -53,12 +53,12 @@
 		<section id="porte-statistiques" class="contenu demi">
 			<h4>Avancement de la mission</h4>
     <?php
-                $nombre['attente']     = $data->nombre_contacts(0);
-                $nombre['absent']      = $data->nombre_contacts(1);
-                $nombre['ouvert']      = $data->nombre_contacts(2);
-                $nombre['procuration'] = $data->nombre_contacts(3);
-                $nombre['contact']     = $data->nombre_contacts(4);
-                $nombre['npai']        = $data->nombre_contacts(-1);
+                $nombre['attente']     = $data->contactsCount(0);
+                $nombre['absent']      = $data->contactsCount(1);
+                $nombre['ouvert']      = $data->contactsCount(2);
+                $nombre['procuration'] = $data->contactsCount(3);
+                $nombre['contact']     = $data->contactsCount(4);
+                $nombre['npai']        = $data->contactsCount(-1);
                 $nombre['total']       = array_sum($nombre);
                 $nombre['fait']        = $nombre['total'] - $nombre['attente'];
                 

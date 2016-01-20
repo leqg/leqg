@@ -23,7 +23,7 @@ if ((isset($_GET['code']) || isset($_POST['code']))
     $mission = new Mission($code);
 
     // On invite la personne demandée
-    if ($mission->invitation($user)) {
+    if ($mission->newMember($user)) {
         Core::goPage(
             'mission',
             array('code' => $code, 'admin' => 'invitations'),

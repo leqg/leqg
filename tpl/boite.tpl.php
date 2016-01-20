@@ -17,7 +17,7 @@
     <?php if ($missions) : ?>
 		<section id="missions">
 			<ul class="liste-missions">
-				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); $parcours = $mission->statistiques_parcours(); ?>
+				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); $parcours = $mission->missionStats(); ?>
 				<li>
     	    	    <a href="<?php Core::goPage('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
 					<a href="<?php Core::goPage('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
@@ -29,9 +29,9 @@
         <?php endif; ?>
 					</p>
 					<p>
-        <?php if ($mission->nombre_immeubles(0) && is_null($mission->get('mission_deadline'))) : ?>
+        <?php if ($mission->buidlingNumber(0) && is_null($mission->get('mission_deadline'))) : ?>
 							Cette mission n'a pas de deadline connue.
-        <?php elseif ($mission->nombre_immeubles(0)) : ?>
+        <?php elseif ($mission->buidlingNumber(0)) : ?>
 							Cette mission doit être terminée pour le <strong><?php echo date('d/m/Y', strtotime($mission->get('mission_deadline'))); ?></strong>.
         <?php endif; ?>
 					</p>

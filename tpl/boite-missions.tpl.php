@@ -6,7 +6,7 @@
     $invitations = Mission::invitations('boitage', User::ID());
     
     // On charge la liste des missions ouvertes où la personne est inscrite
-    $missions_ouvertes = Mission::missions_ouvertes('boitage', User::ID());
+    $missions_ouvertes = Mission::openMissions('boitage', User::ID());
     
     // On charge le header
     Core::loadHeader();

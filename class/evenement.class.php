@@ -469,7 +469,7 @@ class Evenement
      * @return array
      * @static
      */
-    static public function last($nombre = 15)
+    public static function last($nombre = 15)
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');
@@ -503,7 +503,7 @@ class Evenement
      *
      * @return array
      */
-    static public function taches($nombre = 5)
+    public static function taches($nombre = 5)
     {
         // On prépare le lien vers la BDD
         $link = Configuration::read('db.link');

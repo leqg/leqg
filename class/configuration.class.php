@@ -31,7 +31,7 @@ class Configuration
      *
      * @static
      */
-    static public $confArray = [];
+    public static $confArray = [];
 
     /**
      * Reading configuration method
@@ -41,7 +41,7 @@ class Configuration
      * @return mixed
      * @static
      */
-    static public function read(string $name)
+    public static function read(string $name)
     {
         return self::$confArray[$name];
     }
@@ -55,7 +55,7 @@ class Configuration
      * @return void
      * @static
      */
-    static public function write(string $name, $value)
+    public static function write(string $name, $value)
     {
         self::$confArray[$name] = $value;
     }
