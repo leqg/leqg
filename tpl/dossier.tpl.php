@@ -3,7 +3,7 @@
     User::protection(5);
     
     // On vérifie l'existance d'un élément dossier
-if (!isset($_GET['dossier'])) { Core::goTo('dossier', true); 
+if (!isset($_GET['dossier'])) { Core::goPage('dossier', true); 
 }
     
     // On ouvre l'objet dossier
@@ -28,10 +28,10 @@ if (!isset($_GET['dossier'])) { Core::goTo('dossier', true);
 				<?php $evenements = $dossier->events(); foreach ($evenements as $evenement) : $e = new Event($evenement); $c = new People($e->get('people')); ?>
 				<li class="objet <?php echo $e->get('type'); ?>">
 					<small><span><?php echo Core::eventType($e->get('type')); ?></span></small>
-					<strong><a href="<?php Core::goTo('contact', array('contact' => $e->get('people'), 'evenement' => $e->get('id'))); ?>"><?php echo $e->get('objet'); ?></a></strong>
+					<strong><a href="<?php Core::goPage('contact', array('contact' => $e->get('people'), 'evenement' => $e->get('id'))); ?>"><?php echo $e->get('objet'); ?></a></strong>
 					<ul class="infosAnnexes">
 						<li class="date"><?php echo date('d/m/Y', strtotime($e->get('date'))); ?></li>
-						<li class="contact"><a href="<?php Core::goTo('contact', array('contact' => $e->get('people'))); ?>"><?php echo $c->display_name(); ?></a></li>
+						<li class="contact"><a href="<?php Core::goPage('contact', array('contact' => $e->get('people'))); ?>"><?php echo $c->display_name(); ?></a></li>
 					</ul>
 				</li>
 				<?php endforeach; ?>

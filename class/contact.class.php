@@ -876,7 +876,7 @@ class Contact
         // Dans ce cas, on déplace le fichier à sa destination finale
         if (move_uploaded_file($file['tmp_name'], $destination)) {
             // On récupère l'ID de l'utilisateur
-            if ($_COOKIE['leqg-user'])) {
+            if (isset($_COOKIE['leqg-user'])) {
                 $utilisateur = $_COOKIE['leqg-user'];
             } else {
                 $utilisateur = 0;

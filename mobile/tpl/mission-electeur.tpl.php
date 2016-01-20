@@ -3,14 +3,14 @@
     $data = new Mission($_GET['code']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::goTo('porte', true); 
+if ($data->err) { Core::goPage('porte', true); 
 }
     
     // On récupère tous les items de l'immeuble et la rue en question et la ville concernée
     $rue = Carto::rue($_GET['rue']);
     $contact = new Contact(md5($_GET['electeur']));
     
-if (!isset($_GET['electeur'])) { Core::goTo('reporting', array('mission' => $_GET['mission']), true); 
+if (!isset($_GET['electeur'])) { Core::goPage('reporting', array('mission' => $_GET['mission']), true); 
 }
     
     // typologie
@@ -24,11 +24,11 @@ if (!isset($_GET['electeur'])) { Core::goTo('reporting', array('mission' => $_GE
 
     <h3 style="margin: 20px;"><?php echo mb_convert_case($contact->get('contact_nom'), MB_CASE_UPPER) . ' ' . mb_convert_case($contact->get('contact_nom_usage'), MB_CASE_UPPER) . ' ' . mb_convert_case($contact->get('contact_prenoms'), MB_CASE_TITLE); ?></h3>
 
-    <a href="<?php Core::goTo('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 1)); ?>" class="nostyle bouton">Absent</a>
-    <a href="<?php Core::goTo('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 2)); ?>" class="nostyle bouton">Ouvert</a>
-    <a href="<?php Core::goTo('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 3)); ?>" class="nostyle bouton">Demande procuration</a>
-    <a href="<?php Core::goTo('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 4)); ?>" class="nostyle bouton">Demande contact</a>
-    <a href="<?php Core::goTo('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => -1)); ?>" class="nostyle bouton">Inconnu à l'adresse</a>
+    <a href="<?php Core::goPage('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 1)); ?>" class="nostyle bouton">Absent</a>
+    <a href="<?php Core::goPage('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 2)); ?>" class="nostyle bouton">Ouvert</a>
+    <a href="<?php Core::goPage('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 3)); ?>" class="nostyle bouton">Demande procuration</a>
+    <a href="<?php Core::goPage('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => 4)); ?>" class="nostyle bouton">Demande contact</a>
+    <a href="<?php Core::goPage('report', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'], 'electeur' => $_GET['electeur'], 'statut' => -1)); ?>" class="nostyle bouton">Inconnu à l'adresse</a>
 	
-	<a href="<?php Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'])); ?>" class="bouton nostyle">Retour à l'immeuble</a>
+	<a href="<?php Core::goPage('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble'])); ?>" class="bouton nostyle">Retour à l'immeuble</a>
 <?php Core::loadFooter(); ?>

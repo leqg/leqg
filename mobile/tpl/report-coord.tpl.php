@@ -3,7 +3,7 @@
     $data = new Mission($_GET['code']);
     
     // On vérifie que la mission a bien été ouverte
-if ($data->err) { Core::goTo('porte', true); 
+if ($data->err) { Core::goPage('porte', true); 
 }
 
     // On récupère les données du formulaire
@@ -28,5 +28,5 @@ if (isset($reporting['phone']) && !empty($reporting['phone'])) {
     }
 }
     
-    Core::goTo('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble']), true);
+    Core::goPage('mission', array('code' => $_GET['code'], 'rue' => $_GET['rue'], 'immeuble' => $_GET['immeuble']), true);
 ?>

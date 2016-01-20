@@ -34,5 +34,5 @@ if (isset($_POST['mission'])) {
     $query->execute();
 
     // On redirige vers les dossiers
-    Core::goTo('rappels', true);
+    Core::goPage('rappels', true);
 }

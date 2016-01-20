@@ -20,4 +20,4 @@ if (is_numeric($id)) {
 }
 
 // On retourne vers la liste des comptes
-$core->goTo('administration', true);
+$core->goPage('administration', true);

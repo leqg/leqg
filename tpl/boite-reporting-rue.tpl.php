@@ -45,9 +45,9 @@
         <?php endif; ?>
         
         <?php if (User::auth_level() > 5) : ?>
-        <a href="<?php Core::goTo('boite', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <a href="<?php Core::goPage('boite', array('mission' => $_GET['mission'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
         <?php else : ?>
-        <a href="<?php Core::goTo('boite', array('action' => 'voir', 'mission' => $mission['mission_id'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
+        <a href="<?php Core::goPage('boite', array('action' => 'voir', 'mission' => $mission['mission_id'])); ?>" class="nostyle"><button>Revenir à la mission</button></a>
         <?php endif; ?>
     </section>
     

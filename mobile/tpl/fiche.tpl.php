@@ -6,7 +6,7 @@
 if (isset($_GET['fiche'])) :
     $contact = new Contact(md5($_GET['fiche']));
     else :
-        Core::goTo('contacts', true);
+        Core::goPage('contacts', true);
     endif;
     
     // On charge le template
@@ -118,7 +118,7 @@ if (isset($_GET['fiche'])) :
 
 <nav id="actions-fiche">
 	<a href="#" id="goToHistorique" class="historique">&#xe8dd;</a>
-	<a href="<?php Core::goTo('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" id="ajoutInteraction" class="central">&#xe816;</a>
+	<a href="<?php Core::goPage('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" id="ajoutInteraction" class="central">&#xe816;</a>
 	<a href="#" id="goToModif" class="modifier">&#xe855;</a>
 </nav>
 <?php Core::loadFooter(); ?>

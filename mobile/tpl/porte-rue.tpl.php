@@ -2,7 +2,7 @@
 if (isset($_GET['mission']) && $porte->verification($_GET['mission'])) {
 	$mission = $porte->informations($_GET['mission']);
 } else {
-	$core->goTo('porte', true);
+	$core->goPage('porte', true);
 }
 $core->loadHeader(); ?>
 	<h2>Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
@@ -20,7 +20,7 @@ $core->loadHeader(); ?>
 		}
 		natsort($immeubles);
 		foreach ($immeubles as $immeuble) : ?>
-		<a class="nostyle" href="<?php $core->goTo('porte', array('mission' => $_GET['mission'], 'immeuble' => md5($idImmeubles[$immeuble]))); ?>">
+		<a class="nostyle" href="<?php $core->goPage('porte', array('mission' => $_GET['mission'], 'immeuble' => md5($idImmeubles[$immeuble]))); ?>">
 			<li id="element-<?php echo md5($idImmeubles[$immeuble]); ?>">
 				<span><?php if (!empty($immeuble)) { echo $immeuble; } else { echo '&nbsp;';	 } ?></span> <?php echo $nomRue; ?>
 			</li>

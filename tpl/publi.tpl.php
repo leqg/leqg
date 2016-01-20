@@ -14,7 +14,7 @@
 			<ul class="liste-campagnes">
 				<?php foreach ($liste as $element) : $campaign = new Campaign($element['id']); ?>
 				<li>
-					<a href="<?php Core::goTo('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
+					<a href="<?php Core::goPage('publi', array('campagne' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['titre'])) { echo $element['titre']; 
     } else { echo 'Campagne sans titre'; 
 } ?></h4></a>
 					<p>

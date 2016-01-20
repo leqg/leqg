@@ -64,7 +64,7 @@ $query = 'UPDATE `missions`
               `mission_fait` = "' . $fait . '"
           WHERE `mission_id` = ' . $parcours['id'];
 $db->query($query);
-$core->goTo(
+$core->goPage(
     'porte',
     array('action' => 'mission', 'mission' => $parcours['id']),
     true

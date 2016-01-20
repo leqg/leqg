@@ -14,5 +14,5 @@
     $enregistrement = $historique->ajout($fiche, $_COOKIE['leqg-user'], $infos['type'], $date, $lieu, $objet, $notes);
 
     // On affiche la fiche interaction correspondance
-    $core->goTo('interaction', array('fiche' => $fiche, 'interaction' => $enregistrement), true);
+    $core->goPage('interaction', array('fiche' => $fiche, 'interaction' => $enregistrement), true);
 ?>

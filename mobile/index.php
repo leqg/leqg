@@ -25,7 +25,7 @@ if (isset($_GET['page'])) :
         if ($user->deconnexion()) :
             
             // On retourne vers la page de login
-            Core::goTo('login', array(), true);
+            Core::goPage('login', array(), true);
             
         endif;
         
@@ -110,11 +110,11 @@ if (isset($_GET['page'])) :
             
                 if (isset($_GET['fiche'])) :
                 
-                    Core::goTo('contacts', array('fiche' => $_GET['fiche']), true);
+                    Core::goPage('contacts', array('fiche' => $_GET['fiche']), true);
                 
           else :
                 
-                Core::goTo('contacts', array(), true);
+                Core::goPage('contacts', array(), true);
                 
           endif;
             
@@ -130,7 +130,7 @@ if (isset($_GET['page'])) :
                 // Sinon, on charge le module "contacts"	
             else :
             
-                Core::goTo('contacts', array(), true);
+                Core::goPage('contacts', array(), true);
                 
             endif;
                 

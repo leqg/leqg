@@ -22,7 +22,7 @@ $rues = $carto->rechercheRue($ville, $rue);
 // On fait la liste des résultats
 foreach ($rues as $rue) :
 ?>
-<a href="<?php $core->goTo(
+<a href="<?php $core->goPage(
     'boite',
     [
         'action' => 'nouveau',

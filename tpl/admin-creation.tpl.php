@@ -67,10 +67,10 @@ if (isset($_POST)) {
         
     $mail->Send();
         
-    Core::goTo('administration', true);
+    Core::goPage('administration', true);
         
         
 } else {
-    Core::goTo('administration', true);
+    Core::goPage('administration', true);
 }
 ?>

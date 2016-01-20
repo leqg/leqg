@@ -20,12 +20,12 @@ if (empty($_GET['page'])) {
     
     // Redirection si l'utilisateur à une accréditation inférieure au niveau 5
     if (User::auth_level() >= 5) {
-        Core::goTo('contacts', true);
+        Core::goPage('contacts', true);
     }
     
     // Redirection si l'utilisateur n'est que faiblement accrédité à la présentation des services
     else {
-        Core::goTo('services', true);
+        Core::goPage('services', true);
     }
 
 }
@@ -53,7 +53,7 @@ else {
                 $id = People::create();
                 
                 // On redirige vers la nouvelle fiche créée
-                Core::goTo('contact', array('contact' => $id), true);
+                Core::goPage('contact', array('contact' => $id), true);
             }
             
             // Sinon, on charge le template
@@ -63,7 +63,7 @@ else {
         }
         
         else {
-            Core::goTo('contacts', true);
+            Core::goPage('contacts', true);
         }
     }
     
@@ -132,7 +132,7 @@ else {
     else if ($_GET['page'] == 'sms') {
         // On regarde si une page en particulier est demandée
         if (isset($_GET['campagne'])) {
-            Core::goTo('campagne', array('id' => $_GET['campagne']), true);
+            Core::goPage('campagne', array('id' => $_GET['campagne']), true);
         }
         
         // Sinon, on appelle la page principale du module
@@ -147,7 +147,7 @@ else {
     else if ($_GET['page'] == 'email') {
         // On regarde si une page en particulier est demandée
         if (isset($_GET['campagne'])) {
-            Core::goTo('campagne', array('id' => $_GET['campagne']), true);
+            Core::goPage('campagne', array('id' => $_GET['campagne']), true);
         }
         
         // Sinon, on appelle la page principale du module
@@ -260,7 +260,7 @@ else {
             $data = $query->fetch(PDO::FETCH_NUM);
             
             // On redirige vers la vraie URL
-            Core::goTo('rappels', array('mission' => $data[0]), true);
+            Core::goPage('rappels', array('mission' => $data[0]), true);
         }
     }
     
@@ -316,7 +316,7 @@ else {
     else if ($_GET['page'] == 'services') {
         // Si l'utilisateur a une forte accréditation, il s'agit de l'écran d'accueil du module contacts qui est demandé
         if (User::auth_level() >= 5) {
-            Core::goTo('contacts', true);
+            Core::goPage('contacts', true);
         }
         
         // Sinon on affiche effectivement le module des services
@@ -330,11 +330,11 @@ else {
     // On redirige automatiquement sur vers la page de présentation des services ou le module contacts en cas de module non trouvé selon l'accréditation
     else {
         if (User::auth_level() >= 5) {
-            Core::goTo('contacts', true);
+            Core::goPage('contacts', true);
         }
         
         else {
-            Core::goTo('services', true);
+            Core::goPage('services', true);
         }
     }
 }

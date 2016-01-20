@@ -16,7 +16,7 @@
     <ul class="liste-rappels">
     <?php foreach ($missions as $mission) : $m = new Rappel($mission['argumentaire_id']); ?>
             <li>
-				<a href="<?php Core::goTo('rappels', array('mission' => $m->get('argumentaire_id'))); ?>" class="nostyle"><h4><?php echo (!empty($m->get('argumentaire_nom'))) ? $m->get('argumentaire_nom') : 'Mission sans nom'; ?></h4></a>
+				<a href="<?php Core::goPage('rappels', array('mission' => $m->get('argumentaire_id'))); ?>" class="nostyle"><h4><?php echo (!empty($m->get('argumentaire_nom'))) ? $m->get('argumentaire_nom') : 'Mission sans nom'; ?></h4></a>
                 <p>
                     Cette mission concerne le rappel de <strong><?php echo $m->get('nombre'); ?></strong> numéro<?php if ($m->get('nombre') > 1) { ?>s<?php 
                    } ?>.<br>
@@ -25,13 +25,13 @@
     <?php endforeach; ?>
     </ul>
 		
-		<a class="nostyle" href="<?php Core::goTo('rappels', array('action' => 'nouveau')); ?>"><button>Créer un argumentaire et sa mission</button></a>
+		<a class="nostyle" href="<?php Core::goPage('rappels', array('action' => 'nouveau')); ?>"><button>Créer un argumentaire et sa mission</button></a>
     </section>
     <?php else : ?>
 	<section class="icone" id="aucuneMission">
 		<h3>Aucune mission de rappels militant disponible actuellement.</h3>
 		
-		<a class="nostyle" href="<?php Core::goTo('rappels', array('action' => 'nouveau')); ?>"><button>Créer un argumentaire et sa mission</button></a>
+		<a class="nostyle" href="<?php Core::goPage('rappels', array('action' => 'nouveau')); ?>"><button>Créer un argumentaire et sa mission</button></a>
 	</section>
     <?php endif; ?>
 

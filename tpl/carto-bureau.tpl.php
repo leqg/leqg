@@ -24,7 +24,7 @@
 	<section class="contenu">
 		<h4>Informations générales</h4>
 		<ul class="informations">
-			<li class="ville"><span>Ville</span><span><a href="<?php Core::goTo('carto', array('niveau' => 'communes', 'code' => hash('sha256', $ville['commune_id']))); ?>" class="nostyle"><strong><?php echo $ville['commune_nom']; ?></strong></a></span></li>
+			<li class="ville"><span>Ville</span><span><a href="<?php Core::goPage('carto', array('niveau' => 'communes', 'code' => hash('sha256', $ville['commune_id']))); ?>" class="nostyle"><strong><?php echo $ville['commune_nom']; ?></strong></a></span></li>
 			<li class="region"><span>Département</span><span><?php echo $departement['departement_nom']; ?> (<?php echo $region['region_nom']; ?>)</span></li>
 			<li class="electeur"><span>Électeurs</span><span><strong><?php echo number_format($electeurs, 0, ',', ' '); ?></strong> <em>électeur<?php if ($electeurs > 1) { ?>s<?php 
   } ?> importé<?php if ($electeurs > 1) { ?>s<?php 
@@ -47,7 +47,7 @@
 		
 		<ul class="listeContacts">
     <?php $adresses = array(); $contacts = Carto::listeElecteursParBureau($bureau['bureau_id'], true); foreach ($contacts as $contact) : $classSexe = array('M' => 'homme', 'F' => 'femme', 'i' => 'isexe'); $c = new Contact($contact['code']); $adresses[] = explode('|', $c->adresse('electorale', '|')); ?>
-			<a href="<?php Core::goTo('contact', array('contact' => $contact['code'])); ?>" class="nostyle">
+			<a href="<?php Core::goPage('contact', array('contact' => $contact['code'])); ?>" class="nostyle">
 				<li class="contact <?php echo $classSexe[$contact['contact_sexe']]; ?>">
         <?php if (!empty($contact['contact_nom']) || !empty($contact['contact_nom_usage']) || !empty($contact['contact_prenoms'])) : ?>
 					<strong><?php echo mb_convert_case($contact['contact_nom'], MB_CASE_UPPER); ?> <?php echo mb_convert_case($contact['contact_nom_usage'], MB_CASE_UPPER); ?> <?php echo mb_convert_case($contact['contact_prenoms'], MB_CASE_TITLE); ?></strong>

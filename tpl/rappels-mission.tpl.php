@@ -72,7 +72,7 @@
 						elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 						else { $nomAffichage = 'Fiche sans nom'; }
 				?>
-				<a href="<?php Core::goTo('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
+				<a href="<?php Core::goPage('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 					</li>
@@ -104,7 +104,7 @@
 						elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 						else { $nomAffichage = 'Fiche sans nom'; }
 				?>
-				<a href="<?php Core::goTo('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
+				<a href="<?php Core::goPage('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 					</li>
@@ -136,7 +136,7 @@
 						elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 						else { $nomAffichage = 'Fiche sans nom'; }
 				?>
-				<a href="<?php Core::goTo('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
+				<a href="<?php Core::goPage('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 						<p><?php echo nl2br($commentaire['rappel_reporting']); ?></p>
@@ -164,7 +164,7 @@
  			<div id="avancementMission"><div style="width: <?php echo ceil($fait); ?>%;"><?php if ($fait >= 10) { echo ceil($fait); ?>&nbsp;%<?php } ?></div></div>
  			<p>Cette mission a été réalisée à <?php echo ceil($fait); ?>&nbsp;%</p>
  			
- 			<a href="<?php Core::goTo('rappels', array('action' => 'appel')); ?>" class="nostyle"><button class="vert" style="margin-bottom: .5em;">Passer un appel</button></a>
+ 			<a href="<?php Core::goPage('rappels', array('action' => 'appel')); ?>" class="nostyle"><button class="vert" style="margin-bottom: .5em;">Passer un appel</button></a>
        </section>
         
         <section class="contenu demi">
@@ -191,7 +191,7 @@
 					elseif (!empty($fiche->get('organisme'))) { $nomAffichage = $fiche->get('organisme'); }
 					else { $nomAffichage = 'Fiche sans nom'; }
 			?>
-				<a href="<?php Core::goTo('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
+				<a href="<?php Core::goPage('contact', array('contact' => $fiche->get('id'))); ?>" class="nostyle contact-<?php echo $fiche->get('id'); ?>">
 					<li class="contact <?php echo $sexe; ?>">
 						<strong><?php echo $nomAffichage; ?></strong>
 					</li>

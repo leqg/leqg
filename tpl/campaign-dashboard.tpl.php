@@ -41,7 +41,7 @@ if (isset($_GET['operation'])) {
 
         case 'test':
             $data->testing();
-            Core::goTo('campagne', array('id' => $_GET['id']), true);
+            Core::goPage('campagne', array('id' => $_GET['id']), true);
             break;
     }
 }
@@ -56,16 +56,16 @@ Core::loadHeader();
 <?php endif; ?>
 
 <nav class="onglets">
-    <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'))); ?>">Supervision</a>
-    <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'), 'volet' => 'destinataires')); ?>">Destinataire</a>
+    <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'))); ?>">Supervision</a>
+    <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'), 'volet' => 'destinataires')); ?>">Destinataire</a>
     <?php if ($data->get('type') == 'email' && $data->get('status') == 'open') : ?>
-        <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'), 'volet' => 'template')); ?>">Template</a>
-        <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'), 'volet' => 'visu')); ?>">Email final</a>
+        <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'), 'volet' => 'template')); ?>">Template</a>
+        <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'), 'volet' => 'visu')); ?>">Email final</a>
     <?php elseif ($data->get('type') == 'email' && ($data->get('status') == 'send')) : ?>
-        <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'), 'volet' => 'visu')); ?>">Email final</a>
-        <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'), 'volet' => 'statistiques')); ?>">Statistiques</a>
+        <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'), 'volet' => 'visu')); ?>">Email final</a>
+        <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'), 'volet' => 'statistiques')); ?>">Statistiques</a>
     <?php elseif ($data->get('type') == 'sms' && ($data->get('status') == 'send')) : ?>
-        <a href="<?php Core::goTo('campagne', array('id' => $data->get('id'), 'volet' => 'statistiques')); ?>">Statistiques</a>
+        <a href="<?php Core::goPage('campagne', array('id' => $data->get('id'), 'volet' => 'statistiques')); ?>">Statistiques</a>
     <?php endif; ?>
 </nav>
 
@@ -79,12 +79,12 @@ Core::loadHeader();
 
 			<ul class="liste-campagnes">
 				<li class="template">
-				    <a href="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'newTemplate')); ?>" class="nostyle"><h4>Template vierge</h4></a>
+				    <a href="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'newTemplate')); ?>" class="nostyle"><h4>Template vierge</h4></a>
 				    <p>Vous pouvez commencer à partir d'un template vierge ou bien récupérer un précédent template pour l'adapter.</p>
 				</li>
 				<?php foreach ($templates as $element) : ?>
 				<li class="template">
-					<a href="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'copieTemplate', 'template' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['objet'])) { echo $element['objet']; } else { echo 'Campagne sans titre'; } ?></h4></a>
+					<a href="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'copieTemplate', 'template' => $element['id'])); ?>" class="nostyle"><h4><?php if (!empty($element['objet'])) { echo $element['objet']; } else { echo 'Campagne sans titre'; } ?></h4></a>
                     <?php if (!empty($element['desc'])) : ?><p><?php echo $element['desc']; ?></p><?php endif; ?>
 				</li>
 				<?php endforeach; ?>
@@ -96,7 +96,7 @@ Core::loadHeader();
         <section class="contenu">
             <h4>Personnalisation du template</h4>
 
-            <form action="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'saveTemplate')); ?>" method="post">
+            <form action="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'volet' => 'template', 'operation' => 'saveTemplate')); ?>" method="post">
                 <textarea class="templateEditor" id="templateEditor" name="templateEditor"><?php echo $data->get('template'); ?></textarea>
                 <button class="vert clair" type="submit">Sauvegarder le template</button>
             </form>
@@ -154,16 +154,16 @@ Core::loadHeader();
                 <tbody>
                     <tr>
                         <td><?php if ($data->get('status') == 'open') { echo $destinataire[0]; } else { echo $destinataire['email']; } ?></td>
-                        <td><a href="<?php echo Core::goTo('contact', array('contact' => $contact->get('id'))); ?>"><?php echo $contact->display_name(); ?></a></td>
+                        <td><a href="<?php echo Core::goPage('contact', array('contact' => $contact->get('id'))); ?>"><?php echo $contact->display_name(); ?></a></td>
                         <td><?php echo Campaign::displayStatus($destinataire['status']); ?></td>
                     </tr>
                 </tbody>
                 <?php endforeach; ?>
             </table>
             <?php if (count($destinataires)) : ?>
-            <a class="pagination-rapide" style="text-align: center; display: block;" href="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'first' => $suivant)); ?>">Contacts suivants</a>
+            <a class="pagination-rapide" style="text-align: center; display: block;" href="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'first' => $suivant)); ?>">Contacts suivants</a>
             <?php endif; ?>
-            <?php if ($data->get('status') == 'send') { ?><a class="nostyle" href="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'operation' => 'updateTracking')); ?>"><button class="vert clair">Mettre à jour</button></a><?php } ?>
+            <?php if ($data->get('status') == 'send') { ?><a class="nostyle" href="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'volet' => 'destinataires', 'operation' => 'updateTracking')); ?>"><button class="vert clair">Mettre à jour</button></a><?php } ?>
         </section>
     </div>
 
@@ -217,7 +217,7 @@ Core::loadHeader();
                 <?php foreach($erreurs as $erreur) : ?>
                 <li style="margin-bottom: 2em;">
                     <strong><?php echo $erreur['email']; ?></strong><br>
-                    <a href="<?php Core::goTo('contact', array('contact' => $erreur['contact'])); ?>" class="nostyle">Accéder à la fiche contact</a><br>
+                    <a href="<?php Core::goPage('contact', array('contact' => $erreur['contact'])); ?>" class="nostyle">Accéder à la fiche contact</a><br>
                     <em>Erreur :</em> <?php echo $erreur['reject_reason']; ?><br>
                 </li>
                 <?php endforeach; ?>
@@ -270,7 +270,7 @@ Core::loadHeader();
 
         <?php if ($data->get('status') == 'open' && ( ($data->get('type') == 'email' && !empty($data->get('objet'))) || ($data->get('type') == 'sms' && !empty($data->get('message'))) )) : ?>
         <section class="contenu demi">
-            <a href="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'operation' => 'launch', 'volet' => 'launch')); ?>" class="nostyle"><button class="vert clair long" style="margin: .25em auto .15em;">Envoi de la campagne</button></a>
+            <a href="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'operation' => 'launch', 'volet' => 'launch')); ?>" class="nostyle"><button class="vert clair long" style="margin: .25em auto .15em;">Envoi de la campagne</button></a>
         </section>
         <?php endif; ?>
     </div>
@@ -280,7 +280,7 @@ Core::loadHeader();
         <section class="contenu demi">
             <h4>Objet de la campagne</h4>
             <?php if (isset($_GET['operation']) && $_GET['operation'] == 'modificationObjet') : ?>
-                <form action="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjetCampagne')); ?>" method="post">
+                <form action="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjetCampagne')); ?>" method="post">
                     <ul class="formulaire">
                         <li>
                             <label class="small" for="objet">Objet de la campagne email</label>
@@ -293,11 +293,11 @@ Core::loadHeader();
                 </form>
             <?php else : ?>
                 <p><?php if (empty($data->get('objet'))) : echo 'Aucun titre actuellement, ce titre est nécessaire pour l\'envoi.'; else: echo $data->get('objet'); endif; ?></p>
-                <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::goTo('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjet')); ?>" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
+                <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::goPage('campagne', array('id' => $_GET['id'], 'operation' => 'modificationObjet')); ?>" class="modifierObjet">Modifier cet objet</a></p><?php endif; ?>
             <?php endif; ?>
         </section>
         <section class="contenu demi">
-            <a class="nostyle" href="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'operation' => 'test')); ?>">
+            <a class="nostyle" href="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'operation' => 'test')); ?>">
                 <button class="clair long" style="margin: .25em auto .15em;">Envoi d'un essai</button>
             </a>
         </section>
@@ -305,7 +305,7 @@ Core::loadHeader();
         <section class="contenu demi">
             <h4>Contenu du SMS</h4>
             <?php if (isset($_GET['operation']) && $_GET['operation'] == 'modificationSMS') : ?>
-                <form action="<?php Core::goTo('campagne', array('id' => $_GET['id'], 'operation' => 'modificationSMSCampagne')); ?>" method="post">
+                <form action="<?php Core::goPage('campagne', array('id' => $_GET['id'], 'operation' => 'modificationSMSCampagne')); ?>" method="post">
                     <ul class="formulaire">
                         <li>
                             <label class="small" for="objet">Texte envoyé aux destinataires</label>
@@ -318,7 +318,7 @@ Core::loadHeader();
                 </form>
             <?php else : ?>
                 <p><?php if (empty($data->get('message'))) : echo 'Aucun message actuellement, ce paramètre est nécessaire pour l\'envoi.'; else: echo $data->get('message'); endif; ?></p>
-                <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::goTo('campagne', array('id' => $_GET['id'], 'operation' => 'modificationSMS')); ?>" class="modifierObjet">Modifier le message</a></p><?php endif; ?>
+                <?php if ($data->get('status') == 'open') : ?><p style="text-align: center;"><a href="<?php echo Core::goPage('campagne', array('id' => $_GET['id'], 'operation' => 'modificationSMS')); ?>" class="modifierObjet">Modifier le message</a></p><?php endif; ?>
             <?php endif; ?>
         </section>
         <?php endif; ?>

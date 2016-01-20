@@ -1,12 +1,12 @@
 <?php
 User::protection(5);
 
-if (!isset($_POST['rechercheThematique']) || empty($_POST['rechercheThematique'])) { Core::goTo('dossiers', true); 
+if (!isset($_POST['rechercheThematique']) || empty($_POST['rechercheThematique'])) { Core::goPage('dossiers', true); 
 }
 $results = People::search_tags($_POST['rechercheThematique']);
 
 if (count($results) == 1) {
-    Core::goTo('contact', array('contact' => $results[0]), true);
+    Core::goPage('contact', array('contact' => $results[0]), true);
 }
 
 Core::loadHeader();
@@ -17,7 +17,7 @@ Core::loadHeader();
 
 	<section class="icone" id="aucunResultat">
 		<h3>Il n'existe aucun résultat à votre recherche</h3>
-		<a class="nostyle" href="<?php $core->goTo('contacts'); ?>"><button>Revenir au module Contacts</button></a>
+		<a class="nostyle" href="<?php $core->goPage('contacts'); ?>"><button>Revenir au module Contacts</button></a>
 	</section>
 
 <?php else : ?>
@@ -25,7 +25,7 @@ Core::loadHeader();
 	<section class="contenu">
 		<ul class="listeContacts">
     <?php foreach ($results as $element) : $contact = new People($element[0]); ?><!--
-		 --><a class="nostyle" href="<?php Core::goTo('contact', array('contact' => $contact->get('id'))); ?>"><!--
+		 --><a class="nostyle" href="<?php Core::goPage('contact', array('contact' => $contact->get('id'))); ?>"><!--
 			 --><li class="demi contact <?php if ($contact->get('sexe') == 'H') { echo 'homme'; 
    } elseif ($contact->get('sexe') == 'F') { echo 'femme'; 
 } else { echo 'isexe'; 

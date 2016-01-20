@@ -2,7 +2,7 @@
 if (isset($_GET['mission']) && $porte->verification($_GET['mission'])) {
     $mission = $porte->informations($_GET['mission']);
 } else {
-    $core->goTo('porte', true);
+    $core->goPage('porte', true);
 }
 $core->loadHeader(); ?>
 	<h2>Mission &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>
@@ -12,7 +12,7 @@ $core->loadHeader(); ?>
     if ($porte->nombreVisites($mission['mission_id'])) :
         $rues = $porte->liste($mission['mission_id']);
         foreach ($rues as $rue => $immeubles) :  ?>
-        <a href="<?php $core->goTo('porte', array('mission' => $_GET['mission'], 'rue' => md5($rue))); ?>" class="nostyle">
+        <a href="<?php $core->goPage('porte', array('mission' => $_GET['mission'], 'rue' => md5($rue))); ?>" class="nostyle">
          <li class="rue">
           <h4><?php $carto->afficherRue($rue); ?></h4>
           <p><strong><?php echo count($immeubles); ?></strong> immeubles à visiter.</p>

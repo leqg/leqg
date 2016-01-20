@@ -460,7 +460,7 @@ class Boite
                       `boitage_date` = NOW(),
                       `boitage_militant` = :cookie
                   WHERE MD5(`mission_id`) = :mission
-                  AND MD5(`immeuble_id`) = :immeuble'
+                  AND MD5(`immeuble_id`) = :immeuble';
         $query = $link->prepare($query);
         $query->bindParam(':statut', $statut);
         $query->bindParam(':cookie', User::ID(), PDO::PARAM_INT);

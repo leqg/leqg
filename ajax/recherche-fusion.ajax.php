@@ -35,12 +35,12 @@ if ($sql->num_rows > 0) :
         $contact = $core->formatageDonnees($contacts);
 ?>
 <?php if ($_GET['fiche'] == 1) { ?>
-    <a href="<?php $core->goTo(
+    <a href="<?php $core->goPage(
         'fiche',
         array('operation' => 'fusion', 'fiche1' => $contact['id'])
     ); ?>">
 <?php } else { ?>
-    <a href="<?php $core->goTo(
+    <a href="<?php $core->goPage(
         'fiche',
         array(
             'operation' => 'fusion',

@@ -20,7 +20,7 @@ $villes = $carto->rechercheVille($ville);
 // On fait la liste des résultats
 foreach ($villes as $ville) :
 ?>
-<a href="<?php $core->goTo(
+<a href="<?php $core->goPage(
     'boite',
     [
         'action' => 'nouveau',

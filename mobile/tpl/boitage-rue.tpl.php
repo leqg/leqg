@@ -2,7 +2,7 @@
 if (isset($_GET['mission']) && $boitage->verification($_GET['mission'])) {
     $mission = $boitage->informations($_GET['mission']);
 } else {
-    $core->goTo('boitage', true);
+    $core->goPage('boitage', true);
 }
 $core->loadHeader(); ?>
 	<h2>Boîtage &laquo;&nbsp;<?php echo $mission['mission_nom']; ?>&nbsp;&raquo;</h2>

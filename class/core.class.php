@@ -326,7 +326,7 @@ class Core
      *
      * @return     void
      * @deprecated
-     * @see        Core::goTo()
+     * @see        Core::goPage()
      * @static
      */
     static public function redirect($page = null, $valeur = null, $attribut = null)
@@ -361,7 +361,7 @@ class Core
      * @return string|void
      * @static
      */
-    static public function goTo($page = null, $arguments = [], $redirect = false)
+    static public function goPage($page = null, $arguments = [], $redirect = false)
     {
         // Si $page == true, on demande une redirection immédiate
         // vers la page d'accueil
@@ -414,7 +414,7 @@ class Core
      *
      * @return     string
      * @deprecated
-     * @see        Core::goTo()
+     * @see        Core::goPage()
      * @static
      */
     static public function returnUri(
@@ -488,7 +488,7 @@ class Core
      *
      * @return     void
      * @deprecated
-     * @see        Core::goTo()
+     * @see        Core::goPage()
      * @static
      */
     static public function getUrl(

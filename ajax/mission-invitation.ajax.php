@@ -24,7 +24,7 @@ if ((isset($_GET['code']) || isset($_POST['code']))
 
     // On invite la personne demandée
     if ($mission->invitation($user)) {
-        Core::goTo(
+        Core::goPage(
             'mission',
             array('code' => $code, 'admin' => 'invitations'),
             true

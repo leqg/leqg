@@ -3,5 +3,5 @@
     $identifiant = Rappel::creer();
     
     // On redirige vers la mission créée
-    Core::goTo('rappels', array('mission' => $identifiant), true);
+    Core::goPage('rappels', array('mission' => $identifiant), true);
 ?>

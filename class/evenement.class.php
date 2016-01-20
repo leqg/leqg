@@ -139,7 +139,7 @@ class Evenement
             
             // Si on ne trouve pas d'utilisateur, on retourne vers la page d'accueil du module contact
             if (!count($evenements)) {
-                Core::goTo('contacts', true);
+                Core::goPage('contacts', true);
             }
             // Sinon, on affecte les données aux propriétés de l'objet
             else

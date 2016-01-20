@@ -71,7 +71,7 @@
 		
 		<ul class="etatcivil">
 			<?php $fiches = $data->linked_people(); foreach ($fiches as $identifiant => $fiche) : $ficheLiee = new contact($identifiant); ?>
-			<li class="lien fiche-liee-<?php echo $ficheLiee->get('id'); ?>"><a href="<?php Core::goTo('contact', array('contact' => $ficheLiee->get('id'))); ?>"><?php echo $ficheLiee->display_name(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('id'); ?>"><small>&#xe8b0;</small></a></li>
+			<li class="lien fiche-liee-<?php echo $ficheLiee->get('id'); ?>"><a href="<?php Core::goPage('contact', array('contact' => $ficheLiee->get('id'))); ?>"><?php echo $ficheLiee->display_name(); ?></a> <a href="#" class="retraitLiaison nostyle" data-fiche="<?php echo $ficheLiee->get('id'); ?>"><small>&#xe8b0;</small></a></li>
 			<?php endforeach; ?>
 			<li class="ajout ajouterLien">Ajouter une nouvelle fiche liée</li>
 		</ul>
@@ -113,7 +113,7 @@
 				}
 				// on regarde si on peut rediriger vers la campagne
 				elseif ($event->link() == 1) {
-					echo '<a href="'; Core::goTo($event->get('type'), array('campagne' => $event->get('campaign'))); echo '" class="nostyle">';
+					echo '<a href="'; Core::goPage($event->get('type'), array('campagne' => $event->get('campaign'))); echo '" class="nostyle">';
 				}
 			?>
 				<li class="evenement <?php echo $event->get('type'); ?> <?php if ($event->link()) { ?>clic<?php } ?>">

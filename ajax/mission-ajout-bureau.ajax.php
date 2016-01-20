@@ -26,7 +26,7 @@ if (isset($_POST['bureau'], $_POST['code'])
     $mission->ajoutBureau($bureau);
 
     // On retourne un code de réussite
-    Core::goTo('mission', array('code' => $code, 'admin' => 'parcours'), true);
+    Core::goPage('mission', array('code' => $code, 'admin' => 'parcours'), true);
 } else {
     // On retourne un code d'erreur
     http_response_code(418);

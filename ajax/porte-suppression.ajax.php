@@ -24,5 +24,5 @@ if (isset($_POST['mission'])) {
     $query->execute();
 
     // On redirige vers les dossiers
-    Core::goTo('porte', true);
+    Core::goPage('porte', true);
 }

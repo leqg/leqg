@@ -22,7 +22,7 @@
         foreach ($dossiers as $dossier) :
         ?>
         <li>
-    				<a href="<?php Core::goTo('dossier', array('dossier' => $dossier['id'])); ?>" class="nostyle"><h4><?php echo $dossier['name']; ?></h4></a>
+    				<a href="<?php Core::goPage('dossier', array('dossier' => $dossier['id'])); ?>" class="nostyle"><h4><?php echo $dossier['name']; ?></h4></a>
     				<p><?php echo $dossier['desc']; ?></p>
         </li>
         <?php endforeach; ?>
@@ -39,7 +39,7 @@
 	    <section class="contenu demi">
     	    <h4>Recherche thématique</h4>
     	    
-    	    <form action="<?php echo Core::goTo('recherche-thematique'); ?>" method="post">
+    	    <form action="<?php echo Core::goPage('recherche-thematique'); ?>" method="post">
         	    <ul class="formulaire">
             	    <li>
             	        <span class="form-icon decalage search">

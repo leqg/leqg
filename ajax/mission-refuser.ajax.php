@@ -25,7 +25,7 @@ if ((isset($_GET['code']) || isset($_POST['code']))
 
     // On change le statut de la mission comme ouvert et on redirige
     if ($mission->reponse(-1, $user)) {
-        Core::goTo($type, array('action' => 'missions'), true);
+        Core::goPage($type, array('action' => 'missions'), true);
     } else {
         http_response_code(418);
     }

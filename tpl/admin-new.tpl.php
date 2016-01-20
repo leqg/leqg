@@ -4,11 +4,11 @@
 
     Core::loadHeader();
 ?>
-<a href="<?php Core::goTo('administration'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la liste</button></a>	
+<a href="<?php Core::goPage('administration'); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Retour à la liste</button></a>	
 
 <h2>Création d'un nouveau compte</h2>
 
-<form action="<?php Core::goTo('administration', array('action' => 'creation')); ?>" method="post">
+<form action="<?php Core::goPage('administration', array('action' => 'creation')); ?>" method="post">
 	
 	<div class="colonne demi gauche">
     	<section class="contenu demi">

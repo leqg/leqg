@@ -11,7 +11,7 @@ if (isset($_GET['mission']) && Boite::verification($_GET['mission'])) {
         
     Core::loadHeader();
 } else {
-    Core::goTo('boite', true);
+    Core::goPage('boite', true);
 }
 ?>
 

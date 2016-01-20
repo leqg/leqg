@@ -11,7 +11,7 @@
     // On charge le template de header
     Core::loadHeader();
 ?>
-	<a href="<?php Core::goTo('boite', array('action' => 'missions')); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Interface militant</button></a>	
+	<a href="<?php Core::goPage('boite', array('action' => 'missions')); ?>" class="nostyle"><button class="gris" style="float: right; margin-top: 0em;">Interface militant</button></a>	
 	<h2>Campagnes de boîtage</h2>
 	
     <?php if ($missions) : ?>
@@ -19,8 +19,8 @@
 			<ul class="liste-missions">
 				<?php foreach ($missions as $mission) : $mission = new Mission(md5($mission['mission_id'])); $parcours = $mission->statistiques_parcours(); ?>
 				<li>
-    	    	    <a href="<?php Core::goTo('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
-					<a href="<?php Core::goTo('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
+    	    	    <a href="<?php Core::goPage('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><button style="float: right; margin-top: 1.33em;">Ouvrir la mission</button></a>
+					<a href="<?php Core::goPage('mission', array('code' => md5($mission->get('mission_id')))); ?>" class="nostyle"><h4><?php echo $mission->get('mission_nom'); ?></h4></a>
 					<p>
         <?php if (!$parcours['attente']) : ?>
 							Il n'y a plus d'immeuble à visiter.
@@ -38,12 +38,12 @@
 				</li>
 				<?php endforeach; ?>
 			</ul>
-			<a class="nostyle" href="<?php Core::goTo('boite', array('action' => 'nouveau')); ?>"><button>Créer une nouvelle mission</button></a>
+			<a class="nostyle" href="<?php Core::goPage('boite', array('action' => 'nouveau')); ?>"><button>Créer une nouvelle mission</button></a>
 		</section>
     <?php else : ?>
 		<section class="icone" id="aucuneMission">
 			<h3>Aucune mission lancée actuellement !</h3>
-			<a class="nostyle" href="<?php Core::goTo('boite', array('action' => 'nouveau')); ?>"><button>Créer une mission</button></a>
+			<a class="nostyle" href="<?php Core::goPage('boite', array('action' => 'nouveau')); ?>"><button>Créer une mission</button></a>
 		</section>
     <?php endif; ?>
 	

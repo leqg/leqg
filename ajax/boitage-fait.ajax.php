@@ -51,7 +51,7 @@ if (in_array($immeuble, $afaire)) {
         );
     }
 
-    $core->goTo(
+    $core->goPage(
         'boite',
         array(
             'action' => 'mission',

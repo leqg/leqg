@@ -20,7 +20,7 @@
 
     Core::loadHeader();
 ?>
-    <a href="<?php Core::goTo('administration'); ?>" class="nostyle"><button style="float: right; margin-top: 0em;" class="gris">Retour à la liste</button></a>	
+    <a href="<?php Core::goPage('administration'); ?>" class="nostyle"><button style="float: right; margin-top: 0em;" class="gris">Retour à la liste</button></a>	
 	
 	<h2><?php echo $user['firstname'] . ' ' . $user['lastname']; ?></h2>
 	

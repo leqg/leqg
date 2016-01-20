@@ -18,4 +18,4 @@ $info = $_POST;
 $mission = Mission::creation('porte', $info);
 
 // On redirige vers la page de la mission
-Core::goTo('mission', array('code' => md5($mission)), true);
+Core::goPage('mission', array('code' => md5($mission)), true);

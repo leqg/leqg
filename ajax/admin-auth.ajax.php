@@ -31,7 +31,7 @@ if (isset($_GET['compte'], $_GET['lvl']) || isset($_POST['compte'], $_POST['lvl'
         $query->bindParam(':id', $infos['id']);
         $query->execute();
 
-        Core::goTo('administration', array('compte' => $compte), true);
+        Core::goPage('administration', array('compte' => $compte), true);
     } else {
         http_response_code(418);
     }

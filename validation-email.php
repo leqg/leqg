@@ -13,15 +13,15 @@
 if ($sql->num_rows == 1) {
     // On modifie dans la base de données l'email demandé et en profite pour réinitialiser les connexions au compte en question
     $query = 'UPDATE `users` SET `user_reinit` = NOW(), `user_email` = `user_new_email`, `user_new_email` = NULL, `user_new_email_hash` = NULL WHERE `user_new_email_hash` = "' . $hash . '"';
-    $core->goTo(true);
+    $core->goPage(true);
         
     if ($noyau->query($query)) {
             
     } else {
-        $core->goTo(true);
+        $core->goPage(true);
     }
 } else {
-    $core->goTo(true);
+    $core->goPage(true);
 }
 
 ?>

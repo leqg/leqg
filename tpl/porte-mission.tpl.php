@@ -11,7 +11,7 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
         
     Core::loadHeader();
 } else {
-    Core::goTo('porte', true);
+    Core::goPage('porte', true);
 }
 ?>
 
@@ -123,7 +123,7 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
 				<li>Il reste <strong><?php echo number_format($nombre['attente'], 0, ',', ' '); ?></strong>&nbsp;électeurs à visiter.</li>
 			</ul>
 			
-			<a href="<?php echo Core::goTo('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
+			<a href="<?php echo Core::goPage('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
 		</section>
     <?php } else { ?>
 		<section id="porte-statistiques" class="icone fusee contenu demi">
@@ -132,7 +132,7 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
 				<h5>Il existe <span><?php echo number_format(Porte::estimation($mission['mission_id']), 0, ',', ' '); ?></span> électeurs à visiter.</h5>
     <?php } ?>
 			
-			<a href="<?php echo Core::goTo('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
+			<a href="<?php echo Core::goPage('porte', array('reporting' => md5($mission['mission_id']))); ?>" class="nostyle"><button class="long" style="margin: 2.5em auto .33em;">Reporting de la mission</button></a>
 		</section>
     <?php } ?>
 	
@@ -162,7 +162,7 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
         else { $nomAffichage = 'Fiche sans nom'; 
         }
     ?>
-			<a href="<?php Core::goTo('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+			<a href="<?php Core::goPage('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
 				<li class="contact <?php echo $sexe; ?>">
 <strong><?php echo $nomAffichage; ?></strong>
 				</li>
@@ -198,7 +198,7 @@ if (isset($_GET['mission']) && Porte::verification($_GET['mission'])) {
         else { $nomAffichage = 'Fiche sans nom'; 
         }
     ?>
-			<a href="<?php Core::goTo('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
+			<a href="<?php Core::goPage('contact', array('contact' => md5($fiche->get('contact_id')))); ?>" class="nostyle contact-<?php echo $fiche->get('contact_id'); ?>">
 				<li class="contact <?php echo $sexe; ?>">
 <strong><?php echo $nomAffichage; ?></strong>
 				</li>

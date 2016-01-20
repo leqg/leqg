@@ -26,7 +26,7 @@ if (isset($_GET['compte']) || isset($_POST['compte'])) {
         $query->bindParam(':id', $compte);
         $query->execute();
 
-        Core::goTo('administration', true);
+        Core::goPage('administration', true);
     } else {
         http_response_code(418);
     }

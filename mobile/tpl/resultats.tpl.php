@@ -21,12 +21,12 @@ if ($query->rowCount() == 1) {
     // On redirige selon la destination demandée
     if (isset($_GET['destimation'])) {
         if ($_GET['destination'] == 'interaction') {
-            Core::goTo('interaction', array('action' => 'ajout', 'fiche' => $contact[0]), true);
+            Core::goPage('interaction', array('action' => 'ajout', 'fiche' => $contact[0]), true);
         } else {
-            Core::goTo('contacts', array('fiche' => $contact[0]), true);
+            Core::goPage('contacts', array('fiche' => $contact[0]), true);
         }
     } else {
-        Core::goTo('contacts', array('fiche' => $contact[0]), true);
+        Core::goPage('contacts', array('fiche' => $contact[0]), true);
     }
 }
     
@@ -42,9 +42,9 @@ if ($query->rowCount() == 1) {
     <?php foreach ($contacts as $c) : $contact = new Contact(md5($c[0])); ?>
 	<li class="electeur">
     <?php if (isset($_GET['destination']) && $_GET['destination'] == 'interaction') : ?>
-		<a href="<?php Core::goTo('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
+		<a href="<?php Core::goPage('interaction', array('action' => 'ajout', 'fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
     <?php else: ?> 
-		<a href="<?php Core::goTo('contacts', array('fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
+		<a href="<?php Core::goPage('contacts', array('fiche' => $contact->get('contact_id'))); ?>" class="nostyle">
     <?php endif; ?>
 			<strong><?php echo $contact->get('nom_affichage'); ?></strong>
 		</a>

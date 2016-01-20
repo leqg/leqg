@@ -4,13 +4,13 @@
 ?>
 <ul id="actions">
 	<li>
-		<a href="<?php Core::goTo('recherche', array('destination' => 'interaction')); ?>">
+		<a href="<?php Core::goPage('recherche', array('destination' => 'interaction')); ?>">
 			<span>&#xe80b;</span>
 			<p>Nouvelle interaction</p>
 		</a>
 	</li>
 	<li>
-		<a href="<?php Core::goTo('recherche', array('destination' => 'fiche')); ?>">
+		<a href="<?php Core::goPage('recherche', array('destination' => 'fiche')); ?>">
 			<span>&#xe840;</span>
 			<p>Consulter une fiche</p>
 		</a>

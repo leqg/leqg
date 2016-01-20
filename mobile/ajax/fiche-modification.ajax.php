@@ -25,6 +25,6 @@
         $sql = $db->query($query);
     endif;
     
-    $core->goTo('contacts', array('fiche' => $infos['fiche']), true);
+    $core->goPage('contacts', array('fiche' => $infos['fiche']), true);
     
 ?>

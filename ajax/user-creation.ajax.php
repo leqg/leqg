@@ -58,4 +58,4 @@ $mail->MsgHTML($email);
 
 $mail->Send();
 
-$core->goTo('administration', true);
+$core->goPage('administration', true);

@@ -91,6 +91,6 @@ if ($contact1['electeur'] == 1 || $contact2['electeur'] == 1) :
               WHERE `contact_id` = ' . $off;
 
     // On se déplace vers la nouvelle fiche fusionnée
-    $core->goTo('fiche', array('id' => $on), true);
+    $core->goPage('fiche', array('id' => $on), true);
 
 endif;

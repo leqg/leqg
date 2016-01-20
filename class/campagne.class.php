@@ -40,7 +40,7 @@ class Campagne
      * Tableau contenant les informations sur la campagne
      * @var array
      */
-    private array $_campagne;
+    private $_campagne = [];
 
     /**
      * Constructeur de cette classe

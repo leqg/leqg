@@ -64,5 +64,5 @@ $mail->MsgHTML($email);
 
 // On redirige vers la page de profil avec un message spécifique
 if ($mail->Send()) {
-    $core->goTo('utilisateur', array('message' => 'changement-email'), true);
+    $core->goPage('utilisateur', array('message' => 'changement-email'), true);
 }
