@@ -1,61 +1,76 @@
 <?php
 /**
- * Cette classe comprend l'ensemble des méthodes de traitement des porte-à-porte sur le SaaS LeQG
- * 
- * @package   leQG
- * @author    Damien Senger <mail@damiensenger.me>
- * @copyright 2014 MSG SAS – LeQG
+ * Door to door missions
+ *
+ * PHP version 5
+ *
+ * @category Porte
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
  */
 
+/**
+ * Door to door missions
+ *
+ * PHP version 5
+ *
+ * @category Porte
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 class Porte
 {
-    
     /**
-     * Cette méthode permet de calculer le nombre de missions disponible actuellement
+     * Count all missions
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
-     *
-     * @return int        Nombre de missions disponibles
+     * @return integer
+     * @static
      */
-     
-    public static function nombre() 
+    public static function nombre()
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On exécute la requête de calcul du nombre de missions
-        $query = $link->query('SELECT COUNT(*) AS nombre FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "porte" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())');
+        $sql = 'SELECT COUNT(*) AS nombre
+                FROM `mission`
+                WHERE `mission_statut` = 1
+                AND `mission_type` = "porte"
+                AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())';
+        $query = $link->query($sql);
         $data = $query->fetch(PDO::FETCH_NUM);
-        
+
         // On retourne le nombre retrouvé
         return $data[0];
     }
-    
-    
+
     /**
-     * Vérifie si l'utilisateur est inscrit ou non dans une mission
+     * User subscription status
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
+     * @param integer $mission Mission ID
      *
-     * @param int $mission ID de la mission
-     *
-     * @return bool
+     * @return boolean
+     * @static
      */
-     
-    public static function estInscrit( $mission ) 
+    public static function estInscrit(int $mission)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
         $userId = User::ID();
-        
+
         // On exécute la requête de calcul du nombre de missions
-        $query = $link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission AND `user_id` = :user');
+        $sql = 'SELECT * FROM `inscriptions`
+                WHERE `mission_id` = :mission
+                AND `user_id` = :user';
+        $query = $link->prepare($sql);
         $query->bindParam(':mission', $mission, PDO::PARAM_INT);
         $query->bindParam(':user', $userId, PDO::PARAM_INT);
         $query->execute();
-        
+
         // On affiche un booléen
         if ($query->rowCount()) {
             return true;
@@ -63,46 +78,45 @@ class Porte
             return false;
         }
     }
-    
-    
+
     /**
-     * Cette méthode permet d'obtenir un tableau des missions disponibles actuellement
+     * Get all missions
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 0.1
-     *
-     * @return int        Tableau des missions disponibles
+     * @return integer
+     * @static
      */
-     
-    public static function missions() 
+    public static function missions()
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On exécute la requête de récupération des missions
-        $query = $link->query('SELECT * FROM `mission` WHERE `mission_statut` = 1 AND `mission_type` = "porte" AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW()) ORDER BY `mission_deadline` ASC');
-        
+        $sql = 'SELECT *
+                FROM `mission`
+                WHERE `mission_statut` = 1
+                AND `mission_type` = "porte"
+                AND (`mission_deadline` IS NULL OR `mission_deadline` >= NOW())
+                ORDER BY `mission_deadline` ASC';
+        $query = $link->query($sql);
+
         // On retourne le tableau récupéré
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
+
     /**
-     * Cette méthode permet de créer une nouvelle mission de porte-à-porte
+     * Create a new mission
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
+     * @param array $infos new mission args
      *
-     * @param  array $infos Tableau contenant l'ensemble des informations postées par l'utilisateur
-     * @return int                    Identifiant SQL de la nouvelle mission créée
+     * @return integer
+     * @static
      */
-     
-    public static function creation( array $infos ) 
+    public static function creation(array $infos)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
         $userId = User::ID();
-        
+
         // On retraite la date entrée
         if (!empty($infos['date'])) {
             $date = explode('/', $infos['date']);
@@ -111,132 +125,159 @@ class Porte
         } else {
             $date = null;
         }
-    
+
         // On exécute la requête d'insertion dans la base de données
-        $query = $link->prepare('INSERT INTO `mission` (`createur_id`, `responsable_id`, `mission_deadline`, `mission_nom`, `mission_type`) VALUES (:cookie, :responsable, :deadline, :nom, "porte")');
+        $sql = 'INSERT INTO `mission` (`createur_id`,
+                                       `responsable_id`,
+                                       `mission_deadline`,
+                                       `mission_nom`,
+                                       `mission_type`)
+                VALUES (:cookie,
+                        :responsable,
+                        :deadline,
+                        :nom,
+                        "porte")';
+        $query = $link->prepare($sql);
         $query->bindParam(':cookie', $userId, PDO::PARAM_INT);
         $query->bindParam(':responsable', $infos['responsable'], PDO::PARAM_INT);
         $query->bindParam(':deadline', $date);
         $query->bindParam(':nom', $infos['nom']);
         $query->execute();
-        
+
         // On affiche l'identifiant de la nouvelle mission
         return $link->lastInsertId();
     }
-    
-    
+
     /**
-     * Cette méthode permet de vérifier si une mission de porte-à-porte correspond bien à l'ID renvoyé
+     * Verify an ID
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
-     * 
-     * @param  string $mission Entrée dont la véracité est à contrôler
-     * @return bool
+     * @param string $mission mission ID to verify (md5 hash)
+     *
+     * @return boolean
+     * @static
      */
-    
-    public static function verification( $mission ) 
+    public static function verification( $mission )
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On exécute la requête de vérification
-        $query = $link->prepare('SELECT `mission_id` FROM `mission` WHERE MD5( `mission_id` ) = :id AND `mission_type` = "porte"');
+        $sql = 'SELECT `mission_id`
+                FROM `mission`
+                WHERE MD5( `mission_id` ) = :id
+                AND `mission_type` = "porte"';
+        $query = $link->prepare($sql);
         $query->bindParam(':id', $mission);
         $query->execute();
-        
+
         return ($query->rowCount()) ? true : false;
     }
-    
-    
+
     /**
-     * Cette méthode permet de récupérer toutes les informations concernant une mission de porte-à-porte demandée
+     * Door to door mission informations
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
-     * 
-     * @param  string $mission Identifiant de la mission pour laquelle la récupération des informations est demandée
-     * @return array                Tableau contenant l'ensemble des informations concernant la mission demandée
+     * @param string $mission Mission ID (md5 hash)
+     *
+     * @return array
+     * @static
      */
-    
-    public static function informations($mission) 
+    public static function informations($mission)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On exécute la requête de recherche des informations
-        $query = $link->prepare('SELECT * FROM `mission` WHERE MD5(`mission_id`) = :id');
+        $sql = 'SELECT *
+                FROM `mission`
+                WHERE MD5(`mission_id`) = :id';
+        $query = $link->prepare($sql);
         $query->bindParam(':id', $mission);
         $query->execute();
-        
+
         // On retourne les informations sous forme d'un tableau
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    
+
     /**
-     * Cette méthode permet de connaître le nombre d'électeurs à visiter dans une mission
+     * Count the number of voters
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
-     * 
-     * @param  int    $mission Identifiant de la mission
-     * @param  string $type    La recherche doit-elle porter sur les électeurs fait (1), non-fait (0) ou tous (-1) 
-     * @result int                    Nombre d'immeubles correspondant à la recherche
+     * @param integer $mission mission ID
+     * @param integer $type    type of voters
+     *
+     * @return integer
+     * @static
      */
-    
-    public static function nombreVisites( $mission , $type = 0 ) 
+    public static function nombreVisites( $mission , $type = 0 )
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On exécute la requête
         if ($type) {
-            $query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` > 0');
+            $sql = 'SELECT COUNT(*)
+                    FROM `porte`
+                    WHERE `mission_id` = :mission
+                    AND `porte_statut` > 0';
         } else {
-            $query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = 0');
+            $sql = 'SELECT COUNT(*)
+                    FROM `porte`
+                    WHERE `mission_id` = :mission
+                    AND `porte_statut` = 0';
         }
+        $query = $link->prepare($sql);
         $query->bindParam(':mission', $mission, PDO::PARAM_INT);
         $query->execute();
         $data = $query->fetch(PDO::FETCH_NUM);
-        
+
         // On retourne le nombre de visites trouvés
         return $data[0];
     }
-    
-    
+
     /**
-     * Cette méthode permet d'ajouter une rue entière dans une mission de porte-à-porte
+     * Add a street in the mission
      *
-     * @author  Damien Senger    <mail@damiensenger.me>
-     * @version 1.0
+     * @param integer $rue     Street id
+     * @param integer $mission Mission id
      *
-     * @param  int $rue     Identifiant de la rue à ajouter
-     * @param  int $mission Identifiant de la mission dans laquelle ajouter la rue
-     * @return bool
+     * @return boolean
+     * @static
      */
-     
-    public static function ajoutRue( $rue , $mission ) 
+    public static function ajoutRue(int $rue, int $mission)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On effectue une recherche de tous les immeubles contenus dans la rue
-        $query = $link->prepare('SELECT `immeuble_id` FROM `immeubles` WHERE `rue_id` = :id');
+        $sql = 'SELECT `immeuble_id`
+                FROM `immeubles`
+                WHERE `rue_id` = :id';
+        $query = $link->prepare($sql);
         $query->bindParam(':id', $rue, PDO::PARAM_INT);
         $query->execute();
         $immeubles = $query->fetchAll(PDO::FETCH_NUM);
-        
+
         // Pour chaque immeuble, on cherche tous les électeurs de l'immeuble
         foreach ($immeubles as $immeuble) {
-            $query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble OR `adresse_id` = :immeuble');
+            $sql = 'SELECT `contact_id`
+                    FROM `contacts`
+                    WHERE `immeuble_id` = :immeuble
+                    OR `adresse_id` = :immeuble';
+            $query = $link->prepare($sql);
             $query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
             $query->execute();
             $contacts = $query->fetchAll(PDO::FETCH_NUM);
-            
+
             // Pour chaque électeur, on créé une porte à frapper
             foreach ($contacts as $contact) {
-                $query = $link->prepare('INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
+                $sql = 'INSERT INTO `porte` (`mission_id`,
+                                             `rue_id`,
+                                             `immeuble_id`,
+                                             `contact_id`)
+                        VALUES (:mission,
+                                :rue,
+                                :immeuble,
+                                :contact)';
+                $query = $link->prepare($sql);
                 $query->bindParam(':mission', $mission, PDO::PARAM_INT);
                 $query->bindParam(':rue', $rue, PDO::PARAM_INT);
                 $query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -245,40 +286,52 @@ class Porte
             }
         }
     }
-    
-    
+
     /**
-     * Cette méthode permet d'ajouter un bureau entier dans une mission de porte-à-porte
+     * Add a ballot office in a mission
      *
-     * @author  Damien Senger    <mail@damiensenger.me>
-     * @version 1.0
+     * @param integer $bureau  ballot office id
+     * @param integer $mission mission id
      *
-     * @param  int $bureau  Identifiant de la rue à ajouter
-     * @param  int $mission Identifiant de la mission dans laquelle ajouter la rue
-     * @return bool
+     * @return boolean
      */
-     
-    public static function ajoutBureau( $bureau , $mission ) 
+    public static function ajoutBureau(int $bureau, int $mission)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On effectue une recherche de tous les immeubles contenus dans la rue
-        $query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `immeubles` WHERE `bureau_id` = :id');
+        $sql = 'SELECT `immeuble_id`, `rue_id`
+                FROM `immeubles`
+                WHERE `bureau_id` = :id';
+        $query = $link->prepare($sql);
         $query->bindParam(':id', $bureau, PDO::PARAM_INT);
         $query->execute();
         $immeubles = $query->fetchAll(PDO::FETCH_NUM);
-        
-        // Pour chaque immeuble, on cherche tous les contacts pour ajouter pour chacun une entrée dans la base porte à frapper
+
+        // Pour chaque immeuble, on cherche tous les contacts pour ajouter pour
+        // chacun une entrée dans la base porte à frapper
         foreach ($immeubles as $immeuble) {
-            $query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE `immeuble_id` = :immeuble OR `adresse_id` = :immeuble');
+            $sql = 'SELECT `contact_id`
+                    FROM `contacts`
+                    WHERE `immeuble_id` = :immeuble
+                    OR `adresse_id` = :immeuble'
+            $query = $link->prepare($sql);
             $query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
             $query->execute();
             $contacts = $query->fetchAll(PDO::FETCH_NUM);
-            
+
             // Pour chaque électeur, on créé une porte à frapper
             foreach ($contacts as $contact) {
-                $query = $link->prepare('INSERT INTO `porte` (`mission_id`, `rue_id`, `immeuble_id`, `contact_id`) VALUES (:mission, :rue, :immeuble, :contact)');
+                $sql = 'INSERT INTO `porte` (`mission_id`,
+                                             `rue_id`,
+                                             `immeuble_id`,
+                                             `contact_id`)
+                        VALUES (:mission,
+                                :rue,
+                                :immeuble,
+                                :contact)';
+                $query = $link->prepare($sql);
                 $query->bindParam(':mission', $mission, PDO::PARAM_INT);
                 $query->bindParam(':rue', $immeuble[1], PDO::PARAM_INT);
                 $query->bindParam(':immeuble', $immeuble[0], PDO::PARAM_INT);
@@ -287,30 +340,30 @@ class Porte
             }
         }
     }
-    
-    
+
     /**
-     * Cette méthode permet de pouvoir obtenir une liste des immeubles à visiter par rue
+     * List all buildings by street
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
-     * 
-     * @param  int $mission Identifiant de la mission
-     * @param  int $statut  Statut des immeubles recherchés (1 fait, 0 non fait)
-     * @return array                Tableau contenant par rue l'ensemble des immeubles à couvrir
+     * @param integer $mission mission id
+     * @param integer $statut  building status (1 done, 0 to do)
+     *
+     * @return array
+     * @static
      */
-     
-    public static function liste( $mission , $statut = 0 ) 
+    public static function liste(int $mission, $statut = 0)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-        
+
         // On récupère la liste de toutes les portes
-        $query = $link->prepare('SELECT `immeuble_id`, `rue_id` FROM `porte` WHERE `mission_id` = :id');
+        $sql = 'SELECT `immeuble_id`, `rue_id`
+                FROM `porte`
+                WHERE `mission_id` = :id';
+        $query = $link->prepare($sql);
         $query->bindParam(':id', $mission, PDO::PARAM_INT);
         $query->execute();
         $portes = $query->fetchAll(PDO::FETCH_NUM);
-        
+
         // On lance le tri par immeuble des portes à frapper
         $immeubles = array();
         foreach ($portes as $porte) {
@@ -321,148 +374,183 @@ class Porte
                 );
             }
         }
-        
+
         // On lance le tri par rues des immeubles
         $rues = array();
         foreach ($immeubles as $immeuble) {
             $rues[$immeuble['rue_id']][] = $immeuble['immeuble_id'];
         }
-        
+
         // On retourne le tableau trié
         return $rues;
     }
-    
-    
+
+
     /**
-     * Cette méthode permett de charger les électeurs d'une mission à visiter liés à un immeuble
+     * Load all voters by building
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
-     * 
-     * @param int $mission  Identifiant de la mission concernée par l'estimation (md5)
-     * @param int $immeuble Identifiant de l'immeuble dont nous souhaitons extraire les électeurs (md5)
-     * 
-     * @return array                    Tableau des électeurs de l'immeuble demandé
+     * @param string $mission  mission id (md5 hash)
+     * @param string $immeuble building id (md5 hash)
+     *
+     * @return array
+     * @static
      */
-    
-    public static function electeurs( $mission , $immeuble ) 
+    public static function electeurs(string $mission, string $immeuble)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-    
+
         // On récupère la liste des portes à frapper dans l'immeuble demandé
-        $query = $link->prepare('SELECT * FROM `porte` WHERE MD5(`mission_id`) = :mission AND MD5(`immeuble_id`) = :immeuble AND `porte_statut` = 0');
+        $sql = 'SELECT *
+                FROM `porte`
+                WHERE MD5(`mission_id`) = :mission
+                AND MD5(`immeuble_id`) = :immeuble
+                AND `porte_statut` = 0';
+        $query = $link->prepare($sql);
         $query->bindParam(':mission', $mission);
         $query->bindParam(':immeuble', $immeuble);
         $query->execute();
         $portes = $query->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Pour chaque porte, on cherche les informations du contact
         foreach ($portes as $key => $porte) {
-            $query = $link->prepare('SELECT * FROM `contacts` WHERE `contact_id` = :contact');
+            $sql = 'SELECT *
+                    FROM `contacts`
+                    WHERE `contact_id` = :contact';
+            $query = $link->prepare($sql);
             $query->bindParam(':contact', $porte['contact_id']);
             $query->execute();
             $contact = $query->fetch(PDO::FETCH_ASSOC);
-            
+
             $portes[$key] = array_merge($portes[$key], $contact);
         }
-        
+
         // On trie le tableau des électeurs par nom
         Core::triMultidimentionnel($portes, 'contact_nom', SORT_ASC);
-        
+
         // On retourne le tableau trié
         return $portes;
     }
-    
-    
+
     /**
-     * Cette méthode permet d'estimer le nombre d'électeur concernés par un porte à porte
+     * Count the number of voters in a mission
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
+     * @param integer $mission mission id
+     * @param integer $type    voter type (1 done, 0 to do, 2 all)
      *
-     * @param int $mission Identifiant de la mission concernée par l'estimation
-     * @param int $type    Type d'électeurs à vérifier (1 : déjà boités, 0 : à boiter, 2 : tous)
-     *
-     * @return int                    Nombre d'électeur estimé
+     * @return integer
+     * @static
      */
-    
-    public static function estimation( $mission , $type = 0 ) 
+    public static function estimation(int $mission, $type = 0)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
-    
-        // On prépare la requête de recherche des immeubles concernés par le comptage
+
+        // On prépare la requête de recherche des immeubles
+        // concernés par le comptage
         if ($type) {
-            $query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` > 0');
+            $sql = 'SELECT COUNT(*)
+                    FROM `porte`
+                    WHERE `mission_id` = :mission
+                    AND `porte_statut` > 0';
         } else {
-            $query = $link->prepare('SELECT COUNT(*) FROM `porte` WHERE `mission_id` = :mission AND `porte_statut` = 0');
+            $sql = 'SELECT COUNT(*)
+                    FROM `porte`
+                    WHERE `mission_id` = :mission
+                    AND `porte_statut` = 0';
         }
+        $query = $link->prepare($sql);
         $query->bindParam(':mission', $mission, PDO::PARAM_INT);
         $query->execute();
         $data = $query->fetch(PDO::FETCH_NUM);
-        
+
         // On retourne le nombre de portes cherchées
         return $data[0];
     }
-    
-    
+
     /**
-     * Cette méthode permet de reporter un porte-à-porte
+     * Report a mission
      *
-     * @author  Damien Senger <mail@damiensenger.me>
-     * @version 1.0
+     * @param string  $mission  mission id (md5 hash)
+     * @param string  $electeur voter id (md5 hash)
+     * @param integer $statut   status (2 done, 1 inaccessible)
      *
-     * @param  int $mission  Identifiant de la mission concernée par le reporting (MD5)
-     * @param  int $electeur Identifiant de l'électeur concerné par le reporting (MD5)
-     * @param  int $statut   Statut du reporting : 2 pour fait, 1 pour inaccessible
-     * @result void
+     * @return void
+     * @static
      */
-    
-    public static function reporting( $mission , $electeur , $statut ) 
+    public static function reporting( $mission , $electeur , $statut )
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
         $userId = User::ID();
-    
+
         // On récupère les informations sur la mission
         $informations = self::informations($mission);
-        
+
+        $sql = 'UPDATE `porte`
+                SET `porte_statut` = :statut,
+                    `porte_date` = NOW(),
+                    `porte_militant` = :militant
+                WHERE MD5(`mission_id`) = :mission
+                AND MD5(`contact_id`) = :contact';
         // On prépare et exécute la requête
-        $query = $link->prepare('UPDATE `porte` SET `porte_statut` = :statut, `porte_date` = NOW(), `porte_militant` = :militant WHERE MD5(`mission_id`) = :mission AND MD5(`contact_id`) = :contact');
+        $query = $link->prepare($sql);
         $query->bindParam(':statut', $statut);
         $query->bindParam(':militant', $userId, PDO::PARAM_INT);
         $query->bindParam(':mission', $mission);
         $query->bindParam(':contact', $electeur);
         $query->execute();
-        
+
         // On recherche l'identifiant en clair du contact vu
-        $query = $link->prepare('SELECT `contact_id` FROM `contacts` WHERE MD5(`contact_id`) = :contact');
+        $sql = 'SELECT `contact_id`
+                FROM `contacts`
+                WHERE MD5(`contact_id`) = :contact';
+        $query = $link->prepare($sql);
         $query->bindParam(':contact', $electeur);
         $query->execute();
         $contact = $query->fetch(PDO::FETCH_NUM);
-        
+
         // On rajoute une entrée d'historique pour le contact en question
-        $query = $link->prepare('INSERT INTO `historique` (`contact_id`, `compte_id`, `historique_type`, `historique_date`, `historique_objet`) VALUES (:contact, :compte, "porte", NOW(), :nom)');
+        $sql = 'INSERT INTO `historique` (`contact_id`,
+                                          `compte_id`,
+                                          `historique_type`,
+                                          `historique_date`,
+                                          `historique_objet`)
+                VALUES (:contact,
+                        :compte,
+                        "porte",
+                        NOW(),
+                        :nom)';
+        $query = $link->prepare($sql);
         $query->bindParam(':contact', $contact[0], PDO::PARAM_INT);
         $query->bindParam(':compte', $userId, PDO::PARAM_INT);
         $query->bindParam(':nom', $informations['mission_nom']);
         $query->execute();
     }
-    
-    
-    public static function inscriptions( $mission ) 
+
+    /**
+     * Get registration in this mission
+     *
+     * @param integer $mission mission id
+     *
+     * @return array
+     * @static
+     */
+    public static function inscriptions(int $mission)
     {
         // On récupère la connexion à la base de données
         $link = Configuration::read('db.link');
         $userId = User::ID();
-        
-        $query = $link->prepare('SELECT * FROM `inscriptions` WHERE `mission_id` = :mission AND `user_id` = :user');
+
+        $sql = 'SELECT *
+                FROM `inscriptions`
+                WHERE `mission_id` = :mission
+                AND `user_id` = :user';
+        $query = $link->prepare($sql);
         $query->bindParam(':mission', $mission, PDO::PARAM_INT);
         $query->bindParam('user', $userId, PDO::PARAM_INT);
         $query->execute();
-        
+
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-?>
