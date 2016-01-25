@@ -1,7 +1,15 @@
 <?php
-/*
-	Fichier d'appel des différents modules, fonctions et classes du core du site
-*/
+/**
+ * LeQG Mobile include system
+ *
+ * PHP version 5
+ *
+ * @category Mobile
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 
 // On détermine les problématiques de langage des données PHP
 setlocale(LC_ALL, 'fr_FR.UTF-8', 'fr_FR', 'fr');
@@ -10,16 +18,41 @@ setlocale(LC_TIME, 'fr_FR.UTF-8', 'fr_FR', 'fr');
 // On détermine le charset du fichier retourné par le serveur
 header('Content-Type: text/html; charset=utf-8');
 
-// On lance la classe de configuration
+/**
+ * LeQG Mobile configuration class
+ *
+ * PHP version 5
+ *
+ * @category Mobile
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
 class Configuration
 {
-    static $confArray;
-    
+    /**
+     * Configuration data array
+     * @var array
+     */
+    static $confArray = [];
+
+    /**
+     * Read a configuration data
+     * @param  string $name Data name
+     * @return mixed
+     */
     public static function read($name)
     {
         return self::$confArray[$name];
     }
-    
+
+    /**
+     * Write a configuration data
+     * @param  string $name  Data name
+     * @param  mixed  $value Data value
+     * @return void
+     */
     public static function write($name, $value)
     {
         self::$confArray[$name] = $value;
@@ -47,8 +80,14 @@ $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
 $core = new PDO($dsn, $user, $pass);
 
 // On fabrique la classe $link de liaison PDO
-$dsn = 'mysql:host=' . Configuration::read('db.host') . ';dbname=' . Configuration::read('db.basename') . ';charset=utf8';
-$link = new PDO($dsn, Configuration::read('db.user'), Configuration::read('db.pass'));
+$dsn = 'mysql:host=' . Configuration::read('db.host') .
+       ';dbname=' . Configuration::read('db.basename') .
+       ';charset=utf8';
+$link = new PDO(
+    $dsn,
+    Configuration::read('db.user'),
+    Configuration::read('db.pass')
+);
 
 // On enregistre les liaisons SQL
 Configuration::write('db.core', $core);
@@ -59,7 +98,11 @@ require_once '../api/esendex/autoload.php';
 require_once '../api/phpmailer/class.phpmailer.php';
 
 // On configure les données des API extérieures
-$api['sms']['auth'] = new \Esendex\Authentication\LoginAuthentication($config['SMS']['compte'], $config['SMS']['login'], $config['SMS']['pass']);
+$api['sms']['auth'] = new \Esendex\Authentication\LoginAuthentication(
+    $config['SMS']['compte'],
+    $config['SMS']['login'],
+    $config['SMS']['pass']
+);
 
 $api['mail']['charset'] = 'UTF-8';
 $api['mail']['smtp']['host'] = $config['MAIL']['host'];
@@ -85,5 +128,3 @@ require_once '../class/mission.class.php';
 require_once '../class/porte.class.php';
 require_once '../class/rappel.class.php';
 require_once '../class/user.class.php';
-
-?>
