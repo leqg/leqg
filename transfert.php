@@ -1,4 +1,16 @@
 <?php
+/**
+ * Script de transfert de données
+ *
+ * PHP version 5
+ *
+ * @category Core
+ * @package  LeQG
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     http://leqg.info
+ */
+
 require_once 'includes.php';
 
 $link = Configuration::read('db.link');
@@ -15,7 +27,7 @@ foreach ($contacts as $contact) {
     // Traitement du nom
     $person->update('nom', $contact['NOM']);
     $person->update('prenoms', $contact['PRENOM']);
-    
+
     // On paramètre le sexe
     $genre = trim($contact['GENRE']);
     if ($genre == 'Madame') {
@@ -23,7 +35,7 @@ foreach ($contacts as $contact) {
     } else {
         $person->update('sexe', 'H');
     }
-    
+
     $adresse = array(
         'pays' => 'France',
         'ville' => '',
@@ -31,37 +43,48 @@ foreach ($contacts as $contact) {
         'street' => '',
         'building' => ''
     );
-    
+
     $decomposition_rue = explode(' ', $contact['ADRESSE 3']);
     $numero = $decomposition_rue[0];
     $first = substr($numero, 0, 1);
-    
+
     if (is_numeric($first)) {
         $adresse['building'] = $numero;
         unset($decomposition_rue[0]);
     } else {
         $adresse['building'] = null;
     }
-    
-    $adresse['street'] = mb_convert_case(implode(' ', $decomposition_rue), MB_CASE_TITLE);
+
+    $adresse['street'] = mb_convert_case(
+        implode(' ', $decomposition_rue),
+        MB_CASE_TITLE
+    );
 
     // On cherche le code postal
     $cp_ville = explode(' ', $contact['VILLE']);
     $adresse['zip'] = $cp_ville[0];
     unset($cp_ville[0]);
-    $adresse['ville'] = mb_convert_case(trim(implode(' ', $cp_ville)), MB_CASE_TITLE);
-    
-    if (empty($adresse['pays'])) { $adresse['pays'] = null; 
+    $adresse['ville'] = mb_convert_case(
+        trim(implode(' ', $cp_ville)),
+        MB_CASE_TITLE
+    );
+
+    if (empty($adresse['pays'])) {
+        $adresse['pays'] = null;
     }
-    if (empty($adresse['ville'])) { $adresse['ville'] = null; 
+    if (empty($adresse['ville'])) {
+        $adresse['ville'] = null;
     }
-    if (empty($adresse['zip'])) { $adresse['zip'] = null; 
+    if (empty($adresse['zip'])) {
+        $adresse['zip'] = null;
     }
-    if (empty($adresse['street'])) { $adresse['street'] = null; 
+    if (empty($adresse['street'])) {
+        $adresse['street'] = null;
     }
-    if (empty($adresse['building'])) { $adresse['building'] = null; 
+    if (empty($adresse['building'])) {
+        $adresse['building'] = null;
     }
-    
+
     $address = array(
         'pays' => '',
         'ville' => '',
@@ -69,7 +92,7 @@ foreach ($contacts as $contact) {
         'street' => '',
         'building' => ''
     );
-    
+
     if (!is_null($adresse['pays'])) {
         $countries = Maps::countrySearch($adresse['pays']);
         if (count($countries)) {
@@ -81,7 +104,7 @@ foreach ($contacts as $contact) {
     } else {
         $address['pays'] = null;
     }
-    
+
     if (!is_null($adresse['ville'])) {
         $city = Maps::citySearch($adresse['ville'], $address['pays']);
         if (count($city)) {
@@ -93,7 +116,7 @@ foreach ($contacts as $contact) {
     } else {
         $address['ville'] = null;
     }
-    
+
     if (!is_null($adresse['zip'])) {
         $zipcode = Maps::zipcodeSearch($adresse['zip'], $address['ville']);
         if (count($zipcode)) {
@@ -105,7 +128,7 @@ foreach ($contacts as $contact) {
     } else {
         $address['zip'] = null;
     }
-    
+
     if (!is_null($adresse['street'])) {
         $street = Maps::streetSearch($adresse['street'], $address['ville']);
         if (count($street)) {
@@ -117,7 +140,7 @@ foreach ($contacts as $contact) {
     } else {
         $address['street'] = null;
     }
-    
+
     if (!is_null($adresse['building'])) {
         $building = Maps::buildingSearch($adresse['building'], $address['street']);
         if (count($building)) {
@@ -129,14 +152,21 @@ foreach ($contacts as $contact) {
     } else {
         $address['building'] = null;
     }
-    
+
     // On lance la création de l'adresse
-    Maps::addressNew($person->get('id'), $address['ville'], $address['zip'], $address['street'], $address['building'], 'reel');
-    
+    Maps::addressNew(
+        $person->get('id'),
+        $address['ville'],
+        $address['zip'],
+        $address['street'], 
+        $address['building'],
+        'reel'
+    );
+
     $person->contact_details_add($contact['MAIL']);
     $person->tag_add('Sénateur PS');
     $person->tag_add($contact['REGION']);
-    
+
     $query = $link->prepare('DELETE FROM `TABLE 30` WHERE `id` = :id');
     $query->bindValue(':id', $contact['id'], PDO::PARAM_INT);
     $query->execute();
@@ -150,5 +180,5 @@ if ($nb[0]) :
     var url = 'transfert.php';
     document.location.href = url;
 </script>
-<?php else: echo 'Fini!'; 
+<?php else: echo 'Fini!';
 endif; ?>
